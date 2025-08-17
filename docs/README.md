@@ -78,19 +78,42 @@ A **self-contained VPS application** that combines:
 
 ## 🎯 Key Technical Components
 
-### Agent Ecosystem (17+ Agents)
-- **Chief of Staff** - Always-on strategic coordinator
-- **PRD Observer** - Background monitoring and documentation
-- **Personal Todos** - Task management with Fibonacci priorities
-- **Impact Filter** - Request structuring and routing
-- **Bull-Beaver-Bear** - Experiment decision frameworks
-- **Meeting Prep/Next Steps** - Meeting lifecycle management
-- **Follow-ups** - Delegation tracking
-- **Goal Analyst** - Metric flow analysis
-- **Opportunity Scout** - Business opportunity identification
-- **Market Research** - Comprehensive market analysis
-- **Financial Viability** - ROI and feasibility analysis
-- Plus 6+ additional specialized agents
+### Complete Agent Ecosystem (ALL 21 Agents)
+
+**Strategic Coordination:**
+1. **Chief of Staff** - Always-on strategic coordinator
+2. **Chief of Staff Automation** - Daily 5am/10pm coordination cycles
+3. **PRD Observer** - Background monitoring and documentation
+
+**Task & Project Management:**
+4. **Personal Todos** - Task management with Fibonacci priorities (P0-P7)
+5. **Impact Filter** - Transform vague requests into actionable initiatives
+6. **Follow-ups** - Track delegations with team members
+
+**Meeting Management:**
+7. **Meeting Prep** - Create agendas with clear outcomes
+8. **Meeting Next Steps** - Extract action items from transcripts
+
+**Decision & Analysis:**
+9. **Bull-Beaver-Bear** - AB test decision frameworks
+10. **Goal Analyst** - Metric flow and goal cascade analysis
+
+**Business Opportunities:**
+11. **Opportunity Scout** - Identify 4-6 hour buildable opportunities
+12. **Market Research Analyst** - Comprehensive market analysis
+13. **Financial Viability Analyzer** - ROI and feasibility calculations
+14. **Opportunity Log Maintainer** - Document opportunity insights
+
+**Knowledge & Communication:**
+15. **Link Logger** - Strategic link capture with summarization
+16. **Agent Feed Post Composer** - Create agent activity updates
+17. **Get-to-Know-You** - User onboarding and profile building
+
+**Agent Ecosystem Management:**
+18. **Agent Feedback** - Capture and track agent improvements
+19. **Agent Ideas** - Analyze ideas for new agents
+20. **Meta Agent** - Generate new agent configurations
+21. **Meta Update Agent** - Update existing agent configs
 
 ### Tool Integrations
 - **Claude Code Tools**: Read, Write, Edit, Bash, Search, Web tools

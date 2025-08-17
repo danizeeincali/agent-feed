@@ -29,28 +29,33 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Claude Code VPS System                       │
 ├─────────────────────────────────────────────────────────────────┤
-│  Frontend (React/Next.js)                                      │
+│  AgentLink Frontend (React/Next.js) - Runs in Docker           │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐              │
 │  │   Agent     │ │  Task Mgmt  │ │   Memory    │              │
-│  │ Interface   │ │  Dashboard  │ │  Explorer   │              │
+│  │   Feed UI   │ │  Dashboard  │ │  Explorer   │              │
 │  └─────────────┘ └─────────────┘ └─────────────┘              │
 ├─────────────────────────────────────────────────────────────────┤
-│  API Layer (Node.js/Express)                                   │
+│  API Layer (Node.js/Express) - Runs in Docker                  │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐              │
-│  │   Agent     │ │   Memory    │ │  Integration│              │
-│  │ Orchestrator│ │  Manager    │ │    APIs     │              │
+│  │  AgentLink  │ │   Memory    │ │  Integration│              │
+│  │     API     │ │  Manager    │ │    APIs     │              │
 │  └─────────────┘ └─────────────┘ └─────────────┘              │
 ├─────────────────────────────────────────────────────────────────┤
-│  Agent Ecosystem (Docker Containers)                           │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐         │
-│  │ Chief of │ │ Personal │ │ Follow-up│ │ Impact   │         │
-│  │  Staff   │ │  Todos   │ │   Agent  │ │ Filter   │         │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘         │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐         │
-│  │   Goal   │ │ Bull-    │ │ Meeting  │ │  Agent   │         │
-│  │ Analyst  │ │ Beaver-  │ │   Prep   │ │  Feed    │         │
-│  │          │ │  Bear    │ │          │ │          │         │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘         │
+│  Claude Code Orchestration (NOT in Docker)                     │
+│  Reads MD configs from ~/.claude/agents/*.md                   │
+│  ┌──────────────────────────────────────────────────┐          │
+│  │ All 21 Agents execute via Task() tool:           │          │
+│  │ • chief-of-staff • prd-observer • personal-todos │          │
+│  │ • impact-filter • follow-ups • meeting-prep      │          │
+│  │ • meeting-next-steps • bull-beaver-bear          │          │
+│  │ • goal-analyst • opportunity-scout               │          │
+│  │ • market-research • financial-viability          │          │
+│  │ • opportunity-log • link-logger                  │          │
+│  │ • agent-feedback • get-to-know-you              │          │
+│  │ • agent-feed-composer • agent-ideas             │          │
+│  │ • meta-agent • meta-update                      │          │
+│  │ • chief-of-staff-automation                     │          │
+│  └──────────────────────────────────────────────────┘          │
 ├─────────────────────────────────────────────────────────────────┤
 │  Data Layer                                                     │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐              │
@@ -66,38 +71,48 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Docker Container Architecture
+### System Components
 
-**Core Infrastructure Containers:**
+**Docker Containers (AgentLink Frontend & API):**
 
-1. **Claude-Code-API** (Node.js/Express)
-   - Main API server and orchestration layer
-   - Agent lifecycle management
+1. **AgentLink-Frontend** (React/Next.js)
+   - Social media feed UI for agent activity
+   - User interaction interface
+   - Real-time updates and engagement analytics
+
+2. **AgentLink-API** (Node.js/Express)
+   - REST API for frontend communication
+   - Database operations via Drizzle ORM
    - Authentication and session handling
 
-2. **Chief-of-Staff-Agent** (Always-On Container)
-   - Strategic coordination and agent routing
-   - Context preservation across sessions
-   - Background monitoring and system health
-
-3. **Agent-Containers** (Dynamic)
-   - Each specialized agent in its own container
-   - Shared working directory volumes
-   - Inter-agent communication via message queue
-
-4. **Database-Stack**
+3. **Database-Stack**
    - PostgreSQL for primary data
    - Redis for session management and cache
-   - MongoDB for document storage (optional)
+   - File system for document storage
 
-5. **File-Management**
-   - Persistent volume for working directories
-   - Obsidian vault synchronization
-   - Document version control
-
-6. **Monitoring-Stack**
+4. **Monitoring-Stack**
    - Prometheus for metrics collection
    - Grafana for dashboards
+   - Logging aggregation
+
+**Claude Code Components (NOT in Docker):**
+
+1. **Agent Configuration Directory**
+   - Location: `~/.claude/agents/*.md`
+   - 21 agent configuration files in Markdown
+   - YAML frontmatter defines tools and settings
+
+2. **Claude Code Orchestration**
+   - Reads agent MD configurations
+   - Executes agents via Task() tool
+   - Manages agent handoffs and coordination
+   - Maintains session context
+
+3. **Agent Execution Model**
+   - Agents run within Claude Code runtime
+   - Access only tools defined in their MD config
+   - Share context through Claude Code orchestration
+   - Post results to AgentLink via API
    - ELK stack for logging
 
 ### Key Architectural Principles
@@ -478,55 +493,77 @@ Common Error Codes:
 
 ## Agent Framework Design
 
-### Agent Base Architecture
+### Agent Configuration Architecture
 
-#### Agent Container Structure
+#### Agent Directory Structure
 
 ```
-/agent-container/
-├── agent-runtime/
-│   ├── agent-core.js          # Base agent class
-│   ├── message-handler.js     # Inter-agent communication
-│   ├── state-manager.js       # Persistent state management
-│   └── health-monitor.js      # Container health checks
-├── working-directory/
-│   ├── context.md            # Agent session context
-│   ├── state.json           # Persistent agent state
-│   ├── logs/                # Agent operation logs
-│   └── temp/                # Temporary files
-├── config/
-│   ├── agent-config.yaml    # Agent configuration
-│   ├── environment.env      # Environment variables
-│   └── permissions.json     # Security permissions
-└── Dockerfile
+~/.claude/agents/
+├── chief-of-staff-agent.md
+├── prd-observer-agent.md
+├── personal-todos-agent.md
+├── impact-filter-agent.md
+├── follow-ups-agent.md
+├── meeting-prep-agent.md
+├── meeting-next-steps-agent.md
+├── bull-beaver-bear-agent.md
+├── goal-analyst-agent.md
+├── opportunity-scout-agent.md
+├── market-research-analyst-agent.md
+├── financial-viability-analyzer-agent.md
+├── opportunity-log-maintainer-agent.md
+├── link-logger-agent.md
+├── agent-feedback-agent.md
+├── get-to-know-you-agent.md
+├── agent-feed-post-composer-agent.md
+├── agent-ideas-agent.md
+├── meta-agent.md
+├── meta-update-agent.md
+└── chief-of-staff-automation-agent.md
 ```
 
-#### Base Agent Class
+#### Agent Configuration Format
+
+Each agent is defined by a Markdown file with YAML frontmatter:
+
+```markdown
+---
+name: agent-name
+description: Brief description for Task tool selection
+tools: Read, Write, Edit, MultiEdit, Grep, Glob, LS, TodoWrite, Bash, Task
+color: blue
+model: sonnet
+---
+
+# Purpose
+Detailed description of the agent's role and responsibilities
+
+## Instructions
+Step-by-step instructions for agent operation
+
+## Examples
+Concrete usage examples and expected outputs
+```
+
+#### Claude Code Agent Execution
 
 ```typescript
-// agent-core.ts
-abstract class BaseAgent {
-  protected config: AgentConfig;
-  protected messageQueue: MessageQueue;
-  protected stateManager: StateManager;
-  protected workingDirectory: string;
-  
-  constructor(config: AgentConfig) {
-    this.config = config;
-    this.messageQueue = new MessageQueue(config.messaging);
-    this.stateManager = new StateManager(config.storage);
-    this.workingDirectory = config.workingDirectory;
+// How Claude Code executes agents (conceptual)
+interface AgentExecution {
+  // Claude Code reads MD configuration
+  loadAgentConfig(agentName: string): AgentConfig {
+    const configPath = `~/.claude/agents/${agentName}.md`;
+    return parseMarkdownConfig(configPath);
   }
   
-  // Abstract methods each agent must implement
-  abstract async initialize(): Promise<void>;
-  abstract async processMessage(message: AgentMessage): Promise<AgentResponse>;
-  abstract async handleHandoff(handoff: HandoffMessage): Promise<void>;
-  abstract async cleanup(): Promise<void>;
-  
-  // Common agent functionality
-  async sendMessage(targetAgent: string, message: AgentMessage): Promise<void> {
-    await this.messageQueue.send(targetAgent, message);
+  // Execute agent via Task tool
+  async executeAgent(subagentType: string, prompt: string): Promise<AgentResponse> {
+    const config = loadAgentConfig(subagentType);
+    return Task({
+      subagent_type: subagentType,
+      prompt: prompt,
+      description: config.description
+    });
   }
   
   async persistState(state: any): Promise<void> {
