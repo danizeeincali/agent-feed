@@ -65,10 +65,10 @@ This repository now contains **COMPLETE technical specifications** for rebuildin
 ## ⚡ Quick Summary
 
 **What We're Building:**
-- **Claude Code**: Agent orchestration engine that RUNS all AI agents
+- **Claude Code**: Agent orchestration engine that RUNS all AI agents (agents execute within Claude Code via Task tool)
 - **AgentLink**: React frontend that DISPLAYS agent activity
 - **Integration**: APIs connecting orchestration to display
-- **Deployment**: Self-contained VPS application with Docker
+- **Deployment**: Self-contained VPS application (AgentLink in Docker, Claude Code orchestrating agents)
 
 **Key Innovation:**
 - Always-on Chief of Staff coordinator
@@ -82,12 +82,12 @@ This repository now contains **COMPLETE technical specifications** for rebuildin
 1. **Review Documentation**: Start with Developer Quick Reference
 2. **Set Up Development Environment**: Follow unified architecture spec
 3. **Begin Phase 1**: Database and API gateway implementation
-4. **Iterate Weekly**: Follow the 8-week roadmap milestones
+4. **Progress Through Phases**: Follow the implementation roadmap
 
 ## 📊 Business Impact
 
 - **Value**: $100K+ in development savings
-- **Timeline**: 1 day to production
+- **Timeline**: Rapid phase-based deployment
 - **Risk**: Low (systems highly compatible)
 - **Scale**: Enterprise-ready architecture
 

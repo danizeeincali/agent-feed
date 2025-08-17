@@ -17,7 +17,7 @@ This repository contains the **COMPLETE technical specifications** for rebuildin
 #### Complete System Specification
 [`technical-specifications/COMPLETE-CLAUDE-CODE-VPS-TECHNICAL-SPECIFICATIONS.md`](./technical-specifications/COMPLETE-CLAUDE-CODE-VPS-TECHNICAL-SPECIFICATIONS.md)
 - **50,000+ lines** of comprehensive technical documentation
-- All 17+ agent definitions with container specs
+- All 17+ agent definitions with Claude Code integration specs
 - Complete tool specifications and MCP integrations
 - Database schemas, API endpoints, deployment configs
 
@@ -71,7 +71,7 @@ A **self-contained VPS application** that combines:
    - User interaction interface
 
 3. **Unified Infrastructure**
-   - Docker containerization
+   - AgentLink in Docker, Claude Code orchestration
    - PostgreSQL + Redis data layer
    - MCP protocol integrations
    - Enterprise security and monitoring
@@ -106,22 +106,22 @@ A **self-contained VPS application** that combines:
 
 ## 🚀 Implementation Roadmap
 
-### Phase 1: Foundation (Weeks 1-2)
+### Phase 1: Foundation
 - Database schema unification
 - Core API gateway setup
 - Authentication system integration
 
-### Phase 2: Agent Framework (Weeks 3-4)
-- Container setup for all agents
+### Phase 2: Agent Framework
+- Claude Code agent integration
 - Chief of Staff always-on implementation
 - Inter-agent communication protocols
 
-### Phase 3: Integration (Weeks 5-6)
+### Phase 3: Integration
 - AgentLink frontend integration
 - MCP protocol connections
 - Tool ecosystem implementation
 
-### Phase 4: Production (Weeks 7-8)
+### Phase 4: Production
 - Security hardening
 - Monitoring stack deployment
 - Performance optimization
@@ -137,14 +137,14 @@ A **self-contained VPS application** that combines:
 
 ### Architecture Principles
 - **Separation of Concerns**: Claude Code orchestrates, AgentLink displays
-- **Containerization**: Each agent in isolated container
+- **Orchestration Model**: Agents run via Claude Code Task tool, not separate containers
 - **Event-Driven**: Async communication between services
 - **API-First**: All communication via well-defined APIs
 
 ## 📊 Business Value
 
 - **$100K+ Development Savings**: Leveraging existing components
-- **6-8 Week Timeline**: Rapid deployment to production
+- **Rapid Deployment**: Phase-based implementation
 - **Enterprise Scale**: Multi-user, multi-tenant capable
 - **Low Risk**: High compatibility between systems confirmed
 
