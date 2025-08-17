@@ -39,6 +39,12 @@ This repository now contains **COMPLETE technical specifications** for rebuildin
    - Container relationships
    - Multi-agent coordination
 
+7. **[VPS Deployment Guide](./docs/VPS-DEPLOYMENT-GUIDE.md)** - NEW
+   - Complete containerization including Claude Code
+   - User onboarding with Claude OAuth flow
+   - One-command VPS deployment per user
+   - Terraform and automation scripts
+
 ## 🎯 What This Documentation Provides
 
 ### For Backend Developers:

@@ -19,15 +19,31 @@
 4. **Microservices Integration**: AgentLink as frontend service + VPS agent microservices
 5. **Shared Authentication**: Claude OAuth integration across all services
 
-#### System Architecture
+#### System Architecture (Fully Containerized for VPS)
 ```yaml
 services:
+  # Claude Code Container (NEW - Dockerized!)
+  claude-code:
+    build: ./claude-code
+    ports: 
+      - "7681:7681"  # Web terminal
+      - "8090:8090"  # API server
+    volumes:
+      - ./claude-agents:/home/claude/.claude/agents
+      - ./workspace:/workspace
+    environment:
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}  # From OAuth
+      - USER_EMAIL=${USER_EMAIL}
+      - USER_PLAN=${USER_PLAN}
+    depends_on: [database, redis]
+    
   # Frontend Service (AgentLink-based)
   agentlink-frontend:
     build: ./agentlink-frontend
     ports: ["3000:3000"]
     environment:
       - API_BASE_URL=http://agentlink-api:4000
+      - CLAUDE_CODE_URL=http://claude-code:8090
     
   # API Gateway (AgentLink-based with VPS extensions)
   agentlink-api:
@@ -36,14 +52,8 @@ services:
     environment:
       - DATABASE_URL=postgresql://...
       - REDIS_URL=redis://redis:6379
-    depends_on: [database, redis]
-    
-  # Claude Code Orchestration (NOT in Docker)
-  # Agents run within Claude Code via Task tool
-  # - Chief of Staff: Always-on coordination
-  # - PRD Observer: Background monitoring
-  # - Personal Todos: Task management
-  # - All 17+ agents execute via Claude Code Task()
+      - CLAUDE_CODE_URL=http://claude-code:8090
+    depends_on: [database, redis, claude-code]
   
   # Infrastructure Services
   database:
