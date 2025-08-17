@@ -15,21 +15,26 @@ This repository now contains **COMPLETE technical specifications** for rebuildin
 
 2. **[Complete Technical Specifications](./docs/technical-specifications/COMPLETE-CLAUDE-CODE-VPS-TECHNICAL-SPECIFICATIONS.md)**
    - 50,000+ lines of comprehensive documentation
-   - All 17+ agent definitions
+   - All 21 agents as MD configuration files
    - Complete tool and MCP specifications
    - Database schemas and API endpoints
 
-3. **[Claude Code vs AgentLink - DEFINITIVE](./docs/architecture/CLAUDE-CODE-VS-AGENTLINK-DEFINITIVE.md)**
+3. **[Complete Agent List](./docs/COMPLETE-AGENT-LIST.md)** - NEW
+   - All 21 agents listed explicitly
+   - MD configuration format explained
+   - Agent execution model clarified
+
+4. **[Claude Code vs AgentLink - DEFINITIVE](./docs/architecture/CLAUDE-CODE-VS-AGENTLINK-DEFINITIVE.md)**
    - **MANDATORY READING** to prevent confusion
    - Claude Code = Runs the agents (orchestration)
    - AgentLink = Shows the results (frontend)
 
-4. **[Unified Architecture Specification](./docs/architecture/UNIFIED-ARCHITECTURE-SPECIFICATION.md)**
+5. **[Unified Architecture Specification](./docs/architecture/UNIFIED-ARCHITECTURE-SPECIFICATION.md)**
    - Complete hybrid system design
    - Docker configurations
    - 8-week implementation roadmap
 
-5. **[System Architecture Diagrams](./docs/architecture/SYSTEM-ARCHITECTURE-DIAGRAMS.md)**
+6. **[System Architecture Diagrams](./docs/architecture/SYSTEM-ARCHITECTURE-DIAGRAMS.md)**
    - Visual representations of system flow
    - Container relationships
    - Multi-agent coordination
