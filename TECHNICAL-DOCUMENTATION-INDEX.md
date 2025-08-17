@@ -45,6 +45,12 @@ This repository now contains **COMPLETE technical specifications** for rebuildin
    - One-command VPS deployment per user
    - Terraform and automation scripts
 
+8. **[User Experience Flow](./docs/USER-EXPERIENCE-FLOW.md)** - NEW
+   - Automatic onboarding posts via get-to-know-you-agent
+   - Users interact ONLY with AgentLink UI
+   - Claude Code terminal for diagnostics only
+   - Complete user journey documentation
+
 ## 🎯 What This Documentation Provides
 
 ### For Backend Developers:

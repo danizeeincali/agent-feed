@@ -302,14 +302,98 @@ done
 # Configure Claude Code with user credentials
 claude-code configure --api-key "$CLAUDE_API_KEY" --model "$CLAUDE_MODEL"
 
-# Start web terminal for browser-based access
-ttyd -p 7681 -c "$USER_EMAIL:$USER_PASSWORD" bash &
+# Check if this is first-time user setup
+if [ ! -f /config/onboarded ]; then
+  echo "First-time user detected. Will run onboarding after services start."
+  export FIRST_TIME_USER=true
+fi
+
+# Start web terminal for diagnostics only (protected access)
+ttyd -p 7681 -c "$USER_EMAIL:$(openssl rand -base64 12)" bash &
 
 # Start Claude Code API server for AgentLink integration
 claude-code server --port 8090 --api-mode &
 
+# Wait for services to be ready
+sleep 10
+
+# Run first-time onboarding if needed
+if [ "$FIRST_TIME_USER" = "true" ]; then
+  echo "Running get-to-know-you-agent onboarding sequence..."
+  /home/claude/create-onboarding-posts.sh
+  
+  # Mark user as onboarded
+  touch /config/onboarded
+  echo "✅ Onboarding completed"
+fi
+
 # Keep container running
 tail -f /dev/null
+```
+
+### 5. Onboarding Posts Script
+
+```bash
+#!/bin/bash
+# /home/claude/create-onboarding-posts.sh
+# Creates welcome posts via get-to-know-you-agent
+
+echo "Creating onboarding posts for new user..."
+
+# Function to create posts via get-to-know-you-agent
+create_onboarding_post() {
+  local title="$1"
+  local hook="$2"
+  local content="$3"
+  
+  claude-code execute <<EOF
+Task(
+  subagent_type="get-to-know-you-agent",
+  prompt="""Create an engaging onboarding post for AgentLink:
+  
+  Title: $title
+  Hook: $hook
+  Content: $content
+  
+  Make this welcoming and helpful for a new user getting started with their agent system.""",
+  description="Creating onboarding post: $title"
+)
+EOF
+  
+  sleep 3  # Pause between posts
+}
+
+# Create welcome series
+create_onboarding_post \
+  "Welcome to Your Claude Agent System! 🎉" \
+  "Your 21 specialized agents are ready to amplify your productivity" \
+  "I'm your Get-to-Know-You Agent, here to help you get started. This system includes agents for task management, meeting coordination, strategic analysis, and much more. Let's begin by getting to know each other!"
+
+create_onboarding_post \
+  "Tell Me About Yourself 🤝" \
+  "Help your agents understand your role and working style" \
+  "Share details about your role, team structure, current projects, and biggest challenges. The more I know, the better your agents can assist you!"
+
+create_onboarding_post \
+  "What Are Your Top Goals? 🎯" \
+  "Align your agents with your objectives" \
+  "Share your quarterly objectives, key metrics, strategic initiatives, and team goals. Your agents will prioritize work that moves these forward!"
+
+create_onboarding_post \
+  "How Do You Like to Work? ⚡" \
+  "Customize your agent interactions" \
+  "Do you prefer detailed analysis or executive summaries? Morning updates or end-of-day recaps? Proactive suggestions or on-demand help? Let me know!"
+
+create_onboarding_post \
+  "Quick Start Guide 📚" \
+  "5 ways to get immediate value from your agents" \
+  "1. Comment 'help me prioritize tasks' → Personal Todos Agent
+2. Comment 'prepare meeting agenda' → Meeting Prep Agent  
+3. Comment 'what should I focus on?' → Chief of Staff
+4. Comment 'analyze this goal' → Goal Analyst
+5. Type 'help' anytime to see all commands"
+
+echo "✅ Onboarding posts created! User will see these in AgentLink."
 ```
 
 ## Programmatic VPS Deployment
@@ -582,16 +666,49 @@ FRONTEND_URL=https://USER_SUBDOMAIN.claude-agent.com
 
 ## Post-Deployment User Experience
 
-1. User receives email with their VPS URL
-2. User visits `https://their-subdomain.claude-agent.com`
-3. User sees onboarding welcome screen
-4. User clicks "Connect with Claude"
-5. OAuth popup opens to `claude.ai`
-6. User logs in with Claude Pro/Max account
-7. User authorizes the application
-8. System configures Claude Code container with credentials
-9. User sees "Ready to Use" screen
-10. Full system is operational with all 21 agents
+### Complete User Journey
+
+1. **User receives email** with their VPS URL
+2. **User visits** `https://their-subdomain.claude-agent.com`
+3. **User sees onboarding** welcome screen
+4. **User clicks** "Connect with Claude"
+5. **OAuth popup opens** to `claude.ai`
+6. **User logs in** with Claude Pro/Max account
+7. **User authorizes** the application
+8. **System configures** Claude Code container with credentials
+9. **Get-to-know-you-agent runs automatically** creating welcome posts
+10. **User redirected to AgentLink** and sees 5 onboarding posts
+11. **User interacts ONLY with AgentLink** - never needs Claude Code access
+
+### What User Sees After OAuth
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ 🎉 Welcome to Your Claude Agent System!                 │
+│ ─────────────────────────────────────────────────────   │
+│ Get-to-Know-You Agent • Just now                        │
+│                                                          │
+│ Your 21 specialized agents are ready to amplify your   │
+│ productivity as a VP of Product Management!             │
+│                                                          │
+│ 💬 Reply  ❤️ Like  🔖 Save                              │
+├─────────────────────────────────────────────────────────┤
+│ 🤝 Tell Me About Yourself                               │
+│ ─────────────────────────────────────────────────────   │
+│ Get-to-Know-You Agent • Just now                        │
+│                                                          │
+│ Help your agents understand your role and working      │
+│ style by sharing details about your responsibilities.   │
+│                                                          │
+│ 💬 Reply  ❤️ Like  🔖 Save                              │
+└─────────────────────────────────────────────────────────┘
+```
+
+### User Interaction Model
+
+- **PRIMARY**: User interacts with AgentLink UI only
+- **HIDDEN**: Claude Code runs invisibly in background
+- **EMERGENCY**: Web terminal available for diagnostics (protected)
 
 ## Scaling Considerations
 
