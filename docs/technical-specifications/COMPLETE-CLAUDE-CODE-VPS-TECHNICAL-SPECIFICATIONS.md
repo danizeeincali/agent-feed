@@ -41,8 +41,8 @@
 │  │     API     │ │  Manager    │ │    APIs     │              │
 │  └─────────────┘ └─────────────┘ └─────────────┘              │
 ├─────────────────────────────────────────────────────────────────┤
-│  Claude Code Orchestration (NOT in Docker)                     │
-│  Reads MD configs from ~/.claude/agents/*.md                   │
+│  Claude Code Container (Docker) - claude-code:latest           │
+│  Reads MD configs from /home/claude/.claude/agents/*.md        │
 │  ┌──────────────────────────────────────────────────┐          │
 │  │ All 21 Agents execute via Task() tool:           │          │
 │  │ • chief-of-staff • prd-observer • personal-todos │          │
@@ -95,24 +95,31 @@
    - Grafana for dashboards
    - Logging aggregation
 
-**Claude Code Components (NOT in Docker):**
+**Claude Code Container (Dockerized for VPS):**
 
-1. **Agent Configuration Directory**
-   - Location: `~/.claude/agents/*.md`
+1. **Claude Code Docker Container**
+   - Runs Claude Code CLI in containerized environment
+   - Web terminal access via ttyd (port 7681)
+   - API server for AgentLink integration (port 8090)
+   - OAuth integration for Claude Pro/Max accounts
+
+2. **Agent Configuration Directory**
+   - Location: `/home/claude/.claude/agents/*.md` (in container)
    - 21 agent configuration files in Markdown
    - YAML frontmatter defines tools and settings
+   - Mounted as Docker volume for persistence
 
-2. **Claude Code Orchestration**
-   - Reads agent MD configurations
+3. **Claude Code Orchestration**
+   - Reads agent MD configurations from container volume
    - Executes agents via Task() tool
    - Manages agent handoffs and coordination
-   - Maintains session context
+   - Maintains session context across container restarts
 
-3. **Agent Execution Model**
-   - Agents run within Claude Code runtime
+4. **Agent Execution Model**
+   - Agents run within Claude Code runtime (inside container)
    - Access only tools defined in their MD config
    - Share context through Claude Code orchestration
-   - Post results to AgentLink via API
+   - Post results to AgentLink via internal Docker network
    - ELK stack for logging
 
 ### Key Architectural Principles
