@@ -19,7 +19,7 @@
 4. **Microservices Integration**: AgentLink as frontend service + VPS agent microservices
 5. **Shared Authentication**: Claude OAuth integration across all services
 
-#### Container Architecture
+#### System Architecture
 ```yaml
 services:
   # Frontend Service (AgentLink-based)
@@ -28,7 +28,6 @@ services:
     ports: ["3000:3000"]
     environment:
       - API_BASE_URL=http://agentlink-api:4000
-      - CHIEF_OF_STAFF_URL=http://chief-of-staff:5000
     
   # API Gateway (AgentLink-based with VPS extensions)
   agentlink-api:
@@ -37,33 +36,14 @@ services:
     environment:
       - DATABASE_URL=postgresql://...
       - REDIS_URL=redis://redis:6379
-      - MESSAGE_QUEUE_URL=http://message-queue:6000
-    depends_on: [database, redis, message-queue]
+    depends_on: [database, redis]
     
-  # Chief of Staff (Always-On VPS Agent)
-  chief-of-staff:
-    build: ./vps-agents/chief-of-staff
-    restart: always
-    environment:
-      - PRIORITY=P0_CRITICAL
-      - HEALTH_CHECK_INTERVAL=30s
-      - API_GATEWAY_URL=http://agentlink-api:4000
-    depends_on: [agentlink-api, message-queue]
-    
-  # Specialized VPS Agents
-  personal-todos-agent:
-    build: ./vps-agents/personal-todos
-    environment:
-      - CHIEF_OF_STAFF_URL=http://chief-of-staff:5000
-      - API_GATEWAY_URL=http://agentlink-api:4000
-    
-  impact-filter-agent:
-    build: ./vps-agents/impact-filter
-    environment:
-      - CHIEF_OF_STAFF_URL=http://chief-of-staff:5000
-      - API_GATEWAY_URL=http://agentlink-api:4000
-      
-  # ... other VPS agents ...
+  # Claude Code Orchestration (NOT in Docker)
+  # Agents run within Claude Code via Task tool
+  # - Chief of Staff: Always-on coordination
+  # - PRD Observer: Background monitoring
+  # - Personal Todos: Task management
+  # - All 17+ agents execute via Claude Code Task()
   
   # Infrastructure Services
   database:
@@ -135,7 +115,7 @@ CREATE TABLE agents (
   avatar_color VARCHAR,
   icon_class VARCHAR,
   agent_type VARCHAR,             -- NEW: VPS agent classification
-  container_id VARCHAR,           -- NEW: Docker container reference
+  claude_code_id VARCHAR,         -- NEW: Claude Code agent reference
   working_directory VARCHAR,      -- NEW: VPS working directory
   status VARCHAR DEFAULT 'active', -- NEW: Agent status tracking
   health_check_url VARCHAR,       -- NEW: Health monitoring
@@ -569,57 +549,57 @@ abstract class UnifiedBaseAgent {
 
 ## MIGRATION ROADMAP
 
-### PHASE 1: FOUNDATION SETUP (Weeks 1-2)
+### PHASE 1: FOUNDATION SETUP
 
-#### Week 1: Database Integration
+#### Step 1: Database Integration
 - ✅ **Task 1.1**: Create unified database schema combining AgentLink + VPS tables
 - ✅ **Task 1.2**: Set up PostgreSQL container with migration scripts
 - ✅ **Task 1.3**: Implement Drizzle ORM with unified schema
 - ✅ **Task 1.4**: Create database seed scripts for both systems
 
-#### Week 2: Authentication Integration
+#### Step 2: Authentication Integration
 - ✅ **Task 2.1**: Implement Claude OAuth in AgentLink codebase
 - ✅ **Task 2.2**: Add JWT session management
 - ✅ **Task 2.3**: Create user profile management with Claude plan integration
 - ✅ **Task 2.4**: Test authentication flow end-to-end
 
-### PHASE 2: AGENT FRAMEWORK INTEGRATION (Weeks 3-4)
+### PHASE 2: AGENT FRAMEWORK INTEGRATION
 
-#### Week 3: Agent Management Unification
+#### Step 1: Agent Management Unification
 - ✅ **Task 3.1**: Extend AgentLink agent system with VPS agent types
 - ✅ **Task 3.2**: Implement BaseAgent abstract class in AgentLink
-- ✅ **Task 3.3**: Add agent container management and health monitoring
+- ✅ **Task 3.3**: Add Claude Code agent integration and health monitoring
 - ✅ **Task 3.4**: Create agent status tracking and lifecycle management
 
-#### Week 4: Chief of Staff Integration
-- ✅ **Task 4.1**: Create Chief of Staff always-on container
+#### Step 2: Chief of Staff Integration
+- ✅ **Task 4.1**: Create Chief of Staff always-on orchestration via Claude Code
 - ✅ **Task 4.2**: Implement agent routing and coordination logic
 - ✅ **Task 4.3**: Add strategic oversight and decision support
 - ✅ **Task 4.4**: Test multi-agent workflow orchestration
 
-### PHASE 3: FEATURE INTEGRATION (Weeks 5-6)
+### PHASE 3: FEATURE INTEGRATION
 
-#### Week 5: VPS Core Features
+#### Step 1: VPS Core Features
 - ✅ **Task 5.1**: Add task management with Fibonacci priorities
 - ✅ **Task 5.2**: Implement follow-up tracking system
 - ✅ **Task 5.3**: Add memory management with search capabilities
 - ✅ **Task 5.4**: Create project context tracking
 
-#### Week 6: Strategic Framework Agents
+#### Step 2: Strategic Framework Agents
 - ✅ **Task 6.1**: Integrate Impact Filter Agent
 - ✅ **Task 6.2**: Add Bull-Beaver-Bear experiment framework
 - ✅ **Task 6.3**: Implement Goal Analyst capabilities
 - ✅ **Task 6.4**: Add Meeting Prep and Next Steps agents
 
-### PHASE 4: ADVANCED INTEGRATION (Weeks 7-8)
+### PHASE 4: ADVANCED INTEGRATION
 
-#### Week 7: Cross-Session Persistence
+#### Step 1: Cross-Session Persistence
 - ✅ **Task 7.1**: Implement context preservation across sessions
 - ✅ **Task 7.2**: Add workflow continuity management
 - ✅ **Task 7.3**: Create multi-session project tracking
 - ✅ **Task 7.4**: Test session handoff scenarios
 
-#### Week 8: Monitoring and Optimization
+#### Step 2: Monitoring and Optimization
 - ✅ **Task 8.1**: Add Prometheus + Grafana monitoring stack
 - ✅ **Task 8.2**: Implement PRD Observer background monitoring
 - ✅ **Task 8.3**: Create performance optimization protocols
@@ -919,7 +899,7 @@ describe('Unified AgentLink VPS Integration', () => {
 
 1. **User Decision Required**:
    - Review hybrid architecture recommendation
-   - Approve 8-week migration roadmap
+   - Approve phase-based migration roadmap
    - Confirm resource allocation for integration project
    - Validate security and compliance requirements
 

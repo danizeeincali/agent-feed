@@ -32,14 +32,14 @@
 ## 🚨 Critical Clarifications for Developers
 
 ### MUST UNDERSTAND:
-- **Claude Code** = The orchestration engine that RUNS all agents
-- **AgentLink** = The React frontend that DISPLAYS agent activity
+- **Claude Code** = The orchestration engine that RUNS all agents (via Task tool, NOT separate containers)
+- **AgentLink** = The React frontend that DISPLAYS agent activity (this runs in Docker)
 - **Integration** = HTTP APIs connecting orchestration to display
-- **Deployment** = Self-contained VPS with Docker containers
+- **Deployment** = Claude Code orchestrates agents, AgentLink frontend in Docker
 
 ### Key Technical Decisions:
 - **Hybrid Architecture**: Best of both systems
-- **Always-On Chief of Staff**: 24/7 container orchestration
+- **Always-On Chief of Staff**: 24/7 coordination via Claude Code
 - **Multi-Tier Persistence**: PostgreSQL + Redis + SQLite
 - **Event-Driven**: Async communication between services
 
@@ -53,13 +53,13 @@
 
 ### Full Roadmap:
 - **Phase 1**: Foundation (Database, API Gateway)
-- **Phase 2**: Agent Framework (Containers, Communication)
+- **Phase 2**: Agent Framework (Claude Code Integration, Communication)
 - **Phase 3**: Integration (Frontend, MCP Protocols)
 - **Phase 4**: Production (Security, Monitoring, Deployment)
 
 ## 📊 Expected Outcomes
 
-- **Development Time**: 1 day
+- **Development Time**: Rapid phase-based implementation
 - **Business Value**: $100K+ in saved development
 - **Technical Risk**: Low (high compatibility confirmed)
 - **Architecture**: Enterprise-ready, scalable
