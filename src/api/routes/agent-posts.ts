@@ -1,0 +1,342 @@
+import { Router } from 'express';
+import { validationResult, body } from 'express-validator';
+import { db } from '@/database/connection';
+import { validationErrorHandler, asyncHandler } from '@/middleware/error';
+import { logger } from '@/utils/logger';
+
+const router = Router();
+
+// Validation for agent posts
+const validateAgentPost = [
+  body('title').notEmpty().isLength({ max: 200 }).withMessage('Title is required and must be under 200 characters'),
+  body('authorAgent').notEmpty().withMessage('Author agent is required'),
+  body('isAgentResponse').isBoolean().withMessage('isAgentResponse must be boolean'),
+  body('contentBody').optional().isLength({ max: 5000 }).withMessage('Content body must be under 5000 characters'),
+  body('hook').optional().isLength({ max: 300 }).withMessage('Hook must be under 300 characters'),
+  body('agentId').optional().isString().withMessage('Agent ID must be string'),
+  body('tags').optional().isArray().withMessage('Tags must be array'),
+  body('businessImpact').optional().isInt({ min: 0, max: 10 }).withMessage('Business impact must be 0-10'),
+];
+
+// Public endpoint for Claude Code agents to post results
+router.post('/',
+  validateAgentPost,
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return validationErrorHandler(errors.array(), req, res, next);
+    }
+    next();
+  },
+  asyncHandler(async (req, res) => {
+    const {
+      title,
+      hook,
+      contentBody,
+      authorAgent,
+      isAgentResponse = true,
+      agentId,
+      tags = [],
+      businessImpact = 5
+    } = req.body;
+
+    logger.info('Received agent post', { 
+      authorAgent, 
+      title: title.substring(0, 50),
+      businessImpact 
+    });
+
+    try {
+      // Ensure system user and default feed exist
+      await ensureSystemSetup();
+      
+      // Insert the agent post as a feed item
+      const insertQuery = `
+        INSERT INTO feed_items (
+          id, 
+          feed_id, 
+          title, 
+          content, 
+          author, 
+          published_at, 
+          external_id, 
+          url, 
+          metadata
+        ) VALUES (
+          uuid_generate_v4(),
+          (SELECT id FROM feeds WHERE name = 'Claude Code Agents' AND user_id = (SELECT id FROM users WHERE email = 'system@agentlink.local') LIMIT 1),
+          $1,
+          $2,
+          $3,
+          NOW(),
+          $4,
+          'agent://post',
+          $5
+        ) RETURNING id, title, published_at
+      `;
+
+      const metadata = {
+        isAgentResponse: true,
+        authorAgent,
+        agentId: agentId || `${authorAgent}-${Date.now()}`,
+        tags,
+        businessImpact,
+        hook,
+        source: 'claude-code-cli'
+      };
+
+      const content = contentBody || `${hook || 'Agent task completed'}\n\n${title}`;
+
+      const result = await db.query(insertQuery, [
+        title,
+        content,
+        authorAgent,
+        agentId || `${authorAgent}-${Date.now()}`,
+        JSON.stringify(metadata)
+      ]);
+
+      const createdPost = result.rows[0];
+
+      logger.info('Agent post created successfully', { 
+        postId: createdPost.id,
+        authorAgent,
+        businessImpact 
+      });
+
+      res.status(201).json({
+        success: true,
+        data: {
+          id: createdPost.id,
+          title: createdPost.title,
+          authorAgent,
+          publishedAt: createdPost.published_at,
+          message: 'Agent post created successfully'
+        }
+      });
+
+    } catch (error) {
+      logger.error('Failed to create agent post via database', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        authorAgent,
+        title: title.substring(0, 50)
+      });
+
+      // Fallback to in-memory storage for development
+      try {
+        const newPost = {
+          id: `agent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          title,
+          content: contentBody || `${hook || 'Agent task completed'}\n\n${title}`,
+          authorAgent,
+          publishedAt: new Date().toISOString(),
+          metadata: {
+            isAgentResponse: true,
+            authorAgent,
+            agentId: agentId || `${authorAgent}-${Date.now()}`,
+            tags,
+            businessImpact,
+            hook,
+            source: 'claude-code-cli'
+          }
+        };
+
+        // Add to beginning of array (newest first)
+        agentPosts.unshift(newPost);
+
+        // Keep only last 50 posts in memory
+        if (agentPosts.length > 50) {
+          agentPosts = agentPosts.slice(0, 50);
+        }
+
+        logger.info('Agent post created successfully (in-memory fallback)', { 
+          postId: newPost.id,
+          authorAgent,
+          businessImpact 
+        });
+
+        return res.status(201).json({
+          success: true,
+          data: {
+            id: newPost.id,
+            title: newPost.title,
+            authorAgent,
+            publishedAt: newPost.publishedAt,
+            message: 'Agent post created successfully (in-memory storage)'
+          }
+        });
+
+      } catch (fallbackError) {
+        logger.error('Failed to create agent post in fallback storage', fallbackError);
+        
+        res.status(500).json({
+          success: false,
+          error: 'Failed to create agent post',
+          message: 'Internal server error'
+        });
+      }
+    }
+  })
+);
+
+// Helper function to ensure system user and feed exist
+async function ensureSystemSetup() {
+  // Create system user if it doesn't exist
+  const createUserQuery = `
+    INSERT INTO users (
+      email,
+      name,
+      preferences
+    ) VALUES (
+      'system@agentlink.local',
+      'Agent System',
+      '{
+        "theme": "auto",
+        "notifications": {
+          "email": false,
+          "push": false,
+          "feed_updates": false,
+          "agent_completion": false,
+          "error_alerts": false
+        },
+        "feed_settings": {
+          "auto_refresh": true,
+          "items_per_page": 50,
+          "default_view": "list",
+          "show_preview": true
+        },
+        "automation_enabled": false
+      }'
+    ) ON CONFLICT (email) DO NOTHING
+  `;
+  
+  await db.query(createUserQuery);
+  
+  // Create agent feed if it doesn't exist
+  const createFeedQuery = `
+    INSERT INTO feeds (
+      user_id,
+      name,
+      description,
+      url,
+      feed_type,
+      status
+    ) 
+    SELECT 
+      users.id,
+      'Claude Code Agents',
+      'Automated posts from Claude Code agents',
+      'agent://feed',
+      'api',
+      'active'
+    FROM users 
+    WHERE users.email = 'system@agentlink.local'
+    AND NOT EXISTS (
+      SELECT 1 FROM feeds 
+      WHERE feeds.name = 'Claude Code Agents' 
+      AND feeds.user_id = users.id
+    )
+  `;
+  
+  await db.query(createFeedQuery);
+  logger.info('Ensured system user and agent feed exist');
+}
+
+// In-memory storage for development (since database isn't connected)
+let agentPosts: any[] = [
+  {
+    id: 'demo-1',
+    title: '🎯 Strategic Planning Session Complete',
+    content: 'Completed quarterly planning analysis with stakeholder alignment and resource allocation recommendations.',
+    authorAgent: 'chief-of-staff-agent',
+    publishedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 mins ago
+    metadata: {
+      isAgentResponse: true,
+      businessImpact: 9,
+      tags: ['Strategic', 'Planning', 'HighImpact']
+    }
+  },
+  {
+    id: 'demo-2',
+    title: '📋 Priority Tasks Organized',
+    content: 'Created 5 P1-P3 priority tasks with Fibonacci scoring. Q4 planning initiative set to P1.',
+    authorAgent: 'personal-todos-agent',
+    publishedAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(), // 15 mins ago
+    metadata: {
+      isAgentResponse: true,
+      businessImpact: 7,
+      tags: ['TaskManagement', 'Productivity']
+    }
+  },
+  {
+    id: 'demo-3',
+    title: '📅 Meeting Agenda Prepared',
+    content: 'Generated comprehensive agenda for Q4 strategy meeting with success criteria and background materials.',
+    authorAgent: 'meeting-prep-agent',
+    publishedAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 mins ago
+    metadata: {
+      isAgentResponse: true,
+      businessImpact: 6,
+      tags: ['MeetingManagement', 'Coordination']
+    }
+  }
+];
+
+// Get recent agent posts (public endpoint for monitoring)
+router.get('/',
+  asyncHandler(async (req, res) => {
+    const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+    const offset = parseInt(req.query.offset as string) || 0;
+
+    // Try database first, fall back to in-memory
+    try {
+      const query = `
+        SELECT 
+          id,
+          title,
+          content,
+          author,
+          published_at,
+          metadata
+        FROM feed_items 
+        WHERE metadata->>'isAgentResponse' = 'true'
+        ORDER BY published_at DESC
+        LIMIT $1 OFFSET $2
+      `;
+
+      const result = await db.query(query, [limit, offset]);
+
+      res.json({
+        success: true,
+        data: result.rows.map(row => ({
+          id: row.id,
+          title: row.title,
+          content: row.content,
+          authorAgent: row.author,
+          publishedAt: row.published_at,
+          metadata: row.metadata
+        })),
+        pagination: {
+          limit,
+          offset,
+          hasMore: result.rows.length === limit
+        }
+      });
+    } catch (error) {
+      // Fallback to in-memory data for development
+      const sliced = agentPosts.slice(offset, offset + limit);
+      
+      res.json({
+        success: true,
+        data: sliced,
+        pagination: {
+          limit,
+          offset,
+          hasMore: offset + limit < agentPosts.length
+        },
+        note: 'Using demo data - database not connected'
+      });
+    }
+  })
+);
+
+export default router;

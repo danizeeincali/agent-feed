@@ -1,0 +1,1124 @@
+{
+  "dashboards": [
+    {
+      "id": "system-overview",
+      "title": "System Overview Dashboard",
+      "tags": ["system", "overview", "production"],
+      "timezone": "UTC",
+      "refresh": "30s",
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "panels": [
+        {
+          "id": 1,
+          "title": "CPU Usage",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "100 - (avg(irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+              "legendFormat": "CPU Usage %",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 70
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 2,
+          "title": "Memory Usage",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 6,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+              "legendFormat": "Memory Usage %",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 95
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 3,
+          "title": "Disk Usage",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 12,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "(1 - (node_filesystem_avail_bytes{fstype!=\"tmpfs\"} / node_filesystem_size_bytes{fstype!=\"tmpfs\"})) * 100",
+              "legendFormat": "Disk Usage %",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 95
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 4,
+          "title": "Network I/O",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 18,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "rate(node_network_receive_bytes_total[5m]) + rate(node_network_transmit_bytes_total[5m])",
+              "legendFormat": "Network I/O",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "Bps",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "id": 5,
+          "title": "Application Response Time",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))",
+              "legendFormat": "50th percentile",
+              "refId": "A"
+            },
+            {
+              "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+              "legendFormat": "95th percentile",
+              "refId": "B"
+            },
+            {
+              "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))",
+              "legendFormat": "99th percentile",
+              "refId": "C"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "id": 6,
+          "title": "Request Rate",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "rate(application_metrics{metric=\"requests_per_second\"}[5m])",
+              "legendFormat": "Requests/sec",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "performance-monitoring",
+      "title": "Performance Monitoring Dashboard",
+      "tags": ["performance", "bottlenecks", "optimization"],
+      "timezone": "UTC",
+      "refresh": "10s",
+      "time": {
+        "from": "now-30m",
+        "to": "now"
+      },
+      "panels": [
+        {
+          "id": 10,
+          "title": "Performance Bottlenecks",
+          "type": "table",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "increase(performance_bottlenecks_total[5m])",
+              "legendFormat": "{{type}} - {{severity}}",
+              "refId": "A",
+              "format": "table"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "displayMode": "list",
+                "filterable": true
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "severity"
+                },
+                "properties": [
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "type": "color-background"
+                    }
+                  },
+                  {
+                    "id": "color",
+                    "value": {
+                      "mode": "thresholds"
+                    }
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 1
+                        },
+                        {
+                          "color": "red",
+                          "value": 3
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 11,
+          "title": "CPU Trend Analysis",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "system_cpu_usage_percent",
+              "legendFormat": "Current CPU",
+              "refId": "A"
+            },
+            {
+              "expr": "predict_linear(system_cpu_usage_percent[30m], 3600)",
+              "legendFormat": "Predicted (1h)",
+              "refId": "B"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "id": 12,
+          "title": "Memory Trend Analysis",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "system_memory_bytes{type=\"used\"} / system_memory_bytes{type=\"total\"} * 100",
+              "legendFormat": "Current Memory",
+              "refId": "A"
+            },
+            {
+              "expr": "predict_linear((system_memory_bytes{type=\"used\"} / system_memory_bytes{type=\"total\"} * 100)[30m:], 3600)",
+              "legendFormat": "Predicted (1h)",
+              "refId": "B"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "id": 13,
+          "title": "Auto-scaling Events",
+          "type": "logs",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 17
+          },
+          "targets": [
+            {
+              "expr": "{job=\"health-monitor\"} |= \"scaling\"",
+              "refId": "A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "security-monitoring",
+      "title": "Security Monitoring Dashboard",
+      "tags": ["security", "threats", "compliance"],
+      "timezone": "UTC",
+      "refresh": "30s",
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "panels": [
+        {
+          "id": 20,
+          "title": "Security Events by Type",
+          "type": "piechart",
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "increase(security_events_total[1h])",
+              "legendFormat": "{{type}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "id": 21,
+          "title": "Threat Detection Score",
+          "type": "gauge",
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 8,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "security_risk_score",
+              "legendFormat": "Risk Score",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "none",
+              "min": 0,
+              "max": 100,
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 40
+                  },
+                  {
+                    "color": "orange",
+                    "value": 70
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 22,
+          "title": "Compliance Score",
+          "type": "gauge",
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 16,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "security_compliance_score",
+              "legendFormat": "Compliance",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "min": 0,
+              "max": 100,
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 80
+                  },
+                  {
+                    "color": "green",
+                    "value": 95
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 23,
+          "title": "Security Events Timeline",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "rate(security_events_total{severity=\"critical\"}[5m])",
+              "legendFormat": "Critical",
+              "refId": "A"
+            },
+            {
+              "expr": "rate(security_events_total{severity=\"high\"}[5m])",
+              "legendFormat": "High",
+              "refId": "B"
+            },
+            {
+              "expr": "rate(security_events_total{severity=\"medium\"}[5m])",
+              "legendFormat": "Medium",
+              "refId": "C"
+            },
+            {
+              "expr": "rate(security_events_total{severity=\"low\"}[5m])",
+              "legendFormat": "Low",
+              "refId": "D"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "events/sec",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "error-recovery",
+      "title": "Error Recovery Dashboard",
+      "tags": ["errors", "recovery", "incidents"],
+      "timezone": "UTC",
+      "refresh": "30s",
+      "time": {
+        "from": "now-2h",
+        "to": "now"
+      },
+      "panels": [
+        {
+          "id": 30,
+          "title": "Error Rate",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "rate(application_errors_total[5m])",
+              "legendFormat": "Error Rate",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "errors/sec",
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 5
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 31,
+          "title": "Recovery Success Rate",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 6,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "recovery_success_rate",
+              "legendFormat": "Success Rate",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 70
+                  },
+                  {
+                    "color": "green",
+                    "value": 90
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 32,
+          "title": "Mean Time to Recovery",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 12,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "recovery_time_mean",
+              "legendFormat": "MTTR",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "m",
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 15
+                  },
+                  {
+                    "color": "red",
+                    "value": 30
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 33,
+          "title": "Active Incidents",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 18,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "incidents_open_total",
+              "legendFormat": "Open Incidents",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "none",
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 1
+                  },
+                  {
+                    "color": "red",
+                    "value": 3
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": 34,
+          "title": "Error Recovery Timeline",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "rate(error_events_total[5m])",
+              "legendFormat": "Error Events",
+              "refId": "A"
+            },
+            {
+              "expr": "rate(recovery_attempts_total[5m])",
+              "legendFormat": "Recovery Attempts",
+              "refId": "B"
+            },
+            {
+              "expr": "rate(recovery_success_total[5m])",
+              "legendFormat": "Successful Recoveries",
+              "refId": "C"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "events/sec",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "health-monitoring",
+      "title": "Health Monitoring Dashboard",
+      "tags": ["health", "services", "uptime"],
+      "timezone": "UTC",
+      "refresh": "15s",
+      "time": {
+        "from": "now-1h",
+        "to": "now"
+      },
+      "panels": [
+        {
+          "id": 40,
+          "title": "Service Health Status",
+          "type": "stat",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "health_check_status",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "thresholds": {
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 0.5
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  }
+                ]
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "0": {
+                      "text": "DOWN"
+                    },
+                    "1": {
+                      "text": "UP"
+                    }
+                  },
+                  "type": "value"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": 41,
+          "title": "Health Check Response Time",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "health_check_response_time",
+              "legendFormat": "{{service}}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "ms",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "id": 42,
+          "title": "Service Uptime",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "targets": [
+            {
+              "expr": "increase(health_check_success_total[1h]) / increase(health_check_total[1h]) * 100",
+              "legendFormat": "{{service}} Uptime %",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "min": 0,
+              "max": 100,
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "alerts-overview",
+      "title": "Alerts Overview Dashboard",
+      "tags": ["alerts", "notifications", "escalations"],
+      "timezone": "UTC",
+      "refresh": "30s",
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "panels": [
+        {
+          "id": 50,
+          "title": "Alert Summary",
+          "type": "table",
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "targets": [
+            {
+              "expr": "ALERTS",
+              "legendFormat": "",
+              "refId": "A",
+              "format": "table"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "displayMode": "list",
+                "filterable": true
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "severity"
+                },
+                "properties": [
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "type": "color-background"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": 51,
+          "title": "Alert Rate by Severity",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 10
+          },
+          "targets": [
+            {
+              "expr": "rate(alerts_total{severity=\"critical\"}[5m])",
+              "legendFormat": "Critical",
+              "refId": "A"
+            },
+            {
+              "expr": "rate(alerts_total{severity=\"high\"}[5m])",
+              "legendFormat": "High",
+              "refId": "B"
+            },
+            {
+              "expr": "rate(alerts_total{severity=\"medium\"}[5m])",
+              "legendFormat": "Medium",
+              "refId": "C"
+            },
+            {
+              "expr": "rate(alerts_total{severity=\"low\"}[5m])",
+              "legendFormat": "Low",
+              "refId": "D"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "alerts/sec",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        },
+        {
+          "id": 52,
+          "title": "Alert Resolution Time",
+          "type": "histogram",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 10
+          },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.50, alert_resolution_time_bucket)",
+              "legendFormat": "50th percentile",
+              "refId": "A"
+            },
+            {
+              "expr": "histogram_quantile(0.95, alert_resolution_time_bucket)",
+              "legendFormat": "95th percentile",
+              "refId": "B"
+            },
+            {
+              "expr": "histogram_quantile(0.99, alert_resolution_time_bucket)",
+              "legendFormat": "99th percentile",
+              "refId": "C"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "m",
+              "color": {
+                "mode": "palette-classic"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "name": "Deployments",
+        "datasource": "prometheus",
+        "enable": true,
+        "expr": "changes(deployment_version[1h])",
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "titleFormat": "Deployment: {{version}}",
+        "tagKeys": "version,environment"
+      },
+      {
+        "name": "Incidents",
+        "datasource": "prometheus",
+        "enable": true,
+        "expr": "increase(incidents_created_total[1h])",
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "titleFormat": "Incident: {{severity}}",
+        "tagKeys": "severity,component"
+      },
+      {
+        "name": "Scaling Events",
+        "datasource": "prometheus",
+        "enable": true,
+        "expr": "increase(scaling_events_total[1h])",
+        "iconColor": "rgba(96, 255, 96, 1)",
+        "titleFormat": "Scaling: {{action}}",
+        "tagKeys": "action,component"
+      }
+    ]
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "environment",
+        "type": "query",
+        "query": "label_values(environment)",
+        "refresh": 1,
+        "includeAll": false,
+        "multi": false,
+        "current": {
+          "value": "production",
+          "text": "production"
+        }
+      },
+      {
+        "name": "service",
+        "type": "query",
+        "query": "label_values(up{environment=\"$environment\"}, job)",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true,
+        "current": {
+          "value": "All",
+          "text": "All"
+        }
+      },
+      {
+        "name": "instance",
+        "type": "query",
+        "query": "label_values(up{job=\"$service\"}, instance)",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true,
+        "current": {
+          "value": "All",
+          "text": "All"
+        }
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "Prometheus",
+      "url": "https://prometheus.example.com",
+      "type": "link",
+      "icon": "external link"
+    },
+    {
+      "title": "Alertmanager",
+      "url": "https://alertmanager.example.com",
+      "type": "link",
+      "icon": "external link"
+    },
+    {
+      "title": "Documentation",
+      "url": "https://docs.example.com/monitoring",
+      "type": "link",
+      "icon": "doc"
+    }
+  ]
+}

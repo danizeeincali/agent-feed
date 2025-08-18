@@ -1,0 +1,407 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-feed-api-gateway
+  namespace: agent-feed
+  labels:
+    app: api-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: agent-feed/api-gateway:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3000"
+        - name: POSTGRES_URL
+          value: "postgresql://agent_feed_user:$(POSTGRES_PASSWORD)@postgres:5432/agent_feed"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis:6379"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: JWT_SECRET
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: POSTGRES_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-feed-api-gateway
+  namespace: agent-feed
+  labels:
+    app: api-gateway
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: api-gateway
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-feed-agent-management
+  namespace: agent-feed
+  labels:
+    app: agent-management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: agent-management
+  template:
+    metadata:
+      labels:
+        app: agent-management
+    spec:
+      containers:
+      - name: agent-management
+        image: agent-feed/agent-management:latest
+        ports:
+        - containerPort: 3001
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3001"
+        - name: POSTGRES_URL
+          value: "postgresql://agent_feed_user:$(POSTGRES_PASSWORD)@postgres:5432/agent_feed"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis:6379"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: POSTGRES_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-feed-agent-management
+  namespace: agent-feed
+  labels:
+    app: agent-management
+spec:
+  ports:
+  - port: 3001
+    targetPort: 3001
+  selector:
+    app: agent-management
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-feed-feed-processing
+  namespace: agent-feed
+  labels:
+    app: feed-processing
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: feed-processing
+  template:
+    metadata:
+      labels:
+        app: feed-processing
+    spec:
+      containers:
+      - name: feed-processing
+        image: agent-feed/feed-processing:latest
+        ports:
+        - containerPort: 3002
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3002"
+        - name: POSTGRES_URL
+          value: "postgresql://agent_feed_user:$(POSTGRES_PASSWORD)@postgres:5432/agent_feed"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis:6379"
+        - name: QUEUE_CONCURRENCY
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: QUEUE_CONCURRENCY
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: POSTGRES_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-feed-feed-processing
+  namespace: agent-feed
+  labels:
+    app: feed-processing
+spec:
+  ports:
+  - port: 3002
+    targetPort: 3002
+  selector:
+    app: feed-processing
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-feed-user-management
+  namespace: agent-feed
+  labels:
+    app: user-management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-management
+  template:
+    metadata:
+      labels:
+        app: user-management
+    spec:
+      containers:
+      - name: user-management
+        image: agent-feed/user-management:latest
+        ports:
+        - containerPort: 3003
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3003"
+        - name: POSTGRES_URL
+          value: "postgresql://agent_feed_user:$(POSTGRES_PASSWORD)@postgres:5432/agent_feed"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis:6379"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: JWT_SECRET
+        - name: BCRYPT_ROUNDS
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: BCRYPT_ROUNDS
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: POSTGRES_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3003
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3003
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-feed-user-management
+  namespace: agent-feed
+  labels:
+    app: user-management
+spec:
+  ports:
+  - port: 3003
+    targetPort: 3003
+  selector:
+    app: user-management
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-feed-websocket
+  namespace: agent-feed
+  labels:
+    app: websocket
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: websocket
+  template:
+    metadata:
+      labels:
+        app: websocket
+    spec:
+      containers:
+      - name: websocket
+        image: agent-feed/websocket:latest
+        ports:
+        - containerPort: 3004
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: NODE_ENV
+        - name: PORT
+          value: "3004"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis:6379"
+        - name: CORS_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              name: agent-feed-config
+              key: CORS_ORIGIN
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: agent-feed-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3004
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3004
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-feed-websocket
+  namespace: agent-feed
+  labels:
+    app: websocket
+spec:
+  ports:
+  - port: 3004
+    targetPort: 3004
+  selector:
+    app: websocket

@@ -1,0 +1,85 @@
+version: '3.8'
+
+# Simplified Docker Compose for AgentLink Only
+# Claude Code runs in your terminal with Pro/Max authentication
+
+services:
+  # PostgreSQL Database for AgentLink
+  postgres:
+    image: postgres:15-alpine
+    container_name: agentlink-postgres
+    environment:
+      POSTGRES_DB: agentlink
+      POSTGRES_USER: agentlink
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agentlink_2025}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - agentlink-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentlink -d agentlink"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache for AgentLink
+  redis:
+    image: redis:7-alpine
+    container_name: agentlink-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - agentlink-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # AgentLink Social Media Feed Application
+  agentlink:
+    build:
+      context: .
+      dockerfile: Dockerfile.agentlink
+    container_name: agentlink-app
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - DATABASE_URL=postgresql://agentlink:${POSTGRES_PASSWORD:-agentlink_2025}@postgres:5432/agentlink
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET:-agentlink_jwt_secret_2025}
+      - ALLOW_AGENT_POSTS=true  # Allow posts from Claude Code agents
+      - CORS_ORIGIN=*  # Allow posts from any origin (Claude Code CLI)
+    volumes:
+      - ./logs:/app/logs
+    ports:
+      - "3002:3002"  # AgentLink UI
+      - "5000:5000"  # AgentLink API (for agent posts)
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - agentlink-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  agentlink-network:
+    driver: bridge
