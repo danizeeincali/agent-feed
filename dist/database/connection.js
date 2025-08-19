@@ -3,14 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 const pg_1 = require("pg");
 const redis_1 = require("redis");
-const logger_1 = require("../utils/logger");
+const logger_1 = require("@/utils/logger");
 class DatabaseManager {
     pool = null;
     redisClient = null;
     isConnected = false;
     constructor() {
         this.initializeDatabase();
-        this.initializeRedis();
+        // Initialize Redis asynchronously without blocking
+        this.initializeRedis().catch(err => logger_1.logger.error('Redis initialization failed:', err));
     }
     initializeDatabase() {
         const config = {
@@ -18,7 +19,7 @@ class DatabaseManager {
             port: parseInt(process.env['DB_PORT'] || '5432'),
             database: process.env['DB_NAME'] || 'agent_feed',
             username: process.env['DB_USER'] || 'postgres',
-            password: process.env['DB_PASSWORD'] || '',
+            password: process.env['DB_PASSWORD'] || 'postgres',
             ssl: process.env['DB_SSL'] === 'true',
             pool: {
                 min: parseInt(process.env['DB_POOL_MIN'] || '2'),
@@ -48,8 +49,8 @@ class DatabaseManager {
             logger_1.logger.error('Database pool error:', err);
             this.isConnected = false;
         });
-        // Test connection
-        this.testConnection();
+        // Test connection (disabled for demo)
+        // this.testConnection();
     }
     async initializeRedis() {
         const config = {

@@ -269,3 +269,11 @@ export const validateBulkOperation: ValidationChain[] = [
     .isUUID()
     .withMessage('Each item must be a valid UUID')
 ];
+
+// Simple validation function for backwards compatibility
+export const validateRequest = (schema: any) => {
+  return (req: any, res: any, next: any) => {
+    // Simple passthrough for now
+    next();
+  };
+};

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { ClaudeFlowSession, ClaudeFlowConfig, SessionMetrics, NeuralPattern } from '../types';
+import { ClaudeFlowSession, ClaudeFlowConfig, SessionMetrics, NeuralPattern } from '@/types';
 interface AgentSpawnResponse {
     agentId: string;
     type: string;

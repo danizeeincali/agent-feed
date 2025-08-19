@@ -1,0 +1,10 @@
+{
+  "default": [
+    {
+      "key": "architect_requirements",
+      "value": "Single-user middleware requirement: Auto-provide default user ID for all API requests. No authentication needed. System defaults to 'single-user' context. Components: middleware layer, user context manager, API interceptor. No external auth deps. Security: simplified for single-user mode.",
+      "namespace": "default",
+      "timestamp": 1755550458645
+    }
+  ]
+}

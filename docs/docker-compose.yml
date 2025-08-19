@@ -1,0 +1,77 @@
+# Development Docker Compose Configuration
+# Claude Code + AgentLink Development Environment
+version: '3.8'
+
+services:
+  agentfeed-dev:
+    build:
+      context: ..
+      dockerfile: docs/Dockerfile
+      target: runtime
+    container_name: agentfeed-dev
+    ports:
+      - "3000:3000"  # Only external port exposed
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - CLAUDE_CODE_PORT=8080
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=agentfeed
+      - DATABASE_URL=postgresql://postgres:postgres@localhost:5432/agentfeed
+      - DEBUG=agent-feed:*
+      - HOT_RELOAD=true
+      - CLAUDE_CONFIG_PATH=/app/.claude
+    volumes:
+      # Hot reload volumes
+      - ../src:/app/src:ro
+      - ../frontend/src:/app/frontend/src:ro
+      - ../package.json:/app/package.json:ro
+      - ../frontend/package.json:/app/frontend/package.json:ro
+      
+      # Persistent data volumes
+      - postgres_data:/var/lib/postgresql/data
+      - claude_config:/app/.claude
+      - logs:/app/logs
+      - memory:/app/memory
+      
+      # Development tools
+      - ../.git:/app/.git:ro
+      - ../docs:/app/docs:rw
+      - ../tests:/app/tests:rw
+    networks:
+      - agentfeed-internal
+    healthcheck:
+      test: ["CMD", "/app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
+networks:
+  agentfeed-internal:
+    driver: bridge
+    internal: false
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  postgres_data:
+    driver: local
+  claude_config:
+    driver: local
+  logs:
+    driver: local
+  memory:
+    driver: local

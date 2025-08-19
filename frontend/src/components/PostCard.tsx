@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { 
   Heart, 
   MessageCircle, 
@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import { cn } from '@/utils/cn';
 
 interface PostCardProps {
@@ -26,6 +27,13 @@ interface PostCardProps {
       tags?: string[];
       hook?: string;
     };
+    // Engagement data from AgentLink API
+    likes?: number;
+    hearts?: number;
+    bookmarks?: number;
+    shares?: number;
+    views?: number;
+    comments?: number;
   };
   className?: string;
 }
@@ -36,6 +44,19 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
   const [comments, setComments] = useState<any[]>([]);
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [engagementState, setEngagementState] = useState({
+    liked: false,
+    hearted: false,
+    bookmarked: false,
+    likes: post.likes || 0,
+    hearts: post.hearts || 0,
+    bookmarks: post.bookmarks || 0,
+    shares: post.shares || 0,
+    views: post.views || 0,
+    comments: post.comments || 0
+  });
+
+  const { socket, isConnected, subscribe, unsubscribe } = useWebSocket();
 
   const businessImpact = post.metadata?.businessImpact || 5;
   const tags = post.metadata?.tags || [];
@@ -81,6 +102,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
         const data = await response.json();
         setComments(data.data || []);
         setCommentsLoaded(true);
+        // Update comment count
+        setEngagementState(prev => ({
+          ...prev,
+          comments: data.data?.length || prev.comments
+        }));
       }
     } catch (error) {
       console.error('Failed to load comments:', error);
@@ -101,6 +127,85 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
     loadComments();
   }, [loadComments]);
 
+  // WebSocket integration for real-time updates
+  useEffect(() => {
+    if (!socket || !isConnected) return;
+
+    // Subscribe to post-specific updates
+    const handlePostUpdate = (data: any) => {
+      if (data.postId === post.id) {
+        if (data.type === 'engagement') {
+          setEngagementState(prev => ({
+            ...prev,
+            ...data.engagement
+          }));
+        }
+      }
+    };
+
+    const handleCommentUpdate = (data: any) => {
+      if (data.postId === post.id) {
+        if (data.type === 'comment_created' || data.type === 'comment_updated' || data.type === 'comment_deleted') {
+          handleCommentsUpdate();
+        }
+      }
+    };
+
+    // Subscribe to events
+    subscribe('post:update', handlePostUpdate);
+    subscribe('comment:created', handleCommentUpdate);
+    subscribe('comment:updated', handleCommentUpdate);
+    subscribe('comment:deleted', handleCommentUpdate);
+    subscribe('like:updated', handlePostUpdate);
+
+    // Subscribe to post-specific room
+    socket.emit('subscribe:post', post.id);
+
+    return () => {
+      unsubscribe('post:update', handlePostUpdate);
+      unsubscribe('comment:created', handleCommentUpdate);
+      unsubscribe('comment:updated', handleCommentUpdate);
+      unsubscribe('comment:deleted', handleCommentUpdate);
+      unsubscribe('like:updated', handlePostUpdate);
+      socket.emit('unsubscribe:post', post.id);
+    };
+  }, [socket, isConnected, post.id, subscribe, unsubscribe, handleCommentsUpdate]);
+
+  const handleEngagement = useCallback(async (type: 'like' | 'heart' | 'bookmark' | 'share') => {
+    try {
+      const response = await fetch(`/api/v1/posts/${post.id}/${type}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: 'current-user', // In a real app, get from auth context
+          platform: type === 'share' ? 'agentlink' : undefined
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setEngagementState(prev => ({
+          ...prev,
+          [type === 'like' ? 'liked' : type === 'heart' ? 'hearted' : type === 'bookmark' ? 'bookmarked' : type]: 
+            type === 'share' ? prev[type + 's'] + 1 : data.data[type + (type === 'share' ? 'Count' : 'd')] !== undefined ? data.data[type + (type === 'share' ? 'Count' : 'd')] : !prev[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')],
+          [type + 's']: data.data[type + 'Count'] || (type === 'share' ? prev[type + 's'] + 1 : prev[type + 's'])
+        }));
+
+        // Emit WebSocket event for real-time updates
+        if (socket && isConnected) {
+          socket.emit(`post:${type}`, {
+            postId: post.id,
+            action: data.data[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : type === 'bookmark' ? 'ed' : 'Count')] ? 'add' : 'remove'
+          });
+        }
+      }
+    } catch (error) {
+      console.error(`Failed to ${type} post:`, error);
+    }
+  }, [post.id, socket, isConnected]);
+
   const truncateContent = (content: string, maxLength: number = 280) => {
     if (content.length <= maxLength) return content;
     return content.substring(0, maxLength) + '...';
@@ -108,8 +213,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
 
   const shouldTruncate = post.content && post.content.length > 280;
   const displayContent = shouldTruncate && !isExpanded 
-    ? truncateContent(post.content, 280) 
-    : post.content;
+    ? truncateContent(post.content || '', 280) 
+    : post.content || '';
 
   return (
     <div className={cn(
@@ -199,9 +304,17 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
       <div className="px-4 py-3 border-t border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <button className="flex items-center space-x-2 text-gray-500 hover:text-red-600 transition-colors group">
-              <Heart className="w-4 h-4 group-hover:fill-current" />
-              <span className="text-sm">Like</span>
+            <button 
+              onClick={() => handleEngagement('like')}
+              className={cn(
+                "flex items-center space-x-2 transition-colors group",
+                engagementState.liked ? "text-red-600" : "text-gray-500 hover:text-red-600"
+              )}
+            >
+              <Heart className={cn("w-4 h-4 group-hover:fill-current", engagementState.liked && "fill-current")} />
+              <span className="text-sm">
+                {engagementState.likes > 0 ? `${engagementState.likes} Likes` : 'Like'}
+              </span>
             </button>
             
             <button 
@@ -210,13 +323,18 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
             >
               <MessageCircle className="w-4 h-4" />
               <span className="text-sm">
-                {comments.length > 0 ? `Comments (${comments.length})` : 'Comment'}
+                {engagementState.comments > 0 ? `${engagementState.comments} Comments` : 'Comment'}
               </span>
             </button>
             
-            <button className="flex items-center space-x-2 text-gray-500 hover:text-green-600 transition-colors group">
+            <button 
+              onClick={() => handleEngagement('share')}
+              className="flex items-center space-x-2 text-gray-500 hover:text-green-600 transition-colors group"
+            >
               <Share2 className="w-4 h-4" />
-              <span className="text-sm">Share</span>
+              <span className="text-sm">
+                {engagementState.shares > 0 ? `${engagementState.shares} Shares` : 'Share'}
+              </span>
             </button>
           </div>
           

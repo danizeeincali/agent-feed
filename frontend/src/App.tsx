@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AgentFeedDashboard } from '@/components/AgentFeedDashboard';
-import SocialMediaFeed from '@/components/SocialMediaFeed';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { RealTimeNotifications } from '@/components/RealTimeNotifications';
+
+// Import components directly to fix loading issue
+import SocialMediaFeed from '@/components/SocialMediaFeed';
+import { AgentFeedDashboard } from '@/components/AgentFeedDashboard';
 import AgentManager from '@/components/AgentManager';
-import WorkflowOrchestrator from '@/components/WorkflowOrchestrator';
 import SystemAnalytics from '@/components/SystemAnalytics';
 import ClaudeCodePanel from '@/components/ClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
@@ -14,6 +15,7 @@ import WorkflowVisualization from '@/components/WorkflowVisualization';
 import AgentProfile from '@/components/AgentProfile';
 import ActivityPanel from '@/components/ActivityPanel';
 import DualInstanceDashboard from '@/components/DualInstanceDashboard';
+import PerformanceMonitor from '@/components/PerformanceMonitor';
 import { WebSocketProvider } from '@/context/WebSocketContext';
 import '@/styles/agents.css';
 import { 
@@ -33,26 +35,40 @@ import {
 import { cn } from '@/utils/cn';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
 
-// Create a client
+// Optimized QueryClient to reduce API calls and improve performance
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 2,
-      staleTime: 30000,
+      retry: 1, // Reduced from 2 to minimize failed requests
+      staleTime: 5 * 60 * 1000, // 5 minutes - much longer to reduce API calls
+      cacheTime: 10 * 60 * 1000, // 10 minutes cache
       refetchOnWindowFocus: false,
+      refetchOnMount: false, // Prevent unnecessary refetches
+      refetchOnReconnect: 'always',
     },
   },
 });
+
+// Loading spinner component for Suspense fallback
+const LoadingSpinner = memo(() => (
+  <div className="flex items-center justify-center h-64">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    <span className="ml-2 text-gray-600">Loading...</span>
+  </div>
+));
+LoadingSpinner.displayName = 'LoadingSpinner';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+// Memoized Layout to prevent unnecessary re-renders
+const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const navigation = [
+  // Memoized navigation to prevent re-creation on every render
+  const navigation = React.useMemo(() => [
     { name: 'Feed', href: '/', icon: Activity },
     { name: 'Dual Instance', href: '/dual-instance', icon: LayoutDashboard },
     { name: 'Agent Manager', href: '/agents', icon: Bot },
@@ -61,7 +77,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Claude Code', href: '/claude-code', icon: Code },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
-  ];
+  ], []);
 
   return (
     <div className="h-screen bg-gray-50 flex overflow-hidden">
@@ -160,7 +176,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
     </div>
   );
-};
+});
+
+Layout.displayName = 'Layout';
 
 // Settings component
 const Settings: React.FC = () => {
@@ -239,6 +257,11 @@ const App: React.FC = () => {
             </Layout>
           </Router>
         </WebSocketProvider>
+        
+        {/* Performance Monitor - Only in development */}
+        {typeof window !== 'undefined' && process.env.NODE_ENV === 'development' && (
+          <PerformanceMonitor />
+        )}
       </QueryClientProvider>
     </ErrorBoundary>
   );

@@ -14,7 +14,7 @@ class MigrationRunner {
   private migrationsTable = 'schema_migrations';
 
   constructor() {
-    this.ensureMigrationsTable();
+    // Don't call async methods in constructor
   }
 
   private async ensureMigrationsTable(): Promise<void> {
@@ -110,6 +110,9 @@ class MigrationRunner {
     logger.info('Starting database migrations...');
 
     try {
+      // Ensure migrations table exists first
+      await this.ensureMigrationsTable();
+      
       const executedMigrations = await this.getExecutedMigrations();
       const migrationFiles = await this.getMigrationFiles();
 
@@ -173,6 +176,9 @@ class MigrationRunner {
 
   public async status(): Promise<void> {
     try {
+      // Ensure migrations table exists first
+      await this.ensureMigrationsTable();
+      
       const executedMigrations = await this.getExecutedMigrations();
       const migrationFiles = await this.getMigrationFiles();
 

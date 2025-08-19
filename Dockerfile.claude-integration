@@ -1,0 +1,116 @@
+# Claude Code Integration Dockerfile
+# Specialized container for Claude Code integration with Agent Feed
+
+FROM node:18-bullseye-slim
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    python3 \
+    python3-pip \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Claude CLI globally
+RUN npm install -g @anthropic-ai/claude-cli@latest
+
+# Create app directory
+WORKDIR /app
+
+# Create necessary directories
+RUN mkdir -p /app/memory /app/logs /app/config /app/scripts
+
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY src/ ./src/
+COPY config/ ./config/
+COPY scripts/ ./scripts/
+
+# Build the application
+RUN npm run build
+
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash claude-user
+RUN chown -R claude-user:claude-user /app
+
+# Switch to non-root user
+USER claude-user
+
+# Set up Claude configuration directory
+ENV CLAUDE_CONFIG_DIR=/home/claude-user/.claude
+ENV CLAUDE_SESSION_DIR=/tmp/claude-sessions
+ENV CLAUDE_MEMORY_DIR=/app/memory
+
+# Create Claude directories
+RUN mkdir -p $CLAUDE_CONFIG_DIR $CLAUDE_SESSION_DIR $CLAUDE_MEMORY_DIR
+
+# Copy Claude configuration
+COPY --chown=claude-user:claude-user config/claude-config.json $CLAUDE_CONFIG_DIR/config.json
+
+# Make scripts executable
+RUN chmod +x /app/scripts/*.sh
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:3000/api/v1/claude/health || exit 1
+
+# Expose ports
+EXPOSE 3000 8080
+
+# Create startup script
+COPY --chown=claude-user:claude-user <<EOF /app/start-claude-integration.sh
+#!/bin/bash
+set -e
+
+echo "Starting Claude Code Integration..."
+
+# Check if Claude CLI is available
+if ! command -v claude &> /dev/null; then
+    echo "Error: Claude CLI not found"
+    exit 1
+fi
+
+# Check authentication (optional in container)
+if ! claude auth status &> /dev/null; then
+    echo "Warning: Claude not authenticated. Please authenticate manually."
+fi
+
+# Start Claude Code server in background
+echo "Starting Claude Code server..."
+claude server start --port 8080 --host 0.0.0.0 --config $CLAUDE_CONFIG_DIR/config.json &
+CLAUDE_PID=$!
+
+# Wait for Claude server to be ready
+echo "Waiting for Claude server to be ready..."
+for i in {1..30}; do
+    if curl -s http://localhost:8080/health > /dev/null 2>&1; then
+        echo "Claude server is ready"
+        break
+    fi
+    if [ $i -eq 30 ]; then
+        echo "Error: Claude server failed to start"
+        exit 1
+    fi
+    sleep 2
+done
+
+# Start the main application
+echo "Starting Agent Feed with Claude integration..."
+exec npm start
+EOF
+
+RUN chmod +x /app/start-claude-integration.sh
+
+# Default command
+CMD ["/app/start-claude-integration.sh"]

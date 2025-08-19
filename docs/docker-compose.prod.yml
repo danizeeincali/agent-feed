@@ -1,0 +1,129 @@
+# Production Docker Compose Configuration
+# Claude Code + AgentLink Production Environment
+version: '3.8'
+
+services:
+  agentfeed-prod:
+    build:
+      context: ..
+      dockerfile: docs/Dockerfile
+      target: runtime
+    container_name: agentfeed-prod
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - CLAUDE_CODE_PORT=8080
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=agentfeed
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@localhost:5432/agentfeed
+      - CLAUDE_CONFIG_PATH=/app/.claude
+      - LOG_LEVEL=info
+      - MAX_AGENTS=17
+      - MEMORY_LIMIT=1800M
+    volumes:
+      # Production persistent volumes
+      - postgres_data_prod:/var/lib/postgresql/data
+      - claude_config_prod:/app/.claude
+      - logs_prod:/app/logs
+      - memory_prod:/app/memory
+      
+      # Backup volumes
+      - backup_data:/app/backups
+    networks:
+      - agentfeed-prod-internal
+    healthcheck:
+      test: ["CMD", "/app/healthcheck.sh"]
+      interval: 60s
+      timeout: 15s
+      retries: 5
+      start_period: 120s
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+
+  # Optional: Monitoring service
+  agentfeed-monitor:
+    image: alpine:latest
+    container_name: agentfeed-monitor
+    command: >
+      sh -c "
+        while true; do
+          echo '[MONITOR] Checking system health...'
+          if ! wget -q --spider http://agentfeed-prod:3000/health; then
+            echo '[MONITOR] Health check failed!'
+          else
+            echo '[MONITOR] System healthy'
+          fi
+          sleep 300
+        done
+      "
+    networks:
+      - agentfeed-prod-internal
+    depends_on:
+      - agentfeed-prod
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+
+networks:
+  agentfeed-prod-internal:
+    driver: bridge
+    internal: false
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+volumes:
+  postgres_data_prod:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/agentfeed/data/postgres
+  claude_config_prod:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/agentfeed/config/claude
+  logs_prod:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/agentfeed/logs
+  memory_prod:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/agentfeed/memory
+  backup_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/agentfeed/backups

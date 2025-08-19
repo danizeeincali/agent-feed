@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { validationResult, body, param } from 'express-validator';
+import { validationResult, body, param, query } from 'express-validator';
 import { db } from '@/database/connection';
 import { validationErrorHandler, asyncHandler } from '@/middleware/error';
 import { logger } from '@/utils/logger';
 import { v4 as uuidv4 } from 'uuid';
+import WebSocket from 'ws';
 
 const router = Router();
 
@@ -12,6 +13,7 @@ const validateComment = [
   body('content').notEmpty().isLength({ max: 2000 }).withMessage('Content is required and must be under 2000 characters'),
   body('author').notEmpty().withMessage('Author is required'),
   body('parentId').optional().isUUID().withMessage('Invalid parent comment ID'),
+  body('mentionedUsers').optional().isArray().withMessage('Mentioned users must be an array'),
 ];
 
 const validateCommentUpdate = [
@@ -67,18 +69,21 @@ router.post('/posts/:postId/comments',
       const commentId = uuidv4();
       const insertQuery = `
         INSERT INTO comments (
-          id, post_id, content, author, parent_id, created_at, updated_at
+          id, post_id, content, author, parent_id, mentioned_users, created_at, updated_at
         ) VALUES (
-          $1, $2, $3, $4, $5, NOW(), NOW()
+          $1, $2, $3, $4, $5, $6, NOW(), NOW()
         ) RETURNING *
       `;
 
+      const { mentionedUsers = [] } = req.body;
+      
       const result = await db.query(insertQuery, [
         commentId,
         postId,
         content,
         author,
-        parentId
+        parentId,
+        JSON.stringify(mentionedUsers)
       ]);
 
       const comment = result.rows[0];
@@ -123,23 +128,76 @@ router.get('/posts/:postId/comments',
     const { postId } = req.params;
 
     try {
+      const sortBy = req.query.sort as string || 'createdAt';
+      const sortDir = req.query.direction as string || 'asc';
+      const userId = req.query.userId as string || null;
+      
+      let orderClause = 'ORDER BY created_at ASC';
+      switch (sortBy) {
+        case 'likes':
+          orderClause = `ORDER BY likes_count ${sortDir.toUpperCase()}, created_at ASC`;
+          break;
+        case 'replies':
+          orderClause = `ORDER BY replies_count ${sortDir.toUpperCase()}, created_at ASC`;
+          break;
+        case 'controversial':
+          orderClause = `ORDER BY (LEAST(likes_count, replies_count) * 2) ${sortDir.toUpperCase()}, created_at ASC`;
+          break;
+        default:
+          orderClause = `ORDER BY created_at ${sortDir.toUpperCase()}`;
+      }
+      
       const query = `
+        WITH comment_reactions AS (
+          SELECT 
+            comment_id,
+            reaction_type,
+            COUNT(*) as count,
+            CASE WHEN $2 IS NOT NULL THEN 
+              MAX(CASE WHEN user_id = $2 THEN reaction_type END)
+            END as user_reaction
+          FROM comment_reactions 
+          GROUP BY comment_id, reaction_type
+        )
         SELECT 
-          id,
-          post_id,
-          content,
-          author,
-          parent_id,
-          created_at,
-          updated_at,
-          is_deleted,
-          is_edited
-        FROM comments 
-        WHERE post_id = $1
-        ORDER BY created_at ASC
+          c.id,
+          c.post_id,
+          c.content,
+          c.author,
+          c.parent_id,
+          c.thread_depth,
+          c.thread_path,
+          c.created_at,
+          c.updated_at,
+          c.is_deleted,
+          c.is_edited,
+          c.is_pinned,
+          c.is_moderated,
+          c.likes_count,
+          c.replies_count,
+          c.reported_count,
+          c.moderator_notes,
+          c.edit_history,
+          c.mentioned_users,
+          COALESCE(
+            jsonb_object_agg(
+              CASE WHEN cr.reaction_type IS NOT NULL THEN cr.reaction_type END,
+              CASE WHEN cr.reaction_type IS NOT NULL THEN cr.count END
+            ) FILTER (WHERE cr.reaction_type IS NOT NULL),
+            '{}'
+          ) as reactions,
+          MAX(cr.user_reaction) as user_reaction
+        FROM comments c
+        LEFT JOIN comment_reactions cr ON c.id = cr.comment_id
+        WHERE c.post_id = $1
+        GROUP BY c.id, c.post_id, c.content, c.author, c.parent_id, c.thread_depth, 
+                 c.thread_path, c.created_at, c.updated_at, c.is_deleted, c.is_edited,
+                 c.is_pinned, c.is_moderated, c.likes_count, c.replies_count, 
+                 c.reported_count, c.moderator_notes, c.edit_history, c.mentioned_users
+        ${orderClause}
       `;
 
-      const result = await db.query(query, [postId]);
+      const result = await db.query(query, [postId, userId]);
 
       // Transform flat list into threaded structure
       const commentsMap = new Map();
@@ -155,8 +213,20 @@ router.get('/posts/:postId/comments',
           createdAt: row.created_at,
           updatedAt: row.updated_at,
           parentId: row.parent_id,
+          threadDepth: row.thread_depth || 0,
+          threadPath: row.thread_path || row.id,
           isDeleted: row.is_deleted || false,
           isEdited: row.is_edited || false,
+          isPinned: row.is_pinned || false,
+          isModerated: row.is_moderated || false,
+          likesCount: row.likes_count || 0,
+          repliesCount: row.replies_count || 0,
+          reportedCount: row.reported_count || 0,
+          moderatorNotes: row.moderator_notes,
+          editHistory: row.edit_history || [],
+          mentionedUsers: row.mentioned_users || [],
+          reactions: row.reactions || {},
+          userReaction: row.user_reaction,
           replies: []
         };
         commentsMap.set(comment.id, comment);
@@ -209,12 +279,22 @@ router.put('/comments/:commentId',
     const { content } = req.body;
 
     try {
-      const updateQuery = `
+      // Store edit history
+      const historyQuery = `
         UPDATE comments 
-        SET content = $1, updated_at = NOW(), is_edited = TRUE
+        SET 
+          edit_history = COALESCE(edit_history, '[]'::jsonb) || jsonb_build_object(
+            'content', content,
+            'editedAt', updated_at
+          ),
+          content = $1, 
+          updated_at = NOW(), 
+          is_edited = TRUE
         WHERE id = $2 AND is_deleted = FALSE
         RETURNING *
       `;
+      
+      const updateQuery = historyQuery;
 
       const result = await db.query(updateQuery, [content, commentId]);
 

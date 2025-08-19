@@ -1,0 +1,16 @@
+[Unit]
+Description=Claude Code Production Instance
+After=network.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=/workspaces/agent-feed
+Environment=NODE_ENV=production
+EnvironmentFile=/workspaces/agent-feed/.env.prod
+ExecStart=/usr/local/bin/claude code --config-file .claude-prod --port 8090
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

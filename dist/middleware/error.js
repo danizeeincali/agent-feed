@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validationErrorHandler = exports.asyncHandler = exports.notFoundHandler = exports.errorHandler = void 0;
-const types_1 = require("../types");
-const logger_1 = require("../utils/logger");
+const types_1 = require("@/types");
+const logger_1 = require("@/utils/logger");
 // Global error handling middleware
 const errorHandler = (error, req, res, _next) => {
     // Log the error

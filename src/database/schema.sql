@@ -282,6 +282,63 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Agents table for agent management
+CREATE TABLE agents (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    display_name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    system_prompt TEXT NOT NULL,
+    avatar_color VARCHAR(7) NOT NULL DEFAULT '#3B82F6',
+    capabilities JSONB NOT NULL DEFAULT '[]',
+    status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'error', 'testing')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    last_used TIMESTAMP WITH TIME ZONE,
+    usage_count INTEGER DEFAULT 0,
+    performance_metrics JSONB NOT NULL DEFAULT '{
+        "success_rate": 0.0,
+        "average_response_time": 0,
+        "total_tokens_used": 0,
+        "error_count": 0
+    }',
+    health_status JSONB NOT NULL DEFAULT '{
+        "cpu_usage": 0,
+        "memory_usage": 0,
+        "response_time": 0,
+        "last_heartbeat": null
+    }',
+    UNIQUE(user_id, name)
+);
+
+-- Agent execution logs
+CREATE TABLE agent_execution_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    agent_id UUID NOT NULL REFERENCES agents(id) ON DELETE CASCADE,
+    execution_type VARCHAR(50) NOT NULL CHECK (execution_type IN ('test', 'task', 'heartbeat')),
+    input_data JSONB,
+    output_data JSONB,
+    execution_time_ms INTEGER,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('success', 'error', 'timeout')),
+    error_message TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for agents table
+CREATE INDEX idx_agents_user_id ON agents(user_id);
+CREATE INDEX idx_agents_status ON agents(status);
+CREATE INDEX idx_agents_name ON agents(user_id, name);
+CREATE INDEX idx_agents_capabilities_gin ON agents USING GIN (capabilities);
+CREATE INDEX idx_agents_performance_gin ON agents USING GIN (performance_metrics);
+
+CREATE INDEX idx_agent_execution_logs_agent_id ON agent_execution_logs(agent_id);
+CREATE INDEX idx_agent_execution_logs_created_at ON agent_execution_logs(created_at);
+CREATE INDEX idx_agent_execution_logs_status ON agent_execution_logs(status);
+
+-- Triggers for agents updated_at
+CREATE TRIGGER update_agents_updated_at BEFORE UPDATE ON agents FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 -- Comments for documentation
 COMMENT ON TABLE users IS 'User accounts with Claude integration';
 COMMENT ON TABLE feeds IS 'RSS/Atom/JSON feeds with automation configuration';
@@ -293,3 +350,5 @@ COMMENT ON TABLE user_sessions IS 'JWT refresh token management';
 COMMENT ON TABLE feed_fetch_logs IS 'Feed fetching history and error tracking';
 COMMENT ON TABLE automation_triggers IS 'Trigger definitions for automation';
 COMMENT ON TABLE automation_actions IS 'Action definitions for automation';
+COMMENT ON TABLE agents IS 'AI agents created and managed by users';
+COMMENT ON TABLE agent_execution_logs IS 'Execution history and performance logs for agents';

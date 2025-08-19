@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateBulkOperation = exports.validateExport = exports.validateWebhook = exports.validateFeedItemUpdate = exports.validateSearch = exports.validatePagination = exports.validateUUID = exports.validateClaudeFlowSession = exports.validateAutomationAction = exports.validateAutomationTrigger = exports.validateFeedUpdate = exports.validateFeedCreate = exports.validateUserUpdate = exports.validateUserLogin = exports.validateUserRegistration = void 0;
+exports.validateRequest = exports.validateBulkOperation = exports.validateExport = exports.validateWebhook = exports.validateFeedItemUpdate = exports.validateSearch = exports.validatePagination = exports.validateUUID = exports.validateClaudeFlowSession = exports.validateAutomationAction = exports.validateAutomationTrigger = exports.validateFeedUpdate = exports.validateFeedCreate = exports.validateUserUpdate = exports.validateUserLogin = exports.validateUserRegistration = void 0;
 const express_validator_1 = require("express-validator");
-const types_1 = require("../types");
+const types_1 = require("@/types");
 // User validation
 exports.validateUserRegistration = [
     (0, express_validator_1.body)('email')
@@ -257,4 +257,12 @@ exports.validateBulkOperation = [
         .isUUID()
         .withMessage('Each item must be a valid UUID')
 ];
+// Simple validation function for backwards compatibility
+const validateRequest = (schema) => {
+    return (req, res, next) => {
+        // Simple passthrough for now
+        next();
+    };
+};
+exports.validateRequest = validateRequest;
 //# sourceMappingURL=validation.js.map

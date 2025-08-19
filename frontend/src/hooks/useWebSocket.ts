@@ -24,11 +24,13 @@ interface UseWebSocketReturn {
   emit: (event: string, data?: any) => void;
   subscribe: (event: string, handler: (data: any) => void) => void;
   unsubscribe: (event: string, handler?: (data: any) => void) => void;
+  on: (event: string, handler: (data: any) => void) => void;
+  off: (event: string, handler?: (data: any) => void) => void;
 }
 
 export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketReturn => {
   const {
-    url = 'http://localhost:3000',
+    url = 'http://localhost:3000', // Backend WebSocket server
     autoConnect = true,
     reconnectAttempts = 5,
     reconnectDelay = 1000
@@ -43,15 +45,26 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
   const eventHandlers = useRef<Map<string, Set<(data: any) => void>>>(new Map());
 
   const connect = useCallback(() => {
-    if (socket?.connected) return;
+    console.log('🔌 useWebSocket: Attempting connection to', url);
+    if (socket?.connected) {
+      console.log('🔌 useWebSocket: Already connected, skipping');
+      return;
+    }
 
     try {
+      console.log('🔌 useWebSocket: Creating new socket connection...');
       const newSocket = io(url, {
-        transports: ['websocket'],
+        transports: ['polling', 'websocket'],
         upgrade: true,
         rememberUpgrade: true,
-        timeout: 10000,
-        forceNew: false
+        timeout: 20000,
+        forceNew: false,
+        withCredentials: true,
+        auth: {
+          userId: 'claude-code-user', // Default user ID
+          username: 'Claude Code User',
+          token: 'debug-token' // For development
+        }
       });
 
       // Connection event handlers
@@ -183,6 +196,8 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     disconnect,
     emit,
     subscribe,
-    unsubscribe
+    unsubscribe,
+    on: subscribe, // Alias for subscribe
+    off: unsubscribe // Alias for unsubscribe
   };
 };

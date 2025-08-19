@@ -1,152 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { Bell, X, CheckCircle, AlertCircle, Info, TrendingUp } from 'lucide-react';
-import { useWebSocket } from '@/hooks/useWebSocket';
+import React, { useState, useEffect } from 'react';
+import { Bell, X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { useWebSocketContext } from '@/context/WebSocketContext';
 
-interface Notification {
-  id: string;
-  type: 'success' | 'error' | 'info' | 'warning';
-  title: string;
-  message: string;
-  timestamp: string;
-  read: boolean;
-  actionUrl?: string;
-}
+// Using notification type from WebSocketContext
 
 interface RealTimeNotificationsProps {
   className?: string;
 }
 
 export const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({ className }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { 
+    notifications, 
+    clearNotifications, 
+    markNotificationAsRead, 
+    isConnected,
+    connectionError
+  } = useWebSocketContext();
+  
   const [isOpen, setIsOpen] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const unreadCount = notifications.filter(n => !n.read).length;
 
-  const { isConnected, subscribe, unsubscribe } = useWebSocket({
-    autoConnect: true
-  });
-
+  // Auto-mark notifications as read when opened
   useEffect(() => {
-    if (!isConnected) return;
-
-    // Subscribe to various real-time events
-    const handleAgentStatusUpdate = (data: any) => {
-      const notification: Notification = {
-        id: `agent-${data.agentId}-${Date.now()}`,
-        type: data.status === 'error' ? 'error' : 'info',
-        title: 'Agent Status Update',
-        message: `Agent ${data.agentId} is now ${data.status}`,
-        timestamp: new Date().toISOString(),
-        read: false
-      };
-      addNotification(notification);
-    };
-
-    const handleTaskCompleted = (data: any) => {
-      const notification: Notification = {
-        id: `task-${data.taskId}-${Date.now()}`,
-        type: data.result?.success ? 'success' : 'error',
-        title: 'Task Completed',
-        message: `Task "${data.taskId}" has ${data.result?.success ? 'completed successfully' : 'failed'}`,
-        timestamp: new Date().toISOString(),
-        read: false
-      };
-      addNotification(notification);
-    };
-
-    const handlePostCreated = (data: any) => {
-      const notification: Notification = {
-        id: `post-${data.id}-${Date.now()}`,
-        type: 'info',
-        title: 'New Post',
-        message: `${data.authorAgent} posted: ${data.title}`,
-        timestamp: new Date().toISOString(),
-        read: false,
-        actionUrl: `/posts/${data.id}`
-      };
-      addNotification(notification);
-    };
-
-    const handleCommentAdded = (data: any) => {
-      const notification: Notification = {
-        id: `comment-${data.comment.id}-${Date.now()}`,
-        type: 'info',
-        title: 'New Comment',
-        message: `${data.comment.author} commented on a post`,
-        timestamp: new Date().toISOString(),
-        read: false,
-        actionUrl: `/posts/${data.postId}#comment-${data.comment.id}`
-      };
-      addNotification(notification);
-    };
-
-    const handleSystemAlert = (data: any) => {
-      const notification: Notification = {
-        id: `system-${Date.now()}`,
-        type: data.severity || 'warning',
-        title: 'System Alert',
-        message: data.message,
-        timestamp: new Date().toISOString(),
-        read: false
-      };
-      addNotification(notification);
-    };
-
-    // Subscribe to events
-    subscribe('agent:status:update', handleAgentStatusUpdate);
-    subscribe('task:completed', handleTaskCompleted);
-    subscribe('post:created', handlePostCreated);
-    subscribe('comment:added', handleCommentAdded);
-    subscribe('system:alert', handleSystemAlert);
-
-    return () => {
-      unsubscribe('agent:status:update', handleAgentStatusUpdate);
-      unsubscribe('task:completed', handleTaskCompleted);
-      unsubscribe('post:created', handlePostCreated);
-      unsubscribe('comment:added', handleCommentAdded);
-      unsubscribe('system:alert', handleSystemAlert);
-    };
-  }, [isConnected, subscribe, unsubscribe]);
-
-  const addNotification = (notification: Notification) => {
-    setNotifications(prev => [notification, ...prev.slice(0, 49)]); // Keep last 50
-    setUnreadCount(prev => prev + 1);
-  };
-
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === id ? { ...notif, read: true } : notif
-      )
-    );
-    setUnreadCount(prev => Math.max(0, prev - 1));
-  };
-
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
-    setUnreadCount(0);
-  };
-
-  const removeNotification = (id: string) => {
-    setNotifications(prev => prev.filter(notif => notif.id !== id));
-    const notification = notifications.find(n => n.id === id);
-    if (notification && !notification.read) {
-      setUnreadCount(prev => Math.max(0, prev - 1));
+    if (isOpen) {
+      // Mark all unread notifications as read after a short delay
+      const timer = setTimeout(() => {
+        notifications.forEach(notification => {
+          if (!notification.read) {
+            markNotificationAsRead(notification.id);
+          }
+        });
+      }, 1000);
+      
+      return () => clearTimeout(timer);
     }
-  };
+  }, [isOpen, notifications, markNotificationAsRead]);
 
-  const getNotificationIcon = (type: Notification['type']) => {
+  const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'success':
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'error':
-        return <AlertCircle className="w-4 h-4 text-red-600" />;
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
       case 'warning':
-        return <AlertCircle className="w-4 h-4 text-yellow-600" />;
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      case 'error':
+        return <AlertCircle className="w-4 h-4 text-red-500" />;
       default:
-        return <Info className="w-4 h-4 text-blue-600" />;
+        return <Info className="w-4 h-4 text-blue-500" />;
     }
   };
+  
+  const getNotificationBg = (type: string) => {
+    switch (type) {
+      case 'success':
+        return 'bg-green-50 border-green-200';
+      case 'warning':
+        return 'bg-yellow-50 border-yellow-200';
+      case 'error':
+        return 'bg-red-50 border-red-200';
+      default:
+        return 'bg-blue-50 border-blue-200';
+    }
+  };
+
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -169,12 +85,16 @@ export const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({ cl
       {/* Notification Bell */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-        title="Notifications"
+        className={`relative p-2 transition-colors rounded-lg ${
+          isConnected 
+            ? 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' 
+            : 'text-red-600 hover:text-red-700 hover:bg-red-50'
+        }`}
+        title={`Notifications ${!isConnected ? '(Offline)' : ''}`}
       >
-        <Bell className="w-5 h-5" />
+        <Bell className={`w-5 h-5 ${!isConnected ? 'animate-pulse' : ''}`} />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
@@ -190,14 +110,33 @@ export const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({ cl
           <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900">Notifications</h3>
             <div className="flex items-center space-x-2">
+              <span className="text-xs text-gray-500">
+                {notifications.length} total
+                {unreadCount > 0 && (
+                  <span className="text-blue-600 font-medium ml-1">
+                    ({unreadCount} unread)
+                  </span>
+                )}
+              </span>
               {unreadCount > 0 && (
                 <button
-                  onClick={markAllAsRead}
+                  onClick={() => {
+                    notifications.forEach(n => {
+                      if (!n.read) markNotificationAsRead(n.id);
+                    });
+                  }}
                   className="text-xs text-blue-600 hover:text-blue-700"
                 >
                   Mark all read
                 </button>
               )}
+              <button
+                onClick={clearNotifications}
+                disabled={notifications.length === 0}
+                className="text-xs text-gray-500 hover:text-gray-700 disabled:opacity-50"
+              >
+                Clear all
+              </button>
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1 text-gray-400 hover:text-gray-600"
@@ -209,12 +148,19 @@ export const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({ cl
 
           {/* Connection Status */}
           {!isConnected && (
-            <div className="px-4 py-2 bg-yellow-50 border-b border-yellow-200">
-              <div className="flex items-center space-x-2">
-                <AlertCircle className="w-4 h-4 text-yellow-600" />
-                <span className="text-sm text-yellow-700">
-                  Real-time updates disconnected
-                </span>
+            <div className="px-4 py-2 bg-red-50 border-b border-red-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4 text-red-600" />
+                  <span className="text-sm text-red-700">
+                    Real-time updates offline
+                  </span>
+                </div>
+                {connectionError && (
+                  <span className="text-xs text-red-600 truncate max-w-32" title={connectionError}>
+                    {connectionError}
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -231,15 +177,16 @@ export const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({ cl
                 <div
                   key={notification.id}
                   className={cn(
-                    'px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors',
-                    !notification.read && 'bg-blue-50 border-blue-100'
+                    'relative px-4 py-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors',
+                    notification.read 
+                      ? 'bg-gray-50 opacity-75' 
+                      : getNotificationBg(notification.type)
                   )}
                   onClick={() => {
-                    markAsRead(notification.id);
-                    if (notification.actionUrl) {
-                      // Handle navigation
-                      window.location.href = notification.actionUrl;
+                    if (!notification.read) {
+                      markNotificationAsRead(notification.id);
                     }
+                    // Handle navigation if needed
                   }}
                 >
                   <div className="flex items-start space-x-3">
@@ -248,30 +195,46 @@ export const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({ cl
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <p className={`text-sm font-medium truncate ${
+                          notification.read ? 'text-gray-600' : 'text-gray-900'
+                        }`}>
                           {notification.title}
                         </p>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeNotification(notification.id);
-                          }}
-                          className="ml-2 text-gray-400 hover:text-gray-600"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
+                        {!notification.read && (
+                          <div className="flex items-center space-x-1">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                          </div>
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className={`text-sm mt-1 ${
+                        notification.read ? 'text-gray-500' : 'text-gray-700'
+                      }`}>
                         {notification.message}
                       </p>
-                      <p className="text-xs text-gray-400 mt-1">
-                        {formatTimestamp(notification.timestamp)}
-                      </p>
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-xs text-gray-400">
+                          {formatTimestamp(notification.timestamp)}
+                        </p>
+                        <div className="flex items-center space-x-2">
+                          {(notification.postId || notification.userId || notification.commentId) && (
+                            <span className="text-xs text-gray-400">
+                              {notification.postId && '📝'}
+                              {notification.commentId && '💬'}
+                              {notification.userId && '👤'}
+                            </span>
+                          )}
+                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                            notification.type === 'success' ? 'bg-green-100 text-green-700' :
+                            notification.type === 'warning' ? 'bg-yellow-100 text-yellow-700' :
+                            notification.type === 'error' ? 'bg-red-100 text-red-700' :
+                            'bg-blue-100 text-blue-700'
+                          }`}>
+                            {notification.type}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  {!notification.read && (
-                    <div className="absolute left-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full"></div>
-                  )}
                 </div>
               ))
             )}

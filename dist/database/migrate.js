@@ -7,11 +7,11 @@ exports.MigrationRunner = void 0;
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
 const connection_1 = require("./connection");
-const logger_1 = require("../utils/logger");
+const logger_1 = require("@/utils/logger");
 class MigrationRunner {
     migrationsTable = 'schema_migrations';
     constructor() {
-        this.ensureMigrationsTable();
+        // Don't call async methods in constructor
     }
     async ensureMigrationsTable() {
         const createTableSQL = `
@@ -92,6 +92,8 @@ class MigrationRunner {
     async runMigrations() {
         logger_1.logger.info('Starting database migrations...');
         try {
+            // Ensure migrations table exists first
+            await this.ensureMigrationsTable();
             const executedMigrations = await this.getExecutedMigrations();
             const migrationFiles = await this.getMigrationFiles();
             // Filter out already executed migrations
@@ -139,6 +141,8 @@ class MigrationRunner {
     }
     async status() {
         try {
+            // Ensure migrations table exists first
+            await this.ensureMigrationsTable();
             const executedMigrations = await this.getExecutedMigrations();
             const migrationFiles = await this.getMigrationFiles();
             logger_1.logger.info('Migration Status:');

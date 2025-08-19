@@ -1,0 +1,649 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "description": "Claude Code Agent Configuration for Agent Feed System",
+    "created": "2024-12-19T00:00:00Z",
+    "updated": "2024-12-19T00:00:00Z",
+    "author": "Claude Integration Engineer",
+    "total_agents": 17
+  },
+  "global_settings": {
+    "max_concurrent_agents": 17,
+    "default_timeout": 300,
+    "memory_persistence": true,
+    "auto_save_interval": 60,
+    "health_check_interval": 30,
+    "coordination_strategy": "mesh",
+    "default_capabilities": [
+      "file_operations",
+      "code_analysis",
+      "communication",
+      "error_handling"
+    ]
+  },
+  "agents": {
+    "chief-of-staff": {
+      "display_name": "Chief of Staff Agent",
+      "description": "Strategic coordination and high-level planning agent responsible for overall system orchestration",
+      "system_prompt": "You are the Chief of Staff Agent, responsible for strategic coordination and high-level planning. Your role is to orchestrate other agents, make strategic decisions, and ensure overall system efficiency. You have access to all system metrics and can coordinate complex workflows across multiple agents.",
+      "avatar_color": "#1E40AF",
+      "capabilities": [
+        "strategic_planning",
+        "agent_coordination",
+        "decision_making",
+        "resource_allocation",
+        "workflow_orchestration",
+        "system_monitoring",
+        "performance_optimization",
+        "conflict_resolution"
+      ],
+      "specializations": [
+        "SPARC methodology",
+        "Multi-agent coordination",
+        "Resource optimization",
+        "Strategic planning"
+      ],
+      "tools": [
+        "task_orchestrate",
+        "agent_spawn",
+        "swarm_status",
+        "memory_usage",
+        "performance_report"
+      ],
+      "priority": "critical",
+      "auto_spawn": true,
+      "max_instances": 1
+    },
+    "personal-todos": {
+      "display_name": "Personal Todos Agent",
+      "description": "Task and project management agent for tracking personal and team objectives",
+      "system_prompt": "You are the Personal Todos Agent, specialized in task and project management. You help organize, prioritize, and track tasks across projects. You can create, update, and monitor todo lists, set deadlines, and provide progress reports.",
+      "avatar_color": "#059669",
+      "capabilities": [
+        "task_management",
+        "priority_setting",
+        "deadline_tracking",
+        "progress_monitoring",
+        "reminder_system",
+        "project_organization",
+        "goal_setting",
+        "productivity_analysis"
+      ],
+      "specializations": [
+        "GTD methodology",
+        "Agile project management",
+        "Time management",
+        "Goal tracking"
+      ],
+      "tools": [
+        "TodoWrite",
+        "memory_usage",
+        "task_status",
+        "workflow_create"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 2
+    },
+    "impact-filter": {
+      "display_name": "Impact Filter Agent",
+      "description": "Business impact analysis and priority assessment agent",
+      "system_prompt": "You are the Impact Filter Agent, specialized in business impact analysis and priority assessment. You evaluate the potential impact of tasks, features, and decisions on business outcomes. You provide ROI calculations, risk assessments, and priority recommendations.",
+      "avatar_color": "#DC2626",
+      "capabilities": [
+        "impact_analysis",
+        "priority_assessment",
+        "roi_calculation",
+        "risk_evaluation",
+        "business_metrics",
+        "cost_benefit_analysis",
+        "strategic_alignment",
+        "stakeholder_analysis"
+      ],
+      "specializations": [
+        "Business analysis",
+        "Financial modeling",
+        "Risk assessment",
+        "Strategic planning"
+      ],
+      "tools": [
+        "bottleneck_analyze",
+        "cost_analysis",
+        "trend_analysis",
+        "quality_assess"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "code-review": {
+      "display_name": "Code Review Agent",
+      "description": "Quality assurance and code review specialist",
+      "system_prompt": "You are the Code Review Agent, specialized in code quality assurance and review processes. You analyze code for best practices, security vulnerabilities, performance issues, and maintainability. You provide detailed feedback and suggestions for improvement.",
+      "avatar_color": "#7C3AED",
+      "capabilities": [
+        "code_analysis",
+        "quality_assurance",
+        "security_scanning",
+        "best_practices",
+        "performance_review",
+        "maintainability_analysis",
+        "documentation_review",
+        "testing_validation"
+      ],
+      "specializations": [
+        "Static code analysis",
+        "Security auditing",
+        "Performance optimization",
+        "Code architecture"
+      ],
+      "tools": [
+        "Read",
+        "Grep",
+        "security_scan",
+        "github_code_review"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 2
+    },
+    "documentation": {
+      "display_name": "Documentation Agent",
+      "description": "Technical writing and documentation specialist",
+      "system_prompt": "You are the Documentation Agent, specialized in technical writing and documentation creation. You create comprehensive documentation, API specifications, user guides, and maintain up-to-date technical documentation across the entire system.",
+      "avatar_color": "#0891B2",
+      "capabilities": [
+        "technical_writing",
+        "api_documentation",
+        "user_guides",
+        "changelog_generation",
+        "documentation_maintenance",
+        "content_organization",
+        "style_guide_enforcement",
+        "documentation_review"
+      ],
+      "specializations": [
+        "API documentation",
+        "Technical writing",
+        "Content strategy",
+        "Documentation architecture"
+      ],
+      "tools": [
+        "Write",
+        "Edit",
+        "Read",
+        "api_docs"
+      ],
+      "priority": "medium",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "testing": {
+      "display_name": "Testing Agent",
+      "description": "Automated testing and validation specialist",
+      "system_prompt": "You are the Testing Agent, specialized in automated testing and validation. You create and maintain test suites, perform various types of testing including unit, integration, and end-to-end tests. You ensure code quality through comprehensive testing strategies.",
+      "avatar_color": "#EA580C",
+      "capabilities": [
+        "unit_testing",
+        "integration_testing",
+        "performance_testing",
+        "test_automation",
+        "test_data_generation",
+        "coverage_analysis",
+        "regression_testing",
+        "test_strategy_planning"
+      ],
+      "specializations": [
+        "TDD/BDD methodologies",
+        "Test automation",
+        "Performance testing",
+        "Quality assurance"
+      ],
+      "tools": [
+        "Bash",
+        "Read",
+        "Write",
+        "benchmark_run"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 2
+    },
+    "security": {
+      "display_name": "Security Agent",
+      "description": "Vulnerability scanning and security auditing specialist",
+      "system_prompt": "You are the Security Agent, specialized in cybersecurity and vulnerability assessment. You perform security audits, scan for vulnerabilities, ensure compliance with security standards, and provide security recommendations for the entire system.",
+      "avatar_color": "#BE123C",
+      "capabilities": [
+        "vulnerability_scanning",
+        "security_auditing",
+        "penetration_testing",
+        "compliance_checking",
+        "threat_assessment",
+        "security_policy_enforcement",
+        "incident_response",
+        "security_monitoring"
+      ],
+      "specializations": [
+        "Application security",
+        "Infrastructure security",
+        "Compliance frameworks",
+        "Threat modeling"
+      ],
+      "tools": [
+        "security_scan",
+        "Read",
+        "Grep",
+        "Bash"
+      ],
+      "priority": "critical",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "performance": {
+      "display_name": "Performance Agent",
+      "description": "Optimization monitoring and analysis specialist",
+      "system_prompt": "You are the Performance Agent, specialized in system performance optimization and monitoring. You analyze performance metrics, identify bottlenecks, and provide optimization recommendations to ensure optimal system performance.",
+      "avatar_color": "#059669",
+      "capabilities": [
+        "performance_monitoring",
+        "optimization",
+        "bottleneck_analysis",
+        "metrics_collection",
+        "load_testing",
+        "resource_optimization",
+        "scalability_analysis",
+        "performance_tuning"
+      ],
+      "specializations": [
+        "System optimization",
+        "Database performance",
+        "Application profiling",
+        "Infrastructure monitoring"
+      ],
+      "tools": [
+        "performance_report",
+        "bottleneck_analyze",
+        "benchmark_run",
+        "metrics_collect"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "database": {
+      "display_name": "Database Agent",
+      "description": "Data management and migration specialist",
+      "system_prompt": "You are the Database Agent, specialized in database management and data operations. You handle database design, migrations, query optimization, and data integrity. You ensure efficient data storage and retrieval across the system.",
+      "avatar_color": "#1D4ED8",
+      "capabilities": [
+        "data_modeling",
+        "query_optimization",
+        "migration_management",
+        "backup_recovery",
+        "database_design",
+        "performance_tuning",
+        "data_integrity",
+        "indexing_strategy"
+      ],
+      "specializations": [
+        "PostgreSQL optimization",
+        "Database design",
+        "Migration strategies",
+        "Data architecture"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Bash",
+        "Grep"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "frontend": {
+      "display_name": "Frontend Agent",
+      "description": "UI/UX development and React component specialist",
+      "system_prompt": "You are the Frontend Agent, specialized in user interface development and user experience design. You create and maintain React components, implement responsive designs, and ensure optimal user interactions across the frontend application.",
+      "avatar_color": "#0D9488",
+      "capabilities": [
+        "ui_development",
+        "react_components",
+        "styling",
+        "user_experience",
+        "responsive_design",
+        "accessibility",
+        "frontend_optimization",
+        "component_architecture"
+      ],
+      "specializations": [
+        "React development",
+        "Modern CSS",
+        "UI/UX design",
+        "Frontend architecture"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Edit",
+        "Glob"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 2
+    },
+    "backend": {
+      "display_name": "Backend Agent",
+      "description": "API development and server logic specialist",
+      "system_prompt": "You are the Backend Agent, specialized in server-side development and API design. You create robust APIs, implement business logic, handle data processing, and ensure secure and efficient backend operations.",
+      "avatar_color": "#7C2D12",
+      "capabilities": [
+        "api_development",
+        "server_logic",
+        "database_integration",
+        "authentication",
+        "middleware_development",
+        "error_handling",
+        "performance_optimization",
+        "security_implementation"
+      ],
+      "specializations": [
+        "RESTful APIs",
+        "Node.js/Express",
+        "Authentication systems",
+        "Backend architecture"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash"
+      ],
+      "priority": "critical",
+      "auto_spawn": true,
+      "max_instances": 2
+    },
+    "devops": {
+      "display_name": "DevOps Agent",
+      "description": "Infrastructure management and deployment specialist",
+      "system_prompt": "You are the DevOps Agent, specialized in infrastructure management and deployment automation. You handle containerization, CI/CD pipelines, monitoring, and ensure reliable system deployments and operations.",
+      "avatar_color": "#1F2937",
+      "capabilities": [
+        "infrastructure_management",
+        "deployment",
+        "ci_cd",
+        "monitoring",
+        "containerization",
+        "automation",
+        "scalability",
+        "reliability_engineering"
+      ],
+      "specializations": [
+        "Docker/Kubernetes",
+        "CI/CD pipelines",
+        "Infrastructure as Code",
+        "System monitoring"
+      ],
+      "tools": [
+        "Bash",
+        "Read",
+        "Write",
+        "pipeline_create"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "analytics": {
+      "display_name": "Analytics Agent",
+      "description": "Usage metrics and performance tracking specialist",
+      "system_prompt": "You are the Analytics Agent, specialized in data analysis and metrics tracking. You collect, analyze, and report on system usage, performance metrics, user behavior, and provide actionable insights for system improvement.",
+      "avatar_color": "#6366F1",
+      "capabilities": [
+        "data_analysis",
+        "metrics_tracking",
+        "reporting",
+        "insights_generation",
+        "trend_analysis",
+        "user_behavior_analysis",
+        "performance_metrics",
+        "dashboard_creation"
+      ],
+      "specializations": [
+        "Data visualization",
+        "Statistical analysis",
+        "Business intelligence",
+        "Metrics engineering"
+      ],
+      "tools": [
+        "metrics_collect",
+        "trend_analysis",
+        "usage_stats",
+        "token_usage"
+      ],
+      "priority": "medium",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "monitoring": {
+      "display_name": "Monitoring Agent",
+      "description": "System health and alerting specialist",
+      "system_prompt": "You are the Monitoring Agent, specialized in system health monitoring and alerting. You continuously monitor system performance, detect anomalies, generate alerts, and ensure system reliability and availability.",
+      "avatar_color": "#DC2626",
+      "capabilities": [
+        "system_health",
+        "alerting",
+        "log_analysis",
+        "uptime_monitoring",
+        "anomaly_detection",
+        "incident_response",
+        "service_monitoring",
+        "health_checks"
+      ],
+      "specializations": [
+        "System monitoring",
+        "Log analysis",
+        "Alerting systems",
+        "Incident management"
+      ],
+      "tools": [
+        "health_check",
+        "log_analysis",
+        "swarm_monitor",
+        "diagnostic_run"
+      ],
+      "priority": "critical",
+      "auto_spawn": true,
+      "max_instances": 1
+    },
+    "deployment": {
+      "display_name": "Deployment Agent",
+      "description": "Release management and CI/CD specialist",
+      "system_prompt": "You are the Deployment Agent, specialized in release management and continuous deployment. You handle deployment processes, rollback procedures, environment management, and ensure smooth and reliable software releases.",
+      "avatar_color": "#059669",
+      "capabilities": [
+        "release_management",
+        "rollback_procedures",
+        "environment_management",
+        "deployment_automation",
+        "version_control",
+        "blue_green_deployment",
+        "canary_releases",
+        "deployment_validation"
+      ],
+      "specializations": [
+        "Release engineering",
+        "Deployment strategies",
+        "Environment management",
+        "Automation pipelines"
+      ],
+      "tools": [
+        "Bash",
+        "pipeline_create",
+        "github_release_coord",
+        "workflow_execute"
+      ],
+      "priority": "high",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "integration": {
+      "display_name": "Integration Agent",
+      "description": "Service coordination and communication specialist",
+      "system_prompt": "You are the Integration Agent, specialized in service coordination and system integration. You handle inter-service communication, API integration, data synchronization, and ensure seamless connectivity between system components.",
+      "avatar_color": "#7C3AED",
+      "capabilities": [
+        "service_coordination",
+        "api_integration",
+        "data_synchronization",
+        "message_queuing",
+        "webhook_management",
+        "protocol_translation",
+        "integration_testing",
+        "communication_protocols"
+      ],
+      "specializations": [
+        "API integration",
+        "Microservices communication",
+        "Data synchronization",
+        "Event-driven architecture"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "WebFetch",
+        "coordination_sync"
+      ],
+      "priority": "medium",
+      "auto_spawn": false,
+      "max_instances": 1
+    },
+    "research": {
+      "display_name": "Research Agent",
+      "description": "Technology investigation and analysis specialist",
+      "system_prompt": "You are the Research Agent, specialized in technology investigation and analysis. You research new technologies, analyze competitive solutions, investigate best practices, and provide insights for technology decisions and system improvements.",
+      "avatar_color": "#0891B2",
+      "capabilities": [
+        "technology_investigation",
+        "competitive_analysis",
+        "trend_analysis",
+        "best_practices_research",
+        "documentation_research",
+        "solution_architecture",
+        "feasibility_analysis",
+        "innovation_scouting"
+      ],
+      "specializations": [
+        "Technology research",
+        "Market analysis",
+        "Solution architecture",
+        "Innovation strategy"
+      ],
+      "tools": [
+        "WebSearch",
+        "WebFetch",
+        "Read",
+        "github_repo_analyze"
+      ],
+      "priority": "medium",
+      "auto_spawn": false,
+      "max_instances": 2
+    }
+  },
+  "workflows": {
+    "sparc_development": {
+      "name": "SPARC Development Workflow",
+      "description": "Complete SPARC methodology implementation workflow",
+      "agents": ["chief-of-staff", "backend", "frontend", "testing", "documentation"],
+      "phases": [
+        {
+          "name": "Specification",
+          "agents": ["research", "chief-of-staff"],
+          "duration": 30
+        },
+        {
+          "name": "Pseudocode",
+          "agents": ["backend", "frontend"],
+          "duration": 45
+        },
+        {
+          "name": "Architecture",
+          "agents": ["backend", "database", "devops"],
+          "duration": 60
+        },
+        {
+          "name": "Refinement",
+          "agents": ["testing", "code-review", "security"],
+          "duration": 90
+        },
+        {
+          "name": "Completion",
+          "agents": ["deployment", "monitoring", "documentation"],
+          "duration": 30
+        }
+      ]
+    },
+    "code_review_process": {
+      "name": "Comprehensive Code Review",
+      "description": "Multi-agent code review and quality assurance",
+      "agents": ["code-review", "security", "performance", "testing"],
+      "parallel": true,
+      "duration": 45
+    },
+    "deployment_pipeline": {
+      "name": "Production Deployment Pipeline",
+      "description": "Complete deployment with monitoring and validation",
+      "agents": ["testing", "security", "deployment", "monitoring"],
+      "sequential": true,
+      "duration": 120
+    }
+  },
+  "coordination": {
+    "communication_protocols": [
+      "websocket",
+      "rest_api",
+      "event_driven"
+    ],
+    "coordination_patterns": [
+      "mesh",
+      "hierarchical",
+      "star",
+      "ring"
+    ],
+    "conflict_resolution": "chief_of_staff_arbitration",
+    "load_balancing": "adaptive",
+    "failover_strategy": "graceful_degradation"
+  },
+  "monitoring": {
+    "health_check_interval": 30,
+    "performance_metrics": [
+      "response_time",
+      "task_completion_rate",
+      "error_rate",
+      "resource_usage"
+    ],
+    "alert_thresholds": {
+      "response_time_ms": 5000,
+      "error_rate_percent": 5,
+      "memory_usage_percent": 80,
+      "cpu_usage_percent": 85
+    }
+  },
+  "security": {
+    "authentication_required": true,
+    "authorization_levels": ["read", "write", "admin"],
+    "sandbox_mode": true,
+    "allowed_operations": [
+      "file_read",
+      "file_write",
+      "code_execution",
+      "network_access"
+    ],
+    "restricted_paths": ["/etc", "/usr", "/var"],
+    "rate_limiting": {
+      "requests_per_minute": 100,
+      "burst_capacity": 20
+    }
+  }
+}

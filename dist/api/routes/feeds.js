@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const express_validator_1 = require("express-validator");
-const connection_1 = require("../../database/connection");
-const auth_1 = require("../../middleware/auth");
-const validation_1 = require("../../middleware/validation");
-const error_1 = require("../../middleware/error");
-const types_1 = require("../../types");
-const logger_1 = require("../../utils/logger");
-const claude_flow_1 = require("../../services/claude-flow");
+const connection_1 = require("@/database/connection");
+const auth_1 = require("@/middleware/auth");
+const validation_1 = require("@/middleware/validation");
+const error_1 = require("@/middleware/error");
+const types_1 = require("@/types");
+const logger_1 = require("@/utils/logger");
+const claude_flow_1 = require("@/services/claude-flow");
 const router = (0, express_1.Router)();
 // Get all feeds for authenticated user
 router.get('/', auth_1.authenticateToken, validation_1.validatePagination, validation_1.validateSearch, (req, res, next) => {

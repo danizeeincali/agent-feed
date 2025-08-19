@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const express_validator_1 = require("express-validator");
-const connection_1 = require("../../database/connection");
-const auth_1 = require("../../middleware/auth");
-const validation_1 = require("../../middleware/validation");
-const error_1 = require("../../middleware/error");
-const types_1 = require("../../types");
-const logger_1 = require("../../utils/logger");
+const connection_1 = require("@/database/connection");
+const auth_1 = require("@/middleware/auth");
+const validation_1 = require("@/middleware/validation");
+const error_1 = require("@/middleware/error");
+const types_1 = require("@/types");
+const logger_1 = require("@/utils/logger");
 const router = (0, express_1.Router)();
 // Get automation triggers for a feed
 router.get('/feeds/:feedId/triggers', auth_1.authenticateToken, (0, validation_1.validateUUID)('feedId'), validation_1.validatePagination, (req, res, next) => {

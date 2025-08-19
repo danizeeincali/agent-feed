@@ -33,7 +33,7 @@ const addActivity = (activity: any) => {
   return newActivity;
 };
 
-// Production agents endpoint (showing this Claude Code instance)
+// Production agents endpoint (showing this Claude Code instance + production agents)
 router.get('/prod/agents', (req, res) => {
   const agents = [
     {
@@ -51,6 +51,50 @@ router.get('/prod/agents', (req, res) => {
       priority: 'P0',
       color: '#2563eb',
       lastActivity: currentSession.activities[0]?.timestamp || new Date()
+    },
+    {
+      id: 'prod-002',
+      name: 'chief-of-staff-agent',
+      description: 'Strategic orchestration and central coordination for VP-level workflow optimization',
+      status: 'active',
+      instance: 'production',
+      capabilities: ['strategic-coordination', 'workflow-orchestration', 'resource-allocation'],
+      priority: 'P0',
+      color: '#2563eb',
+      lastActivity: new Date(Date.now() - 1 * 60 * 1000)
+    },
+    {
+      id: 'prod-003',
+      name: 'personal-todos-agent',
+      description: 'Task management with Fibonacci priority system (P0-P7)',
+      status: 'busy',
+      instance: 'production',
+      capabilities: ['task-management', 'priority-system', 'fibonacci-prioritization'],
+      priority: 'P0',
+      color: '#059669',
+      lastActivity: new Date(Date.now() - 3 * 60 * 1000)
+    },
+    {
+      id: 'prod-004',
+      name: 'impact-filter-agent',
+      description: 'Transform vague requests into actionable initiatives with business impact analysis',
+      status: 'active',
+      instance: 'production',
+      capabilities: ['impact-analysis', 'initiative-structuring', 'business-value-assessment'],
+      priority: 'P1',
+      color: '#dc2626',
+      lastActivity: new Date(Date.now() - 8 * 60 * 1000)
+    },
+    {
+      id: 'prod-005',
+      name: 'opportunity-scout-agent',
+      description: 'Market opportunity identification and micro-business analysis',
+      status: 'idle',
+      instance: 'production',
+      capabilities: ['opportunity-identification', 'market-analysis', 'trend-analysis'],
+      priority: 'P2',
+      color: '#0891b2',
+      lastActivity: new Date(Date.now() - 20 * 60 * 1000)
     }
   ];
   
@@ -85,7 +129,7 @@ router.get('/health', (req, res) => {
       production: {
         status: 'healthy',
         port: 8090,
-        agents: 1,
+        agents: 5,
         lastCheck: new Date()
       }
     },

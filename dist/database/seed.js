@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseSeeder = void 0;
 const connection_1 = require("./connection");
-const auth_1 = require("../middleware/auth");
-const logger_1 = require("../utils/logger");
+const auth_1 = require("@/middleware/auth");
+const logger_1 = require("@/utils/logger");
 class DatabaseSeeder {
     async createSeedUsers() {
         const seedUsers = [

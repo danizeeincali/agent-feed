@@ -1,0 +1,67 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # Agent Feed API
+  - job_name: 'agent-feed-api'
+    static_configs:
+      - targets: ['api:8080']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # Agent Feed Frontend
+  - job_name: 'agent-feed-frontend'
+    static_configs:
+      - targets: ['frontend:80']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # PostgreSQL
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+    scrape_interval: 15s
+
+  # Redis
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 15s
+
+  # Node Exporter (System metrics)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 15s
+
+  # Claude Flow Metrics
+  - job_name: 'claude-flow'
+    static_configs:
+      - targets: ['api:8080']
+    metrics_path: '/claude-flow/metrics'
+    scrape_interval: 30s
+
+  # Agent Swarm Metrics
+  - job_name: 'agent-swarm'
+    static_configs:
+      - targets: ['api:8080']
+    metrics_path: '/api/claude-flow/metrics'
+    scrape_interval: 20s
+
+  # WebSocket Metrics
+  - job_name: 'websocket'
+    static_configs:
+      - targets: ['api:8080']
+    metrics_path: '/websocket/metrics'
+    scrape_interval: 10s

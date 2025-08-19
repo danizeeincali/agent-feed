@@ -1,0 +1,306 @@
+{
+  "instance": {
+    "name": "production",
+    "description": "Claude Code production instance for business operations",
+    "type": "production", 
+    "port_range": "8090-8119",
+    "max_agents": 30,
+    "workspace": "/workspaces/agent-feed/business",
+    "claude_file": ".claude-prod"
+  },
+  "agents": {
+    "chief-of-staff-agent": {
+      "name": "chief-of-staff-agent",
+      "description": "Strategic orchestration and central coordination for VP-level workflow optimization",
+      "tools": ["Read", "Write", "Edit", "MultiEdit", "Grep", "Glob", "LS", "TodoWrite"],
+      "capabilities": ["strategic-coordination", "workflow-orchestration", "resource-allocation", "impact-assessment"],
+      "priority": "P0",
+      "color": "#2563eb",
+      "model": "sonnet",
+      "proactive": true
+    },
+    "personal-todos-agent": {
+      "name": "personal-todos-agent", 
+      "description": "Task management with Fibonacci priority system (P0-P7)",
+      "tools": ["Read", "Write", "Edit", "MultiEdit", "LS", "Glob"],
+      "capabilities": ["task-management", "priority-system", "fibonacci-prioritization", "dependency-tracking"],
+      "priority": "P0",
+      "color": "#059669",
+      "model": "sonnet",
+      "proactive": true
+    },
+    "impact-filter-agent": {
+      "name": "impact-filter-agent",
+      "description": "Transform vague requests into actionable initiatives with business impact analysis", 
+      "tools": ["Read", "Write", "Edit", "MultiEdit", "LS", "Glob", "TodoWrite"],
+      "capabilities": ["impact-analysis", "initiative-structuring", "business-value-assessment", "clarity-improvement"],
+      "priority": "P1",
+      "color": "#dc2626",
+      "model": "sonnet",
+      "proactive": true
+    },
+    "goal-analyst-agent": {
+      "name": "goal-analyst-agent",
+      "description": "Goal tracking and analysis with metric validation",
+      "tools": ["Read", "Write", "Edit", "Glob", "Grep"],
+      "capabilities": ["goal-tracking", "metric-validation", "progress-analysis", "alignment-assessment"],
+      "priority": "P1",
+      "color": "#7c3aed",
+      "model": "sonnet"
+    },
+    "opportunity-scout-agent": {
+      "name": "opportunity-scout-agent",
+      "description": "Market opportunity identification and micro-business analysis",
+      "tools": ["Read", "Write", "Edit", "Glob", "Grep"],
+      "capabilities": ["opportunity-identification", "market-analysis", "micro-business-evaluation", "trend-analysis"],
+      "priority": "P2",
+      "color": "#0891b2",
+      "model": "sonnet"
+    },
+    "financial-viability-analyzer-agent": {
+      "name": "financial-viability-analyzer-agent",
+      "description": "Financial analysis and ROI assessment for strategic initiatives",
+      "tools": ["Read", "Write", "Edit", "Glob"],
+      "capabilities": ["financial-analysis", "roi-calculation", "cost-benefit-analysis", "revenue-modeling"],
+      "priority": "P1",
+      "color": "#16a34a",
+      "model": "sonnet"
+    },
+    "market-research-analyst-agent": {
+      "name": "market-research-analyst-agent",
+      "description": "Competitive intelligence and market positioning analysis",
+      "tools": ["Read", "Write", "Edit", "Glob", "Grep"],
+      "capabilities": ["market-research", "competitive-analysis", "trend-identification", "positioning-strategy"],
+      "priority": "P2",
+      "color": "#ea580c",
+      "model": "sonnet"
+    },
+    "meeting-prep-agent": {
+      "name": "meeting-prep-agent",
+      "description": "Meeting preparation and coordination",
+      "tools": ["Read", "Write", "Edit", "LS", "Glob"],
+      "capabilities": ["meeting-preparation", "agenda-creation", "stakeholder-coordination", "materials-preparation"],
+      "priority": "P2",
+      "color": "#9333ea",
+      "model": "sonnet"
+    },
+    "meeting-next-steps-agent": {
+      "name": "meeting-next-steps-agent",
+      "description": "Meeting follow-up and action item extraction",
+      "tools": ["Read", "Write", "Edit", "TodoWrite"],
+      "capabilities": ["action-extraction", "follow-up-coordination", "accountability-tracking", "progress-monitoring"],
+      "priority": "P2",
+      "color": "#0284c7",
+      "model": "sonnet"
+    },
+    "follow-ups-agent": {
+      "name": "follow-ups-agent",
+      "description": "Relationship management and follow-up coordination",
+      "tools": ["Read", "Write", "Edit", "LS"],
+      "capabilities": ["relationship-management", "follow-up-scheduling", "communication-tracking", "engagement-optimization"],
+      "priority": "P2",
+      "color": "#65a30d",
+      "model": "sonnet"
+    },
+    "bull-beaver-bear-agent": {
+      "name": "bull-beaver-bear-agent",
+      "description": "Decision framework for experiment design and validation",
+      "tools": ["Read", "Write", "Edit"],
+      "capabilities": ["decision-framework", "experiment-design", "validation-criteria", "risk-assessment"],
+      "priority": "P1",
+      "color": "#dc2626",
+      "model": "sonnet"
+    },
+    "agent-ideas-agent": {
+      "name": "agent-ideas-agent",
+      "description": "Innovation and idea generation for business optimization",
+      "tools": ["Read", "Write", "Edit", "Glob"],
+      "capabilities": ["idea-generation", "innovation-management", "brainstorming-facilitation", "concept-validation"],
+      "priority": "P3",
+      "color": "#f59e0b",
+      "model": "sonnet"
+    },
+    "agent-feedback-agent": {
+      "name": "agent-feedback-agent",
+      "description": "Feedback collection and analysis for continuous improvement",
+      "tools": ["Read", "Write", "Edit", "Grep"],
+      "capabilities": ["feedback-collection", "sentiment-analysis", "improvement-identification", "response-coordination"],
+      "priority": "P2",
+      "color": "#8b5cf6",
+      "model": "sonnet"
+    },
+    "agent-feed-post-composer-agent": {
+      "name": "agent-feed-post-composer-agent", 
+      "description": "Content creation and communication optimization for AgentLink feed",
+      "tools": ["Write", "Edit", "Read"],
+      "capabilities": ["content-creation", "communication-optimization", "engagement-enhancement", "message-crafting"],
+      "priority": "P2",
+      "color": "#06b6d4",
+      "model": "sonnet"
+    },
+    "link-logger-agent": {
+      "name": "link-logger-agent",
+      "description": "Resource management and knowledge base curation",
+      "tools": ["Read", "Write", "Edit", "LS", "Glob"],
+      "capabilities": ["resource-curation", "knowledge-management", "link-organization", "information-indexing"],
+      "priority": "P3",
+      "color": "#84cc16",
+      "model": "sonnet"
+    },
+    "prd-observer-agent": {
+      "name": "prd-observer-agent",
+      "description": "Product requirements documentation and tracking",
+      "tools": ["Read", "Write", "Edit", "Grep", "Glob"],
+      "capabilities": ["requirements-tracking", "documentation-automation", "product-planning", "specification-management"],
+      "priority": "P2",
+      "color": "#f97316",
+      "model": "sonnet"
+    },
+    "get-to-know-you-agent": {
+      "name": "get-to-know-you-agent",
+      "description": "Relationship building and networking facilitation",
+      "tools": ["Read", "Write", "Edit"],
+      "capabilities": ["relationship-building", "networking-facilitation", "introduction-coordination", "connection-optimization"],
+      "priority": "P3",
+      "color": "#ec4899",
+      "model": "sonnet"
+    },
+    "meta-agent": {
+      "name": "meta-agent", 
+      "description": "Agent creation and ecosystem management",
+      "tools": ["Read", "Write", "Edit", "LS", "Glob"],
+      "capabilities": ["agent-creation", "ecosystem-management", "capability-assessment", "workflow-optimization"],
+      "priority": "P1",
+      "color": "#6366f1",
+      "model": "sonnet"
+    },
+    "meta-update-agent": {
+      "name": "meta-update-agent",
+      "description": "Agent evolution and capability enhancement",
+      "tools": ["Read", "Write", "Edit", "Grep"],
+      "capabilities": ["agent-evolution", "capability-enhancement", "performance-optimization", "adaptation-management"],
+      "priority": "P2",
+      "color": "#8b5cf6",
+      "model": "sonnet"
+    },
+    "opportunity-log-maintainer-agent": {
+      "name": "opportunity-log-maintainer-agent",
+      "description": "Opportunity tracking and portfolio management",
+      "tools": ["Read", "Write", "Edit", "LS"],
+      "capabilities": ["opportunity-tracking", "portfolio-management", "status-monitoring", "pipeline-optimization"],
+      "priority": "P2",
+      "color": "#059669",
+      "model": "sonnet"
+    },
+    "chief-of-staff-automation-agent": {
+      "name": "chief-of-staff-automation-agent",
+      "description": "Workflow automation and process optimization",
+      "tools": ["Read", "Write", "Edit", "TodoWrite"],
+      "capabilities": ["workflow-automation", "process-optimization", "efficiency-enhancement", "automation-design"],
+      "priority": "P1", 
+      "color": "#2563eb",
+      "model": "sonnet"
+    }
+  },
+  "additional_agents": {
+    "contract-legal-intelligence-agent": {
+      "name": "contract-legal-intelligence-agent",
+      "description": "Contract analysis, legal risk assessment, and negotiation support",
+      "tools": ["Read", "Write", "Edit", "Grep", "Glob"],
+      "capabilities": ["contract-analysis", "legal-risk-assessment", "compliance-monitoring", "negotiation-support"],
+      "priority": "P1",
+      "color": "#7c2d12",
+      "model": "sonnet"
+    },
+    "competitive-intelligence-orchestrator-agent": {
+      "name": "competitive-intelligence-orchestrator-agent", 
+      "description": "Real-time competitive monitoring and strategic response planning",
+      "tools": ["Read", "Write", "Edit", "Grep"],
+      "capabilities": ["competitive-monitoring", "threat-assessment", "response-planning", "market-intelligence"],
+      "priority": "P2",
+      "color": "#991b1b",
+      "model": "sonnet"
+    },
+    "stakeholder-relationship-manager-agent": {
+      "name": "stakeholder-relationship-manager-agent",
+      "description": "Executive relationship mapping and engagement optimization",
+      "tools": ["Read", "Write", "Edit"],
+      "capabilities": ["relationship-mapping", "engagement-optimization", "influence-analysis", "stakeholder-coordination"],
+      "priority": "P1",
+      "color": "#1e40af",
+      "model": "sonnet"
+    },
+    "resource-allocation-optimizer-agent": {
+      "name": "resource-allocation-optimizer-agent",
+      "description": "Cross-initiative resource optimization and capacity planning",
+      "tools": ["Read", "Write", "Edit", "Glob"],
+      "capabilities": ["resource-optimization", "capacity-planning", "allocation-analysis", "bottleneck-resolution"],
+      "priority": "P1",
+      "color": "#166534",
+      "model": "sonnet"
+    },
+    "executive-decision-support-agent": {
+      "name": "executive-decision-support-agent",
+      "description": "Complex decision synthesis and recommendation generation",
+      "tools": ["Read", "Write", "Edit"],
+      "capabilities": ["decision-synthesis", "recommendation-generation", "multi-criteria-analysis", "risk-assessment"],
+      "priority": "P0",
+      "color": "#7c3aed",
+      "model": "sonnet"
+    },
+    "performance-insights-analytics-agent": {
+      "name": "performance-insights-analytics-agent",
+      "description": "Executive-level performance monitoring and predictive analytics",
+      "tools": ["Read", "Write", "Edit", "Grep"],
+      "capabilities": ["performance-monitoring", "predictive-analytics", "trend-analysis", "insight-generation"],
+      "priority": "P1",
+      "color": "#0891b2",
+      "model": "sonnet"
+    },
+    "crisis-management-coordinator-agent": {
+      "name": "crisis-management-coordinator-agent",
+      "description": "Crisis detection, escalation, and coordinated response management",
+      "tools": ["Read", "Write", "Edit", "TodoWrite"],
+      "capabilities": ["crisis-detection", "escalation-management", "response-coordination", "recovery-planning"],
+      "priority": "P0",
+      "color": "#dc2626",
+      "model": "sonnet"
+    },
+    "strategic-initiative-portfolio-manager-agent": {
+      "name": "strategic-initiative-portfolio-manager-agent",
+      "description": "Portfolio-level strategic initiative tracking and optimization",
+      "tools": ["Read", "Write", "Edit", "Glob"],
+      "capabilities": ["portfolio-management", "initiative-tracking", "strategic-alignment", "optimization-analysis"],
+      "priority": "P1",
+      "color": "#9333ea",
+      "model": "sonnet"
+    }
+  },
+  "restrictions": {
+    "forbidden_tools": ["Bash"],
+    "forbidden_operations": [
+      "code_execution",
+      "system_modification",
+      "development_access",
+      "file_deletion"
+    ],
+    "allowed_directories": [
+      "/workspaces/agent-feed/business",
+      "/workspaces/agent-feed/data", 
+      "/workspaces/agent-feed/reports",
+      "/workspaces/agent-feed/docs/business"
+    ],
+    "environment": "production"
+  },
+  "integration": {
+    "api_base": "http://localhost:3000/api/prod",
+    "websocket_url": "ws://localhost:3000/prod",
+    "database_schema": "production",
+    "agentlink_namespace": "prod"
+  },
+  "coordination": {
+    "chief_agent": "chief-of-staff-agent",
+    "handoff_endpoint": "/api/handoff/prod-to-dev",
+    "escalation_trigger": "development_needed"
+  }
+}

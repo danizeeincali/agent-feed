@@ -24,7 +24,7 @@ export function useBackgroundOrchestration(): UseBackgroundOrchestrationReturn {
     setIsLoading(false);
   }, []);
 
-  const triggerOrchestration = useCallback(async (description: string, options?: any) => {
+  const triggerOrchestration = useCallback(async (description: string, _options?: any) => {
     try {
       // For now, just simulate orchestration
       console.log('Orchestration triggered:', description);

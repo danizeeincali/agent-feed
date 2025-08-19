@@ -1,0 +1,27 @@
+{
+  "instances": {
+    "development": {
+      "port": 8080,
+      "health_endpoint": "http://localhost:8080/health",
+      "agent_count_target": 10,
+      "workspace": "/workspaces/agent-feed"
+    },
+    "production": {
+      "port": 8090,
+      "health_endpoint": "http://localhost:8090/health", 
+      "agent_count_target": 29,
+      "workspace": "/workspaces/agent-feed/business"
+    }
+  },
+  "alerts": {
+    "instance_down": true,
+    "agent_failure": true,
+    "memory_threshold": 1.5,
+    "response_time_threshold": 5000
+  },
+  "logging": {
+    "level": "info",
+    "file": "/workspaces/agent-feed/logs/claude-instances.log",
+    "rotation": "daily"
+  }
+}

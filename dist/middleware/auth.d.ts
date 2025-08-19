@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { JWTPayload, User } from '../types';
+import { JWTPayload, User } from '@/types';
 declare global {
     namespace Express {
         interface Request {

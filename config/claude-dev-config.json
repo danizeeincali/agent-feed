@@ -1,0 +1,130 @@
+{
+  "instance": {
+    "name": "development",
+    "description": "Claude Code development instance for building AgentLink",
+    "type": "development",
+    "port_range": "8080-8089",
+    "max_agents": 10,
+    "workspace": "/workspaces/agent-feed",
+    "claude_file": ".claude-dev"
+  },
+  "agents": {
+    "coder": {
+      "name": "coder",
+      "description": "Implementation specialist for writing clean, efficient code",
+      "tools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Glob", "Grep", "LS", "TodoWrite"],
+      "capabilities": ["javascript", "typescript", "react", "nodejs", "database"],
+      "priority": "P1",
+      "color": "#10b981",
+      "model": "sonnet"
+    },
+    "reviewer": {
+      "name": "reviewer", 
+      "description": "Code review and quality assurance specialist",
+      "tools": ["Read", "Grep", "Glob", "LS"],
+      "capabilities": ["code-review", "quality-assurance", "best-practices", "security"],
+      "priority": "P1",
+      "color": "#f59e0b",
+      "model": "sonnet"
+    },
+    "tester": {
+      "name": "tester",
+      "description": "Comprehensive testing and quality assurance specialist", 
+      "tools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
+      "capabilities": ["unit-testing", "integration-testing", "e2e-testing", "jest", "playwright"],
+      "priority": "P2",
+      "color": "#8b5cf6",
+      "model": "sonnet"
+    },
+    "system-architect": {
+      "name": "system-architect",
+      "description": "Expert agent for system architecture design and technical decisions",
+      "tools": ["Read", "Write", "Edit", "Glob", "Grep", "LS"],
+      "capabilities": ["architecture", "system-design", "scalability", "performance"],
+      "priority": "P1", 
+      "color": "#ef4444",
+      "model": "sonnet"
+    },
+    "backend-dev": {
+      "name": "backend-dev",
+      "description": "Specialized agent for backend API development",
+      "tools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Glob", "Grep"],
+      "capabilities": ["nodejs", "express", "postgresql", "redis", "api-development"],
+      "priority": "P2",
+      "color": "#3b82f6",
+      "model": "sonnet"
+    },
+    "mobile-dev": {
+      "name": "mobile-dev", 
+      "description": "Expert agent for React frontend development",
+      "tools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Glob", "Grep"],
+      "capabilities": ["react", "typescript", "frontend", "ui-ux", "responsive"],
+      "priority": "P2",
+      "color": "#06b6d4",
+      "model": "sonnet"
+    },
+    "performance-benchmarker": {
+      "name": "performance-benchmarker",
+      "description": "Implements comprehensive performance benchmarking",
+      "tools": ["Read", "Bash", "Grep", "Glob"],
+      "capabilities": ["performance-testing", "benchmarking", "optimization", "monitoring"],
+      "priority": "P3",
+      "color": "#84cc16",
+      "model": "sonnet"
+    },
+    "security-manager": {
+      "name": "security-manager",
+      "description": "Implements comprehensive security mechanisms",
+      "tools": ["Read", "Grep", "Glob", "Bash"],
+      "capabilities": ["security-audit", "vulnerability-scanning", "compliance", "penetration-testing"],
+      "priority": "P2",
+      "color": "#dc2626",
+      "model": "sonnet"
+    },
+    "api-docs": {
+      "name": "api-docs",
+      "description": "Expert agent for creating and maintaining OpenAPI documentation",
+      "tools": ["Read", "Write", "Edit", "Glob", "Grep"],
+      "capabilities": ["documentation", "openapi", "swagger", "api-docs"],
+      "priority": "P3",
+      "color": "#6366f1",
+      "model": "sonnet"
+    },
+    "code-analyzer": {
+      "name": "code-analyzer",
+      "description": "Advanced code quality analysis agent",
+      "tools": ["Read", "Grep", "Glob", "LS"],
+      "capabilities": ["static-analysis", "code-quality", "complexity-analysis", "refactoring"],
+      "priority": "P3",
+      "color": "#f97316",
+      "model": "sonnet"
+    }
+  },
+  "restrictions": {
+    "allowed_directories": [
+      "/workspaces/agent-feed/src",
+      "/workspaces/agent-feed/frontend", 
+      "/workspaces/agent-feed/tests",
+      "/workspaces/agent-feed/docs",
+      "/workspaces/agent-feed/config",
+      "/workspaces/agent-feed/scripts"
+    ],
+    "forbidden_operations": [
+      "delete_production_data",
+      "modify_prod_config",
+      "access_business_data"
+    ],
+    "environment": "development"
+  },
+  "integration": {
+    "api_base": "http://localhost:3000/api/dev",
+    "websocket_url": "ws://localhost:3000/dev",
+    "database_schema": "development",
+    "agentlink_namespace": "dev"
+  },
+  "coordination": {
+    "chief_agent": "system-architect",
+    "handoff_endpoint": "/api/handoff/dev-to-prod",
+    "deployment_trigger": "feature_complete"
+  }
+}

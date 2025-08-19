@@ -1,0 +1,1266 @@
+
+> agent-feed-frontend@0.0.0 dev
+> vite
+
+
+  VITE v4.5.14  ready in 2429 ms
+
+  ➜  Local:   http://localhost:3001/
+  ➜  Network: http://10.0.2.190:3001/
+(node:9024) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+2:28:10 PM [vite] hmr update /src/components/DualInstanceDashboard.tsx, /src/index.css
+2:29:46 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+2:29:46 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+2:30:06 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+2:30:06 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+2:30:06 PM [vite] http proxy error at /api/v1/agent-posts:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+2:31:26 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+2:31:26 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+3:30:06 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+3:30:06 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+3:30:16 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+3:30:16 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+3:33:35 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+3:33:44 PM [vite] page reload src/components/PostCard.tsx
+3:33:52 PM [vite] page reload src/components/CommentForm.tsx
+3:34:01 PM [vite] page reload src/components/CommentThread.tsx
+3:36:41 PM [vite] page reload src/components/PostCard.tsx
+3:36:58 PM [vite] page reload src/components/CommentForm.tsx
+3:38:42 PM [vite] page reload src/components/AgentPostsFeed.tsx
+4:04:36 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+4:04:51 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+4:05:11 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+4:05:23 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+4:12:51 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:12:51 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:13:11 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:13:11 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:17:52 PM [vite] hmr update /src/components/SocialMediaFeed.tsx, /src/index.css
+4:22:20 PM [vite] hmr update /src/components/SocialMediaFeed.tsx, /src/index.css
+4:22:28 PM [vite] hmr update /src/components/SocialMediaFeed.tsx, /src/index.css
+4:24:40 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:24:52 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:24:56 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:25:09 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:25:23 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:25:37 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:25:40 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:25:53 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:26:11 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:26:15 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:26:28 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:26:41 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:26:54 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:27:04 PM [vite] hmr update /src/components/PostCreator.tsx, /src/index.css
+4:34:28 PM [vite] hmr update /src/components/AgentDashboard.tsx, /src/index.css, /src/components/WorkflowVisualization.tsx, /src/components/AgentProfile.tsx, /src/components/ActivityPanel.tsx, /src/context/WebSocketContext.tsx
+4:34:29 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+4:34:29 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+4:34:30 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+4:34:30 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+4:34:33 PM [vite] hmr update /src/components/AgentDashboard.tsx, /src/index.css, /src/components/WorkflowVisualization.tsx, /src/components/AgentProfile.tsx, /src/components/ActivityPanel.tsx, /src/context/WebSocketContext.tsx
+4:34:34 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+4:34:34 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+4:34:34 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+4:34:34 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+4:37:23 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:24 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:24 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:24 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:25 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:25 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:25 PM [vite] http proxy error at /api/v1/agent-posts:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:25 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:25 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:25 PM [vite] http proxy error at /api/v1/agent-posts:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:25 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:26 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:26 PM [vite] http proxy error at /api/v1/agent-posts:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:26 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:26 PM [vite] http proxy error at /api/v1/agent-posts:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:26 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:30 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:30 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:30 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:30 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:35 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:35 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:35 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:35 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:40 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:40 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:40 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:40 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:45 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:45 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:45 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:45 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:51 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:51 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:51 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:51 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:55 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:55 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:55 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:37:55 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:00 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:00 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:01 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:01 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:05 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:05 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:05 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:05 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:10 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:10 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:10 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:10 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:15 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:15 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:15 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:15 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:20 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:20 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:20 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:20 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:25 PM [vite] http proxy error at /api/v1/agent-posts:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:25 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:25 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:25 PM [vite] http proxy error at /api/v1/agent-posts:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:25 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:25 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:30 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:30 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:30 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:30 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:35 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:35 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:35 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:35 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:40 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:40 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:40 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:41 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:46 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:46 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:46 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:46 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:51 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:51 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:51 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:51 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:55 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:55 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:56 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:38:56 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:00 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:00 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:01 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:01 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:05 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:05 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:05 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:05 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:50 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:50 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:51 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:39:51 PM [vite] http proxy error at /api/v1/claude-live/prod/activities:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)
+4:47:10 PM [vite] hmr update /src/components/AgentDashboard.tsx, /src/index.css, /src/components/WorkflowVisualization.tsx, /src/components/AgentProfile.tsx, /src/components/ActivityPanel.tsx, /src/context/WebSocketContext.tsx
+4:47:13 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+4:47:13 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+4:47:21 PM [vite] hmr update /src/components/AgentDashboard.tsx, /src/index.css, /src/components/WorkflowVisualization.tsx, /src/components/AgentProfile.tsx, /src/components/ActivityPanel.tsx, /src/context/WebSocketContext.tsx
+4:47:23 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+4:47:23 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+4:47:56 PM [vite] hmr update /src/components/AgentDashboard.tsx, /src/index.css, /src/components/WorkflowVisualization.tsx, /src/components/AgentProfile.tsx, /src/components/ActivityPanel.tsx, /src/context/WebSocketContext.tsx
+4:48:15 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+4:49:08 PM [vite] hmr update /src/components/AgentDashboard.tsx, /src/index.css, /src/components/WorkflowVisualization.tsx, /src/components/AgentProfile.tsx, /src/components/ActivityPanel.tsx, /src/context/WebSocketContext.tsx
+5:00:45 PM [vite] page reload src/components/AgentFeedDashboard.tsx
+5:00:50 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:01:44 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:01:48 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:01:53 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:02:34 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:04:01 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:04:01 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+5:04:01 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+5:04:06 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:04:06 PM [vite] hmr invalidate /src/context/WebSocketContext.tsx Could not Fast Refresh ("default" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+5:04:06 PM [vite] hmr update /src/App.tsx, /src/index.css, /src/components/SocialMediaFeed.tsx, /src/components/RealTimeNotifications.tsx, /src/components/ConnectionStatus.tsx, /src/components/LiveActivityIndicator.tsx, /src/components/TypingIndicator.tsx
+5:04:10 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:04:15 PM [vite] hmr update /src/context/WebSocketContext.tsx, /src/index.css
+5:05:41 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:07:18 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:07:35 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:09:30 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:09:40 PM [vite] vite.config.ts changed, restarting server...
+5:09:41 PM [vite] server restarted.
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (179:1)
+
+  177 |     </div>
+  178 |   );
+> 179 | };
+      |  ^
+  180 |
+  181 | // Settings component
+  182 | const Settings: React.FC = () => {
+5:09:51 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (179:1)
+
+  177 |     </div>
+  178 |   );
+> 179 | };
+      |  ^
+  180 |
+  181 | // Settings component
+  182 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:179:1
+  177|      </div>
+  178|    );
+  179|  };
+     |   ^
+  180|  
+  181|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:11:19 PM [vite] page reload src/components/AgentDashboard.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:11:19 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:11:31 PM [vite] page reload src/components/AgentDashboard.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:11:31 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:11:38 PM [vite] page reload src/components/AgentDashboard.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:11:38 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:11:49 PM [vite] page reload src/components/AgentDashboard.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:11:49 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:11:58 PM [vite] page reload src/components/AgentDashboard.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:11:58 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:12:11 PM [vite] page reload src/components/SocialMediaFeed.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:12:11 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:12:18 PM [vite] page reload src/components/SocialMediaFeed.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:12:19 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:12:29 PM [vite] page reload src/components/SocialMediaFeed.tsx
+/workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+5:12:30 PM [vite] Internal server error: /workspaces/agent-feed/frontend/src/App.tsx: Unexpected token, expected "," (180:1)
+
+  178 |     </div>
+  179 |   );
+> 180 | };
+      |  ^
+  181 |
+  182 | // Settings component
+  183 | const Settings: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /workspaces/agent-feed/frontend/src/App.tsx:180:1
+  178|      </div>
+  179|    );
+  180|  };
+     |   ^
+  181|  
+  182|  // Settings component
+      at constructor (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at TypeScriptParserMixin.raise (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6630:19)
+      at TypeScriptParserMixin.unexpected (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6650:16)
+      at TypeScriptParserMixin.expect (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:6930:12)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11243:14)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11186:29)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11120:19)
+      at TypeScriptParserMixin.parseSubscript (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9358:18)
+      at TypeScriptParserMixin.parseSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11094:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11085:17)
+      at TypeScriptParserMixin.parseUpdate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11066:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:11046:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9857:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10899:61)
+      at TypeScriptParserMixin.parseExprOps (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10904:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10881:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10831:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9806:20)
+      at /workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:39
+      at TypeScriptParserMixin.allowInAnd (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12427:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10800:17)
+      at TypeScriptParserMixin.parseVar (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13389:91)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13235:10)
+      at TypeScriptParserMixin.parseVarStatement (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9498:31)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12856:23)
+      at TypeScriptParserMixin.parseStatementContent (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:9532:18)
+      at TypeScriptParserMixin.parseStatementLike (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12772:17)
+      at TypeScriptParserMixin.parseModuleItem (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12749:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13321:36)
+      at TypeScriptParserMixin.parseBlockBody (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:13314:10)
+      at TypeScriptParserMixin.parseProgram (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12630:10)
+      at TypeScriptParserMixin.parseTopLevel (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:12620:25)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14497:10)
+      at TypeScriptParserMixin.parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:10149:18)
+      at parse (/workspaces/agent-feed/frontend/node_modules/@babel/parser/lib/index.js:14531:38)
+      at parser (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transformation/index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (/workspaces/agent-feed/frontend/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:261:32)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:223:11)
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:189:28
+      at /workspaces/agent-feed/frontend/node_modules/@babel/core/lib/gensync-utils/async.js:67:7
+      at /workspaces/agent-feed/frontend/node_modules/gensync/index.js:113:33
+      at step (/workspaces/agent-feed/frontend/node_modules/gensync/index.js:287:14)
+5:18:42 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:18:57 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:19:06 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:19:18 PM [vite] hmr update /src/App.tsx, /src/index.css
+5:58:05 PM [vite] page reload src/components/CommentReactions.tsx
+5:58:19 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+5:58:33 PM [vite] page reload src/components/CommentReactions.tsx
+5:58:49 PM [vite] hmr update /src/components/SocialMediaFeed.tsx, /src/index.css
+5:59:15 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+6:14:25 PM [vite] hmr update /src/components/RealTimeNotifications.tsx, /src/index.css
+6:14:45 PM [vite] hmr update /src/components/SocialMediaFeed.tsx, /src/index.css
+6:16:17 PM [vite] hmr update /src/components/RealTimeNotifications.tsx, /src/index.css
+6:16:47 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+6:16:55 PM [vite] hmr update /src/components/AgentManager.tsx, /src/index.css
+6:17:05 PM [vite] page reload src/components/CommentThread.tsx
+6:17:15 PM [vite] page reload src/components/CommentThread.tsx
+6:17:26 PM [vite] page reload src/components/CommentThread.tsx
+6:17:33 PM [vite] page reload src/components/CommentThread.tsx
+6:18:01 PM [vite] page reload src/components/CommentThread.tsx
+6:59:33 PM [vite] hmr update /src/components/WorkflowVisualization.tsx, /src/index.css
+6:59:37 PM [vite] hmr update /src/components/ActivityPanel.tsx, /src/index.css
+7:01:03 PM [vite] hmr update /src/components/WorkflowVisualization.tsx, /src/index.css
+7:17:20 PM [vite] hmr update /src/components/DualInstanceDashboard.tsx, /src/index.css
+7:36:16 PM [vite] http proxy error at /api/v1/claude-live/prod/agents:
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at afterConnectMultiple (node:net:1715:7)

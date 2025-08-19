@@ -14,4 +14,5 @@ export declare const validateFeedItemUpdate: ValidationChain[];
 export declare const validateWebhook: ValidationChain[];
 export declare const validateExport: ValidationChain[];
 export declare const validateBulkOperation: ValidationChain[];
+export declare const validateRequest: (schema: any) => (req: any, res: any, next: any) => void;
 //# sourceMappingURL=validation.d.ts.map

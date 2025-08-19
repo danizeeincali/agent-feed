@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
 import { 
   RefreshCw,
   TrendingUp,
@@ -14,6 +14,7 @@ import {
   Edit3
 } from 'lucide-react';
 import { PostCreator } from './PostCreator';
+import LoadingSpinner from './LoadingSpinner';
 import { useWebSocketContext } from '@/context/WebSocketContext';
 import { TypingIndicator } from '@/components/TypingIndicator';
 import { LiveActivityIndicator } from '@/components/LiveActivityIndicator';
@@ -38,7 +39,7 @@ interface SocialMediaFeedProps {
   className?: string;
 }
 
-const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => {
+const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }) => {
   const [posts, setPosts] = useState<AgentPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,6 +95,7 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
         type: 'info',
         title: 'New Post',
         message: `${data.authorAgent} created a new post`,
+        read: false,
       });
     };
 
@@ -382,15 +384,6 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
           
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => setShowPostCreator(!showPostCreator)}
-              className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-              title="Create new post"
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              <span className="hidden sm:block">Create Post</span>
-            </button>
-            
-            <button
               onClick={handleRefresh}
               disabled={refreshing}
               className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
@@ -418,88 +411,54 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
         </div>
       </div>
 
-      {/* Post Creator */}
-      {showPostCreator && (
-        <div className="mb-6">
-          <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                <Edit3 className="w-5 h-5 mr-2 text-blue-600" />
-                Create New Post
-              </h3>
+      {/* LinkedIn-style Post Creator */}
+      <div className="mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          {!showPostCreator ? (
+            // Collapsed state - input-like appearance
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-medium">
+                AI
+              </div>
               <button
-                onClick={() => setShowPostCreator(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-                title="Close"
+                onClick={() => setShowPostCreator(true)}
+                className="flex-1 text-left px-4 py-3 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <X className="w-5 h-5" />
+                Start a post...
+              </button>
+              <button
+                onClick={() => setShowPostCreator(true)}
+                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                title="Create post"
+              >
+                <Edit3 className="w-5 h-5" />
               </button>
             </div>
-            <PostCreator 
-              onPostCreated={handlePostCreated}
-              className="border-0 shadow-none"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Production Agent Status */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          Production Agents ({productionAgents.length})
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          {productionAgents.map((agent) => (
-            <div key={agent.id} className="border border-green-200 rounded-lg p-4 bg-green-50">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-medium text-green-900">{agent.name}</h3>
-                <div className={`w-2 h-2 rounded-full ${
-                  agent.status === 'active' ? 'bg-green-500' : 
-                  agent.status === 'busy' ? 'bg-yellow-500' : 'bg-gray-400'
-                }`}></div>
+          ) : (
+            // Expanded state - full post creator
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <Edit3 className="w-5 h-5 mr-2 text-blue-600" />
+                  Create New Post
+                </h3>
+                <button
+                  onClick={() => setShowPostCreator(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  title="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-              <p className="text-sm text-green-700 mb-2">{agent.description}</p>
-              <div className="flex flex-wrap gap-1">
-                {agent.capabilities.slice(0, 2).map((cap: string, idx: number) => (
-                  <span key={idx} className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded">
-                    {cap}
-                  </span>
-                ))}
-              </div>
+              <PostCreator 
+                onPostCreated={handlePostCreated}
+                className="border-0 shadow-none"
+              />
             </div>
-          ))}
+          )}
         </div>
       </div>
 
-      {/* Production Activities Feed */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Production Agent Activities</h2>
-        
-        {productionActivities.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">No recent activities</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {productionActivities.slice(0, 10).map((activity) => (
-              <div key={activity.id} className="border-l-4 border-green-500 pl-4 py-2">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-green-900">{activity.agentName}</span>
-                  <span className="text-sm text-gray-500">
-                    {new Date(activity.timestamp).toLocaleTimeString()}
-                  </span>
-                </div>
-                <p className="text-gray-700">{activity.description}</p>
-                <span className="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs rounded mt-1">
-                  {activity.type}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
       {/* Legacy Posts Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -641,6 +600,8 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
       </div>
     </div>
   );
-};
+});
+
+SocialMediaFeed.displayName = 'SocialMediaFeed';
 
 export default SocialMediaFeed;

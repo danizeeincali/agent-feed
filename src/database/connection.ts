@@ -10,7 +10,8 @@ class DatabaseManager {
 
   constructor() {
     this.initializeDatabase();
-    this.initializeRedis();
+    // Initialize Redis asynchronously without blocking
+    this.initializeRedis().catch(err => logger.error('Redis initialization failed:', err));
   }
 
   private initializeDatabase(): void {
