@@ -1,0 +1,3 @@
+#!/bin/bash
+# Quick one-liner to start AgentLink
+exec ./scripts/start-agentlink.sh "$@"

@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { 
   RefreshCw,
-  Filter,
-  TrendingUp
+  TrendingUp,
+  MessageCircle,
+  Clock,
+  Star,
+  MoreHorizontal,
+  Tag,
+  Heart,
+  Share2,
+  Plus,
+  X,
+  Edit3
 } from 'lucide-react';
-import { PostCard } from './PostCard';
+import { PostCreator } from './PostCreator';
+import { useWebSocketContext } from '@/context/WebSocketContext';
+import { TypingIndicator } from '@/components/TypingIndicator';
+import { LiveActivityIndicator } from '@/components/LiveActivityIndicator';
 
 interface AgentPost {
   id: string;
@@ -32,13 +44,157 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>('all');
   const [refreshing, setRefreshing] = useState(false);
+  const [showPostCreator, setShowPostCreator] = useState(false);
+  const [productionAgents, setProductionAgents] = useState<any[]>([]);
+  const [productionActivities, setProductionActivities] = useState<any[]>([]);
+  
+  // WebSocket integration
+  const { 
+    isConnected, 
+    on, 
+    off, 
+    subscribeFeed, 
+    unsubscribeFeed, 
+    subscribePost, 
+    sendLike,
+    addNotification
+  } = useWebSocketContext();
 
   useEffect(() => {
     fetchPosts();
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchPosts, 30000);
+    // Refresh every 30 seconds (reduced frequency due to real-time updates)
+    const interval = setInterval(fetchPosts, 60000);
+    
+    // Subscribe to main feed for real-time updates
+    if (isConnected) {
+      subscribeFeed('main');
+    }
+    
+    // Retry if initial load fails
+    const retryTimer = setTimeout(() => {
+      if (posts.length === 0 && error) {
+        console.log('Retrying to fetch posts...');
+        fetchPosts();
+      }
+    }, 3000);
+    
+    return () => {
+      clearInterval(interval);
+      clearTimeout(retryTimer);
+      unsubscribeFeed('main');
+    };
+  }, [isConnected]);
+
+  // Real-time event handlers
+  useEffect(() => {
+    // Handle new posts
+    const handlePostCreated = (data: any) => {
+      setPosts(prev => [data, ...prev]);
+      addNotification({
+        type: 'info',
+        title: 'New Post',
+        message: `${data.authorAgent} created a new post`,
+      });
+    };
+
+    // Handle post updates
+    const handlePostUpdated = (data: any) => {
+      setPosts(prev => prev.map(post => 
+        post.id === data.id ? { ...post, ...data } : post
+      ));
+    };
+
+    // Handle post deletion
+    const handlePostDeleted = (data: any) => {
+      setPosts(prev => prev.filter(post => post.id !== data.id));
+    };
+
+    // Handle like updates
+    const handleLikeUpdated = (data: any) => {
+      setPosts(prev => prev.map(post => {
+        if (post.id === data.postId) {
+          const currentLikes = post.likes || 0;
+          return {
+            ...post,
+            likes: data.action === 'add' ? currentLikes + 1 : Math.max(0, currentLikes - 1)
+          };
+        }
+        return post;
+      }));
+    };
+
+    // Handle comment updates
+    const handleCommentCreated = (data: any) => {
+      setPosts(prev => prev.map(post => {
+        if (post.id === data.postId) {
+          return {
+            ...post,
+            comments: (post.comments || 0) + 1
+          };
+        }
+        return post;
+      }));
+    };
+
+    // Register event handlers
+    on('post:created', handlePostCreated);
+    on('post:updated', handlePostUpdated);
+    on('post:deleted', handlePostDeleted);
+    on('like:updated', handleLikeUpdated);
+    on('comment:created', handleCommentCreated);
+
+    return () => {
+      off('post:created', handlePostCreated);
+      off('post:updated', handlePostUpdated);
+      off('post:deleted', handlePostDeleted);
+      off('like:updated', handleLikeUpdated);
+      off('comment:created', handleCommentCreated);
+    };
+  }, [on, off, addNotification]);
+
+  // Subscribe to individual posts when they're loaded
+  useEffect(() => {
+    posts.forEach(post => {
+      subscribePost(post.id);
+    });
+    
+    return () => {
+      posts.forEach(post => {
+        // unsubscribePost(post.id); // Keep subscriptions active for real-time updates
+      });
+    };
+  }, [posts, subscribePost]);
+
+  // Production data fetching
+  useEffect(() => {
+    fetchProductionData();
+    
+    // Set up real-time polling for production agents
+    const interval = setInterval(fetchProductionData, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const fetchProductionData = async () => {
+    try {
+      // Fetch production agents and activities from live Claude Code instance
+      const [agentsRes, activitiesRes] = await Promise.all([
+        fetch('/api/v1/claude-live/prod/agents'),
+        fetch('/api/v1/claude-live/prod/activities')
+      ]);
+
+      if (agentsRes.ok) {
+        const agentsData = await agentsRes.json();
+        setProductionAgents(agentsData.agents || []);
+      }
+
+      if (activitiesRes.ok) {
+        const activitiesData = await activitiesRes.json();
+        setProductionActivities(activitiesData.activities || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch production data:', error);
+    }
+  };
 
   const fetchPosts = async (showRefreshing = false) => {
     if (showRefreshing) setRefreshing(true);
@@ -71,6 +227,17 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
 
   const handleRefresh = () => {
     fetchPosts(true);
+  };
+
+  const handlePostCreated = (newPost: any) => {
+    // Add the new post to the top of the list
+    setPosts(prevPosts => [newPost, ...prevPosts]);
+    setShowPostCreator(false);
+    
+    // Optionally trigger a refresh to sync with server
+    setTimeout(() => {
+      fetchPosts();
+    }, 1000);
   };
 
   const formatTimeAgo = (dateString: string) => {
@@ -132,6 +299,18 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
       .join(' ');
   };
 
+  const handleLikePost = (postId: string, currentLikes: number) => {
+    // Optimistically update UI
+    setPosts(prev => prev.map(post => 
+      post.id === postId 
+        ? { ...post, likes: currentLikes + 1 }
+        : post
+    ));
+    
+    // Send like event via WebSocket
+    sendLike(postId, 'add');
+  };
+
   const filteredPosts = posts.filter(post => {
     if (filter === 'all') return true;
     if (filter === 'high-impact') return post.metadata.businessImpact >= 7;
@@ -147,7 +326,7 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
 
   if (loading) {
     return (
-      <div className={`max-w-2xl mx-auto ${className}`}>
+      <div className={`max-w-2xl mx-auto ${className}`} data-testid="loading-state">
         <div className="space-y-6">
           {[1, 2, 3].map((i) => (
             <div key={i} className="bg-white rounded-lg border border-gray-200 p-6">
@@ -173,7 +352,7 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
 
   if (error) {
     return (
-      <div className={`max-w-2xl mx-auto ${className}`}>
+      <div className={`max-w-2xl mx-auto ${className}`} data-testid="error-fallback">
         <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
           <div className="text-gray-400 mb-4">
             <TrendingUp className="mx-auto h-12 w-12" />
@@ -203,6 +382,15 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
           
           <div className="flex items-center space-x-2">
             <button
+              onClick={() => setShowPostCreator(!showPostCreator)}
+              className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+              title="Create new post"
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              <span className="hidden sm:block">Create Post</span>
+            </button>
+            
+            <button
               onClick={handleRefresh}
               disabled={refreshing}
               className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
@@ -211,23 +399,114 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
               <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
             
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">All Posts</option>
-              <option value="high-impact">High Impact</option>
-              <option value="recent">Recent</option>
-              <option value="strategic">Strategic</option>
-              <option value="productivity">Productivity</option>
-            </select>
+            <div className="flex items-center space-x-2">
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="all">All Posts</option>
+                <option value="high-impact">High Impact</option>
+                <option value="recent">Recent</option>
+                <option value="strategic">Strategic</option>
+                <option value="productivity">Productivity</option>
+              </select>
+              
+              <LiveActivityIndicator />
+            </div>
           </div>
         </div>
       </div>
 
-      {filteredPosts.length === 0 ? (
-        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+      {/* Post Creator */}
+      {showPostCreator && (
+        <div className="mb-6">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                <Edit3 className="w-5 h-5 mr-2 text-blue-600" />
+                Create New Post
+              </h3>
+              <button
+                onClick={() => setShowPostCreator(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+                title="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <PostCreator 
+              onPostCreated={handlePostCreated}
+              className="border-0 shadow-none"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Production Agent Status */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          Production Agents ({productionAgents.length})
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {productionAgents.map((agent) => (
+            <div key={agent.id} className="border border-green-200 rounded-lg p-4 bg-green-50">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-medium text-green-900">{agent.name}</h3>
+                <div className={`w-2 h-2 rounded-full ${
+                  agent.status === 'active' ? 'bg-green-500' : 
+                  agent.status === 'busy' ? 'bg-yellow-500' : 'bg-gray-400'
+                }`}></div>
+              </div>
+              <p className="text-sm text-green-700 mb-2">{agent.description}</p>
+              <div className="flex flex-wrap gap-1">
+                {agent.capabilities.slice(0, 2).map((cap: string, idx: number) => (
+                  <span key={idx} className="px-2 py-1 bg-green-200 text-green-800 text-xs rounded">
+                    {cap}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Production Activities Feed */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Production Agent Activities</h2>
+        
+        {productionActivities.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-600">No recent activities</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {productionActivities.slice(0, 10).map((activity) => (
+              <div key={activity.id} className="border-l-4 border-green-500 pl-4 py-2">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-medium text-green-900">{activity.agentName}</span>
+                  <span className="text-sm text-gray-500">
+                    {new Date(activity.timestamp).toLocaleTimeString()}
+                  </span>
+                </div>
+                <p className="text-gray-700">{activity.description}</p>
+                <span className="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs rounded mt-1">
+                  {activity.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Legacy Posts Section */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Agent Posts Archive</h2>
+        
+        {filteredPosts.length === 0 ? (
+          <div className="text-center py-8" data-testid="empty-state">
           <div className="text-gray-400 mb-4">
             <MessageCircle className="mx-auto h-12 w-12" />
           </div>
@@ -301,35 +580,65 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = ({ className = '' }) => 
                 )}
               </div>
 
-              {/* Post Actions */}
-              <div className="px-4 py-3 border-t border-gray-100">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-6">
-                    <button className="flex items-center space-x-2 text-gray-500 hover:text-red-500 transition-colors">
-                      <Heart className="h-5 w-5" />
-                      <span className="text-sm">{post.likes}</span>
-                    </button>
+              {/* Enhanced Post Actions with Real-time Features */}
+              <div className="border-t border-gray-100">
+                {/* Typing Indicator */}
+                <TypingIndicator postId={post.id} className="mx-4 mt-3" />
+                
+                <div className="px-4 py-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-6">
+                      <button 
+                        className={`flex items-center space-x-2 transition-colors ${
+                          isConnected
+                            ? 'text-gray-500 hover:text-red-500'
+                            : 'text-gray-400 cursor-not-allowed opacity-50'
+                        }`}
+                        onClick={() => isConnected && handleLikePost(post.id, post.likes || 0)}
+                        disabled={!isConnected}
+                        title={!isConnected ? 'Offline - will sync when reconnected' : ''}
+                      >
+                        <Heart className="h-5 w-5" />
+                        <span className="text-sm">{post.likes || 0}</span>
+                      </button>
+                      
+                      <button 
+                        className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors"
+                        onClick={() => subscribePost(post.id)}
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                        <span className="text-sm">{post.comments || 0}</span>
+                      </button>
+                      
+                      <button className="flex items-center space-x-2 text-gray-500 hover:text-green-500 transition-colors">
+                        <Share2 className="h-5 w-5" />
+                        <span className="text-sm">{post.shares || 0}</span>
+                      </button>
+                    </div>
                     
-                    <button className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors">
-                      <MessageCircle className="h-5 w-5" />
-                      <span className="text-sm">{post.comments}</span>
-                    </button>
-                    
-                    <button className="flex items-center space-x-2 text-gray-500 hover:text-green-500 transition-colors">
-                      <Share2 className="h-5 w-5" />
-                      <span className="text-sm">{post.shares}</span>
-                    </button>
+                    <div className="flex items-center space-x-2 text-xs text-gray-400">
+                      {!isConnected && (
+                        <span className="text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                          Offline
+                        </span>
+                      )}
+                      <span>ID: {post.id}</span>
+                    </div>
                   </div>
                   
-                  <div className="text-xs text-gray-400">
-                    ID: {post.id}
-                  </div>
+                  {/* Connection Status for Individual Posts */}
+                  {!isConnected && (
+                    <div className="mt-2 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                      Real-time features unavailable - interactions will sync when reconnected
+                    </div>
+                  )}
                 </div>
               </div>
             </article>
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 };
