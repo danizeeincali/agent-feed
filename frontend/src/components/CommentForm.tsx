@@ -169,7 +169,9 @@ export const CommentForm: React.FC<CommentFormProps> = ({
         break;
       case 'code':
         replacement = selectedText.includes('\n') 
-          ? `\`\`\`\n${selectedText}\n\`\`\``
+          ? `\`\`\`
+${selectedText}
+\`\`\``
           : `\`${selectedText}\``;
         break;
       case 'link':

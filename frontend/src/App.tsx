@@ -1,21 +1,28 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { 
+  ErrorBoundary, 
+  RouteErrorBoundary, 
+  GlobalErrorBoundary,
+  AsyncErrorBoundary 
+} from '@/components/ErrorBoundary';
+import FallbackComponents from '@/components/FallbackComponents';
 import { RealTimeNotifications } from '@/components/RealTimeNotifications';
 
 // Import components directly to fix loading issue
 import SocialMediaFeed from '@/components/SocialMediaFeed';
-import { AgentFeedDashboard } from '@/components/AgentFeedDashboard';
-import AgentManager from '@/components/AgentManager';
-import SystemAnalytics from '@/components/SystemAnalytics';
-import ClaudeCodePanel from '@/components/ClaudeCodePanel';
+import BulletproofAgentManager from '@/components/BulletproofAgentManager';
+import BulletproofSystemAnalytics from '@/components/BulletproofSystemAnalytics';
+import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
-import WorkflowVisualization from '@/components/WorkflowVisualization';
-import AgentProfile from '@/components/AgentProfile';
-import ActivityPanel from '@/components/ActivityPanel';
+import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
+import BulletproofAgentProfile from '@/components/BulletproofAgentProfile';
+import BulletproofActivityPanel from '@/components/BulletproofActivityPanel';
+import BulletproofSettings from '@/components/BulletproofSettings';
 import DualInstanceDashboard from '@/components/DualInstanceDashboard';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
+import ErrorTesting from '@/components/ErrorTesting';
 import { WebSocketProvider } from '@/context/WebSocketContext';
 import '@/styles/agents.css';
 import { 
@@ -180,50 +187,12 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
 
 Layout.displayName = 'Layout';
 
-// Settings component
-const Settings: React.FC = () => {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
-        <p className="text-gray-600 mt-1">Configure your AgentLink preferences</p>
-      </div>
-      
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">System Configuration</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              API Base URL
-            </label>
-            <input
-              type="url"
-              defaultValue="/api/v1"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="notifications"
-              defaultChecked
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            />
-            <label htmlFor="notifications" className="text-sm text-gray-700">
-              Enable real-time notifications
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+// Using BulletproofSettings component instead of inline Settings
 
 
 const App: React.FC = () => {
   return (
-    <ErrorBoundary>
+    <GlobalErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <WebSocketProvider config={{
           autoConnect: true,
@@ -233,37 +202,104 @@ const App: React.FC = () => {
         }}>
           <Router>
             <Layout>
-              <Routes>
-                <Route path="/" element={<SocialMediaFeed />} />
-                <Route path="/dual-instance" element={<DualInstanceDashboard />} />
-                <Route path="/dashboard" element={<AgentDashboard />} />
-                <Route path="/agents" element={<AgentManager />} />
-                <Route path="/agent/:agentId" element={<AgentProfile />} />
-                <Route path="/workflows" element={<WorkflowVisualization />} />
-                <Route path="/analytics" element={<SystemAnalytics />} />
-                <Route path="/claude-code" element={<ClaudeCodePanel />} />
-                <Route path="/activity" element={<ActivityPanel />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={
-                  <div className="text-center py-12" data-testid="error-fallback">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-4">Page Not Found</h1>
-                    <p className="text-gray-600">The page you're looking for doesn't exist.</p>
-                    <a href="/" className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                      Go Home
-                    </a>
-                  </div>
-                } />
-              </Routes>
+              <ErrorBoundary componentName="AppRouter">
+                <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading page..." size="lg" />}>
+                  <Routes>
+                  <Route path="/" element={
+                    <RouteErrorBoundary routeName="Feed">
+                      <Suspense fallback={<FallbackComponents.FeedFallback />}>
+                        <SocialMediaFeed />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/dual-instance" element={
+                    <RouteErrorBoundary routeName="DualInstance" fallback={<FallbackComponents.DualInstanceFallback />}>
+                      <AsyncErrorBoundary componentName="DualInstanceDashboard">
+                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
+                          <DualInstanceDashboard />
+                        </Suspense>
+                      </AsyncErrorBoundary>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/dashboard" element={
+                    <RouteErrorBoundary routeName="Dashboard">
+                      <Suspense fallback={<FallbackComponents.DashboardFallback />}>
+                        <AgentDashboard />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/agents" element={
+                    <RouteErrorBoundary routeName="AgentManager">
+                      <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
+                        <BulletproofAgentManager />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/agent/:agentId" element={
+                    <RouteErrorBoundary routeName="AgentProfile" fallback={<FallbackComponents.AgentProfileFallback />}>
+                      <AsyncErrorBoundary componentName="AgentProfile">
+                        <Suspense fallback={<FallbackComponents.AgentProfileFallback />}>
+                          <BulletproofAgentProfile />
+                        </Suspense>
+                      </AsyncErrorBoundary>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/workflows" element={
+                    <RouteErrorBoundary routeName="Workflows">
+                      <Suspense fallback={<FallbackComponents.WorkflowFallback />}>
+                        <WorkflowVisualizationFixed />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/analytics" element={
+                    <RouteErrorBoundary routeName="Analytics">
+                      <Suspense fallback={<FallbackComponents.AnalyticsFallback />}>
+                        <BulletproofSystemAnalytics />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/claude-code" element={
+                    <RouteErrorBoundary routeName="ClaudeCode">
+                      <Suspense fallback={<FallbackComponents.ClaudeCodeFallback />}>
+                        <BulletproofClaudeCodePanel />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/activity" element={
+                    <RouteErrorBoundary routeName="Activity">
+                      <Suspense fallback={<FallbackComponents.ActivityFallback />}>
+                        <BulletproofActivityPanel />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/settings" element={
+                    <RouteErrorBoundary routeName="Settings">
+                      <Suspense fallback={<FallbackComponents.SettingsFallback />}>
+                        <BulletproofSettings />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                    <Route path="*" element={<FallbackComponents.NotFoundFallback />} />
+                  </Routes>
+                </Suspense>
+              </ErrorBoundary>
             </Layout>
           </Router>
         </WebSocketProvider>
         
-        {/* Performance Monitor - Only in development */}
+        {/* Development Tools - Only in development */}
         {typeof window !== 'undefined' && process.env.NODE_ENV === 'development' && (
-          <PerformanceMonitor />
+          <>
+            <ErrorBoundary componentName="PerformanceMonitor" isolate={true}>
+              <PerformanceMonitor />
+            </ErrorBoundary>
+            <ErrorBoundary componentName="ErrorTesting" isolate={true}>
+              <ErrorTesting />
+            </ErrorBoundary>
+          </>
         )}
       </QueryClientProvider>
-    </ErrorBoundary>
+    </GlobalErrorBoundary>
   );
 };
 

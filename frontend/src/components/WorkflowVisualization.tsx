@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useWebSocket } from '../hooks/useWebSocket';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import { 
   CheckCircle,
   Clock,
@@ -14,7 +14,7 @@ import {
   ZapOff,
   Pause
 } from 'lucide-react';
-import { cn } from '../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface WorkflowStep {
   id: string;
@@ -48,13 +48,30 @@ interface WorkflowVisualizationProps {
   className?: string;
 }
 
-const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = ({ className = '' }) => {
+const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = React.memo(({ className = '' }) => {
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'timeline' | 'dependency'>('timeline');
+  const [error, setError] = useState<string | null>(null);
 
-  const { isConnected, subscribe } = useWebSocket();
+  // Use WebSocket hook with safe fallbacks
+  const webSocketHook = useWebSocket({
+    url: 'http://localhost:3000',
+    autoConnect: false // Prevent auto-connection to avoid errors
+  });
+  
+  // Extract values with safe defaults and error handling
+  const isConnected = webSocketHook?.isConnected || false;
+  const subscribe = useCallback((event: string, handler: (data: any) => void) => {
+    try {
+      if (webSocketHook?.subscribe) {
+        webSocketHook.subscribe(event, handler);
+      }
+    } catch (err) {
+      console.warn(`Failed to subscribe to ${event}:`, err);
+    }
+  }, [webSocketHook?.subscribe]);
 
   // Mock workflow data
   const mockWorkflows: Workflow[] = [
@@ -249,29 +266,39 @@ const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = ({ className
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
-      subscribe('workflow-update', (data) => {
-        setWorkflows(prev => prev.map(workflow =>
-          workflow.id === data.workflowId
-            ? { ...workflow, ...data.updates }
-            : workflow
-        ));
-      });
+    // Only subscribe if connected and subscribe function exists
+    if (isConnected && subscribe) {
+      try {
+        subscribe('workflow-update', (data) => {
+          if (data?.workflowId && data?.updates) {
+            setWorkflows(prev => prev.map(workflow =>
+              workflow.id === data.workflowId
+                ? { ...workflow, ...data.updates }
+                : workflow
+            ));
+          }
+        });
 
-      subscribe('step-update', (data) => {
-        setWorkflows(prev => prev.map(workflow =>
-          workflow.id === data.workflowId
-            ? {
-                ...workflow,
-                steps: workflow.steps.map(step =>
-                  step.id === data.stepId
-                    ? { ...step, ...data.updates }
-                    : step
-                )
-              }
-            : workflow
-        ));
-      });
+        subscribe('step-update', (data) => {
+          if (data?.workflowId && data?.stepId && data?.updates) {
+            setWorkflows(prev => prev.map(workflow =>
+              workflow.id === data.workflowId
+                ? {
+                    ...workflow,
+                    steps: workflow.steps.map(step =>
+                      step.id === data.stepId
+                        ? { ...step, ...data.updates }
+                        : step
+                    )
+                  }
+                : workflow
+            ));
+          }
+        });
+      } catch (error) {
+        console.warn('Failed to set up WebSocket subscriptions:', error);
+        setError('WebSocket subscription failed');
+      }
     }
   }, [isConnected, subscribe]);
 
@@ -331,6 +358,9 @@ const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = ({ className
 
   const selectedWorkflowData = workflows.find(w => w.id === selectedWorkflow);
 
+  // Show error state if there's an error but still render the main content
+  const showErrorBanner = error && !loading;
+
   if (loading) {
     return (
       <div className={`p-6 ${className}`}>
@@ -348,6 +378,19 @@ const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = ({ className
 
   return (
     <div className={`p-6 space-y-6 ${className}`}>
+      {/* Error banner if needed */}
+      {showErrorBanner && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <AlertCircle className="w-5 h-5 text-yellow-600 mr-2" />
+            <h3 className="text-sm font-medium text-yellow-800">Connection Issue</h3>
+          </div>
+          <p className="mt-2 text-sm text-yellow-700">
+            WebSocket connection failed - Showing mock data for demonstration
+          </p>
+        </div>
+      )}
+      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -625,6 +668,8 @@ const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = ({ className
       </div>
     </div>
   );
-};
+});
+
+WorkflowVisualization.displayName = 'WorkflowVisualization';
 
 export default WorkflowVisualization;

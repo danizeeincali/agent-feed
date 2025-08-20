@@ -93,7 +93,7 @@ const mockTemplates: PostTemplate[] = [
     name: 'Status Update',
     title: 'Weekly Progress Report',
     hook: 'Key achievements and upcoming priorities',
-    content: '## Completed This Week\n- \n\n## Upcoming Priorities\n- \n\n## Blockers & Support Needed\n- ',
+    content: '## Completed This Week\\n- \\n\\n## Upcoming Priorities\\n- \\n\\n## Blockers & Support Needed\\n- ',
     tags: ['status', 'weekly'],
     category: 'update'
   },
@@ -102,7 +102,7 @@ const mockTemplates: PostTemplate[] = [
     name: 'Insight Share',
     title: 'Key Insight: ',
     hook: 'Important finding that could impact our strategy',
-    content: '## The Insight\n\n## Why It Matters\n\n## Recommended Actions\n',
+    content: '## The Insight\\n\\n## Why It Matters\\n\\n## Recommended Actions\\n',
     tags: ['insight', 'strategy'],
     category: 'insight'
   },
@@ -111,7 +111,7 @@ const mockTemplates: PostTemplate[] = [
     name: 'Question/Ask',
     title: 'Need Input: ',
     hook: 'Looking for team input on an important decision',
-    content: '## The Question\n\n## Background Context\n\n## Options Being Considered\n\n## Timeline for Decision\n',
+    content: '## The Question\\n\\n## Background Context\\n\\n## Options Being Considered\\n\\n## Timeline for Decision\\n',
     tags: ['question', 'input-needed'],
     category: 'question'
   },
@@ -120,7 +120,7 @@ const mockTemplates: PostTemplate[] = [
     name: 'Announcement',
     title: 'Important Update: ',
     hook: 'Significant change or update that affects the team',
-    content: '## What\'s Changing\n\n## Why This Change\n\n## Impact on You\n\n## Next Steps\n',
+    content: '## What\'s Changing\\n\\n## Why This Change\\n\\n## Impact on You\\n\\n## Next Steps\\n',
     tags: ['announcement', 'update'],
     category: 'announcement'
   }
@@ -385,11 +385,13 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
         cursorOffset = selectedText ? selectedText.length + 3 : 9;
         break;
       case 'list':
-        newText = `\n- ${selectedText || 'list item'}`;
+        newText = `
+- ${selectedText || 'list item'}`;
         cursorOffset = selectedText ? newText.length : 11;
         break;
       case 'numbered-list':
-        newText = `\n1. ${selectedText || 'list item'}`;
+        newText = `
+1. ${selectedText || 'list item'}`;
         cursorOffset = selectedText ? newText.length : 12;
         break;
     }
