@@ -13,6 +13,9 @@ export default defineConfig({
   server: {
     port: 3001,
     host: true,
+    // Proxy disabled for development with mock API
+    // Enable proxy only when backend server is available
+    /*
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
@@ -24,6 +27,7 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    */
   },
   build: {
     outDir: 'dist',

@@ -1,5 +1,5 @@
 import React, { useState, memo, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { 
   ErrorBoundary, 
@@ -73,6 +73,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const location = useLocation();
 
   // Memoized navigation to prevent re-creation on every render
   const navigation = React.useMemo(() => [
@@ -120,17 +121,25 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
         </div>
 
         <nav className="mt-8 px-4 space-y-2">
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors text-gray-700 hover:bg-gray-100"
-              onClick={() => setIsSidebarOpen(false)}
-            >
-              <item.icon className="w-5 h-5 mr-3" />
-              {item.name}
-            </a>
-          ))}
+          {navigation.map((item) => {
+            const isActive = location.pathname === item.href;
+            return (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={cn(
+                  "flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                  isActive 
+                    ? "bg-blue-100 text-blue-700 border-r-2 border-blue-700" 
+                    : "text-gray-700 hover:bg-gray-100"
+                )}
+                onClick={() => setIsSidebarOpen(false)}
+              >
+                <item.icon className="w-5 h-5 mr-3" />
+                {item.name}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Connection Status */}
