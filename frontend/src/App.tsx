@@ -13,6 +13,7 @@ import { RealTimeNotifications } from '@/components/RealTimeNotifications';
 // Import components directly to fix loading issue
 import SocialMediaFeed from '@/components/SocialMediaFeed';
 import SimpleAgentManager from '@/components/SimpleAgentManager';
+import EnhancedAgentManagerWrapper from '@/components/EnhancedAgentManagerWrapper';
 // import AgentManagerDebug from '@/components/AgentManagerDebug';
 import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
@@ -81,7 +82,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const navigation = React.useMemo(() => [
     { name: 'Feed', href: '/', icon: Activity },
     { name: 'Dual Instance', href: '/dual-instance', icon: LayoutDashboard },
-    { name: 'Agent Manager', href: '/agents', icon: Bot },
+    { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
@@ -242,7 +243,14 @@ const App: React.FC = () => {
                     </RouteErrorBoundary>
                   } />
                   <Route path="/agents" element={
-                    <RouteErrorBoundary routeName="AgentManager">
+                    <RouteErrorBoundary routeName="Agents">
+                      <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
+                        <EnhancedAgentManagerWrapper />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/agents-legacy" element={
+                    <RouteErrorBoundary routeName="LegacyAgentManager">
                       <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
                         <SimpleAgentManager />
                       </Suspense>

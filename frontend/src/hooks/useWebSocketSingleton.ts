@@ -89,7 +89,7 @@ export const useWebSocketSingleton = (options: UseWebSocketSingletonOptions): Us
       transports: ['websocket', 'polling'],
       timeout: 15000,
       reconnection: true,
-      reconnectionAttempts,
+      reconnectionAttempts: reconnectAttempts,
       reconnectionDelay: reconnectDelay,
       forceNew: false // Prevent multiple connections
     });

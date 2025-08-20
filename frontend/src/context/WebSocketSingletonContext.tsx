@@ -42,6 +42,10 @@ interface WebSocketSingletonContextValue {
   connect: () => void;
   disconnect: () => void;
   emit: (event: string, data?: any) => void;
+  on: (event: string, handler: (data: any) => void) => void;
+  off: (event: string, handler?: (data: any) => void) => void;
+  subscribe: (event: string, handler: (data: any) => void) => void;
+  unsubscribe: (event: string, handler?: (data: any) => void) => void;
   connectionState: ConnectionState;
   notifications: Notification[];
   onlineUsers: OnlineUser[];
@@ -108,7 +112,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   // Connection state
   const connectionState = useMemo<ConnectionState>(() => ({
     isConnected,
-    isConnecting: socket?.connecting || false,
+    isConnecting: socket?.disconnected === false && !socket?.connected || false,
     reconnectAttempt,
     lastConnected: isConnected ? new Date().toISOString() : null,
     connectionError
@@ -165,6 +169,31 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     connect();
   }, [connect]);
 
+  // Add missing methods for compatibility
+  const on = useCallback((event: string, handler: (data: any) => void) => {
+    if (socket) {
+      socket.on(event, handler);
+    }
+  }, [socket]);
+
+  const off = useCallback((event: string, handler?: (data: any) => void) => {
+    if (socket) {
+      if (handler) {
+        socket.off(event, handler);
+      } else {
+        socket.off(event);
+      }
+    }
+  }, [socket]);
+
+  const subscribe = useCallback((event: string, handler: (data: any) => void) => {
+    on(event, handler);
+  }, [on]);
+
+  const unsubscribe = useCallback((event: string, handler?: (data: any) => void) => {
+    off(event, handler);
+  }, [off]);
+
   // Socket event handlers
   useEffect(() => {
     if (!socket) return;
@@ -175,6 +204,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
           type: data.type || 'info',
           title: data.title || 'Notification',
           message: data.message || '',
+          read: false,
           userId: data.userId,
           postId: data.postId,
           commentId: data.commentId
@@ -225,6 +255,10 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     connect,
     disconnect,
     emit,
+    on,
+    off,
+    subscribe,
+    unsubscribe,
     connectionState,
     notifications,
     onlineUsers,
@@ -246,6 +280,10 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     connectionError,
     connect,
     disconnect,
+    on,
+    off,
+    subscribe,
+    unsubscribe,
     emit,
     connectionState,
     notifications,

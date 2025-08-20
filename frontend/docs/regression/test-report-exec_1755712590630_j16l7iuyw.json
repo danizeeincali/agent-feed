@@ -1,0 +1,629 @@
+{
+  "execution": {
+    "id": "exec_1755712590630_j16l7iuyw",
+    "suiteId": "critical-tests,normal-tests,performance-tests",
+    "results": [
+      {
+        "testId": "critical-tests-test-0",
+        "status": "passed",
+        "duration": 9,
+        "startTime": "2025-08-20T17:56:30.630Z",
+        "endTime": "2025-08-20T17:56:30.639Z",
+        "output": "Mock test critical-tests-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.639Z",
+        "endTime": "2025-08-20T17:56:30.649Z",
+        "output": "Mock test critical-tests-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-2",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.649Z",
+        "endTime": "2025-08-20T17:56:30.659Z",
+        "output": "Mock test critical-tests-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-3",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.659Z",
+        "endTime": "2025-08-20T17:56:30.669Z",
+        "output": "Mock test critical-tests-test-3 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-4",
+        "status": "passed",
+        "duration": 11,
+        "startTime": "2025-08-20T17:56:30.669Z",
+        "endTime": "2025-08-20T17:56:30.680Z",
+        "output": "Mock test critical-tests-test-4 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-0",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.680Z",
+        "endTime": "2025-08-20T17:56:30.690Z",
+        "output": "Mock test normal-tests-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.690Z",
+        "endTime": "2025-08-20T17:56:30.700Z",
+        "output": "Mock test normal-tests-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-2",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.700Z",
+        "endTime": "2025-08-20T17:56:30.710Z",
+        "output": "Mock test normal-tests-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-3",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.710Z",
+        "endTime": "2025-08-20T17:56:30.720Z",
+        "output": "Mock test normal-tests-test-3 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-4",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.720Z",
+        "endTime": "2025-08-20T17:56:30.730Z",
+        "output": "Mock test normal-tests-test-4 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-5",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.730Z",
+        "endTime": "2025-08-20T17:56:30.740Z",
+        "output": "Mock test normal-tests-test-5 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-6",
+        "status": "passed",
+        "duration": 11,
+        "startTime": "2025-08-20T17:56:30.740Z",
+        "endTime": "2025-08-20T17:56:30.751Z",
+        "output": "Mock test normal-tests-test-6 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-7",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.751Z",
+        "endTime": "2025-08-20T17:56:30.761Z",
+        "output": "Mock test normal-tests-test-7 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-fail-0",
+        "status": "failed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.761Z",
+        "endTime": "2025-08-20T17:56:30.771Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-fail-1",
+        "status": "failed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.771Z",
+        "endTime": "2025-08-20T17:56:30.781Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "performance-tests-test-0",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.781Z",
+        "endTime": "2025-08-20T17:56:30.791Z",
+        "output": "Mock test performance-tests-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "performance-tests-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.791Z",
+        "endTime": "2025-08-20T17:56:30.801Z",
+        "output": "Mock test performance-tests-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "performance-tests-fail-0",
+        "status": "failed",
+        "duration": 11,
+        "startTime": "2025-08-20T17:56:30.801Z",
+        "endTime": "2025-08-20T17:56:30.812Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "summary": {
+      "total": 18,
+      "passed": 15,
+      "failed": 3,
+      "skipped": 0,
+      "duration": 182
+    },
+    "startTime": "2025-08-20T17:56:30.630Z",
+    "endTime": "2025-08-20T17:56:30.812Z",
+    "environment": {
+      "platform": "linux",
+      "version": "0.0.0",
+      "nodeVersion": "v22.17.0",
+      "dependencies": {
+        "@tanstack/react-query": "^4.35.0",
+        "clsx": "^2.1.1",
+        "lucide-react": "^0.279.0",
+        "puppeteer": "^24.16.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-error-boundary": "^6.0.0",
+        "react-router-dom": "^6.15.0",
+        "socket.io-client": "^4.8.1",
+        "tailwind-merge": "^1.14.0",
+        "ws": "^8.14.0"
+      },
+      "variables": {
+        "NODE_ENV": "test",
+        "CI": "false"
+      }
+    },
+    "configuration": {
+      "parallel": false,
+      "maxWorkers": 2,
+      "timeout": 30000,
+      "retries": 0,
+      "reporters": [
+        "console",
+        "json"
+      ],
+      "coverage": true,
+      "screenshots": false,
+      "videos": false,
+      "outputDir": "./test-reports",
+      "enableNLD": true,
+      "enableVerificationWorkflow": true,
+      "generatePMReports": true
+    }
+  },
+  "summary": {
+    "total": 18,
+    "passed": 15,
+    "failed": 3,
+    "skipped": 0,
+    "duration": 182
+  },
+  "results": [
+    {
+      "testId": "critical-tests-test-0",
+      "status": "passed",
+      "duration": 9,
+      "startTime": "2025-08-20T17:56:30.630Z",
+      "endTime": "2025-08-20T17:56:30.639Z",
+      "output": "Mock test critical-tests-test-0 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "critical-tests-test-1",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.639Z",
+      "endTime": "2025-08-20T17:56:30.649Z",
+      "output": "Mock test critical-tests-test-1 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "critical-tests-test-2",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.649Z",
+      "endTime": "2025-08-20T17:56:30.659Z",
+      "output": "Mock test critical-tests-test-2 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "critical-tests-test-3",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.659Z",
+      "endTime": "2025-08-20T17:56:30.669Z",
+      "output": "Mock test critical-tests-test-3 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "critical-tests-test-4",
+      "status": "passed",
+      "duration": 11,
+      "startTime": "2025-08-20T17:56:30.669Z",
+      "endTime": "2025-08-20T17:56:30.680Z",
+      "output": "Mock test critical-tests-test-4 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-0",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.680Z",
+      "endTime": "2025-08-20T17:56:30.690Z",
+      "output": "Mock test normal-tests-test-0 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-1",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.690Z",
+      "endTime": "2025-08-20T17:56:30.700Z",
+      "output": "Mock test normal-tests-test-1 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-2",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.700Z",
+      "endTime": "2025-08-20T17:56:30.710Z",
+      "output": "Mock test normal-tests-test-2 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-3",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.710Z",
+      "endTime": "2025-08-20T17:56:30.720Z",
+      "output": "Mock test normal-tests-test-3 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-4",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.720Z",
+      "endTime": "2025-08-20T17:56:30.730Z",
+      "output": "Mock test normal-tests-test-4 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-5",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.730Z",
+      "endTime": "2025-08-20T17:56:30.740Z",
+      "output": "Mock test normal-tests-test-5 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-6",
+      "status": "passed",
+      "duration": 11,
+      "startTime": "2025-08-20T17:56:30.740Z",
+      "endTime": "2025-08-20T17:56:30.751Z",
+      "output": "Mock test normal-tests-test-6 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-test-7",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.751Z",
+      "endTime": "2025-08-20T17:56:30.761Z",
+      "output": "Mock test normal-tests-test-7 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-fail-0",
+      "status": "failed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.761Z",
+      "endTime": "2025-08-20T17:56:30.771Z",
+      "error": {},
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "normal-tests-fail-1",
+      "status": "failed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.771Z",
+      "endTime": "2025-08-20T17:56:30.781Z",
+      "error": {},
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "performance-tests-test-0",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.781Z",
+      "endTime": "2025-08-20T17:56:30.791Z",
+      "output": "Mock test performance-tests-test-0 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "performance-tests-test-1",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-20T17:56:30.791Z",
+      "endTime": "2025-08-20T17:56:30.801Z",
+      "output": "Mock test performance-tests-test-1 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "performance-tests-fail-0",
+      "status": "failed",
+      "duration": 11,
+      "startTime": "2025-08-20T17:56:30.801Z",
+      "endTime": "2025-08-20T17:56:30.812Z",
+      "error": {},
+      "logs": [],
+      "artifacts": []
+    }
+  ],
+  "categories": {
+    "passed": [
+      {
+        "testId": "critical-tests-test-0",
+        "status": "passed",
+        "duration": 9,
+        "startTime": "2025-08-20T17:56:30.630Z",
+        "endTime": "2025-08-20T17:56:30.639Z",
+        "output": "Mock test critical-tests-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.639Z",
+        "endTime": "2025-08-20T17:56:30.649Z",
+        "output": "Mock test critical-tests-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-2",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.649Z",
+        "endTime": "2025-08-20T17:56:30.659Z",
+        "output": "Mock test critical-tests-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-3",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.659Z",
+        "endTime": "2025-08-20T17:56:30.669Z",
+        "output": "Mock test critical-tests-test-3 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "critical-tests-test-4",
+        "status": "passed",
+        "duration": 11,
+        "startTime": "2025-08-20T17:56:30.669Z",
+        "endTime": "2025-08-20T17:56:30.680Z",
+        "output": "Mock test critical-tests-test-4 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-0",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.680Z",
+        "endTime": "2025-08-20T17:56:30.690Z",
+        "output": "Mock test normal-tests-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.690Z",
+        "endTime": "2025-08-20T17:56:30.700Z",
+        "output": "Mock test normal-tests-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-2",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.700Z",
+        "endTime": "2025-08-20T17:56:30.710Z",
+        "output": "Mock test normal-tests-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-3",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.710Z",
+        "endTime": "2025-08-20T17:56:30.720Z",
+        "output": "Mock test normal-tests-test-3 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-4",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.720Z",
+        "endTime": "2025-08-20T17:56:30.730Z",
+        "output": "Mock test normal-tests-test-4 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-5",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.730Z",
+        "endTime": "2025-08-20T17:56:30.740Z",
+        "output": "Mock test normal-tests-test-5 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-6",
+        "status": "passed",
+        "duration": 11,
+        "startTime": "2025-08-20T17:56:30.740Z",
+        "endTime": "2025-08-20T17:56:30.751Z",
+        "output": "Mock test normal-tests-test-6 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-test-7",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.751Z",
+        "endTime": "2025-08-20T17:56:30.761Z",
+        "output": "Mock test normal-tests-test-7 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "performance-tests-test-0",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.781Z",
+        "endTime": "2025-08-20T17:56:30.791Z",
+        "output": "Mock test performance-tests-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "performance-tests-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.791Z",
+        "endTime": "2025-08-20T17:56:30.801Z",
+        "output": "Mock test performance-tests-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "failed": [
+      {
+        "testId": "normal-tests-fail-0",
+        "status": "failed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.761Z",
+        "endTime": "2025-08-20T17:56:30.771Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "normal-tests-fail-1",
+        "status": "failed",
+        "duration": 10,
+        "startTime": "2025-08-20T17:56:30.771Z",
+        "endTime": "2025-08-20T17:56:30.781Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "performance-tests-fail-0",
+        "status": "failed",
+        "duration": 11,
+        "startTime": "2025-08-20T17:56:30.801Z",
+        "endTime": "2025-08-20T17:56:30.812Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "skipped": [],
+    "errors": [],
+    "timeouts": []
+  },
+  "metrics": {
+    "averageDuration": 10.11111111111111,
+    "longestTest": {
+      "testId": "critical-tests-test-4",
+      "status": "passed",
+      "duration": 11,
+      "startTime": "2025-08-20T17:56:30.669Z",
+      "endTime": "2025-08-20T17:56:30.680Z",
+      "output": "Mock test critical-tests-test-4 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    "totalDuration": 182
+  },
+  "timestamp": "2025-08-20T17:56:30.812Z"
+}

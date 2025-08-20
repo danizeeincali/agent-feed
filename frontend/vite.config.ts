@@ -12,7 +12,8 @@ export default defineConfig({
   },
   server: {
     port: 3001,
-    host: true,
+    host: '0.0.0.0', // Listen on all interfaces for proper connectivity
+    strictPort: true, // Fail if port is already in use
     // Proxy disabled for development with mock API
     // Enable proxy only when backend server is available
     /*

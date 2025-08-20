@@ -532,6 +532,63 @@ if (WEBSOCKET_ENABLED) {
       socket.rooms?.delete(`claude-flow:${sessionId}`);
     });
 
+    // Token Analytics WebSocket Handlers
+    socket.on('token-usage', (data: any) => {
+      if (!checkSocketRateLimit(socket.id)) {
+        socket.emit('error', { message: 'Rate limit exceeded' });
+        return;
+      }
+      
+      // Validate token usage data
+      if (!data.provider || !data.model || typeof data.tokensUsed !== 'number') {
+        socket.emit('error', { message: 'Invalid token usage data' });
+        return;
+      }
+      
+      const tokenUsage = {
+        ...data,
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        timestamp: new Date().toISOString(),
+        userId
+      };
+      
+      logger.debug('Token usage received', { tokenUsage, socketId: socket.id, userId });
+      
+      // Broadcast to all connected clients for real-time updates
+      io.emit('token-usage-update', tokenUsage);
+      
+      // Send acknowledgment
+      socket.emit('token-usage-ack', {
+        id: tokenUsage.id,
+        timestamp: tokenUsage.timestamp,
+        status: 'processed'
+      });
+    });
+    
+    // Token analytics subscription
+    socket.on('subscribe:token-analytics', () => {
+      if (!checkSocketRateLimit(socket.id)) {
+        socket.emit('error', { message: 'Rate limit exceeded' });
+        return;
+      }
+      
+      socket.join('token-analytics');
+      socket.rooms?.add('token-analytics');
+      logger.debug('Socket subscribed to token analytics', { socketId: socket.id, userId });
+      
+      // Send current connection status
+      socket.emit('token-analytics:subscribed', {
+        timestamp: new Date().toISOString(),
+        status: 'connected'
+      });
+    });
+    
+    socket.on('unsubscribe:token-analytics', () => {
+      socket.leave('token-analytics');
+      socket.rooms?.delete('token-analytics');
+      logger.debug('Socket unsubscribed from token analytics', { socketId: socket.id, userId });
+    });
+
     // Heartbeat for connection health
     socket.on('ping', () => {
       if (userId && socket.user) {

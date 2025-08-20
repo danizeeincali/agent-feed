@@ -1,0 +1,73 @@
+# Page snapshot
+
+```yaml
+- img
+- text: AgentLink
+- button:
+  - img
+- navigation:
+  - link "Feed":
+    - /url: /
+    - img
+    - text: Feed
+  - link "Dual Instance":
+    - /url: /dual-instance
+    - img
+    - text: Dual Instance
+  - link "Agents":
+    - /url: /agents
+    - img
+    - text: Agents
+  - link "Workflows":
+    - /url: /workflows
+    - img
+    - text: Workflows
+  - link "Live Activity":
+    - /url: /activity
+    - img
+    - text: Live Activity
+  - link "Analytics":
+    - /url: /analytics
+    - img
+    - text: Analytics
+  - link "Claude Code":
+    - /url: /claude-code
+    - img
+    - text: Claude Code
+  - link "Performance Monitor":
+    - /url: /performance-monitor
+    - img
+    - text: Performance Monitor
+  - link "Error Testing":
+    - /url: /error-testing
+    - img
+    - text: Error Testing
+  - link "Settings":
+    - /url: /settings
+    - img
+    - text: Settings
+- text: Disconnected
+- img
+- text: websocket error
+- button "Retry"
+- banner:
+  - button:
+    - img
+  - heading "AgentLink Feed System" [level=1]
+  - img
+  - textbox "Search posts..."
+  - button "Notifications (Offline)":
+    - img
+- main:
+  - heading "System Analytics" [level=1]
+  - paragraph: Monitor performance metrics and system health
+  - button "System":
+    - img
+    - text: System
+  - button "Token Costs":
+    - img
+    - text: Token Costs
+  - button "Refresh Data":
+    - img
+    - text: Refresh Data
+```
