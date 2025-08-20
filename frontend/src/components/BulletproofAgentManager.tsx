@@ -304,14 +304,12 @@ const BulletproofAgentManager: React.FC<AgentManagerProps> = memo(({
         handleError(new Error('Unknown error occurred'), 'load');
       }
       
-      // Set fallback data on error
-      if (agents.length === 0) {
-        setAgents(mockAgents);
-      }
+      // Set fallback data on error - use mockAgents directly to avoid dependency loop
+      setAgents(mockAgents);
     } finally {
       setLoading(false);
     }
-  }, [mockAgents, handleError, agents.length]);
+  }, [mockAgents, handleError]);
 
   // Initialize component
   useEffect(() => {

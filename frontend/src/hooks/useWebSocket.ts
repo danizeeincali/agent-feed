@@ -127,7 +127,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
       setSocket(null);
       setIsConnected(false);
     }
-  }, [socket]);
+  }, []); // Remove socket from deps, use ref pattern instead
 
   const emit = useCallback((event: string, data?: any) => {
     if (socket?.connected) {
@@ -135,7 +135,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     } else {
       console.warn('WebSocket not connected, cannot emit event:', event);
     }
-  }, [socket]);
+  }, []); // Remove socket from deps
 
   const subscribe = useCallback((event: string, handler: (data: any) => void) => {
     // Store handler for re-registration on reconnection
@@ -148,7 +148,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     if (socket) {
       socket.on(event, handler);
     }
-  }, [socket]);
+  }, []); // Remove socket from deps
 
   const unsubscribe = useCallback((event: string, handler?: (data: any) => void) => {
     if (handler) {
@@ -164,7 +164,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
         socket.removeAllListeners(event);
       }
     }
-  }, [socket]);
+  }, []); // Remove socket from deps
 
   // Auto-connect on mount
   useEffect(() => {
@@ -173,9 +173,11 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     }
 
     return () => {
-      disconnect();
+      if (socket) {
+        socket.disconnect();
+      }
     };
-  }, [autoConnect, connect, disconnect]);
+  }, [autoConnect]); // Remove connect and disconnect from deps to prevent infinite loop
 
   // Cleanup on unmount
   useEffect(() => {
@@ -185,7 +187,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
         socket.disconnect();
       }
     };
-  }, [socket]);
+  }, []); // Remove socket from deps to prevent infinite loop
 
   return {
     socket,

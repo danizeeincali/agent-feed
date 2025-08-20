@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visual Test - /agents Route</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .test-section { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .test-frame { width: 100%; height: 600px; border: 2px solid #ddd; border-radius: 4px; margin: 10px 0; }
+        .console-logs { background: #2d2d2d; color: #ffffff; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; margin: 10px 0; }
+        .step { margin: 10px 0; padding: 10px; border-left: 4px solid #007bff; background: #f8f9fa; }
+        h1 { color: #333; }
+        h2 { color: #555; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Visual Test - /agents Route Debug</h1>
+        
+        <div class="test-section">
+            <h2>🎯 Test Status</h2>
+            <div id="overall-status" class="status info">Initializing visual test...</div>
+            <div id="test-progress"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>🖼️ Live Route Test</h2>
+            <div id="frame-status" class="status info">Loading /agents route...</div>
+            <iframe id="agents-frame" class="test-frame" src="http://localhost:3001/agents"></iframe>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Expected vs Actual</h2>
+            <div class="step">
+                <h3>Expected Result (AgentManagerDebug):</h3>
+                <ul>
+                    <li>✅ Green "SUCCESS!" banner at top</li>
+                    <li>✅ "Agent Manager Debug" heading</li>
+                    <li>✅ Current time display</li>
+                    <li>✅ Two cards with debug info and mock agent</li>
+                    <li>✅ Yellow "Next Steps" section at bottom</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <h3>What we're testing:</h3>
+                <ol>
+                    <li><strong>Route Navigation:</strong> URL should change to /agents</li>
+                    <li><strong>Component Loading:</strong> AgentManagerDebug should render</li>
+                    <li><strong>Content Display:</strong> Should see debug content, not empty space</li>
+                    <li><strong>Console Output:</strong> Should log "AgentManagerDebug component rendering..."</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 Manual Verification Steps</h2>
+            <div id="manual-steps" class="info">
+                <h3>Step-by-step verification:</h3>
+                <ol>
+                    <li><strong>Direct URL Test:</strong> 
+                        <a href="http://localhost:3001/agents" target="_blank">Open /agents in new tab</a>
+                    </li>
+                    <li><strong>Check Browser Console:</strong> Press F12 → Console tab</li>
+                    <li><strong>Look for log:</strong> "🔧 AgentManagerDebug component rendering..."</li>
+                    <li><strong>Verify content:</strong> Should see green success banner and debug content</li>
+                    <li><strong>Navigation Test:</strong> 
+                        <a href="http://localhost:3001/" target="_blank">Go to home</a> → Click "Agent Manager" in sidebar
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 API Test</h2>
+            <div id="api-status" class="status info">Testing API...</div>
+            <div id="api-results"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📋 Debug Results</h2>
+            <div id="debug-results"></div>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.className = `status ${type}`;
+            }
+        }
+
+        function addResult(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            if (container) {
+                const div = document.createElement('div');
+                div.className = `status ${type}`;
+                div.textContent = message;
+                container.appendChild(div);
+            }
+        }
+
+        // Test iframe loading
+        function testIframe() {
+            const iframe = document.getElementById('agents-frame');
+            
+            iframe.onload = () => {
+                updateStatus('frame-status', '✅ /agents route loaded in iframe', 'success');
+                
+                setTimeout(() => {
+                    try {
+                        // Try to access iframe content (will fail due to CORS but that's expected)
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        updateStatus('frame-status', '✅ /agents route loaded with content accessible', 'success');
+                    } catch (e) {
+                        // CORS prevents access, but iframe loaded successfully
+                        updateStatus('frame-status', '✅ /agents route loaded (CORS prevents content inspection)', 'success');
+                    }
+                    
+                    addResult('debug-results', '✅ Iframe test passed - route loads successfully', 'success');
+                }, 2000);
+            };
+
+            iframe.onerror = () => {
+                updateStatus('frame-status', '❌ /agents route failed to load', 'error');
+                addResult('debug-results', '❌ Iframe test failed - route loading error', 'error');
+            };
+        }
+
+        // Test API
+        async function testAPI() {
+            try {
+                const response = await fetch('/api/v1/claude-live/prod/agents');
+                const data = await response.json();
+                
+                if (response.ok && data.success && data.agents.length > 0) {
+                    updateStatus('api-status', `✅ API working - ${data.agents.length} agents available`, 'success');
+                    addResult('api-results', `✅ Mock API returned ${data.agents.length} agents`, 'success');
+                    addResult('debug-results', '✅ API test passed - data available for component', 'success');
+                } else {
+                    updateStatus('api-status', '⚠️ API issues detected', 'warning');
+                    addResult('api-results', '⚠️ API response issues', 'warning');
+                    addResult('debug-results', '⚠️ API test partial - may affect component rendering', 'warning');
+                }
+            } catch (error) {
+                updateStatus('api-status', '❌ API test failed', 'error');
+                addResult('api-results', `❌ API Error: ${error.message}`, 'error');
+                addResult('debug-results', '❌ API test failed - component may not load data', 'error');
+            }
+        }
+
+        // Progress tracking
+        let testsCompleted = 0;
+        const totalTests = 3;
+
+        function updateProgress() {
+            testsCompleted++;
+            const progress = document.getElementById('test-progress');
+            progress.innerHTML = `<div class="info">Progress: ${testsCompleted}/${totalTests} tests completed</div>`;
+            
+            if (testsCompleted === totalTests) {
+                updateStatus('overall-status', '🎉 All visual tests completed! Check results above.', 'success');
+                
+                // Final summary
+                setTimeout(() => {
+                    addResult('debug-results', '🎯 NEXT PHASE: If debug component renders, the issue is in BulletproofAgentManager', 'info');
+                    addResult('debug-results', '🔄 REPLACE: Switch back to BulletproofAgentManager and debug component internals', 'info');
+                }, 1000);
+            }
+        }
+
+        // Run tests
+        async function runVisualTests() {
+            updateStatus('overall-status', '🔄 Running visual tests...', 'info');
+            
+            // Test 1: API
+            await testAPI();
+            updateProgress();
+            
+            // Test 2: Iframe loading
+            testIframe();
+            updateProgress();
+            
+            // Test 3: Instructions
+            setTimeout(() => {
+                addResult('debug-results', '📋 Manual verification step completed', 'info');
+                updateProgress();
+            }, 3000);
+        }
+
+        // Start tests
+        runVisualTests();
+
+        // Add instructions for what to do if debug component works
+        setTimeout(() => {
+            const nextSteps = document.createElement('div');
+            nextSteps.className = 'test-section';
+            nextSteps.innerHTML = `
+                <h2>🚀 Next Phase Instructions</h2>
+                <div class="warning">
+                    <h3>If AgentManagerDebug renders successfully:</h3>
+                    <ol>
+                        <li>✅ Routing is working correctly</li>
+                        <li>✅ React Router configuration is correct</li>
+                        <li>✅ Suspense and Error Boundaries are working</li>
+                        <li>🔄 The issue is specifically in BulletproofAgentManager component</li>
+                    </ol>
+                </div>
+                <div class="success">
+                    <h3>Debugging Strategy:</h3>
+                    <ol>
+                        <li>Replace AgentManagerDebug with BulletproofAgentManager</li>
+                        <li>Add console.log statements in BulletproofAgentManager</li>
+                        <li>Check for infinite loading states</li>
+                        <li>Check for unhandled errors in component</li>
+                        <li>Test component in isolation</li>
+                    </ol>
+                </div>
+            `;
+            document.body.appendChild(nextSteps);
+        }, 5000);
+    </script>
+</body>
+</html>

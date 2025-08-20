@@ -13,6 +13,7 @@ import { RealTimeNotifications } from '@/components/RealTimeNotifications';
 // Import components directly to fix loading issue
 import SocialMediaFeed from '@/components/SocialMediaFeed';
 import BulletproofAgentManager from '@/components/BulletproofAgentManager';
+import AgentManagerDebug from '@/components/AgentManagerDebug';
 import BulletproofSystemAnalytics from '@/components/BulletproofSystemAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
@@ -37,7 +38,8 @@ import {
   Bot,
   Workflow,
   BarChart3,
-  Code
+  Code,
+  AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
@@ -84,11 +86,13 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Claude Code', href: '/claude-code', icon: Code },
+    { name: 'Performance Monitor', href: '/performance-monitor', icon: Zap },
+    { name: 'Error Testing', href: '/error-testing', icon: AlertTriangle },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
   ], []);
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden">
+    <div className="h-screen bg-gray-50 flex">
       {/* Mobile sidebar overlay */}
       {isSidebarOpen && (
         <div
@@ -288,25 +292,27 @@ const App: React.FC = () => {
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
-                    <Route path="*" element={<FallbackComponents.NotFoundFallback />} />
+                  <Route path="/performance-monitor" element={
+                    <RouteErrorBoundary routeName="PerformanceMonitor">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Performance Monitor..." />}>
+                        <PerformanceMonitor />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/error-testing" element={
+                    <RouteErrorBoundary routeName="ErrorTesting">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Error Testing..." />}>
+                        <ErrorTesting />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="*" element={<FallbackComponents.NotFoundFallback />} />
                   </Routes>
                 </Suspense>
               </ErrorBoundary>
             </Layout>
           </Router>
         </WebSocketProvider>
-        
-        {/* Development Tools - Only in development */}
-        {typeof window !== 'undefined' && process.env.NODE_ENV === 'development' && (
-          <>
-            <ErrorBoundary componentName="PerformanceMonitor" isolate={true}>
-              <PerformanceMonitor />
-            </ErrorBoundary>
-            <ErrorBoundary componentName="ErrorTesting" isolate={true}>
-              <ErrorTesting />
-            </ErrorBoundary>
-          </>
-        )}
       </QueryClientProvider>
     </GlobalErrorBoundary>
   );

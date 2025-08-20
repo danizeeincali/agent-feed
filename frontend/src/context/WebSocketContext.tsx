@@ -220,7 +220,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = memo(({
         });
       }
     };
-  }, [webSocket, webSocket?.on, webSocket?.off, addNotification]);
+  }, [webSocket, addNotification]);
 
   // Request online users when connected
   useEffect(() => {
@@ -314,31 +314,13 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = memo(({
     sendMessage,
     reconnect,
   }), [
-    webSocket?.socket,
-    webSocket?.isConnected,
-    webSocket?.lastMessage,
-    webSocket?.connectionError,
-    webSocket?.connect,
-    webSocket?.disconnect,
-    webSocket?.emit,
-    webSocket?.subscribe,
-    webSocket?.unsubscribe,
-    webSocket?.on,
-    webSocket?.off,
-    connectionState,
+    webSocket,
     notifications,
     onlineUsers,
     systemStats,
     clearNotifications,
     markNotificationAsRead,
     addNotification,
-    subscribeFeed,
-    unsubscribeFeed,
-    subscribePost,
-    unsubscribePost,
-    sendLike,
-    sendMessage,
-    reconnect,
   ]);
 
   return (
