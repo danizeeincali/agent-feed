@@ -12,19 +12,19 @@ import { RealTimeNotifications } from '@/components/RealTimeNotifications';
 
 // Import components directly to fix loading issue
 import SocialMediaFeed from '@/components/SocialMediaFeed';
-import BulletproofAgentManager from '@/components/BulletproofAgentManager';
-import AgentManagerDebug from '@/components/AgentManagerDebug';
-import BulletproofSystemAnalytics from '@/components/BulletproofSystemAnalytics';
+import SimpleAgentManager from '@/components/SimpleAgentManager';
+// import AgentManagerDebug from '@/components/AgentManagerDebug';
+import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
 import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
 import BulletproofAgentProfile from '@/components/BulletproofAgentProfile';
 import BulletproofActivityPanel from '@/components/BulletproofActivityPanel';
-import BulletproofSettings from '@/components/BulletproofSettings';
+import SimpleSettings from '@/components/SimpleSettings';
 import DualInstanceDashboard from '@/components/DualInstanceDashboard';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
 import ErrorTesting from '@/components/ErrorTesting';
-import { WebSocketProvider } from '@/context/WebSocketContext';
+import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
 import '@/styles/agents.css';
 import { 
   LayoutDashboard, 
@@ -209,9 +209,9 @@ const App: React.FC = () => {
       <QueryClientProvider client={queryClient}>
         <WebSocketProvider config={{
           autoConnect: true,
-          reconnectAttempts: 10,
+          reconnectAttempts: 3,
           reconnectInterval: 2000,
-          heartbeatInterval: 30000,
+          heartbeatInterval: 20000,
         }}>
           <Router>
             <Layout>
@@ -244,7 +244,7 @@ const App: React.FC = () => {
                   <Route path="/agents" element={
                     <RouteErrorBoundary routeName="AgentManager">
                       <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
-                        <BulletproofAgentManager />
+                        <SimpleAgentManager />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
@@ -267,7 +267,7 @@ const App: React.FC = () => {
                   <Route path="/analytics" element={
                     <RouteErrorBoundary routeName="Analytics">
                       <Suspense fallback={<FallbackComponents.AnalyticsFallback />}>
-                        <BulletproofSystemAnalytics />
+                        <SimpleAnalytics />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
@@ -288,7 +288,7 @@ const App: React.FC = () => {
                   <Route path="/settings" element={
                     <RouteErrorBoundary routeName="Settings">
                       <Suspense fallback={<FallbackComponents.SettingsFallback />}>
-                        <BulletproofSettings />
+                        <SimpleSettings />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

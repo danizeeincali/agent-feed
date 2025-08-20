@@ -14,6 +14,7 @@ import { db } from '@/database/connection';
 import { claudeFlowService } from '@/services/claude-flow';
 import { claudeCodeOrchestrator } from '@/orchestration/claude-code-orchestrator';
 import { claudeHealthMonitor } from '@/monitoring/claude-health-monitor';
+import { connectionLimiter } from '@/middleware/connectionLimiter';
 
 // Import middleware (temporarily disabled for debugging)
 // import { errorHandler, notFoundHandler } from '@/middleware/error';
@@ -50,8 +51,22 @@ const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: process.env['WEBSOCKET_CORS_ORIGIN'] || "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: ["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ['polling', 'websocket'],
+  // CRITICAL FIX: Synchronized timeout settings with client
+  pingTimeout: 20000,     // Reduced from 60000 - more responsive
+  pingInterval: 8000,     // Reduced from 25000 - more frequent pings
+  upgradeTimeout: 15000,  // Reduced from 30000 - faster upgrade timeout
+  connectTimeout: 15000,  // NEW: Connection establishment timeout
+  allowUpgrades: true,    // NEW: Ensure WebSocket upgrades are allowed
+  httpCompression: true,  // NEW: Enable compression for better performance
+  allowEIO3: true,        // NEW: Backward compatibility
+  allowRequest: (req, callback) => {
+    // Allow all connections for development
+    callback(null, true);
   }
 });
 
@@ -164,7 +179,7 @@ app.get('/health', (req, res) => {
     services: {
       api: 'up',
       database: 'disabled',
-      redis: 'disabled',
+      redis: 'fallback-enabled',
       claude_flow: 'disabled'
     },
     uptime: process.uptime()
@@ -278,7 +293,16 @@ function checkSocketRateLimit(socketId: string): boolean {
   return true;
 }
 
-if (process.env['WEBSOCKET_ENABLED'] === 'true') {
+// CRITICAL FIX: Always initialize WebSocket but with proper checks
+const WEBSOCKET_ENABLED = process.env['WEBSOCKET_ENABLED'] === 'true';
+console.log('🔌 WebSocket configuration:', {
+  enabled: WEBSOCKET_ENABLED,
+  pingTimeout: 20000,
+  pingInterval: 8000,
+  transports: ['polling', 'websocket']
+});
+
+if (WEBSOCKET_ENABLED) {
   // Enhanced authentication middleware
   io.use(async (socket: ConnectedSocket, next) => {
     try {

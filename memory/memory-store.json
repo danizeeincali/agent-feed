@@ -5,6 +5,18 @@
       "value": "Single-user middleware requirement: Auto-provide default user ID for all API requests. No authentication needed. System defaults to 'single-user' context. Components: middleware layer, user context manager, API interceptor. No external auth deps. Security: simplified for single-user mode.",
       "namespace": "default",
       "timestamp": 1755550458645
+    },
+    {
+      "key": "spec-pseudocode_requirements",
+      "value": "Enhanced dual Claude system with SPARC (Specification, Pseudocode, Architecture, Refinement, Completion), TDD (Test-Driven Development), and NLD (Neuro Learning Development) integration. Key components: 1) Dual Claude instances for parallel processing, 2) SPARC methodology implementation, 3) TDD workflow automation, 4) NLD pattern learning system, 5) Real-time coordination between instances",
+      "namespace": "default",
+      "timestamp": 1755662950019
+    },
+    {
+      "key": "debug_issue_analysis",
+      "value": "Redis connection failure causing XHR polling errors. Redis service not running, causing ECONNREFUSED errors on agent-feed service. Need to implement graceful fallback for missing Redis.",
+      "namespace": "default",
+      "timestamp": 1755664087198
     }
   ]
 }

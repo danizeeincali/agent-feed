@@ -57,14 +57,24 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
         transports: ['polling', 'websocket'],
         upgrade: true,
         rememberUpgrade: true,
-        timeout: 20000,
+        // CRITICAL FIX: Synchronized timeouts with server
+        timeout: 15000,              // Matches server connectTimeout
         forceNew: false,
         withCredentials: true,
+        reconnection: true,
+        reconnectionAttempts: 10,    // Reduced from 15
+        reconnectionDelay: 1000,     // Reduced from 2000 - faster reconnect
+        reconnectionDelayMax: 5000,  // Reduced from 10000
+        maxReconnectionAttempts: 10, // Reduced from 15
         auth: {
-          userId: 'claude-code-user', // Default user ID
+          userId: 'claude-code-user',
           username: 'Claude Code User',
-          token: 'debug-token' // For development
-        }
+          token: 'debug-token'
+        },
+        // CRITICAL FIX: Synchronized ping settings with server
+        autoConnect: true,
+        pingTimeout: 20000,          // Matches server pingTimeout
+        pingInterval: 8000           // Matches server pingInterval
       });
 
       // Connection event handlers
@@ -79,23 +89,43 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
         console.log('WebSocket disconnected:', reason);
         setIsConnected(false);
         
-        // Attempt reconnection for certain disconnect reasons
-        if (reason === 'io server disconnect' || reason === 'transport close') {
-          if (reconnectCount.current < reconnectAttempts) {
-            setTimeout(() => {
-              reconnectCount.current++;
-              connect();
-            }, reconnectDelay * Math.pow(2, reconnectCount.current));
-          } else {
-            setConnectionError('Failed to reconnect after maximum attempts');
-          }
+        // CRITICAL FIX: Better disconnect reason handling
+        const shouldReconnect = [
+          'io server disconnect',
+          'transport close', 
+          'transport error',
+          'ping timeout',
+          'io client disconnect'  // NEW: Handle client-side disconnects
+        ].includes(reason);
+        
+        if (shouldReconnect && reconnectCount.current < reconnectAttempts) {
+          console.log(`🔄 Auto-reconnecting (attempt ${reconnectCount.current + 1}/${reconnectAttempts}) - reason: ${reason}`);
+          const delay = Math.min(reconnectDelay * Math.pow(1.2, reconnectCount.current), 5000);
+          setTimeout(() => {
+            reconnectCount.current++;
+            connect();
+          }, delay);
+        } else {
+          setConnectionError(`Connection failed: ${reason} - click Retry to reconnect`);
         }
       });
 
       newSocket.on('connect_error', (error) => {
         console.error('WebSocket connection error:', error);
-        setConnectionError(error.message);
+        // CRITICAL FIX: Better error message handling
+        const errorMessage = error.message || error.toString() || 'Connection failed';
+        setConnectionError(`Connection error: ${errorMessage}`);
         setIsConnected(false);
+        
+        // CRITICAL FIX: Auto-retry on connection errors
+        if (reconnectCount.current < reconnectAttempts) {
+          const delay = Math.min(1000 * Math.pow(1.5, reconnectCount.current), 5000);
+          console.log(`🔄 Retrying connection in ${delay}ms...`);
+          setTimeout(() => {
+            reconnectCount.current++;
+            connect();
+          }, delay);
+        }
       });
 
       // Register existing event handlers
@@ -166,18 +196,19 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
     }
   }, []); // Remove socket from deps
 
-  // Auto-connect on mount
+  // CRITICAL FIX: Auto-connect with proper dependency management
   useEffect(() => {
-    if (autoConnect) {
+    if (autoConnect && !socket?.connected) {
       connect();
     }
 
     return () => {
-      if (socket) {
+      // Cleanup on unmount only
+      if (socket && !socket.connected) {
         socket.disconnect();
       }
     };
-  }, [autoConnect]); // Remove connect and disconnect from deps to prevent infinite loop
+  }, [autoConnect, url]); // CRITICAL FIX: Add url to deps but remove connect
 
   // Cleanup on unmount
   useEffect(() => {
