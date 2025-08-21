@@ -33,6 +33,7 @@ const comments_agentlink_1 = __importDefault(require("@/api/routes/comments-agen
 const engagement_1 = __importDefault(require("@/api/routes/engagement"));
 const claude_orchestration_1 = __importDefault(require("@/api/routes/claude-orchestration"));
 const dual_instance_1 = __importDefault(require("@/api/routes/dual-instance"));
+const dual_instance_monitoring_1 = __importDefault(require("./routes/dual-instance-monitoring"));
 const demo_agents_1 = __importDefault(require("@/api/routes/demo-agents"));
 const claude_code_integration_1 = __importDefault(require("@/api/routes/claude-code-integration"));
 const comments_2 = require("@/api/websockets/comments");
@@ -48,8 +49,22 @@ const httpServer = (0, http_1.createServer)(app);
 exports.server = httpServer;
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: process.env['WEBSOCKET_CORS_ORIGIN'] || "http://localhost:3000",
-        methods: ["GET", "POST"]
+        origin: ["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
+        methods: ["GET", "POST"],
+        credentials: true
+    },
+    transports: ['polling', 'websocket'],
+    // CRITICAL FIX: Synchronized timeout settings with client
+    pingTimeout: 20000, // Reduced from 60000 - more responsive
+    pingInterval: 8000, // Reduced from 25000 - more frequent pings
+    upgradeTimeout: 15000, // Reduced from 30000 - faster upgrade timeout
+    connectTimeout: 15000, // NEW: Connection establishment timeout
+    allowUpgrades: true, // NEW: Ensure WebSocket upgrades are allowed
+    httpCompression: true, // NEW: Enable compression for better performance
+    allowEIO3: true, // NEW: Backward compatibility
+    allowRequest: (req, callback) => {
+        // Allow all connections for development
+        callback(null, true);
     }
 });
 exports.io = io;
@@ -155,7 +170,7 @@ app.get('/health', (req, res) => {
         services: {
             api: 'up',
             database: 'disabled',
-            redis: 'disabled',
+            redis: 'fallback-enabled',
             claude_flow: 'disabled'
         },
         uptime: process.uptime()
@@ -176,6 +191,7 @@ apiV1.use('/agents', agents_instance_1.default);
 apiV1.use('/agents-legacy', agents_1.default);
 apiV1.use('/claude', claude_orchestration_1.default);
 apiV1.use('/dual-instance', dual_instance_1.default);
+apiV1.use('/dual-instance-monitor', dual_instance_monitoring_1.default);
 apiV1.use('/demo', demo_agents_1.default);
 apiV1.use('/claude-live', claude_code_integration_1.default);
 apiV1.use('/', comments_1.default);
@@ -236,7 +252,15 @@ function checkSocketRateLimit(socketId) {
     userLimit.count++;
     return true;
 }
-if (process.env['WEBSOCKET_ENABLED'] === 'true') {
+// CRITICAL FIX: Always initialize WebSocket but with proper checks
+const WEBSOCKET_ENABLED = process.env['WEBSOCKET_ENABLED'] === 'true';
+console.log('🔌 WebSocket configuration:', {
+    enabled: WEBSOCKET_ENABLED,
+    pingTimeout: 20000,
+    pingInterval: 8000,
+    transports: ['polling', 'websocket']
+});
+if (WEBSOCKET_ENABLED) {
     // Enhanced authentication middleware
     io.use(async (socket, next) => {
         try {
@@ -433,6 +457,53 @@ if (process.env['WEBSOCKET_ENABLED'] === 'true') {
         socket.on('unsubscribe:claude-flow', (sessionId) => {
             socket.leave(`claude-flow:${sessionId}`);
             socket.rooms?.delete(`claude-flow:${sessionId}`);
+        });
+        // Token Analytics WebSocket Handlers
+        socket.on('token-usage', (data) => {
+            if (!checkSocketRateLimit(socket.id)) {
+                socket.emit('error', { message: 'Rate limit exceeded' });
+                return;
+            }
+            // Validate token usage data
+            if (!data.provider || !data.model || typeof data.tokensUsed !== 'number') {
+                socket.emit('error', { message: 'Invalid token usage data' });
+                return;
+            }
+            const tokenUsage = {
+                ...data,
+                id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                timestamp: new Date().toISOString(),
+                userId
+            };
+            logger_1.logger.debug('Token usage received', { tokenUsage, socketId: socket.id, userId });
+            // Broadcast to all connected clients for real-time updates
+            io.emit('token-usage-update', tokenUsage);
+            // Send acknowledgment
+            socket.emit('token-usage-ack', {
+                id: tokenUsage.id,
+                timestamp: tokenUsage.timestamp,
+                status: 'processed'
+            });
+        });
+        // Token analytics subscription
+        socket.on('subscribe:token-analytics', () => {
+            if (!checkSocketRateLimit(socket.id)) {
+                socket.emit('error', { message: 'Rate limit exceeded' });
+                return;
+            }
+            socket.join('token-analytics');
+            socket.rooms?.add('token-analytics');
+            logger_1.logger.debug('Socket subscribed to token analytics', { socketId: socket.id, userId });
+            // Send current connection status
+            socket.emit('token-analytics:subscribed', {
+                timestamp: new Date().toISOString(),
+                status: 'connected'
+            });
+        });
+        socket.on('unsubscribe:token-analytics', () => {
+            socket.leave('token-analytics');
+            socket.rooms?.delete('token-analytics');
+            logger_1.logger.debug('Socket unsubscribed from token analytics', { socketId: socket.id, userId });
         });
         // Heartbeat for connection health
         socket.on('ping', () => {

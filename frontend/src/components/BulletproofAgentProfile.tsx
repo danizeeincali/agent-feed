@@ -28,7 +28,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { ErrorBoundary } from './ErrorBoundary';
+import { ErrorBoundary } from 'react-error-boundary';
 import {
   safeArray,
   safeObject,
@@ -138,12 +138,12 @@ const transformToSafeAgent = (agent: any): Agent | null => {
         retry_attempts: Math.min(5, Math.max(0, safeNumber(agent.configuration.retry_attempts, 3))),
         rate_limit: Math.min(1000, Math.max(1, safeNumber(agent.configuration.rate_limit, 60)))
       } : undefined,
-      logs: safeArray(agent.logs).map(log => ({
-        id: safeString(log.id, `log-${Date.now()}`),
-        timestamp: safeDate(log.timestamp).toISOString(),
-        level: ['info', 'warn', 'error', 'debug'].includes(log.level) ? log.level : 'info',
-        message: safeString(log.message, 'No message'),
-        metadata: safeObject(log.metadata)
+      logs: safeArray(agent.logs).map((log: any) => ({
+        id: safeString((log as any)?.id, `log-${Date.now()}`),
+        timestamp: safeDate((log as any)?.timestamp).toISOString(),
+        level: ['info', 'warn', 'error', 'debug'].includes((log as any)?.level) ? (log as any).level : 'info',
+        message: safeString((log as any)?.message, 'No message'),
+        metadata: safeObject((log as any)?.metadata)
       }))
     };
   } catch (error) {
@@ -656,7 +656,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
       fallback={({ error, resetErrorBoundary }) => (
         <ErrorFallback 
           error={error} 
-          retry={resetErrorBoundary} 
+          resetErrorBoundary={resetErrorBoundary} 
           componentName="Agent Profile" 
         />
       )}

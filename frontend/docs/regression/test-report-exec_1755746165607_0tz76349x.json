@@ -1,0 +1,242 @@
+{
+  "execution": {
+    "id": "exec_1755746165607_0tz76349x",
+    "suiteId": "execution-test",
+    "results": [
+      {
+        "testId": "execution-test-test-0",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T03:16:05.608Z",
+        "endTime": "2025-08-21T03:16:05.618Z",
+        "output": "Mock test execution-test-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "execution-test-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T03:16:05.618Z",
+        "endTime": "2025-08-21T03:16:05.628Z",
+        "output": "Mock test execution-test-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "execution-test-test-2",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T03:16:05.628Z",
+        "endTime": "2025-08-21T03:16:05.638Z",
+        "output": "Mock test execution-test-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "execution-test-fail-0",
+        "status": "failed",
+        "duration": 11,
+        "startTime": "2025-08-21T03:16:05.638Z",
+        "endTime": "2025-08-21T03:16:05.649Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "execution-test-fail-1",
+        "status": "failed",
+        "duration": 11,
+        "startTime": "2025-08-21T03:16:05.649Z",
+        "endTime": "2025-08-21T03:16:05.660Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "summary": {
+      "total": 5,
+      "passed": 3,
+      "failed": 2,
+      "skipped": 0,
+      "duration": 52
+    },
+    "startTime": "2025-08-21T03:16:05.607Z",
+    "endTime": "2025-08-21T03:16:05.660Z",
+    "environment": {
+      "platform": "linux",
+      "version": "0.0.0",
+      "nodeVersion": "v22.17.0",
+      "dependencies": {
+        "@radix-ui/react-slot": "^1.2.3",
+        "@tanstack/react-query": "^4.35.0",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "lucide-react": "^0.279.0",
+        "puppeteer": "^24.16.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-error-boundary": "^6.0.0",
+        "react-router-dom": "^6.15.0",
+        "socket.io-client": "^4.8.1",
+        "sonner": "^2.0.7",
+        "tailwind-merge": "^1.14.0",
+        "ws": "^8.14.0"
+      },
+      "variables": {
+        "NODE_ENV": "test",
+        "CI": "false"
+      }
+    },
+    "configuration": {
+      "parallel": false,
+      "maxWorkers": 2,
+      "timeout": 5000,
+      "retries": 0,
+      "reporters": [
+        "console",
+        "json"
+      ],
+      "coverage": true,
+      "screenshots": false,
+      "videos": false,
+      "outputDir": "./test-reports",
+      "enableNLD": true,
+      "enableVerificationWorkflow": true,
+      "generatePMReports": true
+    }
+  },
+  "summary": {
+    "total": 5,
+    "passed": 3,
+    "failed": 2,
+    "skipped": 0,
+    "duration": 52
+  },
+  "results": [
+    {
+      "testId": "execution-test-test-0",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-21T03:16:05.608Z",
+      "endTime": "2025-08-21T03:16:05.618Z",
+      "output": "Mock test execution-test-test-0 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "execution-test-test-1",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-21T03:16:05.618Z",
+      "endTime": "2025-08-21T03:16:05.628Z",
+      "output": "Mock test execution-test-test-1 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "execution-test-test-2",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-21T03:16:05.628Z",
+      "endTime": "2025-08-21T03:16:05.638Z",
+      "output": "Mock test execution-test-test-2 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "execution-test-fail-0",
+      "status": "failed",
+      "duration": 11,
+      "startTime": "2025-08-21T03:16:05.638Z",
+      "endTime": "2025-08-21T03:16:05.649Z",
+      "error": {},
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "execution-test-fail-1",
+      "status": "failed",
+      "duration": 11,
+      "startTime": "2025-08-21T03:16:05.649Z",
+      "endTime": "2025-08-21T03:16:05.660Z",
+      "error": {},
+      "logs": [],
+      "artifacts": []
+    }
+  ],
+  "categories": {
+    "passed": [
+      {
+        "testId": "execution-test-test-0",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T03:16:05.608Z",
+        "endTime": "2025-08-21T03:16:05.618Z",
+        "output": "Mock test execution-test-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "execution-test-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T03:16:05.618Z",
+        "endTime": "2025-08-21T03:16:05.628Z",
+        "output": "Mock test execution-test-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "execution-test-test-2",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T03:16:05.628Z",
+        "endTime": "2025-08-21T03:16:05.638Z",
+        "output": "Mock test execution-test-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "failed": [
+      {
+        "testId": "execution-test-fail-0",
+        "status": "failed",
+        "duration": 11,
+        "startTime": "2025-08-21T03:16:05.638Z",
+        "endTime": "2025-08-21T03:16:05.649Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "execution-test-fail-1",
+        "status": "failed",
+        "duration": 11,
+        "startTime": "2025-08-21T03:16:05.649Z",
+        "endTime": "2025-08-21T03:16:05.660Z",
+        "error": {},
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "skipped": [],
+    "errors": [],
+    "timeouts": []
+  },
+  "metrics": {
+    "averageDuration": 10.4,
+    "longestTest": {
+      "testId": "execution-test-fail-0",
+      "status": "failed",
+      "duration": 11,
+      "startTime": "2025-08-21T03:16:05.638Z",
+      "endTime": "2025-08-21T03:16:05.649Z",
+      "error": {},
+      "logs": [],
+      "artifacts": []
+    },
+    "totalDuration": 52
+  },
+  "timestamp": "2025-08-21T03:16:05.661Z"
+}

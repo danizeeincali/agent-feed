@@ -2,16 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 const pg_1 = require("pg");
-const redis_1 = require("redis");
 const logger_1 = require("@/utils/logger");
+const redis_fallback_1 = require("@/config/redis-fallback");
 class DatabaseManager {
     pool = null;
     redisClient = null;
+    fallbackManager;
     isConnected = false;
     constructor() {
+        this.fallbackManager = redis_fallback_1.redisFallbackManager;
         this.initializeDatabase();
-        // Initialize Redis asynchronously without blocking
-        this.initializeRedis().catch(err => logger_1.logger.error('Redis initialization failed:', err));
+        // Initialize Redis with fallback management
+        this.initializeRedisWithFallback().catch(err => logger_1.logger.error('Redis initialization failed:', err));
     }
     initializeDatabase() {
         const config = {
@@ -52,33 +54,25 @@ class DatabaseManager {
         // Test connection (disabled for demo)
         // this.testConnection();
     }
-    async initializeRedis() {
+    async initializeRedisWithFallback() {
         const config = {
             host: process.env['REDIS_HOST'] || 'localhost',
             port: parseInt(process.env['REDIS_PORT'] || '6379'),
             password: process.env['REDIS_PASSWORD'],
             db: parseInt(process.env['REDIS_DB'] || '0')
         };
-        this.redisClient = (0, redis_1.createClient)({
-            socket: {
-                host: config.host,
-                port: config.port
-            },
-            password: config.password,
-            database: config.db
-        });
-        this.redisClient.on('error', (err) => {
-            logger_1.logger.error('Redis client error:', err);
-        });
-        this.redisClient.on('connect', () => {
-            logger_1.logger.info('Redis connection established');
-        });
         try {
-            await this.redisClient.connect();
+            // Initialize fallback manager with Redis config
+            await this.fallbackManager.initialize(config);
+            logger_1.logger.info('Redis fallback manager initialized successfully');
         }
         catch (error) {
-            logger_1.logger.error('Failed to connect to Redis:', error);
+            logger_1.logger.warn('Redis fallback initialization failed, using memory-only mode:', error.message);
         }
+    }
+    async initializeRedis() {
+        // Legacy method kept for compatibility
+        await this.initializeRedisWithFallback();
     }
     async testConnection() {
         try {
@@ -141,46 +135,30 @@ class DatabaseManager {
         }
         return this.pool.connect();
     }
-    // Redis methods
+    // Redis methods with fallback
     async setCache(key, value, ttl) {
-        if (!this.redisClient) {
-            logger_1.logger.warn('Redis not available, skipping cache set');
-            return;
-        }
         try {
-            if (ttl) {
-                await this.redisClient.setEx(key, ttl, value);
-            }
-            else {
-                await this.redisClient.set(key, value);
-            }
+            await this.fallbackManager.set(key, value, ttl);
         }
         catch (error) {
-            logger_1.logger.error('Redis set error:', error);
+            logger_1.logger.error('Cache set error:', error);
         }
     }
     async getCache(key) {
-        if (!this.redisClient) {
-            logger_1.logger.warn('Redis not available, cache miss');
-            return null;
-        }
         try {
-            return await this.redisClient.get(key);
+            return await this.fallbackManager.get(key);
         }
         catch (error) {
-            logger_1.logger.error('Redis get error:', error);
+            logger_1.logger.error('Cache get error:', error);
             return null;
         }
     }
     async deleteCache(key) {
-        if (!this.redisClient) {
-            return;
-        }
         try {
-            await this.redisClient.del(key);
+            await this.fallbackManager.del(key);
         }
         catch (error) {
-            logger_1.logger.error('Redis delete error:', error);
+            logger_1.logger.error('Cache delete error:', error);
         }
     }
     async setCacheObject(key, obj, ttl) {
@@ -201,7 +179,8 @@ class DatabaseManager {
     async healthCheck() {
         const health = {
             database: false,
-            redis: false
+            redis: false,
+            fallback: false
         };
         // Test database
         try {
@@ -211,15 +190,14 @@ class DatabaseManager {
         catch (error) {
             logger_1.logger.error('Database health check failed:', error);
         }
-        // Test Redis
+        // Test Redis and fallback
         try {
-            if (this.redisClient) {
-                await this.redisClient.ping();
-                health.redis = true;
-            }
+            const fallbackHealth = await this.fallbackManager.healthCheck();
+            health.redis = fallbackHealth.redis;
+            health.fallback = fallbackHealth.fallback;
         }
         catch (error) {
-            logger_1.logger.error('Redis health check failed:', error);
+            logger_1.logger.error('Cache health check failed:', error);
         }
         return health;
     }
@@ -228,9 +206,12 @@ class DatabaseManager {
             await this.pool.end();
             logger_1.logger.info('Database pool closed');
         }
-        if (this.redisClient) {
-            await this.redisClient.quit();
-            logger_1.logger.info('Redis connection closed');
+        try {
+            await this.fallbackManager.shutdown();
+            logger_1.logger.info('Redis fallback manager shutdown complete');
+        }
+        catch (error) {
+            logger_1.logger.error('Error shutting down Redis fallback manager:', error);
         }
     }
     get isHealthy() {

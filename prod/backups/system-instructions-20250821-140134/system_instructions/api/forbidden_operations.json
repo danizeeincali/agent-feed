@@ -1,0 +1,288 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2025-08-21",
+    "description": "Comprehensive blacklist of operations FORBIDDEN for production Claude instance",
+    "security_level": "CRITICAL",
+    "enforcement": "IMMEDIATE_BLOCK"
+  },
+  "critical_system_modifications": {
+    "forbidden": {
+      "system_instructions": {
+        "paths": [
+          "/workspaces/agent-feed/prod/system_instructions/**/*",
+          "/workspaces/agent-feed/.claude/prod/**/*",
+          "/workspaces/agent-feed/config/claude-prod-config.json",
+          "/workspaces/agent-feed/CLAUDE.md"
+        ],
+        "operations": [
+          "write", "modify", "delete", "rename", "move", 
+          "chmod", "chown", "ln", "cp", "mv", "rm"
+        ],
+        "severity": "CRITICAL",
+        "action": "IMMEDIATE_BLOCK_AND_ALERT"
+      },
+      "core_configuration": {
+        "files": [
+          "package.json",
+          "tsconfig.json", 
+          "docker-compose*.yml",
+          "Dockerfile*",
+          ".env*",
+          "claude-flow.config.json"
+        ],
+        "operations": ["write", "modify", "delete"],
+        "severity": "HIGH",
+        "action": "BLOCK_AND_LOG"
+      },
+      "security_files": {
+        "patterns": [
+          "**/secrets/**",
+          "**/private/**",
+          "**/.ssh/**",
+          "**/certificates/**",
+          "**/.env*"
+        ],
+        "operations": ["read", "write", "execute"],
+        "severity": "CRITICAL",
+        "action": "IMMEDIATE_BLOCK_AND_ALERT"
+      }
+    }
+  },
+  "dangerous_system_operations": {
+    "forbidden": {
+      "system_commands": [
+        "sudo", "su", "chmod +x", "chown", "usermod", "passwd",
+        "systemctl", "service", "kill -9", "killall", "pkill",
+        "mount", "umount", "fdisk", "mkfs", "fsck",
+        "iptables", "ufw", "firewall-cmd", "setenforce",
+        "crontab", "at", "nohup &", "screen", "tmux"
+      ],
+      "file_operations": [
+        "rm -rf /", "rm -rf /*", "dd if=", "shred", "wipe",
+        "chmod 777", "chmod -R", "chown -R", 
+        "find / -delete", "find / -exec rm"
+      ],
+      "network_operations": [
+        "nc -l", "netcat -l", "python -m http.server", 
+        "ssh", "scp", "rsync", "wget", "curl -X POST",
+        "nmap", "masscan", "zmap", "hping3"
+      ],
+      "process_operations": [
+        "fork bomb", ":(){ :|:& };:", "while true; do", 
+        "exec", "eval", "source /dev/urandom"
+      ]
+    }
+  },
+  "code_modification_restrictions": {
+    "forbidden": {
+      "source_code_changes": {
+        "paths": [
+          "/workspaces/agent-feed/src/api/server.ts",
+          "/workspaces/agent-feed/src/database/**/*",
+          "/workspaces/agent-feed/src/middleware/**/*",
+          "/workspaces/agent-feed/src/security/**/*",
+          "/workspaces/agent-feed/frontend/src/main.tsx",
+          "/workspaces/agent-feed/frontend/src/App.tsx"
+        ],
+        "operations": ["write", "modify", "delete"],
+        "exceptions": "NONE",
+        "severity": "HIGH"
+      },
+      "deployment_files": {
+        "patterns": [
+          "**/docker-compose*.yml",
+          "**/Dockerfile*", 
+          "**/deploy*.sh",
+          "**/start*.sh",
+          "**/stop*.sh",
+          "**/.github/workflows/**"
+        ],
+        "operations": ["write", "modify", "delete", "execute"],
+        "severity": "HIGH"
+      },
+      "test_modifications": {
+        "paths": [
+          "/workspaces/agent-feed/tests/regression/**/*",
+          "/workspaces/agent-feed/frontend/tests/regression/**/*"
+        ],
+        "operations": ["delete", "modify_test_expectations"],
+        "severity": "MEDIUM",
+        "reason": "Regression protection integrity"
+      }
+    }
+  },
+  "database_restrictions": {
+    "forbidden": {
+      "schema_operations": [
+        "CREATE TABLE", "DROP TABLE", "ALTER TABLE",
+        "CREATE INDEX", "DROP INDEX", "ALTER INDEX",
+        "CREATE VIEW", "DROP VIEW", "ALTER VIEW",
+        "CREATE TRIGGER", "DROP TRIGGER", "ALTER TRIGGER"
+      ],
+      "data_operations": [
+        "DELETE FROM users", "UPDATE users SET", 
+        "TRUNCATE TABLE", "DROP DATABASE",
+        "GRANT", "REVOKE", "CREATE USER", "DROP USER"
+      ],
+      "administrative": [
+        "BACKUP DATABASE", "RESTORE DATABASE",
+        "SHUTDOWN", "RESTART", "VACUUM FULL"
+      ],
+      "severity": "CRITICAL",
+      "action": "IMMEDIATE_BLOCK_AND_ALERT"
+    }
+  },
+  "network_security_violations": {
+    "forbidden": {
+      "external_connections": {
+        "blocked_domains": [
+          "*.malware-check.com",
+          "*.virus-total.com", 
+          "*.suspicious-site.net",
+          "raw.githubusercontent.com",
+          "pastebin.com",
+          "*.bit.ly",
+          "*.tinyurl.com"
+        ],
+        "blocked_ips": [
+          "0.0.0.0/8", "10.0.0.0/8", "172.16.0.0/12", 
+          "192.168.0.0/16", "169.254.0.0/16", "127.0.0.0/8"
+        ],
+        "blocked_ports": [
+          22, 23, 25, 135, 139, 445, 1433, 3306, 5432
+        ]
+      },
+      "protocol_violations": [
+        "FTP", "Telnet", "SMTP", "SNMP", "LDAP unencrypted",
+        "HTTP Basic Auth", "Cleartext protocols"
+      ],
+      "severity": "HIGH"
+    }
+  },
+  "api_security_violations": {
+    "forbidden": {
+      "dangerous_endpoints": [
+        "/api/admin/**",
+        "/api/users/delete/**", 
+        "/api/system/shutdown",
+        "/api/database/execute",
+        "/api/files/delete/**",
+        "/api/config/update/**"
+      ],
+      "dangerous_methods": [
+        "DELETE /api/users/**",
+        "PUT /api/system/**", 
+        "POST /api/admin/**",
+        "PATCH /api/security/**"
+      ],
+      "parameter_injection": [
+        "'; DROP TABLE", "--", "/*", "*/", 
+        "../", "..\\", "%2e%2e%2f", 
+        "javascript:", "data:", "vbscript:"
+      ],
+      "severity": "CRITICAL"
+    }
+  },
+  "file_system_violations": {
+    "forbidden": {
+      "system_directories": [
+        "/etc/**", "/var/log/**", "/usr/bin/**", 
+        "/usr/sbin/**", "/boot/**", "/dev/**",
+        "/proc/**", "/sys/**", "/tmp/system/**"
+      ],
+      "application_critical": [
+        "/workspaces/agent-feed/node_modules/**",
+        "/workspaces/agent-feed/.git/**",
+        "/workspaces/agent-feed/dist/**"
+      ],
+      "operations": [
+        "write", "modify", "delete", "execute", 
+        "chmod", "chown", "ln", "mount"
+      ],
+      "severity": "HIGH"
+    }
+  },
+  "agent_workspace_violations": {
+    "forbidden": {
+      "unauthorized_access": {
+        "paths": [
+          "/workspaces/agent-feed/agent_workspace/shared/customer-responses/**",
+          "/workspaces/agent-feed/agent_workspace/data/tickets/**"
+        ],
+        "operations": ["read", "write", "delete"],
+        "reason": "Contains sensitive customer data",
+        "severity": "CRITICAL"
+      },
+      "system_manipulation": [
+        "modify_agent_configurations",
+        "delete_agent_logs",
+        "tamper_with_shared_memory",
+        "intercept_agent_communications"
+      ],
+      "severity": "HIGH"
+    }
+  },
+  "monitoring_and_logging_violations": {
+    "forbidden": {
+      "log_tampering": [
+        "delete_audit_logs",
+        "modify_system_logs", 
+        "clear_error_logs",
+        "disable_logging"
+      ],
+      "monitoring_evasion": [
+        "disable_health_checks",
+        "modify_alert_thresholds",
+        "bypass_security_monitoring",
+        "delete_metrics_data"
+      ],
+      "severity": "CRITICAL"
+    }
+  },
+  "enforcement_mechanisms": {
+    "immediate_blocks": [
+      "system_instruction_modifications",
+      "security_file_access",
+      "database_schema_changes",
+      "critical_system_commands"
+    ],
+    "alert_and_block": [
+      "unauthorized_network_access",
+      "suspicious_file_operations", 
+      "API_security_violations",
+      "log_tampering_attempts"
+    ],
+    "log_and_monitor": [
+      "repeated_forbidden_attempts",
+      "pattern_based_violations",
+      "threshold_breaches",
+      "anomalous_behavior"
+    ],
+    "escalation_triggers": [
+      "multiple_critical_violations",
+      "systematic_bypass_attempts",
+      "security_policy_violations",
+      "data_exfiltration_attempts"
+    ]
+  },
+  "violation_responses": {
+    "immediate_actions": {
+      "block_operation": true,
+      "log_violation": true,
+      "increment_violation_counter": true,
+      "notify_security_team": true
+    },
+    "escalation_thresholds": {
+      "minor_violations": 10,
+      "major_violations": 5,
+      "critical_violations": 1
+    },
+    "automatic_responses": {
+      "temporary_suspension": "after_5_major_violations",
+      "session_termination": "after_1_critical_violation",
+      "admin_notification": "immediately_for_critical",
+      "forensic_logging": "always"
+    }
+  }
+}

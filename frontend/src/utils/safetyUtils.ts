@@ -222,10 +222,11 @@ export const LoadingFallback = ({ message }: { message?: string } = {}) => {
 };
 
 // Simple Error Fallback Component - returns null for safe fallback  
-export const ErrorFallback = ({ error, resetErrorBoundary, message }: { 
+export const ErrorFallback = ({ error, resetErrorBoundary, message, componentName }: { 
   error?: Error; 
   resetErrorBoundary?: () => void; 
   message?: string;
+  componentName?: string;
 }) => {
   return null; // Safe fallback that won't cause rendering issues
 };

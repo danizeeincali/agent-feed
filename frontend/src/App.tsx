@@ -22,7 +22,7 @@ import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed'
 import BulletproofAgentProfile from '@/components/BulletproofAgentProfile';
 import BulletproofActivityPanel from '@/components/BulletproofActivityPanel';
 import SimpleSettings from '@/components/SimpleSettings';
-import DualInstanceDashboard from '@/components/DualInstanceDashboard';
+import DualInstanceDashboardEnhanced from '@/components/DualInstanceDashboardEnhanced';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
 import ErrorTesting from '@/components/ErrorTesting';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
@@ -230,7 +230,7 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="DualInstance" fallback={<FallbackComponents.DualInstanceFallback />}>
                       <AsyncErrorBoundary componentName="DualInstanceDashboard">
                         <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
-                          <DualInstanceDashboard />
+                          <DualInstanceDashboardEnhanced />
                         </Suspense>
                       </AsyncErrorBoundary>
                     </RouteErrorBoundary>

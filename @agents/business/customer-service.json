@@ -1,0 +1,131 @@
+{
+  "id": "customer-service-v1",
+  "name": "Customer Service Agent",
+  "type": "business",
+  "version": "1.0.0",
+  "description": "Handles customer inquiries and support tickets with intelligent routing and response generation",
+  "created": "2025-08-20T20:00:00Z",
+  "status": "active",
+  
+  "capabilities": [
+    "ticket-management",
+    "customer-communication",
+    "knowledge-base-search",
+    "sentiment-analysis",
+    "escalation-routing"
+  ],
+  
+  "workspace": {
+    "directory": "agent_workspace/agents/customer-service/",
+    "storage_limit": "1GB",
+    "databases": [
+      "tickets.sqlite",
+      "customers.sqlite",
+      "knowledge_base.sqlite"
+    ],
+    "permissions": [
+      "read-shared",
+      "write-logs",
+      "execute-queries",
+      "send-notifications"
+    ]
+  },
+  
+  "execution": {
+    "schedule": {
+      "type": "continuous",
+      "active_hours": "24/7",
+      "check_interval": 30000
+    },
+    "resources": {
+      "memory": "512MB",
+      "cpu_cores": 0.5,
+      "max_execution_time": 300000,
+      "priority": "high"
+    },
+    "retry_policy": {
+      "max_retries": 3,
+      "backoff_strategy": "exponential",
+      "timeout_multiplier": 2
+    }
+  },
+  
+  "communication": {
+    "inputs": [
+      {
+        "type": "email",
+        "endpoint": "support@company.com",
+        "processing": "automatic"
+      },
+      {
+        "type": "chat",
+        "endpoint": "websocket://localhost:3000/chat",
+        "processing": "realtime"
+      },
+      {
+        "type": "api",
+        "endpoint": "/api/v1/tickets",
+        "processing": "immediate"
+      }
+    ],
+    "outputs": [
+      {
+        "type": "response",
+        "format": "text/markdown",
+        "destination": "shared/customer-responses/"
+      },
+      {
+        "type": "ticket-update",
+        "format": "application/json",
+        "destination": "data/tickets/"
+      },
+      {
+        "type": "escalation",
+        "format": "application/json",
+        "destination": "shared/escalations/"
+      }
+    ]
+  },
+  
+  "monitoring": {
+    "metrics": [
+      "response_time_avg",
+      "customer_satisfaction_score",
+      "ticket_resolution_rate",
+      "escalation_rate"
+    ],
+    "alerts": [
+      {
+        "condition": "response_time_avg > 60000",
+        "action": "notify_admin",
+        "severity": "warning"
+      },
+      {
+        "condition": "escalation_rate > 20",
+        "action": "increase_resources",
+        "severity": "critical"
+      }
+    ],
+    "logging": {
+      "level": "detailed",
+      "include_context": true,
+      "retention_days": 30
+    }
+  },
+  
+  "configuration": {
+    "language_model": "claude-3-sonnet",
+    "response_style": "professional",
+    "escalation_triggers": [
+      "angry_customer",
+      "complex_technical_issue",
+      "billing_dispute",
+      "legal_concern"
+    ],
+    "knowledge_sources": [
+      "knowledge_base.sqlite",
+      "shared/documentation/",
+      "api://internal-wiki.company.com"
+    ]
+  }
+}

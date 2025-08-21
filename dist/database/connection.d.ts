@@ -2,9 +2,11 @@ import { PoolClient, QueryResult } from 'pg';
 declare class DatabaseManager {
     private pool;
     private redisClient;
+    private fallbackManager;
     private isConnected;
     constructor();
     private initializeDatabase;
+    private initializeRedisWithFallback;
     private initializeRedis;
     private testConnection;
     query<T = any>(text: string, params?: any[]): Promise<QueryResult<T>>;
@@ -18,6 +20,7 @@ declare class DatabaseManager {
     healthCheck(): Promise<{
         database: boolean;
         redis: boolean;
+        fallback: boolean;
     }>;
     close(): Promise<void>;
     get isHealthy(): boolean;

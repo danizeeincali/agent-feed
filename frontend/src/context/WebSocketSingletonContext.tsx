@@ -37,10 +37,8 @@ interface SystemStats {
 interface WebSocketSingletonContextValue {
   socket: any;
   isConnected: boolean;
-  lastMessage: any;
-  connectionError: string | null;
-  connect: () => void;
-  disconnect: () => void;
+  connect: () => Promise<void>;
+  disconnect: () => Promise<void>;
   emit: (event: string, data?: any) => void;
   on: (event: string, handler: (data: any) => void) => void;
   off: (event: string, handler?: (data: any) => void) => void;
@@ -59,7 +57,7 @@ interface WebSocketSingletonContextValue {
   unsubscribePost: (postId: string) => void;
   sendLike: (postId: string, action?: 'add' | 'remove') => void;
   sendMessage: (event: string, data: any) => void;
-  reconnect: () => void;
+  reconnect: () => Promise<void>;
 }
 
 const WebSocketSingletonContext = createContext<WebSocketSingletonContextValue | null>(null);
@@ -91,16 +89,13 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   const { 
     socket, 
     isConnected, 
-    lastMessage, 
-    connectionError, 
     connect, 
     disconnect, 
     emit 
   } = useWebSocketSingleton({
-    url: config.url || 'http://localhost:3000',
+    url: config.url || '/',
     autoConnect: config.autoConnect !== false,
-    reconnectAttempts: config.reconnectAttempts || 3,
-    reconnectDelay: config.reconnectInterval || 2000
+    maxReconnectAttempts: config.reconnectAttempts || 5
   });
 
   // State management
@@ -115,8 +110,8 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     isConnecting: socket?.disconnected === false && !socket?.connected || false,
     reconnectAttempt,
     lastConnected: isConnected ? new Date().toISOString() : null,
-    connectionError
-  }), [isConnected, socket?.connecting, reconnectAttempt, connectionError]);
+    connectionError: null
+  }), [isConnected, socket?.disconnected, socket?.connected, reconnectAttempt]);
 
   // Notification management
   const clearNotifications = useCallback(() => {
@@ -164,9 +159,9 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     emit(event, data);
   }, [emit]);
 
-  const reconnect = useCallback(() => {
+  const reconnect = useCallback(async () => {
     setReconnectAttempt(prev => prev + 1);
-    connect();
+    await connect();
   }, [connect]);
 
   // Add missing methods for compatibility
@@ -250,8 +245,6 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   const contextValue = useMemo<WebSocketSingletonContextValue>(() => ({
     socket,
     isConnected,
-    lastMessage,
-    connectionError,
     connect,
     disconnect,
     emit,
@@ -276,8 +269,6 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   }), [
     socket,
     isConnected,
-    lastMessage,
-    connectionError,
     connect,
     disconnect,
     on,

@@ -218,7 +218,7 @@ router.post('/sessions/:sessionId/tasks', async (req, res) => {
 router.get('/sessions/:sessionId/tasks', async (req, res) => {
     try {
         const { sessionId } = req.params;
-        const tasks = claude_code_orchestrator_1.claudeCodeOrchestrator.getSessionTasks(sessionId);
+        const tasks = claude_code_orchestrator_1.claudeCodeOrchestrator.getSession(sessionId)?.tasks || [];
         res.json({
             success: true,
             data: tasks,

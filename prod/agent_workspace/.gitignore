@@ -1,0 +1,48 @@
+# Protected Agent Workspace - DO NOT MODIFY
+# This directory is completely isolated for agent operations
+
+# Ignore all agent-generated content
+*
+
+# Except these control files
+!.gitignore
+!README.md
+!.protected
+
+# Never track these even if explicitly added
+*.log
+*.tmp
+*.cache
+*.secret
+*.key
+*.env
+*.credential
+
+# Ignore all subdirectories
+outputs/
+temp/
+logs/
+data/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Ignore compiled files
+*.pyc
+*.pyo
+__pycache__/
+*.class
+*.o
+*.so
+
+# Ignore package files
+node_modules/
+venv/
+env/
+*.egg-info/
+dist/
+build/

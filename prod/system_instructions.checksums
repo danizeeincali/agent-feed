@@ -1,0 +1,10 @@
+8137c2e3996756432c79609ca5a68ff2  /workspaces/agent-feed/prod/system_instructions/README.md
+72833685733a200243c67f1680aab386  /workspaces/agent-feed/prod/system_instructions/migration/validation_checkpoints.md
+787a9dfbbd1d6f331e602d95762acd64  /workspaces/agent-feed/prod/system_instructions/migration/workspace_migration_plan.md
+2c3a877faa25d7272040f10f4247d8c2  /workspaces/agent-feed/prod/system_instructions/rules/operation_limits.md
+e7044897a3c8aa9df9db222c6276d727  /workspaces/agent-feed/prod/system_instructions/rules/core_boundaries.md
+8712c3ee91b3badf31acd985d9dd9068  /workspaces/agent-feed/prod/system_instructions/workspace/agent_workspace_rules.md
+c2bac796e58aff023e749230fd5a9be9  /workspaces/agent-feed/prod/system_instructions/architecture/system_overview.md
+01f11fc45f77de791e11472e5670333b  /workspaces/agent-feed/prod/system_instructions/api/forbidden_operations.json
+ae9d0ced052dc6a6380c70fc313a272e  /workspaces/agent-feed/prod/system_instructions/api/allowed_operations.json
+37756f2d5a0c814ab98627f06de11e73  /workspaces/agent-feed/prod/system_instructions/api/endpoint_contracts.json

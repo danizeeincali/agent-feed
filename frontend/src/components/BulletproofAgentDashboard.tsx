@@ -17,7 +17,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { ErrorBoundary } from './ErrorBoundary';
+import { ErrorBoundary } from 'react-error-boundary';
 import {
   safeArray,
   safeObject,

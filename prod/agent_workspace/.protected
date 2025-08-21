@@ -1,0 +1,6 @@
+PROTECTED_WORKSPACE=true
+MANUAL_EDIT_FORBIDDEN=true
+AGENT_MANAGED=true
+CREATED_AT=2025-08-21T05:56:00Z
+PURPOSE=Production agent isolated workspace
+WARNING=Do not modify or delete this file

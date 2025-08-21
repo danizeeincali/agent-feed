@@ -40,7 +40,7 @@ const withBulletproofWrapper = <P extends object>(
       return (
         <FallbackComponents.ComponentErrorFallback
           componentName={componentName}
-          error={errorState.error}
+          error={errorState.error ?? undefined}
           retry={resetError}
         />
       );
@@ -51,7 +51,7 @@ const withBulletproofWrapper = <P extends object>(
         componentName={componentName}
         fallback={
           <FallbackComponent
-            error={errorState.error}
+            error={errorState.error ?? undefined}
             retry={resetError}
             componentName={componentName}
           />
@@ -144,7 +144,7 @@ export const BulletproofWrapper: React.FC<{
   const FallbackComponent = CustomFallback || (() => (
     <FallbackComponents.ComponentErrorFallback
       componentName={componentName}
-      error={errorState.error}
+      error={errorState.error ?? undefined}
       retry={resetError}
     />
   ));

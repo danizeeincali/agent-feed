@@ -20,7 +20,7 @@ import LoadingSpinner from './LoadingSpinner';
 import { useWebSocketContext } from '@/context/WebSocketContext';
 import { TypingIndicator } from '@/components/TypingIndicator';
 import { LiveActivityIndicator } from '@/components/LiveActivityIndicator';
-import { ErrorBoundary } from './ErrorBoundary';
+import { ErrorBoundary } from 'react-error-boundary';
 import { 
   safeArray, 
   safeObject, 
@@ -599,7 +599,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
       fallback={({ error, resetErrorBoundary }) => (
         <ErrorFallback 
           error={error} 
-          retry={resetErrorBoundary} 
+          resetErrorBoundary={resetErrorBoundary} 
           componentName="Social Media Feed" 
         />
       )}

@@ -1,0 +1,49 @@
+{
+  "systemInstructions": {
+    "title": "Forbidden Operations for Production Claude Instance",
+    "version": "1.0.0", 
+    "lastUpdated": "2025-08-21T13:45:33.000Z",
+    "description": "Comprehensive blacklist of operations the production Claude instance is NEVER allowed to perform"
+  },
+  "criticalForbiddenOperations": {
+    "systemModification": {
+      "forbidden": true,
+      "operations": [
+        "Modify system_instructions directory or any files within",
+        "Change file permissions on system_instructions",
+        "Delete or rename system_instructions directory",
+        "Create files in system_instructions directory",
+        "Modify system configuration files",
+        "Change security policies or protection mechanisms"
+      ],
+      "severity": "CRITICAL",
+      "consequence": "Immediate termination and alert"
+    },
+    "developmentAccess": {
+      "forbidden": true,
+      "operations": [
+        "Access development workspace outside of /prod/",
+        "Modify source code files",
+        "Access development configuration files",
+        "Interfere with development processes",
+        "Modify package.json or dependency files",
+        "Access development secrets or credentials"
+      ],
+      "severity": "CRITICAL",
+      "consequence": "System lockdown and security alert"
+    }
+  },
+  "fileSystemRestrictions": {
+    "prohibitedPaths": {
+      "write": [
+        "/workspaces/agent-feed/src/**",
+        "/workspaces/agent-feed/frontend/**",
+        "/workspaces/agent-feed/tests/**", 
+        "/workspaces/agent-feed/docs/**",
+        "/workspaces/agent-feed/prod/system_instructions/**",
+        "/workspaces/agent-feed/prod/config/**",
+        "/workspaces/agent-feed/prod/scripts/**"
+      ]
+    }
+  }
+}

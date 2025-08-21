@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useWebSocketContext } from '@/context/WebSocketContext';
-import { Users, Wifi, WifiOff, Activity } from 'lucide-react';
+import { Users, Wifi, WifiOff, Activity, Power, RefreshCw, AlertCircle } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 interface LiveActivityIndicatorProps {
@@ -8,9 +8,10 @@ interface LiveActivityIndicatorProps {
 }
 
 export const LiveActivityIndicator: React.FC<LiveActivityIndicatorProps> = ({ className }) => {
-  const { connectionState, onlineUsers, systemStats } = useWebSocketContext();
+  const { connectionState, onlineUsers, systemStats, isConnected, connect, disconnect, reconnect } = useWebSocketContext();
   const [recentActivity, setRecentActivity] = useState<string[]>([]);
   const [showDetails, setShowDetails] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   // Track recent activity
   useEffect(() => {
@@ -41,8 +42,40 @@ export const LiveActivityIndicator: React.FC<LiveActivityIndicatorProps> = ({ cl
 
   const getStatusBg = () => {
     if (connectionState.isConnected) return 'bg-green-50 border-green-200';
-    if (connectionState.isConnecting) return 'bg-yellow-50 border-yellow-200';
+    if (connectionState.isConnecting || isConnecting) return 'bg-yellow-50 border-yellow-200';
     return 'bg-red-50 border-red-200';
+  };
+
+  const handleConnect = async () => {
+    if (isConnecting) return;
+    setIsConnecting(true);
+    try {
+      await connect();
+    } catch (error) {
+      console.error('Connection failed:', error);
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    try {
+      await disconnect();
+    } catch (error) {
+      console.error('Disconnection failed:', error);
+    }
+  };
+
+  const handleReconnect = async () => {
+    if (isConnecting) return;
+    setIsConnecting(true);
+    try {
+      await reconnect();
+    } catch (error) {
+      console.error('Reconnection failed:', error);
+    } finally {
+      setIsConnecting(false);
+    }
   };
 
   return (
@@ -189,12 +222,50 @@ export const LiveActivityIndicator: React.FC<LiveActivityIndicatorProps> = ({ cl
             {/* Error Message */}
             {connectionState.connectionError && (
               <div className="border-t border-gray-200 pt-3">
-                <div className="text-xs text-red-600 mb-1">Connection Error</div>
+                <div className="text-xs text-red-600 mb-1 flex items-center space-x-1">
+                  <AlertCircle className="w-3 h-3" />
+                  <span>Connection Error</span>
+                </div>
                 <div className="text-xs text-gray-600 bg-red-50 p-2 rounded">
                   {connectionState.connectionError}
                 </div>
               </div>
             )}
+
+            {/* Connection Controls */}
+            <div className="border-t border-gray-200 pt-3">
+              <div className="text-xs text-gray-600 mb-2">Connection Controls</div>
+              <div className="flex space-x-2">
+                {!connectionState.isConnected ? (
+                  <button
+                    onClick={handleConnect}
+                    disabled={isConnecting || connectionState.isConnecting}
+                    className="flex items-center space-x-1 px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Power className="w-3 h-3" />
+                    <span>{isConnecting ? 'Connecting...' : 'Connect'}</span>
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleReconnect}
+                      disabled={isConnecting}
+                      className="flex items-center space-x-1 px-2 py-1 text-xs bg-yellow-600 text-white rounded hover:bg-yellow-700 disabled:opacity-50"
+                    >
+                      <RefreshCw className={cn('w-3 h-3', { 'animate-spin': isConnecting })} />
+                      <span>Reconnect</span>
+                    </button>
+                    <button
+                      onClick={handleDisconnect}
+                      className="flex items-center space-x-1 px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      <WifiOff className="w-3 h-3" />
+                      <span>Disconnect</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

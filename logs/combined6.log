@@ -12449,3 +12449,977 @@
 {"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-20 07:28:48","version":"1.0.0"}
 {"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-20 07:28:48","version":"1.0.0"}
 {"level":"info","message":"WebSocket client disconnected","reason":"forced close","service":"agent-feed","socketId":"E30q4T2t_8n1EsaBCUHO","timestamp":"2025-08-20 07:28:49","userId":"claude-code-user","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:11:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:11:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:07","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:07","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:07","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:07","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:12:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:12:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:07","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:07","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:13:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:13:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:07","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:07","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:07","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:07","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:51","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:51","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:52","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:52","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:53","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:53","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:54","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:54","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:55","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:55","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:56","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:56","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:57","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:57","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:58","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:58","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:14:59","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:14:59","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:00","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:00","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:01","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:01","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:02","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:02","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:03","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:03","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:04","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:04","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:05","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:05","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:06","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:06","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:07","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:07","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:07","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:07","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:08","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:08","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:09","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:09","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:10","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:10","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:11","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:11","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:12","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:12","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:13","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:13","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:14","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:14","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:15","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:15","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:16","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:16","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:17","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:17","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:18","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:18","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:19","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:19","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:20","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:20","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:21","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:21","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:22","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:22","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:23","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:23","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:24","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:24","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:25","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:25","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:26","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:26","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:27","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:27","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:28","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:28","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:29","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:29","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:30","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:30","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:31","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:31","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:32","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:32","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:33","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:33","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:34","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:34","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:35","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:35","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:36","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:36","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:37","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:37","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:38","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:38","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:39","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:39","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:40","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:40","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:41","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:41","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:42","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:42","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:43","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:43","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:44","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:44","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:45","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:45","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:46","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:46","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:47","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:47","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:48","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:48","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:49","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:49","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:50","version":"1.0.0"}
+{"level":"error","message":"Redis client error:","service":"agent-feed","timestamp":"2025-08-21 02:15:50","version":"1.0.0"}
+{"level":"warn","message":"Max Redis reconnection attempts reached, using fallback store only","service":"agent-feed","timestamp":"2025-08-21 02:15:50","version":"1.0.0"}
