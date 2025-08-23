@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -899,10 +899,7 @@
 <a name='L834'></a><a href='#L834'>834</a>
 <a name='L835'></a><a href='#L835'>835</a>
 <a name='L836'></a><a href='#L836'>836</a>
-<a name='L837'></a><a href='#L837'>837</a>
-<a name='L838'></a><a href='#L838'>838</a>
-<a name='L839'></a><a href='#L839'>839</a>
-<a name='L840'></a><a href='#L840'>840</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L837'></a><a href='#L837'>837</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -920,17 +917,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -965,7 +954,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1044,7 +1032,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1447,6 +1434,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1741,7 +1735,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useState, useEffect, memo, useCallback, useMemo, Suspense } from 'react';</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';</span>
 <span class="cstat-no" title="statement not covered" >import { useWebSocket } from '@/hooks/useWebSocket';</span>
 <span class="cstat-no" title="statement not covered" >import { </span>
   Activity, 
@@ -1752,7 +1746,6 @@
   TrendingUp,
   Users,
   Zap,
-  Filter,
   Search,
   Grid3X3,
   List,
@@ -1761,24 +1754,16 @@
   AlertTriangle
 } from 'lucide-react';
 <span class="cstat-no" title="statement not covered" >import { cn } from '@/utils/cn';</span>
-<span class="cstat-no" title="statement not covered" >import { ErrorBoundary } from './ErrorBoundary';</span>
+<span class="cstat-no" title="statement not covered" >import { ErrorBoundary } from 'react-error-boundary';</span>
 <span class="cstat-no" title="statement not covered" >import {</span>
   safeArray,
   safeObject,
   safeString,
   safeNumber,
   safeDate,
-  ErrorFallback,
-  LoadingFallback,
   withSafetyWrapper,
   safeHandler
 } from '@/utils/safetyUtils';
-import {
-  SafeAgent,
-  agentValidationSchema,
-  validateComponentProps,
-  isValidAgent
-} from '@/types/safety';
 &nbsp;
 interface Agent {
   id: string;
@@ -1885,7 +1870,6 @@ const AgentErrorBoundary: React.FC&lt;{ children: React.ReactNode; agentId?: str
 const BulletproofAgentDashboard: React.FC&lt;AgentDashboardProps&gt; = <span class="cstat-no" title="statement not covered" >memo(<span class="fstat-no" title="function not covered" >({ </span></span>
   className = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span>
   onError,
-  fallback,
   retryable = <span class="branch-0 cbranch-no" title="branch not covered" >true</span>
 }) =&gt; {
   const [agents, setAgents] = <span class="cstat-no" title="statement not covered" >useState&lt;Agent[]&gt;([]);</span>
@@ -2285,11 +2269,18 @@ const BulletproofAgentDashboard: React.FC&lt;AgentDashboardProps&gt; = <span cla
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;ErrorBoundary
       fallback={<span class="fstat-no" title="function not covered" >({</span> error, resetErrorBoundary }) =&gt; (
-<span class="cstat-no" title="statement not covered" >        &lt;ErrorFallback </span>
-          error={error} 
-          retry={resetErrorBoundary} 
-          componentName="Agent Dashboard" 
-        /&gt;
+<span class="cstat-no" title="statement not covered" >        &lt;div className="min-h-screen flex items-center justify-center"&gt;</span>
+          &lt;div className="text-center"&gt;
+            &lt;h2 className="text-xl font-semibold text-gray-900 mb-2"&gt;Agent Dashboard Error&lt;/h2&gt;
+            &lt;p className="text-gray-600 mb-4"&gt;{error?.message || 'Something went wrong'}&lt;/p&gt;
+            &lt;button 
+              onClick={resetErrorBoundary}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            &gt;
+              Try Again
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
       )}
     &gt;
       &lt;div className={`p-6 space-y-6 ${className}`}&gt;
@@ -2587,7 +2578,7 @@ export { <span class="cstat-no" title="statement not covered" >BulletproofAgentD
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-19T21:15:21.173Z
+                at 2025-08-22T15:32:41.198Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

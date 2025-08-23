@@ -93,10 +93,20 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     disconnect, 
     emit 
   } = useWebSocketSingleton({
-    url: config.url || '/',
+    url: config.url || import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
     autoConnect: config.autoConnect !== false,
     maxReconnectAttempts: config.reconnectAttempts || 5
   });
+
+  // CRITICAL DEBUG: Log connection state changes
+  React.useEffect(() => {
+    console.log('🔌 WebSocketSingletonProvider: Connection state changed', {
+      isConnected,
+      socketId: socket?.id,
+      socketConnected: socket?.connected,
+      url: config.url || import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:3001'
+    });
+  }, [isConnected, socket?.id, socket?.connected]);
 
   // State management
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -104,14 +114,42 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   const [systemStats, setSystemStats] = useState<SystemStats | null>(null);
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
 
-  // Connection state
-  const connectionState = useMemo<ConnectionState>(() => ({
-    isConnected,
-    isConnecting: socket?.disconnected === false && !socket?.connected || false,
-    reconnectAttempt,
-    lastConnected: isConnected ? new Date().toISOString() : null,
-    connectionError: null
-  }), [isConnected, socket?.disconnected, socket?.connected, reconnectAttempt]);
+  // PRODUCTION FIX: Socket.IO-specific connection state handling
+  const connectionState = useMemo<ConnectionState>(() => {
+    // CRITICAL FIX: Socket.IO uses different state properties
+    let isConnectingState = false;
+    
+    if (socket) {
+      // Socket.IO specific states:
+      // - socket.connected: true when connected
+      // - socket.disconnected: true when disconnected
+      // - socket.io.readyState: 'opening', 'open', 'closing', 'closed'
+      const socketIO = socket.io || socket;
+      const readyState = socketIO?.readyState || socket.readyState;
+      
+      isConnectingState = !socket.connected && !socket.disconnected && 
+        (readyState === 'opening' || readyState === 1);
+    }
+    
+    console.log('🔧 WebSocketSingletonProvider: Socket.IO connection state (PRODUCTION FIX)', {
+      isConnected,
+      socketExists: !!socket,
+      socketConnected: socket?.connected,
+      socketDisconnected: socket?.disconnected,
+      socketIOReadyState: socket?.io?.readyState,
+      computedIsConnecting: isConnectingState,
+      socketId: socket?.id,
+      fixApplied: 'Socket.IO-specific state logic'
+    });
+    
+    return {
+      isConnected,
+      isConnecting: isConnectingState,
+      reconnectAttempt,
+      lastConnected: isConnected ? new Date().toISOString() : null,
+      connectionError: null
+    };
+  }, [isConnected, socket?.connected, socket?.disconnected, socket?.io?.readyState, reconnectAttempt]);
 
   // Notification management
   const clearNotifications = useCallback(() => {

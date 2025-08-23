@@ -8,7 +8,7 @@ export class WebSocketService {
   private listeners: Map<string, Set<(data: any) => void>> = new Map();
   private isConnecting = false;
 
-  constructor(private url: string = 'ws://localhost:8000/ws') {}
+  constructor(private url: string = 'ws://localhost:3001') {}
 
   connect(): Promise<void> {
     if (this.isConnecting || (this.ws && this.ws.readyState === WebSocket.OPEN)) {

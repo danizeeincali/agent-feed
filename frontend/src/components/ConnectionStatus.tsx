@@ -1,18 +1,18 @@
 import React from 'react';
-import { useWebSocketContext } from '@/context/WebSocketContext';
+import { useWebSocketSingletonContext } from '@/context/WebSocketSingletonContext';
 import { Wifi, WifiOff, AlertCircle, Users } from 'lucide-react';
 
 export const ConnectionStatus: React.FC = () => {
-  const { connectionState, systemStats, onlineUsers, reconnect } = useWebSocketContext();
+  const { isConnected, connectionState, systemStats, onlineUsers, reconnect } = useWebSocketSingletonContext();
 
   const getStatusColor = () => {
-    if (connectionState.isConnected) return 'green';
+    if (isConnected) return 'green';
     if (connectionState.isConnecting) return 'yellow';
     return 'red';
   };
 
   const getStatusText = () => {
-    if (connectionState.isConnected) return 'Connected';
+    if (isConnected) return 'Connected';
     if (connectionState.isConnecting) return 'Connecting...';
     if (connectionState.reconnectAttempt > 0) {
       return `Reconnecting (${connectionState.reconnectAttempt})`;
@@ -21,7 +21,7 @@ export const ConnectionStatus: React.FC = () => {
   };
 
   const getStatusIcon = () => {
-    if (connectionState.isConnected) return <Wifi className="w-4 h-4" />;
+    if (isConnected) return <Wifi className="w-4 h-4" />;
     if (connectionState.isConnecting) return <AlertCircle className="w-4 h-4 animate-spin" />;
     return <WifiOff className="w-4 h-4" />;
   };
@@ -38,7 +38,7 @@ export const ConnectionStatus: React.FC = () => {
       <div className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm ${colors[getStatusColor()]}`}>
         <div className="flex items-center space-x-2">
           <div className={`w-2 h-2 rounded-full ${
-            connectionState.isConnected ? 'bg-green-500 animate-pulse' :
+            isConnected ? 'bg-green-500 animate-pulse' :
             connectionState.isConnecting ? 'bg-yellow-500 animate-pulse' :
             'bg-red-500'
           }`} />
@@ -47,7 +47,7 @@ export const ConnectionStatus: React.FC = () => {
         </div>
         
         {/* Online users count */}
-        {connectionState.isConnected && (
+        {isConnected && (
           <div className="flex items-center space-x-1 text-xs">
             <Users className="w-3 h-3" />
             <span>{onlineUsers.length}</span>
@@ -56,7 +56,7 @@ export const ConnectionStatus: React.FC = () => {
       </div>
 
       {/* Error message */}
-      {connectionState.connectionError && !connectionState.isConnected && (
+      {connectionState.connectionError && !isConnected && (
         <div className="px-3 py-2 rounded-lg text-xs bg-red-50 text-red-600">
           <div className="flex items-center justify-between">
             <span className="truncate">{connectionState.connectionError}</span>
@@ -71,7 +71,7 @@ export const ConnectionStatus: React.FC = () => {
       )}
 
       {/* System stats (only when connected) */}
-      {connectionState.isConnected && systemStats && (
+      {isConnected && systemStats && (
         <div className="px-3 py-2 rounded-lg text-xs bg-gray-50 text-gray-600">
           <div className="grid grid-cols-2 gap-2">
             <div>Users: {systemStats.connectedUsers}</div>
@@ -81,7 +81,7 @@ export const ConnectionStatus: React.FC = () => {
       )}
 
       {/* Last connected time */}
-      {!connectionState.isConnected && connectionState.lastConnected && (
+      {!isConnected && connectionState.lastConnected && (
         <div className="px-3 py-1 rounded text-xs text-gray-500 bg-gray-50">
           Last connected: {new Date(connectionState.lastConnected).toLocaleTimeString()}
         </div>

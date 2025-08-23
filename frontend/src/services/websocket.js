@@ -9,7 +9,7 @@ class WebSocketService {
     reconnectDelay = 1000;
     listeners = new Map();
     isConnecting = false;
-    constructor(url = 'ws://localhost:8000/ws') {
+    constructor(url = 'ws://localhost:3001') {
         this.url = url;
     }
     connect() {

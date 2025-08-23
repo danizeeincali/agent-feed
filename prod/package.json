@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Production Claude instance for debugging and testing",
   "scripts": {
+    "start": "claude --dangerously-skip-permissions",
     "claude": "claude --dangerously-skip-permissions",
     "init": "claude --dangerously-skip-permissions"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.1"
   }
 }

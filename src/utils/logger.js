@@ -1,1 +1,351 @@
-/**\n * Centralized Logging Module\n * Provides structured logging with multiple transports and correlation tracking\n */\n\nimport winston from 'winston';\nimport { appConfig } from './config.js';\nimport { randomUUID } from 'crypto';\n\n// Custom log levels\nconst customLevels = {\n  levels: {\n    error: 0,\n    warn: 1,\n    info: 2,\n    http: 3,\n    debug: 4\n  },\n  colors: {\n    error: 'red',\n    warn: 'yellow',\n    info: 'green',\n    http: 'magenta',\n    debug: 'blue'\n  }\n};\n\n// Add colors to winston\nwinston.addColors(customLevels.colors);\n\n// Custom format for development\nconst developmentFormat = winston.format.combine(\n  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),\n  winston.format.colorize({ all: true }),\n  winston.format.printf(({ timestamp, level, message, correlationId, service, ...meta }) => {\n    const correlation = correlationId ? `[${correlationId}]` : '';\n    const svc = service ? `[${service}]` : '';\n    const metaStr = Object.keys(meta).length ? JSON.stringify(meta) : '';\n    return `${timestamp} ${level}${svc}${correlation}: ${message} ${metaStr}`;\n  })\n);\n\n// Custom format for production\nconst productionFormat = winston.format.combine(\n  winston.format.timestamp(),\n  winston.format.errors({ stack: true }),\n  winston.format.json()\n);\n\n// Determine format based on environment\nconst logFormat = appConfig.isDevelopment ? developmentFormat : productionFormat;\n\n// Create transports array\nconst transports = [\n  // Console transport\n  new winston.transports.Console({\n    level: appConfig.monitoring.logLevel,\n    format: logFormat,\n    handleExceptions: true,\n    handleRejections: true\n  })\n];\n\n// Add file transports in production\nif (appConfig.isProduction) {\n  // Error log file\n  transports.push(\n    new winston.transports.File({\n      filename: 'logs/error.log',\n      level: 'error',\n      format: productionFormat,\n      maxsize: 5242880, // 5MB\n      maxFiles: 5,\n      handleExceptions: true\n    })\n  );\n  \n  // Combined log file\n  transports.push(\n    new winston.transports.File({\n      filename: 'logs/combined.log',\n      format: productionFormat,\n      maxsize: 5242880, // 5MB\n      maxFiles: 5\n    })\n  );\n  \n  // HTTP access log\n  transports.push(\n    new winston.transports.File({\n      filename: 'logs/access.log',\n      level: 'http',\n      format: productionFormat,\n      maxsize: 5242880, // 5MB\n      maxFiles: 10\n    })\n  );\n}\n\n// Create logger instance\nconst logger = winston.createLogger({\n  levels: customLevels.levels,\n  level: appConfig.monitoring.logLevel,\n  format: logFormat,\n  defaultMeta: {\n    service: 'agent-feed',\n    environment: appConfig.env,\n    version: process.env.npm_package_version || '1.0.0'\n  },\n  transports,\n  exitOnError: false\n});\n\n// Correlation ID management\nconst correlationStorage = new Map();\n\n/**\n * Generate a new correlation ID\n * @returns {string} Correlation ID\n */\nexport const generateCorrelationId = () => {\n  return randomUUID();\n};\n\n/**\n * Set correlation ID for current context\n * @param {string} correlationId - The correlation ID\n */\nexport const setCorrelationId = (correlationId) => {\n  correlationStorage.set('current', correlationId);\n};\n\n/**\n * Get current correlation ID\n * @returns {string|null} Current correlation ID\n */\nexport const getCorrelationId = () => {\n  return correlationStorage.get('current') || null;\n};\n\n/**\n * Clear correlation ID\n */\nexport const clearCorrelationId = () => {\n  correlationStorage.delete('current');\n};\n\n/**\n * Create a child logger with additional metadata\n * @param {Object} meta - Additional metadata\n * @returns {Object} Child logger\n */\nexport const createChildLogger = (meta = {}) => {\n  return logger.child(meta);\n};\n\n/**\n * Enhanced logging methods with correlation ID support\n */\nconst enhancedLogger = {\n  error: (message, meta = {}) => {\n    const correlationId = getCorrelationId();\n    logger.error(message, { ...meta, correlationId });\n  },\n  \n  warn: (message, meta = {}) => {\n    const correlationId = getCorrelationId();\n    logger.warn(message, { ...meta, correlationId });\n  },\n  \n  info: (message, meta = {}) => {\n    const correlationId = getCorrelationId();\n    logger.info(message, { ...meta, correlationId });\n  },\n  \n  http: (message, meta = {}) => {\n    const correlationId = getCorrelationId();\n    logger.http(message, { ...meta, correlationId });\n  },\n  \n  debug: (message, meta = {}) => {\n    const correlationId = getCorrelationId();\n    logger.debug(message, { ...meta, correlationId });\n  },\n  \n  // Structured logging methods\n  logError: (error, context = {}) => {\n    const correlationId = getCorrelationId();\n    logger.error('Error occurred', {\n      error: {\n        name: error.name,\n        message: error.message,\n        stack: error.stack,\n        code: error.code\n      },\n      context,\n      correlationId\n    });\n  },\n  \n  logRequest: (req, res, responseTime) => {\n    const correlationId = getCorrelationId();\n    logger.http('HTTP Request', {\n      method: req.method,\n      url: req.url,\n      statusCode: res.statusCode,\n      responseTime,\n      userAgent: req.get('User-Agent'),\n      ip: req.ip,\n      correlationId\n    });\n  },\n  \n  logDatabaseQuery: (query, duration, rowCount = null) => {\n    const correlationId = getCorrelationId();\n    logger.debug('Database Query', {\n      query: appConfig.development.debugSql ? query : '[REDACTED]',\n      duration,\n      rowCount,\n      correlationId\n    });\n  },\n  \n  logAgentAction: (agentId, action, result, duration) => {\n    const correlationId = getCorrelationId();\n    logger.info('Agent Action', {\n      agentId,\n      action,\n      result,\n      duration,\n      correlationId\n    });\n  },\n  \n  logBusinessEvent: (event, data = {}) => {\n    const correlationId = getCorrelationId();\n    logger.info('Business Event', {\n      event,\n      data,\n      timestamp: new Date().toISOString(),\n      correlationId\n    });\n  },\n  \n  logSecurityEvent: (event, severity = 'medium', data = {}) => {\n    const correlationId = getCorrelationId();\n    logger.warn('Security Event', {\n      event,\n      severity,\n      data,\n      timestamp: new Date().toISOString(),\n      correlationId\n    });\n  },\n  \n  logPerformanceMetric: (metric, value, unit = 'ms') => {\n    const correlationId = getCorrelationId();\n    logger.info('Performance Metric', {\n      metric,\n      value,\n      unit,\n      timestamp: new Date().toISOString(),\n      correlationId\n    });\n  }\n};\n\n// Performance timing utilities\nexport const createTimer = () => {\n  const start = process.hrtime.bigint();\n  \n  return {\n    end: () => {\n      const end = process.hrtime.bigint();\n      return Number(end - start) / 1000000; // Convert to milliseconds\n    }\n  };\n};\n\n// Express middleware for request logging\nexport const requestLogger = (req, res, next) => {\n  const correlationId = req.get('X-Correlation-ID') || generateCorrelationId();\n  const timer = createTimer();\n  \n  // Set correlation ID for this request\n  setCorrelationId(correlationId);\n  \n  // Add correlation ID to response headers\n  res.set('X-Correlation-ID', correlationId);\n  \n  // Store original end function\n  const originalEnd = res.end;\n  \n  // Override end function to log response\n  res.end = function(...args) {\n    const responseTime = timer.end();\n    enhancedLogger.logRequest(req, res, responseTime);\n    \n    // Clear correlation ID after request\n    clearCorrelationId();\n    \n    // Call original end function\n    originalEnd.apply(this, args);\n  };\n  \n  next();\n};\n\n// Error logging middleware\nexport const errorLogger = (error, req, res, next) => {\n  enhancedLogger.logError(error, {\n    url: req.url,\n    method: req.method,\n    body: req.body,\n    params: req.params,\n    query: req.query\n  });\n  \n  next(error);\n};\n\n// Graceful shutdown logging\nexport const setupGracefulShutdown = (server, serviceName) => {\n  const shutdown = (signal) => {\n    enhancedLogger.info(`Received ${signal}. Starting graceful shutdown...`, {\n      service: serviceName\n    });\n    \n    server.close(() => {\n      enhancedLogger.info('Server closed. Exiting process...', {\n        service: serviceName\n      });\n      process.exit(0);\n    });\n    \n    // Force close after 30 seconds\n    setTimeout(() => {\n      enhancedLogger.error('Could not close connections in time, forcefully shutting down', {\n        service: serviceName\n      });\n      process.exit(1);\n    }, 30000);\n  };\n  \n  process.on('SIGTERM', () => shutdown('SIGTERM'));\n  process.on('SIGINT', () => shutdown('SIGINT'));\n};\n\n// Export the enhanced logger as default\nexport default enhancedLogger;\nexport { logger as baseLogger };
+/**
+ * Centralized Logging Module
+ * Provides structured logging with multiple transports and correlation tracking
+ */
+
+import winston from 'winston';
+import { appConfig } from './config.js';
+import { randomUUID } from 'crypto';
+
+// Custom log levels
+const customLevels = {
+  levels: {
+    error: 0,
+    warn: 1,
+    info: 2,
+    http: 3,
+    debug: 4
+  },
+  colors: {
+    error: 'red',
+    warn: 'yellow',
+    info: 'green',
+    http: 'magenta',
+    debug: 'blue'
+  }
+};
+
+// Add colors to winston
+winston.addColors(customLevels.colors);
+
+// Custom format for development
+const developmentFormat = winston.format.combine(
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.colorize({ all: true }),
+  winston.format.printf(({ timestamp, level, message, correlationId, service, ...meta }) => {
+    const correlation = correlationId ? `[${correlationId}]` : '';
+    const svc = service ? `[${service}]` : '';
+    const metaStr = Object.keys(meta).length ? JSON.stringify(meta) : '';
+    return `${timestamp} ${level}${svc}${correlation}: ${message} ${metaStr}`;
+  })
+);
+
+// Custom format for production
+const productionFormat = winston.format.combine(
+  winston.format.timestamp(),
+  winston.format.errors({ stack: true }),
+  winston.format.json()
+);
+
+// Determine format based on environment
+const logFormat = appConfig.isDevelopment ? developmentFormat : productionFormat;
+
+// Create transports array
+const transports = [
+  // Console transport
+  new winston.transports.Console({
+    level: appConfig.monitoring.logLevel,
+    format: logFormat,
+    handleExceptions: true,
+    handleRejections: true
+  })
+];
+
+// Add file transports in production
+if (appConfig.isProduction) {
+  // Error log file
+  transports.push(
+    new winston.transports.File({
+      filename: 'logs/error.log',
+      level: 'error',
+      format: productionFormat,
+      maxsize: 5242880, // 5MB
+      maxFiles: 5,
+      handleExceptions: true
+    })
+  );
+  
+  // Combined log file
+  transports.push(
+    new winston.transports.File({
+      filename: 'logs/combined.log',
+      format: productionFormat,
+      maxsize: 5242880, // 5MB
+      maxFiles: 5
+    })
+  );
+  
+  // HTTP access log
+  transports.push(
+    new winston.transports.File({
+      filename: 'logs/access.log',
+      level: 'http',
+      format: productionFormat,
+      maxsize: 5242880, // 5MB
+      maxFiles: 10
+    })
+  );
+}
+
+// Create logger instance
+const logger = winston.createLogger({
+  levels: customLevels.levels,
+  level: appConfig.monitoring.logLevel,
+  format: logFormat,
+  defaultMeta: {
+    service: 'agent-feed',
+    environment: appConfig.env,
+    version: process.env.npm_package_version || '1.0.0'
+  },
+  transports,
+  exitOnError: false
+});
+
+// Correlation ID management
+const correlationStorage = new Map();
+
+/**
+ * Generate a new correlation ID
+ * @returns {string} Correlation ID
+ */
+export const generateCorrelationId = () => {
+  return randomUUID();
+};
+
+/**
+ * Set correlation ID for current context
+ * @param {string} correlationId - The correlation ID
+ */
+export const setCorrelationId = (correlationId) => {
+  correlationStorage.set('current', correlationId);
+};
+
+/**
+ * Get current correlation ID
+ * @returns {string|null} Current correlation ID
+ */
+export const getCorrelationId = () => {
+  return correlationStorage.get('current') || null;
+};
+
+/**
+ * Clear correlation ID
+ */
+export const clearCorrelationId = () => {
+  correlationStorage.delete('current');
+};
+
+/**
+ * Create a child logger with additional metadata
+ * @param {Object} meta - Additional metadata
+ * @returns {Object} Child logger
+ */
+export const createChildLogger = (meta = {}) => {
+  return logger.child(meta);
+};
+
+/**
+ * Enhanced logging methods with correlation ID support
+ */
+const enhancedLogger = {
+  error: (message, meta = {}) => {
+    const correlationId = getCorrelationId();
+    logger.error(message, { ...meta, correlationId });
+  },
+  
+  warn: (message, meta = {}) => {
+    const correlationId = getCorrelationId();
+    logger.warn(message, { ...meta, correlationId });
+  },
+  
+  info: (message, meta = {}) => {
+    const correlationId = getCorrelationId();
+    logger.info(message, { ...meta, correlationId });
+  },
+  
+  http: (message, meta = {}) => {
+    const correlationId = getCorrelationId();
+    logger.http(message, { ...meta, correlationId });
+  },
+  
+  debug: (message, meta = {}) => {
+    const correlationId = getCorrelationId();
+    logger.debug(message, { ...meta, correlationId });
+  },
+  
+  // Structured logging methods
+  logError: (error, context = {}) => {
+    const correlationId = getCorrelationId();
+    logger.error('Error occurred', {
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        code: error.code
+      },
+      context,
+      correlationId
+    });
+  },
+  
+  logRequest: (req, res, responseTime) => {
+    const correlationId = getCorrelationId();
+    logger.http('HTTP Request', {
+      method: req.method,
+      url: req.url,
+      statusCode: res.statusCode,
+      responseTime,
+      userAgent: req.get('User-Agent'),
+      ip: req.ip,
+      correlationId
+    });
+  },
+  
+  logDatabaseQuery: (query, duration, rowCount = null) => {
+    const correlationId = getCorrelationId();
+    logger.debug('Database Query', {
+      query: appConfig.development.debugSql ? query : '[REDACTED]',
+      duration,
+      rowCount,
+      correlationId
+    });
+  },
+  
+  logAgentAction: (agentId, action, result, duration) => {
+    const correlationId = getCorrelationId();
+    logger.info('Agent Action', {
+      agentId,
+      action,
+      result,
+      duration,
+      correlationId
+    });
+  },
+  
+  logBusinessEvent: (event, data = {}) => {
+    const correlationId = getCorrelationId();
+    logger.info('Business Event', {
+      event,
+      data,
+      timestamp: new Date().toISOString(),
+      correlationId
+    });
+  },
+  
+  logSecurityEvent: (event, severity = 'medium', data = {}) => {
+    const correlationId = getCorrelationId();
+    logger.warn('Security Event', {
+      event,
+      severity,
+      data,
+      timestamp: new Date().toISOString(),
+      correlationId
+    });
+  },
+  
+  logPerformanceMetric: (metric, value, unit = 'ms') => {
+    const correlationId = getCorrelationId();
+    logger.info('Performance Metric', {
+      metric,
+      value,
+      unit,
+      timestamp: new Date().toISOString(),
+      correlationId
+    });
+  }
+};
+
+// Performance timing utilities
+export const createTimer = () => {
+  const start = process.hrtime.bigint();
+  
+  return {
+    end: () => {
+      const end = process.hrtime.bigint();
+      return Number(end - start) / 1000000; // Convert to milliseconds
+    }
+  };
+};
+
+// Express middleware for request logging
+export const requestLogger = (req, res, next) => {
+  const correlationId = req.get('X-Correlation-ID') || generateCorrelationId();
+  const timer = createTimer();
+  
+  // Set correlation ID for this request
+  setCorrelationId(correlationId);
+  
+  // Add correlation ID to response headers
+  res.set('X-Correlation-ID', correlationId);
+  
+  // Store original end function
+  const originalEnd = res.end;
+  
+  // Override end function to log response
+  res.end = function(...args) {
+    const responseTime = timer.end();
+    enhancedLogger.logRequest(req, res, responseTime);
+    
+    // Clear correlation ID after request
+    clearCorrelationId();
+    
+    // Call original end function
+    originalEnd.apply(this, args);
+  };
+  
+  next();
+};
+
+// Error logging middleware
+export const errorLogger = (error, req, res, next) => {
+  enhancedLogger.logError(error, {
+    url: req.url,
+    method: req.method,
+    body: req.body,
+    params: req.params,
+    query: req.query
+  });
+  
+  next(error);
+};
+
+// Graceful shutdown logging
+export const setupGracefulShutdown = (server, serviceName) => {
+  const shutdown = (signal) => {
+    enhancedLogger.info(`Received ${signal}. Starting graceful shutdown...`, {
+      service: serviceName
+    });
+    
+    server.close(() => {
+      enhancedLogger.info('Server closed. Exiting process...', {
+        service: serviceName
+      });
+      process.exit(0);
+    });
+    
+    // Force close after 30 seconds
+    setTimeout(() => {
+      enhancedLogger.error('Could not close connections in time, forcefully shutting down', {
+        service: serviceName
+      });
+      process.exit(1);
+    }, 30000);
+  };
+  
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
+};
+
+// Export the enhanced logger as default
+export default enhancedLogger;
+export { logger as baseLogger };

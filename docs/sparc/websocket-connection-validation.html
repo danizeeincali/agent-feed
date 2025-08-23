@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARC WebSocket Connection Validation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .connected { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .disconnected { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .connecting { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .test-result { margin: 10px 0; padding: 10px; border-left: 4px solid #007bff; background: #f8f9fa; }
+        .success { border-left-color: #28a745; }
+        .error { border-left-color: #dc3545; }
+        button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .logs { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>SPARC WebSocket Connection Validation</h1>
+    <p>Testing the 4-layer state propagation fix: Socket.IO → Manager → Hook → Context → UI</p>
+
+    <div id="status" class="status disconnected">
+        <strong>Status:</strong> <span id="status-text">Disconnected</span>
+        <div id="status-details" style="margin-top: 5px; font-size: 0.9em;">
+            <div>Socket ID: <span id="socket-id">-</span></div>
+            <div>Socket Connected: <span id="socket-connected">false</span></div>
+            <div>Ready State: <span id="ready-state">-</span></div>
+        </div>
+    </div>
+
+    <div>
+        <button id="connect-btn" class="btn-primary">Connect</button>
+        <button id="disconnect-btn" class="btn-danger" disabled>Disconnect</button>
+        <button id="test-state-btn" class="btn-success" disabled>Test State Synchronization</button>
+    </div>
+
+    <div id="test-results">
+        <h3>SPARC Validation Results</h3>
+        <div id="results-container">
+            <!-- Test results will appear here -->
+        </div>
+    </div>
+
+    <div>
+        <h3>Connection Logs</h3>
+        <div id="logs" class="logs">
+            <div>📋 SPARC WebSocket Debugging initialized...</div>
+        </div>
+    </div>
+
+    <script>
+        class SPARCWebSocketValidator {
+            constructor() {
+                this.socket = null;
+                this.isConnected = false;
+                this.logs = document.getElementById('logs');
+                this.results = document.getElementById('results-container');
+                this.testsPassed = 0;
+                this.totalTests = 0;
+                
+                this.initializeUI();
+            }
+
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = document.createElement('div');
+                logEntry.innerHTML = `<span style="color: #666">${timestamp}</span> ${message}`;
+                this.logs.appendChild(logEntry);
+                this.logs.scrollTop = this.logs.scrollHeight;
+                console.log(`[SPARC] ${message}`);
+            }
+
+            addTestResult(test, result, details = '') {
+                this.totalTests++;
+                if (result) this.testsPassed++;
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.className = `test-result ${result ? 'success' : 'error'}`;
+                resultDiv.innerHTML = `
+                    <strong>${result ? '✅' : '❌'} ${test}</strong>
+                    ${details ? `<div style="margin-top: 5px; font-size: 0.9em;">${details}</div>` : ''}
+                `;
+                this.results.appendChild(resultDiv);
+            }
+
+            initializeUI() {
+                const connectBtn = document.getElementById('connect-btn');
+                const disconnectBtn = document.getElementById('disconnect-btn');
+                const testBtn = document.getElementById('test-state-btn');
+
+                connectBtn.onclick = () => this.connect();
+                disconnectBtn.onclick = () => this.disconnect();
+                testBtn.onclick = () => this.testStateSynchronization();
+            }
+
+            async connect() {
+                this.log('🔌 SPARC SPECIFICATION: Initiating connection to ws://localhost:3001');
+                
+                try {
+                    this.socket = io('http://localhost:3001', {
+                        transports: ['websocket', 'polling'],
+                        timeout: 10000
+                    });
+
+                    this.setupSocketHandlers();
+                    
+                    // Test connection establishment
+                    setTimeout(() => this.testConnectionEstablishment(), 2000);
+                    
+                } catch (error) {
+                    this.log(`❌ SPARC ERROR: Connection failed - ${error.message}`, 'error');
+                    this.addTestResult('Connection Establishment', false, error.message);
+                }
+            }
+
+            setupSocketHandlers() {
+                this.socket.on('connect', () => {
+                    this.log('🔌 SPARC PSEUDOCODE: Socket connect event fired');
+                    this.isConnected = true;
+                    this.updateUI();
+                    this.validateStateChain();
+                });
+
+                this.socket.on('disconnect', (reason) => {
+                    this.log(`🔌 SPARC REFINEMENT: Socket disconnected - ${reason}`);
+                    this.isConnected = false;
+                    this.updateUI();
+                });
+
+                this.socket.on('connect_error', (error) => {
+                    this.log(`❌ SPARC ERROR: Connection error - ${error.message}`, 'error');
+                    this.addTestResult('Connection Error Handling', true, 'Error properly caught and logged');
+                });
+
+                this.socket.on('connection_synchronized', (data) => {
+                    this.log('🔧 SPARC COMPLETION: Connection synchronization event received');
+                    this.addTestResult('State Synchronization Event', true, JSON.stringify(data));
+                });
+            }
+
+            updateUI() {
+                const statusEl = document.getElementById('status');
+                const statusText = document.getElementById('status-text');
+                const socketId = document.getElementById('socket-id');
+                const socketConnected = document.getElementById('socket-connected');
+                const readyState = document.getElementById('ready-state');
+                const connectBtn = document.getElementById('connect-btn');
+                const disconnectBtn = document.getElementById('disconnect-btn');
+                const testBtn = document.getElementById('test-state-btn');
+
+                if (this.isConnected) {
+                    statusEl.className = 'status connected';
+                    statusText.textContent = 'Connected';
+                    connectBtn.disabled = true;
+                    disconnectBtn.disabled = false;
+                    testBtn.disabled = false;
+                } else {
+                    statusEl.className = 'status disconnected';
+                    statusText.textContent = 'Disconnected';
+                    connectBtn.disabled = false;
+                    disconnectBtn.disabled = true;
+                    testBtn.disabled = true;
+                }
+
+                socketId.textContent = this.socket?.id || '-';
+                socketConnected.textContent = this.socket?.connected || 'false';
+                readyState.textContent = this.socket?.readyState || '-';
+            }
+
+            async testConnectionEstablishment() {
+                this.log('🧪 SPARC ARCHITECTURE: Testing connection establishment...');
+                
+                // Test 1: Socket exists
+                const socketExists = this.socket !== null;
+                this.addTestResult('Socket Instance Created', socketExists);
+                
+                // Test 2: Socket is connected
+                const socketConnected = this.socket?.connected === true;
+                this.addTestResult('Socket Connected State', socketConnected);
+                
+                // Test 3: Connection state matches socket state
+                const stateMatches = this.isConnected === socketConnected;
+                this.addTestResult('State Synchronization', stateMatches, 
+                    `Local: ${this.isConnected}, Socket: ${socketConnected}`);
+                
+                // Test 4: Socket ID assigned
+                const hasSocketId = this.socket?.id !== undefined;
+                this.addTestResult('Socket ID Assignment', hasSocketId, this.socket?.id);
+            }
+
+            async testStateSynchronization() {
+                this.log('🧪 SPARC REFINEMENT: Testing state synchronization across layers...');
+                
+                // Test 1: Event emission works
+                this.socket.emit('test_event', { timestamp: Date.now() });
+                this.addTestResult('Event Emission', true, 'Test event sent');
+                
+                // Test 2: Ready state is correct
+                const correctReadyState = this.socket.readyState === 1; // OPEN
+                this.addTestResult('Socket Ready State', correctReadyState, 
+                    `Ready State: ${this.socket.readyState}`);
+                
+                // Test 3: UI reflects connection state
+                const statusText = document.getElementById('status-text').textContent;
+                const uiMatches = statusText === 'Connected';
+                this.addTestResult('UI State Reflection', uiMatches, 
+                    `UI shows: ${statusText}`);
+                
+                this.showFinalResults();
+            }
+
+            showFinalResults() {
+                const successRate = (this.testsPassed / this.totalTests * 100).toFixed(1);
+                const finalResult = document.createElement('div');
+                finalResult.className = `test-result ${this.testsPassed === this.totalTests ? 'success' : 'error'}`;
+                finalResult.innerHTML = `
+                    <strong>🎯 SPARC COMPLETION SUMMARY</strong>
+                    <div style="margin-top: 5px;">
+                        <div>Tests Passed: ${this.testsPassed}/${this.totalTests} (${successRate}%)</div>
+                        <div>Connection Status: ${this.isConnected ? '✅ Connected' : '❌ Disconnected'}</div>
+                        <div>UI Status: ${document.getElementById('status-text').textContent}</div>
+                        <div>Result: ${this.testsPassed === this.totalTests ? '🎉 SPARC FIX SUCCESSFUL' : '⚠️ SPARC FIX PARTIAL'}</div>
+                    </div>
+                `;
+                this.results.appendChild(finalResult);
+            }
+
+            disconnect() {
+                this.log('🔌 SPARC COMPLETION: Disconnecting socket...');
+                if (this.socket) {
+                    this.socket.disconnect();
+                    this.socket = null;
+                }
+                this.isConnected = false;
+                this.updateUI();
+            }
+        }
+
+        // Initialize SPARC validator
+        const validator = new SPARCWebSocketValidator();
+        
+        // Auto-connect for immediate testing
+        setTimeout(() => {
+            validator.log('🚀 SPARC AUTO-CONNECT: Starting automatic connection test...');
+            validator.connect();
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -115,7 +115,7 @@ const EnhancedAgentManager: React.FC<EnhancedAgentManagerProps> = ({
   
   try {
     const wsResult = useWebSocketSingleton({
-      url: 'ws://localhost:3000',
+      url: 'ws://localhost:3001',
       autoConnect: false, // Don't auto-connect to avoid errors
       reconnectAttempts: 3,
       reconnectDelay: 2000

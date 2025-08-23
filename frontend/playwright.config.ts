@@ -4,7 +4,7 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './src/tests',
+  testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -15,14 +15,14 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html'],
-    ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/results.xml' }],
+    ['html', { outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'playwright-report/results.json' }],
+    ['list']
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.BASE_URL || 'http://localhost:3001',
+    baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -38,7 +38,7 @@ export default defineConfig({
     navigationTimeout: 30000,
 
     /* Run headless in CI environments */
-    headless: true,
+    headless: true, // Always run headless in container environment
   },
 
   /* Configure projects for major browsers */
@@ -91,13 +91,13 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run dev',
-    port: 3001,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000, // 2 minutes
+    url: 'http://localhost:3000',
+    reuseExistingServer: true, // Always reuse existing server
+    timeout: 120000,
   },
 
   /* Output directory for test artifacts */
-  outputDir: 'test-results',
+  outputDir: 'tests/test-results/',
 
   /* Global setup and teardown */
   // globalSetup: './src/tests/e2e/global-setup.ts',

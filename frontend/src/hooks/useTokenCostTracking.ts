@@ -78,7 +78,7 @@ export const useTokenCostTracking = (config?: {
   
   // WebSocket integration using proven singleton pattern
   const { socket, isConnected } = useWebSocketSingleton({
-    url: process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'http://localhost:3000',
+    url: process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'http://localhost:3001',
     autoConnect: config?.enableRealTime ?? true,
     reconnectAttempts: 3,
     reconnectDelay: 2000

@@ -30,7 +30,7 @@ interface UseWebSocketReturn {
 
 export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketReturn => {
   const {
-    url = 'http://localhost:3000', // Backend WebSocket server
+    url = 'http://localhost:3001', // Backend WebSocket server
     autoConnect = true,
     reconnectAttempts = 5,
     reconnectDelay = 1000
@@ -60,7 +60,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
         // CRITICAL FIX: Synchronized timeouts with server
         timeout: 15000,              // Matches server connectTimeout
         forceNew: false,
-        withCredentials: true,
+        withCredentials: false,      // FIXED: Disable credentials for localhost
         reconnection: true,
         reconnectionAttempts: 10,    // Reduced from 15
         reconnectionDelay: 1000,     // Reduced from 2000 - faster reconnect
@@ -74,7 +74,10 @@ export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketRet
         // CRITICAL FIX: Synchronized ping settings with server
         autoConnect: true,
         pingTimeout: 20000,          // Matches server pingTimeout
-        pingInterval: 8000           // Matches server pingInterval
+        pingInterval: 8000,          // Matches server pingInterval
+        // CRITICAL FIX: Force Socket.IO v4 protocol
+        forceBase64: false,
+        timestampRequests: true
       });
 
       // Connection event handlers

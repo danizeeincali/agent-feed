@@ -1,1 +1,301 @@
-/**\n * Configuration Management Module\n * Centralizes all environment configuration for the Agent Feed application\n */\n\nimport { config } from 'dotenv';\nimport joi from 'joi';\n\n// Load environment variables\nconfig();\n\n// Configuration schema validation\nconst configSchema = joi.object({\n  // Environment\n  NODE_ENV: joi.string().valid('development', 'test', 'staging', 'production').default('development'),\n  \n  // Database\n  POSTGRES_URL: joi.string().required(),\n  POSTGRES_HOST: joi.string().default('localhost'),\n  POSTGRES_PORT: joi.number().default(5432),\n  POSTGRES_DB: joi.string().required(),\n  POSTGRES_USER: joi.string().required(),\n  POSTGRES_PASSWORD: joi.string().required(),\n  \n  // Redis\n  REDIS_URL: joi.string().required(),\n  REDIS_HOST: joi.string().default('localhost'),\n  REDIS_PORT: joi.number().default(6379),\n  REDIS_PASSWORD: joi.string().allow(''),\n  \n  // JWT\n  JWT_SECRET: joi.string().min(32).required(),\n  JWT_EXPIRES_IN: joi.string().default('24h'),\n  JWT_REFRESH_EXPIRES_IN: joi.string().default('7d'),\n  \n  // Service Ports\n  API_GATEWAY_PORT: joi.number().default(3000),\n  AGENT_MANAGEMENT_PORT: joi.number().default(3001),\n  FEED_PROCESSING_PORT: joi.number().default(3002),\n  USER_MANAGEMENT_PORT: joi.number().default(3003),\n  WEBSOCKET_PORT: joi.number().default(3004),\n  MONITORING_PORT: joi.number().default(3005),\n  \n  // Rate Limiting\n  RATE_LIMIT_WINDOW_MS: joi.number().default(900000),\n  RATE_LIMIT_MAX_REQUESTS: joi.number().default(100),\n  RATE_LIMIT_SKIP_SUCCESSFUL_REQUESTS: joi.boolean().default(false),\n  \n  // Security\n  BCRYPT_ROUNDS: joi.number().min(10).max(15).default(12),\n  CORS_ORIGIN: joi.string().default('http://localhost:3000'),\n  HELMET_ENABLED: joi.boolean().default(true),\n  TRUST_PROXY: joi.boolean().default(false),\n  \n  // Queue\n  QUEUE_CONCURRENCY: joi.number().default(5),\n  QUEUE_DELAY: joi.number().default(1000),\n  QUEUE_MAX_RETRY_ATTEMPTS: joi.number().default(3),\n  QUEUE_BACKOFF_DELAY: joi.number().default(5000),\n  \n  // Monitoring\n  LOG_LEVEL: joi.string().valid('error', 'warn', 'info', 'debug').default('info'),\n  LOG_FORMAT: joi.string().valid('json', 'simple').default('json'),\n  PROMETHEUS_ENABLED: joi.boolean().default(true),\n  GRAFANA_PASSWORD: joi.string().default('admin'),\n  METRICS_PREFIX: joi.string().default('agent_feed'),\n  \n  // Feature Flags\n  ENABLE_AGENT_COORDINATION: joi.boolean().default(true),\n  ENABLE_REAL_TIME_UPDATES: joi.boolean().default(true),\n  ENABLE_FEED_PROCESSING: joi.boolean().default(true),\n  ENABLE_USER_MANAGEMENT: joi.boolean().default(true),\n  ENABLE_WEBSOCKET: joi.boolean().default(true),\n  \n  // Development\n  DEV_HOT_RELOAD: joi.boolean().default(false),\n  DEV_MOCK_EXTERNAL_APIS: joi.boolean().default(false),\n  DEV_DEBUG_SQL: joi.boolean().default(false),\n  DEV_DISABLE_AUTH: joi.boolean().default(false),\n  \n  // SSL\n  SSL_ENABLED: joi.boolean().default(false),\n  SSL_CERT_PATH: joi.string().allow(''),\n  SSL_KEY_PATH: joi.string().allow(''),\n  \n  // Email\n  SMTP_HOST: joi.string().allow(''),\n  SMTP_PORT: joi.number().default(587),\n  SMTP_SECURE: joi.boolean().default(false),\n  SMTP_USER: joi.string().allow(''),\n  SMTP_PASS: joi.string().allow(''),\n  EMAIL_FROM: joi.string().email().allow('')\n}).unknown();\n\n// Validate configuration\nconst { error, value: envVars } = configSchema.validate(process.env);\n\nif (error) {\n  throw new Error(`Config validation error: ${error.message}`);\n}\n\n// Export validated configuration\nexport const appConfig = {\n  // Environment\n  env: envVars.NODE_ENV,\n  isDevelopment: envVars.NODE_ENV === 'development',\n  isTest: envVars.NODE_ENV === 'test',\n  isStaging: envVars.NODE_ENV === 'staging',\n  isProduction: envVars.NODE_ENV === 'production',\n  \n  // Database\n  database: {\n    url: envVars.POSTGRES_URL,\n    host: envVars.POSTGRES_HOST,\n    port: envVars.POSTGRES_PORT,\n    name: envVars.POSTGRES_DB,\n    user: envVars.POSTGRES_USER,\n    password: envVars.POSTGRES_PASSWORD,\n    ssl: envVars.NODE_ENV === 'production',\n    pool: {\n      min: 2,\n      max: 10,\n      acquireTimeoutMillis: 30000,\n      createTimeoutMillis: 30000,\n      destroyTimeoutMillis: 5000,\n      idleTimeoutMillis: 30000,\n      reapIntervalMillis: 1000,\n      createRetryIntervalMillis: 100\n    }\n  },\n  \n  // Redis\n  redis: {\n    url: envVars.REDIS_URL,\n    host: envVars.REDIS_HOST,\n    port: envVars.REDIS_PORT,\n    password: envVars.REDIS_PASSWORD,\n    retryDelayOnFailover: 100,\n    enableReadyCheck: true,\n    maxRetriesPerRequest: 3\n  },\n  \n  // JWT\n  jwt: {\n    secret: envVars.JWT_SECRET,\n    expiresIn: envVars.JWT_EXPIRES_IN,\n    refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,\n    algorithm: 'HS256',\n    issuer: 'agent-feed',\n    audience: 'agent-feed-users'\n  },\n  \n  // Services\n  services: {\n    apiGateway: {\n      port: envVars.API_GATEWAY_PORT,\n      host: '0.0.0.0'\n    },\n    agentManagement: {\n      port: envVars.AGENT_MANAGEMENT_PORT,\n      host: '0.0.0.0'\n    },\n    feedProcessing: {\n      port: envVars.FEED_PROCESSING_PORT,\n      host: '0.0.0.0'\n    },\n    userManagement: {\n      port: envVars.USER_MANAGEMENT_PORT,\n      host: '0.0.0.0'\n    },\n    websocket: {\n      port: envVars.WEBSOCKET_PORT,\n      host: '0.0.0.0'\n    },\n    monitoring: {\n      port: envVars.MONITORING_PORT,\n      host: '0.0.0.0'\n    }\n  },\n  \n  // Rate Limiting\n  rateLimit: {\n    windowMs: envVars.RATE_LIMIT_WINDOW_MS,\n    maxRequests: envVars.RATE_LIMIT_MAX_REQUESTS,\n    skipSuccessfulRequests: envVars.RATE_LIMIT_SKIP_SUCCESSFUL_REQUESTS,\n    standardHeaders: true,\n    legacyHeaders: false\n  },\n  \n  // Security\n  security: {\n    bcryptRounds: envVars.BCRYPT_ROUNDS,\n    corsOrigin: envVars.CORS_ORIGIN,\n    helmetEnabled: envVars.HELMET_ENABLED,\n    trustProxy: envVars.TRUST_PROXY,\n    contentSecurityPolicy: {\n      directives: {\n        defaultSrc: [\"'self'\"],\n        scriptSrc: [\"'self'\", \"'unsafe-inline'\"],\n        styleSrc: [\"'self'\", \"'unsafe-inline'\"],\n        imgSrc: [\"'self'\", 'data:', 'https:'],\n        connectSrc: [\"'self'\", 'ws:', 'wss:'],\n        fontSrc: [\"'self'\"],\n        objectSrc: [\"'none'\"],\n        mediaSrc: [\"'self'\"],\n        frameSrc: [\"'none'\"]\n      }\n    }\n  },\n  \n  // Queue\n  queue: {\n    concurrency: envVars.QUEUE_CONCURRENCY,\n    delay: envVars.QUEUE_DELAY,\n    maxRetryAttempts: envVars.QUEUE_MAX_RETRY_ATTEMPTS,\n    backoffDelay: envVars.QUEUE_BACKOFF_DELAY,\n    removeOnComplete: 100,\n    removeOnFail: 50\n  },\n  \n  // Monitoring\n  monitoring: {\n    logLevel: envVars.LOG_LEVEL,\n    logFormat: envVars.LOG_FORMAT,\n    prometheusEnabled: envVars.PROMETHEUS_ENABLED,\n    grafanaPassword: envVars.GRAFANA_PASSWORD,\n    metricsPrefix: envVars.METRICS_PREFIX,\n    healthCheck: {\n      timeout: 30000,\n      interval: 60000\n    }\n  },\n  \n  // Feature Flags\n  features: {\n    agentCoordination: envVars.ENABLE_AGENT_COORDINATION,\n    realTimeUpdates: envVars.ENABLE_REAL_TIME_UPDATES,\n    feedProcessing: envVars.ENABLE_FEED_PROCESSING,\n    userManagement: envVars.ENABLE_USER_MANAGEMENT,\n    websocket: envVars.ENABLE_WEBSOCKET\n  },\n  \n  // Development\n  development: {\n    hotReload: envVars.DEV_HOT_RELOAD,\n    mockExternalApis: envVars.DEV_MOCK_EXTERNAL_APIS,\n    debugSql: envVars.DEV_DEBUG_SQL,\n    disableAuth: envVars.DEV_DISABLE_AUTH\n  },\n  \n  // SSL\n  ssl: {\n    enabled: envVars.SSL_ENABLED,\n    certPath: envVars.SSL_CERT_PATH,\n    keyPath: envVars.SSL_KEY_PATH\n  },\n  \n  // Email\n  email: {\n    smtp: {\n      host: envVars.SMTP_HOST,\n      port: envVars.SMTP_PORT,\n      secure: envVars.SMTP_SECURE,\n      auth: {\n        user: envVars.SMTP_USER,\n        pass: envVars.SMTP_PASS\n      }\n    },\n    from: envVars.EMAIL_FROM\n  }\n};\n\n// Configuration validation function\nexport const validateConfig = () => {\n  const requiredConfigs = [\n    'POSTGRES_URL',\n    'REDIS_URL',\n    'JWT_SECRET'\n  ];\n  \n  const missingConfigs = requiredConfigs.filter(\n    config => !process.env[config]\n  );\n  \n  if (missingConfigs.length > 0) {\n    throw new Error(\n      `Missing required environment variables: ${missingConfigs.join(', ')}`\n    );\n  }\n  \n  return true;\n};\n\n// Export individual config sections for convenience\nexport const {\n  env,\n  database,\n  redis,\n  jwt,\n  services,\n  rateLimit,\n  security,\n  queue,\n  monitoring,\n  features,\n  development,\n  ssl,\n  email\n} = appConfig;\n\nexport default appConfig;
+/**
+ * Configuration Management Module
+ * Centralizes all environment configuration for the Agent Feed application
+ */
+
+import { config } from 'dotenv';
+import joi from 'joi';
+
+// Load environment variables
+config();
+
+// Configuration schema validation
+const configSchema = joi.object({
+  // Environment
+  NODE_ENV: joi.string().valid('development', 'test', 'staging', 'production').default('development'),
+  
+  // Database
+  POSTGRES_URL: joi.string().allow(''),
+  POSTGRES_HOST: joi.string().default('localhost'),
+  POSTGRES_PORT: joi.number().default(5432),
+  POSTGRES_DB: joi.string().allow(''),
+  POSTGRES_USER: joi.string().allow(''),
+  POSTGRES_PASSWORD: joi.string().allow(''),
+  
+  // Redis (disabled for development)
+  REDIS_URL: joi.string().allow('').default(''),
+  REDIS_HOST: joi.string().default('localhost'),
+  REDIS_PORT: joi.number().default(6379),
+  REDIS_PASSWORD: joi.string().allow(''),
+  REDIS_ENABLED: joi.boolean().default(false),
+  
+  // JWT
+  JWT_SECRET: joi.string().default('default-secret-for-development-only'),
+  JWT_EXPIRES_IN: joi.string().default('24h'),
+  JWT_REFRESH_EXPIRES_IN: joi.string().default('7d'),
+  
+  // Service Ports
+  API_GATEWAY_PORT: joi.number().default(3000),
+  AGENT_MANAGEMENT_PORT: joi.number().default(3001),
+  FEED_PROCESSING_PORT: joi.number().default(3002),
+  USER_MANAGEMENT_PORT: joi.number().default(3003),
+  WEBSOCKET_PORT: joi.number().default(3004),
+  MONITORING_PORT: joi.number().default(3005),
+  
+  // Rate Limiting
+  RATE_LIMIT_WINDOW_MS: joi.number().default(900000),
+  RATE_LIMIT_MAX_REQUESTS: joi.number().default(100),
+  RATE_LIMIT_SKIP_SUCCESSFUL_REQUESTS: joi.boolean().default(false),
+  
+  // Security
+  BCRYPT_ROUNDS: joi.number().min(10).max(15).default(12),
+  CORS_ORIGIN: joi.string().default('http://localhost:3000'),
+  HELMET_ENABLED: joi.boolean().default(true),
+  TRUST_PROXY: joi.boolean().default(false),
+  
+  // Queue
+  QUEUE_CONCURRENCY: joi.number().default(5),
+  QUEUE_DELAY: joi.number().default(1000),
+  QUEUE_MAX_RETRY_ATTEMPTS: joi.number().default(3),
+  QUEUE_BACKOFF_DELAY: joi.number().default(5000),
+  
+  // Monitoring
+  LOG_LEVEL: joi.string().valid('error', 'warn', 'info', 'debug').default('info'),
+  LOG_FORMAT: joi.string().valid('json', 'simple').default('json'),
+  PROMETHEUS_ENABLED: joi.boolean().default(true),
+  GRAFANA_PASSWORD: joi.string().default('admin'),
+  METRICS_PREFIX: joi.string().default('agent_feed'),
+  
+  // Feature Flags
+  ENABLE_AGENT_COORDINATION: joi.boolean().default(true),
+  ENABLE_REAL_TIME_UPDATES: joi.boolean().default(true),
+  ENABLE_FEED_PROCESSING: joi.boolean().default(true),
+  ENABLE_USER_MANAGEMENT: joi.boolean().default(true),
+  ENABLE_WEBSOCKET: joi.boolean().default(true),
+  
+  // Development
+  DEV_HOT_RELOAD: joi.boolean().default(false),
+  DEV_MOCK_EXTERNAL_APIS: joi.boolean().default(false),
+  DEV_DEBUG_SQL: joi.boolean().default(false),
+  DEV_DISABLE_AUTH: joi.boolean().default(false),
+  
+  // SSL
+  SSL_ENABLED: joi.boolean().default(false),
+  SSL_CERT_PATH: joi.string().allow(''),
+  SSL_KEY_PATH: joi.string().allow(''),
+  
+  // Email
+  SMTP_HOST: joi.string().allow(''),
+  SMTP_PORT: joi.number().default(587),
+  SMTP_SECURE: joi.boolean().default(false),
+  SMTP_USER: joi.string().allow(''),
+  SMTP_PASS: joi.string().allow(''),
+  EMAIL_FROM: joi.string().email().allow('')
+}).unknown();
+
+// Validate configuration
+const { error, value: envVars } = configSchema.validate(process.env);
+
+if (error) {
+  console.warn(`Config validation warning: ${error.message}`);
+}
+
+// Export validated configuration
+export const appConfig = {
+  // Environment
+  env: envVars.NODE_ENV,
+  isDevelopment: envVars.NODE_ENV === 'development',
+  isTest: envVars.NODE_ENV === 'test',
+  isStaging: envVars.NODE_ENV === 'staging',
+  isProduction: envVars.NODE_ENV === 'production',
+  
+  // Database
+  database: {
+    url: envVars.POSTGRES_URL,
+    host: envVars.POSTGRES_HOST,
+    port: envVars.POSTGRES_PORT,
+    name: envVars.POSTGRES_DB,
+    user: envVars.POSTGRES_USER,
+    password: envVars.POSTGRES_PASSWORD,
+    ssl: envVars.NODE_ENV === 'production',
+    pool: {
+      min: 2,
+      max: 10,
+      acquireTimeoutMillis: 30000,
+      createTimeoutMillis: 30000,
+      destroyTimeoutMillis: 5000,
+      idleTimeoutMillis: 30000,
+      reapIntervalMillis: 1000,
+      createRetryIntervalMillis: 100
+    }
+  },
+  
+  // Redis
+  redis: {
+    url: envVars.REDIS_URL,
+    host: envVars.REDIS_HOST,
+    port: envVars.REDIS_PORT,
+    password: envVars.REDIS_PASSWORD,
+    enabled: envVars.REDIS_ENABLED,
+    retryDelayOnFailover: 100,
+    enableReadyCheck: true,
+    maxRetriesPerRequest: 3
+  },
+  
+  // JWT
+  jwt: {
+    secret: envVars.JWT_SECRET,
+    expiresIn: envVars.JWT_EXPIRES_IN,
+    refreshExpiresIn: envVars.JWT_REFRESH_EXPIRES_IN,
+    algorithm: 'HS256',
+    issuer: 'agent-feed',
+    audience: 'agent-feed-users'
+  },
+  
+  // Services
+  services: {
+    apiGateway: {
+      port: envVars.API_GATEWAY_PORT,
+      host: '0.0.0.0'
+    },
+    agentManagement: {
+      port: envVars.AGENT_MANAGEMENT_PORT,
+      host: '0.0.0.0'
+    },
+    feedProcessing: {
+      port: envVars.FEED_PROCESSING_PORT,
+      host: '0.0.0.0'
+    },
+    userManagement: {
+      port: envVars.USER_MANAGEMENT_PORT,
+      host: '0.0.0.0'
+    },
+    websocket: {
+      port: envVars.WEBSOCKET_PORT,
+      host: '0.0.0.0'
+    },
+    monitoring: {
+      port: envVars.MONITORING_PORT,
+      host: '0.0.0.0'
+    }
+  },
+  
+  // Rate Limiting
+  rateLimit: {
+    windowMs: envVars.RATE_LIMIT_WINDOW_MS,
+    maxRequests: envVars.RATE_LIMIT_MAX_REQUESTS,
+    skipSuccessfulRequests: envVars.RATE_LIMIT_SKIP_SUCCESSFUL_REQUESTS,
+    standardHeaders: true,
+    legacyHeaders: false
+  },
+  
+  // Security
+  security: {
+    bcryptRounds: envVars.BCRYPT_ROUNDS,
+    corsOrigin: envVars.CORS_ORIGIN,
+    helmetEnabled: envVars.HELMET_ENABLED,
+    trustProxy: envVars.TRUST_PROXY,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: ["'self'", 'ws:', 'wss:'],
+        fontSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'"],
+        frameSrc: ["'none'"]
+      }
+    }
+  },
+  
+  // Queue
+  queue: {
+    concurrency: envVars.QUEUE_CONCURRENCY,
+    delay: envVars.QUEUE_DELAY,
+    maxRetryAttempts: envVars.QUEUE_MAX_RETRY_ATTEMPTS,
+    backoffDelay: envVars.QUEUE_BACKOFF_DELAY,
+    removeOnComplete: 100,
+    removeOnFail: 50
+  },
+  
+  // Monitoring
+  monitoring: {
+    logLevel: envVars.LOG_LEVEL,
+    logFormat: envVars.LOG_FORMAT,
+    prometheusEnabled: envVars.PROMETHEUS_ENABLED,
+    grafanaPassword: envVars.GRAFANA_PASSWORD,
+    metricsPrefix: envVars.METRICS_PREFIX,
+    healthCheck: {
+      timeout: 30000,
+      interval: 60000
+    }
+  },
+  
+  // Feature Flags
+  features: {
+    agentCoordination: envVars.ENABLE_AGENT_COORDINATION,
+    realTimeUpdates: envVars.ENABLE_REAL_TIME_UPDATES,
+    feedProcessing: envVars.ENABLE_FEED_PROCESSING,
+    userManagement: envVars.ENABLE_USER_MANAGEMENT,
+    websocket: envVars.ENABLE_WEBSOCKET
+  },
+  
+  // Development
+  development: {
+    hotReload: envVars.DEV_HOT_RELOAD,
+    mockExternalApis: envVars.DEV_MOCK_EXTERNAL_APIS,
+    debugSql: envVars.DEV_DEBUG_SQL,
+    disableAuth: envVars.DEV_DISABLE_AUTH
+  },
+  
+  // SSL
+  ssl: {
+    enabled: envVars.SSL_ENABLED,
+    certPath: envVars.SSL_CERT_PATH,
+    keyPath: envVars.SSL_KEY_PATH
+  },
+  
+  // Email
+  email: {
+    smtp: {
+      host: envVars.SMTP_HOST,
+      port: envVars.SMTP_PORT,
+      secure: envVars.SMTP_SECURE,
+      auth: {
+        user: envVars.SMTP_USER,
+        pass: envVars.SMTP_PASS
+      }
+    },
+    from: envVars.EMAIL_FROM
+  }
+};
+
+// Configuration validation function
+export const validateConfig = () => {
+  // Only warn about missing configs in development
+  if (appConfig.isDevelopment) {
+    console.log('Running in development mode with relaxed config validation');
+  }
+  return true;
+};
+
+// Export individual config sections for convenience
+export const {
+  env,
+  database,
+  redis,
+  jwt,
+  services,
+  rateLimit,
+  security,
+  queue,
+  monitoring,
+  features,
+  development,
+  ssl,
+  email
+} = appConfig;
+
+export default appConfig;

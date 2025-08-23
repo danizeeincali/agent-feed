@@ -8,6 +8,83 @@
 import { jest } from '@jest/globals';
 import '@testing-library/jest-dom';
 
+// Mock WebSocket Singleton Hook for tests
+jest.mock('@/hooks/useWebSocketSingleton', () => ({
+  useWebSocketSingleton: jest.fn(() => ({
+    socket: {
+      id: 'test-socket-id',
+      connected: true,
+      disconnected: false,
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+      disconnect: jest.fn(),
+    },
+    isConnected: true,
+    connectionState: 'connected',
+    connect: jest.fn().mockResolvedValue(void 0),
+    disconnect: jest.fn().mockResolvedValue(void 0),
+    emit: jest.fn(),
+    on: jest.fn(),
+    off: jest.fn(),
+  })),
+  __esModule: true,
+}));
+
+// Mock Connection Manager Hook
+jest.mock('@/hooks/useConnectionManager', () => ({
+  useConnectionManager: jest.fn(() => ({
+    socket: {
+      id: 'test-socket-id',
+      connected: true,
+      disconnected: false,
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+      disconnect: jest.fn(),
+    },
+    isConnected: true,
+    state: 'connected',
+    metrics: {
+      totalConnections: 1,
+      totalDisconnections: 0,
+      totalReconnections: 0,
+      totalErrors: 0,
+      messagesReceived: 0,
+      messagesSent: 0,
+      bytesReceived: 0,
+      bytesSent: 0,
+      averageLatency: 0,
+      connectionUptime: 1000,
+      lastMessageTime: new Date(),
+      errorRate: 0,
+      throughputPerSecond: 0,
+    },
+    health: {
+      status: 'healthy',
+      latency: 10,
+      lastCheck: new Date(),
+      consecutiveFailures: 0,
+      isHealthy: true,
+    },
+    connect: jest.fn().mockResolvedValue(void 0),
+    disconnect: jest.fn().mockResolvedValue(void 0),
+    reconnect: jest.fn().mockResolvedValue(void 0),
+    manager: {
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+      getState: jest.fn(() => 'connected'),
+      getMetrics: jest.fn(() => ({})),
+      getHealth: jest.fn(() => ({ status: 'healthy' })),
+      isConnected: jest.fn(() => true),
+      updateOptions: jest.fn(),
+      destroy: jest.fn(),
+    },
+  })),
+  __esModule: true,
+}));
+
 // Global test configuration
 beforeAll(() => {
   // Mock console methods to reduce noise in tests
@@ -377,7 +454,7 @@ expect.extend({
   toHaveNoWhiteScreen(received) {
     const element = received as Element;
     const hasContent = 
-      element.textContent?.trim().length || 0 > 0 ||
+      (element.textContent?.trim().length || 0) > 0 ||
       element.querySelector('img, svg, canvas, video') !== null ||
       element.children.length > 0;
 

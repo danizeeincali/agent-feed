@@ -6,6 +6,7 @@ export declare const broadcastToFeed: (feedId: string, event: string, data: any)
 export declare const broadcastToPost: (postId: string, event: string, data: any) => void;
 export declare const broadcastToUser: (userId: string, event: string, data: any) => void;
 export declare const broadcastNotification: (userId: string, notification: any) => void;
+export declare const getWebSocketHubIntegration: () => any;
 export { app, httpServer as server, io };
 export default app;
 //# sourceMappingURL=server.d.ts.map

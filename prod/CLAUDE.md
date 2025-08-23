@@ -1,4 +1,4 @@
-# Production Claude Instance Configuration
+cluade manager haas continue CAN YOU RUN # Production Claude Instance Configuration
 
 <system-reminder>
 🚨 CRITICAL: You are the PRODUCTION Claude instance. This file contains your operating instructions and boundaries.
@@ -191,7 +191,20 @@ DEVELOPMENT MODE FLAG: When running in development mode, you have additional cap
 </system-reminder>
 
 ### Development Mode Activation
-When you see `DEV_MODE=true` or are specifically instructed to run in development mode:
+
+#### 🔍 How to Check for Development Mode
+1. **Check environment variable**: Look for `DEV_MODE=true` 
+2. **Check configuration file**: Read `/prod/config/mode.json` and look for `"devMode": true`
+3. **Check initialization message**: Look for "DEVELOPMENT MODE" in startup messages
+
+To activate development mode, the developer runs:
+```bash
+cd /workspaces/agent-feed/prod
+./init-dev.sh
+claude --dangerously-skip-permissions
+```
+
+When you detect development mode is active:
 
 #### 🎯 Development Mode Rules
 - **Initialize normally** following all standard production boundaries

@@ -18,6 +18,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/setup/__mocks__/fileMock.js',
+    '^socket\\.io-client$': '<rootDir>/src/tests/websocket/__mocks__/socket-io-client.ts',
   },
   
   // Transform configuration
@@ -191,10 +192,19 @@ module.exports = {
   // Test sequencer for deterministic test ordering
   testSequencer: '@jest/test-sequencer',
   
-  // Transform ignore patterns
+  // Transform ignore patterns - more comprehensive ESM support
   transformIgnorePatterns: [
-    'node_modules/(?!(.*\\.mjs$|@testing-library/.*|react-router.*|@tanstack/.*|react-error-boundary|lucide-react))',
+    'node_modules/(?!(.*\\.mjs$|@testing-library/.*|react-router.*|@tanstack/.*|react-error-boundary|lucide-react|@xterm/.*|socket\\.io-client))',
   ],
+  
+  // Handle import.meta.env in tests
+  globals: {
+    'import.meta': {
+      env: {
+        VITE_WEBSOCKET_HUB_URL: 'http://localhost:3002'
+      }
+    }
+  },
   
   // Extensibility for project-specific configurations
   projects: undefined,

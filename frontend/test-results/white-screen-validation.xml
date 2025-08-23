@@ -1,0 +1,350 @@
+<testsuites id="" name="" tests="84" failures="0" skipped="84" errors="0" time="0.23630599999999982">
+<testsuite name="simple-launcher-white-screen-validation.spec.ts" timestamp="2025-08-23T03:13:11.861Z" hostname="chromium-desktop" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 1: Main app loads without white screen" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 2: SimpleLauncher navigation button visible and functional" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 3: SimpleLauncher component renders with all UI elements" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 4: API connectivity to backend port 3001 works" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 5: Process launch/stop workflow operates correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 6: Error handling displays correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 7: Browser console clean of critical errors" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 8: Responsive design across viewport sizes" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 1: Complete user journey - Home → SimpleLauncher → Workflow" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 2: Page refresh preserves functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 3: Multiple browser tabs maintain functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER CHROMIUM: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER FIREFOX: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER WEBKIT: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="simple-launcher-white-screen-validation.spec.ts" timestamp="2025-08-23T03:13:11.861Z" hostname="firefox-desktop" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 1: Main app loads without white screen" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 2: SimpleLauncher navigation button visible and functional" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 3: SimpleLauncher component renders with all UI elements" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 4: API connectivity to backend port 3001 works" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 5: Process launch/stop workflow operates correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 6: Error handling displays correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 7: Browser console clean of critical errors" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 8: Responsive design across viewport sizes" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 1: Complete user journey - Home → SimpleLauncher → Workflow" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 2: Page refresh preserves functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 3: Multiple browser tabs maintain functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER CHROMIUM: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER FIREFOX: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER WEBKIT: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="simple-launcher-white-screen-validation.spec.ts" timestamp="2025-08-23T03:13:11.861Z" hostname="webkit-desktop" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 1: Main app loads without white screen" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 2: SimpleLauncher navigation button visible and functional" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 3: SimpleLauncher component renders with all UI elements" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 4: API connectivity to backend port 3001 works" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 5: Process launch/stop workflow operates correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 6: Error handling displays correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 7: Browser console clean of critical errors" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 8: Responsive design across viewport sizes" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 1: Complete user journey - Home → SimpleLauncher → Workflow" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 2: Page refresh preserves functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 3: Multiple browser tabs maintain functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER CHROMIUM: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER FIREFOX: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER WEBKIT: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="simple-launcher-white-screen-validation.spec.ts" timestamp="2025-08-23T03:13:11.861Z" hostname="mobile-chrome" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 1: Main app loads without white screen" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 2: SimpleLauncher navigation button visible and functional" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 3: SimpleLauncher component renders with all UI elements" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 4: API connectivity to backend port 3001 works" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 5: Process launch/stop workflow operates correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 6: Error handling displays correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 7: Browser console clean of critical errors" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 8: Responsive design across viewport sizes" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 1: Complete user journey - Home → SimpleLauncher → Workflow" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 2: Page refresh preserves functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 3: Multiple browser tabs maintain functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER CHROMIUM: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER FIREFOX: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER WEBKIT: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="simple-launcher-white-screen-validation.spec.ts" timestamp="2025-08-23T03:13:11.861Z" hostname="mobile-safari" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 1: Main app loads without white screen" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 2: SimpleLauncher navigation button visible and functional" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 3: SimpleLauncher component renders with all UI elements" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 4: API connectivity to backend port 3001 works" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 5: Process launch/stop workflow operates correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 6: Error handling displays correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 7: Browser console clean of critical errors" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 8: Responsive design across viewport sizes" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 1: Complete user journey - Home → SimpleLauncher → Workflow" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 2: Page refresh preserves functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 3: Multiple browser tabs maintain functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER CHROMIUM: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER FIREFOX: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER WEBKIT: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="simple-launcher-white-screen-validation.spec.ts" timestamp="2025-08-23T03:13:11.861Z" hostname="tablet" tests="14" failures="0" skipped="14" time="0" errors="0">
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 1: Main app loads without white screen" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 2: SimpleLauncher navigation button visible and functional" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 3: SimpleLauncher component renders with all UI elements" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 4: API connectivity to backend port 3001 works" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 5: Process launch/stop workflow operates correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 6: Error handling displays correctly" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 7: Browser console clean of critical errors" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🚨 CRITICAL: White Screen Fix Validation › VALIDATION 8: Responsive design across viewport sizes" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 1: Complete user journey - Home → SimpleLauncher → Workflow" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 2: Page refresh preserves functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🔄 REGRESSION: End-to-End Workflow Validation › REGRESSION 3: Multiple browser tabs maintain functionality" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER CHROMIUM: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER FIREFOX: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="🌐 CROSS-BROWSER: Compatibility Validation › BROWSER WEBKIT: SimpleLauncher loads and functions" classname="simple-launcher-white-screen-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

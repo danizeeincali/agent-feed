@@ -3,7 +3,7 @@
  * Updated to use the new connection management system while maintaining backward compatibility
  */
 
-import { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useConnectionManager, UseConnectionManagerOptions } from './useConnectionManager';
 import { Socket } from 'socket.io-client';
 
@@ -31,7 +31,7 @@ export function useWebSocketSingleton(
   options: UseWebSocketSingletonOptions = {}
 ): UseWebSocketSingletonReturn {
   const {
-    url = '/',
+    url = import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
     ...connectionOptions
   } = options;
 
@@ -49,6 +49,21 @@ export function useWebSocketSingleton(
     autoConnect: true,
     ...connectionOptions
   });
+
+  // REFINEMENT: Enhanced state synchronization logging
+  useEffect(() => {
+    console.log('🔧 useWebSocketSingleton: Connection manager state synchronized', {
+      url,
+      isConnected,
+      state,
+      socketId: socket?.id,
+      socketConnected: socket?.connected,
+      socketReadyState: socket?.readyState,
+      managerState: manager?.getState(),
+      managerIsConnected: manager?.isConnected(),
+      stateAlignment: isConnected === manager?.isConnected() ? 'ALIGNED' : 'MISALIGNED'
+    });
+  }, [url, isConnected, state, socket?.id, socket?.connected, socket?.readyState, manager]);
 
   // Backward compatible connect method
   const connect = useCallback(async () => {

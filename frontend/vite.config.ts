@@ -15,24 +15,29 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3001,
+    port: 3000,
     host: '0.0.0.0', // Listen on all interfaces for proper connectivity
     strictPort: true, // Fail if port is already in use
-    // Proxy disabled for development with mock API
-    // Enable proxy only when backend server is available
-    /*
+    // CRITICAL FIX: Enable SPA routing support
+    historyApiFallback: true, // This ensures all routes fallback to index.html for React Router
+    // Proxy configuration for backend services
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      // CRITICAL FIX: WebSocket proxy configuration
+      '/socket.io': {
+        target: 'http://localhost:3001',
+        ws: true,
         changeOrigin: true,
       },
       '/ws': {
-        target: 'ws://localhost:8000',
+        target: 'ws://localhost:3001',
         ws: true,
         changeOrigin: true,
       },
     },
-    */
   },
   build: {
     outDir: 'dist',

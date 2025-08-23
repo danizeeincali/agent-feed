@@ -308,9 +308,33 @@ export class WebSocketConnectionManager implements ConnectionManager {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
+      console.log('🔌 WebSocketConnectionManager: Socket connect event fired', {
+        previousState: this.state,
+        socketId: this.socket?.id,
+        socketConnected: this.socket?.connected,
+        readyState: this.socket?.readyState
+      });
+      
+      // REFINEMENT: Synchronous state update with socket lifecycle
       if (this.state !== ConnectionState.CONNECTED) {
         this.setState(ConnectionState.CONNECTED);
         this.metricsTracker.recordSuccessfulConnection();
+        
+        // Force immediate React state synchronization
+        setTimeout(() => {
+          this.emit('connection_synchronized', {
+            state: this.state,
+            socketConnected: this.socket?.connected,
+            timestamp: new Date()
+          });
+        }, 0);
+        
+        // Register as frontend client with the hub
+        this.socket.emit('registerFrontend', { 
+          timestamp: new Date().toISOString(),
+          userAgent: (typeof navigator !== 'undefined' ? navigator.userAgent : 'frontend-client'),
+          url: (typeof window !== 'undefined' && window.location ? window.location.href : 'unknown')
+        });
       }
     });
 
@@ -424,6 +448,13 @@ export class WebSocketConnectionManager implements ConnectionManager {
   private setState(newState: ConnectionState): void {
     const oldState = this.state;
     this.state = newState;
+    
+    console.log('🔧 WebSocketConnectionManager: State changed', {
+      from: oldState,
+      to: newState,
+      socketConnected: this.socket?.connected,
+      isConnectedMethod: this.isConnected()
+    });
     
     this.emit('state_change', {
       from: oldState,

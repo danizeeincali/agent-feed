@@ -177,7 +177,7 @@ export interface ConnectionConfig {
 // Default configuration
 export const DEFAULT_CONNECTION_CONFIG: ConnectionConfig = {
   defaultOptions: {
-    url: '/ws',
+    url: 'http://localhost:3001',
     namespace: '/',
     autoConnect: true,
     reconnection: true,

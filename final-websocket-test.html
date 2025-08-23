@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final WebSocket Connection Validation</title>
+    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            line-height: 1.6;
+            background: #f8fafc;
+        }
+        .success { color: #065f46; background: #d1fae5; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+        .error { color: #991b1b; background: #fee2e2; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+        .info { color: #1e40af; background: #dbeafe; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+        .warning { color: #92400e; background: #fef3c7; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .test-panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .status {
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        .connected { background: #dcfce7; color: #166534; }
+        .connecting { background: #fef3c7; color: #92400e; }
+        .disconnected { background: #fee2e2; color: #991b1b; }
+        
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.25rem;
+            font-size: 14px;
+        }
+        
+        button:hover { background: #2563eb; }
+        button:disabled { background: #9ca3af; cursor: not-allowed; }
+        
+        .log {
+            background: #1f2937;
+            color: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            margin: 1rem 0;
+        }
+        
+        h1, h2, h3 { color: #1f2937; }
+        
+        .diagnosis {
+            background: white;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .fix-instructions {
+            background: #fef9e7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Final WebSocket Connection Validation</h1>
+    <p><strong>Testing all connection paths to identify the exact issue with "Connection Status: Disconnected"</strong></p>
+    
+    <div class="info">
+        <h3>🔍 What This Test Does</h3>
+        <ul>
+            <li>Tests direct backend connection (confirmed working)</li>
+            <li>Tests Vite proxy connection (should now work after fix)</li>
+            <li>Tests the exact React app configuration</li>
+            <li>Simulates WebSocketSingletonProvider behavior</li>
+            <li>Identifies where the connection state gets lost</li>
+        </ul>
+    </div>
+    
+    <div class="test-grid">
+        <div class="test-panel">
+            <h3>Backend Direct</h3>
+            <div id="backend-status" class="status disconnected">Testing...</div>
+            <div id="backend-info" class="log"></div>
+        </div>
+        
+        <div class="test-panel">
+            <h3>Vite Proxy</h3>
+            <div id="proxy-status" class="status disconnected">Testing...</div>
+            <div id="proxy-info" class="log"></div>
+        </div>
+        
+        <div class="test-panel">
+            <h3>React Config</h3>
+            <div id="react-status" class="status disconnected">Testing...</div>
+            <div id="react-info" class="log"></div>
+        </div>
+    </div>
+    
+    <div id="diagnosis-results"></div>
+    
+    <script>
+        const tests = {};
+        
+        function log(panel, message, type = 'info') {
+            const logEl = document.getElementById(`${panel}-info`);
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#6b7280';
+            logEl.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function updateStatus(panel, status, text) {
+            const statusEl = document.getElementById(`${panel}-status`);
+            statusEl.className = `status ${status}`;
+            statusEl.textContent = text;
+        }
+        
+        async function testConnection(name, url, panel) {
+            return new Promise((resolve) => {
+                log(panel, `🔌 Testing connection to ${url}`);
+                updateStatus(panel, 'connecting', 'Connecting...');
+                
+                const startTime = Date.now();
+                let resolved = false;
+                
+                const socket = io(url, {
+                    transports: ['polling', 'websocket'],
+                    timeout: 10000,
+                    autoConnect: true,
+                    forceNew: true
+                });
+                
+                const finish = (success, error = null) => {
+                    if (resolved) return;
+                    resolved = true;
+                    
+                    const duration = Date.now() - startTime;
+                    tests[name] = {
+                        success,
+                        error,
+                        duration,
+                        socketId: socket.id,
+                        transport: socket.io?.engine?.transport?.name
+                    };
+                    
+                    if (success) {
+                        updateStatus(panel, 'connected', `Connected (${duration}ms)`);
+                        log(panel, `✅ Success: ${socket.id}`, 'success');
+                        log(panel, `   Transport: ${socket.io.engine.transport.name}`, 'success');
+                    } else {
+                        updateStatus(panel, 'disconnected', `Failed (${duration}ms)`);
+                        log(panel, `❌ Error: ${error}`, 'error');
+                    }
+                    
+                    socket.disconnect();
+                    resolve();
+                };
+                
+                socket.on('connect', () => {
+                    log(panel, `Connected - Socket ID: ${socket.id}`);
+                    socket.emit('ping'); // Test ping
+                    setTimeout(() => finish(true), 1000);
+                });
+                
+                socket.on('connect_error', (error) => {
+                    finish(false, error.message);
+                });
+                
+                socket.on('pong', (data) => {
+                    log(panel, `📡 Pong: ${JSON.stringify(data)}`);
+                });
+                
+                setTimeout(() => {
+                    if (!resolved) finish(false, 'Timeout after 10s');
+                }, 10000);
+            });
+        }
+        
+        async function runAllTests() {
+            log('backend', '🚀 Starting comprehensive WebSocket validation...');
+            log('proxy', '🚀 Starting comprehensive WebSocket validation...');
+            log('react', '🚀 Starting comprehensive WebSocket validation...');
+            
+            // Test 1: Backend Direct (should work)
+            await testConnection('backend', 'http://localhost:3001', 'backend');
+            
+            // Test 2: Vite Proxy (should now work)
+            await testConnection('proxy', 'http://localhost:3000', 'proxy');
+            
+            // Test 3: React App Configuration (using env vars)
+            const reactUrl = 'http://localhost:3001'; // VITE_WEBSOCKET_URL
+            await testConnection('react', reactUrl, 'react');
+            
+            // Generate diagnosis
+            generateDiagnosis();
+        }
+        
+        function generateDiagnosis() {
+            const diagnosisEl = document.getElementById('diagnosis-results');
+            
+            const backendWorking = tests.backend?.success;
+            const proxyWorking = tests.proxy?.success;
+            const reactWorking = tests.react?.success;
+            
+            let diagnosis = '<div class="diagnosis"><h2>🎯 DIAGNOSIS RESULTS</h2>';
+            
+            if (backendWorking && proxyWorking && reactWorking) {
+                diagnosis += `
+                    <div class="success">
+                        <h3>✅ ALL CONNECTIONS WORKING!</h3>
+                        <p><strong>The WebSocket infrastructure is completely functional.</strong></p>
+                        <p>If the React app still shows "Disconnected", the issue is in React state management:</p>
+                        <ul>
+                            <li>Check React Developer Tools for WebSocketSingletonProvider state</li>
+                            <li>Verify useWebSocketSingleton hook is being called</li>
+                            <li>Check console for debug logs we added</li>
+                            <li>The ConnectionStatus component may not be receiving state updates</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (backendWorking && !proxyWorking) {
+                diagnosis += `
+                    <div class="warning">
+                        <h3>⚠️ PROXY ISSUE</h3>
+                        <p>Direct backend works but Vite proxy fails.</p>
+                        <p>The Vite configuration fix didn't work completely.</p>
+                    </div>
+                `;
+            } else if (!backendWorking) {
+                diagnosis += `
+                    <div class="error">
+                        <h3>❌ BACKEND ISSUE</h3>
+                        <p>Backend WebSocket server is not responding.</p>
+                        <p>Check if the backend is running on port 3001.</p>
+                    </div>
+                `;
+            }
+            
+            diagnosis += '<h3>📊 Test Results Summary</h3><ul>';
+            diagnosis += `<li>Backend Direct: <strong>${backendWorking ? '✅ PASS' : '❌ FAIL'}</strong> (${tests.backend?.duration || 0}ms)</li>`;
+            diagnosis += `<li>Vite Proxy: <strong>${proxyWorking ? '✅ PASS' : '❌ FAIL'}</strong> (${tests.proxy?.duration || 0}ms)</li>`;
+            diagnosis += `<li>React Config: <strong>${reactWorking ? '✅ PASS' : '❌ FAIL'}</strong> (${tests.react?.duration || 0}ms)</li>`;
+            diagnosis += '</ul>';
+            
+            if (backendWorking && proxyWorking && reactWorking) {
+                diagnosis += `
+                    <div class="fix-instructions">
+                        <h3>🔧 NEXT STEPS TO FIX THE UI</h3>
+                        <ol>
+                            <li><strong>Open the React app at http://localhost:3000/dual-instance</strong></li>
+                            <li><strong>Open browser Developer Tools → Console</strong></li>
+                            <li><strong>Look for debug logs starting with 🔌 or 🔧</strong></li>
+                            <li><strong>Check if WebSocketSingletonProvider is connecting</strong></li>
+                            <li><strong>Verify ConnectionStatus component receives isConnected=true</strong></li>
+                            <li><strong>If no debug logs appear, the React components aren't initializing</strong></li>
+                        </ol>
+                        
+                        <h4>Expected Debug Logs:</h4>
+                        <pre style="background: #f3f4f6; padding: 1rem; border-radius: 4px; font-size: 12px;">
+🔧 useWebSocketSingleton: Connection manager state changed
+🔌 WebSocketSingletonProvider: Connection state changed
+🔌 WebSocket client connected (from backend logs)</pre>
+                        
+                        <h4>If Still Showing Disconnected:</h4>
+                        <p>The issue is in React component state propagation. Check:</p>
+                        <ul>
+                            <li>ConnectionStatus component is using the right context</li>
+                            <li>WebSocketSingletonProvider is wrapping the app correctly</li>
+                            <li>No error boundaries are swallowing connection state updates</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            diagnosis += '</div>';
+            diagnosisEl.innerHTML = diagnosis;
+        }
+        
+        // Auto-start tests
+        window.addEventListener('load', () => {
+            setTimeout(runAllTests, 1000);
+        });
+    </script>
+</body>
+</html>

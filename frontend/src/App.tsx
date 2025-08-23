@@ -18,13 +18,15 @@ import EnhancedAgentManagerWrapper from '@/components/EnhancedAgentManagerWrappe
 import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
+import SimpleLauncher from '@/components/SimpleLauncher';
 import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
 import BulletproofAgentProfile from '@/components/BulletproofAgentProfile';
 import BulletproofActivityPanel from '@/components/BulletproofActivityPanel';
 import SimpleSettings from '@/components/SimpleSettings';
 import DualInstanceDashboardEnhanced from '@/components/DualInstanceDashboardEnhanced';
+import DualInstance from './pages/DualInstance';
+import DualInstancePage from '@/pages/DualInstancePage';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
-import ErrorTesting from '@/components/ErrorTesting';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
 import '@/styles/agents.css';
 import { 
@@ -40,7 +42,7 @@ import {
   Workflow,
   BarChart3,
   Code,
-  AlertTriangle
+  Play,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
@@ -80,15 +82,15 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
 
   // Memoized navigation to prevent re-creation on every render
   const navigation = React.useMemo(() => [
+    { name: 'Simple Launcher', href: '/simple-launcher', icon: Play },
     { name: 'Feed', href: '/', icon: Activity },
-    { name: 'Dual Instance', href: '/dual-instance', icon: LayoutDashboard },
+    { name: 'Claude Manager', href: '/dual-instance', icon: LayoutDashboard },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Claude Code', href: '/claude-code', icon: Code },
     { name: 'Performance Monitor', href: '/performance-monitor', icon: Zap },
-    { name: 'Error Testing', href: '/error-testing', icon: AlertTriangle },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
   ], []);
 
@@ -219,6 +221,13 @@ const App: React.FC = () => {
               <ErrorBoundary componentName="AppRouter">
                 <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading page..." size="lg" />}>
                   <Routes>
+                  <Route path="/simple-launcher" element={
+                    <RouteErrorBoundary routeName="SimpleLauncher">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Simple Launcher..." />}>
+                        <SimpleLauncher />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
                   <Route path="/" element={
                     <RouteErrorBoundary routeName="Feed">
                       <Suspense fallback={<FallbackComponents.FeedFallback />}>
@@ -226,8 +235,37 @@ const App: React.FC = () => {
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
+                  {/* New Claude Instance Manager Routes */}
                   <Route path="/dual-instance" element={
-                    <RouteErrorBoundary routeName="DualInstance" fallback={<FallbackComponents.DualInstanceFallback />}>
+                    <RouteErrorBoundary routeName="DualInstanceManager" fallback={<FallbackComponents.DualInstanceFallback />}>
+                      <AsyncErrorBoundary componentName="DualInstancePage">
+                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
+                          <DualInstancePage />
+                        </Suspense>
+                      </AsyncErrorBoundary>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/dual-instance/:tab" element={
+                    <RouteErrorBoundary routeName="DualInstanceManager" fallback={<FallbackComponents.DualInstanceFallback />}>
+                      <AsyncErrorBoundary componentName="DualInstancePage">
+                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
+                          <DualInstancePage />
+                        </Suspense>
+                      </AsyncErrorBoundary>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/dual-instance/:tab/:instanceId" element={
+                    <RouteErrorBoundary routeName="DualInstanceManager" fallback={<FallbackComponents.DualInstanceFallback />}>
+                      <AsyncErrorBoundary componentName="DualInstancePage">
+                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
+                          <DualInstancePage />
+                        </Suspense>
+                      </AsyncErrorBoundary>
+                    </RouteErrorBoundary>
+                  } />
+                  {/* Legacy Dual Instance Route */}
+                  <Route path="/dual-instance-legacy" element={
+                    <RouteErrorBoundary routeName="DualInstanceLegacy" fallback={<FallbackComponents.DualInstanceFallback />}>
                       <AsyncErrorBoundary componentName="DualInstanceDashboard">
                         <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
                           <DualInstanceDashboardEnhanced />
@@ -304,13 +342,6 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="PerformanceMonitor">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Performance Monitor..." />}>
                         <PerformanceMonitor />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/error-testing" element={
-                    <RouteErrorBoundary routeName="ErrorTesting">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Error Testing..." />}>
-                        <ErrorTesting />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

@@ -1,1 +1,96 @@
-export default {\n  // Project configuration\n  displayName: 'Agent Feed Test Suite',\n  preset: '@jest/preset-typescript',\n  testEnvironment: 'node',\n  \n  // Module resolution\n  moduleNameMapping: {\n    '^@/(.*)$': '<rootDir>/src/$1',\n    '^@tests/(.*)$': '<rootDir>/tests/$1',\n    '^@config/(.*)$': '<rootDir>/config/$1'\n  },\n  \n  // File patterns\n  testMatch: [\n    '<rootDir>/tests/**/*.test.{js,ts}',\n    '<rootDir>/tests/**/*.spec.{js,ts}'\n  ],\n  \n  // Setup files\n  setupFilesAfterEnv: [\n    '<rootDir>/tests/helpers/setup.js'\n  ],\n  \n  // Coverage configuration\n  collectCoverageFrom: [\n    'src/**/*.{js,ts}',\n    '!src/**/*.d.ts',\n    '!src/**/index.{js,ts}',\n    '!src/**/*.config.{js,ts}',\n    '!src/**/__tests__/**',\n    '!src/**/__mocks__/**'\n  ],\n  \n  coverageDirectory: 'coverage',\n  \n  coverageReporters: [\n    'text',\n    'text-summary',\n    'lcov',\n    'html',\n    'json-summary',\n    'cobertura'\n  ],\n  \n  coverageThreshold: {\n    global: {\n      branches: 85,\n      functions: 90,\n      lines: 90,\n      statements: 90\n    },\n    './src/api/': {\n      branches: 90,\n      functions: 95,\n      lines: 95,\n      statements: 95\n    },\n    './src/agents/': {\n      branches: 85,\n      functions: 90,\n      lines: 90,\n      statements: 90\n    }\n  },\n  \n  // Transform configuration\n  transform: {\n    '^.+\\\\.(js|ts)$': ['babel-jest', {\n      presets: [\n        ['@babel/preset-env', {\n          targets: { node: '18' },\n          modules: 'commonjs'\n        }],\n        '@babel/preset-typescript'\n      ]\n    }]\n  },\n  \n  // Test environment setup\n  globalSetup: '<rootDir>/tests/helpers/globalSetup.js',\n  globalTeardown: '<rootDir>/tests/helpers/globalTeardown.js',\n  \n  // Test timeout\n  testTimeout: 30000,\n  \n  // Ignore patterns\n  testPathIgnorePatterns: [\n    '/node_modules/',\n    '/dist/',\n    '/coverage/'\n  ],\n  \n  // Watch mode configuration\n  watchPathIgnorePatterns: [\n    '/node_modules/',\n    '/dist/',\n    '/coverage/',\n    '/.git/'\n  ],\n  \n  // Reporter configuration\n  reporters: [\n    'default',\n    ['jest-html-reporters', {\n      publicPath: './coverage',\n      filename: 'jest-report.html',\n      expand: true\n    }],\n    ['jest-junit', {\n      outputDirectory: './coverage',\n      outputName: 'junit.xml'\n    }]\n  ],\n  \n  // Error handling\n  errorOnDeprecated: true,\n  verbose: true,\n  \n  // Project configurations for different test types\n  projects: [\n    {\n      displayName: 'unit',\n      testMatch: ['<rootDir>/tests/unit/**/*.test.{js,ts}'],\n      collectCoverageFrom: [\n        'src/**/*.{js,ts}',\n        '!src/**/*.d.ts'\n      ]\n    },\n    {\n      displayName: 'integration',\n      testMatch: ['<rootDir>/tests/integration/**/*.test.{js,ts}'],\n      testTimeout: 60000,\n      setupFilesAfterEnv: [\n        '<rootDir>/tests/helpers/setup.js',\n        '<rootDir>/tests/helpers/integrationSetup.js'\n      ]\n    },\n    {\n      displayName: 'e2e',\n      testMatch: ['<rootDir>/tests/e2e/**/*.test.{js,ts}'],\n      testTimeout: 120000,\n      setupFilesAfterEnv: [\n        '<rootDir>/tests/helpers/setup.js',\n        '<rootDir>/tests/helpers/e2eSetup.js'\n      ]\n    },\n    {\n      displayName: 'performance',\n      testMatch: ['<rootDir>/tests/performance/**/*.test.{js,ts}'],\n      testTimeout: 300000,\n      setupFilesAfterEnv: [\n        '<rootDir>/tests/helpers/setup.js',\n        '<rootDir>/tests/helpers/performanceSetup.js'\n      ]\n    }\n  ]\n};
+module.exports = {
+  // Project configuration
+  displayName: 'Agent Feed Test Suite',
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  
+  // Module resolution
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@tests/(.*)$': '<rootDir>/tests/$1',
+    '^@config/(.*)$': '<rootDir>/config/$1'
+  },
+  
+  // File patterns
+  testMatch: [
+    '<rootDir>/src/**/*.test.{js,ts}',
+    '<rootDir>/tests/**/*.test.{js,ts}',
+    '<rootDir>/tests/**/*.spec.{js,ts}'
+  ],
+  
+  // Setup files - use simpler setup for unit tests
+  setupFilesAfterEnv: [
+    '<rootDir>/tests/helpers/unitTestSetup.js'
+  ],
+  
+  // TypeScript configuration for ts-jest
+  transform: {
+    '^.+\\.ts$': ['ts-jest', {
+      useESM: false,
+      tsconfig: {
+        module: 'commonjs',
+        target: 'es2020'
+      }
+    }],
+    '^.+\\.js$': 'babel-jest'
+  },
+  
+  // Coverage configuration
+  collectCoverageFrom: [
+    'src/**/*.{js,ts}',
+    '!src/**/*.d.ts',
+    '!src/**/index.{js,ts}',
+    '!src/**/*.config.{js,ts}',
+    '!src/**/__tests__/**',
+    '!src/**/__mocks__/**'
+  ],
+  
+  coverageDirectory: 'coverage',
+  
+  coverageReporters: [
+    'text',
+    'text-summary',
+    'lcov',
+    'html'
+  ],
+  
+  
+  // Module file extensions
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  
+  // Test environment setup
+  globalSetup: '<rootDir>/tests/helpers/globalSetup.js',
+  globalTeardown: '<rootDir>/tests/helpers/globalTeardown.js',
+  
+  // Test timeout
+  testTimeout: 30000,
+  
+  // Ignore patterns
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+    '/coverage/'
+  ],
+  
+  // Watch mode configuration
+  watchPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+    '/coverage/',
+    '/.git/'
+  ],
+  
+  // Reporter configuration
+  reporters: [
+    'default'
+  ],
+  
+  // Error handling
+  errorOnDeprecated: true,
+  verbose: true,
+  
+  // Clear mocks between tests
+  clearMocks: true,
+  restoreMocks: true,
+  resetMocks: true
+};

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.io = exports.server = exports.app = exports.broadcastNotification = exports.broadcastToUser = exports.broadcastToPost = exports.broadcastToFeed = void 0;
+exports.io = exports.server = exports.app = exports.getWebSocketHubIntegration = exports.broadcastNotification = exports.broadcastToUser = exports.broadcastToPost = exports.broadcastToFeed = void 0;
 const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
@@ -13,8 +13,9 @@ const compression_1 = __importDefault(require("compression"));
 const morgan_1 = __importDefault(require("morgan"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
-const claude_code_orchestrator_1 = require("@/orchestration/claude-code-orchestrator");
-const claude_health_monitor_1 = require("@/monitoring/claude-health-monitor");
+const ProcessManager_1 = require("../services/ProcessManager");
+// Import WebSocket Hub
+const hub_activator_1 = require("../websockets/hub-activator");
 // Import middleware (temporarily disabled for debugging)
 // import { errorHandler, notFoundHandler } from '@/middleware/error';
 // import { authenticateToken, optionalAuth, createRateLimitKey } from '@/middleware/auth';
@@ -36,11 +37,16 @@ const dual_instance_1 = __importDefault(require("@/api/routes/dual-instance"));
 const dual_instance_monitoring_1 = __importDefault(require("./routes/dual-instance-monitoring"));
 const demo_agents_1 = __importDefault(require("@/api/routes/demo-agents"));
 const claude_code_integration_1 = __importDefault(require("@/api/routes/claude-code-integration"));
+const prod_claude_1 = __importDefault(require("@/api/routes/prod-claude"));
+const simple_claude_launcher_1 = __importDefault(require("@/api/routes/simple-claude-launcher"));
 const comments_2 = require("@/api/websockets/comments");
 const claude_agents_1 = require("@/api/websockets/claude-agents");
+const claude_instance_terminal_1 = require("@/websockets/claude-instance-terminal");
 // Import utilities
 const logger_1 = require("@/utils/logger");
 const single_user_1 = require("@/middleware/single-user");
+// Import production Claude service
+const prod_claude_service_1 = require("@/services/prod-claude-service");
 // Load environment variables
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -194,6 +200,8 @@ apiV1.use('/dual-instance', dual_instance_1.default);
 apiV1.use('/dual-instance-monitor', dual_instance_monitoring_1.default);
 apiV1.use('/demo', demo_agents_1.default);
 apiV1.use('/claude-live', claude_code_integration_1.default);
+apiV1.use('/prod-claude', prod_claude_1.default);
+apiV1.use('/claude-launcher', simple_claude_launcher_1.default);
 apiV1.use('/', comments_1.default);
 apiV1.use('/', comments_enhanced_1.default);
 // Root API info
@@ -261,28 +269,14 @@ console.log('🔌 WebSocket configuration:', {
     transports: ['polling', 'websocket']
 });
 if (WEBSOCKET_ENABLED) {
-    // Enhanced authentication middleware
-    io.use(async (socket, next) => {
-        try {
-            const token = socket.handshake.auth.token;
-            const userId = socket.handshake.auth.userId;
-            const username = socket.handshake.auth.username;
-            if (!userId) {
-                return next(new Error('User ID required'));
-            }
-            // Set user information on socket
-            socket.user = {
-                id: userId,
-                username: username || `User-${userId.slice(0, 8)}`,
-                lastSeen: new Date()
-            };
-            socket.rooms = new Set();
-            next();
-        }
-        catch (error) {
-            next(new Error('Authentication failed'));
-        }
-    });
+    // CRITICAL FIX: Disable main server authentication middleware 
+    // WebSocket Hub is handling authentication internally
+    console.log('🚀 WebSocket enabled but authentication delegated to WebSocket Hub');
+    // No io.use() middleware here - WebSocket Hub handles all authentication
+    // CRITICAL FIX: Initialize Terminal WebSocket Namespace
+    console.log('🔧 Initializing ClaudeInstanceTerminalWebSocket...');
+    const terminalWebSocket = new claude_instance_terminal_1.ClaudeInstanceTerminalWebSocket(io);
+    console.log('✅ ClaudeInstanceTerminalWebSocket initialized successfully');
     io.on('connection', (socket) => {
         const userId = socket.user?.id;
         logger_1.logger.info('WebSocket client connected', {
@@ -542,6 +536,138 @@ if (WEBSOCKET_ENABLED) {
             // Clean up rate limiting
             socketRateLimit.delete(socket.id);
         });
+        // ProcessManager WebSocket event handlers
+        // Process launch handler
+        socket.on('process:launch', async (data) => {
+            if (!userId || !checkSocketRateLimit(socket.id)) {
+                socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+                return;
+            }
+            try {
+                logger_1.logger.info('ProcessManager: Launch request received', { userId, socketId: socket.id });
+                const processInfo = await ProcessManager_1.processManager.launchInstance(data.config);
+                socket.emit('process:launched', {
+                    ...processInfo,
+                    timestamp: new Date().toISOString()
+                });
+                logger_1.logger.info('ProcessManager: Instance launched successfully', {
+                    pid: processInfo.pid,
+                    name: processInfo.name,
+                    userId
+                });
+            }
+            catch (error) {
+                logger_1.logger.error('ProcessManager: Launch failed', { error: error.message, userId });
+                socket.emit('process:error', {
+                    action: 'launch',
+                    error: error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        });
+        // Process kill handler
+        socket.on('process:kill', async () => {
+            if (!userId || !checkSocketRateLimit(socket.id)) {
+                socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+                return;
+            }
+            try {
+                logger_1.logger.info('ProcessManager: Kill request received', { userId, socketId: socket.id });
+                await ProcessManager_1.processManager.killInstance();
+                socket.emit('process:killed', {
+                    timestamp: new Date().toISOString()
+                });
+                logger_1.logger.info('ProcessManager: Instance killed successfully', { userId });
+            }
+            catch (error) {
+                logger_1.logger.error('ProcessManager: Kill failed', { error: error.message, userId });
+                socket.emit('process:error', {
+                    action: 'kill',
+                    error: error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        });
+        // Process restart handler
+        socket.on('process:restart', async () => {
+            if (!userId || !checkSocketRateLimit(socket.id)) {
+                socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+                return;
+            }
+            try {
+                logger_1.logger.info('ProcessManager: Restart request received', { userId, socketId: socket.id });
+                socket.emit('process:restarting', {
+                    timestamp: new Date().toISOString()
+                });
+                const processInfo = await ProcessManager_1.processManager.restartInstance();
+                socket.emit('process:restarted', {
+                    ...processInfo,
+                    timestamp: new Date().toISOString()
+                });
+                logger_1.logger.info('ProcessManager: Instance restarted successfully', {
+                    pid: processInfo.pid,
+                    name: processInfo.name,
+                    userId
+                });
+            }
+            catch (error) {
+                logger_1.logger.error('ProcessManager: Restart failed', { error: error.message, userId });
+                socket.emit('process:error', {
+                    action: 'restart',
+                    error: error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        });
+        // Process info handler
+        socket.on('process:info', () => {
+            if (!userId || !checkSocketRateLimit(socket.id)) {
+                socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+                return;
+            }
+            try {
+                const processInfo = ProcessManager_1.processManager.getProcessInfo();
+                socket.emit('process:info:response', {
+                    ...processInfo,
+                    timestamp: new Date().toISOString()
+                });
+                logger_1.logger.debug('ProcessManager: Process info requested', { processInfo, userId });
+            }
+            catch (error) {
+                logger_1.logger.error('ProcessManager: Failed to get process info', { error: error.message, userId });
+                socket.emit('process:error', {
+                    action: 'info',
+                    error: error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        });
+        // Terminal input handler
+        socket.on('terminal:input', (data) => {
+            if (!userId || !checkSocketRateLimit(socket.id)) {
+                socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+                return;
+            }
+            try {
+                const { input } = data;
+                if (typeof input !== 'string') {
+                    socket.emit('terminal:error', {
+                        error: 'Input must be a string',
+                        timestamp: new Date().toISOString()
+                    });
+                    return;
+                }
+                ProcessManager_1.processManager.sendInput(input);
+                logger_1.logger.debug('ProcessManager: Terminal input sent', { input: input.substring(0, 100), userId });
+            }
+            catch (error) {
+                logger_1.logger.error('ProcessManager: Failed to send terminal input', { error: error.message, userId });
+                socket.emit('terminal:error', {
+                    error: error.message,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        });
         // Enhanced error handling
         socket.on('error', (error) => {
             logger_1.logger.error('WebSocket error:', { socketId: socket.id, error, userId });
@@ -552,6 +678,52 @@ if (WEBSOCKET_ENABLED) {
                 socketId: socket.id
             });
         });
+    });
+    // ProcessManager event forwarding to WebSocket clients
+    ProcessManager_1.processManager.on('terminal:output', (outputData) => {
+        // Forward terminal output to all connected clients
+        io.emit('terminal:output', {
+            ...outputData,
+            timestamp: outputData.timestamp || new Date().toISOString()
+        });
+    });
+    ProcessManager_1.processManager.on('launched', (processInfo) => {
+        // Broadcast process launch event
+        io.emit('process:launched', {
+            ...processInfo,
+            timestamp: new Date().toISOString()
+        });
+        logger_1.logger.info('ProcessManager: Broadcasted launch event to all clients', { pid: processInfo.pid });
+    });
+    ProcessManager_1.processManager.on('killed', (data) => {
+        // Broadcast process kill event
+        io.emit('process:killed', {
+            ...data,
+            timestamp: new Date().toISOString()
+        });
+        logger_1.logger.info('ProcessManager: Broadcasted kill event to all clients', { pid: data.pid });
+    });
+    ProcessManager_1.processManager.on('restarting', () => {
+        // Broadcast process restart event
+        io.emit('process:restarting', {
+            timestamp: new Date().toISOString()
+        });
+        logger_1.logger.info('ProcessManager: Broadcasted restarting event to all clients');
+    });
+    ProcessManager_1.processManager.on('auto-restart-triggered', () => {
+        // Broadcast auto-restart event
+        io.emit('process:auto-restart-triggered', {
+            timestamp: new Date().toISOString()
+        });
+        logger_1.logger.info('ProcessManager: Broadcasted auto-restart event to all clients');
+    });
+    ProcessManager_1.processManager.on('error', (error) => {
+        // Broadcast process error
+        io.emit('process:error', {
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
+        logger_1.logger.error('ProcessManager: Broadcasted error to all clients', { error: error.message });
     });
     // Claude Flow event forwarding with enhanced data (temporarily disabled)
     /*
@@ -612,9 +784,104 @@ if (WEBSOCKET_ENABLED) {
         logger_1.logger.debug('System stats broadcast', stats);
     }, 30000); // Every 30 seconds
 }
+// WebSocket Hub Integration
+const ServerIntegration_1 = require("@/websocket-hub/integration/ServerIntegration");
+let webSocketHubIntegration = null;
+// Initialize WebSocket Hub integration if enabled
+const WEBSOCKET_HUB_ENABLED = process.env['WEBSOCKET_HUB_ENABLED'] === 'true';
+if (WEBSOCKET_ENABLED && WEBSOCKET_HUB_ENABLED) {
+    console.log('🚀 Initializing WebSocket Hub integration...');
+    // Initialize hub integration after server setup
+    setTimeout(async () => {
+        try {
+            webSocketHubIntegration = await (0, ServerIntegration_1.integrateWebSocketHub)(httpServer, io, {
+                enableHub: true,
+                enableNLD: process.env['NLD_ENABLED'] === 'true',
+                enableSecurity: true,
+                enableMetrics: true,
+                routingStrategy: 'hybrid',
+                hubConfig: {
+                    port: parseInt(process.env['WEBSOCKET_HUB_PORT'] || '3004'),
+                    maxConnections: 2000,
+                    enableNLD: process.env['NLD_ENABLED'] === 'true'
+                }
+            });
+            console.log('✅ WebSocket Hub integration initialized successfully', {
+                hubConnections: webSocketHubIntegration.metrics.hubConnections,
+                originalConnections: webSocketHubIntegration.metrics.originalConnections,
+                totalConnections: webSocketHubIntegration.metrics.totalConnections
+            });
+            // Set up Claude instance registration endpoint
+            app.post('/api/v1/websocket-hub/register-claude', async (req, res) => {
+                try {
+                    const { instanceId, version, capabilities, webhookUrl } = req.body;
+                    if (webSocketHubIntegration?.hub) {
+                        await webSocketHubIntegration.hub.registerClaudeInstance(instanceId, {
+                            instanceId,
+                            version,
+                            capabilities,
+                            webhookUrl
+                        });
+                        res.json({
+                            success: true,
+                            message: 'Claude instance registered successfully',
+                            instanceId
+                        });
+                    }
+                    else {
+                        res.status(503).json({
+                            error: 'WebSocket Hub not available'
+                        });
+                    }
+                }
+                catch (error) {
+                    logger_1.logger.error('Failed to register Claude instance', { error: error.message });
+                    res.status(500).json({
+                        error: 'Failed to register Claude instance',
+                        message: error.message
+                    });
+                }
+            });
+            // Hub status endpoint
+            app.get('/api/v1/websocket-hub/status', (req, res) => {
+                if (webSocketHubIntegration) {
+                    const status = {
+                        initialized: true,
+                        hubActive: webSocketHubIntegration.hub?.isActive() || false,
+                        metrics: webSocketHubIntegration.metrics || {},
+                        hubMetrics: webSocketHubIntegration.hub?.getMetrics() || {},
+                        connectedClients: webSocketHubIntegration.hub?.getConnectedClients() || [],
+                        activeChannels: webSocketHubIntegration.hub?.getActiveChannels() || []
+                    };
+                    res.json(status);
+                }
+                else {
+                    res.json({
+                        initialized: false,
+                        hubActive: false,
+                        message: 'WebSocket Hub integration not initialized'
+                    });
+                }
+            });
+        }
+        catch (error) {
+            console.error('❌ Failed to initialize WebSocket Hub integration:', error);
+            logger_1.logger.error('WebSocket Hub integration failed', { error: error.message });
+        }
+    }, 1000); // Delay to ensure server is fully initialized
+}
 // Export WebSocket utilities for use in other modules
 const broadcastToFeed = (feedId, event, data) => {
     if (process.env['WEBSOCKET_ENABLED'] === 'true') {
+        // Use hub if available and route appropriately
+        if (webSocketHubIntegration?.hub) {
+            webSocketHubIntegration.hub.broadcastToInstanceType('frontend', event, {
+                feedId,
+                ...data,
+                timestamp: new Date().toISOString()
+            });
+        }
+        // Always broadcast through original Socket.IO for backward compatibility
         io.to(`feed:${feedId}`).emit(event, {
             ...data,
             timestamp: new Date().toISOString()
@@ -624,6 +891,14 @@ const broadcastToFeed = (feedId, event, data) => {
 exports.broadcastToFeed = broadcastToFeed;
 const broadcastToPost = (postId, event, data) => {
     if (process.env['WEBSOCKET_ENABLED'] === 'true') {
+        // Use hub if available
+        if (webSocketHubIntegration?.hub) {
+            webSocketHubIntegration.hub.broadcastToInstanceType('frontend', event, {
+                postId,
+                ...data,
+                timestamp: new Date().toISOString()
+            });
+        }
         io.to(`post:${postId}`).emit(event, {
             ...data,
             timestamp: new Date().toISOString()
@@ -633,6 +908,13 @@ const broadcastToPost = (postId, event, data) => {
 exports.broadcastToPost = broadcastToPost;
 const broadcastToUser = (userId, event, data) => {
     if (process.env['WEBSOCKET_ENABLED'] === 'true') {
+        // Use hub if available
+        if (webSocketHubIntegration?.hub) {
+            webSocketHubIntegration.hub.sendToClient(userId, event, {
+                ...data,
+                timestamp: new Date().toISOString()
+            });
+        }
         io.to(`user:${userId}`).emit(event, {
             ...data,
             timestamp: new Date().toISOString()
@@ -642,6 +924,13 @@ const broadcastToUser = (userId, event, data) => {
 exports.broadcastToUser = broadcastToUser;
 const broadcastNotification = (userId, notification) => {
     if (process.env['WEBSOCKET_ENABLED'] === 'true') {
+        // Use hub if available
+        if (webSocketHubIntegration?.hub) {
+            webSocketHubIntegration.hub.sendToClient(userId, 'notification:new', {
+                ...notification,
+                timestamp: new Date().toISOString()
+            });
+        }
         io.to(`user:${userId}`).emit('notification:new', {
             ...notification,
             timestamp: new Date().toISOString()
@@ -649,6 +938,9 @@ const broadcastNotification = (userId, notification) => {
     }
 };
 exports.broadcastNotification = broadcastNotification;
+// Export hub integration for external use
+const getWebSocketHubIntegration = () => webSocketHubIntegration;
+exports.getWebSocketHubIntegration = getWebSocketHubIntegration;
 // API documentation placeholder
 app.get('/api/v1/docs', (req, res) => {
     res.json({
@@ -788,15 +1080,39 @@ const startServer = async () => {
         comments_2.commentWebSocketManager.initialize(httpServer);
         claude_agents_1.claudeAgentWebSocketManager.initialize(io);
         console.log('WebSocket servers initialized (Comments and Claude Agents)');
+        // Initialize WebSocket Hub if enabled (solving webhook/WebSocket mismatch)
+        if (process.env.ENABLE_WEBSOCKET_HUB === 'true') {
+            try {
+                const hubActivator = new hub_activator_1.HubActivator();
+                const hubIo = hubActivator.activate(httpServer);
+                console.log('🚀 WebSocket Hub activated - webhook/WebSocket mismatch solved!');
+                console.log('   Frontend and production Claude can now communicate in real-time');
+                console.log('   Use ./prod/scripts/connect-to-hub.js to connect production Claude');
+            }
+            catch (error) {
+                console.error('❌ Failed to activate WebSocket Hub:', error);
+            }
+        }
         // Initialize Claude Code orchestrator and health monitoring
         try {
-            await claude_code_orchestrator_1.claudeCodeOrchestrator.initialize();
-            claude_health_monitor_1.claudeHealthMonitor.start();
+            // await claudeCodeOrchestrator.initialize();
+            claudeHealthMonitor.start();
             console.log('Claude Code integration initialized successfully');
         }
         catch (error) {
             console.error('Failed to initialize Claude Code integration:', error);
             // Continue without Claude integration for now
+        }
+        // Initialize Production Claude service if enabled
+        if (process.env.PROD_CLAUDE_ENABLED === 'true') {
+            try {
+                await prod_claude_service_1.prodClaudeService.start();
+                console.log('Production Claude service started successfully');
+            }
+            catch (error) {
+                console.error('Failed to start Production Claude service:', error);
+                // Continue without production Claude service
+            }
         }
     });
 };

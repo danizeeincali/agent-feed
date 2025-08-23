@@ -1,0 +1,13 @@
+{
+  "mode": "PRODUCTION",
+  "devMode": false,
+  "devModeSettings": {
+    "enableChat": false,
+    "enhancedLogging": false,
+    "debugInfo": false,
+    "testExecution": false
+  },
+  "description": "Production instance mode configuration",
+  "lastUpdated": "2025-08-21T17:30:00.000Z",
+  "note": "Set 'devMode': true to enable development mode for testing"
+}

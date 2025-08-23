@@ -54,7 +54,7 @@ exports.DEFAULT_NEURAL_TRAINING_CONFIG = {
     autoTuning: true
 };
 exports.DEFAULT_CLAUDE_FLOW_CONFIG = {
-    mcpServerUrl: 'ws://localhost:3001/mcp',
+    mcpServerUrl: 'ws://localhost:3004/mcp',
     neuralTrainingEnabled: true,
     memoryNamespace: 'nld_connection',
     taskOrchestrationEnabled: true,

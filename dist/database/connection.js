@@ -55,6 +55,12 @@ class DatabaseManager {
         // this.testConnection();
     }
     async initializeRedisWithFallback() {
+        // Check if Redis is enabled in configuration
+        const redisEnabled = process.env['REDIS_ENABLED'] === 'true';
+        if (!redisEnabled) {
+            logger_1.logger.info('Redis disabled in configuration, using memory-only fallback store');
+            return;
+        }
         const config = {
             host: process.env['REDIS_HOST'] || 'localhost',
             port: parseInt(process.env['REDIS_PORT'] || '6379'),
