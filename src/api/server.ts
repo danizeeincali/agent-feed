@@ -47,6 +47,7 @@ import simpleLauncherRoutes from '@/api/routes/simple-claude-launcher';
 import { commentWebSocketManager } from '@/api/websockets/comments';
 import { claudeAgentWebSocketManager } from '@/api/websockets/claude-agents';
 import { ClaudeInstanceTerminalWebSocket } from '@/websockets/claude-instance-terminal';
+import TerminalStreamingService from '@/services/terminal-streaming';
 
 // Import utilities
 import { logger, httpLogger, performanceLogger } from '@/utils/logger';
@@ -326,6 +327,17 @@ if (WEBSOCKET_ENABLED) {
   console.log('🔧 Initializing ClaudeInstanceTerminalWebSocket...');
   const terminalWebSocket = new ClaudeInstanceTerminalWebSocket(io);
   console.log('✅ ClaudeInstanceTerminalWebSocket initialized successfully');
+  
+  // Initialize Advanced Terminal Streaming Service
+  console.log('🔧 Initializing Advanced Terminal Streaming Service...');
+  const terminalStreamingService = new TerminalStreamingService(io, {
+    shell: process.env.TERMINAL_SHELL || '/bin/bash',
+    maxSessions: parseInt(process.env.TERMINAL_MAX_SESSIONS || '50'),
+    sessionTimeout: parseInt(process.env.TERMINAL_SESSION_TIMEOUT || '1800000'), // 30 minutes
+    authentication: process.env.TERMINAL_AUTH_ENABLED === 'true'
+  });
+  
+  console.log('✅ Advanced Terminal Streaming Service initialized successfully');
   
   io.on('connection', (socket: ConnectedSocket) => {
     const userId = socket.user?.id;
@@ -758,7 +770,7 @@ if (WEBSOCKET_ENABLED) {
       }
     });
 
-    // Terminal input handler
+    // Terminal input handler (legacy support for ProcessManager)
     socket.on('terminal:input', (data: { input: string }) => {
       if (!userId || !checkSocketRateLimit(socket.id)) {
         socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
@@ -788,6 +800,61 @@ if (WEBSOCKET_ENABLED) {
         });
       }
     });
+    
+    // Enhanced terminal session management handlers
+    socket.on('terminal:sessions:list', () => {
+      if (!userId || !checkSocketRateLimit(socket.id)) {
+        socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+        return;
+      }
+      
+      try {
+        const stats = terminalStreamingService.getSessionStats();
+        socket.emit('terminal:sessions:response', {
+          ...stats,
+          timestamp: new Date().toISOString()
+        });
+      } catch (error) {
+        logger.error('Failed to get terminal sessions', { error: error.message, userId });
+        socket.emit('terminal:error', {
+          error: error.message,
+          timestamp: new Date().toISOString()
+        });
+      }
+    });
+    
+    // Terminal broadcast handler (admin only)
+    socket.on('terminal:broadcast', (data: { message: string; event?: string }) => {
+      if (!userId || !checkSocketRateLimit(socket.id)) {
+        socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+        return;
+      }
+      
+      // Add authorization check for admin users here
+      // if (!isAdmin(userId)) {
+      //   socket.emit('terminal:error', { error: 'Unauthorized' });
+      //   return;
+      // }
+      
+      try {
+        terminalStreamingService.broadcastToSessions(data.event || 'admin:message', {
+          message: data.message,
+          from: 'admin',
+          userId
+        });
+        
+        logger.info('Terminal broadcast sent', { message: data.message, userId });
+        socket.emit('terminal:broadcast:sent', {
+          timestamp: new Date().toISOString()
+        });
+      } catch (error) {
+        logger.error('Failed to broadcast to terminals', { error: error.message, userId });
+        socket.emit('terminal:error', {
+          error: error.message,
+          timestamp: new Date().toISOString()
+        });
+      }
+    });
 
     // Enhanced error handling
     socket.on('error', (error) => {
@@ -799,6 +866,34 @@ if (WEBSOCKET_ENABLED) {
         timestamp: new Date().toISOString(),
         socketId: socket.id
       });
+    });
+    
+    // Security audit handler
+    socket.on('terminal:security:audit', () => {
+      if (!userId || !checkSocketRateLimit(socket.id)) {
+        socket.emit('error', { message: 'Rate limit exceeded or unauthorized' });
+        return;
+      }
+      
+      try {
+        const auditData = {
+          socketId: socket.id,
+          userId,
+          connectedAt: new Date().toISOString(),
+          rateLimiter: (socket as any).rateLimiter || null,
+          terminalStats: terminalStreamingService.getSessionStats()
+        };
+        
+        socket.emit('terminal:security:audit:response', auditData);
+        logger.info('Security audit requested', { userId, socketId: socket.id });
+        
+      } catch (error) {
+        logger.error('Security audit failed', { error: error.message, userId });
+        socket.emit('terminal:error', {
+          error: error.message,
+          timestamp: new Date().toISOString()
+        });
+      }
     });
   });
 
@@ -1082,6 +1177,12 @@ export const broadcastNotification = (userId: string, notification: any) => {
     });
   }
 };
+
+// Store terminal streaming service reference for external access
+let terminalStreamingServiceInstance: TerminalStreamingService | null = null;
+
+// Export function to get terminal streaming service
+export const getTerminalStreamingService = () => terminalStreamingServiceInstance;
 
 // Export hub integration for external use
 export const getWebSocketHubIntegration = () => webSocketHubIntegration;

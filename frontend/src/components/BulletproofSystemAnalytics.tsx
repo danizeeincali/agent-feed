@@ -219,7 +219,7 @@ AnalyticsSkeleton.displayName = 'AnalyticsSkeleton';
 // Error boundary for individual metric cards
 const MetricCardErrorBoundary: React.FC<{ children: React.ReactNode; metricName?: string }> = ({ children, metricName }) => (
   <ErrorBoundary
-    fallback={({ error, resetErrorBoundary }) => (
+    FallbackComponent={({ error, resetErrorBoundary }) => (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center text-red-700 mb-2">
           <AlertTriangle className="w-4 h-4 mr-2" />
@@ -236,7 +236,6 @@ const MetricCardErrorBoundary: React.FC<{ children: React.ReactNode; metricName?
         </button>
       </div>
     )}
-    isolate
   >
     {children}
   </ErrorBoundary>
@@ -532,7 +531,7 @@ const BulletproofSystemAnalytics: React.FC<SystemAnalyticsProps> = memo(({
 
   return (
     <ErrorBoundary
-      fallback={({ error, resetErrorBoundary }) => (
+      FallbackComponent={({ error, resetErrorBoundary }) => (
         <ErrorFallback 
           error={error} 
           resetErrorBoundary={resetErrorBoundary} 

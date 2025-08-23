@@ -382,7 +382,6 @@ export const ErrorBoundary: React.FC<Props & { componentName?: string }> = ({
     <ReactErrorBoundary
       FallbackComponent={FallbackComponent}
       onError={handleError}
-      resetOnPropsChange={resetOnPropsChange}
       resetKeys={resetKeys}
     >
       {children}

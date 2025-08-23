@@ -142,7 +142,7 @@ AgentCardSkeleton.displayName = 'AgentCardSkeleton';
 // Individual agent error boundary
 const AgentCardErrorBoundary: React.FC<{ children: React.ReactNode; agentId?: string }> = ({ children, agentId }) => (
   <ErrorBoundary
-    fallback={({ error, resetErrorBoundary }) => (
+    FallbackComponent={({ error, resetErrorBoundary }) => (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center text-red-700 mb-2">
           <AlertTriangle className="w-4 h-4 mr-2" />
@@ -159,7 +159,6 @@ const AgentCardErrorBoundary: React.FC<{ children: React.ReactNode; agentId?: st
         </button>
       </div>
     )}
-    isolate
   >
     {children}
   </ErrorBoundary>
@@ -604,7 +603,7 @@ const BulletproofAgentManager: React.FC<AgentManagerProps> = memo(({
 
   return (
     <ErrorBoundary
-      fallback={({ error, resetErrorBoundary }) => (
+      FallbackComponent={({ error, resetErrorBoundary }) => (
         <ErrorFallback 
           error={error} 
           resetErrorBoundary={resetErrorBoundary} 

@@ -566,7 +566,7 @@ const BulletproofSettings: React.FC<SettingsProps> = memo(({
 
   return (
     <ErrorBoundary
-      fallback={({ error, resetErrorBoundary }) => (
+      FallbackComponent={({ error, resetErrorBoundary }) => (
         <ErrorFallback 
           error={error} 
           resetErrorBoundary={resetErrorBoundary} 

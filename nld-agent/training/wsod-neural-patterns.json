@@ -1,0 +1,76 @@
+{
+  "neuralPatterns": {
+    "wsod-typescript-detection": {
+      "inputSignatures": [
+        "TypeScript build errors present",
+        "Multiple TS2322 errors in console output",
+        "Component prop interface mismatches",
+        "JSX syntax validation failures",
+        "Import statement resolution failures"
+      ],
+      "outputPredictions": {
+        "wsod-probability": 0.95,
+        "root-causes": [
+          "build-failure",
+          "component-interface-mismatch", 
+          "jsx-syntax-error"
+        ],
+        "severity": "critical",
+        "user-impact": "complete-app-failure"
+      },
+      "preventionActions": [
+        "Run TypeScript validation before deployment",
+        "Check component prop compatibility",
+        "Validate JSX syntax correctness",
+        "Test import resolution"
+      ]
+    },
+    "success-indicators": {
+      "build-completion": {
+        "signal": "tsc && vite build completes successfully",
+        "confidence": 0.9,
+        "weight": 0.8
+      },
+      "component-mounting": {
+        "signal": "React components mount without errors",
+        "confidence": 0.85,
+        "weight": 0.7
+      },
+      "browser-rendering": {
+        "signal": "Browser shows expected UI content",
+        "confidence": 0.95,
+        "weight": 0.9
+      }
+    },
+    "failure-probability-model": {
+      "if-typescript-errors": {
+        "probability": 0.95,
+        "severity": "critical"
+      },
+      "if-jsx-syntax-errors": {
+        "probability": 0.90,
+        "severity": "critical"
+      },
+      "if-component-prop-mismatches": {
+        "probability": 0.85,
+        "severity": "high"
+      }
+    }
+  },
+  "training-datasets": [
+    {
+      "scenario": "terminal-component-implementation",
+      "inputs": [
+        "Modified SimpleLauncher.tsx with TerminalFixed import",
+        "Changed Terminal imports in EnhancedTerminal.tsx",
+        "TypeScript compilation not validated"
+      ],
+      "expected-output": "Working terminal component",
+      "actual-outcome": "White screen of death",
+      "failure-type": "build-error-wsod",
+      "lesson": "ALWAYS validate TypeScript build before claiming success"
+    }
+  ],
+  "export-format": "claude-flow-neural-network",
+  "version": "1.0.0"
+}

@@ -653,7 +653,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
 
   return (
     <ErrorBoundary
-      fallback={({ error, resetErrorBoundary }) => (
+      FallbackComponent={({ error, resetErrorBoundary }) => (
         <ErrorFallback 
           error={error} 
           resetErrorBoundary={resetErrorBoundary} 

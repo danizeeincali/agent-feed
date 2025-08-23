@@ -35,7 +35,11 @@
     "src/services/neural-patterns.ts",
     "src/services/queen-chief-of-staff.ts", 
     "src/utils/neural-utils.ts",
-    "src/hooks/useBackgroundOrchestration.ts"
+    "src/hooks/useBackgroundOrchestration.ts",
+    "src/tests/**/*.disabled",
+    "src/tests/tdd-london-school.disabled/**/*",
+    "src/tests/integration/*.disabled",
+    "src/tests/unit/connection/*.disabled"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

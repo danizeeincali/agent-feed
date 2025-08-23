@@ -531,7 +531,7 @@ export const DualInstanceMonitor: React.FC = () => {
                       hour: '2-digit',
                       minute: '2-digit',
                       second: '2-digit',
-                      fractionalSecondDigits: 3
+                      // fractionalSecondDigits: 3 // Not supported in older TypeScript versions
                     })}
                   </span>
                   {log.source && (

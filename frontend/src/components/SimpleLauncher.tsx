@@ -5,6 +5,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { TerminalComponent } from './Terminal';
+import { TerminalFixed } from './TerminalFixed';
+import TerminalLauncher from './TerminalLauncher';
 
 interface ProcessStatus {
   isRunning: boolean;
@@ -32,6 +35,8 @@ export const SimpleLauncher: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [claudeAvailable, setClaudeAvailable] = useState<boolean | null>(null);
   const [workingDirectory, setWorkingDirectory] = useState<string>('');
+  const [showTerminal, setShowTerminal] = useState(false);
+  const [useFixedTerminal, setUseFixedTerminal] = useState(true); // Default to fixed version
 
   // Simple HTTP API calls (no WebSocket complexity)
   const apiCall = async (endpoint: string, method: string = 'GET'): Promise<ApiResponse> => {
@@ -197,7 +202,44 @@ export const SimpleLauncher: React.FC = () => {
         </div>
       )}
 
-      <style jsx>{`
+      {/* Terminal Integration */}
+      {processStatus.isRunning && (
+        <div className="terminal-section mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-white">Claude Terminal</h3>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setUseFixedTerminal(!useFixedTerminal)}
+                className="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm"
+                title="Toggle between original and fixed terminal versions"
+              >
+                {useFixedTerminal ? '🔧 Fixed' : '📟 Original'}
+              </button>
+              <button
+                onClick={() => setShowTerminal(!showTerminal)}
+                className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                {showTerminal ? '🔽 Hide Terminal' : '🔼 Show Terminal'}
+              </button>
+            </div>
+          </div>
+          {showTerminal && (
+            useFixedTerminal ? (
+              <TerminalFixed 
+                isVisible={showTerminal}
+                processStatus={processStatus}
+              />
+            ) : (
+              <TerminalComponent 
+                isVisible={showTerminal}
+                processStatus={processStatus}
+              />
+            )
+          )}
+        </div>
+      )}
+      
+      <style>{`
         .simple-launcher {
           max-width: 600px;
           margin: 0 auto;
@@ -329,6 +371,26 @@ export const SimpleLauncher: React.FC = () => {
           border-radius: 6px;
           text-align: center;
           margin-top: 20px;
+        }
+
+        .terminal-section {
+          background: #f8f9fa;
+          border: 2px solid #dee2e6;
+          border-radius: 8px;
+          padding: 20px;
+          margin: 30px 0;
+        }
+
+        .terminal-section h3 {
+          margin-top: 0;
+          color: #495057;
+        }
+
+        .terminal-section p {
+          color: #6c757d;
+          margin-bottom: 15px;
+          text-align: left;
+          font-style: normal;
         }
       `}</style>
     </div>

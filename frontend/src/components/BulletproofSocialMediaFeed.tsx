@@ -114,7 +114,7 @@ PostSkeleton.displayName = 'PostSkeleton';
 // Error boundary for individual posts
 const PostErrorBoundary: React.FC<{ children: React.ReactNode; postId?: string }> = ({ children, postId }) => (
   <ErrorBoundary
-    fallback={({ error, resetErrorBoundary }) => (
+    FallbackComponent={({ error, resetErrorBoundary }) => (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-2">
         <div className="flex items-center text-red-700 mb-2">
           <AlertTriangle className="w-4 h-4 mr-2" />
@@ -131,7 +131,6 @@ const PostErrorBoundary: React.FC<{ children: React.ReactNode; postId?: string }
         </button>
       </div>
     )}
-    isolate
   >
     {children}
   </ErrorBoundary>
@@ -596,7 +595,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
 
   return (
     <ErrorBoundary
-      fallback={({ error, resetErrorBoundary }) => (
+      FallbackComponent={({ error, resetErrorBoundary }) => (
         <ErrorFallback 
           error={error} 
           resetErrorBoundary={resetErrorBoundary} 
@@ -682,7 +681,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                   </button>
                 </div>
                 <ErrorBoundary
-                  fallback={({ resetErrorBoundary }) => (
+                  FallbackComponent={({ resetErrorBoundary }) => (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                       <p className="text-red-600 text-sm mb-2">Failed to load post creator</p>
                       <button

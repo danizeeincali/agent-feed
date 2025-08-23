@@ -1,95 +1,132 @@
 {
   "name": "agent-feed-frontend",
+  "version": "2.0.0",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build-with-types": "tsc && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:terminal": "jest --config src/tests/config/jest.terminal.config.js",
+    "test:terminal:watch": "jest --config src/tests/config/jest.terminal.config.js --watch",
+    "test:terminal:coverage": "jest --config src/tests/config/jest.terminal.config.js --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
-    "test:websocket": "playwright test tests/websocket/",
-    "test:websocket:headed": "playwright test tests/websocket/ --headed",
-    "test:websocket:debug": "playwright test tests/websocket/ --debug",
-    "test:integration": "playwright test tests/integration/",
-    "test:integration:headed": "playwright test tests/integration/ --headed",
-    "test:cross-browser": "playwright test tests/websocket/cross-browser.spec.ts",
-    "test:user-scenarios": "playwright test tests/websocket/user-scenarios.spec.ts",
-    "test:websocket-performance": "playwright test tests/integration/websocket-performance.spec.ts",
-    "test:websocket-connection": "playwright test tests/e2e/websocket-connection.spec.ts",
-    "test:websocket-all": "npm run test:websocket && npm run test:integration && npm run test:e2e",
-    "test:websocket-hub": "playwright test --config=playwright.websocket-hub.config.ts",
-    "validate:white-screen": "playwright test --config=playwright-white-screen-validation.config.ts",
-    "validate:white-screen:headed": "playwright test --config=playwright-white-screen-validation.config.ts --headed",
-    "validate:white-screen:debug": "playwright test --config=playwright-white-screen-validation.config.ts --debug",
-    "validate:quick": "npx ts-node scripts/validate-white-screen-fix.ts",
-    "validate:quick:headed": "npx ts-node scripts/validate-white-screen-fix.ts --headed",
-    "test:websocket-hub:headed": "playwright test --config=playwright.websocket-hub.config.ts --headed",
-    "test:websocket-hub:debug": "playwright test --config=playwright.websocket-hub.config.ts --debug",
-    "test:websocket-security": "playwright test --config=playwright.websocket-hub.config.ts --project=websocket-security",
-    "test:websocket-core": "playwright test --config=playwright.websocket-hub.config.ts --project=websocket-core",
-    "test:websocket-report": "playwright show-report test-results/websocket-hub-e2e/html-report",
-    "playwright:install": "playwright install",
-    "playwright:report": "playwright show-report",
-    "validate:websocket": "npm run test:websocket-all && npm run playwright:report"
+    "test:all": "npm run test:coverage && npm run test:terminal:coverage && npm run test:e2e",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@radix-ui/react-slot": "^1.2.3",
-    "@tanstack/react-query": "^4.35.0",
-    "@types/uuid": "^10.0.0",
+    "@radix-ui/react-tabs": "^1.0.4",
+    "@tanstack/react-query": "^5.85.5",
+    "@tanstack/react-query-devtools": "^5.85.5",
+    "@types/uuid": "^9.0.7",
     "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-search": "^0.15.0",
     "@xterm/addon-web-links": "^0.11.0",
-    "@xterm/xterm": "^5.5.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.279.0",
-    "playwright": "^1.55.0",
-    "puppeteer": "^24.17.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^6.0.0",
-    "react-router-dom": "^6.15.0",
-    "socket.io-client": "^4.8.1",
+    "react-router-dom": "^6.20.1",
+    "socket.io-client": "^4.7.4",
     "sonner": "^2.0.7",
-    "tailwind-merge": "^1.14.0",
-    "uuid": "^11.1.0",
-    "ws": "^8.14.0",
-    "xterm-addon-search": "^0.13.0"
+    "tailwind-merge": "^2.0.0",
+    "uuid": "^9.0.1",
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0",
+    "xterm-addon-search": "^0.13.0",
+    "xterm-addon-web-links": "^0.9.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
-    "@testing-library/jest-dom": "^6.0.0",
+    "@playwright/test": "^1.40.1",
+    "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.5.0",
-    "@types/jest": "^29.5.0",
-    "@types/node": "^24.3.0",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@types/ws": "^8.5.5",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "@vitejs/plugin-react": "^4.0.3",
-    "autoprefixer": "^10.4.15",
-    "babel-jest": "^29.7.0",
-    "eslint": "^8.45.0",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.9.3",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "@vitejs/plugin-react": "^4.1.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.3",
-    "identity-obj-proxy": "^3.0.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "postcss": "^8.4.28",
-    "tailwindcss": "^3.3.3",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "jest-html-reporters": "^3.1.5",
+    "jest-junit": "^16.0.0",
+    "jest-watch-typeahead": "^2.2.2",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2",
+    "vite": "^7.1.3",
+    "ws": "^8.14.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/tests/setup/testSetup.ts"
+    ],
+    "moduleNameMapping": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/**/*.stories.{ts,tsx}",
+      "!src/tests/**/*",
+      "!src/main.tsx",
+      "!src/vite-env.d.ts"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html",
+      "json"
+    ],
+    "coverageDirectory": "coverage",
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.(ts|tsx)",
+      "<rootDir>/src/**/?(*.)(spec|test).(ts|tsx)"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

@@ -45,6 +45,7 @@ interface WebSocketSingletonContextValue {
   subscribe: (event: string, handler: (data: any) => void) => void;
   unsubscribe: (event: string, handler?: (data: any) => void) => void;
   connectionState: ConnectionState;
+  connectionError: string | null; // Add missing property
   notifications: Notification[];
   onlineUsers: OnlineUser[];
   systemStats: SystemStats | null;
@@ -93,7 +94,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     disconnect, 
     emit 
   } = useWebSocketSingleton({
-    url: config.url || import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
+    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
     autoConnect: config.autoConnect !== false,
     maxReconnectAttempts: config.reconnectAttempts || 5
   });
@@ -147,7 +148,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
       isConnecting: isConnectingState,
       reconnectAttempt,
       lastConnected: isConnected ? new Date().toISOString() : null,
-      connectionError: null
+      connectionError: connectionState.connectionError
     };
   }, [isConnected, socket?.connected, socket?.disconnected, socket?.io?.readyState, reconnectAttempt]);
 

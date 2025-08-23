@@ -117,8 +117,8 @@ const EnhancedAgentManager: React.FC<EnhancedAgentManagerProps> = ({
     const wsResult = useWebSocketSingleton({
       url: 'ws://localhost:3001',
       autoConnect: false, // Don't auto-connect to avoid errors
-      reconnectAttempts: 3,
-      reconnectDelay: 2000
+      maxReconnectAttempts: 3,
+      reconnectionDelay: 2000
     });
     ws = wsResult.socket;
     isConnected = wsResult.isConnected;
@@ -400,10 +400,10 @@ const EnhancedAgentManager: React.FC<EnhancedAgentManagerProps> = ({
               <h3 className="font-semibold text-gray-900 flex items-center">
                 {agent.display_name}
                 {agent.system === 'production' && (
-                  <Shield className="w-4 h-4 ml-2 text-green-600" title="Production" />
+                  <Shield className="w-4 h-4 ml-2 text-green-600" />
                 )}
                 {agent.system === 'development' && (
-                  <Code className="w-4 h-4 ml-2 text-blue-600" title="Development" />
+                  <Code className="w-4 h-4 ml-2 text-blue-600" />
                 )}
               </h3>
               <div className="flex items-center space-x-2 mt-1">

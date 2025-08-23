@@ -146,6 +146,9 @@ export const TerminalView: React.FC = () => {
 
     // Create terminal instance with error handling
     let term: Terminal;
+    console.log('🔍 DEBUG: Creating Terminal instance with settings:', settings);
+    console.log('🔍 DEBUG: Using theme:', THEMES[settings.theme]);
+    
     try {
       term = new Terminal({
         fontSize: settings.fontSize,
@@ -158,8 +161,10 @@ export const TerminalView: React.FC = () => {
         rightClickSelectsWord: true,
         allowProposedApi: true
       });
+      console.log('✅ DEBUG: Terminal instance created successfully:', term);
+      console.log('🔍 DEBUG: Terminal methods available:', Object.getOwnPropertyNames(Object.getPrototypeOf(term)));
     } catch (error) {
-      console.error('Terminal initialization failed:', error);
+      console.error('❌ CRITICAL DEBUG: Terminal initialization failed:', error);
       showNotification({
         type: 'error',
         title: 'Terminal Initialization Failed',
@@ -225,12 +230,35 @@ export const TerminalView: React.FC = () => {
       });
     }
 
-    // Handle input
-    term.onData((data) => {
+    // Handle input with EXTENSIVE DEBUGGING
+    console.log('🔍 CRITICAL DEBUG: Setting up terminal onData handler in TerminalView');
+    const inputHandler = (data: string) => {
+      console.log('🎯 CRITICAL DEBUG: TerminalView xterm.js onData fired!');
+      console.log('🎯 CRITICAL DEBUG: Input data:', JSON.stringify(data));
+      console.log('🎯 CRITICAL DEBUG: Data length:', data.length);
+      console.log('🎯 CRITICAL DEBUG: Data char codes:', Array.from(data).map(c => c.charCodeAt(0)));
+      console.log('🎯 CRITICAL DEBUG: Connected state:', connected);
+      console.log('🎯 CRITICAL DEBUG: sendInput function:', typeof sendInput);
+      
       if (connected) {
-        sendInput(data);
+        console.log('📤 CRITICAL DEBUG: Calling sendInput with data');
+        try {
+          sendInput(data);
+          console.log('✅ CRITICAL DEBUG: sendInput called successfully');
+        } catch (error) {
+          console.error('❌ CRITICAL DEBUG: Error calling sendInput:', error);
+        }
+      } else {
+        console.warn('⚠️ CRITICAL DEBUG: Not connected, cannot send input');
       }
-    });
+    };
+    
+    try {
+      const disposable = term.onData(inputHandler);
+      console.log('✅ CRITICAL DEBUG: Terminal onData handler attached successfully:', disposable);
+    } catch (error) {
+      console.error('❌ CRITICAL DEBUG: Failed to attach onData handler:', error);
+    }
 
     // Handle resize
     term.onResize((size) => {

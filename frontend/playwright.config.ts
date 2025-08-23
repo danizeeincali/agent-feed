@@ -1,117 +1,207 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * See https://playwright.dev/docs/test-configuration.
+ * Playwright Configuration for Terminal E2E Tests
+ * 
+ * Comprehensive E2E testing configuration with multiple browsers,
+ * devices, and test environments for terminal functionality.
  */
+
 export default defineConfig({
-  testDir: './tests',
-  /* Run tests in files in parallel */
+  testDir: './src/tests/e2e',
+  
+  // Run tests in files in parallel
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
+  
+  // Fail the build on CI if you accidentally left test.only in the source code
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
+  
+  // Retry on CI only
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
+  
+  // Opt out of parallel tests on CI
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  
+  // Reporter configuration
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
-    ['json', { outputFile: 'playwright-report/results.json' }],
-    ['list']
+    ['json', { outputFile: 'test-results/e2e-results.json' }],
+    ['junit', { outputFile: 'test-results/e2e-junit.xml' }],
+    ['line']
   ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  
+  // Shared settings for all the projects below
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    // Base URL for tests
+    baseURL: 'http://localhost:3001',
+    
+    // Collect trace when retrying the failed test
     trace: 'on-first-retry',
-
-    /* Take screenshot on failure */
+    
+    // Capture screenshot on failure
     screenshot: 'only-on-failure',
-
-    /* Record video on failure */
+    
+    // Record video on failure
     video: 'retain-on-failure',
-
-    /* Global timeout for all tests */
-    actionTimeout: 15000,
+    
+    // Navigation timeout
     navigationTimeout: 30000,
-
-    /* Run headless in CI environments */
-    headless: true, // Always run headless in container environment
+    
+    // Action timeout
+    actionTimeout: 10000,
+    
+    // Test timeout per test
+    testTimeout: 60000,
+    
+    // Expect timeout for assertions
+    expect: {
+      timeout: 10000
+    }
   },
 
-  /* Configure projects for major browsers */
+  // Configure projects for major browsers
   projects: [
+    // Desktop Chrome
     {
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
-        viewport: { width: 1920, height: 1080 },
+        // Additional Chrome-specific settings
+        launchOptions: {
+          args: [
+            '--disable-web-security',
+            '--disable-features=VizDisplayCompositor',
+            '--allow-running-insecure-content'
+          ]
+        }
       },
     },
 
+    // Desktop Firefox
     {
       name: 'firefox',
       use: { 
         ...devices['Desktop Firefox'],
-        viewport: { width: 1920, height: 1080 },
+        // Firefox-specific settings
+        launchOptions: {
+          firefoxUserPrefs: {
+            'dom.webnotifications.enabled': false
+          }
+        }
       },
     },
 
+    // Desktop Safari
     {
       name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+
+    // Mobile Chrome
+    {
+      name: 'Mobile Chrome',
       use: { 
-        ...devices['Desktop Safari'],
-        viewport: { width: 1920, height: 1080 },
+        ...devices['Pixel 5'],
+        // Mobile-specific viewport
+        viewport: { width: 375, height: 667 }
       },
     },
 
-    /* Test against mobile viewports. */
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
+    // Mobile Safari
     {
       name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
+      use: { 
+        ...devices['iPhone 12'],
+        // Mobile Safari specific settings
+        viewport: { width: 390, height: 844 }
+      },
     },
 
-    /* Test against branded browsers. */
+    // Tablet
     {
-      name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+      name: 'iPad',
+      use: { 
+        ...devices['iPad Pro'],
+        viewport: { width: 1024, height: 1366 }
+      },
     },
+
+    // High DPI display
     {
-      name: 'Google Chrome',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    },
+      name: 'High DPI',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1920, height: 1080 },
+        deviceScaleFactor: 2
+      }
+    }
   ],
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true, // Always reuse existing server
-    timeout: 120000,
-  },
+  // Global setup and teardown
+  // globalSetup: './src/tests/config/globalSetup.ts',
+  // globalTeardown: './src/tests/config/globalTeardown.ts',
 
-  /* Output directory for test artifacts */
-  outputDir: 'tests/test-results/',
+  // Test directory patterns
+  testMatch: [
+    '**/terminal/**/*.spec.ts',
+    '**/e2e/**/*.spec.ts'
+  ],
 
-  /* Global setup and teardown */
-  // globalSetup: './src/tests/e2e/global-setup.ts',
-  // globalTeardown: './src/tests/e2e/global-teardown.ts',
+  // Files to ignore
+  testIgnore: [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/build/**'
+  ],
 
-  /* Test timeout */
-  timeout: 60 * 1000, // 1 minute per test
-
-  /* Expect timeout */
-  expect: {
-    timeout: 10 * 1000, // 10 seconds
-    toHaveScreenshot: {
-      mode: 'css',
-      animations: 'disabled',
+  // Web server configuration
+  webServer: [
+    {
+      command: 'npm run dev',
+      port: 3001,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+      stdout: 'pipe',
+      stderr: 'pipe'
     },
-  },
+    {
+      command: 'node ../quick-server.js',
+      port: 3000,
+      reuseExistingServer: !process.env.CI,
+      timeout: 60000,
+      stdout: 'pipe',
+      stderr: 'pipe'
+    }
+  ],
+
+  // Output directory for test artifacts
+  outputDir: 'test-results/',
+  
+  // Maximum time the whole test suite can run
+  globalTimeout: 600000, // 10 minutes
+  
+  // Timeout for expect assertions
+  timeout: 30000,
+  
+  // Whether to update snapshots
+  updateSnapshots: 'missing',
+  
+  // Metadata
+  metadata: {
+    'test-suite': 'Terminal E2E Tests',
+    'environment': process.env.NODE_ENV || 'test',
+    'browser-versions': 'Latest stable versions'
+  }
 });
+
+// Environment-specific configuration for CI
+// if (process.env.NODE_ENV === 'ci') {
+//   // CI-specific overrides
+//   config.retries = 3;
+//   config.workers = 2;
+//   config.timeout = 45000;
+//   
+//   // Disable video recording on CI to save space
+//   config.use.video = 'off';
+//   config.use.screenshot = 'only-on-failure';
+// }

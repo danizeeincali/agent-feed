@@ -121,7 +121,7 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
     getMetrics,
     getHealth
   } = useRobustWebSocket({
-    url: config.url || import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
+    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
     fallbackUrls: config.fallbackUrls || [
       'http://localhost:3003',
       'http://localhost:3002',
@@ -129,7 +129,7 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
       'http://localhost:3005'
     ],
     autoConnect: config.autoConnect !== false,
-    debugMode: config.debugMode || import.meta.env.VITE_DEBUG_WEBSOCKET === 'true',
+    debugMode: config.debugMode || (import.meta as any).env.VITE_DEBUG_WEBSOCKET === 'true',
     onConnect: () => {
       console.log('🎉 RobustWebSocketProvider: Connected to robust hub');
       setReconnectAttempt(0);

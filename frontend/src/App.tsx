@@ -19,6 +19,8 @@ import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
 import SimpleLauncher from '@/components/SimpleLauncher';
+import { TerminalDebug } from '@/components/TerminalDebug';
+import { SimpleTerminalTest } from '@/components/SimpleTerminalTest';
 import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
 import BulletproofAgentProfile from '@/components/BulletproofAgentProfile';
 import BulletproofActivityPanel from '@/components/BulletproofActivityPanel';
@@ -27,6 +29,7 @@ import DualInstanceDashboardEnhanced from '@/components/DualInstanceDashboardEnh
 import DualInstance from './pages/DualInstance';
 import DualInstancePage from '@/pages/DualInstancePage';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
+import { TerminalDebugTest } from '@/components/TerminalDebugTest';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
 import '@/styles/agents.css';
 import { 
@@ -53,7 +56,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: 1, // Reduced from 2 to minimize failed requests
       staleTime: 5 * 60 * 1000, // 5 minutes - much longer to reduce API calls
-      cacheTime: 10 * 60 * 1000, // 10 minutes cache
+      gcTime: 10 * 60 * 1000, // 10 minutes cache (was cacheTime in v4)
       refetchOnWindowFocus: false,
       refetchOnMount: false, // Prevent unnecessary refetches
       refetchOnReconnect: 'always',
@@ -90,6 +93,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Claude Code', href: '/claude-code', icon: Code },
+    { name: 'Terminal Debug', href: '/terminal-debug', icon: Code },
     { name: 'Performance Monitor', href: '/performance-monitor', icon: Zap },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
   ], []);
@@ -342,6 +346,13 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="PerformanceMonitor">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Performance Monitor..." />}>
                         <PerformanceMonitor />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/terminal-debug" element={
+                    <RouteErrorBoundary routeName="TerminalDebug">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Terminal Debug..." />}>
+                        <TerminalDebugTest />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

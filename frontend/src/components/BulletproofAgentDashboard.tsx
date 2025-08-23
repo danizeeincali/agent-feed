@@ -105,9 +105,7 @@ const AgentSkeleton: React.FC = memo(() => (
 AgentSkeleton.displayName = 'AgentSkeleton';
 
 // Individual agent error boundary
-const AgentErrorBoundary: React.FC<{ children: React.ReactNode; agentId?: string }> = ({ children, agentId }) => (
-  <ErrorBoundary
-    fallback={({ error, resetErrorBoundary }) => (
+const AgentErrorFallback: React.FC<{ error: Error; resetErrorBoundary: () => void; agentId?: string }> = ({ error, resetErrorBoundary, agentId }) => (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center text-red-700 mb-2">
           <AlertTriangle className="w-4 h-4 mr-2" />
@@ -123,8 +121,11 @@ const AgentErrorBoundary: React.FC<{ children: React.ReactNode; agentId?: string
           Retry
         </button>
       </div>
-    )}
-    isolate
+);
+
+const AgentErrorBoundary: React.FC<{ children: React.ReactNode; agentId?: string }> = ({ children, agentId }) => (
+  <ErrorBoundary
+    FallbackComponent={(props) => <AgentErrorFallback {...props} agentId={agentId} />}
   >
     {children}
   </ErrorBoundary>
