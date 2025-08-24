@@ -85,10 +85,8 @@ export const withSafetyWrapper = <P extends object>(
 
       // Handle both function and class components safely
       try {
-        if (typeof WrappedComponent === 'function') {
-          return WrappedComponent(props);
-        }
-        return null;
+        const result = (WrappedComponent as any)(props);
+        return result;
       } catch (renderError) {
         console.error(`Error rendering component:`, renderError);
         return null;
@@ -199,10 +197,8 @@ export const safeMemo = <P extends object>(
       
       // Handle both function and class components safely
       try {
-        if (typeof Component === 'function') {
-          return Component(props);
-        }
-        return null;
+        const result = (Component as any)(props);
+        return result;
       } catch (renderError) {
         console.error('Component render error:', renderError);
         return null;

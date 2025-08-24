@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { TerminalComponent } from './Terminal';
 import { TerminalFixed } from './TerminalFixed';
+import TerminalDiagnostic from './TerminalDiagnostic';
 import TerminalLauncher from './TerminalLauncher';
 
 interface ProcessStatus {
@@ -37,32 +38,85 @@ export const SimpleLauncher: React.FC = () => {
   const [workingDirectory, setWorkingDirectory] = useState<string>('');
   const [showTerminal, setShowTerminal] = useState(false);
   const [useFixedTerminal, setUseFixedTerminal] = useState(true); // Default to fixed version
+  const [showDiagnostic, setShowDiagnostic] = useState(false);
+  const [terminalMode, setTerminalMode] = useState<'original' | 'fixed' | 'diagnostic' | 'comparison'>('fixed');
 
-  // Simple HTTP API calls (no WebSocket complexity)
+  // Simple HTTP API calls with comprehensive debug logging (now using Vite proxy)
   const apiCall = async (endpoint: string, method: string = 'GET'): Promise<ApiResponse> => {
-    const response = await fetch(`http://localhost:3001/api/claude${endpoint}`, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    // Use relative URL - Vite proxy will handle routing to backend
+    const fullUrl = `/api/claude${endpoint}`;
+    console.log('🔍 SPARC DEBUG: apiCall starting');
+    console.log('🔍 SPARC DEBUG: endpoint:', endpoint);
+    console.log('🔍 SPARC DEBUG: method:', method);
+    console.log('🔍 SPARC DEBUG: full URL (proxied):', fullUrl);
+    console.log('🔍 SPARC DEBUG: Vite will proxy to backend server' + fullUrl);
     
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    try {
+      console.log('🔍 SPARC DEBUG: Making fetch request...');
+      const response = await fetch(fullUrl, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      console.log('🔍 SPARC DEBUG: Fetch response received');
+      console.log('🔍 SPARC DEBUG: response.ok:', response.ok);
+      console.log('🔍 SPARC DEBUG: response.status:', response.status);
+      console.log('🔍 SPARC DEBUG: response.statusText:', response.statusText);
+      console.log('🔍 SPARC DEBUG: response.headers:', [...response.headers.entries()]);
+      
+      if (!response.ok) {
+        const errorMsg = `HTTP ${response.status}: ${response.statusText}`;
+        console.error('🔍 SPARC DEBUG: Response not OK, throwing error:', errorMsg);
+        throw new Error(errorMsg);
+      }
+      
+      console.log('🔍 SPARC DEBUG: Parsing JSON response...');
+      const jsonData = await response.json();
+      console.log('🔍 SPARC DEBUG: JSON parsed successfully:', jsonData);
+      
+      return jsonData;
+    } catch (error) {
+      console.error('🔍 SPARC DEBUG: apiCall failed with error:', error);
+      console.error('🔍 SPARC DEBUG: Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      throw error;
     }
-    
-    return response.json();
   };
 
-  // Check Claude availability on mount
+  // Check Claude availability on mount with comprehensive debug logging
   useEffect(() => {
     const checkClaude = async () => {
+      console.log('🔍 SPARC DEBUG: Starting Claude availability check');
+      console.log('🔍 SPARC DEBUG: API endpoint will be proxied to backend:', `/api/claude/check`);
+      
       try {
+        console.log('🔍 SPARC DEBUG: Making API call...');
         const response = await apiCall('/check');
-        setClaudeAvailable(response.claudeAvailable || false);
+        
+        console.log('🔍 SPARC DEBUG: Raw API response:', response);
+        console.log('🔍 SPARC DEBUG: response.claudeAvailable:', response.claudeAvailable);
+        console.log('🔍 SPARC DEBUG: typeof response.claudeAvailable:', typeof response.claudeAvailable);
+        console.log('🔍 SPARC DEBUG: response.success:', response.success);
+        
+        const availabilityResult = response.claudeAvailable || false;
+        console.log('🔍 SPARC DEBUG: Final availability result:', availabilityResult);
+        
+        setClaudeAvailable(availabilityResult);
+        console.log('🔍 SPARC DEBUG: State updated, claudeAvailable set to:', availabilityResult);
+        
       } catch (error) {
-        console.error('Error checking Claude availability:', error);
+        console.error('🔍 SPARC DEBUG: Error checking Claude availability:', error);
+        console.error('🔍 SPARC DEBUG: Error type:', error.constructor.name);
+        console.error('🔍 SPARC DEBUG: Error message:', error.message);
+        console.error('🔍 SPARC DEBUG: Full error object:', error);
+        
         setClaudeAvailable(false);
+        console.log('🔍 SPARC DEBUG: Due to error, claudeAvailable set to false');
       }
     };
 
@@ -96,8 +150,8 @@ export const SimpleLauncher: React.FC = () => {
     try {
       const response = await apiCall('/launch', 'POST');
       
-      if (response.success && response.status) {
-        setProcessStatus(response.status);
+      if (response.success) {
+        setProcessStatus('running');
         if (response.workingDirectory) {
           setWorkingDirectory(response.workingDirectory);
         }
@@ -117,8 +171,8 @@ export const SimpleLauncher: React.FC = () => {
     try {
       const response = await apiCall('/stop', 'POST');
       
-      if (response.success && response.status) {
-        setProcessStatus(response.status);
+      if (response.success) {
+        setProcessStatus('stopped');
       }
     } catch (error) {
       console.error('Stop error:', error);
@@ -167,7 +221,7 @@ export const SimpleLauncher: React.FC = () => {
 
       {/* System Information */}
       <div className="system-info">
-        <div><strong>Claude Code:</strong> {getClaudeAvailabilityDisplay()}</div>
+        <div><strong>Claude Code:</strong> <span data-testid="claude-availability">{getClaudeAvailabilityDisplay()}</span></div>
         <div><strong>Working Directory:</strong> {workingDirectory || '/prod'}</div>
       </div>
 
@@ -181,7 +235,7 @@ export const SimpleLauncher: React.FC = () => {
       <div className="controls">
         <button
           onClick={handleLaunch}
-          disabled={isLoading || processStatus.isRunning || !claudeAvailable}
+          disabled={isLoading || processStatus === 'running' || !claudeAvailable}
           className="launch-button"
         >
           {isLoading && processStatus.status !== 'running' ? '🔄 Launching...' : '🚀 Launch Claude'}
@@ -189,10 +243,10 @@ export const SimpleLauncher: React.FC = () => {
 
         <button
           onClick={handleStop}
-          disabled={isLoading || !processStatus.isRunning}
+          disabled={isLoading || processStatus !== 'running'}
           className="stop-button"
         >
-          {isLoading && processStatus.isRunning ? '🔄 Stopping...' : '🛑 Stop Claude'}
+          {isLoading && processStatus === 'running' ? '🔄 Stopping...' : '🛑 Stop Claude'}
         </button>
       </div>
 
@@ -203,18 +257,21 @@ export const SimpleLauncher: React.FC = () => {
       )}
 
       {/* Terminal Integration */}
-      {processStatus.isRunning && (
+      {processStatus === 'running' && (
         <div className="terminal-section mt-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">Claude Terminal</h3>
+            <h3 className="text-lg font-semibold text-white">🔬 Claude Terminal - Deep Diagnostic</h3>
             <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setUseFixedTerminal(!useFixedTerminal)}
-                className="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm"
-                title="Toggle between original and fixed terminal versions"
+              <select
+                value={terminalMode}
+                onChange={(e) => setTerminalMode(e.target.value as any)}
+                className="px-3 py-1 bg-gray-700 text-white rounded border border-gray-600"
               >
-                {useFixedTerminal ? '🔧 Fixed' : '📟 Original'}
-              </button>
+                <option value="original">📟 Original</option>
+                <option value="fixed">🔧 Fixed</option>
+                <option value="diagnostic">🔬 Diagnostic</option>
+                <option value="comparison">🔍 Comparison</option>
+              </select>
               <button
                 onClick={() => setShowTerminal(!showTerminal)}
                 className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -223,18 +280,59 @@ export const SimpleLauncher: React.FC = () => {
               </button>
             </div>
           </div>
+          
           {showTerminal && (
-            useFixedTerminal ? (
-              <TerminalFixed 
-                isVisible={showTerminal}
-                processStatus={processStatus}
-              />
-            ) : (
-              <TerminalComponent 
-                isVisible={showTerminal}
-                processStatus={processStatus}
-              />
-            )
+            <div className="space-y-6">
+              {terminalMode === 'original' && (
+                <div>
+                  <h4 className="text-md font-medium text-gray-300 mb-2">📟 Original Terminal</h4>
+                  <TerminalComponent 
+                    isVisible={showTerminal}
+                    processStatus={processStatus}
+                  />
+                </div>
+              )}
+              
+              {terminalMode === 'fixed' && (
+                <div>
+                  <h4 className="text-md font-medium text-gray-300 mb-2">🔧 Fixed Terminal</h4>
+                  <TerminalFixed 
+                    isVisible={showTerminal}
+                    processStatus={processStatus}
+                  />
+                </div>
+              )}
+              
+              {terminalMode === 'diagnostic' && (
+                <div>
+                  <h4 className="text-md font-medium text-red-400 mb-2">🔬 Diagnostic Terminal (Deep Analysis)</h4>
+                  <TerminalDiagnostic 
+                    isVisible={showTerminal}
+                    processStatus={processStatus}
+                  />
+                </div>
+              )}
+              
+              {terminalMode === 'comparison' && (
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-md font-medium text-gray-300 mb-2">🔧 Fixed Terminal</h4>
+                    <TerminalFixed 
+                      isVisible={showTerminal}
+                      processStatus={processStatus}
+                    />
+                  </div>
+                  
+                  <div className="border-t border-red-500 pt-6">
+                    <h4 className="text-md font-medium text-red-400 mb-2">🔬 Diagnostic Terminal</h4>
+                    <TerminalDiagnostic 
+                      isVisible={showTerminal}
+                      processStatus={processStatus}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
       )}

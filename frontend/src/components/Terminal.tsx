@@ -106,7 +106,8 @@ export const TerminalComponent: React.FC<TerminalProps> = ({
     try {
       // Connect to Socket.IO terminal namespace
       const { io } = await import('socket.io-client');
-      const socket = io('http://localhost:3001/terminal', {
+      // CRITICAL FIX: Use relative URL for Vite proxy compatibility
+      const socket = io('/terminal', {
         transports: ['websocket', 'polling']
       });
       

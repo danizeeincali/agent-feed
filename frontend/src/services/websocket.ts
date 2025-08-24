@@ -1,4 +1,5 @@
 import { WebSocketMessage } from '@/types';
+import { getWebSocketUrl } from '../utils/websocket-url';
 
 export class WebSocketService {
   private ws: WebSocket | null = null;
@@ -8,7 +9,7 @@ export class WebSocketService {
   private listeners: Map<string, Set<(data: any) => void>> = new Map();
   private isConnecting = false;
 
-  constructor(private url: string = 'ws://localhost:3001') {}
+  constructor(private url: string = getWebSocketUrl()) {}
 
   connect(): Promise<void> {
     if (this.isConnecting || (this.ws && this.ws.readyState === WebSocket.OPEN)) {

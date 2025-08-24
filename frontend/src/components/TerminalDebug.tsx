@@ -111,7 +111,10 @@ export const TerminalDebug: React.FC<TerminalDebugProps> = ({
     addLog('🔌 Starting WebSocket connection...');
     
     try {
-      ws.current = new WebSocket('ws://localhost:3001/terminal-debug');
+      // CRITICAL FIX: Use relative URL that will be proxied by Vite
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${protocol}//${window.location.host}/terminal-debug`;
+      ws.current = new WebSocket(wsUrl);
       
       ws.current.onopen = () => {
         addLog('✅ WebSocket connected!');

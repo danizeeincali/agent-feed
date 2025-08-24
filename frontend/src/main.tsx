@@ -3,21 +3,9 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
-// Import WebSocket debug helper for development
-if (import.meta.env.DEV) {
-  import('./websocket-debug.js').then(() => {
-    console.log('🔧 WebSocket Debug Helper loaded in development mode');
-  }).catch(err => console.log('WebSocket debug helper not available'));
-  
-  // Also load the new connection debug utility
-  import('./debug/connection-debug');
-}
-import { setupMockApi } from './services/mockApiService'
-
-// Initialize mock API service for development
-if (import.meta.env.DEV) {
-  setupMockApi();
-}
+// Simplified main.tsx - Remove problematic imports that cause white screen
+// Removed: websocket-debug.js, connection-debug, mockApiService
+// These were causing module resolution errors leading to white screen
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

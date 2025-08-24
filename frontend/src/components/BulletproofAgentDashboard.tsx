@@ -532,7 +532,7 @@ const BulletproofAgentDashboard: React.FC<AgentDashboardProps> = memo(({
 
   return (
     <ErrorBoundary
-      fallback={({ error, resetErrorBoundary }) => (
+      FallbackComponent={({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-xl font-semibold text-gray-900 mb-2">Agent Dashboard Error</h2>

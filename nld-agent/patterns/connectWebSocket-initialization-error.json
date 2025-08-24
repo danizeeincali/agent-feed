@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-08-24T08:02:46.793Z",
+  "pattern_id": "connectWebSocket_initialization_error_v1",
+  "error_id": "err-1756022566782-i1y50p",
+  "failure_type": "ReferenceError: Cannot access 'connectWebSocket' before initialization",
+  "context": {
+    "component": "Route-SimpleLauncher", 
+    "url": "http://127.0.0.1:5173/simple-launcher",
+    "file": "TerminalFixed.tsx",
+    "issue": "connectWebSocket used in useEffect dependency before declaration"
+  },
+  "root_cause": {
+    "primary": "JavaScript hoisting issue - useCallback depends on connectWebSocket before it's defined",
+    "secondary": "useEffect dependency includes connectWebSocket but it's declared later in file",
+    "evidence": [
+      "Line 294: }, [isVisible, addDebugLog, connectWebSocket]);",
+      "Line 297: const connectWebSocket = useCallback(() => {",
+      "connectWebSocket referenced before declaration"
+    ]
+  },
+  "sparc_analysis": {
+    "specification": "Move connectWebSocket declaration before its usage in useEffect",
+    "pseudocode": "Reorder code: connectWebSocket → terminal initialization useEffect", 
+    "architecture": "Function declaration order causing reference error",
+    "refinement": "Fix dependency chain and function ordering",
+    "completion": "All tests must pass after reordering"
+  },
+  "fix_required": "Move connectWebSocket useCallback above terminal initialization useEffect",
+  "regression_risk": "High - terminal functionality completely broken",
+  "priority": "CRITICAL - Terminal cannot initialize"
+}

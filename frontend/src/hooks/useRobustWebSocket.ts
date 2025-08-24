@@ -11,6 +11,7 @@ import {
   getGlobalRobustConnectionManager 
 } from '../services/connection/robust-connection-manager';
 import { ConnectionState } from '../services/connection/types';
+import { getSocketIOUrl } from '../utils/websocket-url';
 
 interface UseRobustWebSocketOptions {
   url?: string;
@@ -58,13 +59,8 @@ export function useRobustWebSocket(
   options: UseRobustWebSocketOptions = {}
 ): UseRobustWebSocketReturn {
   const {
-    url = import.meta.env.VITE_WEBSOCKET_HUB_URL || 'http://localhost:3001',
-    fallbackUrls = [
-      'http://localhost:3002',
-      'http://localhost:3003',
-      'http://localhost:3004',
-      'http://localhost:3005'
-    ],
+    url = import.meta.env.VITE_WEBSOCKET_HUB_URL || getSocketIOUrl(),
+    fallbackUrls = [],
     autoConnect = true,
     debugMode = import.meta.env.VITE_DEBUG_WEBSOCKET === 'true',
     useGlobalInstance = true,

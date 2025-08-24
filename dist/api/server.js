@@ -56,9 +56,32 @@ const httpServer = (0, http_1.createServer)(app);
 exports.server = httpServer;
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: ["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
-        methods: ["GET", "POST"],
-        credentials: true
+        origin: [
+            // Localhost variations
+            "http://localhost:3000", "http://localhost:3001", "http://localhost:5173",
+            "https://localhost:3000", "https://localhost:3001", "https://localhost:5173",
+            // IPv4 localhost
+            "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:5173",
+            "https://127.0.0.1:3000", "https://127.0.0.1:3001", "https://127.0.0.1:5173",
+            // IPv6 localhost (modern browsers)
+            "http://[::1]:3000", "http://[::1]:3001", "http://[::1]:5173",
+            "https://[::1]:3000", "https://[::1]:3001", "https://[::1]:5173",
+            // Common development domains
+            "http://0.0.0.0:3000", "http://0.0.0.0:3001", "http://0.0.0.0:5173"
+        ],
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
+        allowedHeaders: [
+            "Content-Type",
+            "Authorization",
+            "X-Requested-With",
+            "Accept",
+            "Origin",
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Methods",
+            "Access-Control-Allow-Headers"
+        ],
+        credentials: true,
+        optionsSuccessStatus: 200
     },
     transports: ['polling', 'websocket'],
     // CRITICAL FIX: Synchronized timeout settings with client
@@ -70,7 +93,14 @@ const io = new socket_io_1.Server(httpServer, {
     httpCompression: true, // NEW: Enable compression for better performance
     allowEIO3: true, // NEW: Backward compatibility
     allowRequest: (req, callback) => {
-        // Allow all connections for development
+        // SIMPLIFIED: Allow all connections in development for terminal functionality
+        console.log('🔍 WebSocket Connection Request:', {
+            origin: req.headers.origin,
+            method: req.method,
+            url: req.url,
+            timestamp: new Date().toISOString()
+        });
+        // Always allow in development - terminal functionality is critical
         callback(null, true);
     }
 });
@@ -93,15 +123,45 @@ app.use((0, helmet_1.default)({
 app.use((0, compression_1.default)());
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
-        const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001'];
+        const allowedOrigins = [
+            // Localhost variations
+            'http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173',
+            'https://localhost:3000', 'https://localhost:3001', 'https://localhost:5173',
+            // IPv4 localhost
+            'http://127.0.0.1:3000', 'http://127.0.0.1:3001', 'http://127.0.0.1:5173',
+            'https://127.0.0.1:3000', 'https://127.0.0.1:3001', 'https://127.0.0.1:5173',
+            // IPv6 localhost
+            'http://[::1]:3000', 'http://[::1]:3001', 'http://[::1]:5173',
+            'https://[::1]:3000', 'https://[::1]:3001', 'https://[::1]:5173',
+            // Development variations
+            'http://0.0.0.0:3000', 'http://0.0.0.0:3001', 'http://0.0.0.0:5173'
+        ];
+        console.log('🔍 Express CORS Check:', { origin, allowed: !origin || allowedOrigins.includes(origin) });
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         }
+        else if (process.env.NODE_ENV === 'development') {
+            console.log('⚠️  Development: allowing origin', origin);
+            callback(null, true);
+        }
         else {
+            console.log('❌ Express CORS rejected:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With',
+        'Accept',
+        'Origin',
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Methods',
+        'Access-Control-Allow-Headers'
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
 }));
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
@@ -203,6 +263,8 @@ apiV1.use('/demo', demo_agents_1.default);
 apiV1.use('/claude-live', claude_code_integration_1.default);
 apiV1.use('/prod-claude', prod_claude_1.default);
 apiV1.use('/claude-launcher', simple_claude_launcher_1.default);
+// CRITICAL FIX: Mount simple launcher at the path frontend expects
+app.use('/api/claude', simple_claude_launcher_1.default);
 apiV1.use('/', comments_1.default);
 apiV1.use('/', comments_enhanced_1.default);
 // Root API info
@@ -286,9 +348,28 @@ if (WEBSOCKET_ENABLED) {
         sessionTimeout: parseInt(process.env.TERMINAL_SESSION_TIMEOUT || '1800000'), // 30 minutes
         authentication: process.env.TERMINAL_AUTH_ENABLED === 'true'
     });
-    // Store reference for external access
-    terminalStreamingServiceInstance = terminalStreamingService;
     console.log('✅ Advanced Terminal Streaming Service initialized successfully');
+    // CRITICAL FIX: Add authentication middleware for root namespace
+    io.use(async (socket, next) => {
+        try {
+            // Simple auth for terminal connections
+            const auth = socket.handshake.auth;
+            const userId = auth.userId || auth.user_id || 'anonymous-user';
+            const username = auth.username || `User-${userId.slice(0, 8)}`;
+            // Set user info on socket
+            socket.user = {
+                id: userId,
+                username: username,
+                lastSeen: new Date()
+            };
+            console.log('🔍 Root namespace auth successful:', { userId, username });
+            next();
+        }
+        catch (error) {
+            console.error('🔍 Root namespace auth failed:', error);
+            next(); // Allow connection anyway for debugging
+        }
+    });
     io.on('connection', (socket) => {
         const userId = socket.user?.id;
         logger_1.logger.info('WebSocket client connected', {

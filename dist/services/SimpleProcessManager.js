@@ -63,9 +63,9 @@ class SimpleProcessManager {
                 return { ...this.status, error: 'Process already running' };
             }
             this.status = { isRunning: false, status: 'starting' };
-            // Check if Claude Code is available
+            // Launch Claude Code in interactive mode
             const claudeCommand = 'claude';
-            const claudeArgs = ['--version']; // Test command
+            const claudeArgs = []; // Interactive mode - no arguments for persistent session
             // Spawn Claude Code process in /prod directory
             this.process = (0, child_process_1.spawn)(claudeCommand, claudeArgs, {
                 cwd: this.prodPath,

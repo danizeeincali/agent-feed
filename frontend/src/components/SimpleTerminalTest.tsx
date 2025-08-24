@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { getSocketIOUrl, getWebSocketUrl } from '../utils/websocket-url';
 
 export const SimpleTerminalTest: React.FC = () => {
   const [logs, setLogs] = useState<string[]>([]);
@@ -17,7 +18,7 @@ export const SimpleTerminalTest: React.FC = () => {
     
     // Try WebSocket
     try {
-      const ws = new WebSocket('ws://localhost:3001');
+      const ws = new WebSocket(getWebSocketUrl());
       ws.onopen = () => {
         addLog('WebSocket connected');
         ws.send(JSON.stringify({ type: 'test', data: inputValue }));
@@ -37,7 +38,7 @@ export const SimpleTerminalTest: React.FC = () => {
   const testSocketIO = async () => {
     try {
       const { io } = await import('socket.io-client');
-      const socket = io('http://localhost:3001/terminal');
+      const socket = io(getSocketIOUrl() + '/terminal');
       
       socket.on('connect', () => {
         addLog('Socket.IO connected');

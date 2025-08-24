@@ -30,6 +30,7 @@ import { cn } from '@/utils/cn';
 import { useWebSocketSingleton } from '@/hooks/useWebSocketSingleton';
 import LoadingSpinner from './LoadingSpinner';
 import { nldLogger } from '@/utils/nld-logger';
+import { getWebSocketUrl } from '../utils/websocket-url';
 
 // Types
 interface Agent {
@@ -115,7 +116,7 @@ const EnhancedAgentManager: React.FC<EnhancedAgentManagerProps> = ({
   
   try {
     const wsResult = useWebSocketSingleton({
-      url: 'ws://localhost:3001',
+      url: getWebSocketUrl(),
       autoConnect: false, // Don't auto-connect to avoid errors
       maxReconnectAttempts: 3,
       reconnectionDelay: 2000

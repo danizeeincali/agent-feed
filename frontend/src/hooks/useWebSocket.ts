@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { getSocketIOUrl } from '../utils/websocket-url';
 
 interface WebSocketMessage {
   type: string;
@@ -30,7 +31,7 @@ interface UseWebSocketReturn {
 
 export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketReturn => {
   const {
-    url = 'http://localhost:3001', // Backend WebSocket server
+    url = getSocketIOUrl(), // Use dynamic URL based on environment
     autoConnect = true,
     reconnectAttempts = 5,
     reconnectDelay = 1000

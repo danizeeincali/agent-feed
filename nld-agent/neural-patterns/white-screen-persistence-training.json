@@ -1,0 +1,56 @@
+{
+  "neural_training_dataset": {
+    "pattern_name": "white_screen_persistence",
+    "training_type": "failure_prediction",
+    "dataset_version": "1.0",
+    "created": "2025-01-23T00:00:00Z",
+    "samples": [
+      {
+        "input_features": {
+          "backend_running": 1,
+          "frontend_server_running": 1,
+          "html_response_valid": 1,
+          "unit_tests_passing": 1,
+          "integration_tests_passing": 1,
+          "build_successful": 1,
+          "browser_e2e_tests": 0,
+          "react_mount_tests": 0,
+          "console_error_monitoring": 0,
+          "visual_regression_tests": 0,
+          "real_browser_validation": 0
+        },
+        "output_classification": {
+          "failure_probability": 0.95,
+          "failure_type": "white_screen_render_failure",
+          "severity": "critical",
+          "user_impact": "complete_failure"
+        },
+        "confidence_adjustment": {
+          "technical_confidence": 0.9,
+          "reality_confidence": 0.0,
+          "adjusted_confidence": 0.1
+        }
+      }
+    ],
+    "pattern_weights": {
+      "missing_browser_validation": 0.8,
+      "missing_react_mount_tests": 0.7,
+      "missing_console_monitoring": 0.6,
+      "technical_false_positives": 0.9
+    },
+    "prediction_rules": [
+      {
+        "condition": "backend_running AND frontend_server_running AND tests_passing AND missing_browser_validation",
+        "prediction": "high_white_screen_risk",
+        "confidence_reduction": 0.7,
+        "recommended_actions": ["browser_e2e_test", "console_analysis", "react_devtools_check"]
+      }
+    ],
+    "training_metadata": {
+      "effectiveness_threshold": 0.3,
+      "critical_failure_weight": 2.0,
+      "pattern_frequency": "common_in_react_apps",
+      "business_impact": "critical"
+    }
+  }
+}

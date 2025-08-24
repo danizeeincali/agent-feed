@@ -1,0 +1,64 @@
+{
+  "timestamp": "2025-08-24T07:40:27Z",
+  "pattern_id": "websocket_connection_failure_v2",
+  "failure_type": "WebSocket Connection Lost",
+  "context": {
+    "component": "TerminalFixed.tsx",
+    "user_action": "Typing in terminal (w, d, enter, p, w, d, enter)",
+    "error_sequence": [
+      "Input received: 'w' (1 chars, codes: 119)",
+      "❌ Cannot send input - socket not connected",
+      "Input received: 'd' (1 chars, codes: 100)", 
+      "❌ Cannot send input - socket not connected",
+      "Input received: '\\n' (1 chars, codes: 13)",
+      "❌ Cannot send input - socket not connected"
+    ]
+  },
+  "root_cause": {
+    "primary": "WebSocket disconnection after terminal launch",
+    "secondary": "Socket.IO connection not maintained during terminal interaction",
+    "evidence": [
+      "Backend shows PTY launched successfully with PID 12153",
+      "Backend receiving terminal data (98 chars prompt)",
+      "Frontend receiving keyboard input but socket disconnected",
+      "No WebSocket error logs in frontend debug output"
+    ]
+  },
+  "failure_pattern": {
+    "stage": "post_launch_interaction",
+    "symptoms": [
+      "Terminal canvas displays correctly (manual injection working)",
+      "Keyboard input detected in frontend",
+      "WebSocket connection lost silently", 
+      "Backend PTY running but no communication path",
+      "No reconnection attempts triggered"
+    ],
+    "impact": "Terminal appears functional but no commands execute"
+  },
+  "previous_attempts": [
+    {
+      "approach": "Enhanced terminal initialization with DOM validation",
+      "result": "SUCCESS - Canvas rendering fixed",
+      "limitation": "Did not address WebSocket connection stability"
+    },
+    {
+      "approach": "Manual canvas injection for renderer failures", 
+      "result": "SUCCESS - Terminal displays content",
+      "limitation": "WebSocket connection management still broken"
+    }
+  ],
+  "solution_requirements": [
+    "Implement WebSocket connection health monitoring",
+    "Add automatic reconnection on connection loss",
+    "Ensure socket connection persists during terminal interaction",
+    "Add connection status indicators to debug logs",
+    "Implement connection recovery without terminal restart"
+  ],
+  "success_criteria": [
+    "WebSocket connection remains active during typing",
+    "Input successfully reaches backend PTY process", 
+    "Terminal output returns to frontend display",
+    "No 'Cannot send input - socket not connected' errors",
+    "Seamless terminal interaction end-to-end"
+  ]
+}

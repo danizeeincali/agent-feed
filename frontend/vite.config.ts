@@ -15,27 +15,48 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
-    host: '0.0.0.0', // Listen on all interfaces for proper connectivity
-    strictPort: true, // Fail if port is already in use
+    port: 5173,
+    host: true, // Allow external connections
+    cors: true,
+    strictPort: true, // Exit if port is already in use
     // CRITICAL FIX: Enable SPA routing support
     historyApiFallback: true, // This ensures all routes fallback to index.html for React Router
     // Proxy configuration for backend services
     proxy: {
+      // HTTP API proxy (working for Claude detection)
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
+        secure: false,
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('🔍 SPARC DEBUG: HTTP API proxy request:', req.method, req.url, '->', proxyReq.path);
+          });
+          proxy.on('error', (err, _req, _res) => {
+            console.log('🔍 SPARC DEBUG: HTTP API proxy error:', err.message);
+          });
+        }
       },
-      // CRITICAL FIX: WebSocket proxy configuration
+      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression)
       '/socket.io': {
         target: 'http://localhost:3001',
-        ws: true,
-        changeOrigin: true,
-      },
-      '/ws': {
-        target: 'ws://localhost:3001',
-        ws: true,
-        changeOrigin: true,
+        ws: true,           // Enable WebSocket proxying
+        changeOrigin: true, // Change origin headers to match target
+        secure: false,
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('🔍 SPARC DEBUG: WebSocket proxy request:', req.url, '->', proxyReq.path);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('🔍 SPARC DEBUG: WebSocket proxy response:', req.url, '->', proxyRes.statusCode);
+          });
+          proxy.on('error', (err, _req, _res) => {
+            console.log('🔍 SPARC DEBUG: WebSocket proxy error:', err.message);
+          });
+          proxy.on('upgrade', (req, socket, head) => {
+            console.log('🔍 SPARC DEBUG: WebSocket upgrade request:', req.url);
+          });
+        }
       },
     },
   },

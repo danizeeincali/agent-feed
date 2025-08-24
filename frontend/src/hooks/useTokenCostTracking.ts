@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useWebSocketSingleton } from './useWebSocketSingleton';
 import { nldLogger } from '@/utils/nld-logger';
+import { getSocketIOUrl } from '../utils/websocket-url';
 
 export interface TokenUsage {
   id: string;
@@ -78,7 +79,7 @@ export const useTokenCostTracking = (config?: {
   
   // WebSocket integration using proven singleton pattern
   const { socket, isConnected } = useWebSocketSingleton({
-    url: process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'http://localhost:3001',
+    url: process.env.NEXT_PUBLIC_WEBSOCKET_URL || getSocketIOUrl(),
     autoConnect: config?.enableRealTime ?? true,
     reconnectAttempts: 3,
     reconnectDelay: 2000

@@ -1,0 +1,65 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Regression Prevention Pre-commit Hook
+echo "🔍 Running regression prevention checks..."
+
+# 1. TypeScript compilation check - Prevent white screen of death
+echo "📝 Checking TypeScript compilation..."
+npm run typecheck
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript compilation failed - preventing commit"
+  echo "🚫 This prevents White Screen of Death from TypeScript errors"
+  exit 1
+fi
+
+# 2. Frontend TypeScript compilation check
+echo "📝 Checking frontend TypeScript compilation..."
+cd frontend && npm run typecheck
+if [ $? -ne 0 ]; then
+  echo "❌ Frontend TypeScript compilation failed - preventing commit"
+  echo "🚫 This prevents White Screen of Death from frontend TypeScript errors"
+  cd ..
+  exit 1
+fi
+cd ..
+
+# 3. Component import/export validation
+echo "🔗 Validating component imports and exports..."
+node scripts/validate-imports.js
+if [ $? -ne 0 ]; then
+  echo "❌ Component import/export validation failed - preventing commit"
+  echo "🚫 This prevents component import errors"
+  exit 1
+fi
+
+# 4. Build validation test
+echo "🏗️ Running build validation tests..."
+npm run test:build-validation
+if [ $? -ne 0 ]; then
+  echo "❌ Build validation tests failed - preventing commit"
+  echo "🚫 This prevents build-time failures"
+  exit 1
+fi
+
+# 5. CORS configuration validation
+echo "🌐 Validating CORS configuration..."
+npm run test:cors-validation
+if [ $? -ne 0 ]; then
+  echo "❌ CORS configuration validation failed - preventing commit"
+  echo "🚫 This prevents WebSocket CORS blocking issues"
+  exit 1
+fi
+
+# 6. Terminal integration checks
+echo "💻 Validating terminal integration..."
+npm run test:terminal-integration
+if [ $? -ne 0 ]; then
+  echo "❌ Terminal integration validation failed - preventing commit"
+  echo "🚫 This prevents terminal input/output issues"
+  exit 1
+fi
+
+echo "✅ All regression prevention checks passed!"
+echo "📊 Logging success pattern to NLD database..."
+node scripts/nld-log-success.js "pre-commit-validation" "$(git rev-parse HEAD)"

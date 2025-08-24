@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -265,19 +265,13 @@
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
 <a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L203'></a><a href='#L203'>203</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -431,23 +425,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -456,6 +433,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -490,6 +476,7 @@
 <span class="cstat-no" title="statement not covered" >import { useState, useCallback, useEffect, useMemo, useRef } from 'react';</span>
 <span class="cstat-no" title="statement not covered" >import { io, Socket } from 'socket.io-client';</span>
 <span class="cstat-no" title="statement not covered" >import { v4 as uuidv4 } from 'uuid';</span>
+<span class="cstat-no" title="statement not covered" >import { getSocketIOUrl } from '../utils/websocket-url';</span>
 &nbsp;
 export interface ProcessInfo {
   pid: number | null;
@@ -540,7 +527,7 @@ export const <span class="cstat-no" title="statement not covered" >useInstanceMa
 &nbsp;
   // Initialize WebSocket connection
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-    const newSocket = <span class="cstat-no" title="statement not covered" >io('http://localhost:3000', {</span>
+    const newSocket = <span class="cstat-no" title="statement not covered" >io(getSocketIOUrl(), {</span>
       transports: ['websocket']
     });
 &nbsp;
@@ -638,39 +625,31 @@ export const <span class="cstat-no" title="statement not covered" >useInstanceMa
 <span class="cstat-no" title="statement not covered" >    socket.emit('process:config', config);</span>
   }, [socket]);
 &nbsp;
-  // Transform processInfo into instances array for DualInstancePage compatibility
+  // CRITICAL FIX: Always provide at least one mock instance for UI consistency
   const instances = <span class="cstat-no" title="statement not covered" >useMemo&lt;InstanceInfo[]&gt;(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-    // Only return instances if we have valid processInfo
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!processInfo || !processInfo.name) <span class="cstat-no" title="statement not covered" >return [];</span></span>
-    
-    const instanceInfo: InstanceInfo = <span class="cstat-no" title="statement not covered" >{</span>
-      ...processInfo,
-      id: stableInstanceId.current, // Use stable UUID instead of PID
+    const baseInstanceInfo: InstanceInfo = <span class="cstat-no" title="statement not covered" >{</span>
+      id: stableInstanceId.current, // Use stable UUID
       type: 'claude-instance',
-      createdAt: processInfo.startTime || new Date()
+      name: processInfo?.name || 'Claude Instance',
+      status: processInfo?.status || 'stopped',
+      pid: processInfo?.pid || null,
+      startTime: processInfo?.startTime || null,
+      autoRestartEnabled: processInfo?.autoRestartEnabled || false,
+      autoRestartHours: processInfo?.autoRestartHours || 6,
+      createdAt: processInfo?.startTime || new Date()
     };
     
-<span class="cstat-no" title="statement not covered" >    return [instanceInfo];</span>
+<span class="cstat-no" title="statement not covered" >    return [baseInstanceInfo];</span>
   }, [processInfo]);
 &nbsp;
-  // Compute stats from current processInfo with proper validation
+  // CRITICAL FIX: Always provide consistent stats based on current process status
   const stats = <span class="cstat-no" title="statement not covered" >useMemo&lt;InstanceStats&gt;(<span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-    // Return zero stats if no valid processInfo
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!processInfo || !processInfo.name) {</span>
-<span class="cstat-no" title="statement not covered" >      return {</span>
-        running: 0,
-        stopped: 0,
-        error: 0,
-        total: 0
-      };
-    }
-    
-    const status = <span class="cstat-no" title="statement not covered" >processInfo.status;</span>
+    const status = <span class="cstat-no" title="statement not covered" >processInfo?.status || 'stopped';</span>
 <span class="cstat-no" title="statement not covered" >    return {</span>
-      running: status === 'running' ? 1 : 0,
+      running: status === 'running' || status === 'restarting' ? 1 : 0,
       stopped: status === 'stopped' ? 1 : 0,
       error: status === 'error' ? 1 : 0,
-      total: 1 // We have one valid instance
+      total: 1 // Always one instance in single-instance mode
     };
   }, [processInfo]);
 &nbsp;
@@ -697,7 +676,7 @@ export const <span class="cstat-no" title="statement not covered" >useInstanceMa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-22T15:32:40.818Z
+                at 2025-08-24T08:16:26.664Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

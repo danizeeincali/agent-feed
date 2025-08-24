@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-08-24T07:43:55Z",
+  "pattern_id": "websocket_persistent_failure_v3",
+  "failure_type": "WebSocket Never Connects After Terminal Launch",
+  "context": {
+    "component": "TerminalFixed.tsx",
+    "user_action": "Typing after terminal initialization (p, w, d, enter)",
+    "terminal_status": "Canvas successfully created and functional",
+    "canvas_status": "✅ Working - 640x384 dimensions, properly fitted",
+    "connection_attempts": "Multiple ATTEMPTING RECONNECTION messages",
+    "error_sequence": [
+      "✅ Canvas successfully created and attached",
+      "✅ Terminal fitted: 58x19", 
+      "✅ Terminal write test successful and focused",
+      "Key events detected but socket not connected",
+      "❌ Cannot send input - socket not connected - ATTEMPTING RECONNECTION"
+    ]
+  },
+  "root_cause": {
+    "primary": "WebSocket connection never established after terminal launch",
+    "secondary": "connectWebSocket() function not being called or failing silently",
+    "evidence": [
+      "Canvas rendering works perfectly (manual injection successful)",
+      "Terminal receives keyboard input correctly",
+      "No 'Socket connected!' messages in debug logs",
+      "No connection establishment attempts visible",
+      "Backend PTY process running (PID 16572) but no WebSocket connection"
+    ]
+  },
+  "failure_pattern": {
+    "stage": "post_terminal_initialization",
+    "symptoms": [
+      "Terminal displays and accepts input visually",
+      "Canvas element created successfully (640x384)",
+      "Keyboard events captured correctly", 
+      "WebSocket connection never established",
+      "No 'Socket connected!' debug messages",
+      "Reconnection attempts triggered but failing",
+      "Backend ready but no communication channel"
+    ],
+    "impact": "Terminal appears fully functional but no commands execute - complete communication breakdown"
+  },
+  "previous_solution_failures": [
+    {
+      "approach": "Enhanced connection event handlers with heartbeat",
+      "limitation": "Connection never established in first place"
+    },
+    {
+      "approach": "Auto-reconnection on disconnect",
+      "limitation": "Cannot reconnect what was never connected"
+    },
+    {
+      "approach": "Input retry mechanism with queuing",
+      "limitation": "No connection to retry on"
+    }
+  ],
+  "critical_issue": "connectWebSocket() either not being called or failing silently during terminal initialization",
+  "solution_requirements": [
+    "Investigate connectWebSocket() call chain during terminal launch",
+    "Add explicit connection establishment logging",
+    "Ensure WebSocket connection triggered after terminal initialization",
+    "Add connection establishment validation",
+    "Implement connection establishment TDD tests"
+  ],
+  "tdd_test_cases": [
+    "Test: WebSocket connection established after terminal launch",
+    "Test: Socket.connected === true within 5 seconds of launch", 
+    "Test: 'Socket connected!' message appears in debug logs",
+    "Test: Input successfully reaches backend after connection",
+    "Test: Terminal output received from backend PTY process"
+  ]
+}

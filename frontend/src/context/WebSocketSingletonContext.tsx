@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useCallback, useEffect, useState, useMemo, memo } from 'react';
 import { useWebSocketSingleton } from '@/hooks/useWebSocketSingleton';
+import { getSocketIOUrl } from '../utils/websocket-url';
 
 interface ConnectionState {
   isConnected: boolean;
@@ -94,7 +95,8 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     disconnect, 
     emit 
   } = useWebSocketSingleton({
-    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
+    // Use dynamic URL that works with Vite proxy and production
+    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || getSocketIOUrl(),
     autoConnect: config.autoConnect !== false,
     maxReconnectAttempts: config.reconnectAttempts || 5
   });
@@ -105,7 +107,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
       isConnected,
       socketId: socket?.id,
       socketConnected: socket?.connected,
-      url: config.url || import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:3001'
+      url: config.url || import.meta.env.VITE_WEBSOCKET_URL || getSocketIOUrl()
     });
   }, [isConnected, socket?.id, socket?.connected]);
 
@@ -114,8 +116,10 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [systemStats, setSystemStats] = useState<SystemStats | null>(null);
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
 
-  // PRODUCTION FIX: Socket.IO-specific connection state handling
+  // PRODUCTION FIX: Move connectionState calculation BEFORE useMemo context value to avoid temporal dead zone
+  // This fixes the "Cannot access 'connectionState' before initialization" error
   const connectionState = useMemo<ConnectionState>(() => {
     // CRITICAL FIX: Socket.IO uses different state properties
     let isConnectingState = false;
@@ -126,7 +130,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
       // - socket.disconnected: true when disconnected
       // - socket.io.readyState: 'opening', 'open', 'closing', 'closed'
       const socketIO = socket.io || socket;
-      const readyState = socketIO?.readyState || socket.readyState;
+      const readyState = (socketIO as any)?.readyState || (socket as any).readyState;
       
       isConnectingState = !socket.connected && !socket.disconnected && 
         (readyState === 'opening' || readyState === 1);
@@ -137,7 +141,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
       socketExists: !!socket,
       socketConnected: socket?.connected,
       socketDisconnected: socket?.disconnected,
-      socketIOReadyState: socket?.io?.readyState,
+      socketIOReadyState: (socket?.io as any)?.readyState,
       computedIsConnecting: isConnectingState,
       socketId: socket?.id,
       fixApplied: 'Socket.IO-specific state logic'
@@ -148,9 +152,9 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
       isConnecting: isConnectingState,
       reconnectAttempt,
       lastConnected: isConnected ? new Date().toISOString() : null,
-      connectionError: connectionState.connectionError
+      connectionError
     };
-  }, [isConnected, socket?.connected, socket?.disconnected, socket?.io?.readyState, reconnectAttempt]);
+  }, [isConnected, socket?.connected, socket?.disconnected, (socket?.io as any)?.readyState, reconnectAttempt, connectionError]);
 
   // Notification management
   const clearNotifications = useCallback(() => {
@@ -256,6 +260,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
       connect: () => {
         console.log('🔌 WebSocketSingletonProvider: Connected to server');
         setReconnectAttempt(0);
+        setConnectionError(null);
       },
       
       disconnect: (reason: string) => {
@@ -264,6 +269,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
       
       connect_error: (error: any) => {
         console.error('🔌 WebSocketSingletonProvider: Connection error:', error);
+        setConnectionError(error?.message || 'Connection failed');
       }
     };
 
@@ -280,7 +286,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     };
   }, [socket, addNotification]);
 
-  // Stable context value
+  // Stable context value - Fixed temporal dead zone by ensuring connectionState is declared first
   const contextValue = useMemo<WebSocketSingletonContextValue>(() => ({
     socket,
     isConnected,
@@ -292,6 +298,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     subscribe,
     unsubscribe,
     connectionState,
+    connectionError,
     notifications,
     onlineUsers,
     systemStats,
@@ -310,12 +317,13 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     isConnected,
     connect,
     disconnect,
+    emit,
     on,
     off,
     subscribe,
     unsubscribe,
-    emit,
-    connectionState,
+    connectionState, // Safe to use here since connectionState is declared above
+    connectionError,
     notifications,
     onlineUsers,
     systemStats,

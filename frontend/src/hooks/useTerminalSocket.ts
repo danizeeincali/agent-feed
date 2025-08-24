@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { getSocketIOUrl } from '../utils/websocket-url';
 
 interface TerminalSocketState {
   connected: boolean;
@@ -133,9 +134,8 @@ export const useTerminalSocket = () => {
       socketRef.current.disconnect();
     }
 
-    // SPARC:DEBUG FIX - Corrected connection URL from port 3001 to 3000
-    // Backend server runs on port 3000, not 3001
-    const socket = io('http://localhost:3001', {
+    // Use dynamic URL that works with Vite proxy in development and production
+    const socket = io(getSocketIOUrl(), {
       auth: {
         token: localStorage.getItem('auth-token') || 'dev-token',
         userId: localStorage.getItem('user-id') || 'dev-user-' + Date.now(),

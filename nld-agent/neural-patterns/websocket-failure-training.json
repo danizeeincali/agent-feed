@@ -1,0 +1,41 @@
+{
+  "training_dataset": {
+    "pattern_name": "WEBSOCKET_HANDSHAKE_FAILURE_PREDICTION",
+    "version": "1.0.0",
+    "created": "2025-01-26T15:30:00Z",
+    "failure_patterns": [
+      {
+        "input_features": {
+          "frontend_behavior": "connects_to_root_namespace",
+          "backend_behavior": "pty_processes_launching",
+          "connection_status": "handshake_failing",
+          "logs_pattern": "no_client_connected_messages",
+          "ui_status": "renders_but_hangs"
+        },
+        "output_classification": "URL_NAMESPACE_MISMATCH",
+        "confidence_weight": 0.95,
+        "severity": "critical"
+      }
+    ],
+    "success_patterns": [
+      {
+        "input_features": {
+          "tdd_approach": true,
+          "integration_tests": true,
+          "cors_validation": true,
+          "proper_namespacing": true,
+          "connection_lifecycle_testing": true
+        },
+        "output_classification": "STABLE_WEBSOCKET_CONNECTION",
+        "confidence_weight": 0.87,
+        "effectiveness": "high"
+      }
+    ],
+    "neural_weights": {
+      "url_mismatch_detection": 0.9,
+      "cors_issue_detection": 0.7,
+      "tdd_success_correlation": 0.85,
+      "integration_test_importance": 0.8
+    }
+  }
+}

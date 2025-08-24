@@ -63,7 +63,7 @@ export const InstanceLauncher: React.FC = () => {
 
   // Get current running instances
   const runningInstances = instances.filter(instance => 
-    instance.status === 'running' || instance.status === 'starting'
+    instance.status === 'running'
   );
   
   const hasRunningInstance = runningInstances.length > 0;
@@ -95,7 +95,7 @@ export const InstanceLauncher: React.FC = () => {
         setTimeout(() => reject(new Error('Launch timeout after 30 seconds')), 30000);
       });
 
-      const instanceId = await Promise.race([
+      await Promise.race([
         launchInstance(launchOptions),
         launchTimeout
       ]);
@@ -111,11 +111,11 @@ export const InstanceLauncher: React.FC = () => {
 
       // Navigate to terminal view if auto-connect is enabled
       // Wait for instance to appear in the instances list with a short polling mechanism
-      if (config.autoConnect && instanceId) {
+      if (config.autoConnect) {
         let attempts = 0;
         const maxAttempts = 10;
         const checkInstance = () => {
-          const runningInstance = instances.find(i => i.id === instanceId || i.status === 'running');
+          const runningInstance = instances.find(i => i.status === 'running');
           if (runningInstance) {
             navigate(`/dual-instance/terminal/${runningInstance.id}`);
           } else if (attempts < maxAttempts) {
@@ -145,7 +145,7 @@ export const InstanceLauncher: React.FC = () => {
    */
   const handleKill = async (instanceId: string) => {
     try {
-      await killInstance(instanceId);
+      await killInstance();
       
       showNotification({
         type: 'info',
@@ -169,7 +169,7 @@ export const InstanceLauncher: React.FC = () => {
    */
   const handleRestart = async (instanceId: string) => {
     try {
-      const newInstanceId = await restartInstance(instanceId);
+      await restartInstance();
       
       showNotification({
         type: 'success',

@@ -7,6 +7,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid';
+import { getSocketIOUrl } from '../utils/websocket-url';
 
 export interface ProcessInfo {
   pid: number | null;
@@ -57,7 +58,7 @@ export const useInstanceManager = () => {
 
   // Initialize WebSocket connection
   useEffect(() => {
-    const newSocket = io('http://localhost:3001', {
+    const newSocket = io(getSocketIOUrl(), {
       transports: ['websocket']
     });
 

@@ -31,7 +31,8 @@ export function useWebSocketSingleton(
   options: UseWebSocketSingletonOptions = {}
 ): UseWebSocketSingletonReturn {
   const {
-    url = import.meta.env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
+    // CRITICAL FIX: Use relative URL for Vite proxy compatibility
+    url = import.meta.env.VITE_WEBSOCKET_URL || '/',
     ...connectionOptions
   } = options;
 

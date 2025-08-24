@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Terminal, Play, Square, Settings, Maximize2 } from 'lucide-react';
 import { TerminalComponent } from './Terminal';
 import { useTerminal } from '../hooks/useTerminal';
+import { getWebSocketUrl } from '../utils/websocket-url';
 
 interface TerminalLauncherProps {
   /**
@@ -31,7 +32,7 @@ interface TerminalLauncherProps {
 }
 
 const TerminalLauncher: React.FC<TerminalLauncherProps> = ({
-  wsUrl = 'ws://localhost:3001/terminal',
+  wsUrl = getWebSocketUrl('/terminal'),
   initialVisible = false,
   autoConnect = false,
   config = {},

@@ -1,0 +1,95 @@
+{
+  "recordId": "nlt-1755964077927-react-hooks-init",
+  "errorId": "err-1755964077927-iqk15l",
+  "timestamp": "2025-08-23T00:00:00.000Z",
+  "pattern": {
+    "type": "TEMPORAL_DEAD_ZONE_VIOLATION",
+    "category": "REACT_HOOKS_INITIALIZATION",
+    "severity": "CRITICAL",
+    "domain": "Frontend/React",
+    "complexity": "HIGH"
+  },
+  "failure": {
+    "userReport": "Cannot access 'connectionState' before initialization",
+    "originalError": "ReferenceError: Cannot access 'connectionState' before initialization",
+    "location": "WebSocketSingletonContext.tsx:151",
+    "context": "useMemo hook dependency violation",
+    "stackTrace": "at useMemo hook execution in React context provider"
+  },
+  "rootCause": {
+    "primary": "Variable self-reference in useMemo definition",
+    "technical": "connectionState.connectionError referenced inside connectionState useMemo",
+    "pattern": "Temporal dead zone violation in JavaScript const/let hoisting",
+    "reactSpecific": "Hook dependency referencing the computed value being created"
+  },
+  "claudeResponse": {
+    "confidence": "HIGH",
+    "claimed": "Fixed WebSocket context initialization",
+    "actualResult": "FAILED - ReferenceError still occurred",
+    "methodology": "NONE - No TDD patterns used",
+    "tddFactor": 0.0
+  },
+  "correctSolution": {
+    "approach": "Separate state variable for connectionError",
+    "implementation": "useState hook for connectionError before useMemo",
+    "pattern": "Proper variable declaration order in React hooks",
+    "tddTest": "Tests for variable initialization order validation"
+  },
+  "preventionStrategies": {
+    "immediate": [
+      "Always declare state variables before computed values",
+      "Never self-reference inside useMemo/useCallback definitions",
+      "Use separate useState for all context properties"
+    ],
+    "architectural": [
+      "Implement TDD tests for React hooks patterns",
+      "Add ESLint rules for hook dependency validation", 
+      "Create error boundaries for initialization failures"
+    ],
+    "tooling": [
+      "TypeScript strict mode for temporal dead zone detection",
+      "React DevTools for hook execution order analysis",
+      "Jest tests for component initialization patterns"
+    ]
+  },
+  "metrics": {
+    "effectivenessScore": 0.23,
+    "tddFactor": 0.0,
+    "userSuccessRate": 0.0,
+    "claudeConfidence": 0.85,
+    "calculatedScore": 0.0,
+    "timeToResolution": "immediate_after_nld_analysis"
+  },
+  "learningData": {
+    "failureFrequency": "RARE",
+    "domainSpecific": "React/JavaScript temporal dead zone",
+    "complexityIndicators": ["useMemo", "context", "self-reference", "hoisting"],
+    "tddPrevention": true,
+    "errorBoundaryRequired": true
+  },
+  "neuralTraining": {
+    "exported": true,
+    "patterns": ["temporal-dead-zone", "react-hooks-order", "useMemo-self-reference"],
+    "features": {
+      "syntactic": ["useMemo", "const", "self-reference"],
+      "semantic": ["variable-scope", "initialization-order", "hook-dependencies"],
+      "contextual": ["React-context", "provider-pattern", "state-management"]
+    },
+    "classification": "HOOK_INITIALIZATION_ORDER_VIOLATION"
+  },
+  "recommendations": {
+    "immediate": "Fix applied - separate state variable created",
+    "shortTerm": "Add comprehensive TDD tests for React hooks patterns",
+    "longTerm": "Implement systematic hook initialization validation",
+    "tooling": "Add pre-commit hooks for temporal dead zone detection"
+  },
+  "relatedPatterns": [
+    "react-context-initialization-errors",
+    "javascript-hoisting-violations", 
+    "hook-dependency-missing-errors",
+    "provider-pattern-state-management"
+  ],
+  "validated": true,
+  "fixApplied": true,
+  "testCoverage": "COMPREHENSIVE"
+}

@@ -188,8 +188,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
         const data = await response.json();
         setEngagementState(prev => ({
           ...prev,
-          [type === 'like' ? 'liked' : type === 'heart' ? 'hearted' : type === 'bookmark' ? 'bookmarked' : type]: 
-            type === 'share' ? prev[type + 's'] + 1 : data.data[type + (type === 'share' ? 'Count' : 'd')] !== undefined ? data.data[type + (type === 'share' ? 'Count' : 'd')] : !prev[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')],
+          [type === 'like' ? 'liked' : type === 'heart' ? 'hearted' : 'bookmarked']: 
+            data.data[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')] !== undefined ? data.data[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')] : !prev[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')],
           [type + 's']: data.data[type + 'Count'] || (type === 'share' ? prev[type + 's'] + 1 : prev[type + 's'])
         }));
 

@@ -101,7 +101,7 @@ export const TerminalDebugTest: React.FC = () => {
           <h2 className="text-xl font-bold mb-4 text-green-200">✅ Expected Behavior</h2>
           <div className="space-y-2 text-green-100">
             <p><strong>Terminal Initialization:</strong> Should see logs for terminal creation and addon loading</p>
-            <p><strong>WebSocket Connection:</strong> Should attempt to connect to localhost:3001/terminal</p>
+            <p><strong>WebSocket Connection:</strong> Should attempt to connect to the backend terminal service via proxy</p>
             <p><strong>Keyboard Events:</strong> Every keypress should increment the counter and log details</p>
             <p><strong>Focus Management:</strong> Terminal focus status should update when clicking in/out of terminal</p>
             <p><strong>Socket Messages:</strong> Input should be sent via socket.emit('message', ...) when connected</p>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { getWebSocketUrl } from '../utils/websocket-url';
 import { TerminalWebSocketService } from '../services/terminal-websocket';
 
 export interface UseTerminalOptions {
@@ -36,7 +37,7 @@ export interface UseTerminalReturn {
  */
 export const useTerminal = (options: UseTerminalOptions = {}): UseTerminalReturn => {
   const {
-    wsUrl = 'ws://localhost:3001/terminal',
+    wsUrl = getWebSocketUrl('/terminal'),
     autoConnect = true,
     reconnectAttempts = 5,
     reconnectDelay = 3000,

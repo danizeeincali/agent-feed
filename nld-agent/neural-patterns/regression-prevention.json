@@ -1,0 +1,159 @@
+{
+  "neuralModel": {
+    "version": "1.0.0",
+    "type": "regression-prevention",
+    "training": {
+      "epochs": 0,
+      "accuracy": 0.0,
+      "lastTrained": null
+    }
+  },
+  "inputFeatures": {
+    "compilation": {
+      "typescriptErrors": {
+        "weight": 0.95,
+        "threshold": 0,
+        "description": "Number of TypeScript compilation errors"
+      },
+      "buildTime": {
+        "weight": 0.3,
+        "threshold": 60000,
+        "description": "Build time in milliseconds"
+      },
+      "moduleResolutionErrors": {
+        "weight": 0.85,
+        "threshold": 0,
+        "description": "Number of module resolution failures"
+      }
+    },
+    "networking": {
+      "corsErrors": {
+        "weight": 0.85,
+        "threshold": 0,
+        "description": "Number of CORS-related errors"
+      },
+      "websocketConnections": {
+        "weight": 0.8,
+        "threshold": 1,
+        "description": "Number of successful WebSocket connections"
+      },
+      "apiResponseTime": {
+        "weight": 0.4,
+        "threshold": 5000,
+        "description": "Average API response time in milliseconds"
+      }
+    },
+    "ui": {
+      "componentRenderErrors": {
+        "weight": 0.9,
+        "threshold": 0,
+        "description": "Number of component rendering failures"
+      },
+      "consoleErrors": {
+        "weight": 0.7,
+        "threshold": 0,
+        "description": "Number of browser console errors"
+      },
+      "terminalResponsiveness": {
+        "weight": 0.75,
+        "threshold": 1,
+        "description": "Terminal input response success rate"
+      }
+    }
+  },
+  "outputPredictions": {
+    "regressionRisk": {
+      "low": {
+        "threshold": 0.3,
+        "actions": ["continue", "log-success"]
+      },
+      "medium": {
+        "threshold": 0.7,
+        "actions": ["warn", "increase-monitoring"]
+      },
+      "high": {
+        "threshold": 0.9,
+        "actions": ["block", "run-diagnostics", "alert-team"]
+      },
+      "critical": {
+        "threshold": 1.0,
+        "actions": ["halt-deployment", "emergency-rollback"]
+      }
+    }
+  },
+  "learningPatterns": {
+    "successPatterns": {
+      "cleanBuild": {
+        "features": {
+          "typescriptErrors": 0,
+          "moduleResolutionErrors": 0,
+          "componentRenderErrors": 0,
+          "corsErrors": 0,
+          "websocketConnections": 1,
+          "terminalResponsiveness": 1
+        },
+        "outcome": "success",
+        "confidence": 0.95
+      }
+    },
+    "failurePatterns": {
+      "whiteScreenOfDeath": {
+        "features": {
+          "typescriptErrors": ">0",
+          "componentRenderErrors": ">0",
+          "consoleErrors": ">0"
+        },
+        "outcome": "critical-failure",
+        "confidence": 0.98
+      },
+      "corsBlocking": {
+        "features": {
+          "corsErrors": ">0",
+          "websocketConnections": 0,
+          "apiResponseTime": ">10000"
+        },
+        "outcome": "high-failure",
+        "confidence": 0.90
+      },
+      "terminalUnresponsive": {
+        "features": {
+          "terminalResponsiveness": 0,
+          "websocketConnections": 0
+        },
+        "outcome": "medium-failure",
+        "confidence": 0.80
+      }
+    }
+  },
+  "adaptiveWeights": {
+    "recentFailures": {
+      "whiteScreenOfDeath": 0,
+      "corsBlocking": 0,
+      "terminalInputHanging": 0,
+      "componentImportErrors": 0
+    },
+    "environmentFactors": {
+      "development": {
+        "corsWeight": 0.5,
+        "buildTimeWeight": 0.3
+      },
+      "production": {
+        "corsWeight": 0.95,
+        "buildTimeWeight": 0.8
+      }
+    }
+  },
+  "trainingDataSources": {
+    "nldRecords": "/workspaces/agent-feed/nld-agent/records/",
+    "testResults": "/workspaces/agent-feed/tests/regression/",
+    "buildLogs": "/workspaces/agent-feed/logs/",
+    "performanceMetrics": "/workspaces/agent-feed/.claude-flow/metrics/"
+  },
+  "continuousLearning": {
+    "enabled": true,
+    "retrainThreshold": 10,
+    "newDataPoints": 0,
+    "lastUpdate": null,
+    "accuracyTarget": 0.95
+  }
+}

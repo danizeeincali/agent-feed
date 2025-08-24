@@ -8,6 +8,7 @@ import React, { createContext, useContext, useCallback, useEffect, useState, use
 import { useRobustWebSocket } from '../hooks/useRobustWebSocket';
 import { WebSocketErrorBoundary } from './WebSocketErrorBoundary';
 import { ConnectionState } from '../services/connection/types';
+import { getSocketIOUrl } from '../utils/websocket-url';
 
 interface ConnectionStateInfo {
   isConnected: boolean;
@@ -121,13 +122,8 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
     getMetrics,
     getHealth
   } = useRobustWebSocket({
-    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || 'http://localhost:3001',
-    fallbackUrls: config.fallbackUrls || [
-      'http://localhost:3003',
-      'http://localhost:3002',
-      'http://localhost:3004',
-      'http://localhost:3005'
-    ],
+    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || getSocketIOUrl(),
+    fallbackUrls: config.fallbackUrls || [],
     autoConnect: config.autoConnect !== false,
     debugMode: config.debugMode || (import.meta as any).env.VITE_DEBUG_WEBSOCKET === 'true',
     onConnect: () => {

@@ -1,0 +1,146 @@
+# Page snapshot
+
+```yaml
+- img
+- text: AgentLink
+- navigation:
+  - link "Simple Launcher":
+    - /url: /simple-launcher
+    - img
+    - text: Simple Launcher
+  - link "Feed":
+    - /url: /
+    - img
+    - text: Feed
+  - link "Claude Manager":
+    - /url: /dual-instance
+    - img
+    - text: Claude Manager
+  - link "Agents":
+    - /url: /agents
+    - img
+    - text: Agents
+  - link "Workflows":
+    - /url: /workflows
+    - img
+    - text: Workflows
+  - link "Live Activity":
+    - /url: /activity
+    - img
+    - text: Live Activity
+  - link "Analytics":
+    - /url: /analytics
+    - img
+    - text: Analytics
+  - link "Claude Code":
+    - /url: /claude-code
+    - img
+    - text: Claude Code
+  - link "Terminal Debug":
+    - /url: /terminal-debug
+    - img
+    - text: Terminal Debug
+  - link "Performance Monitor":
+    - /url: /performance-monitor
+    - img
+    - text: Performance Monitor
+  - link "Settings":
+    - /url: /settings
+    - img
+    - text: Settings
+- text: Disconnected
+- img
+- banner:
+  - heading "AgentLink Feed System" [level=1]
+  - img
+  - textbox "Search posts..."
+  - button "Notifications (Offline)":
+    - img
+- main:
+  - heading "Terminal Debug Test Page" [level=1]
+  - heading "Test Controls" [level=2]
+  - button "Hide Terminal"
+  - button "Stop Process"
+  - button "Change PID"
+  - button "Reload Page"
+  - heading "Terminal Visibility" [level=3]
+  - paragraph: VISIBLE
+  - heading "Process Status" [level=3]
+  - paragraph: RUNNING
+  - heading "Process PID" [level=3]
+  - paragraph: "12345"
+  - heading "🔍 Debug Instructions" [level=2]
+  - paragraph:
+    - strong: "1. Check Browser Console:"
+    - text: Open DevTools (F12) and watch the console for detailed logs
+  - paragraph:
+    - strong: "2. Test Keyboard Input:"
+    - text: Click in the terminal and try typing - every keystroke should be logged
+  - paragraph:
+    - strong: "3. Monitor WebSocket:"
+    - text: Watch the connection status and socket events in the debug panel
+  - paragraph:
+    - strong: "4. Focus Testing:"
+    - text: Click the "Focus Terminal" button and verify focus status changes
+  - paragraph:
+    - strong: "5. Network Tab:"
+    - text: Check DevTools Network tab for WebSocket connection attempts
+  - paragraph:
+    - strong: "6. Test Buttons:"
+    - text: Use the "Test Keyboard" button to simulate input programmatically
+  - heading "✅ Expected Behavior" [level=2]
+  - paragraph:
+    - strong: "Terminal Initialization:"
+    - text: Should see logs for terminal creation and addon loading
+  - paragraph:
+    - strong: "WebSocket Connection:"
+    - text: Should attempt to connect to the backend terminal service via proxy
+  - paragraph:
+    - strong: "Keyboard Events:"
+    - text: Every keypress should increment the counter and log details
+  - paragraph:
+    - strong: "Focus Management:"
+    - text: Terminal focus status should update when clicking in/out of terminal
+  - paragraph:
+    - strong: "Socket Messages:"
+    - text: Input should be sent via socket.emit('message', ...) when connected
+  - paragraph:
+    - strong: "Error Handling:"
+    - text: Connection failures should be logged and displayed
+  - heading "🚨 Troubleshooting Checklist" [level=2]
+  - paragraph:
+    - strong: "No Keyboard Events:"
+    - text: Check if xterm.js is properly loaded and terminal has focus
+  - paragraph:
+    - strong: "WebSocket Fails:"
+    - text: Verify backend server is running on port 3001
+  - paragraph:
+    - strong: "Input Not Sent:"
+    - text: Check if socket is connected (should see green status)
+  - paragraph:
+    - strong: "Terminal Not Visible:"
+    - text: Verify xterm CSS is loaded and container has proper dimensions
+  - paragraph:
+    - strong: "Focus Issues:"
+    - text: Try clicking directly in the terminal area, not on borders
+  - paragraph:
+    - strong: "Console Errors:"
+    - text: Look for import errors or missing dependencies
+  - heading "🔍 Terminal Debug Panel" [level=3]
+  - text: "Keys Pressed: 0 Socket Messages: 0 Connection: disconnected"
+  - button "Test Input"
+  - button "Focus Terminal"
+  - button "Clear Logs"
+  - textbox "Terminal input"
+  - heading "Debug Logs:" [level=4]
+  - text: "[8:55:09 AM] 🔧 Starting terminal initialization... [8:55:09 AM] 📦 Creating xterm.js Terminal instance [8:55:09 AM] 🖥️ Opening terminal in DOM [8:55:09 AM] ✅ Terminal initialization complete [8:55:09 AM] 🔗 Attaching onData handler [8:55:09 AM] 🎯 Terminal focused [8:55:09 AM] 🔌 Starting WebSocket connection... [8:55:09 AM] 🧹 Cleaning up terminal [8:55:09 AM] 🔧 Starting terminal initialization... [8:55:09 AM] 📦 Creating xterm.js Terminal instance [8:55:09 AM] 🖥️ Opening terminal in DOM [8:55:09 AM] ✅ Terminal initialization complete [8:55:09 AM] 🔗 Attaching onData handler [8:55:09 AM] 🎯 Terminal focused [8:55:09 AM] 🔌 Starting WebSocket connection... [8:55:09 AM] ❌ WebSocket error: [object Event] [8:55:09 AM] 🔌 WebSocket closed"
+  - heading "Debug Environment Info" [level=2]
+  - heading "Browser Info" [level=3]
+  - paragraph: "User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.7258.5 Safari/537.36"
+  - paragraph: "Platform: Linux x86_64"
+  - paragraph: "Language: en-US"
+  - heading "Window Info" [level=3]
+  - paragraph: "Inner Width: 1280"
+  - paragraph: "Inner Height: 720"
+  - paragraph: "Location: http://localhost:5173/terminal-debug"
+```

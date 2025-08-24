@@ -1,0 +1,167 @@
+{
+  "nld_pattern_database": {
+    "pattern_id": "terminal_cors_failure_2025_001",
+    "pattern_type": "websocket_cors_rejection",
+    "timestamp": "2025-08-23T15:15:00Z",
+    "failure_signatures": {
+      "error_messages": [
+        "Not allowed by CORS",
+        "WebSocket transport error", 
+        "Connection rejected by server",
+        "Access-Control-Allow-Origin missing"
+      ],
+      "network_patterns": [
+        "http_status_code_403",
+        "preflight_options_failure",
+        "websocket_upgrade_denied"
+      ],
+      "client_symptoms": [
+        "immediate_disconnect_after_connect",
+        "falling_back_to_polling",
+        "connection_timeout"
+      ]
+    },
+    "root_cause_analysis": {
+      "primary_causes": [
+        {
+          "category": "configuration_error",
+          "description": "Insufficient CORS origin whitelist",
+          "severity": "high",
+          "fix_priority": 1
+        },
+        {
+          "category": "protocol_mismatch", 
+          "description": "Missing WebSocket-specific HTTP methods",
+          "severity": "high",
+          "fix_priority": 2
+        },
+        {
+          "category": "localhost_variants",
+          "description": "IPv6 localhost [::1] not included",
+          "severity": "medium",
+          "fix_priority": 3
+        },
+        {
+          "category": "development_ports",
+          "description": "Vite dev server port 5173 missing",
+          "severity": "medium", 
+          "fix_priority": 4
+        }
+      ]
+    },
+    "prevention_patterns": {
+      "comprehensive_origin_allowlist": {
+        "pattern": "include_all_localhost_variants",
+        "implementation": [
+          "http://localhost:[3000,3001,5173]",
+          "https://localhost:[3000,3001,5173]", 
+          "http://127.0.0.1:[3000,3001,5173]",
+          "https://127.0.0.1:[3000,3001,5173]",
+          "http://[::1]:[3000,3001,5173]",
+          "https://[::1]:[3000,3001,5173]"
+        ]
+      },
+      "websocket_method_inclusion": {
+        "pattern": "include_websocket_required_methods",
+        "implementation": [
+          "GET", "POST", "OPTIONS", "HEAD", "PUT", "DELETE"
+        ]
+      },
+      "enhanced_cors_headers": {
+        "pattern": "comprehensive_header_allowlist",
+        "implementation": [
+          "Content-Type",
+          "Authorization",
+          "X-Requested-With", 
+          "Accept",
+          "Origin",
+          "Access-Control-Allow-Origin",
+          "Access-Control-Allow-Methods",
+          "Access-Control-Allow-Headers"
+        ]
+      },
+      "development_mode_fallback": {
+        "pattern": "allow_unknown_origins_in_dev",
+        "implementation": "process.env.NODE_ENV === 'development' ? allow_all : strict_allowlist"
+      }
+    },
+    "success_patterns": {
+      "connection_establishment": {
+        "metrics": {
+          "target_connection_time": "< 2000ms",
+          "success_rate": "> 99%",
+          "error_rate": "< 0.1%"
+        },
+        "validation_steps": [
+          "preflight_options_success",
+          "websocket_upgrade_success", 
+          "bidirectional_communication_test"
+        ]
+      }
+    },
+    "neural_learning_data": {
+      "training_scenarios": [
+        {
+          "scenario": "localhost_cors_success",
+          "input_features": [
+            "origin_in_allowlist",
+            "proper_methods_included",
+            "valid_headers_present"
+          ],
+          "output": "connection_success"
+        },
+        {
+          "scenario": "cors_rejection_pattern",
+          "input_features": [
+            "origin_not_in_allowlist",
+            "missing_options_method",
+            "insufficient_headers"
+          ],
+          "output": "connection_failure"
+        }
+      ],
+      "pattern_weights": {
+        "origin_matching": 0.4,
+        "method_availability": 0.3,
+        "header_completeness": 0.2,
+        "protocol_compatibility": 0.1
+      }
+    },
+    "automated_detection": {
+      "monitoring_rules": [
+        {
+          "rule_name": "cors_error_spike",
+          "condition": "cors_errors > 5 per minute",
+          "action": "alert_and_auto_remediate"
+        },
+        {
+          "rule_name": "websocket_connection_failure",
+          "condition": "websocket_success_rate < 95%",
+          "action": "escalate_to_nld_analysis"
+        }
+      ],
+      "auto_remediation": [
+        {
+          "trigger": "unknown_origin_in_dev",
+          "action": "temporarily_add_to_allowlist"
+        },
+        {
+          "trigger": "missing_websocket_methods",
+          "action": "add_required_methods_to_cors_config"
+        }
+      ]
+    },
+    "regression_prevention": {
+      "pre_deployment_checks": [
+        "cors_configuration_validation",
+        "websocket_connection_test_suite",
+        "origin_allowlist_completeness_check"
+      ],
+      "continuous_monitoring": [
+        "real_time_cors_error_tracking",
+        "websocket_health_metrics",
+        "client_connection_success_rates"
+      ]
+    }
+  }
+}

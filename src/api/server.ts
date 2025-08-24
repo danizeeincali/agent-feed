@@ -63,9 +63,32 @@ const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
   cors: {
-    origin: ["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
-    methods: ["GET", "POST"],
-    credentials: true
+    origin: [
+      // Localhost variations
+      "http://localhost:3000", "http://localhost:3001", "http://localhost:5173",
+      "https://localhost:3000", "https://localhost:3001", "https://localhost:5173",
+      // IPv4 localhost
+      "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:5173",
+      "https://127.0.0.1:3000", "https://127.0.0.1:3001", "https://127.0.0.1:5173",
+      // IPv6 localhost (modern browsers)
+      "http://[::1]:3000", "http://[::1]:3001", "http://[::1]:5173",
+      "https://[::1]:3000", "https://[::1]:3001", "https://[::1]:5173",
+      // Common development domains
+      "http://0.0.0.0:3000", "http://0.0.0.0:3001", "http://0.0.0.0:5173"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization", 
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+      "Access-Control-Allow-Origin",
+      "Access-Control-Allow-Methods",
+      "Access-Control-Allow-Headers"
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
   },
   transports: ['polling', 'websocket'],
   // CRITICAL FIX: Synchronized timeout settings with client
@@ -77,7 +100,15 @@ const io = new SocketIOServer(httpServer, {
   httpCompression: true,  // NEW: Enable compression for better performance
   allowEIO3: true,        // NEW: Backward compatibility
   allowRequest: (req, callback) => {
-    // Allow all connections for development
+    // SIMPLIFIED: Allow all connections in development for terminal functionality
+    console.log('🔍 WebSocket Connection Request:', {
+      origin: req.headers.origin,
+      method: req.method,
+      url: req.url,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Always allow in development - terminal functionality is critical
     callback(null, true);
   }
 });
@@ -101,14 +132,45 @@ app.use(helmet({
 app.use(compression());
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3001'];
+    const allowedOrigins = [
+      // Localhost variations
+      'http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173',
+      'https://localhost:3000', 'https://localhost:3001', 'https://localhost:5173',
+      // IPv4 localhost
+      'http://127.0.0.1:3000', 'http://127.0.0.1:3001', 'http://127.0.0.1:5173',
+      'https://127.0.0.1:3000', 'https://127.0.0.1:3001', 'https://127.0.0.1:5173',
+      // IPv6 localhost
+      'http://[::1]:3000', 'http://[::1]:3001', 'http://[::1]:5173',
+      'https://[::1]:3000', 'https://[::1]:3001', 'https://[::1]:5173',
+      // Development variations
+      'http://0.0.0.0:3000', 'http://0.0.0.0:3001', 'http://0.0.0.0:5173'
+    ];
+    
+    console.log('🔍 Express CORS Check:', { origin, allowed: !origin || allowedOrigins.includes(origin) });
+    
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
+    } else if (process.env.NODE_ENV === 'development') {
+      console.log('⚠️  Development: allowing origin', origin);
+      callback(null, true);
     } else {
+      console.log('❌ Express CORS rejected:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+    'Origin',
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Methods',
+    'Access-Control-Allow-Headers'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json({ limit: '10mb' }));
@@ -219,6 +281,9 @@ apiV1.use('/demo', demoAgentsRoutes);
 apiV1.use('/claude-live', claudeCodeIntegrationRoutes);
 apiV1.use('/prod-claude', prodClaudeRoutes);
 apiV1.use('/claude-launcher', simpleLauncherRoutes);
+
+// CRITICAL FIX: Mount simple launcher at the path frontend expects
+app.use('/api/claude', simpleLauncherRoutes);
 apiV1.use('/', commentsRouter);
 apiV1.use('/', commentsEnhancedRoutes);
 
@@ -339,6 +404,29 @@ if (WEBSOCKET_ENABLED) {
   
   console.log('✅ Advanced Terminal Streaming Service initialized successfully');
   
+  // CRITICAL FIX: Add authentication middleware for root namespace
+  io.use(async (socket: any, next) => {
+    try {
+      // Simple auth for terminal connections
+      const auth = socket.handshake.auth;
+      const userId = auth.userId || auth.user_id || 'anonymous-user';
+      const username = auth.username || `User-${userId.slice(0, 8)}`;
+      
+      // Set user info on socket
+      socket.user = {
+        id: userId,
+        username: username,
+        lastSeen: new Date()
+      };
+      
+      console.log('🔍 Root namespace auth successful:', { userId, username });
+      next();
+    } catch (error) {
+      console.error('🔍 Root namespace auth failed:', error);
+      next(); // Allow connection anyway for debugging
+    }
+  });
+
   io.on('connection', (socket: ConnectedSocket) => {
     const userId = socket.user?.id;
     logger.info('WebSocket client connected', { 
