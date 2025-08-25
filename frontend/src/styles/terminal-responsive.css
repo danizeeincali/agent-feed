@@ -1,0 +1,181 @@
+/* Terminal Responsive Styles for Cascade Prevention */
+
+.terminal-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-viewport {
+  width: 100%;
+  min-height: 400px;
+  height: 100%;
+  overflow: hidden;
+  background: #1e1e1e;
+  border-radius: 4px;
+}
+
+/* Responsive Terminal Sizing */
+@media (min-width: 320px) and (max-width: 767px) {
+  /* Mobile: Narrower but functional */
+  .terminal-viewport {
+    font-size: 12px;
+    min-height: 300px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet: Medium width */
+  .terminal-viewport {
+    font-size: 13px;
+    min-height: 350px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  /* Desktop: Full width for cascade prevention */
+  .terminal-viewport {
+    font-size: 14px;
+    min-height: 400px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1440px) {
+  /* Large Desktop: Maximum width for complex CLI operations */
+  .terminal-viewport {
+    font-size: 14px;
+    min-height: 450px;
+    width: 100%;
+  }
+}
+
+/* Terminal Header Styles */
+.terminal-header {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  padding: 8px 16px;
+  border-bottom: 1px solid #047857;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.terminal-header h3 {
+  color: white;
+  font-weight: 600;
+  margin: 0;
+  font-size: 16px;
+}
+
+.terminal-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.terminal-status-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.terminal-status-connected {
+  color: #d1fae5;
+}
+
+.terminal-status-connecting {
+  color: #fde68a;
+}
+
+.terminal-status-disconnected {
+  color: #fecaca;
+}
+
+/* Terminal Footer */
+.terminal-footer {
+  background: #047857;
+  padding: 8px 16px;
+  border-top: 1px solid #10b981;
+  flex-shrink: 0;
+}
+
+.terminal-footer-text {
+  font-size: 12px;
+  color: #d1fae5;
+  margin: 0;
+}
+
+/* XTerm.js Terminal Styling */
+.xterm {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.xterm-viewport {
+  width: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.xterm-screen {
+  width: 100% !important;
+}
+
+/* Prevent horizontal scrolling that causes visual cascading */
+.xterm .xterm-rows {
+  width: 100% !important;
+}
+
+/* Ensure text wrapping behaves correctly */
+.xterm .xterm-char-measure-element {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: -9999em;
+  line-height: normal;
+}
+
+/* Claude CLI Specific Optimizations */
+.terminal-claude-optimized {
+  /* Enhanced width for Claude CLI content */
+  min-width: 900px;
+}
+
+.terminal-claude-optimized .xterm {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+/* Cascade Prevention Classes */
+.terminal-no-cascade {
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.terminal-wide {
+  width: 100%;
+  max-width: none;
+}
+
+/* Loading States */
+.terminal-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.terminal-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #ef4444;
+  text-align: center;
+  padding: 20px;
+}

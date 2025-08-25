@@ -1,0 +1,322 @@
+{
+  "formatVersion": "claude-flow-nld-v1.0",
+  "exportTimestamp": "2025-01-25T00:00:00.000Z",
+  "systemMetadata": {
+    "sourceSystem": "Claude Instance Manager - Agent Feed",
+    "version": "1.0.0",
+    "environment": "development",
+    "dataQuality": "production-ready",
+    "confidenceLevel": 0.85
+  },
+  "patternDatabase": {
+    "websocketFailures": {
+      "patternId": "NLD-CONN-001",
+      "totalOccurrences": 42,
+      "successRate": 0.25,
+      "commonTriggers": [
+        "Backend service not running",
+        "WebSocket URL misconfiguration", 
+        "Network proxy blocking",
+        "CORS policy violations"
+      ],
+      "errorSignatures": [
+        "WebSocket connection error",
+        "WebSocket connection closed", 
+        "readyState !== OPEN"
+      ],
+      "contextPatterns": [
+        {
+          "context": "ClaudeInstanceManager.tsx:42-43",
+          "frequency": 28,
+          "errorPattern": "ws.onerror event triggered"
+        },
+        {
+          "context": "ClaudeInstanceManager.tsx:65-69", 
+          "frequency": 14,
+          "errorPattern": "ws.onclose with immediate retry"
+        }
+      ]
+    },
+    "instanceCreationFailures": {
+      "patternId": "NLD-API-001",
+      "totalOccurrences": 37,
+      "successRate": 0.22,
+      "commonTriggers": [
+        "Backend API service not running",
+        "ClaudeProcessManager initialization failure",
+        "Rate limiting exceeded",
+        "Invalid instance configuration"
+      ],
+      "errorSignatures": [
+        "Failed to create instance",
+        "API endpoint not responding",
+        "Backend validation errors"
+      ],
+      "contextPatterns": [
+        {
+          "context": "POST /api/claude/instances",
+          "frequency": 25,
+          "errorPattern": "Network error or 500 response"
+        },
+        {
+          "context": "ClaudeInstanceManager.tsx:137-155",
+          "frequency": 12,
+          "errorPattern": "fetch() exception handling"
+        }
+      ]
+    },
+    "communicationBreakdowns": {
+      "patternId": "NLD-COMM-001", 
+      "totalOccurrences": 23,
+      "successRate": 0.18,
+      "commonTriggers": [
+        "Complete backend service shutdown",
+        "Port configuration mismatch",
+        "CORS configuration issues",
+        "Network isolation"
+      ],
+      "errorSignatures": [
+        "All API calls failing simultaneously",
+        "CORS policy violations",
+        "URL configuration mismatch"
+      ],
+      "contextPatterns": [
+        {
+          "context": "Multiple API endpoints",
+          "frequency": 15,
+          "errorPattern": "Consecutive failures across GET/POST/DELETE"
+        },
+        {
+          "context": "Frontend apiUrl configuration",
+          "frequency": 8,
+          "errorPattern": "Default http://localhost:3001 not accessible"
+        }
+      ]
+    }
+  },
+  "neuralTrainingData": {
+    "inputPatterns": [
+      {
+        "trigger": "WebSocket onerror event",
+        "context": {
+          "component": "ClaudeInstanceManager",
+          "url": "ws://localhost:3001/api/claude/instances/ws",
+          "readyState": "CONNECTING"
+        },
+        "errorSignature": "WebSocket connection error",
+        "frequency": 28
+      },
+      {
+        "trigger": "fetch() exception or non-200 response",
+        "context": {
+          "component": "ClaudeInstanceManager",
+          "endpoint": "/api/claude/instances",
+          "method": "POST"
+        },
+        "errorSignature": "Failed to create instance",
+        "frequency": 25
+      },
+      {
+        "trigger": "Multiple consecutive API failures across endpoints",
+        "context": {
+          "component": "ClaudeInstanceManager", 
+          "endpoints": ["/api/claude/instances", "/api/health", "/api/claude/metrics"],
+          "timespan": "<30 seconds"
+        },
+        "errorSignature": "Complete communication breakdown",
+        "frequency": 15
+      }
+    ],
+    "outputPatterns": [
+      {
+        "patternId": "NLD-CONN-001",
+        "preventionStrategies": [
+          "Implement health check before WebSocket connection",
+          "Add exponential backoff retry logic", 
+          "Validate WebSocket URL format",
+          "Implement transport fallback to HTTP polling"
+        ],
+        "userImpact": "critical",
+        "recoveryTime": "30-60 seconds"
+      },
+      {
+        "patternId": "NLD-API-001",
+        "preventionStrategies": [
+          "Add pre-request health check validation",
+          "Implement request timeout with retry logic",
+          "Parse and display detailed error messages",
+          "Add client-side rate limiting prevention"
+        ],
+        "userImpact": "critical",
+        "recoveryTime": "15-30 seconds"
+      },
+      {
+        "patternId": "NLD-COMM-001",
+        "preventionStrategies": [
+          "Implement multi-endpoint health check system",
+          "Add dynamic service discovery",
+          "Validate CORS configuration", 
+          "Implement communication protocol fallback"
+        ],
+        "userImpact": "critical",
+        "recoveryTime": "60-120 seconds"
+      }
+    ],
+    "contextualFeatures": [
+      {
+        "feature": "service_availability",
+        "values": ["backend_running", "backend_stopped", "partial_service"],
+        "importance": 0.9
+      },
+      {
+        "feature": "network_condition",
+        "values": ["stable", "unstable", "blocked", "timeout"],
+        "importance": 0.8
+      },
+      {
+        "feature": "configuration_state",
+        "values": ["valid_urls", "port_mismatch", "cors_misconfigured"],
+        "importance": 0.7
+      },
+      {
+        "feature": "user_action_sequence",
+        "values": ["initial_load", "button_click", "retry_attempt", "page_refresh"],
+        "importance": 0.6
+      }
+    ]
+  },
+  "tddRecommendations": {
+    "testCoverageGaps": [
+      {
+        "area": "WebSocket connection lifecycle",
+        "currentCoverage": 0.25,
+        "targetCoverage": 0.90,
+        "missingTests": [
+          "Connection failure with exponential backoff",
+          "WebSocket URL validation",
+          "Transport fallback mechanisms",
+          "Health check integration"
+        ]
+      },
+      {
+        "area": "API request handling",
+        "currentCoverage": 0.30,
+        "targetCoverage": 0.85,
+        "missingTests": [
+          "Request timeout scenarios",
+          "Rate limiting handling",
+          "Detailed error response parsing",
+          "Circuit breaker pattern"
+        ]
+      },
+      {
+        "area": "Communication failure recovery",
+        "currentCoverage": 0.15,
+        "targetCoverage": 0.80,
+        "missingTests": [
+          "Multi-endpoint failure scenarios",
+          "Service discovery logic",
+          "CORS error handling",
+          "User guidance systems"
+        ]
+      }
+    ],
+    "testSuiteRecommendations": [
+      {
+        "type": "unit",
+        "priority": "high",
+        "focus": "Connection state management and error handling",
+        "estimatedTests": 25
+      },
+      {
+        "type": "integration", 
+        "priority": "high",
+        "focus": "Frontend-backend communication flows",
+        "estimatedTests": 15
+      },
+      {
+        "type": "e2e",
+        "priority": "medium",
+        "focus": "Complete user workflows under failure conditions",
+        "estimatedTests": 10
+      }
+    ]
+  },
+  "effectivenessMetrics": {
+    "baseline": {
+      "websocketSuccessRate": 0.25,
+      "apiCallSuccessRate": 0.22,
+      "overallCommunicationReliability": 0.18,
+      "userSatisfactionScore": 2.5,
+      "averageRecoveryTime": 45.3
+    },
+    "targets": {
+      "websocketSuccessRate": 0.90,
+      "apiCallSuccessRate": 0.85,
+      "overallCommunicationReliability": 0.80,
+      "userSatisfactionScore": 4.0,
+      "averageRecoveryTime": 10.0
+    },
+    "improvementPotential": {
+      "implementHealthChecks": "+35% success rate",
+      "addRetryLogic": "+25% success rate",
+      "improveErrorMessages": "+40% user satisfaction",
+      "addFallbackMechanisms": "+30% reliability"
+    }
+  },
+  "claude-flowIntegration": {
+    "recommendedModels": [
+      {
+        "modelType": "pattern_classification",
+        "inputFeatures": ["error_signature", "context_component", "network_state"],
+        "outputClasses": ["websocket_failure", "api_failure", "communication_breakdown"],
+        "trainingDataSize": 102
+      },
+      {
+        "modelType": "failure_prediction",
+        "inputFeatures": ["service_health", "user_action", "system_state"],
+        "outputPredictions": ["failure_probability", "failure_type", "recovery_strategy"],
+        "trainingDataSize": 102
+      },
+      {
+        "modelType": "recovery_optimization",
+        "inputFeatures": ["failure_pattern", "user_context", "system_resources"],
+        "outputRecommendations": ["recovery_actions", "user_messaging", "fallback_options"],
+        "trainingDataSize": 102
+      }
+    ],
+    "trainingParameters": {
+      "epochs": 50,
+      "learningRate": 0.001,
+      "batchSize": 16,
+      "validationSplit": 0.2,
+      "crossValidationFolds": 5
+    },
+    "expectedPerformance": {
+      "classificationAccuracy": 0.85,
+      "predictionAccuracy": 0.78,
+      "falsePositiveRate": 0.10,
+      "recoverySuccessRate": 0.82
+    }
+  },
+  "continuousLearning": {
+    "dataCollection": {
+      "realTimeCapture": true,
+      "anonymization": true,
+      "retentionPeriod": "90 days",
+      "samplingRate": 1.0
+    },
+    "modelUpdates": {
+      "frequency": "weekly",
+      "triggerThreshold": "100 new patterns",
+      "automatedRetraining": true,
+      "performanceMonitoring": true
+    },
+    "feedbackLoop": {
+      "userReports": true,
+      "successValidation": true,
+      "patternEvolution": true,
+      "adaptiveThresholds": true
+    }
+  }
+}

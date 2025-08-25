@@ -1,0 +1,56 @@
+{
+  "id": "WSR-2025-08-25-001",
+  "type": "UI_RENDERING_FAILURE",
+  "severity": "CRITICAL",
+  "timestamp": "2025-08-25T23:56:45Z",
+  "pattern": {
+    "name": "White Screen Regression After System Validation",
+    "category": "Frontend Rendering",
+    "symptoms": [
+      "White/blank screen on frontend load",
+      "Backend API endpoints functional",
+      "WebSocket connections established",
+      "No visible React components rendered"
+    ],
+    "context": {
+      "backend_status": "running",
+      "frontend_status": "running",
+      "api_health": "operational",
+      "websocket_status": "connected",
+      "last_working_state": "SimpleLauncher component functional"
+    }
+  },
+  "root_causes": [
+    "React rendering error in root component",
+    "Router configuration issue",
+    "Missing or incorrect component imports",
+    "State management initialization failure",
+    "Build/bundling configuration mismatch"
+  ],
+  "diagnostic_steps": [
+    "Check browser console for React errors",
+    "Verify component import paths",
+    "Validate router configuration",
+    "Check for missing dependencies",
+    "Inspect network tab for failed resource loads"
+  ],
+  "prevention": {
+    "automated_tests": [
+      "Component render tests",
+      "Route navigation tests",
+      "Build validation tests",
+      "E2E smoke tests before deployment"
+    ],
+    "monitoring": [
+      "React error boundaries",
+      "Component mount tracking",
+      "Performance monitoring",
+      "User interaction tracking"
+    ]
+  },
+  "fix_approach": {
+    "immediate": "Restore last known working configuration",
+    "systematic": "SPARC debug methodology with TDD validation",
+    "tools": ["Claude-Flow swarm", "Playwright", "React DevTools"]
+  }
+}

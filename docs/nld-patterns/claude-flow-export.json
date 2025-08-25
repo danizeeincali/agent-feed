@@ -1,0 +1,274 @@
+{
+  "claude_flow_neural_export": {
+    "export_metadata": {
+      "export_id": "CF-NLD-2025-08-25-001",
+      "timestamp": "2025-08-25T00:00:00Z", 
+      "nld_agent_version": "1.0.0",
+      "claude_flow_target_version": "2.0.0+",
+      "export_type": "terminal_regression_training_data"
+    },
+    "training_data_package": {
+      "dataset_name": "terminal_carriage_return_regression",
+      "dataset_category": "failure_pattern_classification",
+      "total_samples": 1,
+      "high_value_samples": 1,
+      "training_priority": "immediate"
+    },
+    "neural_model_targets": [
+      {
+        "model_name": "terminal_modification_risk_predictor",
+        "model_type": "binary_classification", 
+        "target_accuracy": "95%",
+        "deployment_hook": "pre_terminal_modification"
+      },
+      {
+        "model_name": "ansi_processing_regression_detector",
+        "model_type": "multi_class_classification",
+        "target_accuracy": "90%",
+        "deployment_hook": "pre_ansi_modification"
+      },
+      {
+        "model_name": "tdd_effectiveness_predictor",
+        "model_type": "regression",
+        "target_accuracy": "85%",
+        "deployment_hook": "development_process_validation"
+      }
+    ],
+    "feature_engineering": {
+      "input_features": [
+        {
+          "feature_name": "cascade_complaint_detected",
+          "feature_type": "binary",
+          "encoding": "one_hot",
+          "importance": 0.9,
+          "description": "User reports cascading UI issues"
+        },
+        {
+          "feature_name": "carriage_return_modification_implemented",
+          "feature_type": "binary", 
+          "encoding": "one_hot",
+          "importance": 0.95,
+          "description": "Code contains .replace(/\\r/g, ...)"
+        },
+        {
+          "feature_name": "ansi_processing_modified",
+          "feature_type": "binary",
+          "encoding": "one_hot", 
+          "importance": 0.8,
+          "description": "ANSI escape sequence handling changed"
+        },
+        {
+          "feature_name": "regex_line_ending_replacement",
+          "feature_type": "binary",
+          "encoding": "one_hot",
+          "importance": 0.9,
+          "description": "Regex used to modify line ending patterns"
+        },
+        {
+          "feature_name": "terminal_behavior_test_coverage",
+          "feature_type": "continuous",
+          "encoding": "standard_scaling",
+          "range": [0.0, 1.0],
+          "importance": 0.85,
+          "description": "Percentage of terminal behavior tests added"
+        },
+        {
+          "feature_name": "tdd_factor",
+          "feature_type": "continuous", 
+          "encoding": "standard_scaling",
+          "range": [0.0, 1.0],
+          "importance": 0.7,
+          "description": "Degree of TDD usage in implementation"
+        },
+        {
+          "feature_name": "claude_confidence_level",
+          "feature_type": "continuous",
+          "encoding": "standard_scaling",
+          "range": [0.0, 1.0],
+          "importance": 0.6,
+          "description": "Claude's claimed confidence in solution"
+        },
+        {
+          "feature_name": "implementation_complexity",
+          "feature_type": "ordinal",
+          "encoding": "label_encoding",
+          "categories": ["low", "medium", "high", "very_high"],
+          "importance": 0.5,
+          "description": "Complexity of the implemented solution"
+        }
+      ],
+      "target_variables": [
+        {
+          "target_name": "carriage_return_regression_risk",
+          "target_type": "binary",
+          "classes": ["high_risk", "low_risk"],
+          "class_weights": [1.0, 0.3]
+        },
+        {
+          "target_name": "terminal_functionality_break_probability",
+          "target_type": "continuous",
+          "range": [0.0, 1.0]
+        },
+        {
+          "target_name": "effectiveness_score_prediction", 
+          "target_type": "continuous",
+          "range": [0.0, 2.0]
+        }
+      ]
+    },
+    "training_samples": [
+      {
+        "sample_id": "terminal_cr_regression_001",
+        "features": {
+          "cascade_complaint_detected": 1,
+          "carriage_return_modification_implemented": 1,
+          "ansi_processing_modified": 1,
+          "regex_line_ending_replacement": 1,
+          "terminal_behavior_test_coverage": 0.0,
+          "tdd_factor": 0.2,
+          "claude_confidence_level": 0.9,
+          "implementation_complexity": "high"
+        },
+        "targets": {
+          "carriage_return_regression_risk": "high_risk",
+          "terminal_functionality_break_probability": 1.0,
+          "effectiveness_score_prediction": 0.0
+        },
+        "sample_weight": 1.0,
+        "validation_split": "train"
+      }
+    ],
+    "model_architecture": {
+      "terminal_modification_risk_predictor": {
+        "input_layer": {
+          "size": 8,
+          "activation": "none"
+        },
+        "hidden_layers": [
+          {
+            "size": 16,
+            "activation": "relu",
+            "dropout": 0.3
+          },
+          {
+            "size": 12,
+            "activation": "relu", 
+            "dropout": 0.2
+          }
+        ],
+        "output_layer": {
+          "size": 2,
+          "activation": "softmax"
+        },
+        "optimizer": "adam",
+        "loss_function": "binary_crossentropy",
+        "metrics": ["accuracy", "precision", "recall", "f1_score"]
+      }
+    },
+    "deployment_configuration": {
+      "integration_hooks": [
+        {
+          "hook_name": "pre_terminal_modification_validation",
+          "trigger": "terminal_file_modification_detected",
+          "model": "terminal_modification_risk_predictor",
+          "threshold": 0.7,
+          "action": "require_comprehensive_testing"
+        },
+        {
+          "hook_name": "ansi_processing_safety_check",
+          "trigger": "ansi_escape_sequence_handling_modified", 
+          "model": "ansi_processing_regression_detector",
+          "threshold": 0.8,
+          "action": "mandatory_terminal_behavior_tests"
+        },
+        {
+          "hook_name": "tdd_effectiveness_validation",
+          "trigger": "solution_implementation_started",
+          "model": "tdd_effectiveness_predictor",
+          "threshold": 0.5,
+          "action": "recommend_increased_tdd_coverage"
+        }
+      ],
+      "monitoring_dashboard": {
+        "metrics": [
+          "terminal_regression_prevention_rate",
+          "model_prediction_accuracy",
+          "false_positive_rate",
+          "development_process_compliance"
+        ],
+        "alerts": [
+          {
+            "condition": "high_risk_terminal_modification_detected",
+            "severity": "critical",
+            "action": "halt_deployment_require_testing"
+          }
+        ]
+      }
+    },
+    "continuous_learning": {
+      "feedback_integration": {
+        "user_regression_reports": "immediate_model_update",
+        "success_validation": "positive_reinforcement", 
+        "false_predictions": "model_recalibration"
+      },
+      "model_evolution": {
+        "retraining_frequency": "after_each_terminal_regression",
+        "feature_importance_analysis": "monthly",
+        "architecture_optimization": "quarterly"
+      },
+      "data_collection": {
+        "new_pattern_detection": "automatic",
+        "edge_case_identification": "continuous",
+        "domain_expansion": "as_needed"
+      }
+    },
+    "validation_framework": {
+      "cross_validation": {
+        "method": "stratified_k_fold",
+        "k": 5,
+        "stratification": "risk_level"
+      },
+      "test_scenarios": [
+        {
+          "scenario": "terminal_modification_without_tests",
+          "expected_prediction": "high_risk",
+          "confidence_threshold": 0.9
+        },
+        {
+          "scenario": "comprehensive_tdd_terminal_modification",
+          "expected_prediction": "low_risk",
+          "confidence_threshold": 0.8
+        },
+        {
+          "scenario": "ansi_processing_with_minimal_testing",
+          "expected_prediction": "medium_risk",
+          "confidence_threshold": 0.7
+        }
+      ]
+    },
+    "integration_success_metrics": {
+      "deployment_targets": [
+        {
+          "metric": "terminal_regression_reduction",
+          "target": "90%",
+          "measurement_period": "3_months"
+        },
+        {
+          "metric": "early_detection_rate",
+          "target": "95%",
+          "measurement_period": "ongoing"
+        },
+        {
+          "metric": "false_positive_rate",
+          "target": "<5%",
+          "measurement_period": "monthly"
+        },
+        {
+          "metric": "developer_compliance_rate",
+          "target": "85%",
+          "measurement_period": "quarterly"
+        }
+      ]
+    }
+  }
+}

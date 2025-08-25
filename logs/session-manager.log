@@ -1,0 +1,12 @@
+{"code":"ENOENT","errno":-2,"level":"error","message":"Failed to load persisted sessions: ENOENT: no such file or directory, scandir 'sessions/active'","path":"sessions/active","stack":"Error: ENOENT: no such file or directory, scandir 'sessions/active'\n    at async Object.readdir (node:internal/fs/promises:955:18)\n    at async SessionManager.loadPersistedSessions (/workspaces/agent-feed/src/services/SessionManager.ts:326:21)","syscall":"scandir","timestamp":"2025-08-25T20:14:45.979Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T20:47:32.261Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T20:52:19.288Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T20:52:30.046Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T20:52:40.339Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T21:11:38.153Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T21:12:17.129Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T21:14:26.548Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T21:14:54.964Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T21:16:01.856Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T21:17:00.431Z"}
+{"level":"info","message":"Loaded 0 persisted sessions","timestamp":"2025-08-25T23:46:49.953Z"}

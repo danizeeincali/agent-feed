@@ -21,9 +21,9 @@ export default defineConfig({
     strictPort: true, // Exit if port is already in use
     // Proxy configuration for backend services
     proxy: {
-      // HTTP API proxy (working for Claude detection) - FIXED TO PORT 3001
+      // HTTP API proxy (working for Claude detection) - FIXED TO PORT 3000
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
         configure: (proxy, _options) => {
@@ -35,9 +35,9 @@ export default defineConfig({
           });
         }
       },
-      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression) - FIXED TO PORT 3001
+      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression) - FIXED TO PORT 3000
       '/socket.io': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:3000',
         ws: true,           // Enable WebSocket proxying
         changeOrigin: true, // Change origin headers to match target
         secure: false,

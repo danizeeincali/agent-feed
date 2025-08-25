@@ -1,0 +1,152 @@
+{
+  "patternId": "NLD-CONN-001",
+  "type": "WebSocket Connection Failure",
+  "severity": "Critical",
+  "category": "Network Connectivity",
+  "description": "WebSocket connection establishment failure patterns in Claude Instance Manager",
+  "failureSignatures": [
+    {
+      "signature": "WebSocket connection error",
+      "context": "Frontend ClaudeInstanceManager.tsx line 42-43",
+      "errorPattern": "ws.onerror = (error) => { console.error('WebSocket error:', error); setError('WebSocket connection error'); }",
+      "frequency": "High",
+      "userImpact": "Cannot communicate with Claude instances"
+    },
+    {
+      "signature": "WebSocket connection closed",
+      "context": "Frontend ClaudeInstanceManager.tsx line 65-69",
+      "errorPattern": "ws.onclose = () => { console.log('WebSocket connection closed'); setTimeout(connectWebSocket, 3000); }",
+      "frequency": "Medium",
+      "userImpact": "Connection drops, automatic reconnect attempt"
+    },
+    {
+      "signature": "WebSocket readyState !== OPEN",
+      "context": "Frontend ClaudeInstanceManager.tsx line 162",
+      "errorPattern": "if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN)",
+      "frequency": "High",
+      "userImpact": "Cannot send messages to Claude instances"
+    }
+  ],
+  "rootCauses": [
+    {
+      "cause": "Backend server not running",
+      "detection": "WebSocket connection fails at startup",
+      "ports": [3000, 3001, 3002],
+      "urls": ["ws://localhost:3001/api/claude/instances/ws"]
+    },
+    {
+      "cause": "Incorrect WebSocket URL configuration",
+      "detection": "URL replacement logic in line 42: apiUrl.replace('http', 'ws')",
+      "configuration": "WebSocket path: /api/claude/instances/ws"
+    },
+    {
+      "cause": "CORS policy violations",
+      "detection": "WebSocket handshake failure in browser console",
+      "configuration": "Server CORS settings for WebSocket connections"
+    },
+    {
+      "cause": "Network proxy or firewall blocking WebSocket connections",
+      "detection": "Connection timeout or immediate failure",
+      "workaround": "Fallback to polling transport"
+    }
+  ],
+  "preventionStrategies": [
+    {
+      "strategy": "Health Check Validation",
+      "implementation": "Add /api/health endpoint check before WebSocket connection",
+      "code": "const healthCheck = await fetch(`${apiUrl}/api/health`); if (!healthCheck.ok) throw new Error('Backend not available');",
+      "priority": "High"
+    },
+    {
+      "strategy": "Connection Retry with Exponential Backoff",
+      "implementation": "Replace setTimeout with exponential backoff retry logic",
+      "code": "const retryDelay = Math.min(1000 * Math.pow(2, retryCount), 30000);",
+      "priority": "High"
+    },
+    {
+      "strategy": "WebSocket URL Validation",
+      "implementation": "Validate URL format before connection attempt",
+      "code": "const isValidWsUrl = wsUrl.startsWith('ws://') || wsUrl.startsWith('wss://');",
+      "priority": "Medium"
+    },
+    {
+      "strategy": "Transport Fallback",
+      "implementation": "Implement HTTP polling fallback when WebSocket fails",
+      "code": "const transport = wsSupported ? 'websocket' : 'polling';",
+      "priority": "Medium"
+    }
+  ],
+  "detectionMechanisms": [
+    {
+      "mechanism": "Connection State Monitoring",
+      "implementation": "Monitor WebSocket readyState and connection events",
+      "triggers": ["onerror", "onclose", "readyState !== OPEN"]
+    },
+    {
+      "mechanism": "Message Send Validation",
+      "implementation": "Check connection state before message sending",
+      "validation": "wsRef.current?.readyState === WebSocket.OPEN"
+    },
+    {
+      "mechanism": "Heartbeat/Ping Monitoring",
+      "implementation": "Regular ping messages to detect connection health",
+      "interval": "30000ms"
+    }
+  ],
+  "userExperienceImpact": {
+    "symptom": "Button clicks result in no response or error messages",
+    "visibility": "Error state displayed in UI header",
+    "fallback": "Manual refresh required, no automatic recovery UX",
+    "severity": "Blocks core functionality - cannot interact with Claude instances"
+  },
+  "testingRecommendations": [
+    {
+      "testType": "Network Fault Injection",
+      "scenario": "Simulate network disconnection during active WebSocket session",
+      "expectedBehavior": "Graceful error handling and automatic reconnection"
+    },
+    {
+      "testType": "Backend Service Unavailability",
+      "scenario": "Start frontend with backend service stopped",
+      "expectedBehavior": "Clear error message and retry mechanism"
+    },
+    {
+      "testType": "WebSocket Transport Blocking",
+      "scenario": "Block WebSocket connections via proxy/firewall simulation",
+      "expectedBehavior": "Fallback to alternative communication method"
+    }
+  ],
+  "tddRecommendations": {
+    "unitTests": [
+      "WebSocket connection state handling",
+      "Message sending validation with connection checks",
+      "Error state management and UI updates"
+    ],
+    "integrationTests": [
+      "WebSocket connection lifecycle (connect/disconnect/reconnect)",
+      "Backend health check integration",
+      "Message flow between frontend and backend WebSocket"
+    ],
+    "e2eTests": [
+      "Complete user workflow with WebSocket connectivity issues",
+      "Recovery scenarios after network disruption",
+      "Cross-browser WebSocket compatibility"
+    ]
+  },
+  "nldMetadata": {
+    "recordId": "NLD-CONN-001-20250825",
+    "effectivenessScore": 0.25,
+    "calculationMethod": "(User Success Rate: 0.30 / Claude Confidence: 0.90) * TDD Factor: 0.75 = 0.25",
+    "tddUsage": "Limited - Basic error handling present but no comprehensive test coverage",
+    "patternClassification": "Network Infrastructure Failure",
+    "neuralTrainingStatus": "Exported for claude-flow neural pattern training"
+  },
+  "claude-flowIntegration": {
+    "exportFormat": "WebSocket connection failure patterns for neural training",
+    "trainingData": {
+      "inputPatterns": ["WebSocket error events", "Connection state changes", "Message send failures"],
+      "outputPatterns": ["Connection retry logic", "Error state management", "User feedback systems"],
+      "contextFeatures": ["URL validation", "Health checks", "Transport fallbacks"]
+    }
+  }
+}

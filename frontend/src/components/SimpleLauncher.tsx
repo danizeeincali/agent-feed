@@ -5,10 +5,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useNLDCapture } from '../utils/nld-ui-capture';
 import { TerminalComponent } from './Terminal';
 import { TerminalEmergencyFixed } from './TerminalEmergencyFixed';
+import { TerminalExpandedWidth } from './TerminalExpandedWidth';
 import TerminalDiagnostic from './TerminalDiagnostic';
 import TerminalLauncher from './TerminalLauncher';
+import ClaudeInstanceManager from './ClaudeInstanceManager';
+import NLDDashboard from './NLDDashboard';
 
 interface ProcessStatus {
   isRunning: boolean;
@@ -26,6 +30,9 @@ interface ApiResponse {
   workingDirectory?: string;
   claudeAvailable?: boolean;
   error?: string;
+  instanceId?: string;
+  instance?: { id: string };
+  instances?: any[];
 }
 
 export const SimpleLauncher: React.FC = () => {
@@ -39,11 +46,24 @@ export const SimpleLauncher: React.FC = () => {
   const [showTerminal, setShowTerminal] = useState(false);
   const [useFixedTerminal, setUseFixedTerminal] = useState(true); // Default to fixed version
   const [showDiagnostic, setShowDiagnostic] = useState(false);
-  const [terminalMode, setTerminalMode] = useState<'original' | 'fixed' | 'diagnostic' | 'comparison'>('fixed');
+  const [terminalMode, setTerminalMode] = useState<'original' | 'fixed' | 'expanded' | 'diagnostic' | 'comparison'>('expanded');
   const [selectedCommand, setSelectedCommand] = useState<string>('cd prod && claude');
+  const [instances, setInstances] = useState<any[]>([]);
+  const [selectedInstanceId, setSelectedInstanceId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'terminal' | 'web'>(() => {
+    // Persist view preference in localStorage
+    try {
+      const saved = localStorage.getItem('claude-launcher-view-mode');
+      return (saved as 'terminal' | 'web') || 'terminal';
+    } catch {
+      return 'terminal';
+    }
+  });
+  const [showNLDDashboard, setShowNLDDashboard] = useState(false);
+  const nld = useNLDCapture();
 
   // Simple HTTP API calls with comprehensive debug logging (now using Vite proxy)
-  const apiCall = async (endpoint: string, method: string = 'GET'): Promise<ApiResponse> => {
+  const apiCall = async (endpoint: string, method: string = 'GET', body?: any): Promise<ApiResponse> => {
     // Use relative URL - Vite proxy will handle routing to backend
     const fullUrl = `/api/claude${endpoint}`;
     console.log('🔍 SPARC DEBUG: apiCall starting');
@@ -59,6 +79,7 @@ export const SimpleLauncher: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        ...(body && { body: JSON.stringify(body) })
       });
       
       console.log('🔍 SPARC DEBUG: Fetch response received');
@@ -100,7 +121,7 @@ export const SimpleLauncher: React.FC = () => {
         console.log('✅ Claude API response:', response);
         
         // FIXED: Properly handle the response structure
-        const isAvailable = response.claudeAvailable === true || response.status === 'ok';
+        const isAvailable = response.claudeAvailable === true || response.message === 'ok';
         
         setClaudeAvailable(isAvailable);
         console.log('✅ Claude CLI availability set to:', isAvailable);
@@ -144,16 +165,40 @@ export const SimpleLauncher: React.FC = () => {
     setIsLoading(true);
     setSelectedCommand(command);
     try {
-      const response = await apiCall('/launch', 'POST');
-      
-      if (response.success) {
-        setProcessStatus({ isRunning: true, status: 'running' });
-        if (response.workingDirectory) {
-          setWorkingDirectory(response.workingDirectory);
+      // Use the new instance-based launch for Claude commands
+      if (command.includes('claude')) {
+        // Create a dedicated Claude instance
+        const mode = command.includes('chat') ? 'chat' : 
+                    command.includes('code') ? 'code' : 
+                    command.includes('help') ? 'help' : 'chat';
+        
+        const response = await apiCall('/instances', 'POST', {
+          name: `Claude ${mode.charAt(0).toUpperCase() + mode.slice(1)}`,
+          mode,
+          cwd: command.includes('prod') ? '/workspaces/agent-feed/prod' : '/workspaces/agent-feed'
+        });
+        
+        if (response.success || response.instanceId) {
+          setSelectedInstanceId(response.instanceId || response.instance?.id);
+          await fetchInstances();
+          setProcessStatus({ isRunning: true, status: 'running' });
+          setShowTerminal(true);
+        } else {
+          alert(`Failed to launch: ${response.message || response.error}`);
         }
-        setShowTerminal(true); // Auto-show terminal when launching
       } else {
-        alert(`Failed to launch: ${response.message || response.error}`);
+        // Legacy launch for non-Claude commands
+        const response = await apiCall('/launch', 'POST');
+        
+        if (response.success) {
+          setProcessStatus({ isRunning: true, status: 'running' });
+          if (response.workingDirectory) {
+            setWorkingDirectory(response.workingDirectory);
+          }
+          setShowTerminal(true);
+        } else {
+          alert(`Failed to launch: ${response.message || response.error}`);
+        }
       }
     } catch (error) {
       console.error('Launch error:', error);
@@ -162,6 +207,18 @@ export const SimpleLauncher: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  const fetchInstances = async () => {
+    try {
+      const response = await apiCall('/instances');
+      if (response.success && response.instances) {
+        setInstances(response.instances);
+      }
+    } catch (error) {
+      console.error('Error fetching instances:', error);
+    }
+  };
+
 
   const handleStop = async () => {
     setIsLoading(true);
@@ -221,6 +278,7 @@ export const SimpleLauncher: React.FC = () => {
         <div><strong>Claude Code:</strong> <span data-testid="claude-availability">{getClaudeAvailabilityDisplay()}</span></div>
         <div><strong>Working Directory:</strong> {workingDirectory || '/prod'}</div>
       </div>
+
 
       {/* Status Display */}
       <div className="status-section">
@@ -285,88 +343,178 @@ export const SimpleLauncher: React.FC = () => {
         </div>
       )}
 
-      {/* Terminal Integration */}
-      {processStatus.status === 'running' && (
-        <div className="terminal-section mt-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">🔬 Claude Terminal - Deep Diagnostic</h3>
-            <div className="flex items-center space-x-2">
-              <select
-                value={terminalMode}
-                onChange={(e) => setTerminalMode(e.target.value as any)}
-                className="px-3 py-1 bg-gray-700 text-white rounded border border-gray-600"
-              >
-                <option value="original">📟 Original</option>
-                <option value="fixed">🔧 Fixed</option>
-                <option value="diagnostic">🔬 Diagnostic</option>
-                <option value="comparison">🔍 Comparison</option>
-              </select>
-              <button
-                onClick={() => setShowTerminal(!showTerminal)}
-                className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                {showTerminal ? '🔽 Hide Terminal' : '🔼 Show Terminal'}
-              </button>
+      {/* View Mode Toggle */}
+      <div className="view-toggle-section">
+        <div className="view-toggle-header">
+          <h3>Interface Mode</h3>
+          <p>Choose between terminal or web interface for Claude interaction</p>
+        </div>
+        <div className="view-toggle-buttons">
+          <button
+            onClick={() => {
+              setViewMode('terminal');
+              try {
+                localStorage.setItem('claude-launcher-view-mode', 'terminal');
+              } catch (e) {
+                console.warn('Failed to save view preference:', e);
+              }
+            }}
+            className={`toggle-button ${viewMode === 'terminal' ? 'active' : ''}`}
+            data-testid="terminal-view-toggle"
+          >
+            🖥️ Terminal View
+          </button>
+          <button
+            onClick={() => {
+              setViewMode('web');
+              try {
+                localStorage.setItem('claude-launcher-view-mode', 'web');
+              } catch (e) {
+                console.warn('Failed to save view preference:', e);
+              }
+            }}
+            className={`toggle-button ${viewMode === 'web' ? 'active' : ''}`}
+            data-testid="web-view-toggle"
+          >
+            🌐 Web Interface
+          </button>
+        </div>
+        <div className="view-description">
+          {viewMode === 'terminal' ? (
+            <span>💻 Classic terminal interface with real-time output and diagnostic tools</span>
+          ) : (
+            <span>🚀 Modern web interface with multiple instances and advanced management</span>
+          )}
+        </div>
+      </div>
+
+      {/* Interface Content - Conditional Rendering */}
+      {viewMode === 'terminal' ? (
+        // Terminal View
+        processStatus.status === 'running' && (
+          <div className="terminal-section mt-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white">🔬 Claude Terminal - Deep Diagnostic</h3>
+              <div className="flex items-center space-x-2">
+                <select
+                  value={terminalMode}
+                  onChange={(e) => setTerminalMode(e.target.value as any)}
+                  className="px-3 py-1 bg-gray-700 text-white rounded border border-gray-600"
+                >
+                  <option value="original">📟 Original</option>
+                  <option value="fixed">🔧 Fixed</option>
+                  <option value="expanded">📏 Width Expanded</option>
+                  <option value="diagnostic">🔬 Diagnostic</option>
+                  <option value="comparison">🔍 Comparison</option>
+                </select>
+                <button
+                  onClick={() => setShowTerminal(!showTerminal)}
+                  className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  {showTerminal ? '🔽 Hide Terminal' : '🔼 Show Terminal'}
+                </button>
+                <button
+                  onClick={() => {
+                    nld.captureButtonClick('nld_dashboard_open', 'SimpleLauncher');
+                    setShowNLDDashboard(true);
+                  }}
+                  className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700"
+                  title="Open Neural Learning Database Dashboard"
+                >
+                  🧠 NLD Dashboard
+                </button>
+              </div>
             </div>
-          </div>
-          
-          {showTerminal && (
-            <div className="space-y-6">
-              {terminalMode === 'original' && (
-                <div>
-                  <h4 className="text-md font-medium text-gray-300 mb-2">📟 Original Terminal</h4>
-                  <TerminalComponent 
-                    isVisible={showTerminal}
-                    processStatus={processStatus}
-                    initialCommand={selectedCommand}
-                  />
-                </div>
-              )}
-              
-              {terminalMode === 'fixed' && (
-                <div>
-                  <h4 className="text-md font-medium text-gray-300 mb-2">🔧 Fixed Terminal</h4>
-                  <TerminalEmergencyFixed 
-                    isVisible={showTerminal}
-                    processStatus={processStatus}
-                    initialCommand={selectedCommand}
-                  />
-                </div>
-              )}
-              
-              {terminalMode === 'diagnostic' && (
-                <div>
-                  <h4 className="text-md font-medium text-red-400 mb-2">🔬 Diagnostic Terminal (Deep Analysis)</h4>
-                  <TerminalDiagnostic 
-                    isVisible={showTerminal}
-                    processStatus={processStatus}
-                  />
-                </div>
-              )}
-              
-              {terminalMode === 'comparison' && (
-                <div className="space-y-6">
+            
+            {showTerminal && (
+              <div className="space-y-6">
+                {terminalMode === 'original' && (
+                  <div>
+                    <h4 className="text-md font-medium text-gray-300 mb-2">📟 Original Terminal</h4>
+                    <TerminalComponent 
+                      isVisible={showTerminal}
+                      processStatus={processStatus}
+                      initialCommand={selectedCommand}
+                    />
+                  </div>
+                )}
+                
+                {terminalMode === 'fixed' && (
                   <div>
                     <h4 className="text-md font-medium text-gray-300 mb-2">🔧 Fixed Terminal</h4>
                     <TerminalEmergencyFixed 
                       isVisible={showTerminal}
                       processStatus={processStatus}
+                      initialCommand={selectedCommand}
                     />
                   </div>
-                  
-                  <div className="border-t border-red-500 pt-6">
-                    <h4 className="text-md font-medium text-red-400 mb-2">🔬 Diagnostic Terminal</h4>
+                )}
+                
+                {terminalMode === 'expanded' && (
+                  <div>
+                    <h4 className="text-md font-medium text-blue-400 mb-2">📏 Width Expanded Terminal (Cascade Prevention)</h4>
+                    <TerminalExpandedWidth 
+                      isVisible={showTerminal}
+                      processStatus={processStatus}
+                      initialCommand={selectedCommand}
+                    />
+                  </div>
+                )}
+                
+                {terminalMode === 'diagnostic' && (
+                  <div>
+                    <h4 className="text-md font-medium text-red-400 mb-2">🔬 Diagnostic Terminal (Deep Analysis)</h4>
                     <TerminalDiagnostic 
                       isVisible={showTerminal}
                       processStatus={processStatus}
                     />
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+                
+                {terminalMode === 'comparison' && (
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-md font-medium text-gray-300 mb-2">🔧 Fixed Terminal</h4>
+                      <TerminalEmergencyFixed 
+                        isVisible={showTerminal}
+                        processStatus={processStatus}
+                      />
+                    </div>
+                    
+                    <div className="border-t border-red-500 pt-6">
+                      <h4 className="text-md font-medium text-red-400 mb-2">🔬 Diagnostic Terminal</h4>
+                      <TerminalDiagnostic 
+                        isVisible={showTerminal}
+                        processStatus={processStatus}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )
+      ) : (
+        // Web Interface View
+        <div className="web-interface-section mt-6">
+          <div className="web-interface-header mb-4">
+            <h3 className="text-lg font-semibold">🌐 Claude Instance Manager</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              Manage multiple Claude instances with dedicated communication channels
+            </p>
+          </div>
+          <ClaudeInstanceManager apiUrl="" />
         </div>
       )}
+
+      {/* NLD Dashboard */}
+      <NLDDashboard
+        isVisible={showNLDDashboard}
+        onClose={() => {
+          nld.captureButtonClick('nld_dashboard_close', 'SimpleLauncher');
+          setShowNLDDashboard(false);
+        }}
+      />
       
       <style>{`
         .simple-launcher {
@@ -558,6 +706,88 @@ export const SimpleLauncher: React.FC = () => {
         .terminal-section p {
           color: #6c757d;
           margin-bottom: 15px;
+          text-align: left;
+          font-style: normal;
+        }
+
+        /* View Toggle Styles */
+        .view-toggle-section {
+          background: #f8f9fa;
+          border: 2px solid #dee2e6;
+          border-radius: 8px;
+          padding: 20px;
+          margin: 20px 0;
+          text-align: center;
+        }
+
+        .view-toggle-section h3 {
+          margin-top: 0;
+          color: #495057;
+          font-size: 18px;
+          margin-bottom: 15px;
+        }
+
+        .view-toggle {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          margin-bottom: 15px;
+        }
+
+        .toggle-button {
+          padding: 10px 20px;
+          font-size: 14px;
+          font-weight: bold;
+          border: 2px solid #6c757d;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s;
+          background: white;
+          color: #6c757d;
+        }
+
+        .toggle-button:hover {
+          background: #e9ecef;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .toggle-button.active {
+          background: #007bff;
+          color: white;
+          border-color: #007bff;
+        }
+
+        .toggle-button.active:hover {
+          background: #0056b3;
+          border-color: #0056b3;
+        }
+
+        .view-description {
+          color: #6c757d;
+          font-size: 14px;
+          margin: 0;
+          text-align: center;
+          font-style: italic;
+        }
+
+        /* Web Interface Section Styles */
+        .web-interface-section {
+          background: #f8f9fa;
+          border: 2px solid #dee2e6;
+          border-radius: 8px;
+          padding: 20px;
+          margin: 30px 0;
+        }
+
+        .web-interface-header h3 {
+          margin: 0 0 5px 0;
+          color: #495057;
+        }
+
+        .web-interface-header p {
+          margin: 0;
+          color: #6c757d;
           text-align: left;
           font-style: normal;
         }

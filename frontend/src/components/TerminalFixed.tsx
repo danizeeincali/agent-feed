@@ -59,8 +59,8 @@ export const TerminalFixed: React.FC<TerminalProps> = ({
           cyan: '#11a8cd',
           white: '#e5e5e5',
         },
-        cols: 80,
-        rows: 24,
+        cols: 120,
+        rows: 30,
         disableStdin: false,
         convertEol: false,
         macOptionIsMeta: true,
@@ -131,8 +131,8 @@ export const TerminalFixed: React.FC<TerminalProps> = ({
       const initMessage = {
         type: 'init',
         pid: processStatus.pid,
-        cols: terminal.current?.cols || 80,
-        rows: terminal.current?.rows || 24
+        cols: terminal.current?.cols || 120,
+        rows: terminal.current?.rows || 30
       };
       addDebugLog(`📤 Sending init: ${JSON.stringify(initMessage)}`);
       newSocket.send(JSON.stringify(initMessage));
@@ -351,11 +351,11 @@ export const TerminalFixed: React.FC<TerminalProps> = ({
         </div>
       </div>
 
-      {/* Terminal Container */}
-      <div className="h-96 p-2">
+      {/* Terminal Container - Full Width */}
+      <div className="h-[500px] p-2">
         <div 
           ref={terminalRef} 
-          className="w-full h-full"
+          className="w-full h-full min-w-full"
           style={{ background: '#1e1e1e' }}
         />
       </div>

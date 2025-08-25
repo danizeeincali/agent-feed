@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -14,6 +47,12 @@ const morgan_1 = __importDefault(require("morgan"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const ProcessManager_1 = require("../services/ProcessManager");
+// NEW: Import Claude Instance Management services
+const ClaudeProcessManager_1 = __importDefault(require("../services/ClaudeProcessManager"));
+const SessionManager_1 = __importDefault(require("../services/SessionManager"));
+const HealthMonitor_1 = __importDefault(require("../services/HealthMonitor"));
+const ErrorHandler_1 = __importDefault(require("../utils/ErrorHandler"));
+const claude_instance_chat_1 = __importDefault(require("../api/websockets/claude-instance-chat"));
 // Import WebSocket Hub
 const hub_activator_1 = require("../websockets/hub-activator");
 // Import middleware (temporarily disabled for debugging)
@@ -39,6 +78,8 @@ const demo_agents_1 = __importDefault(require("@/api/routes/demo-agents"));
 const claude_code_integration_1 = __importDefault(require("@/api/routes/claude-code-integration"));
 const prod_claude_1 = __importDefault(require("@/api/routes/prod-claude"));
 const simple_claude_launcher_1 = __importDefault(require("@/api/routes/simple-claude-launcher"));
+// NEW: Import Claude Instance Management routes
+const claude_instances_1 = __importStar(require("@/api/routes/claude-instances"));
 const comments_2 = require("@/api/websockets/comments");
 const claude_agents_1 = require("@/api/websockets/claude-agents");
 const claude_instance_terminal_1 = require("@/websockets/claude-instance-terminal");
@@ -54,6 +95,13 @@ const app = (0, express_1.default)();
 exports.app = app;
 const httpServer = (0, http_1.createServer)(app);
 exports.server = httpServer;
+// NEW: Initialize Claude Instance Management services
+const claudeProcessManager = new ClaudeProcessManager_1.default();
+const sessionManager = new SessionManager_1.default();
+const healthMonitor = new HealthMonitor_1.default(claudeProcessManager, sessionManager);
+const errorHandler = ErrorHandler_1.default.getInstance();
+// NEW: Initialize Claude Instance WebSocket Handler
+let claudeInstanceWebSocketHandler;
 const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: [
@@ -263,8 +311,13 @@ apiV1.use('/demo', demo_agents_1.default);
 apiV1.use('/claude-live', claude_code_integration_1.default);
 apiV1.use('/prod-claude', prod_claude_1.default);
 apiV1.use('/claude-launcher', simple_claude_launcher_1.default);
+// NEW: Mount Claude Instance Management routes
+apiV1.use('/claude/instances', claude_instances_1.default);
 // CRITICAL FIX: Mount simple launcher at the path frontend expects
 app.use('/api/claude', simple_claude_launcher_1.default);
+// NEW: Mount Claude Instance Management at expected paths  
+app.use('/api/claude/instances', claude_instances_1.default);
+app.use('/api/v1/claude/instances', claude_instances_1.default);
 apiV1.use('/', comments_1.default);
 apiV1.use('/', comments_enhanced_1.default);
 // Root API info
@@ -340,6 +393,10 @@ if (WEBSOCKET_ENABLED) {
     console.log('🔧 Initializing ClaudeInstanceTerminalWebSocket...');
     const terminalWebSocket = new claude_instance_terminal_1.ClaudeInstanceTerminalWebSocket(io);
     console.log('✅ ClaudeInstanceTerminalWebSocket initialized successfully');
+    // NEW: Initialize Claude Instance WebSocket Handler
+    console.log('🔧 Initializing Claude Instance WebSocket Handler...');
+    claudeInstanceWebSocketHandler = new claude_instance_chat_1.default(httpServer, claudeProcessManager);
+    console.log('✅ Claude Instance WebSocket Handler initialized successfully');
     // Initialize Advanced Terminal Streaming Service
     console.log('🔧 Initializing Advanced Terminal Streaming Service...');
     const terminalStreamingService = new terminal_streaming_1.default(io, {
@@ -812,11 +869,17 @@ if (WEBSOCKET_ENABLED) {
                 });
             }
         });
-        // Enhanced error handling
-        socket.on('error', (error) => {
-            logger_1.logger.error('WebSocket error:', { socketId: socket.id, error, userId });
+        // Enhanced error handling with ErrorHandler integration
+        socket.on('error', async (error) => {
+            const errorDetails = await errorHandler.handleError(error, {
+                socketId: socket.id,
+                userId,
+                type: 'websocket_error'
+            });
+            logger_1.logger.error('WebSocket error:', { socketId: socket.id, errorId: errorDetails.id, userId });
             // Send error details back to client for debugging
             socket.emit('error:details', {
+                id: errorDetails.id,
                 message: error.message,
                 timestamp: new Date().toISOString(),
                 socketId: socket.id
@@ -1199,6 +1262,8 @@ app.get('*', (req, res) => {
         });
     }
 });
+// NEW: Add comprehensive error handling middleware
+app.use(errorHandler.expressErrorHandler());
 // Error handling (temporarily disabled for debugging)
 // app.use(notFoundHandler);
 // app.use(errorHandler);
@@ -1209,6 +1274,23 @@ const gracefulShutdown = async (signal) => {
     httpServer.close(async () => {
         console.log('HTTP server closed');
         try {
+            // NEW: Shutdown Claude Instance Management services
+            if (claudeInstanceWebSocketHandler) {
+                claudeInstanceWebSocketHandler.shutdown();
+                console.log('Claude Instance WebSocket Handler shutdown');
+            }
+            if (healthMonitor) {
+                healthMonitor.shutdown();
+                console.log('Health Monitor shutdown');
+            }
+            if (sessionManager) {
+                await sessionManager.shutdown();
+                console.log('Session Manager shutdown');
+            }
+            if (claudeProcessManager) {
+                await claudeProcessManager.shutdown();
+                console.log('Claude Process Manager shutdown');
+            }
             // Close WebSocket connections
             io.close();
             console.log('WebSocket server closed');
@@ -1254,6 +1336,9 @@ const startServer = async () => {
         comments_2.commentWebSocketManager.initialize(httpServer);
         claude_agents_1.claudeAgentWebSocketManager.initialize(io);
         console.log('WebSocket servers initialized (Comments and Claude Agents)');
+        // Initialize Claude Instance Management WebSocket
+        (0, claude_instances_1.setupWebSocketEndpoint)(io);
+        console.log('Claude Instance Management WebSocket initialized');
         // Initialize WebSocket Hub if enabled (solving webhook/WebSocket mismatch)
         if (process.env.ENABLE_WEBSOCKET_HUB === 'true') {
             try {
@@ -1270,7 +1355,7 @@ const startServer = async () => {
         // Initialize Claude Code orchestrator and health monitoring
         try {
             // await claudeCodeOrchestrator.initialize();
-            claudeHealthMonitor.start();
+            // claudeHealthMonitor.start(); // Temporarily disabled
             console.log('Claude Code integration initialized successfully');
         }
         catch (error) {

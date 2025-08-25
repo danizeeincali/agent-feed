@@ -18,7 +18,7 @@ import EnhancedAgentManagerWrapper from '@/components/EnhancedAgentManagerWrappe
 import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
-import SimpleLauncher from '@/components/SimpleLauncher';
+import ClaudeInstanceManager from '@/components/ClaudeInstanceManager';
 import { TerminalDebug } from '@/components/TerminalDebug';
 import { SimpleTerminalTest } from '@/components/SimpleTerminalTest';
 import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
@@ -45,7 +45,6 @@ import {
   Workflow,
   BarChart3,
   Code,
-  Play,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
@@ -84,15 +83,16 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const location = useLocation();
 
   // Memoized navigation to prevent re-creation on every render
+  // Claude Instances is the primary feature, positioned at the top
   const navigation = React.useMemo(() => [
-    { name: 'Simple Launcher', href: '/simple-launcher', icon: Play },
-    { name: 'Feed', href: '/', icon: Activity },
+    { name: 'Claude Instances', href: '/claude-instances', icon: Bot },
     { name: 'Claude Manager', href: '/dual-instance', icon: LayoutDashboard },
+    { name: 'Feed', href: '/', icon: Activity },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
+    { name: 'Claude Code', href: '/claude-code', icon: Code },
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Claude Code', href: '/claude-code', icon: Code },
     { name: 'Terminal Debug', href: '/terminal-debug', icon: Code },
     { name: 'Performance Monitor', href: '/performance-monitor', icon: Zap },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
@@ -171,7 +171,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
               </button>
               
               <h1 className="text-xl font-semibold text-gray-900">
-                AgentLink Feed System
+                AgentLink - Claude Instance Manager
               </h1>
             </div>
 
@@ -225,10 +225,11 @@ const App: React.FC = () => {
               <ErrorBoundary componentName="AppRouter">
                 <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading page..." size="lg" />}>
                   <Routes>
-                  <Route path="/simple-launcher" element={
-                    <RouteErrorBoundary routeName="SimpleLauncher">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Simple Launcher..." />}>
-                        <SimpleLauncher />
+                  {/* Primary Feature: Claude Instances */}
+                  <Route path="/claude-instances" element={
+                    <RouteErrorBoundary routeName="ClaudeInstances">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Claude Instances..." />}>
+                        <ClaudeInstanceManager />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

@@ -84,7 +84,19 @@ class TerminalSession {
       case 'input':
         // EMERGENCY FIX: Direct input forwarding - no buffering
         if (this.process && message.data !== undefined) {
-          this.process.write(message.data);
+          // CLAUDE CLI HANG FIX: Detect incomplete claude commands
+          const inputText = message.data.toString();
+          console.log('🔍 HANG DEBUG: Checking input:', JSON.stringify(inputText));
+          console.log('🔍 HANG DEBUG: Is incomplete claude command?', this.isIncompleteClaudeCommand(inputText));
+          
+          if (this.isIncompleteClaudeCommand(inputText)) {
+            console.log('🚨 HANG PREVENTION: Intercepting claude command, sending help instead');
+            this.sendHelpfulClaudeMessage(inputText);
+            return; // Important: don't send to PTY
+          } else {
+            console.log('✅ HANG DEBUG: Input safe, forwarding to PTY');
+            this.process.write(message.data);
+          }
         }
         break;
         
@@ -185,12 +197,19 @@ class TerminalSession {
   }
 
   processAnsiSequences(data) {
-    // ENHANCED: Handle all terminal control sequences that cause cascading
+    // CRITICAL BUG FIX: Convert literal '\n' strings to actual newlines
+    // This was the root cause of the terminal display issue!
     return data
-      // Handle carriage return patterns (main cause of cascading)
-      .replace(/\r\x1b\[K/g, '\x1b[2K\x1b[1G') // \r + clear line -> clear entire line + move to start
-      .replace(/\r\x1b\[0K/g, '\x1b[0K\x1b[1G') // \r + clear to end -> clear to end + move to start  
-      .replace(/\r(?!\n)/g, '\x1b[1G')         // Standalone \r -> just move cursor to start
+      // EMERGENCY FIX: Convert literal backslash-n to actual newlines
+      .replace(/\\n/g, '\n')                   // Convert literal '\n' to actual newlines
+      .replace(/\\r/g, '\r')                   // Convert literal '\r' to actual carriage returns
+      
+      // FIXED: Preserve carriage returns - they're essential for line overwriting
+      // Only modify problematic sequences, not basic carriage returns
+      .replace(/\r\x1b\[2K/g, '\r\x1b[2K')    // \r + clear entire line - preserve both
+      .replace(/\r\x1b\[K/g, '\r\x1b[K')      // \r + clear line - preserve both
+      .replace(/\r\x1b\[0K/g, '\r\x1b[0K')    // \r + clear to end - preserve both
+      // CRITICAL: DO NOT TOUCH standalone \r - it's essential for spinner animations!
       
       // Handle cursor positioning (prevents duplicate lines)
       .replace(/\x1b\[\d*A/g, '')              // Remove cursor up sequences
@@ -268,6 +287,80 @@ class TerminalSession {
       return `error: ${error.message}`;
     }
   }
+
+  // CLAUDE CLI HANG FIX: Detect incomplete claude commands that would hang
+  isIncompleteClaudeCommand(input) {
+    const trimmedInput = input.trim().replace(/\\n/g, '\n').replace(/\\r/g, '\r');
+    
+    console.log('🔍 DETAILED: Checking trimmed input:', JSON.stringify(trimmedInput));
+    console.log('🔍 DETAILED: Original input:', JSON.stringify(input));
+    
+    // Check for standalone 'claude' command (without arguments)
+    const standaloneClaudePatterns = [
+      'claude\r',
+      'claude\n', 
+      'claude',
+      'claude\r\n'
+    ];
+    
+    // ENHANCED: Check for cd && claude patterns (without arguments after claude)
+    const chainedClaudePatterns = [
+      /cd\s+[\w\/\-\.]+\s*&&\s*claude\s*[\r\n]*$/,        // cd dir && claude
+      /cd\s+[\w\/\-\.]+\s*;\s*claude\s*[\r\n]*$/,         // cd dir ; claude
+      /.*&&\s*claude\s*[\r\n]*$/,                          // anything && claude
+      /.*;\s*claude\s*[\r\n]*$/,                           // anything ; claude
+      /cd.*claude\s*$/                                      // Any cd...claude pattern
+    ];
+    
+    // CRITICAL: Also check original input for escaped sequences
+    const originalChainedPatterns = [
+      /cd\s+[\w\/\-\.]+\s*&&\s*claude\\n$/,                // cd dir && claude\n  
+      /cd\s+[\w\/\-\.]+\s*&&\s*claude\\r$/,                // cd dir && claude\r
+      /.*&&\s*claude\\[nr]$/,                               // anything && claude\n or claude\r
+      /.*;\s*claude\\[nr]$/                                 // anything ; claude\n or claude\r
+    ];
+    
+    const isStandalone = standaloneClaudePatterns.some(pattern => trimmedInput === pattern);
+    const isChained = chainedClaudePatterns.some(pattern => pattern.test(trimmedInput));
+    const isOriginalChained = originalChainedPatterns.some(pattern => pattern.test(input.trim()));
+    
+    console.log('🔍 DETAILED: Is standalone?', isStandalone);
+    console.log('🔍 DETAILED: Is chained?', isChained);
+    console.log('🔍 DETAILED: Is original chained?', isOriginalChained);
+    
+    return isStandalone || isChained || isOriginalChained;
+  }
+
+  // CLAUDE CLI HANG FIX: Provide helpful message instead of hanging
+  sendHelpfulClaudeMessage(originalInput) {
+    const helpMessage = [
+      '\r\n',
+      '\x1b[33m💡 Claude CLI Usage Help:\x1b[0m\r\n',
+      '\r\n',
+      '  \x1b[36mclaude --version\x1b[0m     Show Claude CLI version\r\n',
+      '  \x1b[36mclaude --help\x1b[0m        Show all available options\r\n', 
+      '  \x1b[36mclaude chat\x1b[0m          Start a chat session\r\n',
+      '  \x1b[36mclaude code\x1b[0m          Code assistance mode\r\n',
+      '\r\n',
+      '\x1b[33m⚠️  Running \x1b[31mclaude\x1b[33m without arguments enters interactive mode and may appear to hang.\x1b[0m\r\n',
+      '\x1b[32m✨ Try one of the commands above!\x1b[0m\r\n',
+      '\r\n'
+    ].join('');
+
+    // Send help message via WebSocket
+    this.sendMessage({
+      type: 'data',
+      data: helpMessage
+    });
+    
+    // Send a fresh prompt
+    setTimeout(() => {
+      this.sendMessage({
+        type: 'data',
+        data: '$ '
+      });
+    }, 100);
+  }
 }
 
 // WebSocket connection handler
@@ -293,4 +386,4 @@ server.listen(PORT, HOST, () => {
   console.log(`📊 Direct passthrough mode - no buffering or batching`);
 });
 
-module.exports = { server, app };
+module.exports = { server, app, TerminalSession };

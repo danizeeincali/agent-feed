@@ -1,0 +1,128 @@
+{
+  "neuralTrainingExport": {
+    "exportId": "NEURAL-001-TERMINAL-PROTOCOL-MISMATCH",
+    "timestamp": "2025-01-27T15:50:00Z",
+    "trainingDataVersion": "1.0",
+    "claudeFlowCompatible": true
+  },
+  "patternClassification": {
+    "primaryPattern": "progressive-fix-failure",
+    "secondaryPatterns": [
+      "protocol-mismatch",
+      "architectural-assumption-error",
+      "integration-testing-gap",
+      "overconfidence-cascade"
+    ],
+    "domainTags": ["terminal", "websocket", "communication", "real-time"],
+    "complexityLevel": "high",
+    "architecturalLayer": "communication-transport"
+  },
+  "failureFeatures": {
+    "progressiveFix": {
+      "iterations": 4,
+      "successClaimed": [true, true, true, true],
+      "actualSuccess": [false, false, false, false],
+      "confidenceDecay": false,
+      "scopeCreep": true
+    },
+    "technicalIndicators": {
+      "protocolMismatch": true,
+      "integrationTestingAbsent": true,
+      "assumptionBasedFix": true,
+      "surfaceLevelFocusOnly": true,
+      "architecturalValidationSkipped": true
+    },
+    "claudeConfidencePattern": {
+      "maintainedHighConfidence": true,
+      "architecturalBlindSpot": true,
+      "testingGapIgnored": true,
+      "protocolCompatibilityAssumed": true
+    }
+  },
+  "neuralPatterns": {
+    "input_vectors": [
+      {
+        "feature": "frontend_uses_socketio",
+        "value": 1.0,
+        "weight": 0.95
+      },
+      {
+        "feature": "backend_uses_raw_websocket", 
+        "value": 1.0,
+        "weight": 0.95
+      },
+      {
+        "feature": "integration_tests_absent",
+        "value": 1.0,
+        "weight": 0.85
+      },
+      {
+        "feature": "progressive_fixes_failing",
+        "value": 4.0,
+        "weight": 0.9
+      },
+      {
+        "feature": "high_confidence_maintained",
+        "value": 1.0,
+        "weight": 0.8
+      },
+      {
+        "feature": "architectural_validation_skipped",
+        "value": 1.0,
+        "weight": 0.88
+      }
+    ],
+    "target_classification": {
+      "failure_probability": 0.98,
+      "requires_architectural_fix": true,
+      "surface_fixes_ineffective": true,
+      "integration_testing_critical": true
+    }
+  },
+  "preventionModel": {
+    "trigger_conditions": [
+      "frontend_protocol != backend_protocol",
+      "no_integration_tests AND communication_layer_involved",
+      "multiple_fixes AND no_architectural_validation",
+      "high_confidence AND repeated_failures"
+    ],
+    "intervention_suggestions": [
+      "STOP: Validate protocol compatibility first",
+      "WRITE: Integration test for end-to-end communication",
+      "CHECK: Are client and server using compatible libraries?",
+      "TEST: Can a simple message reach the backend?"
+    ],
+    "priority_tests": [
+      "protocol_compatibility_test",
+      "end_to_end_communication_test",
+      "message_format_validation_test"
+    ]
+  },
+  "trainingOutcomes": {
+    "expectedLearning": [
+      "Detect protocol mismatches before implementation",
+      "Require integration tests for communication layers", 
+      "Flag repeated surface fixes as architectural red flag",
+      "Validate assumptions about library compatibility"
+    ],
+    "behaviorChanges": [
+      "Always verify protocol compatibility first",
+      "Write communication integration tests before implementation",
+      "Question high confidence on repeated failures",
+      "Validate end-to-end flow early"
+    ]
+  },
+  "realWorldImpact": {
+    "userExperienceImpact": "Terminal completely unusable - hangs on any input",
+    "developmentTimeWasted": "4+ iterations of failed fixes",
+    "rootCauseDiscoveryTime": "Required external pattern analysis to identify",
+    "actualSolutionComplexity": "Simple - use matching protocols (Socket.IO both sides OR raw WebSocket both sides)"
+  },
+  "claudeFlowIntegration": {
+    "memoryKey": "terminal-protocol-mismatch-pattern",
+    "triggerHooks": ["pre-websocket-implementation", "communication-layer-changes"],
+    "validationRequired": ["protocol-compatibility-check", "integration-test-presence"],
+    "exportFormat": "claude-flow-neural-v1",
+    "updateFrequency": "on-pattern-detection"
+  }
+}

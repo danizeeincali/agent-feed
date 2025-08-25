@@ -1,0 +1,61 @@
+{
+  "analysisId": "ARCH-BREAKDOWN-001",
+  "timestamp": "2025-01-27T15:35:00Z",
+  "criticalFindings": {
+    "protocolMismatch": {
+      "severity": "CRITICAL",
+      "description": "Frontend using Socket.IO client, Backend using raw WebSocket server",
+      "evidence": {
+        "frontend": "const { io } = await import('socket.io-client'); const socket = io('/terminal')",
+        "backend": "const wss = new WebSocket.Server({ server, path: '/terminal' })",
+        "incompatibility": "Socket.IO and raw WebSocket are not interoperable protocols"
+      },
+      "impact": "Complete communication failure - no messages can pass between frontend and backend"
+    },
+    "serverStatus": {
+      "backendRunning": true,
+      "port": 3002,
+      "connections": "1 established connection detected",
+      "but": "Connection established at transport layer but protocol layer incompatible"
+    }
+  },
+  "communicationFlowBreakdown": {
+    "intendedFlow": [
+      "User types in xterm.js terminal",
+      "xterm.js fires onData event", 
+      "Frontend captures data and emits Socket.IO message",
+      "Backend WebSocket server receives message",
+      "Backend forwards to PTY process",
+      "PTY output sent back through WebSocket",
+      "Frontend receives and displays in terminal"
+    ],
+    "actualFlow": [
+      "User types in xterm.js terminal ✅",
+      "xterm.js fires onData event ✅",
+      "Frontend Socket.IO client emits message ✅",
+      "❌ BREAK: Backend raw WebSocket cannot understand Socket.IO protocol",
+      "Backend never receives parsed message ❌",
+      "No data forwarded to PTY ❌",
+      "Terminal appears to hang ❌"
+    ]
+  },
+  "technicalDeepDive": {
+    "socketIOProtocol": {
+      "description": "Socket.IO uses its own protocol on top of WebSocket/polling",
+      "messageFormat": "Engine.IO packet format with Socket.IO namespace handling",
+      "example": "42['message',{type:'input',data:'test'}]"
+    },
+    "rawWebSocketProtocol": {
+      "description": "Raw WebSocket expects plain JSON strings",
+      "messageFormat": "Direct JSON string transmission",
+      "example": "{\"type\":\"input\",\"data\":\"test\"}"
+    },
+    "whyItFails": "Socket.IO client sends Engine.IO formatted packets, raw WebSocket server expects plain JSON"
+  },
+  "previousFixAttempts": {
+    "pattern": "All previous fixes focused on data processing AFTER message reception",
+    "missedRootCause": "Never validated that messages were actually being received",
+    "falsePremise": "Assumed communication layer was working, focused on data transformation",
+    "debuggingGap": "Extensive frontend debugging but no backend message reception validation"
+  }
+}

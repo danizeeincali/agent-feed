@@ -1,0 +1,10 @@
+{
+  "default": [
+    {
+      "key": "spec-pseudocode_analysis",
+      "value": "Analyzed terminal width constraints in frontend components. Found terminal components using fixed width/height (h-96, w-full) in Tailwind classes and inline styles. Terminal currently constrained by container padding and max-width settings. Need to expand to full horizontal space within frame to prevent Claude CLI cascading.",
+      "namespace": "default",
+      "timestamp": 1756105814602
+    }
+  ]
+}

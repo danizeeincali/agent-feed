@@ -4,6 +4,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { SearchAddon } from '@xterm/addon-search';
 import 'xterm/css/xterm.css';
+import '../styles/terminal-responsive.css';
 
 interface TerminalProps {
   isVisible: boolean;
@@ -91,8 +92,8 @@ export const TerminalEmergencyFixed: React.FC<TerminalProps> = ({
           cursor: '#d4d4d4',
           selectionBackground: '#264f78',
         },
-        cols: 80,
-        rows: 24,
+        cols: 120, // Increased width to accommodate Claude CLI content
+        rows: 30,  // Increased height for better visibility
       });
 
       fitAddon.current = new FitAddon();
@@ -269,16 +270,20 @@ export const TerminalEmergencyFixed: React.FC<TerminalProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className="bg-gray-900 border border-green-500 rounded-lg overflow-hidden">
-      <div className="bg-green-800 px-4 py-2 border-b border-green-600 flex items-center justify-between">
+    <div className="terminal-container bg-gray-900 border border-green-500 rounded-lg overflow-hidden">
+      <div className="terminal-header">
         <div className="flex items-center space-x-2">
-          <span className="text-white font-medium">🚨 Emergency Terminal Fix</span>
+          <span className="text-white font-medium">🚨 Emergency Terminal Fix - Wide Display</span>
           {processStatus.pid && (
             <span className="text-green-200 text-sm">PID: {processStatus.pid}</span>
           )}
         </div>
-        <div className="flex items-center space-x-4">
-          <span className={`text-sm ${getStatusColor()}`}>
+        <div className="terminal-status">
+          <span className={`text-sm terminal-status-text ${
+            connectionStatus === 'connected' ? 'terminal-status-connected' :
+            connectionStatus === 'connecting' ? 'terminal-status-connecting' :
+            'terminal-status-disconnected'
+          }`}>
             {getStatusText()}
           </span>
           {error && (
@@ -289,17 +294,16 @@ export const TerminalEmergencyFixed: React.FC<TerminalProps> = ({
         </div>
       </div>
 
-      <div className="h-96 p-2">
+      <div className="terminal-viewport terminal-claude-optimized terminal-wide"> 
         <div 
           ref={terminalRef} 
-          className="w-full h-full"
-          style={{ background: '#1e1e1e' }}
+          className="w-full h-full terminal-no-cascade"
         />
       </div>
 
-      <div className="bg-green-800 px-4 py-2 border-t border-green-600">
-        <div className="text-xs text-green-200">
-          Fixed: No raw JSON display - Port 3002 emergency backend
+      <div className="terminal-footer">
+        <div className="terminal-footer-text">
+          Enhanced: Full width display for cascade prevention - Cols: 120, Rows: 30
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export function getWebSocketUrl(path: string = ''): string {
   
   if (typeof window === 'undefined') {
     // Server-side rendering fallback
-    return `ws://localhost:3001${cleanPath}`;
+    return `ws://localhost:3000${cleanPath}`;
   }
 
   const { protocol, hostname, port } = window.location;
@@ -47,7 +47,7 @@ export function getApiUrl(path: string = ''): string {
   
   if (typeof window === 'undefined') {
     // Server-side rendering fallback
-    return `http://localhost:3001${cleanPath}`;
+    return `http://localhost:3000${cleanPath}`;
   }
 
   // Always use relative paths in the browser - Vite proxy or reverse proxy will handle routing
@@ -62,7 +62,7 @@ export function getApiUrl(path: string = ''): string {
 export function getSocketIOUrl(): string {
   if (typeof window === 'undefined') {
     // Server-side rendering fallback
-    return 'http://localhost:3001';
+    return 'http://localhost:3000';
   }
 
   const { protocol, hostname, port } = window.location;
