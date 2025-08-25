@@ -137,14 +137,14 @@ export function useRobustWebSocket(
   const on = useCallback((event: string, handler: Function) => {
     const socket = manager.getSocket();
     if (socket) {
-      socket.on(event, handler);
+      socket.on(event, handler as (...args: any[]) => void);
     }
   }, [manager]);
 
   const off = useCallback((event: string, handler: Function) => {
     const socket = manager.getSocket();
     if (socket) {
-      socket.off(event, handler);
+      socket.off(event, handler as (...args: any[]) => void);
     }
   }, [manager]);
 

@@ -1,0 +1,1213 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/playwright.config.ts",
+    "rootDir": "/workspaces/agent-feed/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/e2e-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/e2e-junit.xml"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/workspaces/agent-feed/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/workspaces/agent-feed/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/workspaces/agent-feed/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/workspaces/agent-feed/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "integration/terminal-protocol-fix.test.ts",
+      "file": "integration/terminal-protocol-fix.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Terminal WebSocket Protocol Integration Tests",
+          "file": "integration/terminal-protocol-fix.test.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should handle WebSocket protocol messages correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-I1VcUV --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=327865\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327878:0824/180559.193985:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327865:0824/180559.198005:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327865:0824/180559.198021:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-I1VcUV --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=327865\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327878:0824/180559.193985:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327865:0824/180559.198005:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327865:0824/180559.198021:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-I1VcUV --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=327865\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327878:0824/180559.193985:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327865:0824/180559.198005:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=327865][err] [327865:327865:0824/180559.198021:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:05:59.086Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-3bc34ee1500a5f03d101",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 10,
+              "column": 7
+            },
+            {
+              "title": "should execute all 4 terminal commands without connection errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-tfiaKw --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=327943\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327960:0824/180600.244378:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327943:0824/180600.246426:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327943:0824/180600.246442:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-tfiaKw --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=327943\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327960:0824/180600.244378:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327943:0824/180600.246426:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327943:0824/180600.246442:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-tfiaKw --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=327943\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327960:0824/180600.244378:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327943:0824/180600.246426:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=327943][err] [327943:327943:0824/180600.246442:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:00.108Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-f0df439ab601eacaca02",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "should maintain stable WebSocket connections",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-jGqFDi --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328064\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328064:0824/180601.325962:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328064:0824/180601.326001:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328077:0824/180601.331393:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-jGqFDi --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328064\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328064:0824/180601.325962:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328064:0824/180601.326001:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328077:0824/180601.331393:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-jGqFDi --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328064\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328064:0824/180601.325962:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328064:0824/180601.326001:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n\u001b[2m  - [pid=328064][err] [328064:328077:0824/180601.331393:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:01.211Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-f5c054fdaac14de9a0a6",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 74,
+              "column": 7
+            },
+            {
+              "title": "should prevent white screen regression",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-xBEvR8 --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328099\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328114:0824/180602.286645:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328099:0824/180602.288755:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328099:0824/180602.288768:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-xBEvR8 --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328099\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328114:0824/180602.286645:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328099:0824/180602.288755:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328099:0824/180602.288768:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-xBEvR8 --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328099\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328114:0824/180602.286645:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328099:0824/180602.288755:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328099][err] [328099:328099:0824/180602.288768:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:02.176Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-4adca7eac5a8d92dc2e9",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 105,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket reconnection gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-t8Ljhk --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328158\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328171:0824/180603.439867:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328158:0824/180603.445884:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328158:0824/180603.445893:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-t8Ljhk --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328158\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328171:0824/180603.439867:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328158:0824/180603.445884:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328158:0824/180603.445893:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-t8Ljhk --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=328158\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328171:0824/180603.439867:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328158:0824/180603.445884:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=328158][err] [328158:328158:0824/180603.445893:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:03.346Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-ac975cc145bae0276da9",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket protocol messages correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-ue6ikm -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328193\u001b[22m\n\u001b[2m  - [pid=328193][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328193] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328193] starting temporary directories cleanup\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-ue6ikm -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328193\u001b[22m\n\u001b[2m  - [pid=328193][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328193] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328193] starting temporary directories cleanup\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-ue6ikm -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328193\u001b[22m\n\u001b[2m  - [pid=328193][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328193] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328193] starting temporary directories cleanup\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:04.300Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-3e65fd361c989e672638",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 10,
+              "column": 7
+            },
+            {
+              "title": "should execute all 4 terminal commands without connection errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-MXTTUT -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328262\u001b[22m\n\u001b[2m  - [pid=328262][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328262] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328262] starting temporary directories cleanup\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-MXTTUT -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328262\u001b[22m\n\u001b[2m  - [pid=328262][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328262] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328262] starting temporary directories cleanup\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-MXTTUT -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328262\u001b[22m\n\u001b[2m  - [pid=328262][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328262] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328262] starting temporary directories cleanup\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:05.465Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-bf29e2d7607eb7588171",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "should maintain stable WebSocket connections",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-X6GETn -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328356\u001b[22m\n\u001b[2m  - [pid=328356][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328356] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328356] starting temporary directories cleanup\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-X6GETn -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328356\u001b[22m\n\u001b[2m  - [pid=328356][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328356] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328356] starting temporary directories cleanup\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-X6GETn -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328356\u001b[22m\n\u001b[2m  - [pid=328356][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328356] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328356] starting temporary directories cleanup\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:06.496Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-e96f2799f3e8e470c633",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 74,
+              "column": 7
+            },
+            {
+              "title": "should prevent white screen regression",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-HfExe8 -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328385\u001b[22m\n\u001b[2m  - [pid=328385][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328385] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328385] starting temporary directories cleanup\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-HfExe8 -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328385\u001b[22m\n\u001b[2m  - [pid=328385][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328385] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328385] starting temporary directories cleanup\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-HfExe8 -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=328385\u001b[22m\n\u001b[2m  - [pid=328385][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=328385] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=328385] starting temporary directories cleanup\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:07.871Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-148ec0a95b963744a411",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 105,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket reconnection gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-rvnKyC -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=329866\u001b[22m\n\u001b[2m  - [pid=329866][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=329866] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=329866] starting temporary directories cleanup\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-rvnKyC -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=329866\u001b[22m\n\u001b[2m  - [pid=329866][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=329866] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=329866] starting temporary directories cleanup\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/firefox-1489/firefox/firefox -no-remote -wait-for-browser -foreground -profile /tmp/playwright_firefoxdev_profile-rvnKyC -juggler-pipe -silent\u001b[22m\n\u001b[2m  - <launched> pid=329866\u001b[22m\n\u001b[2m  - [pid=329866][err] Error: no DISPLAY environment variable specified\u001b[22m\n\u001b[2m  - [pid=329866] <process did exit: exitCode=1, signal=null>\u001b[22m\n\u001b[2m  - [pid=329866] starting temporary directories cleanup\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:10.656Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-9cf6d8e96c86d8ddd2df",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket protocol messages correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=329966\u001b[22m\n\u001b[2m  - [pid=329966][err]\u001b[22m\n\u001b[2m  - [pid=329966][err] (process:329972): Gtk-WARNING **: 18:06:11.801: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=329966\u001b[22m\n\u001b[2m  - [pid=329966][err]\u001b[22m\n\u001b[2m  - [pid=329966][err] (process:329972): Gtk-WARNING **: 18:06:11.801: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=329966\u001b[22m\n\u001b[2m  - [pid=329966][err]\u001b[22m\n\u001b[2m  - [pid=329966][err] (process:329972): Gtk-WARNING **: 18:06:11.801: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:11.675Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-bc4259779bd6529a64e2",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 10,
+              "column": 7
+            },
+            {
+              "title": "should execute all 4 terminal commands without connection errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=329997\u001b[22m\n\u001b[2m  - [pid=329997][err]\u001b[22m\n\u001b[2m  - [pid=329997][err] (process:330003): Gtk-WARNING **: 18:06:12.845: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=329997\u001b[22m\n\u001b[2m  - [pid=329997][err]\u001b[22m\n\u001b[2m  - [pid=329997][err] (process:330003): Gtk-WARNING **: 18:06:12.845: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=329997\u001b[22m\n\u001b[2m  - [pid=329997][err]\u001b[22m\n\u001b[2m  - [pid=329997][err] (process:330003): Gtk-WARNING **: 18:06:12.845: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:12.728Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-71386222015889ef5ae0",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "should maintain stable WebSocket connections",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330045\u001b[22m\n\u001b[2m  - [pid=330045][err]\u001b[22m\n\u001b[2m  - [pid=330045][err] (process:330051): Gtk-WARNING **: 18:06:13.998: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330045\u001b[22m\n\u001b[2m  - [pid=330045][err]\u001b[22m\n\u001b[2m  - [pid=330045][err] (process:330051): Gtk-WARNING **: 18:06:13.998: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330045\u001b[22m\n\u001b[2m  - [pid=330045][err]\u001b[22m\n\u001b[2m  - [pid=330045][err] (process:330051): Gtk-WARNING **: 18:06:13.998: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:13.861Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-d823819dbce97aede51c",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 74,
+              "column": 7
+            },
+            {
+              "title": "should prevent white screen regression",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330114\u001b[22m\n\u001b[2m  - [pid=330114][err]\u001b[22m\n\u001b[2m  - [pid=330114][err] (process:330120): Gtk-WARNING **: 18:06:15.064: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330114\u001b[22m\n\u001b[2m  - [pid=330114][err]\u001b[22m\n\u001b[2m  - [pid=330114][err] (process:330120): Gtk-WARNING **: 18:06:15.064: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330114\u001b[22m\n\u001b[2m  - [pid=330114][err]\u001b[22m\n\u001b[2m  - [pid=330114][err] (process:330120): Gtk-WARNING **: 18:06:15.064: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:14.919Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-b88d411edcc4f4024257",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 105,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket reconnection gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330218\u001b[22m\n\u001b[2m  - [pid=330218][err]\u001b[22m\n\u001b[2m  - [pid=330218][err] (process:330224): Gtk-WARNING **: 18:06:16.186: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330218\u001b[22m\n\u001b[2m  - [pid=330218][err]\u001b[22m\n\u001b[2m  - [pid=330218][err] (process:330224): Gtk-WARNING **: 18:06:16.186: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330218\u001b[22m\n\u001b[2m  - [pid=330218][err]\u001b[22m\n\u001b[2m  - [pid=330218][err] (process:330224): Gtk-WARNING **: 18:06:16.186: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:16.060Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-7c29c54aab450c2028cb",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket protocol messages correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-jgVWho --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330243\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330258:0824/180617.156693:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330243:0824/180617.158733:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330243:0824/180617.158747:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-jgVWho --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330243\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330258:0824/180617.156693:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330243:0824/180617.158733:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330243:0824/180617.158747:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-jgVWho --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330243\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330258:0824/180617.156693:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330243:0824/180617.158733:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330243][err] [330243:330243:0824/180617.158747:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:17.045Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-57bccf8db4694aae337c",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 10,
+              "column": 7
+            },
+            {
+              "title": "should execute all 4 terminal commands without connection errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-c9yXTy --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330291\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330304:0824/180618.277924:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330291:0824/180618.288899:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330291:0824/180618.288921:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-c9yXTy --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330291\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330304:0824/180618.277924:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330291:0824/180618.288899:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330291:0824/180618.288921:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-c9yXTy --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330291\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330304:0824/180618.277924:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330291:0824/180618.288899:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330291][err] [330291:330291:0824/180618.288921:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:18.136Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-14b58216c7aaddce39f3",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "should maintain stable WebSocket connections",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-dmkSiK --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330325\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330340:0824/180619.254535:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330325:0824/180619.256674:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330325:0824/180619.256689:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-dmkSiK --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330325\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330340:0824/180619.254535:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330325:0824/180619.256674:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330325:0824/180619.256689:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-dmkSiK --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330325\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330340:0824/180619.254535:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330325:0824/180619.256674:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330325][err] [330325:330325:0824/180619.256689:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:19.157Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-c7e97fee96d1d542cb1f",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 74,
+              "column": 7
+            },
+            {
+              "title": "should prevent white screen regression",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-cbjYDY --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330411\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330424:0824/180620.417016:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330411:0824/180620.418434:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330411:0824/180620.418443:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-cbjYDY --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330411\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330424:0824/180620.417016:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330411:0824/180620.418434:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330411:0824/180620.418443:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-cbjYDY --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330411\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330424:0824/180620.417016:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330411:0824/180620.418434:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330411][err] [330411:330411:0824/180620.418443:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:20.320Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-64e3990fbb95cb576257",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 105,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket reconnection gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-FJj1qo --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330519\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330532:0824/180621.508657:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330519:0824/180621.511002:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330519:0824/180621.511013:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-FJj1qo --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330519\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330532:0824/180621.508657:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330519:0824/180621.511002:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330519:0824/180621.511013:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1181/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AutoExpandDetailsElement,AvoidUnnecessaryBeforeUnloadCheckSync,CertificateTransparencyComponentUpdater,DestroyProfileOnBrowserClose,DialMediaRouteProvider,ExtensionManifestV2Disabled,GlobalMediaControls,HttpsUpgrades,ImprovedCookieControls,LazyFrameLoading,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-FJj1qo --remote-debugging-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330519\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330532:0824/180621.508657:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330519:0824/180621.511002:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY\u001b[22m\n\u001b[2m  - [pid=330519][err] [330519:330519:0824/180621.511013:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:21.421Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-0f5dca3e7cbda63dd4d6",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket protocol messages correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330559\u001b[22m\n\u001b[2m  - [pid=330559][err]\u001b[22m\n\u001b[2m  - [pid=330559][err] (process:330565): Gtk-WARNING **: 18:06:22.544: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330559\u001b[22m\n\u001b[2m  - [pid=330559][err]\u001b[22m\n\u001b[2m  - [pid=330559][err] (process:330565): Gtk-WARNING **: 18:06:22.544: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330559\u001b[22m\n\u001b[2m  - [pid=330559][err]\u001b[22m\n\u001b[2m  - [pid=330559][err] (process:330565): Gtk-WARNING **: 18:06:22.544: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:22.437Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-25254e1f6ca8c125f9ea",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 10,
+              "column": 7
+            },
+            {
+              "title": "should execute all 4 terminal commands without connection errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330596\u001b[22m\n\u001b[2m  - [pid=330596][err]\u001b[22m\n\u001b[2m  - [pid=330596][err] (process:330608): Gtk-WARNING **: 18:06:23.692: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330596\u001b[22m\n\u001b[2m  - [pid=330596][err]\u001b[22m\n\u001b[2m  - [pid=330596][err] (process:330608): Gtk-WARNING **: 18:06:23.692: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330596\u001b[22m\n\u001b[2m  - [pid=330596][err]\u001b[22m\n\u001b[2m  - [pid=330596][err] (process:330608): Gtk-WARNING **: 18:06:23.692: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:23.469Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-3f094a3374e115b90421",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 37,
+              "column": 7
+            },
+            {
+              "title": "should maintain stable WebSocket connections",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330684\u001b[22m\n\u001b[2m  - [pid=330684][err]\u001b[22m\n\u001b[2m  - [pid=330684][err] (process:330690): Gtk-WARNING **: 18:06:24.823: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330684\u001b[22m\n\u001b[2m  - [pid=330684][err]\u001b[22m\n\u001b[2m  - [pid=330684][err] (process:330690): Gtk-WARNING **: 18:06:24.823: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330684\u001b[22m\n\u001b[2m  - [pid=330684][err]\u001b[22m\n\u001b[2m  - [pid=330684][err] (process:330690): Gtk-WARNING **: 18:06:24.823: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:24.722Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-d38cc9381b3ad08118ef",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 74,
+              "column": 7
+            },
+            {
+              "title": "should prevent white screen regression",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330765\u001b[22m\n\u001b[2m  - [pid=330765][err]\u001b[22m\n\u001b[2m  - [pid=330765][err] (process:330779): Gtk-WARNING **: 18:06:25.898: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330765\u001b[22m\n\u001b[2m  - [pid=330765][err]\u001b[22m\n\u001b[2m  - [pid=330765][err] (process:330779): Gtk-WARNING **: 18:06:25.898: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330765\u001b[22m\n\u001b[2m  - [pid=330765][err]\u001b[22m\n\u001b[2m  - [pid=330765][err] (process:330779): Gtk-WARNING **: 18:06:25.898: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:25.777Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-8b2d3f28156516ddbf2f",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 105,
+              "column": 7
+            },
+            {
+              "title": "should handle WebSocket reconnection gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 24,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3,
+                      "error": {
+                        "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330814\u001b[22m\n\u001b[2m  - [pid=330814][err]\u001b[22m\n\u001b[2m  - [pid=330814][err] (process:330820): Gtk-WARNING **: 18:06:26.910: Failed to open display\u001b[22m\n",
+                        "stack": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330814\u001b[22m\n\u001b[2m  - [pid=330814][err]\u001b[22m\n\u001b[2m  - [pid=330814][err] (process:330820): Gtk-WARNING **: 18:06:26.910: Failed to open display\u001b[22m\n"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n║ Looks like you launched a headed browser without having a XServer running.                     ║\n║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║\n║                                                                                                ║\n║ <3 Playwright Team                                                                             ║\n╚════════════════════════════════════════════════════════════════════════════════════════════════╝\nCall log:\n\u001b[2m  - <launching> /home/codespace/.cache/ms-playwright/webkit-2191/pw_run.sh --inspector-pipe --no-startup-window\u001b[22m\n\u001b[2m  - <launched> pid=330814\u001b[22m\n\u001b[2m  - [pid=330814][err]\u001b[22m\n\u001b[2m  - [pid=330814][err] (process:330820): Gtk-WARNING **: 18:06:26.910: Failed to open display\u001b[22m\n"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-24T18:06:26.812Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "35a98117959b971f57fb-6de18758b0a3dec1815a",
+              "file": "integration/terminal-protocol-fix.test.ts",
+              "line": 121,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-08-24T18:05:57.901Z",
+    "duration": 29056.221,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 25,
+    "flaky": 0
+  }
+}

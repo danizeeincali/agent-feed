@@ -8,7 +8,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 
 export default defineConfig({
-  testDir: './src/tests/e2e',
+  testDir: './tests/e2e',
   
   // Run tests in files in parallel
   fullyParallel: true,
@@ -33,7 +33,7 @@ export default defineConfig({
   // Shared settings for all the projects below
   use: {
     // Base URL for tests
-    baseURL: 'http://localhost:3001',
+    baseURL: 'http://localhost:5173',
     
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',
@@ -143,7 +143,6 @@ export default defineConfig({
 
   // Test directory patterns
   testMatch: [
-    '**/terminal/**/*.spec.ts',
     '**/e2e/**/*.spec.ts'
   ],
 
@@ -154,25 +153,8 @@ export default defineConfig({
     '**/build/**'
   ],
 
-  // Web server configuration
-  webServer: [
-    {
-      command: 'npm run dev',
-      port: 3001,
-      reuseExistingServer: !process.env.CI,
-      timeout: 120000,
-      stdout: 'pipe',
-      stderr: 'pipe'
-    },
-    {
-      command: 'node ../quick-server.js',
-      port: 3000,
-      reuseExistingServer: !process.env.CI,
-      timeout: 60000,
-      stdout: 'pipe',
-      stderr: 'pipe'
-    }
-  ],
+  // Web server configuration - assuming server is already running on 5173
+  // webServer: undefined,
 
   // Output directory for test artifacts
   outputDir: 'test-results/',

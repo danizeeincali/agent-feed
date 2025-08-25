@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useCallback, useEffect, useState, useMemo, memo } from 'react';
 import { useWebSocketSingleton } from '@/hooks/useWebSocketSingleton';
-import { getSocketIOUrl } from '../utils/websocket-url';
+import { getSocketIOUrl } from '@/utils/websocket-url';
 
 interface ConnectionState {
   isConnected: boolean;
@@ -96,7 +96,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     emit 
   } = useWebSocketSingleton({
     // Use dynamic URL that works with Vite proxy and production
-    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || getSocketIOUrl(),
+    url: config.url || import.meta.env.VITE_WEBSOCKET_URL || getSocketIOUrl(),
     autoConnect: config.autoConnect !== false,
     maxReconnectAttempts: config.reconnectAttempts || 5
   });

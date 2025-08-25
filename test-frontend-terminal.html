@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 EMERGENCY: Test Frontend Terminal JSON Fix</title>
+    <style>
+        body { font-family: monospace; background: #000; color: #fff; padding: 20px; }
+        .terminal { background: #1a1a1a; border: 1px solid #333; padding: 20px; margin: 20px 0; }
+        .log { background: #2a2a2a; border: 1px solid #555; padding: 10px; margin: 10px 0; max-height: 300px; overflow-y: auto; }
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+        .warning { color: #ffaa44; }
+    </style>
+</head>
+<body>
+    <h1>🚨 EMERGENCY: Frontend Terminal JSON Message Fix Test</h1>
+    <p>This test connects directly to the emergency backend and shows whether JSON messages are properly processed.</p>
+    
+    <div id="status">🔄 Connecting to emergency backend...</div>
+    
+    <div class="terminal">
+        <h3>Terminal Output (Should show ONLY terminal data, NOT raw JSON):</h3>
+        <div id="terminal-output"></div>
+    </div>
+    
+    <div class="log">
+        <h3>Debug Log:</h3>
+        <div id="debug-log"></div>
+    </div>
+    
+    <button onclick="sendTestCommand()">Send Test Command</button>
+    <button onclick="clearOutput()">Clear Output</button>
+    
+    <script>
+        const statusEl = document.getElementById('status');
+        const terminalEl = document.getElementById('terminal-output');
+        const logEl = document.getElementById('debug-log');
+        
+        let socket = null;
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : '';
+            logEl.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function connectWebSocket() {
+            log('🚨 EMERGENCY: Connecting to ws://localhost:3002/terminal');
+            
+            socket = new WebSocket('ws://localhost:3002/terminal');
+            
+            socket.onopen = function() {
+                statusEl.innerHTML = '🟢 Connected to Emergency Backend (Port 3002)';
+                statusEl.className = 'success';
+                log('✅ WebSocket connected successfully', 'success');
+                
+                // Send init message
+                const initMsg = {
+                    type: 'init',
+                    cols: 80,
+                    rows: 24
+                };
+                socket.send(JSON.stringify(initMsg));
+                log('📤 Sent init message: ' + JSON.stringify(initMsg));
+            };
+            
+            socket.onmessage = function(event) {
+                try {
+                    const message = JSON.parse(event.data);
+                    log(`📥 Received JSON message type: ${message.type}`, 'info');
+                    
+                    // 🚨 CRITICAL FIX: Extract terminal data from JSON and display ONLY the data
+                    if (message.type === 'data' && message.data) {
+                        log(`🔍 Processing terminal data (length: ${message.data.length})`, 'warning');
+                        log(`🎯 Raw JSON would show: ${JSON.stringify(message).substring(0, 100)}...`, 'warning');
+                        log(`✅ Extracted terminal data: ${JSON.stringify(message.data.substring(0, 50))}...`, 'success');
+                        
+                        // This is what the terminal component should do
+                        terminalEl.innerHTML += message.data.replace(/\r?\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+                        
+                        // Show the fix is working
+                        if (terminalEl.innerHTML.includes('{"type":"data"')) {
+                            log('❌ CRITICAL ERROR: Raw JSON is being displayed!', 'error');
+                            statusEl.innerHTML = '🔴 CRITICAL: Still showing raw JSON!';
+                            statusEl.className = 'error';
+                        } else {
+                            log('✅ SUCCESS: Only terminal data is displayed', 'success');
+                        }
+                        
+                    } else if (message.type === 'connect') {
+                        log('📡 Backend connection established', 'success');
+                    } else if (message.type === 'init_ack') {
+                        log(`✅ Terminal initialized (PID: ${message.pid})`, 'success');
+                    } else {
+                        log(`📥 Other message type: ${message.type}`);
+                    }
+                    
+                } catch (error) {
+                    log('❌ Failed to parse message as JSON: ' + error.message, 'error');
+                    log('📥 Raw data: ' + event.data, 'warning');
+                }
+            };
+            
+            socket.onerror = function(error) {
+                statusEl.innerHTML = '🔴 WebSocket Error';
+                statusEl.className = 'error';
+                log('❌ WebSocket error: ' + error.message, 'error');
+            };
+            
+            socket.onclose = function(event) {
+                statusEl.innerHTML = '🔴 Disconnected';
+                statusEl.className = 'error';
+                log(`🔌 Connection closed: ${event.code} - ${event.reason || 'No reason'}`, 'warning');
+            };
+        }
+        
+        function sendTestCommand() {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const testCmd = {
+                    type: 'input',
+                    data: 'echo "🎯 EMERGENCY TEST: This should appear as terminal text, NOT JSON" && date\\n'
+                };
+                socket.send(JSON.stringify(testCmd));
+                log('📤 Sent test command: ' + testCmd.data.replace('\\n', ''));
+            } else {
+                log('❌ WebSocket not connected', 'error');
+            }
+        }
+        
+        function clearOutput() {
+            terminalEl.innerHTML = '';
+            logEl.innerHTML = '';
+        }
+        
+        // Connect on page load
+        connectWebSocket();
+        
+        // Auto-test after 3 seconds
+        setTimeout(sendTestCommand, 3000);
+    </script>
+</body>
+</html>

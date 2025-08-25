@@ -1,0 +1,79 @@
+{
+  "training_dataset_id": "websocket-deployment-regression-v1",
+  "format": "claude-flow-neural-network",
+  "created": "2025-08-25T06:38:00Z",
+  "dataset_type": "failure_prediction_training",
+  "target_model": "deployment_validation_predictor",
+  "training_samples": [
+    {
+      "input_features": {
+        "task_type": "ui_cascade_fix",
+        "backend_dependencies": true,
+        "websocket_services": true,
+        "process_restart_required": true,
+        "tdd_coverage": 0.0,
+        "validation_tests": false,
+        "claude_confidence": 0.9
+      },
+      "expected_output": {
+        "failure_probability": 0.87,
+        "recommended_confidence": 0.3,
+        "required_validation_steps": [
+          "server_process_verification",
+          "websocket_connection_test", 
+          "end_to_end_functionality_test"
+        ]
+      },
+      "actual_outcome": {
+        "success": false,
+        "failure_type": "websocket_connection_lost",
+        "time_to_failure": 0,
+        "user_impact": "critical"
+      }
+    },
+    {
+      "input_features": {
+        "task_type": "server_deployment",
+        "backend_dependencies": true,
+        "websocket_services": true,
+        "process_restart_required": true,
+        "tdd_coverage": 0.85,
+        "validation_tests": true,
+        "claude_confidence": 0.8
+      },
+      "expected_output": {
+        "failure_probability": 0.12,
+        "recommended_confidence": 0.75,
+        "required_validation_steps": [
+          "automated_smoke_tests"
+        ]
+      },
+      "actual_outcome": {
+        "success": true,
+        "failure_type": null,
+        "time_to_failure": null,
+        "user_impact": "none"
+      }
+    }
+  ],
+  "pattern_weights": {
+    "websocket_dependency": 0.85,
+    "process_restart_indicator": 0.78,
+    "missing_tdd_coverage": 0.82,
+    "cascade_fix_type": 0.71,
+    "deployment_validation_absence": 0.89
+  },
+  "neural_architecture": {
+    "input_layer": 8,
+    "hidden_layers": [16, 12, 8],
+    "output_layer": 4,
+    "activation": "relu",
+    "loss_function": "categorical_crossentropy",
+    "optimizer": "adam"
+  },
+  "integration_instructions": {
+    "claude_flow_import": "npx claude-flow neural train --dataset websocket-deployment-regression-training.json",
+    "model_deployment": "npx claude-flow neural deploy --model deployment_validation_predictor",
+    "usage": "Model provides failure probability and confidence adjustments for deployment operations"
+  }
+}

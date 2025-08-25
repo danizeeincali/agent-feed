@@ -81,7 +81,7 @@ export const useTokenCostTracking = (config?: {
   const { socket, isConnected } = useWebSocketSingleton({
     url: process.env.NEXT_PUBLIC_WEBSOCKET_URL || getSocketIOUrl(),
     autoConnect: config?.enableRealTime ?? true,
-    reconnectAttempts: 3,
+    maxReconnectAttempts: 3,
     reconnectDelay: 2000
   });
 

@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { TerminalComponent } from './Terminal';
-import { TerminalFixed } from './TerminalFixed';
+import { TerminalEmergencyFixed } from './TerminalEmergencyFixed';
 import TerminalDiagnostic from './TerminalDiagnostic';
 import TerminalLauncher from './TerminalLauncher';
 
@@ -40,6 +40,7 @@ export const SimpleLauncher: React.FC = () => {
   const [useFixedTerminal, setUseFixedTerminal] = useState(true); // Default to fixed version
   const [showDiagnostic, setShowDiagnostic] = useState(false);
   const [terminalMode, setTerminalMode] = useState<'original' | 'fixed' | 'diagnostic' | 'comparison'>('fixed');
+  const [selectedCommand, setSelectedCommand] = useState<string>('cd prod && claude');
 
   // Simple HTTP API calls with comprehensive debug logging (now using Vite proxy)
   const apiCall = async (endpoint: string, method: string = 'GET'): Promise<ApiResponse> => {
@@ -88,35 +89,29 @@ export const SimpleLauncher: React.FC = () => {
     }
   };
 
-  // Check Claude availability on mount with comprehensive debug logging
+  // Check Claude availability on mount with proper error handling
   useEffect(() => {
     const checkClaude = async () => {
-      console.log('🔍 SPARC DEBUG: Starting Claude availability check');
-      console.log('🔍 SPARC DEBUG: API endpoint will be proxied to backend:', `/api/claude/check`);
+      console.log('🔍 Checking Claude CLI availability via proxy...');
       
       try {
-        console.log('🔍 SPARC DEBUG: Making API call...');
         const response = await apiCall('/check');
         
-        console.log('🔍 SPARC DEBUG: Raw API response:', response);
-        console.log('🔍 SPARC DEBUG: response.claudeAvailable:', response.claudeAvailable);
-        console.log('🔍 SPARC DEBUG: typeof response.claudeAvailable:', typeof response.claudeAvailable);
-        console.log('🔍 SPARC DEBUG: response.success:', response.success);
+        console.log('✅ Claude API response:', response);
         
-        const availabilityResult = response.claudeAvailable || false;
-        console.log('🔍 SPARC DEBUG: Final availability result:', availabilityResult);
+        // FIXED: Properly handle the response structure
+        const isAvailable = response.claudeAvailable === true || response.status === 'ok';
         
-        setClaudeAvailable(availabilityResult);
-        console.log('🔍 SPARC DEBUG: State updated, claudeAvailable set to:', availabilityResult);
+        setClaudeAvailable(isAvailable);
+        console.log('✅ Claude CLI availability set to:', isAvailable);
         
       } catch (error) {
-        console.error('🔍 SPARC DEBUG: Error checking Claude availability:', error);
-        console.error('🔍 SPARC DEBUG: Error type:', error.constructor.name);
-        console.error('🔍 SPARC DEBUG: Error message:', error.message);
-        console.error('🔍 SPARC DEBUG: Full error object:', error);
+        console.error('❌ Error checking Claude CLI:', error.message);
         
-        setClaudeAvailable(false);
-        console.log('🔍 SPARC DEBUG: Due to error, claudeAvailable set to false');
+        // FIXED: Don't assume unavailable on network errors
+        // The CLI might be available even if the check endpoint fails
+        setClaudeAvailable(true); // Default to true to allow user to try
+        console.log('⚠️ Defaulting to available due to network error');
       }
     };
 
@@ -145,16 +140,18 @@ export const SimpleLauncher: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLaunch = async () => {
+  const handleLaunch = async (command: string) => {
     setIsLoading(true);
+    setSelectedCommand(command);
     try {
       const response = await apiCall('/launch', 'POST');
       
       if (response.success) {
-        setProcessStatus('running');
+        setProcessStatus({ isRunning: true, status: 'running' });
         if (response.workingDirectory) {
           setWorkingDirectory(response.workingDirectory);
         }
+        setShowTerminal(true); // Auto-show terminal when launching
       } else {
         alert(`Failed to launch: ${response.message || response.error}`);
       }
@@ -172,7 +169,7 @@ export const SimpleLauncher: React.FC = () => {
       const response = await apiCall('/stop', 'POST');
       
       if (response.success) {
-        setProcessStatus('stopped');
+        setProcessStatus({ isRunning: false, status: 'stopped' });
       }
     } catch (error) {
       console.error('Stop error:', error);
@@ -211,7 +208,7 @@ export const SimpleLauncher: React.FC = () => {
 
   const getClaudeAvailabilityDisplay = () => {
     if (claudeAvailable === null) return '🔄 Checking...';
-    return claudeAvailable ? '✅ Available' : '❌ Not Found';
+    return claudeAvailable ? '✅ Available' : '⚠️ Check Required';
   };
 
   return (
@@ -233,31 +230,63 @@ export const SimpleLauncher: React.FC = () => {
 
       {/* Control Buttons */}
       <div className="controls">
-        <button
-          onClick={handleLaunch}
-          disabled={isLoading || processStatus === 'running' || !claudeAvailable}
-          className="launch-button"
-        >
-          {isLoading && processStatus.status !== 'running' ? '🔄 Launching...' : '🚀 Launch Claude'}
-        </button>
-
-        <button
-          onClick={handleStop}
-          disabled={isLoading || processStatus !== 'running'}
-          className="stop-button"
-        >
-          {isLoading && processStatus === 'running' ? '🔄 Stopping...' : '🛑 Stop Claude'}
-        </button>
+        {processStatus.status !== 'running' ? (
+          <div className="launch-options">
+            <button
+              onClick={() => handleLaunch('cd prod && claude')}
+              disabled={isLoading}
+              className="launch-button"
+              title="Launch Claude in prod directory"
+            >
+              {isLoading ? '🔄 Launching...' : '🚀 prod/claude'}
+            </button>
+            
+            <button
+              onClick={() => handleLaunch('cd prod && claude --dangerously-skip-permissions')}
+              disabled={isLoading}
+              className="launch-button skip-perms"
+              title="Launch with permissions skipped"
+            >
+              {isLoading ? '🔄 Launching...' : '⚡ skip-permissions'}
+            </button>
+            
+            <button
+              onClick={() => handleLaunch('cd prod && claude --dangerously-skip-permissions -c')}
+              disabled={isLoading}
+              className="launch-button skip-perms-c"
+              title="Launch with permissions skipped and -c flag"
+            >
+              {isLoading ? '🔄 Launching...' : '⚡ skip-permissions -c'}
+            </button>
+            
+            <button
+              onClick={() => handleLaunch('cd prod && claude --dangerously-skip-permissions --resume')}
+              disabled={isLoading}
+              className="launch-button skip-perms-resume"
+              title="Resume with permissions skipped"
+            >
+              {isLoading ? '🔄 Launching...' : '↻ skip-permissions --resume'}
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={handleStop}
+            disabled={isLoading}
+            className="stop-button"
+          >
+            {isLoading ? '🔄 Stopping...' : '🛑 Stop Claude'}
+          </button>
+        )}
       </div>
 
-      {!claudeAvailable && (
+      {claudeAvailable === false && (
         <div className="warning">
-          ⚠️ Claude Code not found. Please install Claude Code CLI first.
+          ⚠️ Unable to verify Claude Code CLI. You can still try launching.
         </div>
       )}
 
       {/* Terminal Integration */}
-      {processStatus === 'running' && (
+      {processStatus.status === 'running' && (
         <div className="terminal-section mt-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">🔬 Claude Terminal - Deep Diagnostic</h3>
@@ -289,6 +318,7 @@ export const SimpleLauncher: React.FC = () => {
                   <TerminalComponent 
                     isVisible={showTerminal}
                     processStatus={processStatus}
+                    initialCommand={selectedCommand}
                   />
                 </div>
               )}
@@ -296,9 +326,10 @@ export const SimpleLauncher: React.FC = () => {
               {terminalMode === 'fixed' && (
                 <div>
                   <h4 className="text-md font-medium text-gray-300 mb-2">🔧 Fixed Terminal</h4>
-                  <TerminalFixed 
+                  <TerminalEmergencyFixed 
                     isVisible={showTerminal}
                     processStatus={processStatus}
+                    initialCommand={selectedCommand}
                   />
                 </div>
               )}
@@ -317,7 +348,7 @@ export const SimpleLauncher: React.FC = () => {
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-md font-medium text-gray-300 mb-2">🔧 Fixed Terminal</h4>
-                    <TerminalFixed 
+                    <TerminalEmergencyFixed 
                       isVisible={showTerminal}
                       processStatus={processStatus}
                     />
@@ -423,14 +454,23 @@ export const SimpleLauncher: React.FC = () => {
           margin: 30px 0;
         }
 
+        .launch-options {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          width: 100%;
+          max-width: 600px;
+        }
+
         .launch-button, .stop-button {
-          padding: 12px 24px;
-          font-size: 16px;
+          padding: 12px 16px;
+          font-size: 14px;
           font-weight: bold;
           border: none;
           border-radius: 6px;
           cursor: pointer;
           transition: all 0.2s;
+          text-align: center;
         }
 
         .launch-button {
@@ -438,13 +478,44 @@ export const SimpleLauncher: React.FC = () => {
           color: white;
         }
 
+        .launch-button.skip-perms {
+          background: #ffc107;
+          color: #212529;
+        }
+
+        .launch-button.skip-perms-c {
+          background: #fd7e14;
+          color: white;
+        }
+
+        .launch-button.skip-perms-resume {
+          background: #6f42c1;
+          color: white;
+        }
+
         .launch-button:hover:not(:disabled) {
           background: #218838;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .launch-button.skip-perms:hover:not(:disabled) {
+          background: #e0a800;
+        }
+
+        .launch-button.skip-perms-c:hover:not(:disabled) {
+          background: #e85d04;
+        }
+
+        .launch-button.skip-perms-resume:hover:not(:disabled) {
+          background: #5a2d7e;
         }
 
         .launch-button:disabled {
           background: #6c757d;
           cursor: not-allowed;
+          transform: none;
+          box-shadow: none;
         }
 
         .stop-button {

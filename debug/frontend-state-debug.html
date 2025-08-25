@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend State Debug</title>
+</head>
+<body>
+    <h1>Frontend State Debug</h1>
+    <div id="debug-results"></div>
+
+    <script>
+        console.log('🔍 DEBUG: Starting frontend state investigation');
+        
+        // Test API call directly
+        fetch('/api/claude/check')
+            .then(response => {
+                console.log('🔍 DEBUG: API Response Status:', response.status);
+                console.log('🔍 DEBUG: API Response Headers:', [...response.headers.entries()]);
+                return response.json();
+            })
+            .then(data => {
+                console.log('🔍 DEBUG: API Response Data:', data);
+                console.log('🔍 DEBUG: data.claudeAvailable:', data.claudeAvailable);
+                console.log('🔍 DEBUG: typeof data.claudeAvailable:', typeof data.claudeAvailable);
+                
+                // Update page content
+                document.getElementById('debug-results').innerHTML = `
+                    <h2>API Response Analysis:</h2>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    
+                    <h3>Key Value Analysis:</h3>
+                    <p><strong>claudeAvailable:</strong> ${data.claudeAvailable}</p>
+                    <p><strong>Type:</strong> ${typeof data.claudeAvailable}</p>
+                    <p><strong>Truthy Check:</strong> ${!!data.claudeAvailable}</p>
+                    <p><strong>Logic Result:</strong> ${data.claudeAvailable || false}</p>
+                    
+                    <h3>Expected Frontend Logic:</h3>
+                    <p><strong>Should show warning if:</strong> !claudeAvailable (${!data.claudeAvailable})</p>
+                `;
+            })
+            .catch(error => {
+                console.error('🔍 DEBUG: API Error:', error);
+                document.getElementById('debug-results').innerHTML = `
+                    <h2>API Error:</h2>
+                    <pre>${error.message}</pre>
+                `;
+            });
+    </script>
+</body>
+</html>

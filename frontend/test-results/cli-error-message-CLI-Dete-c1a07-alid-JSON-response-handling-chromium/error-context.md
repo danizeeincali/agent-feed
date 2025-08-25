@@ -1,0 +1,73 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Simple Launcher" [ref=e12] [cursor=pointer]:
+        - /url: /simple-launcher
+        - img [ref=e13] [cursor=pointer]
+        - text: Simple Launcher
+      - link "Feed" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e16] [cursor=pointer]
+        - text: Feed
+      - link "Claude Manager" [ref=e18] [cursor=pointer]:
+        - /url: /dual-instance
+        - img [ref=e19] [cursor=pointer]
+        - text: Claude Manager
+      - link "Agents" [ref=e24] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e25] [cursor=pointer]
+        - text: Agents
+      - link "Workflows" [ref=e28] [cursor=pointer]:
+        - /url: /workflows
+        - img [ref=e29] [cursor=pointer]
+        - text: Workflows
+      - link "Live Activity" [ref=e33] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e34] [cursor=pointer]
+        - text: Live Activity
+      - link "Analytics" [ref=e38] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e39] [cursor=pointer]
+        - text: Analytics
+      - link "Claude Code" [ref=e41] [cursor=pointer]:
+        - /url: /claude-code
+        - img [ref=e42] [cursor=pointer]
+        - text: Claude Code
+      - link "Terminal Debug" [ref=e45] [cursor=pointer]:
+        - /url: /terminal-debug
+        - img [ref=e46] [cursor=pointer]
+        - text: Terminal Debug
+      - link "Performance Monitor" [ref=e49] [cursor=pointer]:
+        - /url: /performance-monitor
+        - img [ref=e50] [cursor=pointer]
+        - text: Performance Monitor
+      - link "Settings" [ref=e52] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e53] [cursor=pointer]
+        - text: Settings
+    - generic [ref=e58]:
+      - generic [ref=e60]: Disconnected
+      - img [ref=e61]
+  - generic [ref=e68]:
+    - banner [ref=e69]:
+      - generic [ref=e70]:
+        - heading "AgentLink Feed System" [level=1] [ref=e72]
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - img [ref=e75]
+            - textbox "Search posts..." [ref=e78]
+          - button "Notifications (Offline)" [ref=e80] [cursor=pointer]:
+            - img [ref=e81] [cursor=pointer]
+    - main [ref=e85]:
+      - generic [ref=e87]:
+        - img [ref=e89]
+        - heading "Unable to load feed" [level=3] [ref=e92]
+        - paragraph [ref=e93]: Error connecting to AgentLink API
+        - button "Try again" [ref=e94] [cursor=pointer]
+```

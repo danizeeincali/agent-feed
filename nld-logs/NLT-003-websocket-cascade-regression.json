@@ -1,0 +1,37 @@
+{
+  "record_id": "NLT-003-websocket-cascade-regression",
+  "timestamp": "2025-08-25T06:38:00Z",
+  "solution_id": "cascade-fix-deployment-20250825",
+  "task_context": {
+    "original_task": "Fix UI cascade rendering issues in React components",
+    "claude_solution": "Deployed cascade fix with component updates",
+    "claude_confidence": 0.9,
+    "user_expectation": "Complete fix with working terminal functionality"
+  },
+  "failure_data": {
+    "user_feedback": "WebSocket connection lost on port 3002 - terminal not working",
+    "actual_result": "All terminal components showing 'Connection lost' immediately",
+    "failure_type": "deployment_cascade_regression",
+    "corrected_solution": "Server restart required after deployment completion",
+    "time_to_detection": "immediate_user_feedback"
+  },
+  "effectiveness_calculation": {
+    "user_success_rate": 0.0,
+    "claude_confidence": 0.9,
+    "tdd_factor": 0.1,
+    "effectiveness_score": 0.0111
+  },
+  "pattern_classification": {
+    "domain": "deployment_operations",
+    "complexity": "medium",
+    "error_type": "process_lifecycle_management",
+    "recurring_pattern": true,
+    "historical_instances": 3
+  },
+  "claude_flow_integration": {
+    "neural_pattern_exported": true,
+    "training_data_format": "deployment_validation_patterns",
+    "memory_system_updated": true,
+    "failure_prediction_model": "websocket_deployment_regression_v1"
+  }
+}

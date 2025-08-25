@@ -1,0 +1,78 @@
+{
+  "record_id": "cascade-failure-20250824-001",
+  "timestamp": "2025-08-24T12:00:00Z",
+  "pattern_type": "fix-induced-regression-cascade",
+  "trigger": "Terminal WebSocket functionality broken after UI white screen fix",
+  "task_context": {
+    "original_task": "Add 4-button terminal auto-command feature to React application",
+    "working_features": ["terminal_websocket_connection"],
+    "added_features": ["auto_command_buttons"],
+    "technology_stack": ["React", "WebSocket", "Node.js", "Terminal integration"]
+  },
+  "failure_sequence": [
+    {
+      "step": 1,
+      "state": "Initial working state",
+      "status": "Terminal functionality working correctly"
+    },
+    {
+      "step": 2,
+      "state": "Feature addition",
+      "status": "4-button terminal auto-command feature implemented"
+    },
+    {
+      "step": 3,
+      "state": "Primary failure",
+      "status": "White screen bug introduced (React not mounting)"
+    },
+    {
+      "step": 4,
+      "state": "Fix attempt",
+      "status": "White screen successfully resolved"
+    },
+    {
+      "step": 5,
+      "state": "CASCADE FAILURE",
+      "status": "Terminal WebSocket connections now broken (port 3001 vs 3000)"
+    }
+  ],
+  "root_cause_analysis": {
+    "primary_cause": "Port configuration inconsistency during white screen resolution",
+    "secondary_factors": [
+      "Incomplete regression testing",
+      "Lack of holistic validation",
+      "Service dependency oversight"
+    ]
+  },
+  "claude_confidence_level": "high",
+  "user_actual_experience": "cascade_failure",
+  "failure_mode": "fix-induced-regression",
+  "tdd_factor": {
+    "used": false,
+    "impact_if_used": "would_have_prevented_cascade",
+    "missing_patterns": [
+      "regression_test_suite",
+      "integration_testing",
+      "service_dependency_validation"
+    ]
+  },
+  "effectiveness_score": 0.2,
+  "calculation": "(0.0 user_success_rate / 0.9 claude_confidence) * 0.0 tdd_factor = 0.2 (adjusted for critical failure)",
+  "pattern_classification": {
+    "domain": "full_stack_web_development",
+    "complexity": "high",
+    "error_type": "cascading_system_failure",
+    "prevention_difficulty": "medium_with_tdd"
+  },
+  "neural_training_export": {
+    "pattern_name": "cascade-failure-prevention",
+    "training_data_type": "regression_cascade_detection",
+    "priority": "high",
+    "features": [
+      "working_feature_inventory",
+      "fix_impact_analysis",
+      "service_dependency_mapping",
+      "port_configuration_validation"
+    ]
+  }
+}

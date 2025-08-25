@@ -1,57 +1,50 @@
-import { config } from 'dotenv';
-import path from 'path';
+/**
+ * Test Setup Configuration
+ * 
+ * Global test setup for TDD validation suite
+ */
 
-// Load test environment variables
-config({ path: path.resolve(__dirname, '../.env.test') });
+import { vi, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 
-// Global test setup
-beforeAll(async () => {
-  // Set test environment
-  process.env.NODE_ENV = 'test';
-  process.env.DB_NAME = 'agent_feed_test';
-  process.env.JWT_SECRET = 'test-jwt-secret';
-  process.env.LOG_LEVEL = 'error';
-  
-  // Disable external services in tests
-  process.env.CLAUDE_FLOW_ENABLED = 'false';
-  process.env.WEBSOCKET_ENABLED = 'false';
-  process.env.REDIS_ENABLED = 'false';
+// Mock WebSocket for testing
+global.WebSocket = vi.fn(() => ({
+  readyState: 1,
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSING: 2,
+  CLOSED: 3,
+  send: vi.fn(),
+  close: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  onopen: null,
+  onclose: null,
+  onerror: null,
+  onmessage: null
+})) as any;
+
+// Mock performance for performance tests
+if (typeof performance === 'undefined') {
+  global.performance = {
+    now: vi.fn(() => Date.now())
+  } as any;
+}
+
+beforeAll(() => {
+  console.log('🚀 Starting TDD Validation Test Suite');
+  console.log('📋 Testing terminal regression fixes');
 });
 
-// Cleanup after each test
-afterEach(async () => {
-  // Clear any lingering timers
-  jest.clearAllTimers();
+afterAll(() => {
+  console.log('✅ TDD Validation Test Suite Complete');
 });
 
-// Global error handling
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+beforeEach(() => {
+  // Clear all mocks before each test
+  vi.clearAllMocks();
 });
 
-// Increase timeout for slower tests
-jest.setTimeout(30000);
-
-// Mock external dependencies
-jest.mock('redis', () => ({
-  createClient: jest.fn(() => ({
-    connect: jest.fn(),
-    disconnect: jest.fn(),
-    get: jest.fn(),
-    set: jest.fn(),
-    del: jest.fn(),
-    on: jest.fn(),
-    quit: jest.fn()
-  }))
-}));
-
-jest.mock('socket.io', () => ({
-  Server: jest.fn(() => ({
-    on: jest.fn(),
-    emit: jest.fn(),
-    to: jest.fn(() => ({
-      emit: jest.fn()
-    })),
-    close: jest.fn()
-  }))
-}));
+afterEach(() => {
+  // Cleanup after each test
+  vi.restoreAllMocks();
+});

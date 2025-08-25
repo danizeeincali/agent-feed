@@ -154,10 +154,13 @@ export const TerminalDebug: React.FC<TerminalDebugProps> = ({
     addLog('🧪 Testing programmatic input');
     if (terminal.current) {
       // Simulate typing "test"
-      terminal.current.onData('t');
-      terminal.current.onData('e');
-      terminal.current.onData('s');
-      terminal.current.onData('t');
+      // Simulate typing test - fixed type issue
+      if (terminal.current && typeof terminal.current.onData === 'function') {
+        terminal.current.onData('t');
+        terminal.current.onData('e');
+        terminal.current.onData('s');
+        terminal.current.onData('t');
+      }
     }
   };
 

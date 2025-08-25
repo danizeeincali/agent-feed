@@ -48,37 +48,110 @@ app.get('/api/simple-claude/health', (req, res) => {
   });
 });
 
-// Check Claude availability
-app.get('/api/simple-claude/check', (req, res) => {
-  // For testing, simulate Claude availability check
-  const testProcess = spawn('node', ['--version'], { shell: true });
+// Check Claude availability - ROBUST CLI DETECTION
+app.get('/api/simple-claude/check', async (req, res) => {
+  console.log('🔍 Robust Claude CLI detection check');
   
-  testProcess.on('error', () => {
+  try {
+    const claudeDetector = require('./src/utils/claude-cli-detector');
+    const testResult = await claudeDetector.testCLI();
+    
     res.json({
-      success: true,
-      claudeAvailable: false,
-      message: 'Claude Code not found'
+      success: testResult.success,
+      available: testResult.detection.available,
+      path: testResult.detection.path,
+      version: testResult.detection.version,
+      source: testResult.detection.source,
+      message: testResult.success ? 'Claude CLI is available and functional' : testResult.error,
+      timestamp: new Date().toISOString()
     });
-  });
-  
-  testProcess.on('exit', (code) => {
-    res.json({
-      success: true,
-      claudeAvailable: code === 0,
-      message: code === 0 ? 'Claude Code is available' : 'Claude Code not found'
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      available: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
     });
-  });
+  }
+});
   
-  setTimeout(() => {
-    if (!res.headersSent) {
-      testProcess.kill();
+  console.log('🔍 SPARC DEBUG: Testing direct path:', claudePath);
+  
+  // Check if Claude CLI exists at the known path
+  if (fs.existsSync(claudePath)) {
+    console.log('✅ SPARC DEBUG: Claude CLI found at known path');
+    
+    // Test execution
+    const testProcess = spawn(claudePath, ['--version'], {
+      stdio: 'pipe',
+      timeout: 5000,
+      env: {
+        ...process.env,
+        PATH: process.env.PATH + ':/home/codespace/nvm/current/bin'
+      }
+    });
+    
+    let testOutput = '';
+    let testError = '';
+    
+    testProcess.stdout.on('data', (data) => {
+      testOutput += data.toString();
+    });
+    
+    testProcess.stderr.on('data', (data) => {
+      testError += data.toString();
+    });
+    
+    testProcess.on('close', (testCode) => {
+      console.log('🔍 SPARC DEBUG: claude --version exit code:', testCode);
+      console.log('🔍 SPARC DEBUG: claude --version output:', testOutput);
+      
+      res.json({
+        success: true,
+        claudeAvailable: testCode === 0,
+        message: testCode === 0 ? 'Claude Code is available (PATH FIXED)' : 'Claude Code found but not executable',
+        version: testOutput.trim(),
+        path: claudePath,
+        pathFixed: true
+      });
+    });
+    
+    testProcess.on('error', (error) => {
+      console.error('🔍 SPARC DEBUG: claude --version error:', error);
       res.json({
         success: true,
         claudeAvailable: false,
-        message: 'Claude Code check timeout'
+        message: 'Claude Code found but execution failed',
+        error: error.message,
+        path: claudePath,
+        pathFixed: false
       });
-    }
-  }, 3000);
+    });
+    
+    setTimeout(() => {
+      if (!res.headersSent) {
+        testProcess.kill();
+        res.json({
+          success: true,
+          claudeAvailable: false,
+          message: 'Claude Code check timeout',
+          path: claudePath,
+          pathFixed: false
+        });
+      }
+    }, 3000);
+    
+  } else {
+    console.log('❌ SPARC DEBUG: Claude CLI not found at expected path');
+    
+    res.json({
+      success: true,
+      claudeAvailable: false,
+      message: '⚠️ Claude Code not found. Please install Claude Code CLI first.',
+      path: claudePath + ' (not found)',
+      pathFixed: false
+    });
+  }
 });
 
 // Get status
@@ -103,10 +176,26 @@ app.post('/api/simple-claude/launch', (req, res) => {
       });
     }
 
-    // For testing, spawn a simple Node.js process that stays alive
-    currentProcess = spawn('node', ['-e', 'console.log("Claude Code started"); setInterval(() => process.stdout.write("."), 5000);'], {
+    // CRITICAL FIX: Use full path to Claude CLI for actual launch
+    const claudePath = '/home/codespace/nvm/current/bin/claude';
+    
+    if (!fs.existsSync(claudePath)) {
+      throw new Error(`Claude CLI not found at ${claudePath}`);
+    }
+    
+    console.log('🚀 SPARC DEBUG: Using FIXED Claude CLI path:', claudePath);
+    
+    // Launch actual Claude CLI process with FIXED PATH
+    const claudeDetector = require('./src/utils/claude-cli-detector');
+    currentProcess = await claudeDetector.spawnClaude([], {
       cwd: prodPath,
-      stdio: ['pipe', 'pipe', 'pipe']
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env: {
+        ...process.env,
+        PATH: process.env.PATH + ':/home/codespace/nvm/current/bin',  // CRITICAL: Add Claude CLI to PATH
+        HOME: process.env.HOME || '/home/codespace',
+        TERM: 'xterm-256color'
+      }
     });
 
     if (!currentProcess.pid) {
@@ -152,9 +241,11 @@ app.post('/api/simple-claude/launch', (req, res) => {
     
     res.json({
       success: true,
-      message: 'Claude launched successfully',
+      message: 'Claude launched successfully with FIXED path',
       status: processStatus,
-      workingDirectory: prodPath
+      workingDirectory: prodPath,
+      claudePath: claudePath,
+      pathFixed: true
     });
 
   } catch (error) {
@@ -172,7 +263,8 @@ app.post('/api/simple-claude/launch', (req, res) => {
       success: false,
       message: 'Failed to launch Claude',
       error: error.message,
-      status: processStatus
+      status: processStatus,
+      pathFixed: false
     });
   }
 });

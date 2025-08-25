@@ -19,11 +19,9 @@ export default defineConfig({
     host: true, // Allow external connections
     cors: true,
     strictPort: true, // Exit if port is already in use
-    // CRITICAL FIX: Enable SPA routing support
-    historyApiFallback: true, // This ensures all routes fallback to index.html for React Router
     // Proxy configuration for backend services
     proxy: {
-      // HTTP API proxy (working for Claude detection)
+      // HTTP API proxy (working for Claude detection) - FIXED TO PORT 3001
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
@@ -37,7 +35,7 @@ export default defineConfig({
           });
         }
       },
-      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression)
+      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression) - FIXED TO PORT 3001
       '/socket.io': {
         target: 'http://localhost:3001',
         ws: true,           // Enable WebSocket proxying

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { useWebSocketContext } from '@/context/WebSocketContext';
+import { useWebSocketSingletonContext } from '@/context/WebSocketSingletonContext';
 
 // Using notification type from WebSocketContext
 
@@ -16,7 +16,7 @@ export const RealTimeNotifications: React.FC<RealTimeNotificationsProps> = ({ cl
     markNotificationAsRead, 
     isConnected,
     connectionError
-  } = useWebSocketContext();
+  } = useWebSocketSingletonContext();
   
   const [isOpen, setIsOpen] = useState(false);
   const unreadCount = notifications.filter(n => !n.read).length;

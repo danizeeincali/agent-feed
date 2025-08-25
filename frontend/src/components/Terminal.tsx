@@ -12,11 +12,13 @@ interface TerminalProps {
     pid?: number;
     status: string;
   };
+  initialCommand?: string;
 }
 
 export const TerminalComponent: React.FC<TerminalProps> = ({ 
   isVisible, 
-  processStatus 
+  processStatus,
+  initialCommand 
 }) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const terminal = useRef<Terminal | null>(null);
@@ -129,6 +131,22 @@ export const TerminalComponent: React.FC<TerminalProps> = ({
         console.log('🔍 DEBUG: Sending init data:', initData);
         socket.emit('init', initData);
         
+        // Execute initial command if provided
+        if (initialCommand) {
+          setTimeout(() => {
+            const commandMessage = {
+              type: 'input',
+              data: initialCommand + '\r',
+              timestamp: Date.now()
+            };
+            socket.emit('message', commandMessage);
+            console.log('📝 DEBUG: Sent initial command:', initialCommand);
+            if (terminal.current) {
+              terminal.current.write(`\x1b[33m➜ Auto-executing: ${initialCommand}\x1b[0m\r\n`);
+            }
+          }, 500); // Small delay to ensure terminal is ready
+        }
+        
         // Focus terminal after connection
         setTimeout(() => {
           if (terminal.current) {
@@ -210,12 +228,20 @@ export const TerminalComponent: React.FC<TerminalProps> = ({
       console.log('🔍 DEBUG: WebSocket readyState:', ws.current?.readyState);
       
       if (ws.current && (ws.current as any).connected) {
+        // CRITICAL FIX: Normalize carriage returns to prevent command corruption
+        let normalizedData = data;
+        
+        // Convert Windows-style \r\n to Unix-style \n
+        normalizedData = normalizedData.replace(/\r\n/g, '\n');
+        // Convert standalone \r to \n (for Mac-style line endings)  
+        normalizedData = normalizedData.replace(/\r/g, '\n');
+        
         const message = {
           type: 'input',
-          data: data,
+          data: normalizedData,
           timestamp: Date.now()
         };
-        console.log('📝 DEBUG: Sending input message:', message);
+        console.log('📝 DEBUG: Sending normalized input message:', message);
         console.log('📝 DEBUG: Socket emit method:', typeof (ws.current as any).emit);
         
         try {

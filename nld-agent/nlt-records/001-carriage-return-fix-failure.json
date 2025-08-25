@@ -1,0 +1,61 @@
+{
+  "recordId": "NLT-001-CR-RELOAD-FAILURE",
+  "timestamp": "2025-08-24T00:00:00.000Z",
+  "category": "test-production-mismatch",
+  "severity": "critical",
+  "originalTask": "Fix carriage return issue in terminal WebSocket communication",
+  "claudeSolution": {
+    "description": "Applied carriage return normalization in TerminalFixed.tsx lines 256-258",
+    "confidence": "high",
+    "testsRun": ["WebSocket message handling", "Terminal input processing"],
+    "testsStatus": "passed",
+    "files": [
+      "/frontend/src/components/TerminalFixed.tsx",
+      "/frontend/src/utils/terminal-helpers.ts"
+    ]
+  },
+  "userFeedback": {
+    "actual": "it doesnt look like you fixed the carriage return issue",
+    "evidence": "cd prod && claude --dangerously-skip-permissions\\r\\n@danizeeincali ➜ /workspaces/agent-feed (v1) $ cd prod && claude --dangerously-skip-permissions\\n",
+    "status": "failed"
+  },
+  "failureAnalysis": {
+    "rootCause": "Hot reload or component usage mismatch",
+    "failureType": "deployment-synchronization",
+    "patternType": "fix-induced-regression",
+    "details": [
+      "TerminalFixed.tsx contains proper normalization (lines 256-258)",
+      "Original Terminal.tsx does NOT contain normalization fixes",
+      "Application may be using Terminal.tsx instead of TerminalFixed.tsx",
+      "Hot reload may not have applied changes to running process"
+    ]
+  },
+  "correctiveMeasures": {
+    "immediate": [
+      "Verify which component is actually being used in production",
+      "Check import statements and component references",
+      "Force browser refresh to ensure latest code is loaded",
+      "Apply fixes to the correct component file"
+    ],
+    "preventive": [
+      "Implement real-time verification of fixes in running applications",
+      "Add deployment verification checklist",
+      "Build automated tests that run against actual browser instances",
+      "Create hot-reload verification system"
+    ]
+  },
+  "effectivenessScore": 0.15,
+  "tddFactor": 0.3,
+  "neuralPatterns": {
+    "failureSignature": "tests-pass-production-fails",
+    "contextPattern": "websocket-terminal-carriage-return",
+    "hotReloadIssue": true,
+    "componentMismatch": true
+  },
+  "recommendations": {
+    "immediate": "Check which Terminal component is actually being imported and used",
+    "architecture": "Implement single source of truth for terminal components",
+    "testing": "Add browser-based integration tests that verify actual running code",
+    "deployment": "Build verification system that confirms fixes are active in production"
+  }
+}

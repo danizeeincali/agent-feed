@@ -1,0 +1,100 @@
+{
+  "nld_record_id": "NLT-2025-001",
+  "failure_pattern": "vite_white_screen_typescript_errors",
+  "neural_training_results": {
+    "model_id": "model_coordination_1756052809024",
+    "accuracy": 0.7284306202989793,
+    "training_epochs": 75,
+    "pattern_recognition": "build_system_failure_with_silent_errors"
+  },
+  "diagnostic_analysis": {
+    "primary_issue": "TypeScript compilation errors preventing module loading",
+    "error_count": 26,
+    "critical_errors": [
+      {
+        "category": "import.meta.env_missing_types",
+        "count": 8,
+        "severity": "critical",
+        "files_affected": [
+          "src/components/WebSocketDebugPanel.tsx",
+          "src/context/WebSocketSingletonContext.tsx",
+          "src/hooks/useRobustWebSocket.ts",
+          "src/hooks/useWebSocketSingleton.ts"
+        ]
+      },
+      {
+        "category": "socket_io_api_mismatch",
+        "count": 5,
+        "severity": "high",
+        "description": "Socket.io client API type mismatches"
+      },
+      {
+        "category": "react_query_v5_migration",
+        "count": 3,
+        "severity": "high",
+        "description": "Incomplete React Query v5 migration (cacheTime -> gcTime)"
+      }
+    ]
+  },
+  "immediate_fixes": [
+    {
+      "priority": 1,
+      "action": "Add import.meta.env type definitions",
+      "file": "src/vite-env.d.ts",
+      "implementation": "/// <reference types=\"vite/client\" />\n\ninterface ImportMetaEnv {\n  readonly VITE_API_URL?: string\n  readonly VITE_WS_URL?: string\n  readonly DEV?: boolean\n  readonly PROD?: boolean\n}\n\ninterface ImportMeta {\n  readonly env: ImportMetaEnv\n}"
+    },
+    {
+      "priority": 2,
+      "action": "Fix React Query v5 API usage",
+      "files": ["src/hooks/useOptimizedQuery.ts"],
+      "changes": ["Replace 'cacheTime' with 'gcTime'", "Fix QueryFunction type signatures"]
+    },
+    {
+      "priority": 3,
+      "action": "Update Socket.io client usage",
+      "files": ["src/components/TerminalLauncher.tsx", "src/services/connection/connection-manager.ts"],
+      "changes": ["Remove 'wsUrl' prop from TerminalProps", "Fix event listener type signatures"]
+    }
+  ],
+  "tdd_recommendations": {
+    "pre_commit_validation": {
+      "test": "TypeScript strict compilation check",
+      "command": "npx tsc --noEmit --strict",
+      "expected_result": "Zero compilation errors"
+    },
+    "component_loading_tests": {
+      "framework": "React Testing Library + Jest",
+      "coverage_target": "95%",
+      "critical_components": [
+        "SimpleLauncher",
+        "WebSocketProvider",
+        "TerminalLauncher",
+        "App routing"
+      ]
+    },
+    "build_validation_pipeline": {
+      "pre_build": "TypeScript compilation check",
+      "build": "Vite build with type checking",
+      "post_build": "Bundle analysis and error detection"
+    }
+  },
+  "prevention_metrics": {
+    "success_criteria": {
+      "build_errors": 0,
+      "white_screen_incidents": 0,
+      "typescript_coverage": "100%",
+      "test_coverage": "95%+"
+    },
+    "monitoring": {
+      "build_time_threshold": "30 seconds",
+      "error_detection_time": "< 5 seconds",
+      "recovery_time": "< 2 minutes"
+    }
+  },
+  "neural_pattern_confidence": {
+    "pattern_match": 0.92,
+    "prediction_accuracy": 0.73,
+    "recommended_action": "immediate_typescript_fixes",
+    "risk_level": "critical"
+  }
+}

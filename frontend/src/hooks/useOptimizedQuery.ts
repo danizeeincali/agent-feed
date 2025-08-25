@@ -18,7 +18,7 @@ export const useOptimizedQuery = <TData = unknown, TError = unknown>(
       return Promise.resolve({});
     }
     lastFetchTime.current = now;
-    return queryOptions.queryFn ? queryOptions.queryFn({} as any) : Promise.resolve({});
+    return (queryOptions.queryFn as any)?.({}as any) || Promise.resolve({} as TData);
   }, [queryOptions.queryFn, throttleMs]);
   
   return useQuery({
@@ -49,6 +49,6 @@ export const useStaticQuery = <TData = unknown, TError = unknown>(
     ...options,
     enableSmartRefetch: false,
     staleTime: 3600000, // 1 hour
-    cacheTime: 7200000, // 2 hours
+    gcTime: 7200000, // 2 hours (React Query v5 uses gcTime)
   });
 };

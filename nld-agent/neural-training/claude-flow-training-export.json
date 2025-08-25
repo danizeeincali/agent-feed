@@ -1,0 +1,57 @@
+{
+  "trainingDataExport": {
+    "version": "1.0",
+    "exportDate": "2025-08-24T00:00:00Z",
+    "totalRecords": 1,
+    "patternTypes": ["fix-illusion"],
+    "purpose": "claude-flow neural network training for failure prediction"
+  },
+  
+  "neuralPatterns": [
+    {
+      "patternId": "fix-illusion-001",
+      "inputFeatures": {
+        "taskComplexity": "high",
+        "domain": "full-stack-websocket",
+        "confidenceLevel": 0.85,
+        "tddUsage": false,
+        "testCoverage": "isolated-only",
+        "keyTerms": ["terminal", "websocket", "cleanup", "newline", "CLI"]
+      },
+      "failureSignals": {
+        "stringEscaping": true,
+        "immediateCleanup": true,
+        "environmentMismatch": true,
+        "highConfidenceLowValidation": true
+      },
+      "correctSolutionFeatures": {
+        "characterLevelTesting": true,
+        "delayedCleanup": true,
+        "environmentSpecificTesting": true,
+        "endToEndValidation": true
+      },
+      "outcome": "failure",
+      "userSatisfaction": 0.0,
+      "effectivenessScore": 0.12
+    }
+  ],
+  
+  "trainingObjectives": [
+    "Predict fix-illusion pattern probability",
+    "Calibrate confidence for string/character operations", 
+    "Detect environment mismatch risks",
+    "Recommend TDD patterns for integration tasks"
+  ],
+  
+  "modelRecommendations": {
+    "confidenceCalibration": "Reduce confidence for character-level operations without explicit validation",
+    "tddSuggestions": "Always recommend character-level and environment-specific tests",
+    "riskAssessment": "Flag immediate cleanup operations and escaped string usage as high-risk"
+  },
+  
+  "integrationInstructions": {
+    "claudeFlowImport": "npx claude-flow neural-train --import /workspaces/agent-feed/nld-agent/neural-training/claude-flow-training-export.json",
+    "patternMatching": "Monitor for fix-illusion signals in real-time during code generation",
+    "preventiveAction": "Suggest additional testing when pattern probability exceeds 0.3"
+  }
+}
