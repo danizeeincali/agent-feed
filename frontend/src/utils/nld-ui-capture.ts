@@ -577,14 +577,16 @@ export class NLDUICapture {
 export const nldCapture = new NLDUICapture();
 
 // Convenience hooks for React components
-export const useNLDCapture = () => ({
-  captureButtonClick: nldCapture.captureButtonClick.bind(nldCapture),
-  captureToggleAction: nldCapture.captureToggleAction.bind(nldCapture),
-  captureViewSwitch: nldCapture.captureViewSwitch.bind(nldCapture),
-  captureApiCall: nldCapture.captureApiCall.bind(nldCapture),
-  captureWebSocketEvent: nldCapture.captureWebSocketEvent.bind(nldCapture),
-  capturePerformanceIssue: nldCapture.capturePerformanceIssue.bind(nldCapture),
-  captureNavigationAction: nldCapture.captureNavigationAction.bind(nldCapture),
-  getRecommendations: nldCapture.generateRecommendations.bind(nldCapture),
-  exportPatterns: nldCapture.exportPatterns.bind(nldCapture)
-});
+export const useNLDCapture = () => {
+  return {
+    captureButtonClick: nldCapture.captureButtonClick.bind(nldCapture),
+    captureToggleAction: nldCapture.captureToggleAction.bind(nldCapture),
+    captureViewSwitch: nldCapture.captureViewSwitch.bind(nldCapture),
+    captureApiCall: nldCapture.captureApiCall.bind(nldCapture),
+    captureWebSocketEvent: nldCapture.captureWebSocketEvent.bind(nldCapture),
+    capturePerformanceIssue: nldCapture.capturePerformanceIssue.bind(nldCapture),
+    captureNavigationAction: nldCapture.captureNavigationAction.bind(nldCapture),
+    getRecommendations: nldCapture.generateRecommendations.bind(nldCapture),
+    exportPatterns: nldCapture.exportPatterns.bind(nldCapture)
+  };
+};

@@ -6,7 +6,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const logger_1 = require("@/utils/logger");
-const server_1 = require("@/api/server");
+// HTTP/SSE only - WebSocket integration removed
+// import { getWebSocketHubIntegration } from '@/api/server';
 const router = (0, express_1.Router)();
 // Middleware for terminal API authentication (simplified for demo)
 const requireTerminalAuth = (req, res, next) => {
@@ -30,13 +31,10 @@ router.use(requireTerminalAuth);
  */
 router.get('/stats', async (req, res) => {
     try {
-        const webSocketIntegration = (0, server_1.getWebSocketHubIntegration)();
-        if (!webSocketIntegration) {
-            return res.status(503).json({
-                error: 'WebSocket integration not available',
-                message: 'Terminal streaming service not initialized'
-            });
-        }
+        // HTTP/SSE only - WebSocket integration removed
+        const webSocketIntegration = null;
+        // HTTP/SSE only - WebSocket integration not needed
+        // WebSocket integration check removed
         // Get stats from terminal streaming service if available
         const stats = {
             serverStatus: 'running',

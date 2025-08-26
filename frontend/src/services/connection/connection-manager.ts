@@ -3,7 +3,7 @@
  * Core service for managing WebSocket connections with auto-reconnect, health monitoring, and metrics
  */
 
-import { io, Socket } from 'socket.io-client';
+// import { io, Socket } from 'socket.io-client'; // HTTP/SSE ONLY - Socket.IO eliminated
 // Browser-compatible EventEmitter replacement
 class EventEmitter {
   private events: { [key: string]: Function[] } = {};
@@ -114,18 +114,28 @@ export class WebSocketConnectionManager implements ConnectionManager {
         this.socket.disconnect();
       }
 
-      // Create new socket connection
-      this.socket = io(connectOptions.url!, {
-        timeout: connectOptions.timeout,
-        reconnection: false, // We handle reconnection ourselves
-        autoConnect: false,
-        withCredentials: connectOptions.withCredentials,
-        transports: connectOptions.transports,
-        upgrade: connectOptions.upgrade,
-        rememberUpgrade: connectOptions.rememberUpgrade,
-        forceNew: connectOptions.forceNew,
-        auth: connectOptions.auth
-      });
+      // HTTP/SSE ONLY - Mock socket connection
+      console.log('🚀 [HTTP/SSE ConnectionManager] Mock connection - no Socket.IO needed:', connectOptions.url);
+      
+      // Create mock socket for backward compatibility
+      this.socket = {
+        connected: true,
+        emit: (event: string, data?: any) => {
+          console.log(`📡 [HTTP/SSE Mock ConnectionManager] Emit ${event}:`, data);
+        },
+        on: (event: string, handler: Function) => {
+          console.log(`👂 [HTTP/SSE Mock ConnectionManager] Listen ${event}`);
+        },
+        off: (event: string, handler?: Function) => {
+          console.log(`🔇 [HTTP/SSE Mock ConnectionManager] Unlisten ${event}`);
+        },
+        disconnect: () => {
+          console.log('📴 [HTTP/SSE Mock ConnectionManager] Disconnect - no Socket.IO needed');
+        },
+        connect: () => {
+          console.log('🌐 [HTTP/SSE Mock ConnectionManager] Connect - no Socket.IO needed');
+        }
+      } as any;
 
       await this.setupSocketHandlers();
       await this.establishConnection(connectOptions.timeout || 15000);

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useCallback, useEffect, useState, useMemo, memo } from 'react';
-import { useWebSocketSingleton } from '@/hooks/useWebSocketSingleton';
-import { getSocketIOUrl } from '@/utils/websocket-url';
+// HTTP/SSE only - WebSocket imports removed
+// import { useWebSocketSingleton } from '@/hooks/useWebSocketSingleton';
+// import { getSocketIOUrl } from '@/utils/websocket-url';
 
 interface ConnectionState {
   isConnected: boolean;
@@ -36,7 +37,7 @@ interface SystemStats {
 }
 
 interface WebSocketSingletonContextValue {
-  socket: any;
+  socket: any; // Mock object for compatibility
   isConnected: boolean;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
@@ -46,7 +47,7 @@ interface WebSocketSingletonContextValue {
   subscribe: (event: string, handler: (data: any) => void) => void;
   unsubscribe: (event: string, handler?: (data: any) => void) => void;
   connectionState: ConnectionState;
-  connectionError: string | null; // Add missing property
+  connectionError: string | null;
   notifications: Notification[];
   onlineUsers: OnlineUser[];
   systemStats: SystemStats | null;
@@ -87,74 +88,65 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   children, 
   config = {} 
 }) => {
-  // Use singleton hook instead of regular hook
-  const { 
-    socket, 
-    isConnected, 
-    connect, 
-    disconnect, 
-    emit 
-  } = useWebSocketSingleton({
-    // Use dynamic URL that works with Vite proxy and production
-    url: config.url || import.meta.env.VITE_WEBSOCKET_URL || getSocketIOUrl(),
-    autoConnect: config.autoConnect !== false,
-    maxReconnectAttempts: config.reconnectAttempts || 5
-  });
-
-  // CRITICAL DEBUG: Log connection state changes
-  React.useEffect(() => {
-    console.log('🔌 WebSocketSingletonProvider: Connection state changed', {
-      isConnected,
-      socketId: socket?.id,
-      socketConnected: socket?.connected,
-      url: config.url || import.meta.env.VITE_WEBSOCKET_URL || getSocketIOUrl()
-    });
-  }, [isConnected, socket?.id, socket?.connected]);
-
-  // State management
+  // HTTP/SSE only - no WebSocket connections
+  const [isConnected, setIsConnected] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [systemStats, setSystemStats] = useState<SystemStats | null>(null);
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
-  // PRODUCTION FIX: Move connectionState calculation BEFORE useMemo context value to avoid temporal dead zone
-  // This fixes the "Cannot access 'connectionState' before initialization" error
-  const connectionState = useMemo<ConnectionState>(() => {
-    // CRITICAL FIX: Socket.IO uses different state properties
-    let isConnectingState = false;
-    
-    if (socket) {
-      // Socket.IO specific states:
-      // - socket.connected: true when connected
-      // - socket.disconnected: true when disconnected
-      // - socket.io.readyState: 'opening', 'open', 'closing', 'closed'
-      const socketIO = socket.io || socket;
-      const readyState = (socketIO as any)?.readyState || (socket as any).readyState;
-      
-      isConnectingState = !socket.connected && !socket.disconnected && 
-        (readyState === 'opening' || readyState === 1);
+  // Mock socket object for compatibility
+  const socket = useMemo(() => ({
+    id: 'http-sse-' + Date.now(),
+    connected: isConnected,
+    emit: (event: string, data?: any) => {
+      console.log('📡 [HTTP/SSE] Mock emit:', event, data);
+    },
+    on: (event: string, handler: (data: any) => void) => {
+      console.log('📡 [HTTP/SSE] Mock event handler registered:', event);
+    },
+    off: (event: string, handler?: (data: any) => void) => {
+      console.log('📡 [HTTP/SSE] Mock event handler removed:', event);
     }
-    
-    console.log('🔧 WebSocketSingletonProvider: Socket.IO connection state (PRODUCTION FIX)', {
-      isConnected,
-      socketExists: !!socket,
-      socketConnected: socket?.connected,
-      socketDisconnected: socket?.disconnected,
-      socketIOReadyState: (socket?.io as any)?.readyState,
-      computedIsConnecting: isConnectingState,
-      socketId: socket?.id,
-      fixApplied: 'Socket.IO-specific state logic'
-    });
-    
-    return {
-      isConnected,
-      isConnecting: isConnectingState,
-      reconnectAttempt,
-      lastConnected: isConnected ? new Date().toISOString() : null,
-      connectionError
-    };
-  }, [isConnected, socket?.connected, socket?.disconnected, (socket?.io as any)?.readyState, reconnectAttempt, connectionError]);
+  }), [isConnected]);
+
+  // Mock connection state
+  const connectionState = useMemo<ConnectionState>(() => ({
+    isConnected,
+    isConnecting: false,
+    reconnectAttempt,
+    lastConnected: isConnected ? new Date().toISOString() : null,
+    connectionError
+  }), [isConnected, reconnectAttempt, connectionError]);
+
+  // Connection methods
+  const connect = useCallback(async () => {
+    console.log('🚀 [HTTP/SSE] Mock connect - no WebSocket needed');
+    setIsConnected(true);
+    setConnectionError(null);
+    setReconnectAttempt(0);
+  }, []);
+
+  const disconnect = useCallback(async () => {
+    console.log('🚀 [HTTP/SSE] Mock disconnect');
+    setIsConnected(false);
+  }, []);
+
+  const emit = useCallback((event: string, data?: any) => {
+    console.log('📡 [HTTP/SSE] Mock emit:', event, data);
+  }, []);
+
+  const on = useCallback((event: string, handler: (data: any) => void) => {
+    console.log('📡 [HTTP/SSE] Mock event handler registered:', event);
+  }, []);
+
+  const off = useCallback((event: string, handler?: (data: any) => void) => {
+    console.log('📡 [HTTP/SSE] Mock event handler removed:', event);
+  }, []);
+
+  const subscribe = on;
+  const unsubscribe = off;
 
   // Notification management
   const clearNotifications = useCallback(() => {
@@ -179,114 +171,42 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
 
   // Feed and post management
   const subscribeFeed = useCallback((feedId: string) => {
-    emit('subscribe_feed', { feedId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE] Mock subscribe feed:', feedId);
+  }, []);
 
   const unsubscribeFeed = useCallback((feedId: string) => {
-    emit('unsubscribe_feed', { feedId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE] Mock unsubscribe feed:', feedId);
+  }, []);
 
   const subscribePost = useCallback((postId: string) => {
-    emit('subscribe_post', { postId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE] Mock subscribe post:', postId);
+  }, []);
 
   const unsubscribePost = useCallback((postId: string) => {
-    emit('unsubscribe_post', { postId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE] Mock unsubscribe post:', postId);
+  }, []);
 
   const sendLike = useCallback((postId: string, action: 'add' | 'remove' = 'add') => {
-    emit('like_post', { postId, action });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE] Mock send like:', postId, action);
+  }, []);
 
   const sendMessage = useCallback((event: string, data: any) => {
-    emit(event, data);
-  }, [emit]);
+    console.log('📡 [HTTP/SSE] Mock send message:', event, data);
+  }, []);
 
   const reconnect = useCallback(async () => {
     setReconnectAttempt(prev => prev + 1);
     await connect();
   }, [connect]);
 
-  // Add missing methods for compatibility
-  const on = useCallback((event: string, handler: (data: any) => void) => {
-    if (socket) {
-      socket.on(event, handler);
-    }
-  }, [socket]);
-
-  const off = useCallback((event: string, handler?: (data: any) => void) => {
-    if (socket) {
-      if (handler) {
-        socket.off(event, handler);
-      } else {
-        socket.off(event);
-      }
-    }
-  }, [socket]);
-
-  const subscribe = useCallback((event: string, handler: (data: any) => void) => {
-    on(event, handler);
-  }, [on]);
-
-  const unsubscribe = useCallback((event: string, handler?: (data: any) => void) => {
-    off(event, handler);
-  }, [off]);
-
-  // Socket event handlers
+  // Auto-connect on mount
   useEffect(() => {
-    if (!socket) return;
+    if (config.autoConnect !== false) {
+      connect();
+    }
+  }, [connect, config.autoConnect]);
 
-    const handlers = {
-      notification: (data: any) => {
-        addNotification({
-          type: data.type || 'info',
-          title: data.title || 'Notification',
-          message: data.message || '',
-          read: false,
-          userId: data.userId,
-          postId: data.postId,
-          commentId: data.commentId
-        });
-      },
-      
-      online_users: (data: OnlineUser[]) => {
-        setOnlineUsers(data || []);
-      },
-      
-      system_stats: (data: SystemStats) => {
-        setSystemStats(data);
-      },
-      
-      connect: () => {
-        console.log('🔌 WebSocketSingletonProvider: Connected to server');
-        setReconnectAttempt(0);
-        setConnectionError(null);
-      },
-      
-      disconnect: (reason: string) => {
-        console.log('🔌 WebSocketSingletonProvider: Disconnected:', reason);
-      },
-      
-      connect_error: (error: any) => {
-        console.error('🔌 WebSocketSingletonProvider: Connection error:', error);
-        setConnectionError(error?.message || 'Connection failed');
-      }
-    };
-
-    // Register all handlers
-    Object.entries(handlers).forEach(([event, handler]) => {
-      socket.on(event, handler);
-    });
-
-    // Cleanup function
-    return () => {
-      Object.entries(handlers).forEach(([event, handler]) => {
-        socket.off(event, handler);
-      });
-    };
-  }, [socket, addNotification]);
-
-  // Stable context value - Fixed temporal dead zone by ensuring connectionState is declared first
+  // Context value
   const contextValue = useMemo<WebSocketSingletonContextValue>(() => ({
     socket,
     isConnected,
@@ -320,9 +240,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
     emit,
     on,
     off,
-    subscribe,
-    unsubscribe,
-    connectionState, // Safe to use here since connectionState is declared above
+    connectionState,
     connectionError,
     notifications,
     onlineUsers,
@@ -348,6 +266,6 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
 
 WebSocketSingletonProvider.displayName = 'WebSocketSingletonProvider';
 
-// Backward compatibility export
+// Backward compatibility exports
 export { useWebSocketSingletonContext as useWebSocketContext };
 export { WebSocketSingletonProvider as WebSocketProvider };

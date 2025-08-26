@@ -420,7 +420,7 @@ const NLDDashboard: React.FC<NLDDashboardProps> = ({ isVisible, onClose }) => {
           )}
         </div>
 
-        <style jsx global>{`
+        <style>{`
           .nld-dashboard-overlay {
             position: fixed;
             top: 0;

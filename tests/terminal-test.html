@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Terminal Test - Agent Feed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #61dafb;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        .controls {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        button {
+            background: #0084ff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        button:hover {
+            background: #0066cc;
+            transform: translateY(-1px);
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        button.success {
+            background: #28a745;
+        }
+        
+        button.error {
+            background: #dc3545;
+        }
+        
+        .status-panel {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-connected {
+            background-color: #28a745;
+        }
+        
+        .status-disconnected {
+            background-color: #dc3545;
+        }
+        
+        .status-pending {
+            background-color: #ffc107;
+        }
+        
+        .terminal-container {
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+        
+        .terminal-output {
+            color: #0f0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .command-input {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .command-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #555;
+            color: #e0e0e0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #61dafb;
+        }
+        
+        .preset-commands {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+        }
+        
+        .preset-commands button {
+            background: #444;
+            font-size: 12px;
+            padding: 8px 12px;
+        }
+        
+        .preset-commands button:hover {
+            background: #555;
+        }
+        
+        .logs {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        
+        .log-info { color: #61dafb; }
+        .log-success { color: #28a745; }
+        .log-error { color: #dc3545; }
+        .log-warning { color: #ffc107; }
+        
+        .instance-info {
+            background: #2d2d2d;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #61dafb;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 WebSocket Terminal Test Interface</h1>
+        
+        <!-- Control Panel -->
+        <div class="controls">
+            <button id="createInstanceBtn">Create Claude Instance</button>
+            <button id="connectTerminalBtn" disabled>Connect Terminal</button>
+            <button id="disconnectTerminalBtn" disabled>Disconnect Terminal</button>
+            <button id="clearTerminalBtn">Clear Terminal</button>
+            <button id="runTestsBtn">Run Test Suite</button>
+            <button id="clearLogsBtn">Clear Logs</button>
+        </div>
+        
+        <!-- Status Panel -->
+        <div class="status-panel">
+            <div class="status-row">
+                <span>Backend Server (Port 3000):</span>
+                <span><span class="status-indicator status-disconnected" id="backendStatus"></span><span id="backendStatusText">Checking...</span></span>
+            </div>
+            <div class="status-row">
+                <span>Terminal Server (Port 3002):</span>
+                <span><span class="status-indicator status-disconnected" id="terminalServerStatus"></span><span id="terminalServerStatusText">Checking...</span></span>
+            </div>
+            <div class="status-row">
+                <span>WebSocket Connection:</span>
+                <span><span class="status-indicator status-disconnected" id="wsStatus"></span><span id="wsStatusText">Disconnected</span></span>
+            </div>
+        </div>
+        
+        <!-- Metrics -->
+        <div class="metrics">
+            <div class="metric-card">
+                <span class="metric-value" id="messagesReceived">0</span>
+                <span class="metric-label">Messages Received</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="messagesSent">0</span>
+                <span class="metric-label">Messages Sent</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="averageLatency">0ms</span>
+                <span class="metric-label">Avg Latency</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value" id="connectionUptime">0s</span>
+                <span class="metric-label">Connection Uptime</span>
+            </div>
+        </div>
+        
+        <!-- Instance Info -->
+        <div class="instance-info" id="instanceInfo" style="display: none;">
+            <strong>Claude Instance:</strong> <span id="instanceDetails">No instance created</span>
+        </div>
+        
+        <!-- Terminal Output -->
+        <div class="terminal-container">
+            <div class="terminal-output" id="terminalOutput">
+Welcome to WebSocket Terminal Test Interface
+===========================================
+
+Click "Create Claude Instance" to start, then "Connect Terminal" to establish WebSocket connection.
+You can then send commands and see real-time output.
+
+Waiting for connection...
+            </div>
+        </div>
+        
+        <!-- Command Input -->
+        <div class="command-input">
+            <div class="command-row">
+                <input type="text" id="commandInput" placeholder="Enter terminal command..." disabled>
+                <button id="sendCommandBtn" disabled>Send Command</button>
+            </div>
+            <div class="preset-commands">
+                <button class="preset-cmd" data-cmd="echo 'Hello Terminal'">Echo Test</button>
+                <button class="preset-cmd" data-cmd="pwd">Show Directory</button>
+                <button class="preset-cmd" data-cmd="ls -la">List Files</button>
+                <button class="preset-cmd" data-cmd="whoami">Show User</button>
+                <button class="preset-cmd" data-cmd="date">Show Date</button>
+                <button class="preset-cmd" data-cmd="uname -a">System Info</button>
+                <button class="preset-cmd" data-cmd="ps aux | head -10">Processes</button>
+                <button class="preset-cmd" data-cmd="df -h">Disk Space</button>
+            </div>
+        </div>
+        
+        <!-- Logs -->
+        <h3>Activity Logs</h3>
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script>
+        class TerminalTestInterface {
+            constructor() {
+                this.ws = null;
+                this.claudeInstance = null;
+                this.metrics = {
+                    messagesReceived: 0,
+                    messagesSent: 0,
+                    latencySum: 0,
+                    connectionStartTime: null
+                };
+                this.lastPingTime = null;
+                
+                this.setupEventListeners();
+                this.checkServerStatus();
+                this.startMetricsUpdater();
+            }
+            
+            setupEventListeners() {
+                // Button events
+                document.getElementById('createInstanceBtn').addEventListener('click', () => this.createInstance());
+                document.getElementById('connectTerminalBtn').addEventListener('click', () => this.connectTerminal());
+                document.getElementById('disconnectTerminalBtn').addEventListener('click', () => this.disconnectTerminal());
+                document.getElementById('clearTerminalBtn').addEventListener('click', () => this.clearTerminal());
+                document.getElementById('runTestsBtn').addEventListener('click', () => this.runTestSuite());
+                document.getElementById('clearLogsBtn').addEventListener('click', () => this.clearLogs());
+                document.getElementById('sendCommandBtn').addEventListener('click', () => this.sendCommand());
+                
+                // Command input
+                document.getElementById('commandInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendCommand();
+                    }
+                });
+                
+                // Preset commands
+                document.querySelectorAll('.preset-cmd').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const command = btn.getAttribute('data-cmd');
+                        document.getElementById('commandInput').value = command;
+                        this.sendCommand();
+                    });
+                });
+            }
+            
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry log-${type}`;
+                logEntry.innerHTML = `[${timestamp}] ${message}`;
+                
+                const logsContainer = document.getElementById('logs');
+                logsContainer.appendChild(logEntry);
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+            }
+            
+            updateTerminalOutput(text, type = 'output') {
+                const terminal = document.getElementById('terminalOutput');
+                const span = document.createElement('span');
+                span.textContent = text;
+                if (type === 'command') {
+                    span.style.color = '#61dafb';
+                    span.textContent = `$ ${text}`;
+                } else if (type === 'error') {
+                    span.style.color = '#dc3545';
+                }
+                terminal.appendChild(span);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+            
+            clearTerminal() {
+                document.getElementById('terminalOutput').innerHTML = 'Terminal cleared.\n\n';
+            }
+            
+            clearLogs() {
+                document.getElementById('logs').innerHTML = '';
+            }
+            
+            async checkServerStatus() {
+                // Check backend server
+                try {
+                    const response = await fetch('http://localhost:3000/health');
+                    if (response.ok) {
+                        this.updateStatus('backend', 'connected', 'Connected');
+                    } else {
+                        this.updateStatus('backend', 'disconnected', 'Error');
+                    }
+                } catch (error) {
+                    this.updateStatus('backend', 'disconnected', 'Disconnected');
+                }
+                
+                // Check terminal server
+                try {
+                    const response = await fetch('http://localhost:3002/health');
+                    if (response.ok) {
+                        this.updateStatus('terminalServer', 'connected', 'Connected');
+                        document.getElementById('connectTerminalBtn').disabled = false;
+                    } else {
+                        this.updateStatus('terminalServer', 'disconnected', 'Error');
+                    }
+                } catch (error) {
+                    this.updateStatus('terminalServer', 'disconnected', 'Disconnected');
+                }
+                
+                // Re-check every 30 seconds
+                setTimeout(() => this.checkServerStatus(), 30000);
+            }
+            
+            updateStatus(service, status, text) {
+                const indicator = document.getElementById(`${service}Status`);
+                const textElement = document.getElementById(`${service}StatusText`);
+                
+                indicator.className = `status-indicator status-${status}`;
+                textElement.textContent = text;
+            }
+            
+            async createInstance() {
+                this.log('Creating Claude instance...', 'info');
+                const btn = document.getElementById('createInstanceBtn');
+                btn.disabled = true;
+                btn.textContent = 'Creating...';
+                
+                try {
+                    const instanceData = {
+                        name: `terminal-test-${Date.now()}`,
+                        description: 'Test instance for terminal WebSocket validation',
+                        config: {
+                            model: 'claude-3-sonnet',
+                            temperature: 0.7
+                        }
+                    };
+                    
+                    const response = await fetch('http://localhost:3000/api/claude/instances', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(instanceData)
+                    });
+                    
+                    if (response.ok) {
+                        this.claudeInstance = await response.json();
+                        this.log(`Claude instance created: ${this.claudeInstance.id}`, 'success');
+                        
+                        // Update UI
+                        const instanceInfo = document.getElementById('instanceInfo');
+                        const instanceDetails = document.getElementById('instanceDetails');
+                        instanceInfo.style.display = 'block';
+                        instanceDetails.textContent = `ID: ${this.claudeInstance.id}, Name: ${this.claudeInstance.name}`;
+                        
+                        btn.textContent = 'Instance Created';
+                        btn.className = 'success';
+                        
+                        document.getElementById('connectTerminalBtn').disabled = false;
+                    } else {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    this.log(`Failed to create instance: ${error.message}`, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Claude Instance';
+                    btn.className = 'error';
+                }
+            }
+            
+            connectTerminal() {
+                this.log('Connecting to WebSocket terminal...', 'info');
+                const connectBtn = document.getElementById('connectTerminalBtn');
+                const disconnectBtn = document.getElementById('disconnectTerminalBtn');
+                
+                connectBtn.disabled = true;
+                connectBtn.textContent = 'Connecting...';
+                
+                try {
+                    this.ws = new WebSocket('ws://localhost:3002/terminal');
+                    
+                    this.ws.onopen = () => {
+                        this.log('WebSocket connection established', 'success');
+                        this.updateStatus('ws', 'connected', 'Connected');
+                        
+                        connectBtn.style.display = 'none';
+                        disconnectBtn.disabled = false;
+                        disconnectBtn.style.display = 'inline-block';
+                        
+                        document.getElementById('commandInput').disabled = false;
+                        document.getElementById('sendCommandBtn').disabled = false;
+                        
+                        this.metrics.connectionStartTime = Date.now();
+                        this.updateTerminalOutput('WebSocket connection established. Ready for commands.\n\n');
+                    };
+                    
+                    this.ws.onmessage = (event) => {
+                        this.metrics.messagesReceived++;
+                        
+                        // Calculate latency if this is a response to our ping
+                        if (this.lastPingTime && event.data.includes('pong')) {
+                            const latency = Date.now() - this.lastPingTime;
+                            this.metrics.latencySum += latency;
+                            this.lastPingTime = null;
+                        }
+                        
+                        this.updateTerminalOutput(event.data);
+                        this.log(`Received: ${event.data.substring(0, 50)}...`, 'info');
+                    };
+                    
+                    this.ws.onclose = (event) => {
+                        this.log(`WebSocket closed: Code ${event.code}, Reason: ${event.reason}`, 'warning');
+                        this.updateStatus('ws', 'disconnected', 'Disconnected');
+                        this.resetConnectionUI();
+                    };
+                    
+                    this.ws.onerror = (error) => {
+                        this.log(`WebSocket error: ${error.message || 'Connection failed'}`, 'error');
+                        this.updateStatus('ws', 'disconnected', 'Error');
+                        this.resetConnectionUI();
+                    };
+                    
+                } catch (error) {
+                    this.log(`Failed to connect: ${error.message}`, 'error');
+                    this.resetConnectionUI();
+                }
+            }
+            
+            disconnectTerminal() {
+                if (this.ws) {
+                    this.ws.close();
+                    this.log('WebSocket connection closed by user', 'info');
+                }
+                this.resetConnectionUI();
+            }
+            
+            resetConnectionUI() {
+                const connectBtn = document.getElementById('connectTerminalBtn');
+                const disconnectBtn = document.getElementById('disconnectTerminalBtn');
+                
+                connectBtn.disabled = false;
+                connectBtn.textContent = 'Connect Terminal';
+                connectBtn.style.display = 'inline-block';
+                
+                disconnectBtn.disabled = true;
+                disconnectBtn.style.display = 'none';
+                
+                document.getElementById('commandInput').disabled = true;
+                document.getElementById('sendCommandBtn').disabled = true;
+                
+                this.metrics.connectionStartTime = null;
+            }
+            
+            sendCommand() {
+                const input = document.getElementById('commandInput');
+                const command = input.value.trim();
+                
+                if (!command || !this.ws || this.ws.readyState !== WebSocket.OPEN) {
+                    return;
+                }
+                
+                this.log(`Sending command: ${command}`, 'info');
+                this.updateTerminalOutput(`${command}\n`, 'command');
+                
+                this.ws.send(command + '\n');
+                this.metrics.messagesSent++;
+                
+                // Send ping for latency measurement
+                this.lastPingTime = Date.now();
+                
+                input.value = '';
+            }
+            
+            async runTestSuite() {
+                this.log('Starting automated test suite...', 'info');
+                const btn = document.getElementById('runTestsBtn');
+                btn.disabled = true;
+                btn.textContent = 'Running Tests...';
+                
+                const tests = [
+                    { name: 'Basic Echo Test', command: 'echo "Test Suite Running"' },
+                    { name: 'Directory Test', command: 'pwd' },
+                    { name: 'File List Test', command: 'ls -la | head -5' },
+                    { name: 'System Info Test', command: 'uname -a' },
+                    { name: 'Date Test', command: 'date' }
+                ];
+                
+                for (const test of tests) {
+                    this.log(`Running: ${test.name}`, 'info');
+                    this.updateTerminalOutput(`\n--- ${test.name} ---\n`, 'info');
+                    
+                    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                        this.ws.send(test.command + '\n');
+                        this.metrics.messagesSent++;
+                        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait between tests
+                    }
+                }
+                
+                this.log('Automated test suite completed', 'success');
+                btn.disabled = false;
+                btn.textContent = 'Run Test Suite';
+            }
+            
+            startMetricsUpdater() {
+                setInterval(() => {
+                    this.updateMetricsDisplay();
+                }, 1000);
+            }
+            
+            updateMetricsDisplay() {
+                document.getElementById('messagesReceived').textContent = this.metrics.messagesReceived;
+                document.getElementById('messagesSent').textContent = this.metrics.messagesSent;
+                
+                const avgLatency = this.metrics.messagesReceived > 0 ? 
+                    (this.metrics.latencySum / this.metrics.messagesReceived).toFixed(0) : 0;
+                document.getElementById('averageLatency').textContent = `${avgLatency}ms`;
+                
+                const uptime = this.metrics.connectionStartTime ? 
+                    Math.floor((Date.now() - this.metrics.connectionStartTime) / 1000) : 0;
+                document.getElementById('connectionUptime').textContent = `${uptime}s`;
+            }
+        }
+        
+        // Initialize the interface when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            new TerminalTestInterface();
+        });
+    </script>
+</body>
+</html>

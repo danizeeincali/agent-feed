@@ -5,7 +5,8 @@
 
 import { Router, Request, Response } from 'express';
 import { logger } from '@/utils/logger';
-import { getWebSocketHubIntegration } from '@/api/server';
+// HTTP/SSE only - WebSocket integration removed
+// import { getWebSocketHubIntegration } from '@/api/server';
 
 const router = Router();
 
@@ -35,14 +36,11 @@ router.use(requireTerminalAuth);
  */
 router.get('/stats', async (req: Request, res: Response) => {
   try {
-    const webSocketIntegration = getWebSocketHubIntegration();
+    // HTTP/SSE only - WebSocket integration removed
+    const webSocketIntegration = null;
     
-    if (!webSocketIntegration) {
-      return res.status(503).json({
-        error: 'WebSocket integration not available',
-        message: 'Terminal streaming service not initialized'
-      });
-    }
+    // HTTP/SSE only - WebSocket integration not needed
+    // WebSocket integration check removed
     
     // Get stats from terminal streaming service if available
     const stats = {

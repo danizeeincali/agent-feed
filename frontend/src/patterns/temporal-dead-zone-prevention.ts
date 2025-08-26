@@ -5,6 +5,8 @@
  * by establishing coding conventions and automated detection systems.
  */
 
+import { useEffect } from 'react';
+
 export interface TemporalDeadZonePattern {
   errorId: string;
   pattern: string;
@@ -248,7 +250,7 @@ export class TemporalDeadZoneDetector {
  * Use this in development to automatically detect TDZ issues
  */
 export function useTemporalDeadZoneDetection(enabled: boolean = process.env.NODE_ENV === 'development') {
-  React.useEffect(() => {
+  useEffect(() => {
     if (!enabled) return;
 
     const detector = new TemporalDeadZoneDetector();

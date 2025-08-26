@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './ClaudeInstanceManager.css';
 import { nldCapture } from '../utils/nld-ui-capture';
+import { useHTTPSSE } from '../hooks/useHTTPSSE';
 
 interface ClaudeInstance {
   id: string;
@@ -23,99 +24,90 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [connectionType, setConnectionType] = useState<string>('Disconnected');
   
-  const wsRef = useRef<WebSocket | null>(null);
   const outputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  
+  // Use HTTP/SSE hook instead of WebSocket
+  const { 
+    socket, 
+    isConnected, 
+    connectionError, 
+    connectSSE, 
+    startPolling, 
+    on, 
+    off,
+    emit
+  } = useHTTPSSE({ 
+    url: apiUrl,
+    autoConnect: true
+  });
 
-  // Connect to WebSocket for real-time updates
+  // Setup event handlers and fetch instances
   useEffect(() => {
-    connectWebSocket();
     fetchInstances();
+    setupEventHandlers();
     
     return () => {
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
+      cleanupEventHandlers();
     };
-  }, []);
+  }, [socket]);
 
-  const connectWebSocket = () => {
-    // Use correct WebSocket path that matches server WebSocket setup
-    const wsUrl = apiUrl.replace('http', 'ws') + '/socket.io/?EIO=4&transport=websocket';
-    const ws = new WebSocket(wsUrl);
+  const setupEventHandlers = () => {
+    if (!socket) return;
     
-    
-    ws.onopen = () => {
-      console.log('Connected to Claude instances WebSocket');
+    // Handle connection events
+    on('connect', (data) => {
+      console.log('Connected via HTTP/SSE:', data);
       setError(null);
-    };
+      setConnectionType(data.connectionType === 'sse' ? 'Connected via SSE' : 
+                      data.connectionType === 'polling' ? 'Connected via Polling' : 
+                      'Connected via HTTP/SSE');
+    });
     
-    ws.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        handleWebSocketMessage(message);
-      } catch (err) {
-        console.error('WebSocket message parse error:', err);
-      }
-    };
-    
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-      setError('WebSocket connection error');
-      
-      // Capture NLD pattern for WebSocket connection failure
-      nldCapture.captureWebSocketConnectionFailure(
-        'WebSocket connection error',
-        wsUrl,
-        'ClaudeInstanceManager'
-      );
-    };
-    
-    ws.onclose = () => {
-      console.log('WebSocket connection closed');
-      // Attempt to reconnect after 3 seconds
-      setTimeout(connectWebSocket, 3000);
-    };
-    
-    wsRef.current = ws;
-  };
-
-  const handleWebSocketMessage = (message: any) => {
-    if (message.type === 'instances' || (message instanceof Array)) {
-      // Handle instances list update
-      const instancesData = message.type === 'instances' ? message.data : message;
-      setInstances(instancesData.map(inst => ({
-        id: inst.id,
-        name: inst.id.slice(0, 8), // Use first 8 chars of ID as name for now
-        status: inst.status,
-        pid: inst.pid,
-        startTime: new Date(inst.startTime)
-      })));
-      return;
-    }
-    
-    switch (message.type) {
-      case 'output':
+    // Handle terminal output
+    on('terminal:output', (data) => {
+      if (data.output && data.instanceId) {
         setOutput(prev => ({
           ...prev,
-          [message.instanceId]: (prev[message.instanceId] || '') + message.data
+          [data.instanceId]: (prev[data.instanceId] || '') + data.output
         }));
-        // Auto-scroll to bottom
-        if (outputRefs.current[message.instanceId]) {
-          outputRefs.current[message.instanceId]!.scrollTop = 
-            outputRefs.current[message.instanceId]!.scrollHeight;
-        }
-        break;
         
-      case 'status':
-        setInstances(prev => prev.map(inst => 
-          inst.id === message.instanceId 
-            ? { ...inst, status: message.status }
-            : inst
-        ));
-        break;
-    }
+        // Auto-scroll to bottom
+        if (outputRefs.current[data.instanceId]) {
+          const element = outputRefs.current[data.instanceId];
+          if (element) {
+            element.scrollTop = element.scrollHeight;
+          }
+        }
+      }
+    });
+    
+    // Handle connection errors
+    on('error', (error) => {
+      console.error('HTTP/SSE error:', error);
+      setError(connectionError || 'Connection error');
+      setConnectionType('Connection Error');
+    });
   };
+
+  const cleanupEventHandlers = () => {
+    if (!socket) return;
+    
+    off('connect');
+    off('terminal:output');
+    off('error');
+  };
+
+  // Update connection status when connectionError changes
+  useEffect(() => {
+    if (connectionError) {
+      setError(connectionError);
+      setConnectionType('Connection Error');
+    } else if (isConnected) {
+      setError(null);
+    }
+  }, [connectionError, isConnected]);
 
   const fetchInstances = async () => {
     try {
@@ -185,6 +177,16 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
         await fetchInstances();
         setSelectedInstance(data.instanceId);
         setOutput(prev => ({ ...prev, [data.instanceId]: '' }));
+        
+        // Start terminal streaming for the new instance
+        // Try SSE first, fallback to polling if it fails
+        try {
+          connectSSE(data.instanceId);
+          console.log('Started SSE streaming for instance:', data.instanceId);
+        } catch (sseError) {
+          console.log('SSE failed, falling back to polling:', sseError);
+          startPolling(data.instanceId);
+        }
       } else {
         setError(data.error || 'Failed to create instance');
       }
@@ -208,14 +210,15 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
   const sendInput = () => {
     if (!selectedInstance || !input.trim()) return;
     
-    
-    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify({
-        type: 'input',
-        instanceId: selectedInstance,
-        data: input + '\n'
-      }));
+    if (socket && isConnected) {
+      emit('terminal:input', {
+        input: input + '\n',
+        instanceId: selectedInstance
+      });
       setInput('');
+    } else {
+      console.warn('Not connected, cannot send input');
+      setError('Not connected to terminal');
     }
   };
 
@@ -249,7 +252,12 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
         <h2>Claude Instance Manager</h2>
         <div className="status">
           {error && <span className="error">{error}</span>}
-          {instances.length > 0 && (
+          {!error && (
+            <span className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
+              {connectionType}
+            </span>
+          )}
+          {instances && instances.length > 0 && (
             <span className="count">Active: {instances.filter(i => i.status === 'running').length}/{instances.length}</span>
           )}
         </div>
@@ -305,6 +313,16 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                   className={`instance-item ${selectedInstance === instance.id ? 'selected' : ''} status-${instance.status}`}
                   onClick={() => {
                     setSelectedInstance(instance.id);
+                    // Start streaming for the selected instance if not already streaming
+                    if (instance.status === 'running') {
+                      try {
+                        connectSSE(instance.id);
+                        console.log('Started SSE streaming for selected instance:', instance.id);
+                      } catch (sseError) {
+                        console.log('SSE failed for selected instance, falling back to polling:', sseError);
+                        startPolling(instance.id);
+                      }
+                    }
                   }}
                 >
                   <div className="instance-header">
@@ -340,7 +358,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                 className="output-area"
                 ref={el => outputRefs.current[selectedInstance] = el}
               >
-                <pre>{output[selectedInstance] || 'Waiting for output...'}</pre>
+                <pre>{output[selectedInstance] || 'Connecting to terminal stream...'}</pre>
               </div>
               <div className="input-area">
                 <input

@@ -1,0 +1,111 @@
+{
+  "swarmId": "endpoint-analysis-swarm-20250826",
+  "topology": "hierarchical",
+  "coordinatorAgent": "hierarchical-coordinator",
+  "maxAgents": 6,
+  "configuration": {
+    "faultTolerance": {
+      "enabled": true,
+      "exponentialBackoff": {
+        "baseDelay": 1000,
+        "maxDelay": 30000,
+        "backoffFactor": 2
+      },
+      "retryLimit": 5,
+      "healthCheckInterval": 10000
+    },
+    "memorySharing": {
+      "enabled": true,
+      "namespace": "endpoint-analysis",
+      "persistence": true,
+      "crossAgentAccess": true
+    },
+    "coordination": {
+      "realtimeUpdates": true,
+      "progressReporting": true,
+      "automaticScaling": true
+    }
+  },
+  "agents": [
+    {
+      "id": "specification-agent",
+      "type": "specification",
+      "priority": "critical",
+      "resources": {
+        "memory": "high",
+        "cpu": "medium"
+      },
+      "specialization": "Frontend log analysis and endpoint identification",
+      "responsibilities": [
+        "Analyze ClaudeInstanceManager.tsx for missing API calls",
+        "Parse frontend logs for failed endpoint requests",
+        "Identify required HTTP/SSE endpoints",
+        "Document API contract requirements"
+      ]
+    },
+    {
+      "id": "nld-pattern-agent", 
+      "type": "nld-agent",
+      "priority": "high",
+      "resources": {
+        "memory": "high",
+        "cpu": "high"
+      },
+      "specialization": "Pattern detection and API mapping",
+      "responsibilities": [
+        "Deploy advanced pattern detection algorithms",
+        "Map frontend API calls to backend implementation gaps",
+        "Identify missing endpoint patterns",
+        "Generate endpoint requirement specifications"
+      ]
+    },
+    {
+      "id": "tdd-swarm-agent",
+      "type": "tdd-london-swarm", 
+      "priority": "high",
+      "resources": {
+        "memory": "medium",
+        "cpu": "high"
+      },
+      "specialization": "Mock-driven test development",
+      "responsibilities": [
+        "Create comprehensive test suites for missing endpoints",
+        "Implement London School TDD methodology",
+        "Generate mock implementations for API contracts",
+        "Validate test coverage for all 4 Claude instance buttons"
+      ]
+    },
+    {
+      "id": "backend-implementation-agent",
+      "type": "backend-dev",
+      "priority": "critical",
+      "resources": {
+        "memory": "high", 
+        "cpu": "high"
+      },
+      "specialization": "HTTP/SSE endpoint implementation",
+      "responsibilities": [
+        "Implement missing /api/claude/* endpoints in simple-backend.js",
+        "Add proper SSE streaming for terminal output",
+        "Ensure HTTP fallback mechanisms work correctly",
+        "Implement fault-tolerant connection handling"
+      ]
+    },
+    {
+      "id": "e2e-validation-agent",
+      "type": "production-validator",
+      "priority": "critical",
+      "resources": {
+        "memory": "medium",
+        "cpu": "medium"
+      },
+      "specialization": "End-to-end validation and testing",
+      "responsibilities": [
+        "Run comprehensive E2E tests for all 4 Claude instance buttons",
+        "Validate HTTP/SSE connectivity works properly",
+        "Test terminal streaming functionality",
+        "Generate production readiness report"
+      ]
+    }
+  ]
+}

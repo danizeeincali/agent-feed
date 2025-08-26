@@ -209,7 +209,7 @@ export const ConnectionHealthDashboard: React.FC<ConnectionHealthDashboardProps>
 
       {/* Detailed Metrics */}
       {showDetailedMetrics && (
-        <Tabs defaultValue="connection" className="w-full">
+        <Tabs value="connection" onValueChange={() => {}} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="connection">Connection</TabsTrigger>
             <TabsTrigger value="performance">Performance</TabsTrigger>

@@ -229,7 +229,8 @@ router.post('/sessions/:sessionId/tasks', async (req, res) => {
 router.get('/sessions/:sessionId/tasks', async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const tasks = claudeCodeOrchestrator.getSession(sessionId)?.tasks || [];
+    // Get tasks for the session using the service method instead of session.tasks
+    const tasks = claudeCodeOrchestrator.getSessionTasks ? claudeCodeOrchestrator.getSessionTasks(sessionId) : [];
 
     res.json({
       success: true,

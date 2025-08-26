@@ -3,7 +3,8 @@
  * Solves webhook/WebSocket mismatch and enables real-time communication
  */
 
-import { Server as SocketIOServer } from 'socket.io';
+// HTTP/SSE only - Socket.IO removed
+// import { Server as SocketIOServer } from 'socket.io';
 import { createServer, Server as HTTPServer } from 'http';
 import { Express } from 'express';
 import logger from '../utils/logger';

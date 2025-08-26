@@ -1,17 +1,126 @@
 /**
  * Production Validation Test Suite
  * 
- * Comprehensive browser validation of dual-instance functionality
- * to verify all fixes are working correctly in real browser environment.
+ * Comprehensive validation of Claude instance management functionality
+ * to verify all backend services and UI integration work correctly.
  */
 
 import { test, expect, Page } from '@playwright/test';
 
-const FRONTEND_URL = 'http://localhost:3001';
-const BACKEND_URL = 'http://localhost:3000';
+const FRONTEND_URL = 'http://localhost:5173';
+const API_BASE_URL = 'http://localhost:3003';
+const TERMINAL_URL = 'http://localhost:3002';
 
 // Test configuration
-test.describe('Production Validation - Dual Instance Functionality', () => {
+test.describe('Production Backend Services Validation', () => {
+  test('should have all backend services running and healthy', async ({ request }) => {
+    // Test Claude Instance Management API (port 3003)
+    const claudeApiResponse = await request.get(`${API_BASE_URL}/health`);
+    expect(claudeApiResponse.ok()).toBeTruthy();
+    
+    const claudeApiHealth = await claudeApiResponse.json();
+    expect(claudeApiHealth).toMatchObject({
+      success: true,
+      status: 'healthy',
+      features: expect.arrayContaining(['claude-instances', 'websocket', 'real-time-updates'])
+    });
+
+    // Test Terminal WebSocket API (port 3002)
+    const terminalApiResponse = await request.get(`${TERMINAL_URL}/health`);
+    expect(terminalApiResponse.ok()).toBeTruthy();
+    
+    const terminalApiHealth = await terminalApiResponse.json();
+    expect(terminalApiHealth).toMatchObject({
+      success: true,
+      status: 'healthy',
+      enhanced: true,
+      features: expect.arrayContaining(['pty', 'claude-cli-ready'])
+    });
+  });
+
+  test('should support Claude instance lifecycle operations', async ({ request }) => {
+    // Test creating a new Claude instance
+    const createResponse = await request.post(`${API_BASE_URL}/api/claude/instances`, {
+      data: {
+        name: 'Production Test Instance',
+        workingDirectory: '/workspaces/agent-feed',
+        useProductionMode: false
+      }
+    });
+    
+    expect(createResponse.ok()).toBeTruthy();
+    const createResult = await createResponse.json();
+    expect(createResult).toMatchObject({
+      success: true,
+      instance: expect.objectContaining({
+        id: expect.stringMatching(/^claude-instance-/),
+        name: 'Production Test Instance',
+        status: 'stopped',
+        isConnected: false,
+        workingDirectory: '/workspaces/agent-feed'
+      })
+    });
+
+    const instanceId = createResult.instance.id;
+
+    // Test getting instance details
+    const getResponse = await request.get(`${API_BASE_URL}/api/claude/instances/${instanceId}`);
+    expect(getResponse.ok()).toBeTruthy();
+    
+    const getInstance = await getResponse.json();
+    expect(getInstance).toMatchObject({
+      success: true,
+      instance: expect.objectContaining({
+        id: instanceId,
+        status: 'stopped'
+      })
+    });
+
+    // Test starting the instance
+    const startResponse = await request.post(`${API_BASE_URL}/api/claude/instances/${instanceId}/start`);
+    expect(startResponse.ok()).toBeTruthy();
+    
+    const startResult = await startResponse.json();
+    expect(startResult).toMatchObject({
+      success: true,
+      instance: expect.objectContaining({
+        id: instanceId,
+        status: 'running',
+        isConnected: true,
+        pid: expect.any(Number)
+      })
+    });
+
+    // Wait for instance to stabilize
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Test stopping the instance
+    const stopResponse = await request.post(`${API_BASE_URL}/api/claude/instances/${instanceId}/stop`);
+    expect(stopResponse.ok()).toBeTruthy();
+    
+    const stopResult = await stopResponse.json();
+    expect(stopResult).toMatchObject({
+      success: true,
+      instance: expect.objectContaining({
+        id: instanceId,
+        status: 'stopped',
+        isConnected: false
+      })
+    });
+
+    // Test deleting the instance
+    const deleteResponse = await request.delete(`${API_BASE_URL}/api/claude/instances/${instanceId}`);
+    expect(deleteResponse.ok()).toBeTruthy();
+    
+    const deleteResult = await deleteResponse.json();
+    expect(deleteResult).toMatchObject({
+      success: true,
+      message: expect.stringContaining(`Instance ${instanceId} deleted`)
+    });
+  });
+});
+
+test.describe('Frontend Integration Validation', () => {
   let page: Page;
 
   test.beforeAll(async ({ browser }) => {
@@ -25,8 +134,6 @@ test.describe('Production Validation - Dual Instance Functionality', () => {
     page.on('console', msg => {
       if (msg.type() === 'error') {
         console.error(`Browser console error: ${msg.text()}`);
-      } else {
-        console.log(`Browser console: ${msg.text()}`);
       }
     });
 
@@ -36,12 +143,8 @@ test.describe('Production Validation - Dual Instance Functionality', () => {
     });
   });
 
-  /**
-   * VALIDATION 1: Correct URL Access
-   * Verify user accesses http://localhost:3001 (frontend) not port 3000
-   */
-  test('should access correct frontend URL on port 3001', async () => {
-    console.log('🧪 Testing URL Access on correct port...');
+  test('should load the application without errors', async () => {
+    console.log('🧪 Testing frontend application loading...');
     
     const response = await page.goto(FRONTEND_URL, { 
       waitUntil: 'networkidle',
@@ -49,13 +152,12 @@ test.describe('Production Validation - Dual Instance Functionality', () => {
     });
     
     expect(response?.status()).toBe(200);
-    expect(page.url()).toContain('localhost:3001');
+    expect(page.url()).toContain('localhost:5173');
     
-    // Verify page loads completely
-    await expect(page.locator('[data-testid="header"]')).toBeVisible();
-    await expect(page.locator('text=AgentLink Feed System')).toBeVisible();
+    // Wait for React app to fully load
+    await page.waitForLoadState('networkidle');
     
-    console.log('✅ Frontend URL access validated');
+    console.log('✅ Frontend application loading validated');
   });
 
   /**

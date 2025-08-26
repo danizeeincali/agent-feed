@@ -7,7 +7,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setupWebSocketEndpoint = void 0;
+exports.setupHTTPEndpoints = void 0;
 const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
@@ -31,8 +31,8 @@ const createInstanceRateLimit = (0, express_rate_limit_1.default)({
 });
 // Initialize process manager
 const processManager = new ClaudeProcessManager_1.default();
-// WebSocket endpoint for real-time communication
-router.ws = '/ws';
+// HTTP/SSE only - WebSocket endpoint removed
+// router.ws = '/ws';
 // Middleware for validation error handling
 const handleValidationErrors = (req, res, next) => {
     const errors = (0, express_validator_1.validationResult)(req);
@@ -45,51 +45,15 @@ const handleValidationErrors = (req, res, next) => {
     next();
 };
 /**
- * WebSocket endpoint for real-time Claude instance communication
+ * HTTP/SSE only - WebSocket endpoint completely removed
+ * Real-time communication now handled via Server-Sent Events
  */
-const setupWebSocketEndpoint = (io) => {
-    // Create a namespace for Claude instances
-    const claudeInstancesNamespace = io.of('/claude-instances');
-    claudeInstancesNamespace.on('connection', (socket) => {
-        logger_1.logger.info('Claude instances WebSocket client connected', { socketId: socket.id });
-        // Send current instances on connection
-        socket.emit('instances', processManager.getInstances());
-        // Handle input messages to instances
-        socket.on('input', async (data) => {
-            try {
-                await processManager.sendMessage(data.instanceId, data.data);
-            }
-            catch (error) {
-                socket.emit('error', { message: error.message });
-            }
-        });
-        // Forward process manager events to WebSocket clients
-        const handleMessage = (message) => {
-            socket.emit('output', {
-                instanceId: message.instanceId,
-                data: message.content,
-                type: message.type
-            });
-        };
-        const handleStatusChange = (status) => {
-            socket.emit('status', {
-                instanceId: status.id,
-                status: status.status
-            });
-            // Also send updated instances list
-            socket.emit('instances', processManager.getInstances());
-        };
-        processManager.on('message', handleMessage);
-        processManager.on('statusChange', handleStatusChange);
-        socket.on('disconnect', () => {
-            processManager.removeListener('message', handleMessage);
-            processManager.removeListener('statusChange', handleStatusChange);
-            logger_1.logger.info('Claude instances WebSocket client disconnected', { socketId: socket.id });
-        });
-    });
-    return claudeInstancesNamespace;
+const setupHTTPEndpoints = () => {
+    logger_1.logger.info('HTTP/SSE mode: Real-time communication via SSE endpoints');
+    // All real-time features converted to HTTP polling/SSE
+    return null;
 };
-exports.setupWebSocketEndpoint = setupWebSocketEndpoint;
+exports.setupHTTPEndpoints = setupHTTPEndpoints;
 /**
  * POST /api/claude/instances
  * Create new Claude instance

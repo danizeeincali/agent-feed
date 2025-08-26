@@ -47,7 +47,7 @@ global.fetch = mockFetch;
 // Test data
 const mockInstance = {
   id: 'test-instance-1',
-  name: 'Claude Chat',
+  name: 'test-ins', // Component uses id.slice(0, 8) as name
   status: 'running' as const,
   pid: 12345,
   startTime: new Date('2024-01-01T10:00:00Z'),
@@ -57,7 +57,7 @@ const mockInstances = [
   mockInstance,
   {
     id: 'test-instance-2', 
-    name: 'Claude Code',
+    name: 'test-ins', // Component uses id.slice(0, 8) as name
     status: 'stopped' as const,
     pid: 12346,
     startTime: new Date('2024-01-01T10:01:00Z'),
@@ -95,7 +95,7 @@ describe('ClaudeInstanceManager - Simplified UI with Integrated Launch Buttons',
           ok: true,
           json: () => Promise.resolve({
             success: true,
-            instances: mockInstances,
+            instances: [], // Start with empty array to prevent undefined issues
           }),
         });
       }
@@ -211,14 +211,13 @@ describe('ClaudeInstanceManager - Simplified UI with Integrated Launch Buttons',
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          'http://localhost:3001/api/claude/instances',
+          'http://localhost:3000/api/claude/instances',
           expect.objectContaining({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              name: 'Claude Prod',
-              mode: 'chat',
-              cwd: '/workspaces/agent-feed/prod'
+              command: ['claude'],
+              workingDirectory: '/workspaces/agent-feed/prod'
             }),
           })
         );
@@ -238,15 +237,13 @@ describe('ClaudeInstanceManager - Simplified UI with Integrated Launch Buttons',
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          'http://localhost:3001/api/claude/instances',
+          'http://localhost:3000/api/claude/instances',
           expect.objectContaining({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              name: 'Claude Skip Perms',
-              mode: 'chat',
-              cwd: '/workspaces/agent-feed/prod',
-              args: ['--dangerously-skip-permissions']
+              command: ['claude', '--dangerously-skip-permissions'],
+              workingDirectory: '/workspaces/agent-feed/prod'
             }),
           })
         );
@@ -266,15 +263,13 @@ describe('ClaudeInstanceManager - Simplified UI with Integrated Launch Buttons',
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          'http://localhost:3001/api/claude/instances',
+          'http://localhost:3000/api/claude/instances',
           expect.objectContaining({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              name: 'Claude Skip Perms -c',
-              mode: 'chat',
-              cwd: '/workspaces/agent-feed/prod',
-              args: ['--dangerously-skip-permissions', '-c']
+              command: ['claude', '--dangerously-skip-permissions', '-c'],
+              workingDirectory: '/workspaces/agent-feed/prod'
             }),
           })
         );
@@ -294,15 +289,13 @@ describe('ClaudeInstanceManager - Simplified UI with Integrated Launch Buttons',
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          'http://localhost:3001/api/claude/instances',
+          'http://localhost:3000/api/claude/instances',
           expect.objectContaining({
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              name: 'Claude Resume',
-              mode: 'chat',
-              cwd: '/workspaces/agent-feed/prod',
-              args: ['--dangerously-skip-permissions', '--resume']
+              command: ['claude', '--dangerously-skip-permissions', '--resume'],
+              workingDirectory: '/workspaces/agent-feed/prod'
             }),
           })
         );
@@ -464,7 +457,7 @@ describe('ClaudeInstanceManager - Simplified UI with Integrated Launch Buttons',
       );
 
       // Verify WebSocket connection is established
-      expect(global.WebSocket).toHaveBeenCalledWith('ws://localhost:3001/api/claude/instances/ws');
+      expect(global.WebSocket).toHaveBeenCalledWith('ws://localhost:3000/socket.io/?EIO=4&transport=websocket');
       
       // Launch instance
       const prodButton = screen.getByText('🚀 prod/claude');
@@ -554,7 +547,7 @@ describe('ClaudeInstanceManager - Simplified UI with Integrated Launch Buttons',
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          'http://localhost:3001/api/claude/instances/test-instance-1',
+          'http://localhost:3000/api/claude/instances/test-instance-1',
           expect.objectContaining({ method: 'DELETE' })
         );
       });

@@ -1,19 +1,18 @@
 /**
- * Enhanced WebSocket Singleton Hook
- * Updated to use the new connection management system while maintaining backward compatibility
+ * HTTP/SSE-only WebSocket Singleton Hook (WebSocket Removed)
+ * Mock implementation for backward compatibility
  */
 
-import React, { useCallback, useEffect } from 'react';
-import { useConnectionManager, UseConnectionManagerOptions } from './useConnectionManager';
-import { Socket } from 'socket.io-client';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 
-export interface UseWebSocketSingletonOptions extends UseConnectionManagerOptions {
-  // Legacy options for backward compatibility
+export interface UseWebSocketSingletonOptions {
   url?: string;
+  autoConnect?: boolean;
+  maxReconnectAttempts?: number;
 }
 
 export interface UseWebSocketSingletonReturn {
-  socket: Socket | null;
+  socket: any; // Mock socket for compatibility
   isConnected: boolean;
   connectionState: string;
   connect: () => Promise<void>;
@@ -24,81 +23,67 @@ export interface UseWebSocketSingletonReturn {
 }
 
 /**
- * Enhanced WebSocket singleton hook that uses the new connection management system
- * while maintaining backward compatibility with existing code
+ * HTTP/SSE-only WebSocket singleton hook (Socket.IO completely removed)
+ * Provides mock interface for backward compatibility
  */
 export function useWebSocketSingleton(
   options: UseWebSocketSingletonOptions = {}
 ): UseWebSocketSingletonReturn {
-  const {
-    // CRITICAL FIX: Use relative URL for Vite proxy compatibility
-    url = import.meta.env.VITE_WEBSOCKET_URL || '/',
-    ...connectionOptions
-  } = options;
+  const { url = '/', autoConnect = true } = options;
 
-  // Use the enhanced connection manager
-  const {
-    socket,
-    isConnected,
-    state,
-    connect: managerConnect,
-    disconnect: managerDisconnect,
-    manager
-  } = useConnectionManager({
-    url,
-    useGlobalInstance: true,
-    autoConnect: true,
-    ...connectionOptions
-  });
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectionState, setConnectionState] = useState('disconnected');
 
-  // REFINEMENT: Enhanced state synchronization logging
-  useEffect(() => {
-    console.log('🔧 useWebSocketSingleton: Connection manager state synchronized', {
-      url,
-      isConnected,
-      state,
-      socketId: socket?.id,
-      socketConnected: socket?.connected,
-      socketReadyState: socket?.readyState,
-      managerState: manager?.getState(),
-      managerIsConnected: manager?.isConnected(),
-      stateAlignment: isConnected === manager?.isConnected() ? 'ALIGNED' : 'MISALIGNED'
-    });
-  }, [url, isConnected, state, socket?.id, socket?.connected, socket?.readyState, manager]);
-
-  // Backward compatible connect method
-  const connect = useCallback(async () => {
-    await managerConnect();
-  }, [managerConnect]);
-
-  // Backward compatible disconnect method
-  const disconnect = useCallback(async () => {
-    await managerDisconnect(true);
-  }, [managerDisconnect]);
-
-  // Socket event methods
-  const emit = useCallback((event: string, data: any) => {
-    if (socket) {
-      socket.emit(event, data);
+  // Mock socket object for compatibility
+  const socket = useMemo(() => ({
+    id: 'http-sse-singleton-' + Date.now(),
+    connected: isConnected,
+    emit: (event: string, data?: any) => {
+      console.log('📡 [HTTP/SSE Singleton] Mock emit:', event, data);
+    },
+    on: (event: string, handler: (data: any) => void) => {
+      console.log('📡 [HTTP/SSE Singleton] Mock event handler registered:', event);
+    },
+    off: (event: string, handler?: (data: any) => void) => {
+      console.log('📡 [HTTP/SSE Singleton] Mock event handler removed:', event);
     }
-  }, [socket]);
+  }), [isConnected]);
+
+  const connect = useCallback(async () => {
+    console.log('🚀 [HTTP/SSE Singleton] Mock connect - no WebSocket needed');
+    setIsConnected(true);
+    setConnectionState('connected');
+  }, []);
+
+  const disconnect = useCallback(async () => {
+    console.log('🚀 [HTTP/SSE Singleton] Mock disconnect');
+    setIsConnected(false);
+    setConnectionState('disconnected');
+  }, []);
+
+  const emit = useCallback((event: string, data: any) => {
+    console.log('📡 [HTTP/SSE Singleton] Mock emit:', event, data);
+  }, []);
 
   const on = useCallback((event: string, handler: Function) => {
-    if (socket) {
-      socket.on(event, handler);
-    }
-  }, [socket]);
+    console.log('📡 [HTTP/SSE Singleton] Mock event handler registered:', event);
+  }, []);
 
   const off = useCallback((event: string, handler: Function) => {
-    if (socket) {
-      socket.off(event, handler);
+    console.log('📡 [HTTP/SSE Singleton] Mock event handler removed:', event);
+  }, []);
+
+  // Auto-connect on mount
+  useEffect(() => {
+    if (autoConnect) {
+      connect();
     }
-  }, [socket]);
+  }, [autoConnect, connect]);
 
   return {
     socket,
     isConnected,
-    connectionState: state,
+    connectionState,
     connect,
     disconnect,
     emit,
@@ -106,6 +91,3 @@ export function useWebSocketSingleton(
     off
   };
 }
-
-// Legacy export for backward compatibility
-export default useWebSocketSingleton;

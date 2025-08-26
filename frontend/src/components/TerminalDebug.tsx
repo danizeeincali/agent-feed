@@ -155,11 +155,14 @@ export const TerminalDebug: React.FC<TerminalDebugProps> = ({
     if (terminal.current) {
       // Simulate typing "test"
       // Simulate typing test - fixed type issue
-      if (terminal.current && typeof terminal.current.onData === 'function') {
-        terminal.current.onData('t');
-        terminal.current.onData('e');
-        terminal.current.onData('s');
-        terminal.current.onData('t');
+      if (terminal.current && terminal.current.onData) {
+        terminal.current.onData((data: string) => {
+          console.log('Terminal input:', data);
+        });
+        // For simulation, we write directly to the terminal instead of using onData
+        if (terminal.current.write) {
+          terminal.current.write('test\r\n');
+        }
       }
     }
   };

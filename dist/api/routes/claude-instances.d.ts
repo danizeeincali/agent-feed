@@ -4,9 +4,10 @@
  */
 declare const router: import("express-serve-static-core").Router;
 /**
- * WebSocket endpoint for real-time Claude instance communication
+ * HTTP/SSE only - WebSocket endpoint completely removed
+ * Real-time communication now handled via Server-Sent Events
  */
-declare const setupWebSocketEndpoint: (io: any) => any;
-export { setupWebSocketEndpoint };
+declare const setupHTTPEndpoints: () => any;
+export { setupHTTPEndpoints };
 export default router;
 //# sourceMappingURL=claude-instances.d.ts.map

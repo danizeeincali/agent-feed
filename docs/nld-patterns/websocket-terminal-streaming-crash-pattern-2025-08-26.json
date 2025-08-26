@@ -1,0 +1,246 @@
+{
+  "pattern_id": "websocket-terminal-streaming-crash-2025-08-26",
+  "pattern_type": "WebSocket Terminal Streaming Failure",
+  "detection_trigger": "Massive WebSocket reconnection storm with no successful handshake completion",
+  "severity": "CRITICAL",
+  "system": "agent-feed",
+  "timestamp": "2025-08-26T17:28:00Z",
+  "
+  
+  "failure_characteristics": {
+    "primary_symptom": "WebSocket reconnection every 3 seconds with thousands of failed attempts",
+    "secondary_symptoms": [
+      "Socket.IO handshake succeeds initially but WebSocket upgrade fails",
+      "Claude instance creates successfully (PID generated)",
+      "Terminal shows 'Waiting for output...' indefinitely",
+      "Connection disconnects when terminal streaming is activated",
+      "Transport errors and disconnections flood the logs"
+    ],
+    "reconnection_pattern": {
+      "interval": "3 seconds",
+      "attempt_count": "thousands",
+      "success_rate": "0%",
+      "transport_method": "polling fallback only"
+    }
+  },
+
+  "crash_point_analysis": {
+    "exact_failure_location": "server.ts line 937: terminalStreamingServiceInstance before initialization",
+    "failure_sequence": [
+      {
+        "step": 1,
+        "description": "Socket.IO handshake succeeds",
+        "evidence": "session ID created: 7p29XP-ZITEwjCoWAACe",
+        "status": "SUCCESS"
+      },
+      {
+        "step": 2,
+        "description": "Claude instance creation",
+        "evidence": "PID 8952 generated successfully",
+        "status": "SUCCESS"
+      },
+      {
+        "step": 3,
+        "description": "WebSocket namespace initialization",
+        "evidence": "ClaudeInstanceTerminalWebSocket namespace created",
+        "status": "SUCCESS"
+      },
+      {
+        "step": 4,
+        "description": "Terminal streaming service access",
+        "evidence": "Cannot access 'terminalStreamingServiceInstance' before initialization",
+        "status": "FAILURE - CRASH POINT"
+      },
+      {
+        "step": 5,
+        "description": "WebSocket transport upgrade",
+        "evidence": "WebSocket connections flood server but never complete",
+        "status": "FAILURE - RECONNECTION STORM"
+      }
+    ]
+  },
+
+  "code_analysis": {
+    "problematic_files": [
+      {
+        "file": "/workspaces/agent-feed/src/api/server.ts",
+        "issues": [
+          {
+            "line": 73,
+            "issue": "terminalStreamingServiceInstance declared but not initialized until line 432",
+            "impact": "Race condition in initialization order"
+          },
+          {
+            "line": 937,
+            "issue": "Reference to terminalStreamingServiceInstance before initialization",
+            "impact": "ReferenceError causing server crash"
+          },
+          {
+            "line": 422-442,
+            "issue": "AdvancedTerminalStreamingService initialized inside WebSocket enabled block",
+            "impact": "Initialization happens too late in server lifecycle"
+          }
+        ]
+      },
+      {
+        "file": "/workspaces/agent-feed/src/services/claude-instance-terminal-websocket.ts",
+        "issues": [
+          {
+            "line": 54,
+            "issue": "/terminal namespace created but isolated from streaming service",
+            "impact": "Namespace conflicts and connection routing failures"
+          },
+          {
+            "line": 411-413,
+            "issue": "Terminal data broadcasting depends on claude-instance-manager events",
+            "impact": "Event chain breaks when PTY data flow is interrupted"
+          }
+        ]
+      },
+      {
+        "file": "/workspaces/agent-feed/src/services/terminal-streaming-service.ts",
+        "issues": [
+          {
+            "line": 96,
+            "issue": "/terminal-streaming namespace conflicts with /terminal",
+            "impact": "Dual namespace creates routing conflicts"
+          },
+          {
+            "line": 248-277,
+            "issue": "StartStreaming method has complex dependency chain on claude-instance-manager",
+            "impact": "Any failure in dependency chain breaks entire streaming"
+          }
+        ]
+      }
+    ]
+  },
+
+  "architectural_problems": {
+    "initialization_order": {
+      "problem": "Terminal services initialized after WebSocket handlers that reference them",
+      "solution_required": "Move initialization before WebSocket setup"
+    },
+    "namespace_conflicts": {
+      "problem": "Two WebSocket namespaces (/terminal and /terminal-streaming) competing",
+      "solution_required": "Consolidate to single namespace with unified routing"
+    },
+    "dependency_fragility": {
+      "problem": "Terminal streaming depends on complex chain: Socket.IO -> claude-instance-manager -> PTY -> terminal output",
+      "solution_required": "Add resilience and fallback mechanisms at each stage"
+    },
+    "error_propagation": {
+      "problem": "Single failure point cascades to complete WebSocket connection failure",
+      "solution_required": "Implement circuit breaker pattern"
+    }
+  },
+
+  "evidence_artifacts": {
+    "log_entries": [
+      {
+        "timestamp": "2025-08-26 17:23:45",
+        "message": "WebSocket client connected",
+        "socketId": "5a0RK53N7iNZOQAVAAJs",
+        "status": "SUCCESS"
+      },
+      {
+        "timestamp": "2025-08-26 17:27:19", 
+        "message": "WebSocket client disconnected",
+        "reason": "transport error",
+        "socketId": "5a0RK53N7iNZOQAVAAJs",
+        "status": "FAILURE"
+      },
+      {
+        "timestamp": "2025-08-26 13:49:35",
+        "message": "Cannot access 'terminalStreamingServiceInstance' before initialization",
+        "error": "ReferenceError",
+        "line": "server.ts:429",
+        "status": "CRASH"
+      }
+    ],
+    "error_patterns": [
+      "terminalStreamingServiceInstance before initialization",
+      "transport error disconnections",
+      "WebSocket upgrade failures",
+      "Connection flood without completion"
+    ]
+  },
+
+  "impact_assessment": {
+    "user_impact": "SEVERE - Terminal functionality completely broken",
+    "system_impact": "HIGH - WebSocket reconnection storms consume server resources",
+    "data_impact": "LOW - No data loss, but no terminal output received",
+    "availability_impact": "CRITICAL - Terminal streaming service unavailable"
+  },
+
+  "nld_classification": {
+    "failure_type": "Initialization Order Race Condition",
+    "complexity": "HIGH - Multi-service interdependency failure",
+    "predictability": "HIGH - Consistent failure pattern on terminal activation",
+    "detection_difficulty": "MEDIUM - Clear error signatures in logs",
+    "debugging_complexity": "HIGH - Requires understanding full WebSocket/PTY chain"
+  },
+
+  "tdd_prevention_recommendations": [
+    {
+      "test_type": "Unit Test",
+      "target": "Server initialization order",
+      "description": "Test that terminalStreamingServiceInstance is initialized before any WebSocket handlers reference it"
+    },
+    {
+      "test_type": "Integration Test", 
+      "target": "WebSocket namespace isolation",
+      "description": "Test that /terminal and /terminal-streaming namespaces don't conflict"
+    },
+    {
+      "test_type": "End-to-End Test",
+      "target": "Terminal streaming workflow",
+      "description": "Test complete flow from WebSocket connect -> PTY creation -> terminal output"
+    },
+    {
+      "test_type": "Stress Test",
+      "target": "Reconnection handling",
+      "description": "Test WebSocket reconnection limits and circuit breaker behavior"
+    },
+    {
+      "test_type": "Dependency Test",
+      "target": "Claude instance manager integration",
+      "description": "Test terminal streaming resilience when claude-instance-manager fails"
+    }
+  ],
+
+  "immediate_fixes_required": [
+    {
+      "priority": "P0",
+      "description": "Move terminalStreamingServiceInstance initialization before WebSocket setup",
+      "file": "src/api/server.ts",
+      "estimated_effort": "15 minutes"
+    },
+    {
+      "priority": "P1", 
+      "description": "Consolidate /terminal and /terminal-streaming namespaces",
+      "file": "src/services/claude-instance-terminal-websocket.ts",
+      "estimated_effort": "2 hours"
+    },
+    {
+      "priority": "P1",
+      "description": "Add null checks and error boundaries for terminalStreamingServiceInstance",
+      "file": "src/api/server.ts",
+      "estimated_effort": "30 minutes"
+    },
+    {
+      "priority": "P2",
+      "description": "Implement WebSocket connection circuit breaker",
+      "file": "src/api/server.ts", 
+      "estimated_effort": "4 hours"
+    }
+  ],
+
+  "pattern_metadata": {
+    "detected_by": "NLD Agent Analysis",
+    "detection_method": "Log pattern analysis + Code structure review",
+    "confidence_level": "HIGH",
+    "false_positive_risk": "LOW",
+    "pattern_uniqueness": "Medium - Similar to other initialization order issues",
+    "learning_value": "HIGH - Critical for WebSocket service architecture"
+  }
+}

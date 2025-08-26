@@ -8,7 +8,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WebSocketHubIntegration = void 0;
-const socket_io_1 = require("socket.io");
+// HTTP/SSE only - Socket.IO removed
+// import { Server as SocketIOServer } from 'socket.io';
 const http_1 = require("http");
 const logger_1 = __importDefault(require("../utils/logger"));
 class WebSocketHubIntegration {
@@ -21,7 +22,7 @@ class WebSocketHubIntegration {
         // Create HTTP server for existing Express app
         this.httpServer = (0, http_1.createServer)(app);
         // Initialize Socket.IO with existing server
-        this.io = new socket_io_1.Server(this.httpServer, {
+        this.io = new SocketIOServer(this.httpServer, {
             cors: {
                 origin: ["http://localhost:3000", "http://localhost:3001"],
                 methods: ["GET", "POST"],

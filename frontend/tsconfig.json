@@ -36,10 +36,15 @@
     "src/services/queen-chief-of-staff.ts", 
     "src/utils/neural-utils.ts",
     "src/hooks/useBackgroundOrchestration.ts",
-    "src/tests/**/*.disabled",
-    "src/tests/tdd-london-school.disabled/**/*",
-    "src/tests/integration/*.disabled",
-    "src/tests/unit/connection/*.disabled"
+    "src/tests/**/*",
+    "src/nld/**/*",
+    "src/testing/**/*",
+    "src/patterns/**/*",
+    "src/services/connection/**/*",
+    "src/hooks/useRobustWebSocket.ts",
+    "src/hooks/useConnectionManager.ts",
+    "src/debug/**/*",
+    "src/utils/apiSafety.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

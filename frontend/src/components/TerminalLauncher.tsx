@@ -214,16 +214,13 @@ const TerminalLauncher: React.FC<TerminalLauncherProps> = ({
           isFullscreen ? 'fixed inset-0 z-50 bg-black' : 'relative'
         }`}>
           <TerminalComponent
-            wsUrl={wsUrl}
-            theme={config.theme}
-            fontSize={config.fontSize}
-            fontFamily={config.fontFamily}
-            onConnect={() => console.log('Terminal component connected')}
-            onDisconnect={(reason) => console.log('Terminal component disconnected:', reason)}
-            onError={(error) => console.error('Terminal component error:', error)}
-            enableSearch={true}
-            enableWebLinks={true}
-            className={isFullscreen ? 'h-full' : 'h-96'}
+            isVisible={isVisible}
+            processStatus={{
+              isRunning: isConnected || false,
+              pid: undefined,
+              status: isConnected ? 'connected' : 'disconnected'
+            }}
+            initialCommand=""
           />
         </div>
       )}

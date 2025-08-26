@@ -1,0 +1,360 @@
+{
+  "workflows": [
+    {
+      "name": "Create New Instance",
+      "endpointsCovered": 1,
+      "endpointsTotal": 1,
+      "testFilesCovered": 3,
+      "testFilesTotal": 3,
+      "scenariosCovered": 4,
+      "scenariosTotal": 4,
+      "details": {
+        "endpoints": [
+          {
+            "endpoint": "POST /api/v1/claude-live/prod/instances",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js"
+            ]
+          }
+        ],
+        "testFiles": [
+          {
+            "file": "claude-instance-endpoints.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 15
+          },
+          {
+            "file": "frontend-backend-integration.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 12
+          },
+          {
+            "file": "e2e-instance-workflows.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 8
+          }
+        ],
+        "scenarios": [
+          {
+            "scenario": "successful instance creation",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "instance creation failure handling",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "validation error handling",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "concurrent instance creation",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          }
+        ]
+      },
+      "coveragePercentage": 100
+    },
+    {
+      "name": "View Instance List",
+      "endpointsCovered": 1,
+      "endpointsTotal": 1,
+      "testFilesCovered": 3,
+      "testFilesTotal": 3,
+      "scenariosCovered": 3,
+      "scenariosTotal": 4,
+      "details": {
+        "endpoints": [
+          {
+            "endpoint": "GET /api/v1/claude-live/prod/instances",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js"
+            ]
+          }
+        ],
+        "testFiles": [
+          {
+            "file": "claude-instance-endpoints.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 15
+          },
+          {
+            "file": "frontend-backend-integration.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 12
+          },
+          {
+            "file": "performance-benchmarks.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 7
+          }
+        ],
+        "scenarios": [
+          {
+            "scenario": "list all instances",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "empty instance list",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "instance filtering",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "performance benchmarking",
+            "covered": false,
+            "testFiles": []
+          }
+        ]
+      },
+      "coveragePercentage": 92.5
+    },
+    {
+      "name": "Delete Instance",
+      "endpointsCovered": 1,
+      "endpointsTotal": 1,
+      "testFilesCovered": 3,
+      "testFilesTotal": 3,
+      "scenariosCovered": 4,
+      "scenariosTotal": 4,
+      "details": {
+        "endpoints": [
+          {
+            "endpoint": "DELETE /api/v1/claude-live/prod/instances/:id",
+            "covered": true,
+            "testFiles": [
+              "frontend-backend-integration.test.js"
+            ]
+          }
+        ],
+        "testFiles": [
+          {
+            "file": "claude-instance-endpoints.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 15
+          },
+          {
+            "file": "frontend-backend-integration.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 12
+          },
+          {
+            "file": "e2e-instance-workflows.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 8
+          }
+        ],
+        "scenarios": [
+          {
+            "scenario": "successful instance deletion",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "graceful shutdown",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "non-existent instance handling",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "cleanup verification",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          }
+        ]
+      },
+      "coveragePercentage": 100
+    },
+    {
+      "name": "Terminal Access",
+      "endpointsCovered": 0,
+      "endpointsTotal": 2,
+      "testFilesCovered": 2,
+      "testFilesTotal": 2,
+      "scenariosCovered": 3,
+      "scenariosTotal": 5,
+      "details": {
+        "endpoints": [
+          {
+            "endpoint": "GET /api/v1/claude-live/prod/instances/:id/terminal/stream",
+            "covered": false,
+            "testFiles": []
+          },
+          {
+            "endpoint": "GET /api/v1/claude-live/prod/instances/:id/terminal/poll",
+            "covered": false,
+            "testFiles": []
+          }
+        ],
+        "testFiles": [
+          {
+            "file": "e2e-instance-workflows.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 8
+          },
+          {
+            "file": "error-handling-scenarios.test.js",
+            "exists": true,
+            "hasWorkflowTests": true,
+            "testCount": 16
+          }
+        ],
+        "scenarios": [
+          {
+            "scenario": "terminal connection establishment",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "command execution",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js"
+            ]
+          },
+          {
+            "scenario": "output streaming",
+            "covered": false,
+            "testFiles": []
+          },
+          {
+            "scenario": "connection failure handling",
+            "covered": true,
+            "testFiles": [
+              "claude-instance-endpoints.test.js",
+              "frontend-backend-integration.test.js",
+              "e2e-instance-workflows.test.js",
+              "performance-benchmarks.test.js",
+              "error-handling-scenarios.test.js"
+            ]
+          },
+          {
+            "scenario": "reconnection logic",
+            "covered": false,
+            "testFiles": []
+          }
+        ]
+      },
+      "coveragePercentage": 48
+    }
+  ],
+  "totalCoverage": 85.125,
+  "missingCoverage": [],
+  "recommendations": [
+    {
+      "workflow": "Terminal Access",
+      "type": "missing_endpoints",
+      "message": "Add tests for endpoints: GET /api/v1/claude-live/prod/instances/:id/terminal/stream, GET /api/v1/claude-live/prod/instances/:id/terminal/poll",
+      "priority": "high"
+    },
+    {
+      "workflow": "Terminal Access",
+      "type": "missing_scenarios",
+      "message": "Add tests for scenarios: output streaming, reconnection logic",
+      "priority": "medium"
+    }
+  ],
+  "generatedAt": "2025-08-26T21:17:50.882Z",
+  "testSuiteVersion": "1.0.0",
+  "londonSchoolTDD": true
+}

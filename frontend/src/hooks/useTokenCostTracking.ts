@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useWebSocketSingleton } from './useWebSocketSingleton';
 import { nldLogger } from '@/utils/nld-logger';
-import { getSocketIOUrl } from '../utils/websocket-url';
+import { getSocketIOUrl } from '../utils/websocket-url.ts';
 
 export interface TokenUsage {
   id: string;
@@ -82,7 +82,7 @@ export const useTokenCostTracking = (config?: {
     url: process.env.NEXT_PUBLIC_WEBSOCKET_URL || getSocketIOUrl(),
     autoConnect: config?.enableRealTime ?? true,
     maxReconnectAttempts: 3,
-    reconnectDelay: 2000
+    reconnectionDelay: 2000
   });
 
   /**
@@ -98,13 +98,13 @@ export const useTokenCostTracking = (config?: {
     try {
       const providerConfig = PRICING_CONFIG[provider as keyof typeof PRICING_CONFIG];
       if (!providerConfig) {
-        nldLogger.renderFailure('useTokenCostTracking', new Error(`Unknown provider: ${provider}`), { provider, model });
+        nldLogger.renderFailure('useTokenCostTracking', new Error(`Unknown provider: ${provider}`));
         return 0;
       }
 
-      const modelConfig = providerConfig[model as keyof typeof providerConfig];
-      if (!modelConfig) {
-        nldLogger.renderFailure('useTokenCostTracking', new Error(`Unknown model: ${model}`), { provider, model });
+      const modelConfig = providerConfig[model as keyof typeof providerConfig] as any;
+      if (!modelConfig || typeof modelConfig.input !== 'number' || typeof modelConfig.output !== 'number') {
+        nldLogger.renderFailure('useTokenCostTracking', new Error(`Unknown model: ${model}`));
         return 0;
       }
 
@@ -113,7 +113,7 @@ export const useTokenCostTracking = (config?: {
       
       return Math.round((inputCost + outputCost) * 10000) / 10000; // Round to 4 decimal places
     } catch (error) {
-      nldLogger.renderFailure('useTokenCostTracking', error as Error, { provider, model, inputTokens, outputTokens });
+      nldLogger.renderFailure('useTokenCostTracking', error as Error);
       return 0;
     }
   }, []);
@@ -301,9 +301,9 @@ export const useTokenCostTracking = (config?: {
             timestamp: new Date(usage.timestamp)
           }));
           setTokenUsages(parsedUsages);
-          nldLogger.renderSuccess('useTokenCostTracking', 'loaded-from-storage', { count: parsedUsages.length });
+          nldLogger.renderSuccess('useTokenCostTracking', 'loaded-from-storage');
         } catch (parseError) {
-          nldLogger.renderFailure('useTokenCostTracking', parseError as Error, { action: 'parse-storage' });
+          nldLogger.renderFailure('useTokenCostTracking', parseError as Error);
           // Clear invalid data
           localStorage.removeItem('tokenUsages');
         }
@@ -385,7 +385,7 @@ export const useTokenCostTracking = (config?: {
             }
           ];
           setTokenUsages(demoData);
-          nldLogger.renderSuccess('useTokenCostTracking', 'demo-data-loaded', { count: demoData.length });
+          nldLogger.renderSuccess('useTokenCostTracking', 'demo-data-loaded');
         }
       }
     }, 3000); // Force complete after 3 seconds

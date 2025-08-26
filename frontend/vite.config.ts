@@ -41,9 +41,20 @@ export default defineConfig({
         ws: true,           // Enable WebSocket proxying
         changeOrigin: true, // Change origin headers to match target
         secure: false,
+        headers: {
+          'Connection': 'upgrade',
+          'Upgrade': 'websocket'
+        },
         configure: (proxy, _options) => {
           proxy.on('proxyReq', (proxyReq, req, _res) => {
             console.log('🔍 SPARC DEBUG: WebSocket proxy request:', req.url, '->', proxyReq.path);
+            // Ensure proper headers for WebSocket upgrade
+            if (req.headers.connection) {
+              proxyReq.setHeader('Connection', req.headers.connection);
+            }
+            if (req.headers.upgrade) {
+              proxyReq.setHeader('Upgrade', req.headers.upgrade);
+            }
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
             console.log('🔍 SPARC DEBUG: WebSocket proxy response:', req.url, '->', proxyRes.statusCode);
@@ -68,7 +79,8 @@ export default defineConfig({
           router: ['react-router-dom'],
           query: ['@tanstack/react-query'],
           ui: ['lucide-react'],
-          realtime: ['socket.io-client'],
+          // HTTP/SSE only - socket.io-client removed
+          // realtime: ['socket.io-client'],
         },
       },
     },

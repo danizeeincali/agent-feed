@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 NUCLEAR OPTION: HTTP Terminal Test</title>
+    <style>
+        body { 
+            font-family: 'Courier New', monospace; 
+            background: #1a1a1a; 
+            color: #00ff00; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+        }
+        .terminal { 
+            background: #000; 
+            border: 2px solid #00ff00; 
+            border-radius: 10px; 
+            padding: 20px; 
+            height: 400px; 
+            overflow-y: auto; 
+            font-size: 14px; 
+            line-height: 1.5; 
+        }
+        .controls { 
+            margin: 20px 0; 
+            text-align: center; 
+        }
+        .btn { 
+            background: #00ff00; 
+            color: #000; 
+            border: none; 
+            padding: 10px 20px; 
+            margin: 0 10px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold; 
+        }
+        .btn:hover { 
+            background: #00cc00; 
+        }
+        .status { 
+            text-align: center; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        .success { background: #004400; }
+        .error { background: #440000; }
+        .info { background: #004444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 NUCLEAR OPTION: HTTP Polling Terminal</h1>
+            <p>WebSocket connection storm bypassed! Testing HTTP polling and SSE for Claude terminal output.</p>
+            <div id="status" class="status info">Ready to test...</div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="testDirectConnection()">Test Direct PID 2426</button>
+            <button class="btn" onclick="startSSE()">Start SSE Stream</button>
+            <button class="btn" onclick="startPolling()">Start HTTP Poll</button>
+            <button class="btn" onclick="stopAll()">Stop All</button>
+            <button class="btn" onclick="clearTerminal()">Clear</button>
+        </div>
+        
+        <div id="terminal" class="terminal">
+            <div>🚀 NUCLEAR OPTION Terminal initialized...</div>
+            <div>📡 Ready to connect to Claude instance PID 2426</div>
+            <div>⚡ WebSocket connection storm has been eliminated!</div>
+            <div></div>
+        </div>
+    </div>
+
+    <script>
+        let sseConnection = null;
+        let pollingInterval = null;
+        const terminal = document.getElementById('terminal');
+        const status = document.getElementById('status');
+        
+        function addToTerminal(message, type = 'output') {
+            const timestamp = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            const color = type === 'error' ? '#ff4444' : type === 'info' ? '#44aaff' : '#00ff00';
+            div.innerHTML = `<span style="color: #888">${timestamp}</span> <span style="color: ${color}">${message}</span>`;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+        
+        function updateStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        async function testDirectConnection() {
+            addToTerminal('🧪 Testing direct connection to Claude PID 2426...', 'info');
+            updateStatus('Testing direct connection...', 'info');
+            
+            try {
+                const response = await fetch('/api/v1/claude/terminal/output/2426');
+                const data = await response.json();
+                
+                if (data.success) {
+                    addToTerminal('✅ Direct connection successful!', 'info');
+                    addToTerminal(`📋 PID: ${data.pid} | Status: ${data.status} | Uptime: ${data.uptime}s`, 'info');
+                    addToTerminal(`💬 Message: ${data.message}`, 'info');
+                    addToTerminal(`📤 Output: ${data.output}`, 'output');
+                    updateStatus(`✅ Connected to Claude PID ${data.pid}`, 'success');
+                } else {
+                    addToTerminal(`❌ Direct connection failed: ${data.error}`, 'error');
+                    updateStatus('❌ Direct connection failed', 'error');
+                }
+            } catch (error) {
+                addToTerminal(`❌ Connection error: ${error.message}`, 'error');
+                updateStatus('❌ Connection error', 'error');
+            }
+        }
+        
+        function startSSE() {
+            stopAll();
+            addToTerminal('🚀 Starting Server-Sent Events connection...', 'info');
+            updateStatus('Starting SSE connection...', 'info');
+            
+            try {
+                sseConnection = new EventSource('/api/v1/claude/instances/claude-2426/terminal/stream');
+                
+                sseConnection.onopen = () => {
+                    addToTerminal('✅ SSE connection opened successfully!', 'info');
+                    updateStatus('✅ SSE connected', 'success');
+                };
+                
+                sseConnection.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        
+                        if (data.type === 'connected') {
+                            addToTerminal(`🔗 SSE connected to instance ${data.instanceId}`, 'info');
+                        } else if (data.type === 'terminal_output') {
+                            addToTerminal(`📤 ${data.output}`, 'output');
+                        } else if (data.type === 'ping') {
+                            addToTerminal('💓 SSE keepalive', 'info');
+                        } else {
+                            addToTerminal(`📨 SSE: ${JSON.stringify(data)}`, 'info');
+                        }
+                    } catch (error) {
+                        addToTerminal(`⚠️ SSE parse error: ${error.message}`, 'error');
+                    }
+                };
+                
+                sseConnection.onerror = (error) => {
+                    addToTerminal('❌ SSE connection error', 'error');
+                    updateStatus('❌ SSE connection failed', 'error');
+                };
+                
+            } catch (error) {
+                addToTerminal(`❌ Failed to start SSE: ${error.message}`, 'error');
+                updateStatus('❌ SSE failed', 'error');
+            }
+        }
+        
+        function startPolling() {
+            stopAll();
+            addToTerminal('🔄 Starting HTTP polling...', 'info');
+            updateStatus('Starting HTTP polling...', 'info');
+            
+            pollingInterval = setInterval(async () => {
+                try {
+                    const response = await fetch('/api/v1/claude/instances/claude-2426/terminal/poll');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const now = Date.now();
+                        if (now % 15000 < 3000) { // Every ~15 seconds
+                            addToTerminal(`📊 Poll: PID ${data.processInfo?.pid} | Status: ${data.processInfo?.status}`, 'info');
+                            if (data.lastOutput) {
+                                addToTerminal(`📤 ${data.lastOutput}`, 'output');
+                            }
+                        }
+                        updateStatus('🔄 HTTP polling active', 'success');
+                    } else {
+                        addToTerminal(`⚠️ Poll: ${data.error}`, 'error');
+                    }
+                } catch (error) {
+                    // Don't spam network errors
+                    if (error.message && !error.message.includes('fetch')) {
+                        addToTerminal(`❌ Poll error: ${error.message}`, 'error');
+                    }
+                }
+            }, 3000); // Poll every 3 seconds
+            
+            updateStatus('🔄 HTTP polling started', 'success');
+        }
+        
+        function stopAll() {
+            if (sseConnection) {
+                sseConnection.close();
+                sseConnection = null;
+                addToTerminal('🛑 SSE connection closed', 'info');
+            }
+            
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+                addToTerminal('🛑 HTTP polling stopped', 'info');
+            }
+            
+            updateStatus('🛑 All connections stopped', 'info');
+        }
+        
+        function clearTerminal() {
+            terminal.innerHTML = '';
+            addToTerminal('🚀 Terminal cleared - NUCLEAR OPTION active', 'info');
+        }
+        
+        // Auto-start with direct test
+        setTimeout(() => {
+            addToTerminal('🚀 Auto-testing direct connection in 2 seconds...', 'info');
+            setTimeout(testDirectConnection, 2000);
+        }, 1000);
+        
+        // Prevent page from closing accidentally
+        window.addEventListener('beforeunload', () => {
+            stopAll();
+        });
+    </script>
+</body>
+</html>

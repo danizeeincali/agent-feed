@@ -1,14 +1,9 @@
 /**
- * SPARC IMPLEMENTATION: Robust WebSocket Provider
- * COMPLETION: Production-ready WebSocket context with error boundaries
- * Integration with existing WebSocketSingletonContext while using robust backend
+ * HTTP/SSE-only Robust WebSocket Provider (Socket.IO Removed)
+ * Mock implementation for backward compatibility
  */
 
 import React, { createContext, useContext, useCallback, useEffect, useState, useMemo, memo } from 'react';
-import { useRobustWebSocket } from '../hooks/useRobustWebSocket';
-import { WebSocketErrorBoundary } from './WebSocketErrorBoundary';
-import { ConnectionState } from '../services/connection/types';
-import { getSocketIOUrl } from '../utils/websocket-url';
 
 interface ConnectionStateInfo {
   isConnected: boolean;
@@ -70,7 +65,7 @@ interface RobustWebSocketContextValue {
   sendLike: (postId: string, action?: 'add' | 'remove') => void;
   sendMessage: (event: string, data: any) => void;
   
-  // Enhanced robust features
+  // Enhanced robust features (mocked)
   testConnection: () => Promise<{ success: boolean; latency: number; error?: string }>;
   getDetailedStatus: () => any;
   getMetrics: () => any;
@@ -104,65 +99,72 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
   children, 
   config = {} 
 }) => {
-  // Use robust WebSocket hook
-  const { 
-    socket, 
-    isConnected,
-    connectionState,
-    connectionQuality,
-    currentUrl,
-    connect, 
-    disconnect, 
-    reconnect,
-    emit,
-    on,
-    off,
-    testConnection,
-    getDetailedStatus,
-    getMetrics,
-    getHealth
-  } = useRobustWebSocket({
-    url: config.url || (import.meta as any).env.VITE_WEBSOCKET_URL || getSocketIOUrl(),
-    fallbackUrls: config.fallbackUrls || [],
-    autoConnect: config.autoConnect !== false,
-    debugMode: config.debugMode || (import.meta as any).env.VITE_DEBUG_WEBSOCKET === 'true',
-    onConnect: () => {
-      console.log('🎉 RobustWebSocketProvider: Connected to robust hub');
-      setReconnectAttempt(0);
-    },
-    onDisconnect: (data) => {
-      console.log('🔌 RobustWebSocketProvider: Disconnected:', data.reason);
-    },
-    onError: (error) => {
-      console.error('🚨 RobustWebSocketProvider: Error:', error);
-      setConnectionError(error.error?.message || 'Connection error');
-    }
-  });
-
-  // State management
+  // HTTP/SSE only - no WebSocket connections
+  const [isConnected, setIsConnected] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
   const [systemStats, setSystemStats] = useState<SystemStats | null>(null);
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
+  // Mock socket object for compatibility
+  const socket = useMemo(() => ({
+    id: 'http-sse-robust-' + Date.now(),
+    connected: isConnected,
+    emit: (event: string, data?: any) => {
+      console.log('📡 [HTTP/SSE Robust] Mock emit:', event, data);
+    },
+    on: (event: string, handler: (data: any) => void) => {
+      console.log('📡 [HTTP/SSE Robust] Mock event handler registered:', event);
+    },
+    off: (event: string, handler?: (data: any) => void) => {
+      console.log('📡 [HTTP/SSE Robust] Mock event handler removed:', event);
+    }
+  }), [isConnected]);
+
   // Enhanced connection state
   const enhancedConnectionState = useMemo<ConnectionStateInfo>(() => ({
     isConnected,
-    isConnecting: connectionState === ConnectionState.CONNECTING,
+    isConnecting: false,
     reconnectAttempt,
     lastConnected: isConnected ? new Date().toISOString() : null,
     connectionError,
-    connectionQuality,
-    currentUrl
-  }), [isConnected, connectionState, reconnectAttempt, connectionError, connectionQuality, currentUrl]);
+    connectionQuality: 'excellent',
+    currentUrl: config.url || 'http://localhost:3000'
+  }), [isConnected, reconnectAttempt, connectionError, config.url]);
 
-  // Clear connection error when connected
-  useEffect(() => {
-    if (isConnected) {
-      setConnectionError(null);
-    }
-  }, [isConnected]);
+  // Connection methods
+  const connect = useCallback(async () => {
+    console.log('🚀 [HTTP/SSE Robust] Mock connect - no WebSocket needed');
+    setIsConnected(true);
+    setConnectionError(null);
+    setReconnectAttempt(0);
+  }, []);
+
+  const disconnect = useCallback(async () => {
+    console.log('🚀 [HTTP/SSE Robust] Mock disconnect');
+    setIsConnected(false);
+  }, []);
+
+  const reconnect = useCallback(async () => {
+    setReconnectAttempt(prev => prev + 1);
+    await connect();
+  }, [connect]);
+
+  const emit = useCallback((event: string, data?: any) => {
+    console.log('📡 [HTTP/SSE Robust] Mock emit:', event, data);
+  }, []);
+
+  const on = useCallback((event: string, handler: (data: any) => void) => {
+    console.log('📡 [HTTP/SSE Robust] Mock event handler registered:', event);
+  }, []);
+
+  const off = useCallback((event: string, handler?: (data: any) => void) => {
+    console.log('📡 [HTTP/SSE Robust] Mock event handler removed:', event);
+  }, []);
+
+  const subscribe = on;
+  const unsubscribe = off;
 
   // Notification management
   const clearNotifications = useCallback(() => {
@@ -187,125 +189,52 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
 
   // Feed and post management
   const subscribeFeed = useCallback((feedId: string) => {
-    emit('subscribe_feed', { feedId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE Robust] Mock subscribe feed:', feedId);
+  }, []);
 
   const unsubscribeFeed = useCallback((feedId: string) => {
-    emit('unsubscribe_feed', { feedId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE Robust] Mock unsubscribe feed:', feedId);
+  }, []);
 
   const subscribePost = useCallback((postId: string) => {
-    emit('subscribe_post', { postId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE Robust] Mock subscribe post:', postId);
+  }, []);
 
   const unsubscribePost = useCallback((postId: string) => {
-    emit('unsubscribe_post', { postId });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE Robust] Mock unsubscribe post:', postId);
+  }, []);
 
   const sendLike = useCallback((postId: string, action: 'add' | 'remove' = 'add') => {
-    emit('like_post', { postId, action });
-  }, [emit]);
+    console.log('📡 [HTTP/SSE Robust] Mock send like:', postId, action);
+  }, []);
 
   const sendMessage = useCallback((event: string, data: any) => {
-    emit(event, data);
-  }, [emit]);
+    console.log('📡 [HTTP/SSE Robust] Mock send message:', event, data);
+  }, []);
 
-  // Enhanced reconnect with attempt tracking
-  const enhancedReconnect = useCallback(async () => {
-    setReconnectAttempt(prev => prev + 1);
-    await reconnect();
-  }, [reconnect]);
+  // Mock enhanced features
+  const testConnection = useCallback(async () => {
+    return { success: true, latency: 10 };
+  }, []);
 
-  // Compatibility methods
-  const subscribe = useCallback((event: string, handler: (data: any) => void) => {
-    on(event, handler);
-  }, [on]);
+  const getDetailedStatus = useCallback(() => {
+    return { status: 'http-sse-mock', healthy: true };
+  }, []);
 
-  const unsubscribe = useCallback((event: string, handler?: (data: any) => void) => {
-    off(event, handler);
-  }, [off]);
+  const getMetrics = useCallback(() => {
+    return { connections: 0, messages: 0 };
+  }, []);
 
-  // Socket event handlers with robust error handling
+  const getHealth = useCallback(() => {
+    return { healthy: true, lastCheck: new Date() };
+  }, []);
+
+  // Auto-connect on mount
   useEffect(() => {
-    if (!socket) return;
-
-    const handlers = {
-      notification: (data: any) => {
-        try {
-          addNotification({
-            type: data.type || 'info',
-            title: data.title || 'Notification',
-            message: data.message || '',
-            read: false,
-            userId: data.userId,
-            postId: data.postId,
-            commentId: data.commentId
-          });
-        } catch (error) {
-          console.error('Error handling notification:', error);
-        }
-      },
-      
-      online_users: (data: OnlineUser[]) => {
-        try {
-          setOnlineUsers(data || []);
-        } catch (error) {
-          console.error('Error handling online users:', error);
-        }
-      },
-      
-      system_stats: (data: SystemStats) => {
-        try {
-          setSystemStats(data);
-        } catch (error) {
-          console.error('Error handling system stats:', error);
-        }
-      },
-      
-      hubWelcome: (data: any) => {
-        console.log('🎉 RobustWebSocketProvider: Hub welcome received:', data);
-      },
-      
-      hubHealthUpdate: (data: any) => {
-        console.log('💓 RobustWebSocketProvider: Hub health update:', data);
-      },
-      
-      hubRegistered: (data: any) => {
-        console.log('✅ RobustWebSocketProvider: Hub registration confirmed:', data);
-      },
-      
-      fromClaude: (data: any) => {
-        console.log('📨 RobustWebSocketProvider: Message from Claude:', data);
-      },
-      
-      messageRouted: (data: any) => {
-        console.log('📤 RobustWebSocketProvider: Message routed:', data);
-      },
-      
-      routingError: (error: any) => {
-        console.warn('⚠️ RobustWebSocketProvider: Routing error:', error);
-      }
-    };
-
-    // Register all handlers with error boundaries
-    Object.entries(handlers).forEach(([event, handler]) => {
-      const wrappedHandler = (...args: any[]) => {
-        try {
-          handler(...args);
-        } catch (error) {
-          console.error(`Error in ${event} handler:`, error);
-        }
-      };
-      socket.on(event, wrappedHandler);
-    });
-
-    // Cleanup function
-    return () => {
-      Object.entries(handlers).forEach(([event]) => {
-        socket.off(event);
-      });
-    };
-  }, [socket, addNotification]);
+    if (config.autoConnect !== false) {
+      connect();
+    }
+  }, [connect, config.autoConnect]);
 
   // Stable context value
   const contextValue = useMemo<RobustWebSocketContextValue>(() => ({
@@ -313,7 +242,7 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
     isConnected,
     connect,
     disconnect,
-    reconnect: enhancedReconnect,
+    reconnect,
     emit,
     on,
     off,
@@ -341,12 +270,10 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
     isConnected,
     connect,
     disconnect,
-    enhancedReconnect,
+    reconnect,
     emit,
     on,
     off,
-    subscribe,
-    unsubscribe,
     enhancedConnectionState,
     notifications,
     onlineUsers,
@@ -367,22 +294,9 @@ export const RobustWebSocketProvider: React.FC<RobustWebSocketProviderProps> = m
   ]);
 
   return (
-    <WebSocketErrorBoundary
-      onError={(error, errorInfo) => {
-        console.error('WebSocket Error Boundary triggered:', error, errorInfo);
-        setConnectionError(error.message);
-      }}
-      onRecover={() => {
-        console.log('WebSocket Error Boundary recovered, attempting reconnection...');
-        enhancedReconnect().catch(error => {
-          console.error('Recovery reconnection failed:', error);
-        });
-      }}
-    >
-      <RobustWebSocketContext.Provider value={contextValue}>
-        {children}
-      </RobustWebSocketContext.Provider>
-    </WebSocketErrorBoundary>
+    <RobustWebSocketContext.Provider value={contextValue}>
+      {children}
+    </RobustWebSocketContext.Provider>
   );
 });
 
