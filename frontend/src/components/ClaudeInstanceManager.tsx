@@ -25,6 +25,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connectionType, setConnectionType] = useState<string>('Disconnected');
+  const [currentInstanceId, setCurrentInstanceId] = useState<string | null>(null);
   
   const outputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   
@@ -35,6 +36,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     connectionError, 
     connectSSE, 
     startPolling, 
+    disconnectFromInstance,
     on, 
     off,
     emit
@@ -60,8 +62,9 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     on('connect', (data) => {
       console.log('Connected via HTTP/SSE:', data);
       setError(null);
-      setConnectionType(data.connectionType === 'sse' ? 'Connected via SSE' : 
-                      data.connectionType === 'polling' ? 'Connected via Polling' : 
+      setCurrentInstanceId(data.instanceId || null);
+      setConnectionType(data.connectionType === 'sse' ? `Connected via SSE${data.instanceId ? ` (${data.instanceId.slice(0,8)})` : ''}` : 
+                      data.connectionType === 'polling' ? `Connected via Polling${data.instanceId ? ` (${data.instanceId.slice(0,8)})` : ''}` : 
                       'Connected via HTTP/SSE');
     });
     
@@ -83,6 +86,28 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       }
     });
     
+    // Handle instance creation success events
+    on('instance:create:success', async (data) => {
+      console.log('Instance creation success event received:', data);
+      try {
+        await fetchInstances();
+        if (data.instanceId) {
+          setSelectedInstance(data.instanceId);
+          setOutput(prev => ({ ...prev, [data.instanceId]: '' }));
+        }
+      } catch (error) {
+        console.error('Failed to refresh instances after creation success:', error);
+        setError('Failed to refresh instances list');
+      }
+    });
+    
+    // Handle instance creation error events
+    on('instance:create:error', (error) => {
+      console.error('Instance creation error event received:', error);
+      setError(error.message || 'Failed to create instance');
+      setLoading(false);
+    });
+    
     // Handle connection errors
     on('error', (error) => {
       console.error('HTTP/SSE error:', error);
@@ -96,6 +121,9 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     
     off('connect');
     off('terminal:output');
+    off('terminal:input_echo'); // Clean up input echo handler
+    off('instance:create:success');
+    off('instance:create:error');
     off('error');
   };
 
@@ -174,19 +202,23 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       
       const data = await response.json();
       if (data.success) {
+        // Refresh instances list immediately after successful creation
+        console.log('Instance created successfully, refreshing instances list...');
         await fetchInstances();
         setSelectedInstance(data.instanceId);
         setOutput(prev => ({ ...prev, [data.instanceId]: '' }));
         
-        // Start terminal streaming for the new instance
-        // Try SSE first, fallback to polling if it fails
-        try {
-          connectSSE(data.instanceId);
-          console.log('Started SSE streaming for instance:', data.instanceId);
-        } catch (sseError) {
-          console.log('SSE failed, falling back to polling:', sseError);
-          startPolling(data.instanceId);
-        }
+        // Wait a moment for the instance to be ready, then start streaming
+        setTimeout(() => {
+          try {
+            console.log('Starting terminal connection for new instance:', data.instanceId);
+            connectSSE(data.instanceId);
+            console.log('Started SSE streaming for instance:', data.instanceId);
+          } catch (sseError) {
+            console.log('SSE failed, falling back to polling:', sseError);
+            startPolling(data.instanceId);
+          }
+        }, 500); // Small delay to ensure instance is ready
       } else {
         setError(data.error || 'Failed to create instance');
       }
@@ -230,6 +262,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       
       const data = await response.json();
       if (data.success) {
+        console.log('Instance terminated successfully, refreshing instances list...');
         await fetchInstances();
         if (selectedInstance === instanceId) {
           setSelectedInstance(null);
@@ -312,16 +345,31 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                   key={instance.id}
                   className={`instance-item ${selectedInstance === instance.id ? 'selected' : ''} status-${instance.status}`}
                   onClick={() => {
+                    console.log('Selecting instance:', instance.id);
+                    
+                    // Disconnect from current instance first
+                    if (selectedInstance && selectedInstance !== instance.id) {
+                      console.log('Disconnecting from previous instance:', selectedInstance);
+                      disconnectFromInstance();
+                    }
+                    
                     setSelectedInstance(instance.id);
-                    // Start streaming for the selected instance if not already streaming
+                    // Initialize output for this instance if not already present
+                    if (!output[instance.id]) {
+                      setOutput(prev => ({ ...prev, [instance.id]: '' }));
+                    }
+                    
+                    // Start streaming for the selected instance if running
                     if (instance.status === 'running') {
-                      try {
-                        connectSSE(instance.id);
-                        console.log('Started SSE streaming for selected instance:', instance.id);
-                      } catch (sseError) {
-                        console.log('SSE failed for selected instance, falling back to polling:', sseError);
-                        startPolling(instance.id);
-                      }
+                      setTimeout(() => {
+                        try {
+                          console.log('Starting SSE connection for selected instance:', instance.id);
+                          connectSSE(instance.id);
+                        } catch (sseError) {
+                          console.log('SSE failed for selected instance, falling back to polling:', sseError);
+                          startPolling(instance.id);
+                        }
+                      }, 100); // Small delay to ensure cleanup is complete
                     }
                   }}
                 >
@@ -358,7 +406,13 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                 className="output-area"
                 ref={el => outputRefs.current[selectedInstance] = el}
               >
-                <pre>{output[selectedInstance] || 'Connecting to terminal stream...'}</pre>
+                <pre>
+                  {output[selectedInstance] || (
+                    currentInstanceId === selectedInstance 
+                      ? `Connected to instance ${selectedInstance.slice(0,8)}...\nReady for input.\n` 
+                      : `Connecting to instance ${selectedInstance.slice(0,8)}...\n${connectionType}\n`
+                  )}
+                </pre>
               </div>
               <div className="input-area">
                 <input

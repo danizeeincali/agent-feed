@@ -30,6 +30,7 @@ interface UseHTTPSSEReturn {
   startPolling: (instanceId: string) => void;
   stopPolling: () => void;
   connectSSE: (instanceId: string) => void;
+  disconnectFromInstance: () => void;
 }
 
 interface ConnectionState {
@@ -83,14 +84,14 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
 
       switch (event) {
         case 'terminal:input':
-          endpoint = '/api/v1/claude/terminal/input';
-          payload = { input: data.input, instanceId: connectionState.current.instanceId };
+          endpoint = `/api/claude/instances/${connectionState.current.instanceId}/terminal/input`;
+          payload = { input: data.input };
           break;
         case 'instance:create':
-          endpoint = '/api/v1/claude/instances';
+          endpoint = '/api/claude/instances';
           break;
         case 'instance:delete':
-          endpoint = `/api/v1/claude/instances/${data.instanceId}`;
+          endpoint = `/api/claude/instances/${data.instanceId}`;
           break;
         default:
           console.warn(`Unsupported event type: ${event}`);
@@ -189,15 +190,23 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
   const connectSSE = useCallback((instanceId: string) => {
     console.log('🔄 Attempting SSE connection for instance:', instanceId);
     
-    // Clean up existing connections
+    // Clean up existing connections first
     if (sseConnection.current) {
+      console.log('🔌 Closing existing SSE connection');
       sseConnection.current.close();
       sseConnection.current = null;
+    }
+    
+    // Stop any existing polling
+    if (pollingIntervalRef.current) {
+      console.log('🛑 Stopping existing polling');
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
     }
 
     try {
       const eventSource = new EventSource(
-        `${url}/api/v1/claude/instances/${instanceId}/terminal/stream`,
+        `${url}/api/claude/instances/${instanceId}/terminal/stream`,
         { withCredentials: false }
       );
       
@@ -238,6 +247,18 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
               output: data.output || data.data,
               instanceId: data.instanceId || instanceId,
               processInfo: data.processInfo
+            });
+          } else if (data.type === 'input_echo') {
+            // Handle terminal input echo events (Option C - Backend Echo Fix)
+            triggerHandlers('terminal:output', {
+              output: data.data || '',
+              instanceId: data.instanceId || instanceId,
+              isEcho: true
+            });
+            triggerHandlers('terminal:input_echo', {
+              data: data.data || '',
+              instanceId: data.instanceId || instanceId,
+              timestamp: data.timestamp
             });
           }
           
@@ -503,6 +524,33 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
     };
   }, []);
 
+  // Add a method to disconnect from a specific instance
+  const disconnectFromInstance = useCallback(() => {
+    console.log('🔌 Disconnecting from current instance');
+    
+    // Close SSE connection
+    if (sseConnection.current) {
+      sseConnection.current.close();
+      sseConnection.current = null;
+    }
+    
+    // Stop polling
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+    
+    // Reset connection state but keep socket connected for general operations
+    connectionState.current = {
+      isSSE: false,
+      isPolling: false,
+      instanceId: null,
+      connectionType: 'none'
+    };
+    
+    console.log('✅ Instance disconnected');
+  }, []);
+
   return {
     socket,
     isConnected,
@@ -517,6 +565,7 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
     off: unsubscribe,
     startPolling,
     stopPolling,
-    connectSSE
+    connectSSE,
+    disconnectFromInstance
   };
 };

@@ -10,6 +10,30 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
+// Terminal session management
+const instanceSessions = new Map(); // Track terminal state per instance
+const sseConnections = new Map(); // Track SSE connections per instance
+
+// CRITICAL FIX: Dynamic instance storage for Option A validation
+const instances = new Map(); // Track all created instances dynamically
+
+// Initialize with default instances
+instances.set('claude-2426', {
+  id: 'claude-2426',
+  name: 'prod/claude',
+  status: 'running',
+  pid: 2426,
+  startTime: new Date(Date.now() - 300000) // 5 minutes ago
+});
+
+instances.set('claude-3891', {
+  id: 'claude-3891', 
+  name: 'skip-permissions',
+  status: 'running',
+  pid: 3891,
+  startTime: new Date(Date.now() - 180000) // 3 minutes ago
+});
+
 // Middleware
 app.use(cors({
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
@@ -87,27 +111,13 @@ app.get('/api/v1/agent-posts', (req, res) => {
 app.get('/api/claude/instances', (req, res) => {
   console.log('🔍 Fetching Claude instances for frontend');
   
-  // Mock instance data that matches frontend expectations
-  const instances = [
-    {
-      id: 'claude-2426',
-      name: 'prod/claude',
-      status: 'running',
-      pid: 2426,
-      startTime: new Date(Date.now() - 300000) // 5 minutes ago
-    },
-    {
-      id: 'claude-3891', 
-      name: 'skip-permissions',
-      status: 'running',
-      pid: 3891,
-      startTime: new Date(Date.now() - 180000) // 3 minutes ago
-    }
-  ];
+  // CRITICAL FIX: Return dynamic instances list for Option A validation
+  const instanceList = Array.from(instances.values());
+  console.log(`📋 Returning ${instanceList.length} instances:`, instanceList.map(i => `${i.id} (${i.name})`));
   
   res.json({
     success: true,
-    instances,
+    instances: instanceList,
     timestamp: new Date().toISOString()
   });
 });
@@ -148,12 +158,18 @@ app.post('/api/claude/instances', (req, res) => {
     workingDirectory
   };
   
-  console.log(`✅ Claude instance created: ${newId} (${instanceName}, PID: ${newPid})`);
+  // CRITICAL FIX: Add new instance to dynamic storage for Option A validation
+  instances.set(newId, newInstance);
+  console.log(`✅ Claude instance created and added to list: ${newId} (${instanceName}, PID: ${newPid})`);
+  console.log(`📊 Total instances now: ${instances.size}`);
   
   // Simulate instance becoming running after short delay
   setTimeout(() => {
-    newInstance.status = 'running';
-    console.log(`🚀 Claude instance ${newId} now running`);
+    const instance = instances.get(newId);
+    if (instance) {
+      instance.status = 'running';
+      console.log(`🚀 Claude instance ${newId} now running`);
+    }
   }, 2000);
   
   res.status(201).json({
@@ -171,10 +187,15 @@ app.delete('/api/claude/instances/:instanceId', (req, res) => {
   
   console.log(`🗑️ Terminating Claude instance: ${instanceId}`);
   
+  // CRITICAL FIX: Remove instance from dynamic storage
+  const removed = instances.delete(instanceId);
+  console.log(`📊 Instance ${instanceId} ${removed ? 'removed' : 'not found'}. Total instances now: ${instances.size}`);
+  
   res.json({
     success: true,
     message: `Claude instance ${instanceId} terminated successfully`,
     instanceId,
+    removed,
     timestamp: new Date().toISOString()
   });
 });
@@ -222,10 +243,80 @@ app.delete('/api/v1/claude/instances/:instanceId', (req, res) => {
   });
 });
 
-// Additional Claude terminal endpoints the frontend is calling
-app.get('/api/v1/claude/instances/:instanceId/terminal/stream', (req, res) => {
-  const { instanceId } = req.params;
+// Terminal command processing utilities
+function processTerminalInput(instanceId, input) {
+  // Initialize session if not exists
+  if (!instanceSessions.has(instanceId)) {
+    instanceSessions.set(instanceId, {
+      workingDirectory: '/workspaces/agent-feed',
+      history: [],
+      environment: {
+        USER: 'claude',
+        PWD: '/workspaces/agent-feed',
+        HOME: '/home/claude'
+      }
+    });
+  }
   
+  const session = instanceSessions.get(instanceId);
+  session.history.push(input);
+  
+  // Process basic commands
+  const trimmedInput = input.trim();
+  let response = '';
+  
+  if (trimmedInput === '') {
+    response = '';
+  } else if (trimmedInput === 'help') {
+    response = `Available commands:\n  echo <text>     - Print text\n  ls              - List directory contents\n  pwd             - Show current directory\n  whoami          - Show current user\n  clear           - Clear terminal\n  history         - Show command history\n  help            - Show this help`;
+  } else if (trimmedInput === 'ls') {
+    response = `total 24\ndrwxr-xr-x  12 claude claude  384 Aug 27 00:00 .\ndrwxr-xr-x   3 claude claude   96 Aug 27 00:00 ..\n-rw-r--r--   1 claude claude 1234 Aug 27 00:00 package.json\n-rw-r--r--   1 claude claude 2345 Aug 27 00:00 simple-backend.js\ndrwxr-xr-x   8 claude claude  256 Aug 27 00:00 frontend\ndrwxr-xr-x   4 claude claude  128 Aug 27 00:00 src\n-rw-r--r--   1 claude claude  567 Aug 27 00:00 README.md`;
+  } else if (trimmedInput === 'pwd') {
+    response = session.workingDirectory;
+  } else if (trimmedInput === 'whoami') {
+    response = 'claude';
+  } else if (trimmedInput === 'clear') {
+    response = '\x1B[2J\x1B[H'; // ANSI clear screen
+  } else if (trimmedInput === 'history') {
+    response = session.history.map((cmd, idx) => `  ${idx + 1}  ${cmd}`).join('\n');
+  } else if (trimmedInput.startsWith('echo ')) {
+    response = trimmedInput.substring(5);
+  } else if (trimmedInput.startsWith('cd ')) {
+    const newDir = trimmedInput.substring(3).trim();
+    if (newDir === '..') {
+      session.workingDirectory = '/workspaces';
+    } else if (newDir === 'frontend') {
+      session.workingDirectory = '/workspaces/agent-feed/frontend';
+    } else {
+      session.workingDirectory = `/workspaces/agent-feed/${newDir}`;
+    }
+    session.environment.PWD = session.workingDirectory;
+    response = '';
+  } else {
+    response = `bash: ${trimmedInput}: command not found`;
+  }
+  
+  return response;
+}
+
+// Broadcast message to all SSE connections for an instance
+function broadcastToInstance(instanceId, message) {
+  const connections = sseConnections.get(instanceId) || [];
+  const data = `data: ${JSON.stringify(message)}\n\n`;
+  
+  connections.forEach((connection, index) => {
+    try {
+      connection.write(data);
+    } catch (error) {
+      console.error(`❌ Error broadcasting to connection ${index} for instance ${instanceId}:`, error);
+      // Remove dead connection
+      connections.splice(index, 1);
+    }
+  });
+}
+
+// Terminal SSE streaming function (shared between endpoints)
+function createTerminalSSEStream(req, res, instanceId) {
   console.log(`📡 SSE Claude terminal stream requested for instance: ${instanceId}`);
   
   // Set SSE headers
@@ -237,28 +328,167 @@ app.get('/api/v1/claude/instances/:instanceId/terminal/stream', (req, res) => {
     'Access-Control-Allow-Headers': 'Cache-Control'
   });
 
+  // Add connection to tracking
+  if (!sseConnections.has(instanceId)) {
+    sseConnections.set(instanceId, []);
+  }
+  sseConnections.get(instanceId).push(res);
+
   // Send initial connection message
   res.write(`data: ${JSON.stringify({
     type: 'connected',
     instanceId,
-    message: `✅ HTTP/SSE Claude terminal connected to instance ${instanceId}`,
+    message: `✅ Terminal connected to Claude instance ${instanceId}`,
     timestamp: new Date().toISOString()
-  })}\\n\\n`);
+  })}\n\n`);
 
-  // Send periodic updates
+  // Send initial prompt
+  res.write(`data: ${JSON.stringify({
+    type: 'output',
+    instanceId,
+    data: `Claude Code session started for instance ${instanceId}\r\nWorking directory: /workspaces/agent-feed\r\n$ `,
+    timestamp: new Date().toISOString()
+  })}\n\n`);
+
+  // Send periodic keep-alive messages (less frequent now that we have input)
   const interval = setInterval(() => {
+    const timestamp = new Date().toLocaleTimeString();
+    
     res.write(`data: ${JSON.stringify({
-      type: 'output',
+      type: 'heartbeat',
       instanceId,
-      data: `[${new Date().toLocaleTimeString()}] Claude ${instanceId} - HTTP/SSE active!\\r\\n$ `,
+      data: `[${timestamp}] System operational\r\n`,
       timestamp: new Date().toISOString()
-    })}\\n\\n`);
-  }, 3000);
+    })}\n\n`);
+  }, 30000); // Every 30 seconds instead of 2
 
   // Handle client disconnect
   req.on('close', () => {
     console.log(`🔌 SSE connection closed for Claude instance: ${instanceId}`);
     clearInterval(interval);
+    
+    // Remove connection from tracking
+    const connections = sseConnections.get(instanceId) || [];
+    const index = connections.indexOf(res);
+    if (index !== -1) {
+      connections.splice(index, 1);
+    }
+  });
+
+  // Handle connection errors
+  req.on('error', (err) => {
+    console.error(`❌ SSE connection error for instance ${instanceId}:`, err);
+    clearInterval(interval);
+    
+    // Remove connection from tracking
+    const connections = sseConnections.get(instanceId) || [];
+    const index = connections.indexOf(res);
+    if (index !== -1) {
+      connections.splice(index, 1);
+    }
+  });
+}
+
+// Primary SSE endpoint that frontend expects
+app.get('/api/v1/claude/instances/:instanceId/terminal/stream', (req, res) => {
+  const { instanceId } = req.params;
+  createTerminalSSEStream(req, res, instanceId);
+});
+
+// Alias endpoint for compatibility (without /v1/)
+app.get('/api/claude/instances/:instanceId/terminal/stream', (req, res) => {
+  const { instanceId } = req.params;
+  createTerminalSSEStream(req, res, instanceId);
+});
+
+// Enhanced terminal input endpoints with SSE broadcasting
+app.post('/api/v1/claude/instances/:instanceId/terminal/input', (req, res) => {
+  const { instanceId } = req.params;
+  const { input } = req.body;
+  
+  console.log(`⌨️ Terminal input for Claude instance ${instanceId}: ${input}`);
+  
+  // Process the input and get response
+  const commandResponse = processTerminalInput(instanceId, input);
+  
+  // Broadcast input echo to all SSE connections
+  broadcastToInstance(instanceId, {
+    type: 'input_echo',
+    instanceId,
+    data: `${input}`,
+    timestamp: new Date().toISOString()
+  });
+  
+  // Broadcast command response if any
+  if (commandResponse) {
+    broadcastToInstance(instanceId, {
+      type: 'output',
+      instanceId,
+      data: `${commandResponse}\r\n$ `,
+      timestamp: new Date().toISOString()
+    });
+  } else {
+    // Just show new prompt
+    broadcastToInstance(instanceId, {
+      type: 'output', 
+      instanceId,
+      data: `$ `,
+      timestamp: new Date().toISOString()
+    });
+  }
+  
+  res.json({
+    success: true,
+    instanceId,
+    input,
+    processed: true,
+    response: commandResponse || 'Command processed',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.post('/api/claude/instances/:instanceId/terminal/input', (req, res) => {
+  const { instanceId } = req.params;
+  const { input } = req.body;
+  
+  console.log(`⌨️ Terminal input for Claude instance ${instanceId}: ${input}`);
+  
+  // Process the input and get response
+  const commandResponse = processTerminalInput(instanceId, input);
+  
+  // Broadcast input echo to all SSE connections
+  broadcastToInstance(instanceId, {
+    type: 'input_echo',
+    instanceId,
+    data: `${input}`,
+    timestamp: new Date().toISOString()
+  });
+  
+  // Broadcast command response if any
+  if (commandResponse) {
+    broadcastToInstance(instanceId, {
+      type: 'output',
+      instanceId,
+      data: `${commandResponse}\r\n$ `,
+      timestamp: new Date().toISOString()
+    });
+  } else {
+    // Just show new prompt
+    broadcastToInstance(instanceId, {
+      type: 'output',
+      instanceId,
+      data: `$ `,
+      timestamp: new Date().toISOString()
+    });
+  }
+  
+  res.json({
+    success: true,
+    instanceId,
+    input,
+    processed: true,
+    response: commandResponse || 'Command processed',
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -344,18 +574,48 @@ app.get('/api/v1/terminal/poll/:instanceId', (req, res) => {
   });
 });
 
-// Terminal input endpoint
+// Legacy terminal input endpoint (enhanced)
 app.post('/api/v1/terminal/input/:instanceId', (req, res) => {
   const { instanceId } = req.params;
   const { input } = req.body;
   
   console.log(`⌨️ Terminal input for ${instanceId}: ${input}`);
   
+  // Process the input and get response
+  const commandResponse = processTerminalInput(instanceId, input);
+  
+  // Broadcast input echo to all SSE connections
+  broadcastToInstance(instanceId, {
+    type: 'input_echo',
+    instanceId,
+    data: `${input}`,
+    timestamp: new Date().toISOString()
+  });
+  
+  // Broadcast command response if any
+  if (commandResponse) {
+    broadcastToInstance(instanceId, {
+      type: 'output',
+      instanceId,
+      data: `${commandResponse}\r\n$ `,
+      timestamp: new Date().toISOString()
+    });
+  } else {
+    // Just show new prompt
+    broadcastToInstance(instanceId, {
+      type: 'output',
+      instanceId,
+      data: `$ `,
+      timestamp: new Date().toISOString()
+    });
+  }
+  
   res.json({
     success: true,
     instanceId,
     echo: input,
-    response: 'HTTP/SSE input received - WebSocket eliminated!',
+    processed: true,
+    response: commandResponse || 'HTTP/SSE input received - WebSocket eliminated!',
     timestamp: new Date().toISOString()
   });
 });
@@ -364,11 +624,15 @@ app.post('/api/v1/terminal/input/:instanceId', (req, res) => {
 const server = app.listen(PORT, () => {
   console.log(`🚀 HTTP/SSE Server running on http://localhost:${PORT}`);
   console.log(`✅ WebSocket connection storm eliminated!`);
-  console.log(`📡 SSE endpoints available:`);
+  console.log(`📡 Claude Terminal SSE endpoints available:`);
   console.log(`   - Health: http://localhost:${PORT}/health`);
-  console.log(`   - SSE Stream: http://localhost:${PORT}/api/v1/terminal/stream/{instanceId}`);
+  console.log(`   - Claude Terminal Stream (v1): http://localhost:${PORT}/api/v1/claude/instances/{instanceId}/terminal/stream`);
+  console.log(`   - Claude Terminal Stream: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/stream`);
+  console.log(`   - Terminal Input (v1): http://localhost:${PORT}/api/v1/claude/instances/{instanceId}/terminal/input`);
+  console.log(`   - Terminal Input: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/input`);
+  console.log(`   - Legacy SSE Stream: http://localhost:${PORT}/api/v1/terminal/stream/{instanceId}`);
   console.log(`   - HTTP Polling: http://localhost:${PORT}/api/v1/terminal/poll/{instanceId}`);
-  console.log(`🎉 Clean HTTP/SSE architecture - no WebSocket dependencies!`);
+  console.log(`🎉 Clean HTTP/SSE architecture - Frontend terminal connection ready!`);
 });
 
 // Graceful shutdown
