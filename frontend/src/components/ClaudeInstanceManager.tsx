@@ -68,12 +68,37 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                       'Connected via HTTP/SSE');
     });
     
-    // Handle terminal output
+    // CRITICAL FIX: Handle REAL terminal output from Claude processes ONLY
     on('terminal:output', (data) => {
-      if (data.output && data.instanceId) {
+      if (data.output && data.instanceId && data.isReal) {
+        // Display REAL Claude output without fake prefixes - enhanced validation
+        const realOutput = data.output;
+        
+        console.log(`📺 REAL Claude output for ${data.instanceId.slice(0,8)}:`, realOutput);
+        
         setOutput(prev => ({
           ...prev,
-          [data.instanceId]: (prev[data.instanceId] || '') + data.output
+          [data.instanceId]: (prev[data.instanceId] || '') + realOutput
+        }));
+        
+        // Auto-scroll to bottom
+        if (outputRefs.current[data.instanceId]) {
+          const element = outputRefs.current[data.instanceId];
+          if (element) {
+            element.scrollTop = element.scrollHeight;
+          }
+        }
+      }
+    });
+    
+    // Also handle 'output' type messages from SSE - ONLY REAL Claude output
+    on('output', (data) => {
+      if (data.data && data.instanceId && data.isReal) {
+        console.log(`📺 REAL Claude output (type: output) for ${data.instanceId.slice(0,8)}:`, data.data);
+        
+        setOutput(prev => ({
+          ...prev,
+          [data.instanceId]: (prev[data.instanceId] || '') + data.data
         }));
         
         // Auto-scroll to bottom
@@ -108,6 +133,39 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       setLoading(false);
     });
     
+    // CRITICAL FIX: Handle instance status updates from backend SSE
+    on('instance:status', (data) => {
+      console.log('📲 Instance status update received:', data);
+      
+      // Update instances list with new status and ensure type safety
+      setInstances(prev => prev.map(instance => 
+        instance.id === data.instanceId 
+          ? { ...instance, status: data.status as ClaudeInstance['status'] }
+          : instance
+      ));
+      
+      // Show status change notification in output if this instance is selected
+      if (data.instanceId === selectedInstance) {
+        const timestamp = new Date().toLocaleTimeString();
+        const statusMessage = `[${timestamp}] Status changed to: ${data.status}\n`;
+        setOutput(prev => ({
+          ...prev,
+          [data.instanceId]: (prev[data.instanceId] || '') + statusMessage
+        }));
+        console.log('🔄 Updated selected instance status in UI');
+      }
+    });
+    
+    // Handle status updates (alternative event name)
+    on('status_update', (data) => {
+      console.log('📲 Status update received:', data);
+      setInstances(prev => prev.map(instance => 
+        instance.id === data.instanceId 
+          ? { ...instance, status: data.status }
+          : instance
+      ));
+    });
+    
     // Handle connection errors
     on('error', (error) => {
       console.error('HTTP/SSE error:', error);
@@ -124,6 +182,8 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     off('terminal:input_echo'); // Clean up input echo handler
     off('instance:create:success');
     off('instance:create:error');
+    off('instance:status'); // Clean up status handler
+    off('status_update'); // Clean up status update handler
     off('error');
   };
 
@@ -163,64 +223,90 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     setError(null);
     
     
-    // Map commands to instance configurations
+    // SPARC Enhanced instance configuration mapping
     const getInstanceConfig = (cmd: string) => {
       if (cmd.includes('prod') && !cmd.includes('skip-permissions')) {
         return { 
           command: ['claude'],
-          workingDirectory: '/workspaces/agent-feed/prod'
+          instanceType: 'prod'  // SPARC: Let backend resolve directory
         };
       } else if (cmd.includes('skip-permissions') && cmd.includes('resume')) {
         return { 
           command: ['claude', '--dangerously-skip-permissions', '--resume'],
-          workingDirectory: '/workspaces/agent-feed/prod'
+          instanceType: 'skip-permissions-resume'
         };
       } else if (cmd.includes('skip-permissions') && cmd.includes('-c')) {
         return { 
           command: ['claude', '--dangerously-skip-permissions', '-c'],
-          workingDirectory: '/workspaces/agent-feed/prod'
+          instanceType: 'skip-permissions-c'
         };
       } else if (cmd.includes('skip-permissions')) {
         return { 
           command: ['claude', '--dangerously-skip-permissions'],
-          workingDirectory: '/workspaces/agent-feed/prod'
+          instanceType: 'skip-permissions'
         };
       } else {
         return { 
           command: ['claude'],
-          workingDirectory: '/workspaces/agent-feed'
+          instanceType: 'default'
         };
       }
     };
     
     try {
+      const config = getInstanceConfig(command);
+      console.log('🚀 SPARC Sending instance configuration:', config);
+      
       const response = await fetch(`${apiUrl}/api/claude/instances`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(getInstanceConfig(command))
+        body: JSON.stringify(config)
       });
       
       const data = await response.json();
       if (data.success) {
+        // CRITICAL FIX: Extract instanceId from correct response structure
+        // Backend returns { success: true, instance: { id: instanceId } }
+        const instanceId = data.instanceId || data.instance?.id;
+        
+        if (!instanceId) {
+          console.error('❌ Instance creation succeeded but no instance ID found in response:', data);
+          setError('Instance creation failed: No instance ID in response');
+          return;
+        }
+        
+        // Validate instanceId format
+        if (!/^claude-\d+$/.test(instanceId)) {
+          console.error('❌ Invalid instance ID format:', instanceId);
+          setError(`Invalid instance ID format: ${instanceId}`);
+          return;
+        }
+        
+        console.log('✅ SPARC Enhanced instance created successfully:', instanceId);
+        console.log('   Instance Type:', data.instance?.type || 'unknown');
+        console.log('   Working Directory:', data.instance?.workingDirectory || 'unknown');
+        
         // Refresh instances list immediately after successful creation
-        console.log('Instance created successfully, refreshing instances list...');
         await fetchInstances();
-        setSelectedInstance(data.instanceId);
-        setOutput(prev => ({ ...prev, [data.instanceId]: '' }));
+        
+        setSelectedInstance(instanceId);
+        setOutput(prev => ({ ...prev, [instanceId]: '' }));
         
         // Wait a moment for the instance to be ready, then start streaming
         setTimeout(() => {
           try {
-            console.log('Starting terminal connection for new instance:', data.instanceId);
-            connectSSE(data.instanceId);
-            console.log('Started SSE streaming for instance:', data.instanceId);
+            console.log('🔗 Starting terminal connection for validated instance:', instanceId);
+            connectSSE(instanceId);
+            console.log('✅ Started SSE streaming for instance:', instanceId);
           } catch (sseError) {
-            console.log('SSE failed, falling back to polling:', sseError);
-            startPolling(data.instanceId);
+            console.log('⚠️ SSE failed, falling back to polling:', sseError);
+            startPolling(instanceId);
           }
         }, 500); // Small delay to ensure instance is ready
       } else {
-        setError(data.error || 'Failed to create instance');
+        const errorMsg = data.error || 'Failed to create instance';
+        console.error('❌ Instance creation failed:', errorMsg, data);
+        setError(errorMsg);
       }
     } catch (err) {
       console.error('Create instance error:', err);
@@ -240,14 +326,33 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
   };
 
   const sendInput = () => {
-    if (!selectedInstance || !input.trim()) return;
+    // TDD London School Fix: Enhanced validation before sending input
+    if (!selectedInstance || selectedInstance === 'undefined' || !selectedInstance.trim()) {
+      console.warn('Cannot send input: no valid instance selected', { selectedInstance });
+      setError('No valid instance selected');
+      return;
+    }
+    
+    if (!input.trim()) {
+      console.warn('Cannot send empty input');
+      return;
+    }
+    
+    // Validate instance ID format
+    if (!/^claude-[a-zA-Z0-9]+$/.test(selectedInstance)) {
+      console.error('Invalid instance ID format:', selectedInstance);
+      setError(`Invalid instance ID format: ${selectedInstance}`);
+      return;
+    }
     
     if (socket && isConnected) {
+      console.log('⌨️ Sending input to instance:', selectedInstance, 'Input:', input);
       emit('terminal:input', {
         input: input + '\n',
         instanceId: selectedInstance
       });
       setInput('');
+      setError(null); // Clear any previous errors
     } else {
       console.warn('Not connected, cannot send input');
       setError('Not connected to terminal');
@@ -280,7 +385,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
   };
 
   return (
-    <div className="claude-instance-manager">
+    <div className="claude-instance-manager" data-testid="claude-instance-manager">
       <div className="header">
         <h2>Claude Instance Manager</h2>
         <div className="status">
@@ -345,7 +450,21 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                   key={instance.id}
                   className={`instance-item ${selectedInstance === instance.id ? 'selected' : ''} status-${instance.status}`}
                   onClick={() => {
-                    console.log('Selecting instance:', instance.id);
+                    // TDD London School Fix: Enhanced instance selection validation
+                    if (!instance.id || instance.id === 'undefined' || !instance.id.trim()) {
+                      console.error('Cannot select instance with invalid ID:', instance.id);
+                      setError('Invalid instance ID');
+                      return;
+                    }
+                    
+                    // Validate instance ID format
+                    if (!/^claude-[a-zA-Z0-9]+$/.test(instance.id)) {
+                      console.error('Instance ID does not match expected format:', instance.id);
+                      setError(`Invalid instance ID format: ${instance.id}`);
+                      return;
+                    }
+                    
+                    console.log('Selecting validated instance:', instance.id);
                     
                     // Disconnect from current instance first
                     if (selectedInstance && selectedInstance !== instance.id) {
@@ -375,9 +494,10 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                 >
                   <div className="instance-header">
                     <span className="instance-name">{instance.name}</span>
-                    <span className={`instance-status ${instance.status}`}>
-                      {instance.status}
-                    </span>
+                    <div className={`instance-status status-${instance.status || 'starting'}`}>
+                      <span className={`status-indicator status-${instance.status || 'starting'}`}>●</span>
+                      <span className="status-text">{instance.status || 'starting'}</span>
+                    </div>
                   </div>
                   <div className="instance-info">
                     <span className="instance-id">ID: {instance.id.slice(0, 8)}</span>
@@ -409,7 +529,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                 <pre>
                   {output[selectedInstance] || (
                     currentInstanceId === selectedInstance 
-                      ? `Connected to instance ${selectedInstance.slice(0,8)}...\nReady for input.\n` 
+                      ? `Waiting for real output from Claude instance ${selectedInstance.slice(0,8)}...\n` 
                       : `Connecting to instance ${selectedInstance.slice(0,8)}...\n${connectionType}\n`
                   )}
                 </pre>

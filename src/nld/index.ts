@@ -1,384 +1,164 @@
 /**
- * NLD (Neuro Learning Development) Connection Learning System
- * Main export file for all NLD components
+ * NLD (Neuro-Learning Development) System - Entry Point
+ * 
+ * Complete NLD system for failure pattern detection and prevention across:
+ * - SSE connection failures
+ * - Silent process failures (TTY, authentication, permissions, environment)
+ * - Process I/O capture failures
+ * - Working directory and terminal issues
+ * 
+ * Features:
+ * - Real-time failure monitoring and pattern detection
+ * - Comprehensive anti-pattern databases with prevention strategies
+ * - Neural training data export for claude-flow integration
+ * - TDD prevention strategies and automated test generation
+ * - Silent process failure detection with automated recovery
+ * - Integrated monitoring and reporting system
  */
 
-// Core Components
-export { 
-  ConnectionFailureDetector,
-  type ConnectionFailureContext,
-  type NetworkConditions,
-  type ClientInfo,
-  type ErrorDetails,
-  type ConnectionAttempt,
-  type ConnectionStrategy,
-  type RecoveryContext,
-  type FailurePattern,
-  type ConnectionMetrics
-} from './connection-failure-detector';
+// Core SSE Components
+export { SSEConnectionPatternDetector, SSEConnectionPattern, SSETriggerCondition } from './sse-connection-pattern-detector';
+export { RealTimeSSEFailureMonitor, SSEConnectionMetrics, FailureAlert } from './real-time-sse-failure-monitor';
+export { SSEAntiPatternsDatabase, SSEAntiPattern } from './sse-anti-patterns-database';
+export { TDDSSEPreventionStrategies, TDDSSETestSuite, TDDSSETestCase, MockingStrategy, AssertionPattern } from './tdd-sse-prevention-strategies';
 
-export {
-  ConnectionLearningDatabase,
-  type NLTRecord,
-  type ConnectionLearningRecord,
-  type NeuralFeatures,
-  type StrategyPerformance
-} from './learning-database';
+// Silent Process Failure Components
+export { SilentProcessFailureDetector, SilentProcessMetrics, SilentProcessAlert, SilentProcessPattern, silentProcessDetector } from './silent-process-failure-detector';
+export { SilentProcessAntiPatternsDatabase, SilentProcessAntiPattern, silentProcessAntiPatternsDB } from './silent-process-anti-patterns-database';
+export { TDDSilentProcessPreventionStrategies, SilentProcessTDDTestCase, SilentProcessTDDSuite, tddSilentProcessPrevention } from './tdd-silent-process-prevention-strategies';
+export { SilentProcessNeuralTrainingExport, SilentProcessNeuralRecord, SilentProcessNeuralDataset, silentProcessNeuralExport } from './silent-process-neural-training-export';
 
-export {
-  AdaptiveConnectionManager,
-  type AdaptiveConnectionConfig,
-  type ConnectionHealth,
-  type ConnectionAttemptResult
-} from './adaptive-connection-manager';
+// Process I/O and Terminal Components
+export { ProcessIOAntiPatternsDatabase, ProcessIOFailurePattern } from './process-io-anti-patterns-database';
+export { StdoutCaptureFailureMonitor, StdoutCaptureEvent, StdoutCaptureMetrics, stdoutCaptureMonitor } from './stdout-capture-failure-monitor';
+export { TerminalAntiPatternsDatabase, AntiPattern } from './terminal-anti-patterns-database';
 
-export {
-  NeuralConnectionTrainer,
-  type NeuralTrainingConfig,
-  type TrainingDataPoint,
-  type TrainingLabels,
-  type TrainingMetadata,
-  type ModelPerformance,
-  type PredictionResult
-} from './neural-connection-trainer';
+// Neural Training and Export Systems
+export { NeuralTrainingExportSystem, NeuralTrainingDataset, NeuralTrainingRecord, NeuralArchitectureSpec } from './neural-training-export-system';
 
-export {
-  ClaudeFlowIntegration,
-  type ClaudeFlowConfig,
-  type NeuralTrainingRequest,
-  type TaskOrchestrationRequest
-} from './claude-flow-integration';
+// Integration Systems
+export { NLDSSEIntegrationSystem, NLDSSEValidationResult } from './nld-sse-integration';
+export { NLDSilentProcessIntegrationSystem, NLDSilentProcessConfig, NLDSilentProcessReport, nldSilentProcessIntegration } from './nld-silent-process-integration';
 
-export {
-  NLDPerformanceMonitor,
-  type PerformanceMetric,
-  type PerformanceThreshold,
-  type PerformanceAlert,
-  type PerformanceTrend,
-  type PerformanceReport
-} from './performance-monitor';
-
-export {
-  TroubleshootingEngine,
-  type TroubleshootingRequest,
-  type TroubleshootingSuggestion,
-  type TroubleshootingStep,
-  type TroubleshootingResource,
-  type TroubleshootingResult,
-  type DiagnosticTest,
-  type DiagnosticResult
-} from './troubleshooting-engine';
-
-export {
-  NLDWebSocketIntegration,
-  createNLDWebSocketService,
-  integrateNLDWithWebSocket,
-  type NLDWebSocketConfig,
-  type EnhancedWebSocketMessage
-} from './websocket-integration';
-
-// Utility functions and constants
-export const NLD_VERSION = '1.0.0';
-
-export const DEFAULT_NLD_CONFIG: Partial<NLDWebSocketConfig> = {
-  enableLearning: true,
-  enableAdaptiveRetry: true,
-  enablePerformanceMonitoring: true,
-  enableTroubleshooting: true,
-  fallbackTransports: ['sse', 'polling'],
-  circuitBreakerThreshold: 5,
-  neuralTrainingEnabled: true
-};
-
-export const DEFAULT_PERFORMANCE_MONITOR_CONFIG = {
-  metricsRetentionMs: 24 * 60 * 60 * 1000, // 24 hours
-  monitoringIntervalMs: 10000, // 10 seconds
-  reportingIntervalMs: 300000, // 5 minutes
-  alertingEnabled: true
-};
-
-export const DEFAULT_NEURAL_TRAINING_CONFIG: NeuralTrainingConfig = {
-  batchSize: 50,
-  learningRate: 0.001,
-  epochs: 100,
-  validationSplit: 0.2,
-  modelType: 'classification',
-  featureEngineering: true,
-  autoTuning: true
-};
-
-export const DEFAULT_CLAUDE_FLOW_CONFIG: ClaudeFlowConfig = {
-  mcpServerUrl: 'ws://localhost:3004/mcp',
-  neuralTrainingEnabled: true,
-  memoryNamespace: 'nld_connection',
-  taskOrchestrationEnabled: true,
-  performanceTrackingEnabled: true
-};
+// Deployment and Validation
+export { validateNLDSystem, demonstratePatternDetectionFlow } from './validate-nld-system';
+export { SilentProcessNLDDeployment, deploySilentProcessNLD } from './deploy-silent-process-nld';
 
 /**
- * Create a complete NLD system with all components
+ * Quick Start Guide
+ * ================
+ * 
+ * 1. Initialize the complete NLD system:
+ * ```typescript
+ * import { nldSilentProcessIntegration, NLDSSEIntegrationSystem } from '@/src/nld';
+ * 
+ * // Initialize SSE monitoring
+ * const sseSystem = new NLDSSEIntegrationSystem();
+ * await sseSystem.initialize();
+ * 
+ * // Initialize silent process monitoring
+ * await nldSilentProcessIntegration.initialize();
+ * ```
+ * 
+ * 2. Register processes for monitoring:
+ * ```typescript
+ * // When spawning a new process
+ * nldSilentProcessIntegration.registerProcess(instanceId, processId, command, workingDirectory);
+ * 
+ * // Record process output
+ * nldSilentProcessIntegration.recordProcessOutput(instanceId, 'stdout', data);
+ * nldSilentProcessIntegration.recordProcessInput(instanceId, input);
+ * ```
+ * 
+ * 3. Monitor for failure patterns:
+ * ```typescript
+ * const systemReport = nldSilentProcessIntegration.generateSystemReport();
+ * console.log('System Status:', systemReport.systemStatus);
+ * console.log('Silent Processes:', systemReport.silentProcesses);
+ * console.log('Detected Patterns:', systemReport.detectedPatterns);
+ * ```
+ * 
+ * 4. Run TDD prevention tests:
+ * ```typescript
+ * const testResults = await nldSilentProcessIntegration.runTDDTestSuite();
+ * console.log('TDD Coverage:', testResults.patternsCovered);
+ * ```
+ * 
+ * 5. Deploy complete silent process detection:
+ * ```typescript
+ * import { deploySilentProcessNLD } from '@/src/nld';
+ * 
+ * const deploymentResult = await deploySilentProcessNLD();
+ * console.log('Deployment Status:', deploymentResult.validationResults);
+ * ```
  */
-export function createCompleteNLDSystem(config: {
-  webSocketConfig?: Partial<NLDWebSocketConfig>;
-  performanceConfig?: Partial<any>;
-  neuralConfig?: Partial<NeuralTrainingConfig>;
-  claudeFlowConfig?: Partial<ClaudeFlowConfig>;
-} = {}) {
-  const {
-    webSocketConfig = {},
-    performanceConfig = {},
-    neuralConfig = {},
-    claudeFlowConfig = {}
-  } = config;
-
-  // Create enhanced WebSocket service
-  const { service, nldIntegration } = createNLDWebSocketService({
-    ...DEFAULT_NLD_CONFIG,
-    ...webSocketConfig
-  });
-
-  // Initialize performance monitor
-  const performanceMonitor = new NLDPerformanceMonitor({
-    ...DEFAULT_PERFORMANCE_MONITOR_CONFIG,
-    ...performanceConfig
-  });
-
-  // Initialize neural trainer
-  const neuralTrainer = new NeuralConnectionTrainer({
-    ...DEFAULT_NEURAL_TRAINING_CONFIG,
-    ...neuralConfig
-  });
-
-  // Initialize Claude Flow integration
-  const claudeFlowIntegration = new ClaudeFlowIntegration({
-    ...DEFAULT_CLAUDE_FLOW_CONFIG,
-    ...claudeFlowConfig
-  });
-
-  // Initialize learning database
-  const learningDatabase = new ConnectionLearningDatabase();
-
-  // Initialize troubleshooting engine
-  const troubleshootingEngine = new TroubleshootingEngine(learningDatabase);
-
-  // Start monitoring
-  performanceMonitor.startMonitoring();
-
-  return {
-    webSocketService: service,
-    nldIntegration,
-    performanceMonitor,
-    neuralTrainer,
-    claudeFlowIntegration,
-    learningDatabase,
-    troubleshootingEngine,
-    
-    // Utility methods
-    async shutdown() {
-      performanceMonitor.stopMonitoring();
-      await nldIntegration.shutdown();
-      await claudeFlowIntegration.shutdown();
-    },
-
-    getSystemStatus() {
-      return {
-        nld_integration: nldIntegration.getNLDStatus(),
-        performance_metrics: performanceMonitor.getDashboardData(),
-        connection_health: nldIntegration.getConnectionHealth(),
-        system_statistics: nldIntegration.getStatistics()
-      };
-    },
-
-    async exportAllData() {
-      const nldData = await nldIntegration.exportNLDData();
-      const neuralModels = await neuralTrainer.exportModels();
-      const performanceReport = performanceMonitor.generatePerformanceReport();
-      
-      return {
-        nld_data: nldData,
-        neural_models: neuralModels,
-        performance_report: performanceReport,
-        exported_at: new Date().toISOString(),
-        version: NLD_VERSION
-      };
-    }
-  };
-}
 
 /**
- * Quick setup function for basic NLD integration
+ * Detected SSE Anti-Patterns
+ * ==========================
+ * 
+ * 1. Status SSE Zero Connections While Terminal Connected (Critical)
+ *    - Symptoms: UI stuck on "starting", terminal works, status SSE = 0 connections
+ *    - Prevention: Establish status SSE before terminal SSE
+ *    - Recovery: Restart status SSE connections
+ * 
+ * 2. Terminal Input Forwarding Breakdown (High)
+ *    - Symptoms: Input accepted but no command responses
+ *    - Prevention: Input path validation before sending
+ *    - Recovery: Reset terminal input connection
+ * 
+ * 3. Mixed Connection State Inconsistency (Medium)
+ *    - Symptoms: Frontend/backend connection state mismatch
+ *    - Prevention: Connection state synchronization
+ *    - Recovery: Force state reconciliation
+ * 
+ * 4. UI State Lock on Instance Status (High)
+ *    - Symptoms: Status stuck despite backend showing "running"
+ *    - Prevention: Status update timeout detection
+ *    - Recovery: Force status refresh
+ * 
+ * 5. Connection Recovery Loop Failure (Medium)
+ *    - Symptoms: Infinite reconnection attempts
+ *    - Prevention: Circuit breaker pattern
+ *    - Recovery: Manual recovery override
  */
-export function quickSetupNLD(options: {
-  enableAll?: boolean;
-  learningOnly?: boolean;
-  monitoringOnly?: boolean;
-} = {}) {
-  const { enableAll = true, learningOnly = false, monitoringOnly = false } = options;
-
-  let config: Partial<NLDWebSocketConfig>;
-
-  if (learningOnly) {
-    config = {
-      enableLearning: true,
-      enableAdaptiveRetry: false,
-      enablePerformanceMonitoring: false,
-      enableTroubleshooting: false,
-      neuralTrainingEnabled: true
-    };
-  } else if (monitoringOnly) {
-    config = {
-      enableLearning: false,
-      enableAdaptiveRetry: false,
-      enablePerformanceMonitoring: true,
-      enableTroubleshooting: true,
-      neuralTrainingEnabled: false
-    };
-  } else {
-    config = DEFAULT_NLD_CONFIG;
-  }
-
-  return createNLDWebSocketService(config);
-}
 
 /**
- * Utility function to check NLD system compatibility
+ * TDD Implementation Priority
+ * ===========================
+ * 
+ * Critical:
+ * - Connection establishment order validation tests
+ * - Connection state synchronization tests
+ * 
+ * High:
+ * - UI status update timeout tests  
+ * - Terminal input forwarding validation tests
+ * 
+ * Medium:
+ * - Connection recovery mechanism tests
+ * - Performance benchmark tests
  */
-export function checkNLDCompatibility(): {
-  compatible: boolean;
-  issues: string[];
-  recommendations: string[];
-} {
-  const issues: string[] = [];
-  const recommendations: string[] = [];
-
-  // Check for required APIs
-  if (typeof WebSocket === 'undefined') {
-    issues.push('WebSocket API not available');
-    recommendations.push('Ensure WebSocket support is available in your environment');
-  }
-
-  if (typeof EventSource === 'undefined') {
-    issues.push('EventSource API not available');
-    recommendations.push('Consider using a polyfill for EventSource support');
-  }
-
-  if (typeof navigator === 'undefined') {
-    issues.push('Navigator API not available');
-    recommendations.push('Some network detection features may not work');
-  }
-
-  // Check for Node.js specific features
-  if (typeof process !== 'undefined') {
-    if (!process.hrtime) {
-      issues.push('High-resolution time measurement not available');
-      recommendations.push('Performance timing may be less accurate');
-    }
-  }
-
-  return {
-    compatible: issues.length === 0,
-    issues,
-    recommendations
-  };
-}
 
 /**
- * Development utilities
+ * Neural Training Capabilities
+ * ============================
+ * 
+ * - Pattern classification and prediction
+ * - Failure probability estimation
+ * - Recovery action effectiveness tracking
+ * - TDD test case generation
+ * - Continuous learning from user feedback
+ * - Integration with claude-flow neural network
  */
-export const NLDDevUtils = {
-  /**
-   * Create mock failure context for testing
-   */
-  createMockFailureContext(overrides: Partial<ConnectionFailureContext> = {}): ConnectionFailureContext {
-    return {
-      connectionType: 'websocket',
-      endpoint: 'ws://localhost:8000/ws',
-      timestamp: Date.now(),
-      networkConditions: {
-        connectionType: 'wifi',
-        isOnline: true
-      },
-      clientInfo: {
-        userAgent: 'test-agent',
-        platform: 'test',
-        isMobile: false,
-        supportedProtocols: ['websocket']
-      },
-      errorDetails: {
-        code: 'ETIMEDOUT',
-        message: 'Connection timeout',
-        type: 'timeout'
-      },
-      attemptHistory: [],
-      ...overrides
-    };
-  },
 
-  /**
-   * Create mock connection strategy for testing
-   */
-  createMockStrategy(overrides: Partial<ConnectionStrategy> = {}): ConnectionStrategy {
-    return {
-      type: 'exponential-backoff',
-      baseDelay: 1000,
-      maxDelay: 30000,
-      jitter: true,
-      maxAttempts: 5,
-      ...overrides
-    };
-  },
+// Claude Process I/O Components (NEW)
+export { claudeProcessIODetector, ClaudeProcessIOMetrics, ClaudeProcessIOErrorPattern, ClaudeProcessIOTriggerCondition } from './claude-process-io-failure-detector';
+export { claudeProcessIOMonitor, ClaudeProcessIOAlert } from './claude-process-io-real-time-monitor';
+export { claudeProcessIONeuralDataset, ClaudeProcessIONeuralRecord, ClaudeProcessIONeuralDataset } from './claude-process-io-neural-training-dataset';
+export { claudeProcessIOTDDPrevention, ClaudeProcessIOTDDTestCase, ClaudeProcessIOTDDSuite } from './claude-process-io-tdd-prevention-strategies';
+export { claudeProcessIOIntegration, ClaudeProcessIOSystemReport } from './claude-process-io-integration-system';
+export { claudeProcessIODeployment, ClaudeProcessIODeploymentResult } from './claude-process-io-deployment-demo';
 
-  /**
-   * Simulate network conditions for testing
-   */
-  simulateNetworkConditions(type: 'slow-2g' | '2g' | '3g' | '4g' | 'wifi' | 'ethernet'): NetworkConditions {
-    const conditionsMap = {
-      'slow-2g': { latency: 2000, bandwidth: 50 },
-      '2g': { latency: 1000, bandwidth: 250 },
-      '3g': { latency: 500, bandwidth: 750 },
-      '4g': { latency: 100, bandwidth: 10000 },
-      'wifi': { latency: 50, bandwidth: 50000 },
-      'ethernet': { latency: 10, bandwidth: 100000 }
-    };
-
-    const conditions = conditionsMap[type];
-    return {
-      connectionType: type,
-      isOnline: true,
-      latency: conditions.latency,
-      bandwidth: conditions.bandwidth,
-      effectiveType: type
-    };
-  }
-};
-
-// Export version and metadata
-export const NLD_METADATA = {
-  version: NLD_VERSION,
-  name: 'NLD Connection Learning System',
-  description: 'Intelligent connection failure learning and optimization system',
-  author: 'Claude Code',
-  license: 'MIT',
-  repository: 'https://github.com/ruvnet/claude-flow',
-  documentation: '/docs/nld-connection-learning-system.md',
-  components: [
-    'ConnectionFailureDetector',
-    'ConnectionLearningDatabase', 
-    'AdaptiveConnectionManager',
-    'NeuralConnectionTrainer',
-    'ClaudeFlowIntegration',
-    'NLDPerformanceMonitor',
-    'TroubleshootingEngine',
-    'NLDWebSocketIntegration'
-  ],
-  features: [
-    'Automatic failure pattern detection',
-    'Neural learning from connection data',
-    'Adaptive retry strategies',
-    'Intelligent troubleshooting',
-    'Performance monitoring',
-    'Claude-flow integration',
-    'Real-time optimization',
-    'Comprehensive analytics'
-  ]
-};
+// Default export for convenience
+export default NLDSSEIntegrationSystem;

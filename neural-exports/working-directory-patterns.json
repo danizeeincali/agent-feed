@@ -1,0 +1,20 @@
+[
+  {
+    "input": {
+      "taskType": "directory-spawning",
+      "buttonType": "prod/claude",
+      "codePattern": "const workingDir = '/workspaces/agent-feed';",
+      "antiPatternType": "HARDCODED_WORKING_DIR"
+    },
+    "output": {
+      "failureProbability": 0.85,
+      "recommendedFix": "Make workingDir dynamic based on button type: prod -> /workspaces/agent-feed/prod",
+      "preventionStrategy": "Use dynamic directory mapping based on button type"
+    },
+    "metadata": {
+      "recordId": "wd-1756302630138",
+      "classification": "DIRECTORY_CONFIGURATION_HARDCODING",
+      "tddFactor": false
+    }
+  }
+]

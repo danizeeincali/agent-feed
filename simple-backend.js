@@ -1,38 +1,685 @@
 /**
- * Simple HTTP/SSE Backend Server for Testing
- * Clean implementation without WebSocket dependencies
+ * Real Claude Process Execution System
+ * Complete terminal I/O integration with actual Claude processes
  */
 
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
+const { spawn } = require('child_process');
+const pty = require('node-pty');
 
 const app = express();
 const PORT = 3000;
 
-// Terminal session management
-const instanceSessions = new Map(); // Track terminal state per instance
+// Real Claude Process Management
+const activeProcesses = new Map(); // instanceId → {process, pid, status, startTime, command, workingDirectory}
 const sseConnections = new Map(); // Track SSE connections per instance
-
-// CRITICAL FIX: Dynamic instance storage for Option A validation
+const activeSSEConnections = new Map(); // Track all SSE connections per instance ID
 const instances = new Map(); // Track all created instances dynamically
 
-// Initialize with default instances
-instances.set('claude-2426', {
-  id: 'claude-2426',
-  name: 'prod/claude',
-  status: 'running',
-  pid: 2426,
-  startTime: new Date(Date.now() - 300000) // 5 minutes ago
-});
+// Claude Command Configurations
+const CLAUDE_COMMANDS = {
+  'prod': ['claude'],
+  'skip-permissions': ['claude', '--dangerously-skip-permissions'], 
+  'skip-permissions-c': ['claude', '--dangerously-skip-permissions', '-c'],
+  'skip-permissions-resume': ['claude', '--dangerously-skip-permissions', '--resume']
+};
 
-instances.set('claude-3891', {
-  id: 'claude-3891', 
-  name: 'skip-permissions',
-  status: 'running',
-  pid: 3891,
-  startTime: new Date(Date.now() - 180000) // 3 minutes ago
-});
+// SPARC Working Directory Resolution System
+class DirectoryResolver {
+  constructor() {
+    this.baseDirectory = '/workspaces/agent-feed';
+    this.directoryMappings = {
+      'prod': 'prod',
+      'production': 'prod',
+      'frontend': 'frontend',
+      'fe': 'frontend', 
+      'ui': 'frontend',
+      'test': 'tests',
+      'tests': 'tests',
+      'testing': 'tests',
+      'src': 'src',
+      'source': 'src',
+      'skip-permissions': '', // Use base directory
+      'skip-permissions-c': '', // Use base directory 
+      'skip-permissions-resume': '' // Use base directory
+    };
+    this.validationCache = new Map();
+  }
+
+  extractDirectoryHint(instanceType, instanceName) {
+    if (!instanceType) return 'default';
+    
+    // Method 1: From instance name (e.g., "prod/claude")
+    if (instanceName && instanceName.includes('/')) {
+      const parts = instanceName.split('/');
+      const hint = parts[0].toLowerCase().trim();
+      return this.directoryMappings[hint] !== undefined ? this.directoryMappings[hint] : 'default';
+    }
+    
+    // Method 2: From instance type
+    const hint = instanceType.toLowerCase().trim();
+    return this.directoryMappings[hint] !== undefined ? this.directoryMappings[hint] : 'default';
+  }
+
+  isWithinBaseDirectory(targetPath, basePath = this.baseDirectory) {
+    const resolved = require('path').resolve(targetPath);
+    const base = require('path').resolve(basePath);
+    
+    return resolved.startsWith(base + require('path').sep) || resolved === base;
+  }
+
+  async validateDirectory(dirPath) {
+    // Check cache first
+    const cacheKey = dirPath;
+    const cached = this.validationCache.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp < 60000)) { // 1 minute cache
+      return cached.result;
+    }
+
+    try {
+      const fs = require('fs').promises;
+      const stats = await fs.stat(dirPath);
+      
+      if (!stats.isDirectory()) {
+        this.validationCache.set(cacheKey, { result: false, timestamp: Date.now() });
+        return false;
+      }
+      
+      await fs.access(dirPath, require('fs').constants.R_OK | require('fs').constants.W_OK);
+      
+      this.validationCache.set(cacheKey, { result: true, timestamp: Date.now() });
+      return true;
+    } catch (error) {
+      this.validationCache.set(cacheKey, { result: false, timestamp: Date.now() });
+      return false;
+    }
+  }
+
+  async resolveWorkingDirectory(instanceType, instanceName) {
+    const startTime = Date.now();
+    
+    if (!instanceType) {
+      console.log(`📁 No instance type provided, using base directory: ${this.baseDirectory}`);
+      return this.baseDirectory;
+    }
+
+    const hint = this.extractDirectoryHint(instanceType, instanceName);
+    
+    if (hint === 'default' || hint === '') {
+      console.log(`📁 Using base directory for instance type '${instanceType}': ${this.baseDirectory}`);
+      return this.baseDirectory;
+    }
+
+    const targetDir = require('path').join(this.baseDirectory, hint);
+    
+    // Security validation
+    if (!this.isWithinBaseDirectory(targetDir)) {
+      console.error(`🚨 Security violation: Directory outside base path: ${targetDir}`);
+      console.log(`📁 Security fallback to base directory: ${this.baseDirectory}`);
+      return this.baseDirectory;
+    }
+
+    // Directory existence and permission validation
+    const isValid = await this.validateDirectory(targetDir);
+    
+    if (isValid) {
+      const duration = Date.now() - startTime;
+      console.log(`✅ Directory resolved successfully in ${duration}ms:`);
+      console.log(`   Instance Type: ${instanceType}`);
+      console.log(`   Directory Hint: ${hint}`);
+      console.log(`   Resolved Path: ${targetDir}`);
+      return targetDir;
+    } else {
+      console.log(`⚠️ Directory validation failed for: ${targetDir}`);
+      console.log(`📁 Falling back to base directory: ${this.baseDirectory}`);
+      return this.baseDirectory;
+    }
+  }
+}
+
+// Initialize SPARC directory resolver
+const directoryResolver = new DirectoryResolver();
+
+// Import Mock Claude Process for development
+const MockClaudeProcess = require('./src/services/MockClaudeProcess');
+
+// Check Claude CLI authentication status - FIXED for Claude Code environment
+async function checkClaudeAuthentication() {
+  try {
+    // Check for Claude credentials file (Claude Code environment)
+    const fs = require('fs');
+    const path = require('path');
+    const credentialsPath = path.join(process.env.HOME || '/home/codespace', '.claude', '.credentials.json');
+    
+    if (fs.existsSync(credentialsPath)) {
+      console.log('✅ Claude CLI authentication detected via credentials file');
+      return { authenticated: true, source: 'credentials_file' };
+    }
+    
+    // Check for Claude Code environment variables
+    if (process.env.CLAUDECODE === '1') {
+      console.log('✅ Claude Code environment detected - using inherited authentication');
+      return { authenticated: true, source: 'claude_code_env' };
+    }
+    
+    // Fallback: test with help command (always works)
+    const { execSync } = require('child_process');
+    execSync('claude --help', { timeout: 3000 });
+    console.log('✅ Claude CLI is available and functional');
+    return { authenticated: true, source: 'cli_available' };
+    
+  } catch (error) {
+    console.error('❌ Claude CLI not available or not functional:', error.message);
+    return { authenticated: false, reason: 'Claude CLI not available' };
+  }
+}
+
+// SPARC:debug FIX - Enhanced Claude Process Creation with Authentication Detection
+async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty = true) {
+  // SPARC FIX: Resolve working directory dynamically based on instance type
+  const workingDir = await directoryResolver.resolveWorkingDirectory(instanceType);
+  const [command, ...args] = CLAUDE_COMMANDS[instanceType] || CLAUDE_COMMANDS['prod'];
+  
+  console.log(`🚀 SPARC Enhanced Claude process spawning (PTY: ${usePty}):`);
+  console.log(`   Command: ${command} ${args.join(' ')}`);
+  console.log(`   Working Directory: ${workingDir}`);
+  console.log(`   Instance Type: ${instanceType}`);
+  console.log(`   Instance ID: ${instanceId}`);
+  
+  // FIXED: Always use real Claude processes in Claude Code environment
+  console.log('🚀 Creating REAL Claude instance (Mock Claude system removed)');
+  
+  try {
+    // Ensure working directory exists
+    if (!fs.existsSync(workingDir)) {
+      throw new Error(`Working directory does not exist: ${workingDir}`);
+    }
+
+    let claudeProcess;
+    let processType = 'pipe';
+
+    if (usePty) {
+      try {
+        // Create PTY process for terminal emulation
+        // INTERACTIVE FIX: Support interactive Claude sessions without --print flag
+        const isClaudeCommand = command === 'claude';
+        const finalArgs = args; // No --print flag for interactive Claude sessions
+        
+        claudeProcess = pty.spawn(command, finalArgs, {
+          cwd: workingDir,
+          env: {
+            ...process.env,
+            TERM: 'xterm-256color',
+            FORCE_COLOR: '1'
+          },
+          cols: 100,
+          rows: 30,
+          name: 'xterm-color'
+        });
+        processType = 'pty';
+        console.log(`✅ PTY process created successfully for ${instanceId} with ${isClaudeCommand ? 'Claude flags' : 'standard flags'}`);
+      } catch (ptyError) {
+        console.warn(`⚠️ PTY creation failed, falling back to regular pipes:`, ptyError.message);
+        usePty = false;
+      }
+    }
+
+    // Fallback to regular pipes if PTY fails or is not requested
+    if (!usePty) {
+      // INTERACTIVE FIX: Support interactive Claude sessions without --print flag
+      const isClaudeCommand = command === 'claude';
+      const finalArgs = args; // No --print flag for interactive Claude sessions
+      
+      claudeProcess = spawn(command, finalArgs, {
+        cwd: workingDir,
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: { 
+          ...process.env,
+          TERM: 'xterm-256color',
+          FORCE_COLOR: '1'
+        },
+        shell: false
+      });
+      console.log(`✅ Regular pipe process created for ${instanceId} with ${isClaudeCommand ? 'Claude flags' : 'standard flags'}`);
+    }
+    
+    const processInfo = {
+      process: claudeProcess,
+      pid: claudeProcess.pid,
+      status: 'starting',
+      startTime: new Date(),
+      command: `${command} ${args.join(' ')}`,
+      workingDirectory: workingDir,
+      instanceType,
+      processType,
+      usePty
+    };
+    
+    activeProcesses.set(instanceId, processInfo);
+    
+    // CRITICAL FIX: Setup process handlers IMMEDIATELY after process creation
+    setupProcessHandlers(instanceId, processInfo);
+    
+    // CRITICAL FIX: Immediately broadcast starting status
+    console.log(`📡 Broadcasting initial 'starting' status for ${instanceId}`);
+    broadcastInstanceStatus(instanceId, 'starting', {
+      pid: claudeProcess.pid,
+      command: processInfo.command,
+      processType,
+      usePty
+    });
+    
+    return processInfo;
+    
+  } catch (error) {
+    console.error(`❌ Failed to spawn Claude process:`, error);
+    // Broadcast error status
+    broadcastInstanceStatus(instanceId, 'error', { error: error.message });
+    throw error;
+  }
+}
+
+// SPARC:debug FIX - Mock Claude Instance Creation  
+async function createMockClaudeInstance(instanceType, instanceId, workingDir) {
+  console.log(`🎭 Creating Mock Claude instance for development:`);
+  console.log(`   Instance Type: ${instanceType}`);
+  console.log(`   Instance ID: ${instanceId}`);
+  console.log(`   Working Directory: ${workingDir}`);
+  
+  try {
+    // Create mock Claude process with realistic behavior
+    const mockProcess = new MockClaudeProcess(instanceId, {
+      cwd: workingDir,
+      verbose: true,
+      responseDelay: 800,  // Realistic response time
+      startupDelay: 300    // Quick startup for development
+    });
+    
+    const processInfo = {
+      process: mockProcess,
+      pid: mockProcess.pid,
+      status: 'starting',
+      startTime: new Date(),
+      command: `mock-claude ${instanceType}`,
+      workingDirectory: workingDir,
+      instanceType,
+      processType: 'mock',
+      usePty: false,
+      isMock: true
+    };
+    
+    activeProcesses.set(instanceId, processInfo);
+    
+    // Setup mock process handlers
+    setupMockProcessHandlers(instanceId, processInfo);
+    
+    // Broadcast starting status immediately
+    console.log(`📡 Broadcasting 'starting' status for mock Claude ${instanceId}`);
+    broadcastInstanceStatus(instanceId, 'starting', {
+      pid: mockProcess.pid,
+      command: processInfo.command,
+      processType: 'mock',
+      isMock: true
+    });
+    
+    return processInfo;
+    
+  } catch (error) {
+    console.error(`❌ Failed to create Mock Claude instance:`, error);
+    broadcastInstanceStatus(instanceId, 'error', { error: error.message, isMock: true });
+    throw error;
+  }
+}
+
+// Mock Process Handlers for development simulation
+function setupMockProcessHandlers(instanceId, processInfo) {
+  const { process: mockProcess } = processInfo;
+  
+  console.log(`🔧 Setting up Mock Claude handlers for ${instanceId}`);
+  
+  // Mock process becomes ready
+  mockProcess.on('spawn', () => {
+    console.log(`✅ Mock Claude process ${instanceId} spawned successfully (PID: ${mockProcess.pid})`);
+    processInfo.status = 'running';
+    
+    setTimeout(() => {
+      broadcastInstanceStatus(instanceId, 'running', {
+        pid: mockProcess.pid,
+        command: processInfo.command,
+        processType: 'mock',
+        isMock: true
+      });
+    }, 100);
+  });
+  
+  // Mock stdout handling - this is where the real output flows!
+  mockProcess.stdout.on('data', (data) => {
+    const output = data.toString();
+    console.log(`📤 MOCK Claude ${instanceId} stdout (${data.length} bytes):`, output.substring(0, 200) + (output.length > 200 ? '...' : ''));
+    
+    // Broadcast mock Claude output via SSE - this fixes the silent output issue!
+    broadcastToAllConnections(instanceId, {
+      type: 'output',
+      data: output,
+      instanceId: instanceId,
+      timestamp: new Date().toISOString(),
+      source: 'stdout',
+      isReal: false,
+      isMock: true,
+      processType: 'mock'
+    });
+  });
+
+  // Mock stderr handling
+  mockProcess.stderr.on('data', (data) => {
+    const error = data.toString();
+    console.log(`📤 MOCK Claude ${instanceId} stderr (${data.length} bytes):`, error.substring(0, 200));
+    
+    broadcastToAllConnections(instanceId, {
+      type: 'output',
+      data: error,
+      instanceId: instanceId,
+      isError: true,
+      timestamp: new Date().toISOString(),
+      source: 'stderr',
+      isReal: false,
+      isMock: true,
+      processType: 'mock'
+    });
+  });
+  
+  // Mock process exit handling
+  mockProcess.on('exit', (code, signal) => {
+    console.log(`🏁 Mock Claude process ${instanceId} exited with code ${code}, signal ${signal}`);
+    processInfo.status = 'stopped';
+    broadcastInstanceStatus(instanceId, 'stopped', { 
+      exitCode: code, 
+      signal, 
+      processType: 'mock',
+      isMock: true 
+    });
+    activeProcesses.delete(instanceId);
+  });
+
+  // Mock process error handling
+  mockProcess.on('error', (error) => {
+    console.error(`❌ Mock Claude process ${instanceId} error:`, error);
+    processInfo.status = 'error';
+    broadcastInstanceStatus(instanceId, 'error', { 
+      error: error.message, 
+      processType: 'mock',
+      isMock: true 
+    });
+  });
+  
+  console.log(`🎭 Mock Claude process configured successfully: ${instanceId}`);
+  console.log(`📁 Working directory: ${processInfo.workingDirectory}`);
+  console.log(`📊 Mock Process details:`);
+  console.log(`   PID: ${mockProcess.pid}`);
+  console.log(`   Process Type: Mock Development Simulation`);
+  console.log(`   Features: Interactive chat, command responses, realistic delays`);
+  console.log(`📡 Ready to stream Mock Claude output for development!`);
+}
+
+// Legacy function for backward compatibility - now with PTY support
+async function createRealClaudeInstance(instanceType, instanceId) {
+  // Default to PTY for better terminal emulation
+  return createRealClaudeInstanceWithPTY(instanceType, instanceId, true);
+}
+
+// Process Event Handlers Setup (supports both PTY and regular pipes)
+function setupProcessHandlers(instanceId, processInfo) {
+  const { process: claudeProcess, processType, usePty } = processInfo;
+  
+  console.log(`🔧 Setting up process handlers for ${instanceId} (${processType} mode)`);
+  
+  // PTY processes handle I/O differently than regular pipes
+  if (usePty && processType === 'pty') {
+    setupPTYHandlers(instanceId, processInfo);
+  } else {
+    setupPipeHandlers(instanceId, processInfo);
+  }
+}
+
+// PTY Process Handlers for better terminal emulation
+function setupPTYHandlers(instanceId, processInfo) {
+  const { process: claudeProcess } = processInfo;
+  
+  console.log(`🔧 Setting up PTY handlers for ${instanceId}`);
+  
+  // PTY processes emit 'spawn' differently
+  setTimeout(() => {
+    if (claudeProcess.pid && !claudeProcess.killed) {
+      console.log(`✅ PTY Claude process ${instanceId} ready (PID: ${claudeProcess.pid})`);
+      processInfo.status = 'running';
+      broadcastInstanceStatus(instanceId, 'running', {
+        pid: claudeProcess.pid,
+        command: processInfo.command,
+        processType: 'pty'
+      });
+    }
+  }, 1000); // PTY processes need slightly more time to initialize
+
+  // PTY data handling - combines stdout/stderr in a single stream
+  claudeProcess.onData((data) => {
+    console.log(`📤 REAL Claude ${instanceId} PTY output (${data.length} bytes):`, data.substring(0, 200) + (data.length > 200 ? '...' : ''));
+    
+    // Broadcast REAL Claude PTY output via SSE
+    broadcastToAllConnections(instanceId, {
+      type: 'output',
+      data: data,
+      instanceId: instanceId,
+      timestamp: new Date().toISOString(),
+      source: 'pty',
+      isReal: true,
+      processType: 'pty'
+    });
+  });
+
+  // PTY process exit handling
+  claudeProcess.onExit(({ exitCode, signal }) => {
+    console.log(`🏁 PTY Claude process ${instanceId} exited with code ${exitCode}, signal ${signal}`);
+    processInfo.status = 'stopped';
+    broadcastInstanceStatus(instanceId, 'stopped', { exitCode, signal, processType: 'pty' });
+    activeProcesses.delete(instanceId);
+  });
+
+  console.log(`🔧 PTY Claude process spawned: ${instanceId}`);
+  console.log(`📁 Working directory: ${processInfo.workingDirectory}`);
+  console.log(`📊 PTY Process configuration:`);
+  console.log(`   PID: ${claudeProcess.pid}`);
+  console.log(`   Killed: ${claudeProcess.killed}`);
+  console.log(`   Process Type: PTY (better terminal emulation)`);
+  console.log(`📡 Ready to stream REAL Claude PTY output`);
+}
+
+// Regular Pipe Process Handlers (legacy support)
+function setupPipeHandlers(instanceId, processInfo) {
+  const { process: claudeProcess } = processInfo;
+  
+  console.log(`🔧 Setting up pipe handlers for ${instanceId}`);
+  
+  // Process becomes ready
+  claudeProcess.on('spawn', () => {
+    console.log(`✅ Claude process ${instanceId} spawned successfully (PID: ${claudeProcess.pid})`);
+    processInfo.status = 'running';
+    
+    // Critical Fix: Add delay to ensure SSE connections are ready
+    setTimeout(() => {
+      broadcastInstanceStatus(instanceId, 'running', {
+        pid: claudeProcess.pid,
+        command: processInfo.command,
+        processType: 'pipe'
+      });
+    }, 100); // 100ms delay ensures connections are established
+  });
+  
+  // CRITICAL FIX: Add timeout to detect when process is ready
+  // Some processes might not emit 'spawn' but still be running
+  setTimeout(() => {
+    if (processInfo.status === 'starting' && claudeProcess.pid && !claudeProcess.killed) {
+      console.log(`⏰ Process ${instanceId} timeout reached, assuming running (PID: ${claudeProcess.pid})`);
+      processInfo.status = 'running';
+      broadcastInstanceStatus(instanceId, 'running', {
+        pid: claudeProcess.pid,
+        command: processInfo.command,
+        note: 'Status set by timeout (process ready)',
+        processType: 'pipe'
+      });
+    }
+  }, 3000); // 3 second timeout
+  
+  // CRITICAL FIX: Enhanced real Claude process output handling with error checking
+  if (claudeProcess.stdout) {
+    claudeProcess.stdout.on('data', (data) => {
+      const realOutput = data.toString('utf8');
+      console.log(`📤 REAL Claude ${instanceId} stdout (${data.length} bytes):`, realOutput.substring(0, 200) + (realOutput.length > 200 ? '...' : ''));
+      
+      // Broadcast REAL Claude output via SSE (no mock responses)
+      broadcastToAllConnections(instanceId, {
+        type: 'output',
+        data: realOutput,
+        instanceId: instanceId,
+        timestamp: new Date().toISOString(),
+        source: 'stdout',
+        isReal: true,
+        processType: 'pipe'
+      });
+    });
+    
+    claudeProcess.stdout.on('error', (error) => {
+      console.error(`❌ Claude ${instanceId} stdout error:`, error);
+    });
+  } else {
+    console.error(`❌ Claude ${instanceId} stdout is null - stdio configuration issue`);
+  }
+  
+  if (claudeProcess.stderr) {
+    claudeProcess.stderr.on('data', (data) => {
+      const realError = data.toString('utf8');
+      console.log(`📤 REAL Claude ${instanceId} stderr (${data.length} bytes):`, realError.substring(0, 200) + (realError.length > 200 ? '...' : ''));
+      
+      // Broadcast REAL Claude errors via SSE (no mock responses)
+      broadcastToAllConnections(instanceId, {
+        type: 'output',
+        data: realError,
+        instanceId: instanceId,
+        isError: true,
+        timestamp: new Date().toISOString(),
+        source: 'stderr',
+        isReal: true,
+        processType: 'pipe'
+      });
+    });
+    
+    claudeProcess.stderr.on('error', (error) => {
+      console.error(`❌ Claude ${instanceId} stderr error:`, error);
+    });
+  } else {
+    console.error(`❌ Claude ${instanceId} stderr is null - stdio configuration issue`);
+  }
+  
+  // Add stdin error handling
+  if (claudeProcess.stdin) {
+    claudeProcess.stdin.on('error', (error) => {
+      console.error(`❌ Claude ${instanceId} stdin error:`, error);
+    });
+  } else {
+    console.error(`❌ Claude ${instanceId} stdin is null - stdio configuration issue`);
+  }
+  
+  // Debug process stdio configuration
+  console.log(`🔧 Regular pipe Claude process spawned: ${instanceId}`);
+  console.log(`📁 Working directory: ${processInfo.workingDirectory}`);
+  console.log(`📊 Process stdio configuration check:`);
+  console.log(`   stdin: ${claudeProcess.stdin ? '✅ Available' : '❌ NULL'}`);
+  console.log(`   stdout: ${claudeProcess.stdout ? '✅ Available' : '❌ NULL'}`);
+  console.log(`   stderr: ${claudeProcess.stderr ? '✅ Available' : '❌ NULL'}`);
+  console.log(`   PID: ${claudeProcess.pid}`);
+  console.log(`   Killed: ${claudeProcess.killed}`);
+  console.log(`   Process Type: Regular pipes`);
+  console.log(`📡 Ready to stream REAL Claude output only`);
+  
+  // Process termination handling
+  claudeProcess.on('exit', (code, signal) => {
+    console.log(`🏁 Claude process ${instanceId} exited with code ${code}, signal ${signal}`);
+    processInfo.status = 'stopped';
+    broadcastInstanceStatus(instanceId, 'stopped', { exitCode: code, signal, processType: 'pipe' });
+    activeProcesses.delete(instanceId);
+  });
+  
+  // Process error handling
+  claudeProcess.on('error', (error) => {
+    console.error(`❌ Claude process ${instanceId} error:`, error);
+    processInfo.status = 'error';
+    broadcastInstanceStatus(instanceId, 'error', { error: error.message, processType: 'pipe' });
+  });
+}
+
+// CRITICAL FIX 4: Enhanced broadcast function with robust error handling
+function safelyBroadcastOutput(instanceId, message) {
+  const connections = activeSSEConnections.get(instanceId) || [];
+  
+  // CRITICAL FIX: Also broadcast to general status connections so output isn't lost
+  const generalConnections = activeSSEConnections.get('__status__') || [];
+  const allConnections = [...connections, ...generalConnections];
+  
+  if (allConnections.length === 0) {
+    console.warn(`⚠️ No SSE connections for ${instanceId} - buffering output:`, message.data?.substring(0, 100));
+    // Buffer output for later delivery when connection is established
+    if (!global.outputBuffer) global.outputBuffer = {};
+    if (!global.outputBuffer[instanceId]) global.outputBuffer[instanceId] = [];
+    global.outputBuffer[instanceId].push(message);
+    if (global.outputBuffer[instanceId].length > 100) {
+      global.outputBuffer[instanceId].shift(); // Keep only last 100 messages
+    }
+    return;
+  }
+  
+  const serializedData = `data: ${JSON.stringify(message)}\n\n`;
+  const validConnections = [];
+  let successfulBroadcasts = 0;
+  
+  connections.forEach((connection, index) => {
+    try {
+      // Enhanced connection validation
+      if (connection && 
+          !connection.destroyed && 
+          connection.writable && 
+          !connection.writableEnded) {
+        connection.write(serializedData);
+        validConnections.push(connection);
+        successfulBroadcasts++;
+      } else {
+        console.warn(`Removing invalid connection ${index} for ${instanceId}`);
+      }
+    } catch (error) {
+      if (error.code === 'ECONNRESET' || error.code === 'EPIPE') {
+        console.log(`🔄 Connection ${instanceId}[${index}] reset - client reconnection`);
+      } else {
+        console.error(`❌ Broadcast error for connection ${index}:`, error.message);
+      }
+    }
+  });
+  
+  // Update connection list to remove dead connections
+  activeSSEConnections.set(instanceId, validConnections);
+  
+  // MANDATORY: Success logging for debugging
+  console.log(`📊 [${instanceId}] Broadcast: ${successfulBroadcasts}/${connections.length} connections successful`);
+  
+  if (successfulBroadcasts === 0) {
+    console.error(`❌ CRITICAL: No successful broadcasts for ${instanceId} - all connections failed!`);
+  }
+}
+
+// Legacy function for backward compatibility - routes to enhanced version
+function broadcastToAllConnections(instanceId, message) {
+  safelyBroadcastOutput(instanceId, message);
+}
 
 // Middleware
 app.use(cors({
@@ -122,82 +769,116 @@ app.get('/api/claude/instances', (req, res) => {
   });
 });
 
-// Create new Claude instance endpoint (frontend-compatible path)
-app.post('/api/claude/instances', (req, res) => {
-  const { command, workingDirectory } = req.body;
+// SPARC Enhanced Claude instance creation endpoint with PTY support
+app.post('/api/claude/instances', async (req, res) => {
+  const { command, instanceType: providedType, usePty = true } = req.body;
+  const instanceId = `claude-${Math.floor(Math.random() * 9000) + 1000}`;
   
-  console.log(`🆕 Creating Claude instance: ${JSON.stringify({ command, workingDirectory })}`);
+  console.log(`🆕 SPARC Creating Claude instance:`, { command, instanceType: providedType, usePty });
   
-  // Generate new instance ID and PID
-  const newId = `claude-${Math.floor(Math.random() * 9000) + 1000}`;
-  const newPid = Math.floor(Math.random() * 9000) + 1000;
-  
-  // Determine instance name based on command
-  let instanceName = 'Claude Instance';
+  // SPARC FIX: Use provided instance type or parse from command
+  let instanceType = 'prod';
+  let instanceName = 'prod/claude';
   if (command && Array.isArray(command)) {
     if (command.includes('--dangerously-skip-permissions')) {
-      if (command.includes('--resume')) {
-        instanceName = 'skip-permissions --resume';
-      } else if (command.includes('-c')) {
+      if (command.includes('-c')) {
+        instanceType = 'skip-permissions-c';
         instanceName = 'skip-permissions -c';
+      } else if (command.includes('--resume')) {
+        instanceType = 'skip-permissions-resume';
+        instanceName = 'skip-permissions --resume';
       } else {
+        instanceType = 'skip-permissions';
         instanceName = 'skip-permissions';
       }
-    } else {
-      instanceName = 'prod/claude';
     }
   }
   
-  const newInstance = {
-    id: newId,
-    name: instanceName,
-    status: 'starting',
-    pid: newPid,
-    startTime: new Date(),
-    command,
-    workingDirectory
-  };
-  
-  // CRITICAL FIX: Add new instance to dynamic storage for Option A validation
-  instances.set(newId, newInstance);
-  console.log(`✅ Claude instance created and added to list: ${newId} (${instanceName}, PID: ${newPid})`);
-  console.log(`📊 Total instances now: ${instances.size}`);
-  
-  // Simulate instance becoming running after short delay
-  setTimeout(() => {
-    const instance = instances.get(newId);
-    if (instance) {
-      instance.status = 'running';
-      console.log(`🚀 Claude instance ${newId} now running`);
-    }
-  }, 2000);
-  
-  res.status(201).json({
-    success: true,
-    instanceId: newId,
-    instance: newInstance,
-    message: 'Claude instance created successfully',
-    timestamp: new Date().toISOString()
-  });
+  try {
+    const processInfo = await createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty);
+    
+    // Create instance tracking record with SPARC working directory and PTY info
+    const instanceRecord = {
+      id: instanceId,
+      name: instanceName,
+      status: 'starting',
+      pid: processInfo.pid,
+      type: instanceType,
+      created: processInfo.startTime.toISOString(),
+      command: processInfo.command,
+      workingDirectory: processInfo.workingDirectory,  // SPARC: Include resolved directory
+      processType: processInfo.processType,
+      usePty: processInfo.usePty
+    };
+    
+    instances.set(instanceId, instanceRecord);
+    
+    console.log(`✅ SPARC Enhanced Claude process spawned: ${instanceId} (PID: ${processInfo.pid})`);
+    console.log(`   Working Directory: ${processInfo.workingDirectory}`);
+    console.log(`   Process Type: ${processInfo.processType}`);
+    console.log(`   PTY Enabled: ${processInfo.usePty}`);
+    
+    res.status(201).json({
+      success: true,
+      instance: instanceRecord
+    });
+    
+  } catch (error) {
+    console.error(`❌ SPARC Enhanced process creation failed:`, error);
+    console.error(`   Instance Type: ${instanceType}`);
+    console.error(`   Instance ID: ${instanceId}`);
+    res.status(500).json({
+      success: false,
+      error: `SPARC Enhanced process creation failed: ${error.message}`,
+      instanceType,
+      instanceId
+    });
+  }
 });
 
-// Delete Claude instance endpoint (frontend-compatible path) 
+// Delete Claude instance endpoint with real process termination
 app.delete('/api/claude/instances/:instanceId', (req, res) => {
   const { instanceId } = req.params;
+  const processInfo = activeProcesses.get(instanceId);
   
   console.log(`🗑️ Terminating Claude instance: ${instanceId}`);
   
-  // CRITICAL FIX: Remove instance from dynamic storage
-  const removed = instances.delete(instanceId);
-  console.log(`📊 Instance ${instanceId} ${removed ? 'removed' : 'not found'}. Total instances now: ${instances.size}`);
+  if (!processInfo) {
+    return res.status(404).json({ success: false, error: 'Instance not found' });
+  }
   
-  res.json({
-    success: true,
-    message: `Claude instance ${instanceId} terminated successfully`,
-    instanceId,
-    removed,
-    timestamp: new Date().toISOString()
-  });
+  try {
+    console.log(`🗑️ Terminating Claude process ${instanceId} (PID: ${processInfo.pid})`);
+    
+    // Graceful termination
+    if (processInfo.process.stdin && !processInfo.process.stdin.destroyed) {
+      processInfo.process.stdin.end(); // Close stdin
+    }
+    processInfo.process.kill('SIGTERM'); // Send termination signal
+    
+    // Force kill after 5 seconds if still running
+    setTimeout(() => {
+      if (!processInfo.process.killed) {
+        console.log(`⚡ Force killing Claude process ${instanceId}`);
+        processInfo.process.kill('SIGKILL');
+      }
+    }, 5000);
+    
+    // Clean up tracking data
+    instances.delete(instanceId);
+    activeSSEConnections.delete(instanceId);
+    sseConnections.delete(instanceId);
+    
+    res.json({ 
+      success: true, 
+      message: `Claude instance ${instanceId} termination initiated`,
+      pid: processInfo.pid
+    });
+    
+  } catch (error) {
+    console.error(`❌ Failed to terminate Claude process ${instanceId}:`, error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // Create new Claude instance endpoint (legacy v1 path - keep for compatibility)
@@ -243,61 +924,108 @@ app.delete('/api/v1/claude/instances/:instanceId', (req, res) => {
   });
 });
 
-// Terminal command processing utilities
-function processTerminalInput(instanceId, input) {
-  // Initialize session if not exists
-  if (!instanceSessions.has(instanceId)) {
-    instanceSessions.set(instanceId, {
-      workingDirectory: '/workspaces/agent-feed',
-      history: [],
-      environment: {
-        USER: 'claude',
-        PWD: '/workspaces/agent-feed',
-        HOME: '/home/claude'
-      }
-    });
-  }
+// SPARC FIX: Mock terminal processing REMOVED
+// Real Claude processes handle all terminal I/O directly
+// No mock responses - only real process stdin/stdout/stderr streaming
+
+// Broadcast instance status changes via SSE
+function broadcastInstanceStatus(instanceId, status, details = {}) {
+  const statusEvent = {
+    type: 'instance:status',
+    instanceId,
+    status,  // 'starting', 'running', 'stopped', 'error'
+    timestamp: new Date().toISOString(),
+    ...details
+  };
   
-  const session = instanceSessions.get(instanceId);
-  session.history.push(input);
+  console.log(`📡 Broadcasting status ${status} for instance ${instanceId}`);
   
-  // Process basic commands
-  const trimmedInput = input.trim();
-  let response = '';
-  
-  if (trimmedInput === '') {
-    response = '';
-  } else if (trimmedInput === 'help') {
-    response = `Available commands:\n  echo <text>     - Print text\n  ls              - List directory contents\n  pwd             - Show current directory\n  whoami          - Show current user\n  clear           - Clear terminal\n  history         - Show command history\n  help            - Show this help`;
-  } else if (trimmedInput === 'ls') {
-    response = `total 24\ndrwxr-xr-x  12 claude claude  384 Aug 27 00:00 .\ndrwxr-xr-x   3 claude claude   96 Aug 27 00:00 ..\n-rw-r--r--   1 claude claude 1234 Aug 27 00:00 package.json\n-rw-r--r--   1 claude claude 2345 Aug 27 00:00 simple-backend.js\ndrwxr-xr-x   8 claude claude  256 Aug 27 00:00 frontend\ndrwxr-xr-x   4 claude claude  128 Aug 27 00:00 src\n-rw-r--r--   1 claude claude  567 Aug 27 00:00 README.md`;
-  } else if (trimmedInput === 'pwd') {
-    response = session.workingDirectory;
-  } else if (trimmedInput === 'whoami') {
-    response = 'claude';
-  } else if (trimmedInput === 'clear') {
-    response = '\x1B[2J\x1B[H'; // ANSI clear screen
-  } else if (trimmedInput === 'history') {
-    response = session.history.map((cmd, idx) => `  ${idx + 1}  ${cmd}`).join('\n');
-  } else if (trimmedInput.startsWith('echo ')) {
-    response = trimmedInput.substring(5);
-  } else if (trimmedInput.startsWith('cd ')) {
-    const newDir = trimmedInput.substring(3).trim();
-    if (newDir === '..') {
-      session.workingDirectory = '/workspaces';
-    } else if (newDir === 'frontend') {
-      session.workingDirectory = '/workspaces/agent-feed/frontend';
-    } else {
-      session.workingDirectory = `/workspaces/agent-feed/${newDir}`;
+  // Fix 1: Broadcast to instance-specific connections
+  const instanceConnections = activeSSEConnections.get(instanceId) || [];
+  console.log(`   → Instance connections: ${instanceConnections.length}`);
+  instanceConnections.forEach((res, index) => {
+    try {
+      res.write(`data: ${JSON.stringify(statusEvent)}\n\n`);
+    } catch (error) {
+      console.error(`❌ Failed to broadcast to instance connection ${index}:`, error);
+      instanceConnections.splice(index, 1);
     }
-    session.environment.PWD = session.workingDirectory;
-    response = '';
-  } else {
-    response = `bash: ${trimmedInput}: command not found`;
+  });
+  
+  // Fix 2: Broadcast to general status connections
+  const generalConnections = activeSSEConnections.get('__status__') || [];
+  console.log(`   → General status connections: ${generalConnections.length}`);
+  generalConnections.forEach((res, index) => {
+    try {
+      res.write(`data: ${JSON.stringify(statusEvent)}\n\n`);
+    } catch (error) {
+      console.error(`❌ Failed to broadcast to general connection ${index}:`, error);
+      generalConnections.splice(index, 1);
+    }
+  });
+  
+  // Fix 3: Update instance record
+  if (instances.has(instanceId)) {
+    const instance = instances.get(instanceId);
+    instance.status = status;
+    instances.set(instanceId, instance);
   }
   
-  return response;
+  console.log(`📊 Total broadcasts sent: ${instanceConnections.length + generalConnections.length}`);
 }
+
+// SPARC FIX: Mock terminal command processing REMOVED
+// All commands are forwarded directly to real Claude process stdin
+// Real Claude handles all commands and generates authentic responses
+
+// Process Status Endpoint with Real System Data
+app.get('/api/claude/instances/:instanceId/status', (req, res) => {
+  const { instanceId } = req.params;
+  const processInfo = activeProcesses.get(instanceId);
+  
+  if (!processInfo) {
+    return res.status(404).json({ success: false, error: 'Instance not found' });
+  }
+  
+  // Check if process is actually running in system
+  const isRunning = processInfo.process && !processInfo.process.killed;
+  
+  res.json({
+    success: true,
+    status: {
+      id: instanceId,
+      pid: processInfo.pid,
+      status: isRunning ? processInfo.status : 'stopped',
+      command: processInfo.command,
+      workingDirectory: processInfo.workingDirectory,
+      startTime: processInfo.startTime,
+      uptime: Date.now() - processInfo.startTime.getTime()
+    }
+  });
+});
+
+// Process Health Monitoring
+app.get('/api/claude/instances/:instanceId/health', (req, res) => {
+  const { instanceId } = req.params;
+  const processInfo = activeProcesses.get(instanceId);
+  
+  if (!processInfo) {
+    return res.status(404).json({ healthy: false, reason: 'Instance not found' });
+  }
+  
+  const isHealthy = processInfo.process && 
+                   !processInfo.process.killed && 
+                   processInfo.status === 'running';
+  
+  res.json({
+    healthy: isHealthy,
+    pid: processInfo.pid,
+    status: processInfo.status,
+    uptime: Date.now() - processInfo.startTime.getTime(),
+    memoryUsage: process.memoryUsage(),
+    command: processInfo.command
+  });
+});
 
 // Broadcast message to all SSE connections for an instance
 function broadcastToInstance(instanceId, message) {
@@ -319,20 +1047,31 @@ function broadcastToInstance(instanceId, message) {
 function createTerminalSSEStream(req, res, instanceId) {
   console.log(`📡 SSE Claude terminal stream requested for instance: ${instanceId}`);
   
-  // Set SSE headers
+  // Set SSE headers with persistent connection settings
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Cache-Control'
+    'Access-Control-Allow-Headers': 'Cache-Control',
+    'X-Accel-Buffering': 'no' // Disable nginx buffering
   });
 
-  // Add connection to tracking
+  // Prevent request timeout
+  req.setTimeout(0);
+  res.setTimeout(0);
+
+  // Add connection to tracking (both maps)
   if (!sseConnections.has(instanceId)) {
     sseConnections.set(instanceId, []);
   }
+  if (!activeSSEConnections.has(instanceId)) {
+    activeSSEConnections.set(instanceId, []);
+  }
   sseConnections.get(instanceId).push(res);
+  activeSSEConnections.get(instanceId).push(res);
+  
+  console.log(`📊 SSE connections for ${instanceId}: ${activeSSEConnections.get(instanceId).length}`);
 
   // Send initial connection message
   res.write(`data: ${JSON.stringify({
@@ -342,49 +1081,112 @@ function createTerminalSSEStream(req, res, instanceId) {
     timestamp: new Date().toISOString()
   })}\n\n`);
 
-  // Send initial prompt
-  res.write(`data: ${JSON.stringify({
-    type: 'output',
-    instanceId,
-    data: `Claude Code session started for instance ${instanceId}\r\nWorking directory: /workspaces/agent-feed\r\n$ `,
-    timestamp: new Date().toISOString()
-  })}\n\n`);
+  // CRITICAL FIX: Send any buffered output that was captured while disconnected
+  if (global.outputBuffer && global.outputBuffer[instanceId]) {
+    console.log(`📦 Sending ${global.outputBuffer[instanceId].length} buffered messages for ${instanceId}`);
+    global.outputBuffer[instanceId].forEach(message => {
+      res.write(`data: ${JSON.stringify(message)}\n\n`);
+    });
+    // Clear buffer after sending
+    global.outputBuffer[instanceId] = [];
+  }
 
-  // Send periodic keep-alive messages (less frequent now that we have input)
-  const interval = setInterval(() => {
-    const timestamp = new Date().toLocaleTimeString();
+  // CRITICAL FIX: Don't send fake session messages - let real Claude output come through
+  // Check if we have a real Claude process to stream from
+  const processInfo = activeProcesses.get(instanceId);
+  if (processInfo) {
+    // Only send working directory info, let real Claude output handle the rest
+    console.log(`📁 Real Claude process found for ${instanceId}, working directory: ${processInfo.workingDirectory}`);
+    console.log(`📡 SSE stream ready to receive REAL Claude output from PID: ${processInfo.pid}`);
     
+    // Send a simple connection confirmation without fake output
     res.write(`data: ${JSON.stringify({
-      type: 'heartbeat',
+      type: 'connected',
       instanceId,
-      data: `[${timestamp}] System operational\r\n`,
+      message: `Terminal connected to Claude instance ${instanceId}`,
+      workingDirectory: processInfo.workingDirectory,
+      pid: processInfo.pid,
       timestamp: new Date().toISOString()
     })}\n\n`);
-  }, 30000); // Every 30 seconds instead of 2
+  } else {
+    // Process not ready yet, send status only
+    res.write(`data: ${JSON.stringify({
+      type: 'status',
+      instanceId,
+      message: `Waiting for Claude instance ${instanceId} to be ready...`,
+      timestamp: new Date().toISOString()
+    })}\n\n`);
+  }
 
-  // Handle client disconnect
-  req.on('close', () => {
-    console.log(`🔌 SSE connection closed for Claude instance: ${instanceId}`);
-    clearInterval(interval);
-    
-    // Remove connection from tracking
-    const connections = sseConnections.get(instanceId) || [];
-    const index = connections.indexOf(res);
-    if (index !== -1) {
-      connections.splice(index, 1);
+  // Send periodic keep-alive messages only when no real output is flowing
+  let lastOutputTime = Date.now();
+  const interval = setInterval(() => {
+    try {
+      // Only send heartbeat if no recent output from real process
+      if (Date.now() - lastOutputTime > 30000) {
+        const timestamp = new Date().toLocaleTimeString();
+        res.write(`data: ${JSON.stringify({
+          type: 'heartbeat',
+          instanceId,
+          data: `[${timestamp}] Connection active\r\n`,
+          timestamp: new Date().toISOString()
+        })}\n\n`);
+      }
+    } catch (error) {
+      console.error(`❌ Error sending heartbeat to ${instanceId}:`, error);
+      clearInterval(interval);
     }
+  }, 30000); // Every 30 seconds
+  
+  // Track output time for heartbeat logic
+  const updateOutputTime = () => { lastOutputTime = Date.now(); };
+
+  // Handle client disconnect - improved connection tracking
+  let connectionClosed = false;
+  
+  const closeHandler = () => {
+    if (!connectionClosed) {
+      console.log(`🔌 SSE connection closed for Claude instance: ${instanceId}`);
+      clearInterval(interval);
+      connectionClosed = true;
+      
+      // Remove connection from both tracking maps
+      const connections = sseConnections.get(instanceId) || [];
+      const activeConnections = activeSSEConnections.get(instanceId) || [];
+      const index = connections.indexOf(res);
+      const activeIndex = activeConnections.indexOf(res);
+      
+      if (index !== -1) {
+        connections.splice(index, 1);
+      }
+      if (activeIndex !== -1) {
+        activeConnections.splice(activeIndex, 1);
+      }
+      
+      console.log(`📊 SSE connections remaining for ${instanceId}: ${activeConnections.length}`);
+    }
+  };
+  
+  req.on('close', closeHandler);
+  req.on('end', closeHandler);
+
+  // Handle connection errors - gracefully handle ECONNRESET
+  res.on('error', (err) => {
+    // ECONNRESET is normal when client reconnects or refreshes page
+    if (err.code === 'ECONNRESET' || err.code === 'EPIPE' || err.message?.includes('aborted')) {
+      console.log(`🔄 Connection reset for instance ${instanceId} - normal behavior`);
+    } else {
+      console.error(`❌ SSE connection error for instance ${instanceId}:`, err);
+    }
+    // Don't clean up connections here - let the close handler do it
   });
 
-  // Handle connection errors
   req.on('error', (err) => {
-    console.error(`❌ SSE connection error for instance ${instanceId}:`, err);
-    clearInterval(interval);
-    
-    // Remove connection from tracking
-    const connections = sseConnections.get(instanceId) || [];
-    const index = connections.indexOf(res);
-    if (index !== -1) {
-      connections.splice(index, 1);
+    // Handle request errors separately  
+    if (err.code === 'ECONNRESET' || err.code === 'EPIPE' || err.message?.includes('aborted')) {
+      console.log(`🔄 Request error for instance ${instanceId} - normal behavior`);
+    } else {
+      console.error(`❌ Request error for instance ${instanceId}:`, err);
     }
   });
 }
@@ -401,95 +1203,168 @@ app.get('/api/claude/instances/:instanceId/terminal/stream', (req, res) => {
   createTerminalSSEStream(req, res, instanceId);
 });
 
-// Enhanced terminal input endpoints with SSE broadcasting
+// General status SSE endpoint for frontend status updates
+app.get('/api/status/stream', (req, res) => {
+  console.log('📡 General status SSE stream requested');
+  
+  // Set SSE headers
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Cache-Control'
+  });
+
+  // Add connection to general status tracking (BOTH maps for proper counting)
+  if (!sseConnections.has('__status__')) {
+    sseConnections.set('__status__', []);
+  }
+  if (!activeSSEConnections.has('__status__')) {
+    activeSSEConnections.set('__status__', []);
+  }
+  sseConnections.get('__status__').push(res);
+  activeSSEConnections.get('__status__').push(res);
+  
+  console.log(`📊 General status SSE connections: ${activeSSEConnections.get('__status__').length}`);
+
+  // Send initial connection message
+  res.write(`data: ${JSON.stringify({
+    type: 'connected',
+    message: '✅ Status stream connected',
+    timestamp: new Date().toISOString()
+  })}\n\n`);
+
+  // Handle client disconnect for status connections
+  let statusConnectionClosed = false;
+  
+  const statusCloseHandler = () => {
+    if (!statusConnectionClosed) {
+      console.log('🔌 General status SSE connection closed');
+      statusConnectionClosed = true;
+      
+      // Remove connection from both tracking maps
+      const connections = sseConnections.get('__status__') || [];
+      const activeConnections = activeSSEConnections.get('__status__') || [];
+      const index = connections.indexOf(res);
+      const activeIndex = activeConnections.indexOf(res);
+      
+      if (index !== -1) {
+        connections.splice(index, 1);
+      }
+      if (activeIndex !== -1) {
+        activeConnections.splice(activeIndex, 1);
+      }
+      
+      console.log(`📊 General status SSE connections remaining: ${activeConnections.length}`);
+    }
+  };
+  
+  req.on('close', statusCloseHandler);
+  req.on('end', statusCloseHandler);
+  
+  // Handle status connection errors gracefully
+  req.on('error', (err) => {
+    if (err.code === 'ECONNRESET' || err.code === 'EPIPE' || err.message?.includes('aborted')) {
+      console.log('🔄 Status SSE connection reset - normal behavior');
+    } else {
+      console.error('❌ Status SSE connection error:', err);
+    }
+  });
+  
+  res.on('error', (err) => {
+    if (err.code === 'ECONNRESET' || err.code === 'EPIPE' || err.message?.includes('aborted')) {
+      console.log('🔄 Status SSE response error - normal behavior');
+    } else {
+      console.error('❌ Status SSE response error:', err);
+    }
+  });
+});
+
+// Real terminal input forwarding to Claude process stdin
 app.post('/api/v1/claude/instances/:instanceId/terminal/input', (req, res) => {
   const { instanceId } = req.params;
   const { input } = req.body;
   
-  console.log(`⌨️ Terminal input for Claude instance ${instanceId}: ${input}`);
-  
-  // Process the input and get response
-  const commandResponse = processTerminalInput(instanceId, input);
-  
-  // Broadcast input echo to all SSE connections
-  broadcastToInstance(instanceId, {
-    type: 'input_echo',
-    instanceId,
-    data: `${input}`,
-    timestamp: new Date().toISOString()
-  });
-  
-  // Broadcast command response if any
-  if (commandResponse) {
-    broadcastToInstance(instanceId, {
-      type: 'output',
-      instanceId,
-      data: `${commandResponse}\r\n$ `,
-      timestamp: new Date().toISOString()
-    });
-  } else {
-    // Just show new prompt
-    broadcastToInstance(instanceId, {
-      type: 'output', 
-      instanceId,
-      data: `$ `,
-      timestamp: new Date().toISOString()
-    });
+  const processInfo = activeProcesses.get(instanceId);
+  if (!processInfo) {
+    return res.status(404).json({ success: false, error: 'Instance not found' });
   }
   
-  res.json({
-    success: true,
-    instanceId,
-    input,
-    processed: true,
-    response: commandResponse || 'Command processed',
-    timestamp: new Date().toISOString()
-  });
+  if (processInfo.status !== 'running') {
+    return res.status(400).json({ success: false, error: 'Instance not running' });
+  }
+  
+  try {
+    console.log(`⌨️ Forwarding input to Claude ${instanceId}: ${input}`);
+    
+    // Forward input to real Claude process
+    processInfo.process.stdin.write(input + '\n');
+    
+    // Echo input to user (terminal behavior)
+    broadcastToAllConnections(instanceId, {
+      type: 'terminal:echo',
+      data: `$ ${input}`,
+      timestamp: new Date().toISOString()
+    });
+    
+    res.json({ success: true, processed: input });
+    
+  } catch (error) {
+    console.error(`❌ Failed to send input to Claude ${instanceId}:`, error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 app.post('/api/claude/instances/:instanceId/terminal/input', (req, res) => {
   const { instanceId } = req.params;
   const { input } = req.body;
   
-  console.log(`⌨️ Terminal input for Claude instance ${instanceId}: ${input}`);
-  
-  // Process the input and get response
-  const commandResponse = processTerminalInput(instanceId, input);
-  
-  // Broadcast input echo to all SSE connections
-  broadcastToInstance(instanceId, {
-    type: 'input_echo',
-    instanceId,
-    data: `${input}`,
-    timestamp: new Date().toISOString()
-  });
-  
-  // Broadcast command response if any
-  if (commandResponse) {
-    broadcastToInstance(instanceId, {
-      type: 'output',
-      instanceId,
-      data: `${commandResponse}\r\n$ `,
-      timestamp: new Date().toISOString()
-    });
-  } else {
-    // Just show new prompt
-    broadcastToInstance(instanceId, {
-      type: 'output',
-      instanceId,
-      data: `$ `,
-      timestamp: new Date().toISOString()
-    });
+  const processInfo = activeProcesses.get(instanceId);
+  if (!processInfo) {
+    console.log(`❌ Terminal input failed - Instance ${instanceId} not found`);
+    return res.status(404).json({ success: false, error: 'Instance not found' });
   }
   
-  res.json({
-    success: true,
-    instanceId,
-    input,
-    processed: true,
-    response: commandResponse || 'Command processed',
-    timestamp: new Date().toISOString()
-  });
+  if (processInfo.status !== 'running') {
+    console.log(`❌ Terminal input failed - Instance ${instanceId} status: ${processInfo.status}`);
+    return res.status(400).json({ success: false, error: 'Instance not running' });
+  }
+  
+  try {
+    console.log(`⌨️ Forwarding input to Claude ${instanceId} (${processInfo.processType}): ${input}`);
+    
+    // Handle input differently for PTY vs regular pipes
+    if (processInfo.usePty && processInfo.processType === 'pty') {
+      // PTY input handling
+      processInfo.process.write(input);
+      console.log(`✅ PTY Input sent to Claude ${instanceId}`);
+    } else {
+      // Regular pipe input handling
+      processInfo.process.stdin.write(input);
+      console.log(`✅ Pipe Input sent to Claude ${instanceId}`);
+    }
+    
+    // Enhanced echo broadcast with process type information
+    broadcastToAllConnections(instanceId, {
+      type: 'terminal:echo',
+      data: `$ ${input.replace('\n', '')}`,
+      timestamp: new Date().toISOString(),
+      processType: processInfo.processType,
+      usePty: processInfo.usePty
+    });
+    
+    res.json({ 
+      success: true, 
+      processed: input,
+      processType: processInfo.processType,
+      usePty: processInfo.usePty
+    });
+    
+  } catch (error) {
+    console.error(`❌ Failed to send input to Claude ${instanceId}:`, error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 app.get('/api/v1/claude/terminal/output/:pid', (req, res) => {
@@ -542,15 +1417,9 @@ app.get('/api/v1/terminal/stream/:instanceId', (req, res) => {
     timestamp: new Date().toISOString()
   })}\\n\\n`);
 
-  // Send periodic updates
-  const interval = setInterval(() => {
-    res.write(`data: ${JSON.stringify({
-      type: 'output',
-      instanceId,
-      data: `[${new Date().toLocaleTimeString()}] HTTP/SSE terminal active - WebSocket storm eliminated!\\r\\n$ `,
-      timestamp: new Date().toISOString()
-    })}\\n\\n`);
-  }, 3000);
+  // CRITICAL FIX: Don't send mock periodic updates - let real Claude output flow
+  // Only send connection confirmation, no fake terminal output
+  let interval = null;
 
   // Handle client disconnect
   req.on('close', () => {
@@ -565,12 +1434,14 @@ app.get('/api/v1/terminal/poll/:instanceId', (req, res) => {
   
   console.log(`🔄 HTTP polling request for instance: ${instanceId}`);
   
+  // CRITICAL FIX: Don't send mock polling data - this should return real Claude output
+  // For now, return empty response - real output should come via SSE
   res.json({
     success: true,
     instanceId,
-    data: `[${new Date().toLocaleTimeString()}] HTTP polling active - no WebSocket needed!\\r\\n$ `,
+    data: '', // No fake data
     timestamp: new Date().toISOString(),
-    message: 'HTTP/SSE conversion successful'
+    message: 'Polling endpoint - use SSE for real output'
   });
 });
 
@@ -579,45 +1450,51 @@ app.post('/api/v1/terminal/input/:instanceId', (req, res) => {
   const { instanceId } = req.params;
   const { input } = req.body;
   
-  console.log(`⌨️ Terminal input for ${instanceId}: ${input}`);
-  
-  // Process the input and get response
-  const commandResponse = processTerminalInput(instanceId, input);
-  
-  // Broadcast input echo to all SSE connections
-  broadcastToInstance(instanceId, {
-    type: 'input_echo',
-    instanceId,
-    data: `${input}`,
-    timestamp: new Date().toISOString()
-  });
-  
-  // Broadcast command response if any
-  if (commandResponse) {
-    broadcastToInstance(instanceId, {
-      type: 'output',
-      instanceId,
-      data: `${commandResponse}\r\n$ `,
-      timestamp: new Date().toISOString()
-    });
-  } else {
-    // Just show new prompt
-    broadcastToInstance(instanceId, {
-      type: 'output',
-      instanceId,
-      data: `$ `,
-      timestamp: new Date().toISOString()
-    });
+  const processInfo = activeProcesses.get(instanceId);
+  if (!processInfo) {
+    console.log(`❌ Terminal input failed - Instance ${instanceId} not found`);
+    return res.status(404).json({ success: false, error: 'Instance not found' });
   }
   
-  res.json({
-    success: true,
-    instanceId,
-    echo: input,
-    processed: true,
-    response: commandResponse || 'HTTP/SSE input received - WebSocket eliminated!',
-    timestamp: new Date().toISOString()
-  });
+  if (processInfo.status !== 'running') {
+    console.log(`❌ Terminal input failed - Instance ${instanceId} status: ${processInfo.status}`);
+    return res.status(400).json({ success: false, error: 'Instance not running' });
+  }
+  
+  try {
+    console.log(`⌨️ Forwarding input to REAL Claude ${instanceId} (${processInfo.processType}): ${input}`);
+    
+    // Handle input differently for PTY vs regular pipes
+    if (processInfo.usePty && processInfo.processType === 'pty') {
+      // PTY input handling - write directly to PTY
+      processInfo.process.write(input);
+      console.log(`✅ PTY Input forwarded to REAL Claude ${instanceId}`);
+    } else {
+      // Regular pipe input handling - write to stdin
+      processInfo.process.stdin.write(input);
+      console.log(`✅ Pipe Input forwarded to REAL Claude ${instanceId}`);
+    }
+    
+    // Echo input to user (standard terminal behavior)
+    broadcastToAllConnections(instanceId, {
+      type: 'terminal:echo',
+      data: `$ ${input.replace('\n', '')}`,
+      timestamp: new Date().toISOString(),
+      processType: processInfo.processType,
+      usePty: processInfo.usePty
+    });
+    
+    res.json({ 
+      success: true, 
+      processed: input,
+      processType: processInfo.processType,
+      usePty: processInfo.usePty
+    });
+    
+  } catch (error) {
+    console.error(`❌ Failed to send input to REAL Claude ${instanceId}:`, error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // Start server

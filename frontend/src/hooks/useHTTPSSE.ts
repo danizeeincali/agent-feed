@@ -61,6 +61,7 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
   const eventHandlers = useRef<Map<string, Set<(data: any) => void>>>(new Map());
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const sseConnection = useRef<EventSource | null>(null);
+  const statusSSEConnection = useRef<EventSource | null>(null);
   const connectionState = useRef<ConnectionState>({
     isSSE: false,
     isPolling: false,
@@ -84,8 +85,20 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
 
       switch (event) {
         case 'terminal:input':
-          endpoint = `/api/claude/instances/${connectionState.current.instanceId}/terminal/input`;
+          // TDD London School Fix: Enhanced instance ID validation for terminal input
+          const inputInstanceId = data.instanceId || connectionState.current.instanceId;
+          if (!inputInstanceId || inputInstanceId === 'undefined' || inputInstanceId.trim() === '') {
+            throw new Error('No valid instance ID available for terminal input');
+          }
+          
+          // Validate instance ID format
+          if (!/^claude-[a-zA-Z0-9]+$/.test(inputInstanceId)) {
+            throw new Error(`Invalid instance ID format for terminal input: ${inputInstanceId}`);
+          }
+          
+          endpoint = `/api/claude/instances/${inputInstanceId}/terminal/input`;
           payload = { input: data.input };
+          console.log(`🔧 Terminal input sending to: ${url}${endpoint} with payload:`, payload);
           break;
         case 'instance:create':
           endpoint = '/api/claude/instances';
@@ -186,9 +199,77 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
     });
   }, []);
 
-  // SSE Connection
+  // SSE Connection for status updates (separate from terminal)
+  const connectStatusSSE = useCallback(() => {
+    // Clean up existing status connection
+    if (statusSSEConnection.current) {
+      console.log('🔌 Closing existing status SSE connection');
+      statusSSEConnection.current.close();
+      statusSSEConnection.current = null;
+    }
+
+    console.log('🔄 Attempting general status SSE connection');
+    
+    try {
+      const eventSource = new EventSource(
+        `${url}/api/status/stream`,
+        { withCredentials: false }
+      );
+      
+      statusSSEConnection.current = eventSource;
+      
+      eventSource.onopen = () => {
+        console.log('✅ Status SSE connection established');
+      };
+      
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          
+          if (data.type === 'instance:status' || data.type === 'status_update') {
+            console.log('📲 Received general status update:', data);
+            triggerHandlers('instance:status', {
+              instanceId: data.instanceId,
+              status: data.status,
+              instance: data.instance,
+              timestamp: data.timestamp
+            });
+          } else if (data.type === 'connected') {
+            console.log('✅ Status SSE connected:', data.message);
+          }
+          
+        } catch (error) {
+          console.error('Status SSE message parsing error:', error);
+        }
+      };
+      
+      eventSource.onerror = (error) => {
+        console.warn('❌ Status SSE connection error (non-critical):', error);
+        // Don't close status connections on error - they're secondary
+      };
+      
+    } catch (error) {
+      console.error('Failed to create status SSE connection:', error);
+    }
+  }, [url, triggerHandlers]);
+
+  // Enhanced SSE Connection with Robust Error Handling (SPARC Phase 4)
   const connectSSE = useCallback((instanceId: string) => {
-    console.log('🔄 Attempting SSE connection for instance:', instanceId);
+    // Enhanced instance ID validation with comprehensive checks
+    if (!instanceId || instanceId === 'undefined' || instanceId.trim() === '') {
+      console.error('🚨 Cannot connect SSE with invalid instance ID:', instanceId);
+      setConnectionError('Invalid instance ID for SSE connection');
+      return;
+    }
+    
+    // Additional validation for proper instance ID format
+    if (!/^claude-[a-zA-Z0-9]+$/.test(instanceId)) {
+      console.error('🚨 Instance ID does not match expected format:', instanceId);
+      setConnectionError(`Invalid instance ID format: ${instanceId}`);
+      return;
+    }
+    
+    console.log('🔄 Attempting ENHANCED SSE connection for validated instance:', instanceId);
     
     // Clean up existing connections first
     if (sseConnection.current) {
@@ -210,11 +291,19 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
         { withCredentials: false }
       );
       
+      // SPARC Phase 4: Enhanced connection establishment tracking
+      let connectionEstablished = false;
+      let lastMessageTime = Date.now();
+      let heartbeatInterval: NodeJS.Timeout | null = null;
+      
       eventSource.onopen = () => {
-        console.log('✅ SSE connection established');
+        console.log('✅ ENHANCED SSE connection established');
+        connectionEstablished = true;
         setIsConnected(true);
         setConnectionError(null);
         reconnectCount.current = 0;
+        lastMessageTime = Date.now();
+        
         connectionState.current = {
           isSSE: true,
           isPolling: false,
@@ -222,14 +311,25 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
           connectionType: 'sse'
         };
         
+        // Start heartbeat monitoring for connection health
+        heartbeatInterval = setInterval(() => {
+          const timeSinceLastMessage = Date.now() - lastMessageTime;
+          if (timeSinceLastMessage > 60000) { // 60 seconds without messages
+            console.warn('⚠️ No messages received for 60 seconds, connection may be stale');
+          }
+        }, 30000); // Check every 30 seconds
+        
         triggerHandlers('connect', { 
           transport: 'sse', 
           instanceId,
-          connectionType: 'sse'
+          connectionType: 'sse',
+          enhanced: true
         });
       };
       
       eventSource.onmessage = (event) => {
+        lastMessageTime = Date.now(); // Update last message time for health monitoring
+        
         try {
           const data = JSON.parse(event.data);
           
@@ -241,43 +341,124 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
           
           setLastMessage(message);
           
-          // Route messages to appropriate handlers
-          if (data.type === 'terminal_output' || data.output) {
-            triggerHandlers('terminal:output', {
-              output: data.output || data.data,
-              instanceId: data.instanceId || instanceId,
-              processInfo: data.processInfo
-            });
-          } else if (data.type === 'input_echo') {
-            // Handle terminal input echo events (Option C - Backend Echo Fix)
-            triggerHandlers('terminal:output', {
-              output: data.data || '',
-              instanceId: data.instanceId || instanceId,
-              isEcho: true
-            });
-            triggerHandlers('terminal:input_echo', {
-              data: data.data || '',
-              instanceId: data.instanceId || instanceId,
-              timestamp: data.timestamp
-            });
+          // CRITICAL FIX: Enhanced message routing for REAL Claude output ONLY
+          try {
+            // Route messages to appropriate handlers - ONLY real Claude output
+            if (data.type === 'output' && data.data && data.isReal) {
+              // REAL Claude process output - enhanced with authenticity validation
+              console.log('📺 REAL Claude output received (validated):', data.data);
+              triggerHandlers('terminal:output', {
+                output: data.data,
+                instanceId: data.instanceId || instanceId,
+                timestamp: data.timestamp,
+                isReal: true,
+                source: data.source
+              });
+              // Also trigger generic 'output' handler for components listening to that event
+              triggerHandlers('output', {
+                data: data.data,
+                instanceId: data.instanceId || instanceId,
+                timestamp: data.timestamp,
+                isReal: true,
+                source: data.source
+              });
+            } else if (data.type === 'terminal_output' || data.output) {
+              // Only process if marked as real
+              if (data.isReal) {
+                triggerHandlers('terminal:output', {
+                  output: data.output || data.data,
+                  instanceId: data.instanceId || instanceId,
+                  processInfo: data.processInfo,
+                  timestamp: data.timestamp,
+                  isReal: true
+                });
+              }
+            } else if (data.type === 'input_echo') {
+              // Handle terminal input echo events (always show user's input)
+              triggerHandlers('terminal:output', {
+                output: data.data || '',
+                instanceId: data.instanceId || instanceId,
+                isEcho: true,
+                timestamp: data.timestamp
+              });
+            } else if (data.type === 'terminal:output' && data.data && data.isReal) {
+              // Enhanced terminal response handling for backend responses - ONLY real
+              triggerHandlers('terminal:output', {
+                instanceId: instanceId,
+                output: data.data,
+                timestamp: data.timestamp,
+                isReal: true
+              });
+            } else if (data.type === 'instance:status' || data.type === 'status_update') {
+              // Handle instance status updates from backend SSE
+              console.log('📲 Received status update via SSE:', data);
+              triggerHandlers('instance:status', {
+                instanceId: data.instanceId,
+                status: data.status,
+                instance: data.instance,
+                timestamp: data.timestamp
+              });
+              triggerHandlers('status_update', data);
+            } else if (data.type === 'connected') {
+              // Handle initial connection confirmation
+              console.log('🔗 SSE connection confirmed by backend');
+            } else if (data.type === 'heartbeat') {
+              // Handle heartbeat messages - just update timestamp
+              console.debug('💓 Heartbeat received from backend');
+            }
+            
+            // Generic message handler
+            triggerHandlers('message', data);
+          } catch (handlerError) {
+            console.error('Error in message handler:', handlerError);
+            // Don't break the connection for handler errors
           }
           
-          // Generic message handler
-          triggerHandlers('message', data);
-          
-        } catch (error) {
-          console.error('SSE message parsing error:', error);
+        } catch (parseError) {
+          console.error('SSE message parsing error:', parseError);
+          // Don't break the connection for parse errors
         }
       };
       
       eventSource.onerror = (error) => {
-        console.warn('❌ SSE connection error, falling back to HTTP polling');
-        setConnectionError('SSE failed, using HTTP polling');
+        console.warn('❌ Enhanced SSE connection error detected:', error);
         
-        // Close SSE and fallback to polling
-        eventSource.close();
-        sseConnection.current = null;
-        startPolling(instanceId);
+        // Clean up heartbeat interval
+        if (heartbeatInterval) {
+          clearInterval(heartbeatInterval);
+          heartbeatInterval = null;
+        }
+        
+        // SPARC Phase 4: Intelligent error recovery based on connection state
+        if (eventSource.readyState === EventSource.CONNECTING) {
+          console.log('🔄 Connection in progress, waiting for completion...');
+          return; // Let it continue trying to connect
+        }
+        
+        if (connectionEstablished && reconnectCount.current < reconnectAttempts) {
+          // Connection was working, attempt intelligent reconnection
+          console.log(`🔄 Attempting enhanced SSE reconnection (${reconnectCount.current + 1}/${reconnectAttempts})`);
+          
+          setTimeout(() => {
+            if (eventSource.readyState !== EventSource.CLOSED) {
+              eventSource.close();
+            }
+            sseConnection.current = null;
+            reconnectCount.current++;
+            connectSSE(instanceId); // Recursive reconnect with backoff
+          }, calculateBackoffDelay(reconnectCount.current));
+        } else {
+          // Connection never established or too many retries, fallback to polling
+          console.warn('🔄 SSE connection failed permanently, falling back to enhanced polling');
+          setConnectionError('SSE failed, using enhanced HTTP polling');
+          
+          // Close SSE and fallback to polling
+          if (eventSource.readyState !== EventSource.CLOSED) {
+            eventSource.close();
+          }
+          sseConnection.current = null;
+          startPolling(instanceId);
+        }
       };
       
       sseConnection.current = eventSource;
@@ -290,7 +471,21 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
 
   // HTTP Polling Fallback
   const startPolling = useCallback((instanceId: string) => {
-    console.log('🔄 Starting HTTP polling for instance:', instanceId);
+    // TDD London School Fix: Enhanced instance ID validation for polling
+    if (!instanceId || instanceId === 'undefined' || instanceId.trim() === '') {
+      console.error('🚨 Cannot start polling with invalid instance ID:', instanceId);
+      setConnectionError('Invalid instance ID for polling connection');
+      return;
+    }
+    
+    // Additional validation for proper instance ID format
+    if (!/^claude-[a-zA-Z0-9]+$/.test(instanceId)) {
+      console.error('🚨 Instance ID does not match expected format for polling:', instanceId);
+      setConnectionError(`Invalid instance ID format for polling: ${instanceId}`);
+      return;
+    }
+    
+    console.log('🔄 Starting HTTP polling for validated instance:', instanceId);
     
     // Stop existing polling
     if (pollingIntervalRef.current) {
@@ -427,6 +622,12 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
       sseConnection.current = null;
     }
     
+    // Close status SSE connection
+    if (statusSSEConnection.current) {
+      statusSSEConnection.current.close();
+      statusSSEConnection.current = null;
+    }
+    
     // Update state
     setIsConnected(false);
     setConnectionError(null);
@@ -441,7 +642,7 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
     triggerHandlers('disconnect', { reason: 'manual' });
   }, [stopPolling, triggerHandlers]);
 
-  // Attempt reconnection with exponential backoff
+  // Attempt reconnection with exponential backoff - improved for SSE persistence
   const attemptReconnect = useCallback(() => {
     if (reconnectCount.current >= reconnectAttempts) {
       setConnectionError(`Connection failed after ${reconnectAttempts} attempts`);
@@ -449,12 +650,13 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
     }
 
     const delay = calculateBackoffDelay(reconnectCount.current);
-    console.log(`🔄 Reconnecting in ${delay}ms (attempt ${reconnectCount.current + 1}/${reconnectAttempts})`);
+    console.log(`🔄 SSE Reconnecting in ${delay}ms (attempt ${reconnectCount.current + 1}/${reconnectAttempts})`);
     
     reconnectTimeoutRef.current = setTimeout(() => {
       reconnectCount.current++;
       
       if (connectionState.current.instanceId) {
+        console.log(`🔄 Reconnecting SSE to instance: ${connectionState.current.instanceId}`);
         connectSSE(connectionState.current.instanceId);
       } else {
         connect();
@@ -489,17 +691,20 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
   }, [socket]);
 
   const emit = useCallback((event: string, data?: any) => {
-    if (socket?.connected) {
-      socket.emit(event, data);
+    if (isConnected) {
+      emitMessage(event, data);
     } else {
       console.warn('Not connected, cannot emit event:', event);
     }
-  }, [socket]);
+  }, [isConnected, emitMessage]);
 
   // Auto-connect on mount
   useEffect(() => {
     if (autoConnect && !isConnected) {
       connect();
+      // Also connect to general status SSE for instance updates
+      console.log('🔄 Setting up status SSE connection on mount');
+      connectStatusSSE();
     }
 
     return () => {
@@ -507,7 +712,7 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
       disconnect();
       eventHandlers.current.clear();
     };
-  }, [autoConnect]);
+  }, [autoConnect, connectStatusSSE]);
 
   // Cleanup function
   useEffect(() => {
@@ -520,6 +725,9 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
       }
       if (sseConnection.current) {
         sseConnection.current.close();
+      }
+      if (statusSSEConnection.current) {
+        statusSSEConnection.current.close();
       }
     };
   }, []);

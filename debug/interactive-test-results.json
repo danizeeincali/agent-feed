@@ -1,0 +1,23 @@
+{
+  "interactive": {
+    "hasOutput": false,
+    "stdoutData": "",
+    "stderrData": "",
+    "code": null
+  },
+  "print": {
+    "success": false,
+    "stdoutData": "",
+    "stderrData": "",
+    "code": null
+  },
+  "auth": {
+    "needsAuth": true,
+    "timeout": true
+  },
+  "conclusions": [
+    "❌ CRITICAL: Claude CLI not producing any output in any mode",
+    "🔑 Claude CLI requires authentication or --dangerously-skip-permissions"
+  ],
+  "timestamp": "2025-08-27T18:18:05.851Z"
+}

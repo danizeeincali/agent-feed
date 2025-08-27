@@ -1,3 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="0" failures="0" errors="0" time="0">
+<testsuites name="vitest tests" tests="12" failures="12" errors="0" time="0.022389375">
+    <testsuite name="tests/tdd-london-school/sse-connection-lifecycle.test.ts" timestamp="2025-08-27T06:21:33.165Z" hostname="codespaces-005acc" tests="12" failures="12" errors="0" skipped="0" time="0.022389375">
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Connection Persistence Behavior &gt; should maintain SSE connection across multiple command interactions" time="0.00647743">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Connection Persistence Behavior &gt; should not recreate connection for subsequent commands on same instance" time="0.001350018">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; ECONNRESET Error Recovery Behavior &gt; should handle ECONNRESET gracefully without dropping session" time="0.000862769">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; ECONNRESET Error Recovery Behavior &gt; should implement exponential backoff reconnection strategy" time="0.001510937">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; ECONNRESET Error Recovery Behavior &gt; should implement graceful degradation when recovery fails" time="0.000904325">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Frontend Connection Status Behavior &gt; should synchronize connection state between backend and frontend" time="0.000629885">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Frontend Connection Status Behavior &gt; should maintain &quot;connected&quot; status during active command sessions" time="0.001065076">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Claude Session State Persistence Behavior &gt; should preserve Claude session state across connection interruptions" time="0.001064765">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Claude Session State Persistence Behavior &gt; should maintain session context across multiple interactions" time="0.001561662">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Complete SSE Connection Lifecycle Integration &gt; should orchestrate stable connection lifecycle end-to-end" time="0.001040921">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Contract Verification &gt; should satisfy all defined collaboration contracts" time="0.001199607">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/tdd-london-school/sse-connection-lifecycle.test.ts" name="TDD London School: SSE Connection Lifecycle &gt; Contract Verification &gt; should verify mock interaction patterns match expected contracts" time="0.001036142">
+            <failure message="EventSource is not defined" type="ReferenceError">
+ReferenceError: EventSource is not defined
+ ❯ tests/tdd-london-school/sse-connection-lifecycle.test.ts:95:19
+            </failure>
+        </testcase>
+    </testsuite>
 </testsuites>

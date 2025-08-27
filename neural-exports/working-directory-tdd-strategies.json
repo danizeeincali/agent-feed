@@ -1,0 +1,20 @@
+{
+  "strategies": [
+    {
+      "name": "Button Type Directory Mapping Tests",
+      "description": "Test suite ensuring each UI button type maps to correct working directory",
+      "testCode": "test('prod button maps to prod directory', () => {\n  const workingDir = getWorkingDirectoryByButtonType('prod');\n  expect(workingDir).toBe('/workspaces/agent-feed/prod');\n});",
+      "effectiveness": 0.95
+    },
+    {
+      "name": "Process Creation Directory Context Tests",
+      "description": "Test that Claude process creation uses correct working directory",
+      "testCode": "test('prod instance spawns in prod directory', () => {\n  createRealClaudeInstance('prod', 'test-id');\n  expect(mockSpawn).toHaveBeenCalledWith(\n    expect.anything(),\n    expect.anything(),\n    expect.objectContaining({ cwd: '/workspaces/agent-feed/prod' })\n  );\n});",
+      "effectiveness": 0.88
+    }
+  ],
+  "summary": {
+    "totalStrategies": 2,
+    "averageEffectiveness": 0.915
+  }
+}

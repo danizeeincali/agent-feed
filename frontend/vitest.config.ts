@@ -11,7 +11,8 @@ export default defineConfig({
     include: [
       'tests/unit/**/*.test.{ts,tsx}',
       'tests/integration/**/*.test.{ts,tsx}', 
-      'tests/mock-server/**/*.test.{ts,tsx}'
+      'tests/mock-server/**/*.test.{ts,tsx}',
+      'tests/tdd-london-school/**/*.test.{ts,tsx}'
     ],
     exclude: [
       'tests/e2e/**/*',

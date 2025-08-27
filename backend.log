@@ -1,0 +1,13 @@
+🚀 HTTP/SSE Server running on http://localhost:3000
+✅ WebSocket connection storm eliminated!
+📡 Claude Terminal SSE endpoints available:
+   - Health: http://localhost:3000/health
+   - Claude Terminal Stream (v1): http://localhost:3000/api/v1/claude/instances/{instanceId}/terminal/stream
+   - Claude Terminal Stream: http://localhost:3000/api/claude/instances/{instanceId}/terminal/stream
+   - Terminal Input (v1): http://localhost:3000/api/v1/claude/instances/{instanceId}/terminal/input
+   - Terminal Input: http://localhost:3000/api/claude/instances/{instanceId}/terminal/input
+   - Legacy SSE Stream: http://localhost:3000/api/v1/terminal/stream/{instanceId}
+   - HTTP Polling: http://localhost:3000/api/v1/terminal/poll/{instanceId}
+🎉 Clean HTTP/SSE architecture - Frontend terminal connection ready!
+🛑 Shutting down HTTP/SSE server...
+✅ HTTP/SSE server shutdown complete

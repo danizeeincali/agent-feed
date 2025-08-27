@@ -178,6 +178,9 @@
 }
 
 .instance-status {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -185,24 +188,58 @@
   font-weight: 600;
 }
 
-.instance-status.starting {
+.status-indicator {
+  font-size: 0.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.status-starting, .instance-status.starting {
   background: #ffa726;
   color: #000;
 }
 
-.instance-status.running {
+.status-running, .instance-status.running {
   background: #4caf50;
   color: #000;
 }
 
-.instance-status.stopped {
+.status-stopped, .instance-status.stopped {
   background: #757575;
   color: #fff;
 }
 
-.instance-status.error {
+.status-error, .instance-status.error {
   background: #f44336;
   color: #fff;
+}
+
+.status-starting .status-indicator {
+  color: #ff6f00;
+}
+
+.status-running .status-indicator {
+  color: #1b5e20;
+  animation: none; /* Running doesn't need to pulse */
+}
+
+.status-stopped .status-indicator {
+  color: #424242;
+  animation: none;
+}
+
+.status-error .status-indicator {
+  color: #b71c1c;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 .instance-info {

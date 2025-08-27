@@ -1,0 +1,90 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/tests/playwright.config.ts",
+    "rootDir": "/workspaces/agent-feed/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/tests/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.test.js"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: Playwright Test did not expect test.describe() to be called here.\nMost common reasons include:\n- You are calling test.describe() in a configuration file.\n- You are calling test.describe() in a file that is imported by the configuration file.\n- You have two different versions of @playwright/test. This usually happens\n  when one of the dependencies in your package.json depends on @playwright/test.",
+      "stack": "Error: Playwright Test did not expect test.describe() to be called here.\nMost common reasons include:\n- You are calling test.describe() in a configuration file.\n- You are calling test.describe() in a file that is imported by the configuration file.\n- You have two different versions of @playwright/test. This usually happens\n  when one of the dependencies in your package.json depends on @playwright/test.\n    at TestTypeImpl._currentSuite (/workspaces/agent-feed/tests/node_modules/playwright/lib/common/testType.js:74:13)\n    at TestTypeImpl._describe (/workspaces/agent-feed/tests/node_modules/playwright/lib/common/testType.js:114:24)\n    at Function.describe (/workspaces/agent-feed/tests/node_modules/playwright/lib/transform/transform.js:275:12)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/claude-route-basic.test.js:3:6)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/claude-route-basic.test.js",
+        "column": 6,
+        "line": 3
+      },
+      "snippet": "\u001b[90m   at \u001b[39mclaude-route-basic.test.js:3\n\n  1 | const { test, expect } = require('@playwright/test');\n  2 |\n> 3 | test.describe('Claude Instance Manager Route Test', () => {\n    |      ^\n  4 |   test('should load Claude Instance Manager page correctly', async ({ page }) => {\n  5 |     // Navigate to the Claude Instance Manager\n  6 |     await page.goto('http://localhost:5173/claude-instances');"
+    },
+    {
+      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
+    }
+  ],
+  "stats": {
+    "startTime": "2025-08-27T19:26:56.681Z",
+    "duration": 203.85500000000002,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
