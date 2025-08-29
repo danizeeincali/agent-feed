@@ -5,7 +5,7 @@
  * Tests CLI path resolution, environment validation, and command execution
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+// Converted from Vitest to Jest - globals available
 import { spawn } from 'child_process';
 import * as path from 'path';
 import * as os from 'os';

@@ -35,9 +35,9 @@ export default defineConfig({
           });
         }
       },
-      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression) - FIXED TO PORT 3000
+      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression) - FIXED TO PORT 3002  
       '/socket.io': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3002',
         ws: true,           // Enable WebSocket proxying
         changeOrigin: true, // Change origin headers to match target
         secure: false,

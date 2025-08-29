@@ -1,0 +1,28 @@
+{
+  "name": "sse-connections-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive Playwright tests for SSE connection functionality",
+  "scripts": {
+    "test": "playwright test",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:connection-establishment": "playwright test 01-connection-establishment.spec.ts",
+    "test:real-time-streaming": "playwright test 02-real-time-streaming.spec.ts", 
+    "test:retry-recovery": "playwright test 03-connection-retry-recovery.spec.ts",
+    "test:concurrent-connections": "playwright test 04-multiple-concurrent-connections.spec.ts",
+    "test:resource-cleanup": "playwright test 05-resource-cleanup-management.spec.ts",
+    "test:all": "playwright test --reporter=html",
+    "test:ci": "playwright test --reporter=json",
+    "report": "playwright show-report sse-connection-report",
+    "install-deps": "npx playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "eventsource": "^2.0.2"
+  }
+}

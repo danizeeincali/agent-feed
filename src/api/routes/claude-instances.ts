@@ -88,6 +88,13 @@ router.post('/',
       res.status(201).json({
         success: true,
         instanceId,
+        instance: {
+          id: instanceId,
+          name: `claude-${instanceId.split('-').pop()}`,
+          status: 'starting',
+          type: config.instanceType || 'default',
+          workingDirectory: config.workingDirectory || process.cwd()
+        },
         message: 'Claude instance created successfully'
       });
       
@@ -161,7 +168,7 @@ router.get('/',
 router.get('/:id',
   instanceRateLimit,
   [
-    param('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    param('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
   ],
   handleValidationErrors,
   async (req: Request, res: Response) => {
@@ -201,7 +208,7 @@ router.get('/:id',
 router.delete('/:id',
   instanceRateLimit,
   [
-    param('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    param('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
     query('force').optional().isBoolean().withMessage('Force parameter must be boolean'),
   ],
   handleValidationErrors,
@@ -244,7 +251,7 @@ router.delete('/:id',
 router.post('/:id/restart',
   instanceRateLimit,
   [
-    param('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    param('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
   ],
   handleValidationErrors,
   async (req: Request, res: Response) => {
@@ -285,7 +292,7 @@ router.post('/:id/restart',
 router.get('/:id/health',
   instanceRateLimit,
   [
-    param('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    param('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
   ],
   handleValidationErrors,
   async (req: Request, res: Response) => {
@@ -324,13 +331,74 @@ router.get('/:id/health',
 );
 
 /**
+ * POST /api/claude/instances/:id/terminal/input
+ * Send terminal input to instance (CRITICAL FIX)
+ */
+router.post('/:id/terminal/input',
+  instanceRateLimit,
+  [
+    param('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
+    body('input').isString().isLength({ min: 1, max: 10000 }).withMessage('Input must be a string between 1 and 10000 characters'),
+  ],
+  handleValidationErrors,
+  async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { input } = req.body;
+      
+      logger.info(`Terminal input received for instance ${id}:`, input.slice(0, 100));
+      
+      const instance = processManager.getInstance(id);
+      if (!instance) {
+        return res.status(404).json({
+          success: false,
+          error: 'Instance not found',
+          message: `Claude instance with ID ${id} not found`
+        });
+      }
+      
+      if (instance.status !== 'running') {
+        return res.status(400).json({
+          success: false,
+          error: 'Instance not ready',
+          message: `Instance ${id} is not running (status: ${instance.status})`
+        });
+      }
+      
+      // CRITICAL FIX: Send input to the actual terminal process
+      await processManager.sendInput(id, input);
+      
+      res.json({
+        success: true,
+        message: 'Terminal input sent successfully',
+        instanceId: id,
+        input: input.slice(0, 100), // Log first 100 chars for debugging
+        timestamp: new Date().toISOString()
+      });
+      
+      logger.debug(`Terminal input sent to instance ${id}`, { 
+        inputLength: input.length
+      });
+    } catch (error) {
+      logger.error(`Failed to send terminal input to instance ${req.params.id}:`, error);
+      
+      res.status(500).json({
+        success: false,
+        error: 'Failed to send terminal input',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+);
+
+/**
  * POST /api/claude/instances/:id/message
  * Send message to instance
  */
 router.post('/:id/message',
   instanceRateLimit,
   [
-    param('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    param('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
     body('content').isString().isLength({ min: 1, max: 10000 }).withMessage('Content must be a string between 1 and 10000 characters'),
     body('metadata').optional().isObject().withMessage('Metadata must be an object'),
   ],
@@ -386,7 +454,7 @@ router.post('/:id/message',
 router.get('/:id/messages',
   instanceRateLimit,
   [
-    param('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    param('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
     query('limit').optional().isInt({ min: 1, max: 1000 }).withMessage('Limit must be between 1 and 1000'),
     query('type').optional().isIn(['input', 'output', 'error', 'control']).withMessage('Invalid message type filter'),
   ],

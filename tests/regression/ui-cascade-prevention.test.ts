@@ -8,7 +8,9 @@
  * EXPECTED: These tests will PASS when UI cascade is prevented
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+// Convert from Vitest to Jest imports
+// // Converted from Vitest to Jest - globals available
+// Jest equivalents are available globally, vi -> jest for mocking
 
 interface UIElement {
   id: string;
@@ -49,21 +51,21 @@ describe('UI Cascade Prevention - TDD Tests', () => {
     };
 
     mockTerminal = {
-      onData: vi.fn((callback: (data: string) => void) => {
+      onData: jest.fn((callback: (data: string) => void) => {
         // Mock terminal data handler
-        return { dispose: vi.fn() };
+        return { dispose: jest.fn() };
       }),
-      write: vi.fn((data: string) => {
+      write: jest.fn((data: string) => {
         renderEvents.push(`write: ${data}`);
       }),
-      writeln: vi.fn((data: string) => {
+      writeln: jest.fn((data: string) => {
         renderEvents.push(`writeln: ${data}`);
       })
     };
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Character-by-Character UI Cascade Prevention', () => {
@@ -141,7 +143,7 @@ describe('UI Cascade Prevention - TDD Tests', () => {
       for (let i = 0; i < 100; i++) {
         simulateRenderRequest();
         // Simulate tiny delay between requests
-        vi.advanceTimersByTime(1);
+        jest.advanceTimersByTime(1);
       }
       
       expect(totalRenderRequests).toBe(100);

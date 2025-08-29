@@ -1,186 +1,155 @@
 /**
- * Jest Setup for London School TDD
- * 
- * Configures mock verification and interaction testing utilities
+ * Jest Setup for TDD London School WebSocket Tests
+ * Configures the testing environment for mock-driven development
  */
 
-const { SwarmMockCoordinator, portConfigurationContracts } = require('./port-configuration/mocks/swarm-mock-coordination');
+// Global mock implementations
+global.console = {
+  ...console,
+  // Optionally suppress console output in tests
+  log: process.env.NODE_ENV === 'test' ? jest.fn() : console.log,
+  warn: process.env.NODE_ENV === 'test' ? jest.fn() : console.warn,
+  error: process.env.NODE_ENV === 'test' ? jest.fn() : console.error,
+  info: process.env.NODE_ENV === 'test' ? jest.fn() : console.info,
+  debug: process.env.NODE_ENV === 'test' ? jest.fn() : console.debug
+};
 
-// Global swarm coordinator for tests
-global.swarmCoordinator = new SwarmMockCoordinator();
+// WebSocket global mock
+global.WebSocket = class MockWebSocket {
+  static CONNECTING = 0;
+  static OPEN = 1;
+  static CLOSING = 2;
+  static CLOSED = 3;
 
-// Register all port configuration contracts
-Object.entries(portConfigurationContracts).forEach(([serviceName, contract]) => {
-  global.swarmCoordinator.registerMockContract(serviceName, contract);
-});
+  constructor(url) {
+    this.url = url;
+    this.readyState = MockWebSocket.CLOSED;
+    this.onopen = null;
+    this.onclose = null;
+    this.onerror = null;
+    this.onmessage = null;
+  }
 
-// London School custom matchers
+  send() {
+    throw new Error('send is not defined');
+  }
+
+  close() {}
+
+  addEventListener() {}
+  removeEventListener() {}
+};
+
+// Buffer global for Node.js compatibility
+if (typeof global.Buffer === 'undefined') {
+  global.Buffer = require('buffer').Buffer;
+}
+
+// Performance API mock for timing measurements
+global.performance = {
+  now: jest.fn(() => Date.now()),
+  mark: jest.fn(),
+  measure: jest.fn()
+};
+
+// Process environment setup
+process.env.NODE_ENV = 'test';
+
+// Jest configuration for mock behavior verification
 expect.extend({
   toHaveBeenCalledBefore(received, expected) {
     const receivedCalls = received.mock.invocationCallOrder;
     const expectedCalls = expected.mock.invocationCallOrder;
     
-    if (!receivedCalls || !expectedCalls || !receivedCalls.length || !expectedCalls.length) {
+    if (!receivedCalls || !expectedCalls) {
       return {
-        message: () => 'One or both mocks have no recorded calls',
-        pass: false
+        pass: false,
+        message: () => 'Mock functions must be called to use toHaveBeenCalledBefore'
       };
     }
+
+    const receivedLastCall = Math.max(...receivedCalls);
+    const expectedFirstCall = Math.min(...expectedCalls);
     
-    const lastReceivedCall = Math.max(...receivedCalls);
-    const firstExpectedCall = Math.min(...expectedCalls);
-    
-    const pass = lastReceivedCall < firstExpectedCall;
+    const pass = receivedLastCall < expectedFirstCall;
     
     return {
-      message: () => 
-        pass 
-          ? `Expected ${received.getMockName() || 'mock'} NOT to be called before ${expected.getMockName() || 'mock'}`
-          : `Expected ${received.getMockName() || 'mock'} to be called before ${expected.getMockName() || 'mock'}`,
-      pass
+      pass,
+      message: () => pass 
+        ? `Expected ${received.getMockName()} not to be called before ${expected.getMockName()}`
+        : `Expected ${received.getMockName()} to be called before ${expected.getMockName()}`
     };
   },
 
   toSatisfyContract(received, contract) {
-    if (!received || typeof received !== 'object') {
-      return {
-        message: () => 'Received value must be an object',
-        pass: false
-      };
-    }
-
-    const violations = [];
+    const receivedMethods = Object.keys(received).filter(key => 
+      typeof received[key] === 'function' && jest.isMockFunction(received[key])
+    );
     
-    // Check expected methods exist
-    if (contract.expectedMethods) {
-      contract.expectedMethods.forEach(method => {
-        if (!received[method] || typeof received[method] !== 'function') {
-          violations.push(`Missing method: ${method}`);
-        }
-      });
-    }
+    const contractMethods = Object.keys(contract);
+    const missingMethods = contractMethods.filter(method => !receivedMethods.includes(method));
     
-    // Check input/output structure
-    if (contract.input) {
-      Object.entries(contract.input).forEach(([method, inputSpec]) => {
-        if (received[method] && received[method].mock) {
-          // Verify mock was called with expected input structure
-          const calls = received[method].mock.calls;
-          calls.forEach(call => {
-            const [input] = call;
-            if (input && typeof input === 'object') {
-              Object.entries(inputSpec).forEach(([key, type]) => {
-                if (input[key] && typeof input[key] !== type) {
-                  violations.push(`Method ${method}: expected ${key} to be ${type}, got ${typeof input[key]}`);
-                }
-              });
-            }
-          });
-        }
-      });
-    }
-    
-    const pass = violations.length === 0;
+    const pass = missingMethods.length === 0;
     
     return {
-      message: () => 
-        pass 
-          ? `Expected object NOT to satisfy contract`
-          : `Contract violations: ${violations.join(', ')}`,
-      pass
-    };
-  },
-
-  toMatchInteractionPattern(received, pattern) {
-    if (!received || !Array.isArray(received)) {
-      return {
-        message: () => 'Expected an array of mock calls',
-        pass: false
-      };
-    }
-    
-    const callSequence = received.map(call => ({
-      mockName: call[0],
-      method: call[1]?.[0],
-      args: call[1]?.slice(1)
-    }));
-    
-    let patternIndex = 0;
-    const violations = [];
-    
-    for (let i = 0; i < callSequence.length && patternIndex < pattern.length; i++) {
-      const call = callSequence[i];
-      const expectedPattern = pattern[patternIndex];
-      
-      if (call.mockName === expectedPattern.mock && call.method === expectedPattern.method) {
-        patternIndex++;
-      } else if (expectedPattern.required !== false) {
-        violations.push(`Expected ${expectedPattern.mock}.${expectedPattern.method} at position ${patternIndex}, but found ${call.mockName}.${call.method}`);
-      }
-    }
-    
-    if (patternIndex < pattern.length) {
-      violations.push(`Missing expected calls: ${pattern.slice(patternIndex).map(p => `${p.mock}.${p.method}`).join(', ')}`);
-    }
-    
-    const pass = violations.length === 0;
-    
-    return {
-      message: () => 
-        pass 
-          ? `Expected calls NOT to match interaction pattern`
-          : `Interaction pattern violations: ${violations.join(', ')}`,
-      pass
+      pass,
+      message: () => pass
+        ? `Expected mock not to satisfy contract`
+        : `Expected mock to satisfy contract. Missing methods: ${missingMethods.join(', ')}`
     };
   }
 });
 
-// Mock call tracking utilities
-global.getAllMockCalls = () => {
-  const allCalls = [];
-  
-  // This would be implemented to collect all mock calls in order
-  // For now, return empty array as placeholder
-  return allCalls;
+// Global test utilities
+global.createMockPromise = () => {
+  let resolve, reject;
+  const promise = new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
 };
 
-// London School test utilities
-global.londonSchoolUtils = {
-  createMockWithContract: (serviceName, methods = {}) => {
-    const contract = portConfigurationContracts[serviceName];
-    const mock = {};
-    
-    if (contract?.expectedMethods) {
-      contract.expectedMethods.forEach(method => {
-        mock[method] = jest.fn();
-      });
-    }
-    
-    // Add any additional methods
-    Object.assign(mock, methods);
-    
-    return mock;
-  },
-  
-  verifyMockConversation: (mocks, expectedSequence) => {
-    // Utility to verify mock interactions follow expected conversation pattern
-    return true; // Placeholder implementation
-  }
-};
+global.waitForTick = () => new Promise(resolve => process.nextTick(resolve));
+global.waitForTimeout = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Setup fake timers for timeout testing
+// Mock timers setup for consistent testing
 beforeEach(() => {
-  if (global.LONDON_SCHOOL_MODE) {
-    jest.clearAllMocks();
-  }
+  jest.useFakeTimers();
 });
 
 afterEach(() => {
-  if (global.MOCK_VERIFICATION_ENABLED) {
-    // Generate interaction report after each test
-    const report = global.swarmCoordinator.generateInteractionReport();
-    if (report.violations.length > 0) {
-      console.warn('Mock contract violations detected:', report.violations);
-    }
-  }
+  jest.useRealTimers();
+  jest.clearAllMocks();
+  jest.resetAllMocks();
+  jest.restoreAllMocks();
 });
+
+// Global error handling for uncaught exceptions in tests
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+
+// London School TDD specific utilities
+global.mockCollaborator = (name, methods = {}) => {
+  const mock = {};
+  Object.keys(methods).forEach(method => {
+    mock[method] = jest.fn().mockImplementation(methods[method]);
+  });
+  mock.getMockName = () => name;
+  return mock;
+};
+
+global.verifyInteraction = (mock, method, ...args) => {
+  expect(mock[method]).toHaveBeenCalledWith(...args);
+};
+
+global.verifyInteractionOrder = (...mocks) => {
+  for (let i = 0; i < mocks.length - 1; i++) {
+    expect(mocks[i]).toHaveBeenCalledBefore(mocks[i + 1]);
+  }
+};

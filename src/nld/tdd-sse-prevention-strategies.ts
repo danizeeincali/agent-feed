@@ -1,8 +1,7 @@
 /**
- * TDD Prevention Strategies for SSE Connection Management
- * 
- * Test-Driven Development patterns specifically designed to prevent
- * SSE connection failures in complex multi-stream scenarios
+ * TDD Prevention Strategies for SSE Streaming Issues
+ * Test-driven development patterns to prevent SSE buffer accumulation anti-patterns
+ * Part of NLD (Neuro-Learning Development) system
  */
 
 export interface TDDSSETestSuite {

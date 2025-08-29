@@ -9,15 +9,20 @@ const path = require('path');
 const fs = require('fs');
 const { spawn } = require('child_process');
 const pty = require('node-pty');
+const http = require('http');
+const WebSocket = require('ws');
 
 const app = express();
+const server = http.createServer(app);
 const PORT = 3000;
 
 // Real Claude Process Management
-const activeProcesses = new Map(); // instanceId → {process, pid, status, startTime, command, workingDirectory}
+const activeProcesses = new Map(); // instanceId → {process, pid, status, startTime, command, workingDirectory, outputPosition, outputBuffer}
 const sseConnections = new Map(); // Track SSE connections per instance
 const activeSSEConnections = new Map(); // Track all SSE connections per instance ID
 const instances = new Map(); // Track all created instances dynamically
+// UNIFIED BUFFER SYSTEM: Single source of truth for all terminal output
+const instanceOutputBuffers = new Map(); // instanceId → {buffer: string, readPosition: number, lastSentPosition: number, lineCount: number}
 
 // Claude Command Configurations
 const CLAUDE_COMMANDS = {
@@ -255,8 +260,19 @@ async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty 
       workingDirectory: workingDir,
       instanceType,
       processType,
-      usePty
+      usePty,
+      outputPosition: 0,
+      outputBuffer: ''
     };
+    
+    // Initialize unified output buffer tracking with line counting
+    instanceOutputBuffers.set(instanceId, {
+      buffer: '',
+      readPosition: 0,
+      lastSentPosition: 0,
+      lineCount: 0,
+      createdAt: new Date()
+    });
     
     activeProcesses.set(instanceId, processInfo);
     
@@ -463,20 +479,12 @@ function setupPTYHandlers(instanceId, processInfo) {
     }
   }, 1000); // PTY processes need slightly more time to initialize
 
-  // PTY data handling - combines stdout/stderr in a single stream
+  // PTY data handling - combines stdout/stderr in a single stream with incremental output
   claudeProcess.onData((data) => {
     console.log(`📤 REAL Claude ${instanceId} PTY output (${data.length} bytes):`, data.substring(0, 200) + (data.length > 200 ? '...' : ''));
     
-    // Broadcast REAL Claude PTY output via SSE
-    broadcastToAllConnections(instanceId, {
-      type: 'output',
-      data: data,
-      instanceId: instanceId,
-      timestamp: new Date().toISOString(),
-      source: 'pty',
-      isReal: true,
-      processType: 'pty'
-    });
+    // Use incremental broadcast to prevent repetition
+    broadcastIncrementalOutput(instanceId, data, 'pty');
   });
 
   // PTY process exit handling
@@ -532,22 +540,14 @@ function setupPipeHandlers(instanceId, processInfo) {
     }
   }, 3000); // 3 second timeout
   
-  // CRITICAL FIX: Enhanced real Claude process output handling with error checking
+  // CRITICAL FIX: Enhanced real Claude process output handling with incremental broadcasting
   if (claudeProcess.stdout) {
     claudeProcess.stdout.on('data', (data) => {
       const realOutput = data.toString('utf8');
       console.log(`📤 REAL Claude ${instanceId} stdout (${data.length} bytes):`, realOutput.substring(0, 200) + (realOutput.length > 200 ? '...' : ''));
       
-      // Broadcast REAL Claude output via SSE (no mock responses)
-      broadcastToAllConnections(instanceId, {
-        type: 'output',
-        data: realOutput,
-        instanceId: instanceId,
-        timestamp: new Date().toISOString(),
-        source: 'stdout',
-        isReal: true,
-        processType: 'pipe'
-      });
+      // Use incremental broadcast to prevent repetition
+      broadcastIncrementalOutput(instanceId, realOutput, 'stdout');
     });
     
     claudeProcess.stdout.on('error', (error) => {
@@ -562,17 +562,8 @@ function setupPipeHandlers(instanceId, processInfo) {
       const realError = data.toString('utf8');
       console.log(`📤 REAL Claude ${instanceId} stderr (${data.length} bytes):`, realError.substring(0, 200) + (realError.length > 200 ? '...' : ''));
       
-      // Broadcast REAL Claude errors via SSE (no mock responses)
-      broadcastToAllConnections(instanceId, {
-        type: 'output',
-        data: realError,
-        instanceId: instanceId,
-        isError: true,
-        timestamp: new Date().toISOString(),
-        source: 'stderr',
-        isReal: true,
-        processType: 'pipe'
-      });
+      // Use incremental broadcast for stderr too
+      broadcastIncrementalOutput(instanceId, realError, 'stderr');
     });
     
     claudeProcess.stderr.on('error', (error) => {
@@ -619,6 +610,53 @@ function setupPipeHandlers(instanceId, processInfo) {
   });
 }
 
+// SPARC Enhanced: Incremental Output Broadcast with Position Tracking
+function broadcastIncrementalOutput(instanceId, newData, source = 'stdout') {
+  const outputBuffer = instanceOutputBuffers.get(instanceId);
+  if (!outputBuffer) {
+    console.warn(`⚠️ No output buffer for ${instanceId} - initializing`);
+    instanceOutputBuffers.set(instanceId, {
+      buffer: '',
+      readPosition: 0,
+      lastSentPosition: 0,
+      createdAt: new Date()
+    });
+    return broadcastIncrementalOutput(instanceId, newData, source);
+  }
+  
+  // Append new data to buffer
+  outputBuffer.buffer += newData;
+  
+  // Calculate new data slice since last sent position
+  const newDataSlice = outputBuffer.buffer.slice(outputBuffer.lastSentPosition);
+  
+  if (newDataSlice.length === 0) {
+    console.log(`📊 No new output for ${instanceId} - already sent`);
+    return;
+  }
+  
+  console.log(`📤 Broadcasting incremental output for ${instanceId}: ${newDataSlice.length} bytes (pos: ${outputBuffer.lastSentPosition} -> ${outputBuffer.buffer.length})`);
+  
+  const message = {
+    type: 'terminal_output',
+    output: newDataSlice,
+    instanceId: instanceId,
+    timestamp: new Date().toISOString(),
+    source: source,
+    isReal: true,
+    position: outputBuffer.lastSentPosition,
+    totalLength: outputBuffer.buffer.length,
+    isIncremental: true
+  };
+  
+  // Update last sent position
+  outputBuffer.lastSentPosition = outputBuffer.buffer.length;
+  
+  // Broadcast to connections (SSE and WebSocket)
+  broadcastToConnections(instanceId, message);
+  broadcastToWebSockets(instanceId, message);
+}
+
 // CRITICAL FIX 4: Enhanced broadcast function with robust error handling
 function safelyBroadcastOutput(instanceId, message) {
   const connections = activeSSEConnections.get(instanceId) || [];
@@ -629,12 +667,11 @@ function safelyBroadcastOutput(instanceId, message) {
   
   if (allConnections.length === 0) {
     console.warn(`⚠️ No SSE connections for ${instanceId} - buffering output:`, message.data?.substring(0, 100));
-    // Buffer output for later delivery when connection is established
-    if (!global.outputBuffer) global.outputBuffer = {};
-    if (!global.outputBuffer[instanceId]) global.outputBuffer[instanceId] = [];
-    global.outputBuffer[instanceId].push(message);
-    if (global.outputBuffer[instanceId].length > 100) {
-      global.outputBuffer[instanceId].shift(); // Keep only last 100 messages
+    // Use new incremental buffer instead of global buffer
+    const outputBuffer = instanceOutputBuffers.get(instanceId);
+    if (outputBuffer && message.data) {
+      outputBuffer.buffer += message.data;
+      console.log(`📦 Buffered ${message.data.length} bytes for ${instanceId} (total: ${outputBuffer.buffer.length})`);
     }
     return;
   }
@@ -676,9 +713,49 @@ function safelyBroadcastOutput(instanceId, message) {
   }
 }
 
-// Legacy function for backward compatibility - routes to enhanced version
+// Enhanced broadcast to connections with deduplication
+function broadcastToConnections(instanceId, message) {
+  const connections = activeSSEConnections.get(instanceId) || [];
+  const generalConnections = activeSSEConnections.get('__status__') || [];
+  const allConnections = [...connections, ...generalConnections];
+  
+  if (allConnections.length === 0) {
+    console.warn(`⚠️ No connections for ${instanceId} - message will be buffered`);
+    return;
+  }
+  
+  const serializedData = `data: ${JSON.stringify(message)}\n\n`;
+  const validConnections = [];
+  let successfulBroadcasts = 0;
+  
+  connections.forEach((connection, index) => {
+    try {
+      if (connection && 
+          !connection.destroyed && 
+          connection.writable && 
+          !connection.writableEnded) {
+        connection.write(serializedData);
+        validConnections.push(connection);
+        successfulBroadcasts++;
+      }
+    } catch (error) {
+      console.warn(`Connection ${index} failed for ${instanceId}:`, error.message);
+    }
+  });
+  
+  // Update connection list to remove dead connections
+  activeSSEConnections.set(instanceId, validConnections);
+  
+  console.log(`📊 [${instanceId}] Incremental broadcast: ${successfulBroadcasts}/${connections.length} successful`);
+}
+
+// Legacy function for backward compatibility - now uses incremental output
 function broadcastToAllConnections(instanceId, message) {
-  safelyBroadcastOutput(instanceId, message);
+  if (message.type === 'output' && message.data) {
+    broadcastIncrementalOutput(instanceId, message.data, message.source);
+  } else {
+    safelyBroadcastOutput(instanceId, message);
+  }
 }
 
 // Middleware
@@ -864,10 +941,11 @@ app.delete('/api/claude/instances/:instanceId', (req, res) => {
       }
     }, 5000);
     
-    // Clean up tracking data
+    // Clean up tracking data including output buffers
     instances.delete(instanceId);
     activeSSEConnections.delete(instanceId);
     sseConnections.delete(instanceId);
+    instanceOutputBuffers.delete(instanceId);
     
     res.json({ 
       success: true, 
@@ -1081,14 +1159,29 @@ function createTerminalSSEStream(req, res, instanceId) {
     timestamp: new Date().toISOString()
   })}\n\n`);
 
-  // CRITICAL FIX: Send any buffered output that was captured while disconnected
-  if (global.outputBuffer && global.outputBuffer[instanceId]) {
-    console.log(`📦 Sending ${global.outputBuffer[instanceId].length} buffered messages for ${instanceId}`);
-    global.outputBuffer[instanceId].forEach(message => {
-      res.write(`data: ${JSON.stringify(message)}\n\n`);
-    });
-    // Clear buffer after sending
-    global.outputBuffer[instanceId] = [];
+  // SPARC Enhanced: Send incremental buffered output that was captured while disconnected
+  const outputBuffer = instanceOutputBuffers.get(instanceId);
+  if (outputBuffer && outputBuffer.buffer.length > 0 && outputBuffer.lastSentPosition < outputBuffer.buffer.length) {
+    const unsentData = outputBuffer.buffer.slice(outputBuffer.lastSentPosition);
+    console.log(`📦 Sending ${unsentData.length} bytes of buffered output for ${instanceId} (pos: ${outputBuffer.lastSentPosition})`);
+    
+    if (unsentData.length > 0) {
+      const bufferedMessage = {
+        type: 'output',
+        data: unsentData,
+        instanceId: instanceId,
+        timestamp: new Date().toISOString(),
+        source: 'buffered',
+        isReal: true,
+        position: outputBuffer.lastSentPosition,
+        totalLength: outputBuffer.buffer.length,
+        isIncremental: true,
+        isBuffered: true
+      };
+      
+      res.write(`data: ${JSON.stringify(bufferedMessage)}\n\n`);
+      outputBuffer.lastSentPosition = outputBuffer.buffer.length;
+    }
   }
 
   // CRITICAL FIX: Don't send fake session messages - let real Claude output come through
@@ -1497,19 +1590,150 @@ app.post('/api/v1/terminal/input/:instanceId', (req, res) => {
   }
 });
 
+// SPARC UNIFIED ARCHITECTURE: Add WebSocket support for terminal communication
+const wss = new WebSocket.Server({ 
+  server,
+  path: '/terminal'
+});
+
+// WebSocket connection tracking
+const wsConnections = new Map(); // instanceId -> Set of WebSocket connections
+const wsConnectionsBySocket = new Map(); // WebSocket -> instanceId
+
+// WebSocket connection handler
+wss.on('connection', (ws, req) => {
+  console.log('🔗 SPARC: New WebSocket terminal connection established');
+  
+  ws.on('message', (data) => {
+    try {
+      const message = JSON.parse(data.toString());
+      console.log('📨 SPARC: WebSocket message received:', message.type);
+      
+      if (message.type === 'connect' && message.terminalId) {
+        // Associate this WebSocket with a Claude instance
+        const instanceId = message.terminalId;
+        
+        if (!wsConnections.has(instanceId)) {
+          wsConnections.set(instanceId, new Set());
+        }
+        wsConnections.get(instanceId).add(ws);
+        wsConnectionsBySocket.set(ws, instanceId);
+        
+        console.log(`✅ SPARC: WebSocket connected to Claude instance ${instanceId}`);
+        
+        // Send connection confirmation
+        ws.send(JSON.stringify({
+          type: 'connect',
+          terminalId: instanceId,
+          connectionType: 'websocket',
+          timestamp: Date.now()
+        }));
+        
+        // Start broadcasting existing output if available
+        const outputBuffer = instanceOutputBuffers.get(instanceId);
+        if (outputBuffer && outputBuffer.buffer.length > 0) {
+          ws.send(JSON.stringify({
+            type: 'output',
+            data: outputBuffer.buffer,
+            terminalId: instanceId,
+            timestamp: Date.now()
+          }));
+        }
+      }
+      
+      if (message.type === 'input' && message.data) {
+        // Forward input to Claude process
+        const instanceId = wsConnectionsBySocket.get(ws);
+        if (instanceId) {
+          const processInfo = activeProcesses.get(instanceId);
+          if (processInfo && processInfo.status === 'running') {
+            console.log(`⌨️ SPARC: Forwarding WebSocket input to Claude ${instanceId}: ${message.data}`);
+            
+            try {
+              if (processInfo.usePty && processInfo.processType === 'pty') {
+                processInfo.process.write(message.data);
+              } else {
+                processInfo.process.stdin.write(message.data);
+              }
+              
+              // Echo back to WebSocket for immediate feedback
+              ws.send(JSON.stringify({
+                type: 'echo',
+                data: message.data,
+                terminalId: instanceId,
+                timestamp: Date.now()
+              }));
+              
+            } catch (error) {
+              console.error(`❌ SPARC: Failed to forward input to Claude ${instanceId}:`, error);
+              ws.send(JSON.stringify({
+                type: 'error',
+                error: error.message,
+                terminalId: instanceId,
+                timestamp: Date.now()
+              }));
+            }
+          }
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ SPARC: WebSocket message parsing error:', error);
+    }
+  });
+  
+  ws.on('close', () => {
+    console.log('🔌 SPARC: WebSocket connection closed');
+    const instanceId = wsConnectionsBySocket.get(ws);
+    if (instanceId) {
+      wsConnections.get(instanceId)?.delete(ws);
+      wsConnectionsBySocket.delete(ws);
+    }
+  });
+  
+  ws.on('error', (error) => {
+    console.error('❌ SPARC: WebSocket error:', error);
+  });
+});
+
+// Enhanced broadcast function to include WebSocket connections
+function broadcastToWebSockets(instanceId, message) {
+  const connections = wsConnections.get(instanceId);
+  if (connections && connections.size > 0) {
+    const wsMessage = JSON.stringify({
+      type: 'output',
+      data: message.data || message.output,
+      terminalId: instanceId,
+      timestamp: message.timestamp,
+      source: message.source || 'process'
+    });
+    
+    connections.forEach(ws => {
+      if (ws.readyState === WebSocket.OPEN) {
+        try {
+          ws.send(wsMessage);
+        } catch (error) {
+          console.error(`❌ SPARC: Failed to send WebSocket message to ${instanceId}:`, error);
+          connections.delete(ws);
+        }
+      }
+    });
+    
+    console.log(`📤 SPARC: Broadcasted to ${connections.size} WebSocket connections for ${instanceId}`);
+  }
+}
+
 // Start server
-const server = app.listen(PORT, () => {
-  console.log(`🚀 HTTP/SSE Server running on http://localhost:${PORT}`);
-  console.log(`✅ WebSocket connection storm eliminated!`);
-  console.log(`📡 Claude Terminal SSE endpoints available:`);
+server.listen(PORT, () => {
+  console.log(`🚀 SPARC UNIFIED SERVER running on http://localhost:${PORT}`);
+  console.log(`✅ HTTP API + WebSocket Terminal on single port!`);
+  console.log(`📡 Claude Terminal endpoints available:`);
+  console.log(`   - WebSocket Terminal: ws://localhost:${PORT}/terminal`);
   console.log(`   - Health: http://localhost:${PORT}/health`);
-  console.log(`   - Claude Terminal Stream (v1): http://localhost:${PORT}/api/v1/claude/instances/{instanceId}/terminal/stream`);
+  console.log(`   - Claude Instances API: http://localhost:${PORT}/api/claude/instances`);
   console.log(`   - Claude Terminal Stream: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/stream`);
-  console.log(`   - Terminal Input (v1): http://localhost:${PORT}/api/v1/claude/instances/{instanceId}/terminal/input`);
   console.log(`   - Terminal Input: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/input`);
-  console.log(`   - Legacy SSE Stream: http://localhost:${PORT}/api/v1/terminal/stream/{instanceId}`);
-  console.log(`   - HTTP Polling: http://localhost:${PORT}/api/v1/terminal/poll/{instanceId}`);
-  console.log(`🎉 Clean HTTP/SSE architecture - Frontend terminal connection ready!`);
+  console.log(`🎉 SPARC: Unified architecture - WebSocket + HTTP on single server!`);
 });
 
 // Graceful shutdown

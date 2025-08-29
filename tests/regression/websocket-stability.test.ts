@@ -9,7 +9,9 @@
  * EXPECTED: These tests will PASS when WebSocket stability is implemented
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+// Convert from Vitest to Jest imports
+// // Converted from Vitest to Jest - globals available
+// Jest equivalents are available globally, vi -> jest for mocking
 
 interface MockWebSocket {
   readyState: number;
@@ -55,13 +57,13 @@ describe('WebSocket Connection Stability - TDD Tests', () => {
       OPEN: 1,
       CLOSING: 2,
       CLOSED: 3,
-      send: vi.fn((data: string) => {
+      send: jest.fn((data: string) => {
         if (mockWebSocket.readyState !== mockWebSocket.OPEN) {
           throw new Error('WebSocket is not open');
         }
         messageQueue.push(data);
       }),
-      close: vi.fn(),
+      close: jest.fn(),
       onopen: null,
       onclose: null,
       onerror: null,
@@ -70,7 +72,7 @@ describe('WebSocket Connection Stability - TDD Tests', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Connection State Management', () => {

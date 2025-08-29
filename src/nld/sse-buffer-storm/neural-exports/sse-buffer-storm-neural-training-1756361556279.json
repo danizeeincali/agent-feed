@@ -1,0 +1,97 @@
+{
+  "metadata": {
+    "dataset_name": "sse_buffer_storm_failure_patterns",
+    "version": "1.0.0",
+    "timestamp": 1756361556279,
+    "pattern_focus": "Implementation vs Integration Gap Detection",
+    "claude_flow_compatible": true
+  },
+  "failure_patterns": [
+    {
+      "pattern_id": "SSE_HELPER_NOT_INTEGRATED",
+      "pattern_type": "IMPLEMENTATION_INTEGRATION_GAP",
+      "claimed_solution": "Implemented SSE incremental output helper functions with position tracking",
+      "actual_failure": "Helper functions exist but are not called by actual SSE endpoints, causing full buffer replay storms",
+      "tdd_factor": 0.15,
+      "effectiveness_score": 0.05,
+      "anti_pattern_signature": [
+        "helper_functions_exist",
+        "endpoints_bypass_helpers",
+        "full_buffer_sent_on_every_sse_event",
+        "position_tracking_not_used",
+        "claimed_success_actual_failure"
+      ],
+      "prevention_strategy": "Integration tests must validate actual endpoint behavior, not just helper function logic",
+      "neural_weight": 0.95
+    },
+    {
+      "pattern_id": "SSE_BUFFER_REPLAY_LOOP",
+      "pattern_type": "BUFFER_ACCUMULATION_STORM",
+      "claimed_solution": "Fixed SSE message duplication with buffer slicing",
+      "actual_failure": "Massive message duplication (1000+ repeated messages) continues due to full buffer replay",
+      "tdd_factor": 0.25,
+      "effectiveness_score": 0.1,
+      "anti_pattern_signature": [
+        "duplicate_ratio > 0.7",
+        "buffer_size_unlimited_growth",
+        "position_not_advancing",
+        "frontend_message_state_explosion",
+        "user_reports_continued_failure"
+      ],
+      "prevention_strategy": "TDD must test actual SSE streaming with real endpoints, not isolated components",
+      "neural_weight": 0.9
+    },
+    {
+      "pattern_id": "FRONTEND_BACKEND_MISMATCH",
+      "pattern_type": "DATA_CONTRACT_VIOLATION",
+      "claimed_solution": "Backend sends incremental data with position tracking",
+      "actual_failure": "Frontend receives cumulative data causing infinite message accumulation",
+      "tdd_factor": 0.3,
+      "effectiveness_score": 0.15,
+      "anti_pattern_signature": [
+        "backend_sends_full_buffer",
+        "frontend_expects_incremental",
+        "data_contract_violated",
+        "cumulative_instead_of_incremental",
+        "memory_leak_unbounded_growth"
+      ],
+      "prevention_strategy": "End-to-end contract testing between frontend and backend SSE implementations",
+      "neural_weight": 0.85
+    },
+    {
+      "pattern_id": "POSITION_TRACKING_BYPASS",
+      "pattern_type": "LOGIC_BYPASS_FAILURE",
+      "claimed_solution": "Added position tracking to prevent duplicate message sending",
+      "actual_failure": "Actual SSE endpoints ignore position tracking, sending full buffer on every event",
+      "tdd_factor": 0.2,
+      "effectiveness_score": 0.08,
+      "anti_pattern_signature": [
+        "position_tracking_implemented",
+        "sse_endpoints_ignore_position",
+        "full_buffer_sent_regardless",
+        "duplicate_messages_continue",
+        "implementation_not_integrated"
+      ],
+      "prevention_strategy": "Integration tests must verify position tracking is used by actual SSE message sending logic",
+      "neural_weight": 0.88
+    }
+  ],
+  "tdd_improvement_insights": {
+    "integration_testing_gaps": 0,
+    "isolation_vs_integration_failures": 0,
+    "helper_function_integration_rate": 0,
+    "recommended_tdd_patterns": [
+      "END_TO_END_SSE_STREAMING_TESTS",
+      "INTEGRATION_TESTS_FOR_HELPER_FUNCTION_USAGE",
+      "CONTRACT_TESTS_BETWEEN_FRONTEND_BACKEND",
+      "REAL_TIME_SSE_MESSAGE_VALIDATION",
+      "POSITION_TRACKING_INTEGRATION_VERIFICATION"
+    ]
+  },
+  "claude_flow_training_config": {
+    "neural_model_type": "pattern_classification_with_effectiveness_scoring",
+    "training_epochs_recommended": 100,
+    "pattern_classification_accuracy_target": 0.95,
+    "deployment_ready": true
+  }
+}

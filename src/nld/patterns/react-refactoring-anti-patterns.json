@@ -1,0 +1,326 @@
+[
+  {
+    "id": "RP001",
+    "name": "Undefined Handler Reference After Migration",
+    "description": "Component still references SSE handler methods that no longer exist after WebSocket migration",
+    "component": "ClaudeInstanceManager",
+    "antiPatternCode": "// After migrating to WebSocket, but keeping old SSE handler references\ncomponentDidMount() {\n  const websocket = new WebSocket('ws://localhost:3001');\n  // ERROR: addHandler doesn't exist on WebSocket\n  websocket.addHandler('message', this.handleMessage);\n  websocket.addHandler('error', this.handleError);\n}\n\ncomponentWillUnmount() {\n  // ERROR: removeHandler doesn't exist\n  this.websocket.removeHandler('message', this.handleMessage);\n}",
+    "correctCode": "// Correct WebSocket implementation\ncomponentDidMount() {\n  this.websocket = new WebSocket('ws://localhost:3001');\n  this.websocket.addEventListener('message', this.handleMessage);\n  this.websocket.addEventListener('error', this.handleError);\n}\n\ncomponentWillUnmount() {\n  if (this.websocket) {\n    this.websocket.removeEventListener('message', this.handleMessage);\n    this.websocket.removeEventListener('error', this.handleError);\n    this.websocket.close();\n  }\n}",
+    "symptoms": [
+      "ReferenceError: addHandler is not defined",
+      "TypeError: websocket.addHandler is not a function",
+      "Component fails to establish connection",
+      "Event handlers not properly cleaned up"
+    ],
+    "causes": [
+      "Incomplete migration from SSE to WebSocket",
+      "Copy-paste refactoring without updating method names",
+      "Mixing SSE and WebSocket patterns in same component",
+      "Lack of testing during refactoring process"
+    ],
+    "consequences": [
+      "Runtime errors breaking user interface",
+      "Memory leaks from uncleaned event handlers",
+      "Connection failures",
+      "Inconsistent application behavior"
+    ],
+    "detectionRules": [
+      "Check for .addHandler() calls on WebSocket objects",
+      "Look for .removeHandler() calls in cleanup methods",
+      "Validate event listener management patterns",
+      "Ensure proper WebSocket lifecycle management"
+    ],
+    "prevention": [
+      "Use TypeScript for compile-time error detection",
+      "Create migration checklists for handler refactoring",
+      "Implement automated tests for connection patterns",
+      "Use linting rules to detect deprecated handler methods"
+    ],
+    "severity": "high",
+    "frequency": 0,
+    "category": "handlers",
+    "refactoringContext": {
+      "from": "SSE",
+      "to": "WebSocket",
+      "migration": "SSE_TO_WEBSOCKET",
+      "phase": "handler_replacement"
+    },
+    "realWorldExample": {
+      "project": "agent-feed",
+      "file": "ClaudeInstanceManager.tsx",
+      "lineRange": "45-52",
+      "impact": "Component fails to connect, breaks instance management"
+    },
+    "metadata": {
+      "firstDetected": "2025-08-28T20:57:49.655Z",
+      "lastSeen": "2025-08-28T20:57:49.655Z",
+      "affectedComponents": [
+        "ClaudeInstanceManager",
+        "ClaudeInstanceSelector"
+      ],
+      "relatedPatterns": [
+        "RP002",
+        "RP004"
+      ]
+    }
+  },
+  {
+    "id": "RP002",
+    "name": "Incomplete useEffect Cleanup During Migration",
+    "description": "useEffect cleanup functions still reference old SSE methods after WebSocket migration",
+    "component": "useHTTPSSE",
+    "antiPatternCode": "// Hook migrated to WebSocket but cleanup still uses SSE pattern\nconst useHTTPSSE = (url: string) => {\n  const [connection, setConnection] = useState<WebSocket | null>(null);\n\n  useEffect(() => {\n    const ws = new WebSocket(url);\n    setConnection(ws);\n\n    return () => {\n      // ERROR: WebSocket doesn't have removeHandler method\n      ws.removeHandler('message', handleMessage);\n      ws.removeHandler('error', handleError);\n    };\n  }, [url]);\n};",
+    "correctCode": "// Correct WebSocket cleanup in useEffect\nconst useHTTPSSE = (url: string) => {\n  const [connection, setConnection] = useState<WebSocket | null>(null);\n\n  useEffect(() => {\n    const ws = new WebSocket(url);\n    \n    const handleMessage = (event: MessageEvent) => {\n      // Handle message\n    };\n    \n    const handleError = (event: Event) => {\n      // Handle error\n    };\n\n    ws.addEventListener('message', handleMessage);\n    ws.addEventListener('error', handleError);\n    setConnection(ws);\n\n    return () => {\n      ws.removeEventListener('message', handleMessage);\n      ws.removeEventListener('error', handleError);\n      ws.close();\n    };\n  }, [url]);\n};",
+    "symptoms": [
+      "ReferenceError in useEffect cleanup",
+      "Memory leaks from uncleaned listeners",
+      "Hook fails to cleanup properly",
+      "Console warnings about missing cleanup"
+    ],
+    "causes": [
+      "Partial migration of hook patterns",
+      "Copy-paste errors during refactoring",
+      "Not updating cleanup functions to match new API",
+      "Mixing EventSource and WebSocket patterns"
+    ],
+    "consequences": [
+      "Memory leaks in React applications",
+      "Stale closures causing unexpected behavior",
+      "Performance degradation over time",
+      "Inconsistent connection management"
+    ],
+    "detectionRules": [
+      "Scan useEffect cleanup functions for deprecated methods",
+      "Check for proper WebSocket cleanup patterns",
+      "Validate event listener removal",
+      "Ensure connection closure in cleanup"
+    ],
+    "prevention": [
+      "Create hook testing utilities",
+      "Use React Testing Library for cleanup validation",
+      "Implement custom hooks for connection management",
+      "Add ESLint rules for proper cleanup patterns"
+    ],
+    "severity": "medium",
+    "frequency": 0,
+    "category": "effects",
+    "refactoringContext": {
+      "from": "SSE",
+      "to": "WebSocket",
+      "migration": "HOOK_PATTERN_MIGRATION",
+      "phase": "cleanup_refactoring"
+    },
+    "realWorldExample": {
+      "project": "agent-feed",
+      "file": "useHTTPSSE.ts",
+      "lineRange": "78-95",
+      "impact": "Memory leaks and connection issues in SSE hook"
+    },
+    "metadata": {
+      "firstDetected": "2025-08-28T20:57:49.655Z",
+      "lastSeen": "2025-08-28T20:57:49.655Z",
+      "affectedComponents": [
+        "useHTTPSSE",
+        "useAdvancedSSEConnection"
+      ],
+      "relatedPatterns": [
+        "RP001",
+        "RP003"
+      ]
+    }
+  },
+  {
+    "id": "RP003",
+    "name": "Protocol Mismatch in Connection URLs",
+    "description": "WebSocket connection attempts using HTTP/SSE endpoint URLs without protocol conversion",
+    "component": "useAdvancedSSEConnection",
+    "antiPatternCode": "// WebSocket trying to connect to HTTP SSE endpoint\nconst useAdvancedSSEConnection = () => {\n  useEffect(() => {\n    // ERROR: WebSocket cannot connect to HTTP endpoint\n    const ws = new WebSocket('http://localhost:3001/sse');\n    \n    ws.addEventListener('open', () => {\n      console.log('Connected'); // This will never fire\n    });\n  }, []);\n};",
+    "correctCode": "// Correct protocol handling for WebSocket\nconst useAdvancedSSEConnection = () => {\n  useEffect(() => {\n    // Convert HTTP to WebSocket protocol\n    const wsUrl = 'ws://localhost:3001/websocket'; // Use proper WebSocket endpoint\n    const ws = new WebSocket(wsUrl);\n    \n    ws.addEventListener('open', () => {\n      console.log('WebSocket connected');\n    });\n    \n    ws.addEventListener('error', (error) => {\n      console.error('WebSocket error:', error);\n    });\n  }, []);\n};",
+    "symptoms": [
+      "WebSocket connection failures",
+      "Network errors in browser console",
+      "Connection never establishes",
+      "Protocol mismatch errors"
+    ],
+    "causes": [
+      "Reusing SSE endpoint URLs for WebSocket",
+      "Not updating backend to support WebSocket protocol",
+      "Incomplete understanding of protocol differences",
+      "Copy-paste migration without URL updates"
+    ],
+    "consequences": [
+      "Complete connection failure",
+      "Application functionality breakdown",
+      "Poor user experience",
+      "Debugging challenges"
+    ],
+    "detectionRules": [
+      "Check WebSocket URLs for http:// protocol",
+      "Validate endpoint protocol compatibility",
+      "Ensure backend supports WebSocket protocol",
+      "Test connection establishment"
+    ],
+    "prevention": [
+      "Create URL validation utilities",
+      "Implement protocol detection logic",
+      "Add connection health monitoring",
+      "Use environment-specific configuration"
+    ],
+    "severity": "critical",
+    "frequency": 0,
+    "category": "handlers",
+    "refactoringContext": {
+      "from": "SSE",
+      "to": "WebSocket",
+      "migration": "PROTOCOL_CONVERSION",
+      "phase": "connection_setup"
+    },
+    "realWorldExample": {
+      "project": "agent-feed",
+      "file": "useAdvancedSSEConnection.ts",
+      "lineRange": "34-45",
+      "impact": "Complete connection failure, app non-functional"
+    },
+    "metadata": {
+      "firstDetected": "2025-08-28T20:57:49.655Z",
+      "lastSeen": "2025-08-28T20:57:49.655Z",
+      "affectedComponents": [
+        "useAdvancedSSEConnection",
+        "SSEConnectionManager"
+      ],
+      "relatedPatterns": [
+        "RP004",
+        "RP005"
+      ]
+    }
+  },
+  {
+    "id": "RP004",
+    "name": "State Management Inconsistency During Migration",
+    "description": "React state still reflects SSE patterns after WebSocket migration, causing state inconsistencies",
+    "component": "TokenCostAnalytics",
+    "antiPatternCode": "// State management not updated for WebSocket patterns\nconst [sseConnected, setSseConnected] = useState(false);\nconst [eventSource, setEventSource] = useState<EventSource | null>(null);\n\nuseEffect(() => {\n  // Migrated to WebSocket but state variables still reference SSE\n  const ws = new WebSocket('ws://localhost:3001');\n  \n  ws.addEventListener('open', () => {\n    setSseConnected(true); // Confusing: WebSocket but SSE state name\n    setEventSource(ws as any); // Type mismatch: WebSocket assigned to EventSource\n  });\n}, []);",
+    "correctCode": "// Consistent state management for WebSocket\nconst [wsConnected, setWsConnected] = useState(false);\nconst [webSocket, setWebSocket] = useState<WebSocket | null>(null);\n\nuseEffect(() => {\n  const ws = new WebSocket('ws://localhost:3001');\n  \n  ws.addEventListener('open', () => {\n    setWsConnected(true);\n    setWebSocket(ws);\n  });\n  \n  ws.addEventListener('close', () => {\n    setWsConnected(false);\n    setWebSocket(null);\n  });\n}, []);",
+    "symptoms": [
+      "Confusing variable names in codebase",
+      "Type errors with state assignments",
+      "Misleading debugging information",
+      "State inconsistencies"
+    ],
+    "causes": [
+      "Incomplete refactoring of state variables",
+      "Not updating variable names during migration",
+      "Type system not catching state mismatches",
+      "Rushed refactoring without proper review"
+    ],
+    "consequences": [
+      "Confusing codebase for developers",
+      "Type safety violations",
+      "Debugging difficulties",
+      "Maintenance challenges"
+    ],
+    "detectionRules": [
+      "Check for SSE-named variables with WebSocket types",
+      "Validate state variable naming consistency",
+      "Ensure type safety in state management",
+      "Review variable usage patterns"
+    ],
+    "prevention": [
+      "Use consistent naming conventions",
+      "Implement comprehensive refactoring checklists",
+      "Leverage TypeScript strict mode",
+      "Add code review for naming consistency"
+    ],
+    "severity": "medium",
+    "frequency": 0,
+    "category": "state",
+    "refactoringContext": {
+      "from": "SSE",
+      "to": "WebSocket",
+      "migration": "STATE_MANAGEMENT_MIGRATION",
+      "phase": "variable_renaming"
+    },
+    "realWorldExample": {
+      "project": "agent-feed",
+      "file": "TokenCostAnalytics.tsx",
+      "lineRange": "67-89",
+      "impact": "Confusing state management, type safety issues"
+    },
+    "metadata": {
+      "firstDetected": "2025-08-28T20:57:49.655Z",
+      "lastSeen": "2025-08-28T20:57:49.655Z",
+      "affectedComponents": [
+        "TokenCostAnalytics",
+        "ClaudeInstanceManagerModern"
+      ],
+      "relatedPatterns": [
+        "RP001",
+        "RP003"
+      ]
+    }
+  },
+  {
+    "id": "RP005",
+    "name": "Mixed Event Handler Patterns",
+    "description": "Component uses both SSE and WebSocket event handling patterns simultaneously, creating conflicts",
+    "component": "ClaudeInstanceManagerModern",
+    "antiPatternCode": "// Mixing SSE and WebSocket event patterns\nclass ClaudeInstanceManagerModern extends Component {\n  componentDidMount() {\n    // Old SSE pattern\n    this.eventSource = new EventSource('/sse');\n    this.eventSource.onmessage = this.handleSSEMessage;\n    \n    // New WebSocket pattern added without removing SSE\n    this.websocket = new WebSocket('ws://localhost:3001');\n    this.websocket.addEventListener('message', this.handleWSMessage);\n  }\n  \n  handleSSEMessage = (event) => {\n    // Handles SSE messages\n  }\n  \n  handleWSMessage = (event) => {\n    // Handles WebSocket messages  \n    // Potential conflicts with SSE handler\n  }\n}",
+    "correctCode": "// Clean WebSocket-only implementation\nclass ClaudeInstanceManagerModern extends Component {\n  componentDidMount() {\n    // Single WebSocket connection\n    this.websocket = new WebSocket('ws://localhost:3001');\n    this.websocket.addEventListener('message', this.handleMessage);\n    this.websocket.addEventListener('error', this.handleError);\n    this.websocket.addEventListener('close', this.handleClose);\n  }\n  \n  componentWillUnmount() {\n    if (this.websocket) {\n      this.websocket.removeEventListener('message', this.handleMessage);\n      this.websocket.removeEventListener('error', this.handleError);\n      this.websocket.removeEventListener('close', this.handleClose);\n      this.websocket.close();\n    }\n  }\n  \n  handleMessage = (event: MessageEvent) => {\n    // Single, consistent message handler\n  }\n}",
+    "symptoms": [
+      "Duplicate connections being established",
+      "Conflicting message handlers",
+      "Resource waste from multiple connections",
+      "Inconsistent behavior"
+    ],
+    "causes": [
+      "Gradual migration without removing old code",
+      "Fear of breaking existing functionality",
+      "Incomplete understanding of migration scope",
+      "Lack of proper testing during migration"
+    ],
+    "consequences": [
+      "Resource waste from multiple connections",
+      "Unpredictable application behavior",
+      "Performance degradation",
+      "Increased complexity and maintenance burden"
+    ],
+    "detectionRules": [
+      "Check for both EventSource and WebSocket in same component",
+      "Look for duplicate message handlers",
+      "Identify multiple connection patterns",
+      "Validate single responsibility principle"
+    ],
+    "prevention": [
+      "Use feature flags for gradual migration",
+      "Implement comprehensive testing",
+      "Create clear migration milestones",
+      "Remove old code after successful migration"
+    ],
+    "severity": "high",
+    "frequency": 0,
+    "category": "handlers",
+    "refactoringContext": {
+      "from": "SSE",
+      "to": "WebSocket",
+      "migration": "PARALLEL_PATTERN_CONFLICT",
+      "phase": "transition_overlap"
+    },
+    "realWorldExample": {
+      "project": "agent-feed",
+      "file": "ClaudeInstanceManagerModern.tsx",
+      "lineRange": "45-78",
+      "impact": "Duplicate connections, resource waste, inconsistent behavior"
+    },
+    "metadata": {
+      "firstDetected": "2025-08-28T20:57:49.655Z",
+      "lastSeen": "2025-08-28T20:57:49.655Z",
+      "affectedComponents": [
+        "ClaudeInstanceManagerModern"
+      ],
+      "relatedPatterns": [
+        "RP001",
+        "RP002"
+      ]
+    }
+  }
+]

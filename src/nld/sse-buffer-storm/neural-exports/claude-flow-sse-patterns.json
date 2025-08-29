@@ -1,0 +1,58 @@
+{
+  "neural_patterns": [
+    {
+      "pattern": [
+        "helper_functions_exist",
+        "endpoints_bypass_helpers",
+        "full_buffer_sent_on_every_sse_event",
+        "position_tracking_not_used",
+        "claimed_success_actual_failure"
+      ],
+      "effectiveness": 0.05,
+      "tdd_factor": 0.15,
+      "prevention": "Integration tests must validate actual endpoint behavior, not just helper function logic",
+      "weight": 0.95
+    },
+    {
+      "pattern": [
+        "duplicate_ratio > 0.7",
+        "buffer_size_unlimited_growth",
+        "position_not_advancing",
+        "frontend_message_state_explosion",
+        "user_reports_continued_failure"
+      ],
+      "effectiveness": 0.1,
+      "tdd_factor": 0.25,
+      "prevention": "TDD must test actual SSE streaming with real endpoints, not isolated components",
+      "weight": 0.9
+    },
+    {
+      "pattern": [
+        "backend_sends_full_buffer",
+        "frontend_expects_incremental",
+        "data_contract_violated",
+        "cumulative_instead_of_incremental",
+        "memory_leak_unbounded_growth"
+      ],
+      "effectiveness": 0.15,
+      "tdd_factor": 0.3,
+      "prevention": "End-to-end contract testing between frontend and backend SSE implementations",
+      "weight": 0.85
+    },
+    {
+      "pattern": [
+        "position_tracking_implemented",
+        "sse_endpoints_ignore_position",
+        "full_buffer_sent_regardless",
+        "duplicate_messages_continue",
+        "implementation_not_integrated"
+      ],
+      "effectiveness": 0.08,
+      "tdd_factor": 0.2,
+      "prevention": "Integration tests must verify position tracking is used by actual SSE message sending logic",
+      "weight": 0.88
+    }
+  ],
+  "training_ready": true,
+  "version": "2.0.0"
+}

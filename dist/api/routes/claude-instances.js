@@ -73,6 +73,13 @@ router.post('/', createInstanceRateLimit, [
         res.status(201).json({
             success: true,
             instanceId,
+            instance: {
+                id: instanceId,
+                name: `claude-${instanceId.split('-').pop()}`,
+                status: 'starting',
+                type: config.instanceType || 'default',
+                workingDirectory: config.workingDirectory || process.cwd()
+            },
             message: 'Claude instance created successfully'
         });
         logger_1.logger.info(`Claude instance created: ${instanceId}`);
@@ -130,7 +137,7 @@ router.get('/', instanceRateLimit, [
  * Get instance details
  */
 router.get('/:id', instanceRateLimit, [
-    (0, express_validator_1.param)('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    (0, express_validator_1.param)('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
 ], handleValidationErrors, async (req, res) => {
     try {
         const { id } = req.params;
@@ -160,7 +167,7 @@ router.get('/:id', instanceRateLimit, [
  * Terminate instance
  */
 router.delete('/:id', instanceRateLimit, [
-    (0, express_validator_1.param)('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    (0, express_validator_1.param)('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
     (0, express_validator_1.query)('force').optional().isBoolean().withMessage('Force parameter must be boolean'),
 ], handleValidationErrors, async (req, res) => {
     try {
@@ -193,7 +200,7 @@ router.delete('/:id', instanceRateLimit, [
  * Restart instance
  */
 router.post('/:id/restart', instanceRateLimit, [
-    (0, express_validator_1.param)('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    (0, express_validator_1.param)('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
 ], handleValidationErrors, async (req, res) => {
     try {
         const { id } = req.params;
@@ -224,7 +231,7 @@ router.post('/:id/restart', instanceRateLimit, [
  * Health check for instance
  */
 router.get('/:id/health', instanceRateLimit, [
-    (0, express_validator_1.param)('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    (0, express_validator_1.param)('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
 ], handleValidationErrors, async (req, res) => {
     try {
         const { id } = req.params;
@@ -255,11 +262,60 @@ router.get('/:id/health', instanceRateLimit, [
     }
 });
 /**
+ * POST /api/claude/instances/:id/terminal/input
+ * Send terminal input to instance (CRITICAL FIX)
+ */
+router.post('/:id/terminal/input', instanceRateLimit, [
+    (0, express_validator_1.param)('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
+    (0, express_validator_1.body)('input').isString().isLength({ min: 1, max: 10000 }).withMessage('Input must be a string between 1 and 10000 characters'),
+], handleValidationErrors, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { input } = req.body;
+        logger_1.logger.info(`Terminal input received for instance ${id}:`, input.slice(0, 100));
+        const instance = processManager.getInstance(id);
+        if (!instance) {
+            return res.status(404).json({
+                success: false,
+                error: 'Instance not found',
+                message: `Claude instance with ID ${id} not found`
+            });
+        }
+        if (instance.status !== 'running') {
+            return res.status(400).json({
+                success: false,
+                error: 'Instance not ready',
+                message: `Instance ${id} is not running (status: ${instance.status})`
+            });
+        }
+        // CRITICAL FIX: Send input to the actual terminal process
+        await processManager.sendInput(id, input);
+        res.json({
+            success: true,
+            message: 'Terminal input sent successfully',
+            instanceId: id,
+            input: input.slice(0, 100), // Log first 100 chars for debugging
+            timestamp: new Date().toISOString()
+        });
+        logger_1.logger.debug(`Terminal input sent to instance ${id}`, {
+            inputLength: input.length
+        });
+    }
+    catch (error) {
+        logger_1.logger.error(`Failed to send terminal input to instance ${req.params.id}:`, error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to send terminal input',
+            message: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+});
+/**
  * POST /api/claude/instances/:id/message
  * Send message to instance
  */
 router.post('/:id/message', instanceRateLimit, [
-    (0, express_validator_1.param)('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    (0, express_validator_1.param)('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
     (0, express_validator_1.body)('content').isString().isLength({ min: 1, max: 10000 }).withMessage('Content must be a string between 1 and 10000 characters'),
     (0, express_validator_1.body)('metadata').optional().isObject().withMessage('Metadata must be an object'),
 ], handleValidationErrors, async (req, res) => {
@@ -304,7 +360,7 @@ router.post('/:id/message', instanceRateLimit, [
  * Get recent messages from instance
  */
 router.get('/:id/messages', instanceRateLimit, [
-    (0, express_validator_1.param)('id').isUUID(4).withMessage('Instance ID must be a valid UUID'),
+    (0, express_validator_1.param)('id').isString().matches(/^claude-\d+$/).withMessage('Instance ID must be in format claude-XXXX'),
     (0, express_validator_1.query)('limit').optional().isInt({ min: 1, max: 1000 }).withMessage('Limit must be between 1 and 1000'),
     (0, express_validator_1.query)('type').optional().isIn(['input', 'output', 'error', 'control']).withMessage('Invalid message type filter'),
 ], handleValidationErrors, async (req, res) => {

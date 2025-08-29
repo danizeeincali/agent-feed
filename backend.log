@@ -1,13 +1,407 @@
-🚀 HTTP/SSE Server running on http://localhost:3000
-✅ WebSocket connection storm eliminated!
-📡 Claude Terminal SSE endpoints available:
+🚀 SPARC UNIFIED SERVER running on http://localhost:3000
+✅ HTTP API + WebSocket Terminal on single port!
+📡 Claude Terminal endpoints available:
+   - WebSocket Terminal: ws://localhost:3000/terminal
    - Health: http://localhost:3000/health
-   - Claude Terminal Stream (v1): http://localhost:3000/api/v1/claude/instances/{instanceId}/terminal/stream
+   - Claude Instances API: http://localhost:3000/api/claude/instances
    - Claude Terminal Stream: http://localhost:3000/api/claude/instances/{instanceId}/terminal/stream
-   - Terminal Input (v1): http://localhost:3000/api/v1/claude/instances/{instanceId}/terminal/input
    - Terminal Input: http://localhost:3000/api/claude/instances/{instanceId}/terminal/input
-   - Legacy SSE Stream: http://localhost:3000/api/v1/terminal/stream/{instanceId}
-   - HTTP Polling: http://localhost:3000/api/v1/terminal/poll/{instanceId}
-🎉 Clean HTTP/SSE architecture - Frontend terminal connection ready!
-🛑 Shutting down HTTP/SSE server...
-✅ HTTP/SSE server shutdown complete
+🎉 SPARC: Unified architecture - WebSocket + HTTP on single server!
+🆕 SPARC Creating Claude instance: {
+  command: [ 'claude', '--version' ],
+  instanceType: undefined,
+  usePty: true
+}
+✅ Directory resolved successfully in 1ms:
+   Instance Type: prod
+   Directory Hint: prod
+   Resolved Path: /workspaces/agent-feed/prod
+🚀 SPARC Enhanced Claude process spawning (PTY: true):
+   Command: claude 
+   Working Directory: /workspaces/agent-feed/prod
+   Instance Type: prod
+   Instance ID: claude-6601
+🚀 Creating REAL Claude instance (Mock Claude system removed)
+✅ PTY process created successfully for claude-6601 with Claude flags
+🔧 Setting up process handlers for claude-6601 (pty mode)
+🔧 Setting up PTY handlers for claude-6601
+🔧 PTY Claude process spawned: claude-6601
+📁 Working directory: /workspaces/agent-feed/prod
+📊 PTY Process configuration:
+   PID: 135447
+   Killed: undefined
+   Process Type: PTY (better terminal emulation)
+📡 Ready to stream REAL Claude PTY output
+📡 Broadcasting initial 'starting' status for claude-6601
+📡 Broadcasting status starting for instance claude-6601
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ SPARC Enhanced Claude process spawned: claude-6601 (PID: 135447)
+   Working Directory: /workspaces/agent-feed/prod
+   Process Type: pty
+   PTY Enabled: true
+✅ PTY Claude process claude-6601 ready (PID: 135447)
+📡 Broadcasting status running for instance claude-6601
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+📤 REAL Claude claude-6601 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-6601: 6 bytes (pos: 0 -> 6)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (8 bytes): [?2004h
+📤 Broadcasting incremental output for claude-6601: 8 bytes (pos: 6 -> 14)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (12 bytes): [?25h[?25h
+📤 Broadcasting incremental output for claude-6601: 12 bytes (pos: 14 -> 26)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (8 bytes): [?2004l
+📤 Broadcasting incremental output for claude-6601: 8 bytes (pos: 26 -> 34)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (444 bytes): [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                         [38;2;215;119;...
+📤 Broadcasting incremental output for claude-6601: 444 bytes (pos: 34 -> 478)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (789 bytes): 
+[38;2;215;119;87m│[39m                                                   [38;2;215;119;87m│[39m
+[38;2;215;119;87m│[39m   [38;2;153;153;153mcwd: /workspaces/agent-feed/prod[39m              ...
+📤 Broadcasting incremental output for claude-6601: 789 bytes (pos: 478 -> 1267)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-6601: 6 bytes (pos: 1267 -> 1273)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (16 bytes): [?2004h[?1004h
+📤 Broadcasting incremental output for claude-6601: 16 bytes (pos: 1273 -> 1289)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (47 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+📤 Broadcasting incremental output for claude-6601: 47 bytes (pos: 1289 -> 1336)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 REAL Claude claude-6601 PTY output (486 bytes): 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;136;136m│[39m[22m > [7mT[27m[2mry "create a...
+📤 Broadcasting incremental output for claude-6601: 486 bytes (pos: 1336 -> 1822)
+⚠️ No connections for claude-6601 - message will be buffered
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔗 SPARC: New WebSocket terminal connection established
+📨 SPARC: WebSocket message received: connect
+✅ SPARC: WebSocket connected to Claude instance claude-6601
+📨 SPARC: WebSocket message received: input
+⌨️ SPARC: Forwarding WebSocket input to Claude claude-6601: help
+
+📤 REAL Claude claude-6601 PTY output (664 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-6601: 664 bytes (pos: 1822 -> 2486)
+⚠️ No connections for claude-6601 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6601
+🔌 SPARC: WebSocket connection closed
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 1 instances: [ 'claude-6601 (prod/claude)' ]
+🆕 SPARC Creating Claude instance: {
+  command: [ 'claude', '--version' ],
+  instanceType: 'prod',
+  usePty: true
+}
+✅ Directory resolved successfully in 1ms:
+   Instance Type: prod
+   Directory Hint: prod
+   Resolved Path: /workspaces/agent-feed/prod
+🚀 SPARC Enhanced Claude process spawning (PTY: true):
+   Command: claude 
+   Working Directory: /workspaces/agent-feed/prod
+   Instance Type: prod
+   Instance ID: claude-3884
+🚀 Creating REAL Claude instance (Mock Claude system removed)
+✅ PTY process created successfully for claude-3884 with Claude flags
+🔧 Setting up process handlers for claude-3884 (pty mode)
+🔧 Setting up PTY handlers for claude-3884
+🔧 PTY Claude process spawned: claude-3884
+📁 Working directory: /workspaces/agent-feed/prod
+📊 PTY Process configuration:
+   PID: 189316
+   Killed: undefined
+   Process Type: PTY (better terminal emulation)
+📡 Ready to stream REAL Claude PTY output
+📡 Broadcasting initial 'starting' status for claude-3884
+📡 Broadcasting status starting for instance claude-3884
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ SPARC Enhanced Claude process spawned: claude-3884 (PID: 189316)
+   Working Directory: /workspaces/agent-feed/prod
+   Process Type: pty
+   PTY Enabled: true
+✅ PTY Claude process claude-3884 ready (PID: 189316)
+📡 Broadcasting status running for instance claude-3884
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+📤 REAL Claude claude-3884 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-3884: 6 bytes (pos: 0 -> 6)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (8 bytes): [?2004h
+📤 Broadcasting incremental output for claude-3884: 8 bytes (pos: 6 -> 14)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (6 bytes): [?25h
+📤 Broadcasting incremental output for claude-3884: 6 bytes (pos: 14 -> 20)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (6 bytes): [?25h
+📤 Broadcasting incremental output for claude-3884: 6 bytes (pos: 20 -> 26)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (8 bytes): [?2004l
+📤 Broadcasting incremental output for claude-3884: 8 bytes (pos: 26 -> 34)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (1239 bytes): [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                         [38;2;215;119;...
+📤 Broadcasting incremental output for claude-3884: 1239 bytes (pos: 34 -> 1273)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (8 bytes): [?2004h
+📤 Broadcasting incremental output for claude-3884: 8 bytes (pos: 1273 -> 1281)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (8 bytes): [?1004h
+📤 Broadcasting incremental output for claude-3884: 8 bytes (pos: 1281 -> 1289)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (47 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+📤 Broadcasting incremental output for claude-3884: 47 bytes (pos: 1289 -> 1336)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (484 bytes): 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;136;136m│[39m[22m > [7mT[27m[2mry "fix lint...
+📤 Broadcasting incremental output for claude-3884: 484 bytes (pos: 1336 -> 1820)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (2 bytes): 
+
+📤 Broadcasting incremental output for claude-3884: 2 bytes (pos: 1820 -> 1822)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (563 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-3884: 563 bytes (pos: 1822 -> 2385)
+⚠️ No connections for claude-3884 - message will be buffered
+📤 REAL Claude claude-3884 PTY output (533 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-3884: 533 bytes (pos: 2385 -> 2918)
+⚠️ No connections for claude-3884 - message will be buffered
+🔍 Fetching Claude instances for frontend
+📋 Returning 2 instances: [ 'claude-6601 (prod/claude)', 'claude-3884 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 2 instances: [ 'claude-6601 (prod/claude)', 'claude-3884 (prod/claude)' ]
+🔍 Fetching Claude instances for frontend
+📋 Returning 2 instances: [ 'claude-6601 (prod/claude)', 'claude-3884 (prod/claude)' ]
+🆕 SPARC Creating Claude instance: { command: 'cd prod && claude', instanceType: undefined, usePty: true }
+✅ Directory resolved successfully in 0ms:
+   Instance Type: prod
+   Directory Hint: prod
+   Resolved Path: /workspaces/agent-feed/prod
+🚀 SPARC Enhanced Claude process spawning (PTY: true):
+   Command: claude 
+   Working Directory: /workspaces/agent-feed/prod
+   Instance Type: prod
+   Instance ID: claude-6803
+🚀 Creating REAL Claude instance (Mock Claude system removed)
+✅ PTY process created successfully for claude-6803 with Claude flags
+🔧 Setting up process handlers for claude-6803 (pty mode)
+🔧 Setting up PTY handlers for claude-6803
+🔧 PTY Claude process spawned: claude-6803
+📁 Working directory: /workspaces/agent-feed/prod
+📊 PTY Process configuration:
+   PID: 192098
+   Killed: undefined
+   Process Type: PTY (better terminal emulation)
+📡 Ready to stream REAL Claude PTY output
+📡 Broadcasting initial 'starting' status for claude-6803
+📡 Broadcasting status starting for instance claude-6803
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ SPARC Enhanced Claude process spawned: claude-6803 (PID: 192098)
+   Working Directory: /workspaces/agent-feed/prod
+   Process Type: pty
+   PTY Enabled: true
+🔍 Fetching Claude instances for frontend
+📋 Returning 3 instances: [
+  'claude-6601 (prod/claude)',
+  'claude-3884 (prod/claude)',
+  'claude-6803 (prod/claude)'
+]
+🔗 SPARC: New WebSocket terminal connection established
+📨 SPARC: WebSocket message received: connect
+✅ SPARC: WebSocket connected to Claude instance claude-6803
+✅ PTY Claude process claude-6803 ready (PID: 192098)
+📡 Broadcasting status running for instance claude-6803
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+📤 REAL Claude claude-6803 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-6803: 6 bytes (pos: 0 -> 6)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (8 bytes): [?2004h
+📤 Broadcasting incremental output for claude-6803: 8 bytes (pos: 6 -> 14)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (12 bytes): [?25h[?25h
+📤 Broadcasting incremental output for claude-6803: 12 bytes (pos: 14 -> 26)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (8 bytes): [?2004l
+📤 Broadcasting incremental output for claude-6803: 8 bytes (pos: 26 -> 34)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (76 bytes): [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+📤 Broadcasting incremental output for claude-6803: 76 bytes (pos: 34 -> 110)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (1163 bytes): 
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                         [38;2;215;119;87m│[39m
+[38;2;215;119;87m│[39m                                         ...
+📤 Broadcasting incremental output for claude-6803: 1163 bytes (pos: 110 -> 1273)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (16 bytes): [?2004h[?1004h
+📤 Broadcasting incremental output for claude-6803: 16 bytes (pos: 1273 -> 1289)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (563 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-6803: 563 bytes (pos: 1289 -> 1852)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+📤 REAL Claude claude-6803 PTY output (533 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-6803: 533 bytes (pos: 1852 -> 2385)
+⚠️ No connections for claude-6803 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-6803
+🔌 SPARC: WebSocket connection closed
+🔍 Fetching Claude instances for frontend
+📋 Returning 3 instances: [
+  'claude-6601 (prod/claude)',
+  'claude-3884 (prod/claude)',
+  'claude-6803 (prod/claude)'
+]
+🔍 Fetching Claude instances for frontend
+📋 Returning 3 instances: [
+  'claude-6601 (prod/claude)',
+  'claude-3884 (prod/claude)',
+  'claude-6803 (prod/claude)'
+]
+🔍 Fetching Claude instances for frontend
+📋 Returning 3 instances: [
+  'claude-6601 (prod/claude)',
+  'claude-3884 (prod/claude)',
+  'claude-6803 (prod/claude)'
+]
+🔍 Fetching Claude instances for frontend
+📋 Returning 3 instances: [
+  'claude-6601 (prod/claude)',
+  'claude-3884 (prod/claude)',
+  'claude-6803 (prod/claude)'
+]
+🆕 SPARC Creating Claude instance: { command: 'cd prod && claude', instanceType: undefined, usePty: true }
+✅ Directory resolved successfully in 0ms:
+   Instance Type: prod
+   Directory Hint: prod
+   Resolved Path: /workspaces/agent-feed/prod
+🚀 SPARC Enhanced Claude process spawning (PTY: true):
+   Command: claude 
+   Working Directory: /workspaces/agent-feed/prod
+   Instance Type: prod
+   Instance ID: claude-9641
+🚀 Creating REAL Claude instance (Mock Claude system removed)
+✅ PTY process created successfully for claude-9641 with Claude flags
+🔧 Setting up process handlers for claude-9641 (pty mode)
+🔧 Setting up PTY handlers for claude-9641
+🔧 PTY Claude process spawned: claude-9641
+📁 Working directory: /workspaces/agent-feed/prod
+📊 PTY Process configuration:
+   PID: 198814
+   Killed: undefined
+   Process Type: PTY (better terminal emulation)
+📡 Ready to stream REAL Claude PTY output
+📡 Broadcasting initial 'starting' status for claude-9641
+📡 Broadcasting status starting for instance claude-9641
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ SPARC Enhanced Claude process spawned: claude-9641 (PID: 198814)
+   Working Directory: /workspaces/agent-feed/prod
+   Process Type: pty
+   PTY Enabled: true
+🔍 Fetching Claude instances for frontend
+📋 Returning 4 instances: [
+  'claude-6601 (prod/claude)',
+  'claude-3884 (prod/claude)',
+  'claude-6803 (prod/claude)',
+  'claude-9641 (prod/claude)'
+]
+🔗 SPARC: New WebSocket terminal connection established
+📨 SPARC: WebSocket message received: connect
+✅ SPARC: WebSocket connected to Claude instance claude-9641
+✅ PTY Claude process claude-9641 ready (PID: 198814)
+📡 Broadcasting status running for instance claude-9641
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+📤 REAL Claude claude-9641 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-9641: 6 bytes (pos: 0 -> 6)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (8 bytes): [?2004h
+📤 Broadcasting incremental output for claude-9641: 8 bytes (pos: 6 -> 14)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (12 bytes): [?25h[?25h
+📤 Broadcasting incremental output for claude-9641: 12 bytes (pos: 14 -> 26)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (8 bytes): [?2004l
+📤 Broadcasting incremental output for claude-9641: 8 bytes (pos: 26 -> 34)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (1233 bytes): [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                         [38;2;215;119;...
+📤 Broadcasting incremental output for claude-9641: 1233 bytes (pos: 34 -> 1267)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-9641: 6 bytes (pos: 1267 -> 1273)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (16 bytes): [?2004h[?1004h
+📤 Broadcasting incremental output for claude-9641: 16 bytes (pos: 1273 -> 1289)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (563 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-9641: 563 bytes (pos: 1289 -> 1852)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (47 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+📤 Broadcasting incremental output for claude-9641: 47 bytes (pos: 1852 -> 1899)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+📤 REAL Claude claude-9641 PTY output (486 bytes): 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;136;136m│[39m[22m > [7mT[27m[2mry "fix type...
+📤 Broadcasting incremental output for claude-9641: 486 bytes (pos: 1899 -> 2385)
+⚠️ No connections for claude-9641 - message will be buffered
+📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641

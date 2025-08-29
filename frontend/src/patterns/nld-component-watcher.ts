@@ -367,7 +367,7 @@ export function withNLDMonitoring<P extends object>(
     });
 
     try {
-      return <WrappedComponent ref={ref} {...props} />;
+      return React.createElement(WrappedComponent, { ...props, ref });
     } catch (error) {
       recordError(error as Error);
       throw error; // Re-throw to maintain normal error handling

@@ -1,0 +1,645 @@
+{
+  "validationTime": "2025-08-28T13:46:59.998Z",
+  "overallStatus": "failed",
+  "totalTests": 11,
+  "passedTests": 4,
+  "failedTests": 7,
+  "results": [
+    {
+      "testName": "Pattern Detection - Basic Functionality",
+      "passed": false,
+      "message": "Pattern detection failed",
+      "details": {},
+      "timestamp": "2025-08-28T13:46:59.938Z"
+    },
+    {
+      "testName": "Pattern Detection - Rate Limiting",
+      "passed": true,
+      "message": "Rate limiting pattern detected correctly",
+      "details": {
+        "patternDetected": true,
+        "rateLimitTriggered": true,
+        "renderToActionRatio": 4
+      },
+      "timestamp": "2025-08-28T13:46:59.945Z"
+    },
+    {
+      "testName": "Pattern Detection - Severity Classification",
+      "passed": true,
+      "message": "Critical severity patterns detected",
+      "details": {
+        "criticalPatterns": 13
+      },
+      "timestamp": "2025-08-28T13:46:59.951Z"
+    },
+    {
+      "testName": "Training Dataset - Data Point Creation",
+      "passed": {
+        "isPattern": true,
+        "severity": "medium",
+        "patternType": "react-hook-rate-limiting",
+        "preventionStrategy": "rate-limit-removal",
+        "tddTestRequired": true
+      },
+      "message": "Training data point created successfully",
+      "details": {
+        "hasInputFeatures": true,
+        "hasOutputLabels": true,
+        "preventionStrategy": "rate-limit-removal"
+      },
+      "timestamp": "2025-08-28T13:46:59.955Z"
+    },
+    {
+      "testName": "Training Dataset - Negative Samples",
+      "passed": false,
+      "message": "Negative sample generation failed: ReferenceError: negativeSamples is not defined",
+      "details": {
+        "error": {}
+      },
+      "timestamp": "2025-08-28T13:46:59.955Z"
+    },
+    {
+      "testName": "Training Dataset - Statistics Generation",
+      "passed": false,
+      "message": "Statistics generation failed: ReferenceError: negativeSamples is not defined",
+      "details": {
+        "error": {}
+      },
+      "timestamp": "2025-08-28T13:46:59.958Z"
+    },
+    {
+      "testName": "Neural Exporter - Claude-flow Format",
+      "passed": {
+        "trainingSplit": [
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0,
+              "userActionCount": 0.3333333333333333,
+              "renderToActionRatio": 0,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0,
+              "userActionCount": 0.3333333333333333,
+              "renderToActionRatio": 0,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.07692307692307693,
+              "userActionCount": 0.3333333333333333,
+              "renderToActionRatio": 0.07692307692307693,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.04035874439461887,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.23076923076923078,
+              "userActionCount": 0.6666666666666666,
+              "renderToActionRatio": 0,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.04035874439461887,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.3076923076923077,
+              "userActionCount": 0.6666666666666666,
+              "renderToActionRatio": 0.038461538461538464,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.0672645739910314,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.38461538461538464,
+              "userActionCount": 0.6666666666666666,
+              "renderToActionRatio": 0.07692307692307693,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.09417040358744398,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.46153846153846156,
+              "userActionCount": 1,
+              "renderToActionRatio": 0,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.08071748878923767,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.5384615384615384,
+              "userActionCount": 1,
+              "renderToActionRatio": 0.025641025641025654,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.10313901345291479,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.6153846153846154,
+              "userActionCount": 1,
+              "renderToActionRatio": 0.05128205128205127,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.12556053811659193,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "RateLimitComponent",
+              "hookName": "useTokenCostTracking",
+              "renderCycleCount": 0.6923076923076923,
+              "userActionCount": 1,
+              "renderToActionRatio": 0.07692307692307693,
+              "sideEffectType": "rate-limiting",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.1479820627802691,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-rate-limiting",
+              "preventionStrategy": "rate-limit-removal",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0,
+              "userActionCount": 0,
+              "renderToActionRatio": 0,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.030269058295964126,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "medium",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.07692307692307693,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.07692307692307693,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.2825112107623319,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.15384615384615385,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.15384615384615385,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.3834080717488789,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.23076923076923078,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.23076923076923078,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.484304932735426,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.3076923076923077,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.3076923076923077,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.5852017937219731,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.38461538461538464,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.38461538461538464,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.6860986547085203,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.46153846153846156,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.46153846153846156,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.7869955156950674,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.5384615384615384,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.5384615384615384,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.8878923766816144,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.6153846153846154,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.6153846153846154,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 0.9887892376681615,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          }
+        ],
+        "validationSplit": [
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.6923076923076923,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.6923076923076923,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 1,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.7692307692307693,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.7692307692307693,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 1,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.8461538461538461,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.8461538461538461,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 1,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 0.9230769230769231,
+              "userActionCount": 0,
+              "renderToActionRatio": 0.9230769230769231,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 1,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          },
+          {
+            "input": {
+              "componentName": "CriticalComponent",
+              "hookName": "useCriticalHook",
+              "renderCycleCount": 1,
+              "userActionCount": 0,
+              "renderToActionRatio": 1,
+              "sideEffectType": "state-mutation",
+              "sourceFileType": "tsx",
+              "hookComplexityScore": 1,
+              "componentSize": 0,
+              "dependencyCount": 0
+            },
+            "output": {
+              "isPattern": true,
+              "severity": "critical",
+              "patternType": "react-hook-state-mutation",
+              "preventionStrategy": "state-isolation",
+              "tddTestRequired": true
+            }
+          }
+        ]
+      },
+      "message": "Claude-flow export format valid",
+      "details": {
+        "hasMetadata": true,
+        "hasTrainingData": true,
+        "hasCrossValidation": true,
+        "sampleCount": 24
+      },
+      "timestamp": "2025-08-28T13:46:59.959Z"
+    },
+    {
+      "testName": "Neural Exporter - File Export",
+      "passed": false,
+      "message": "File export failed: ReferenceError: negativeSamples is not defined",
+      "details": {
+        "error": {}
+      },
+      "timestamp": "2025-08-28T13:46:59.965Z"
+    },
+    {
+      "testName": "End-to-End Workflow",
+      "passed": false,
+      "message": "End-to-end workflow failed: ReferenceError: negativeSamples is not defined",
+      "details": {
+        "error": {}
+      },
+      "timestamp": "2025-08-28T13:46:59.969Z"
+    },
+    {
+      "testName": "Performance Validation",
+      "passed": false,
+      "message": "Performance validation failed: ReferenceError: negativeSamples is not defined",
+      "details": {
+        "error": {}
+      },
+      "timestamp": "2025-08-28T13:46:59.997Z"
+    },
+    {
+      "testName": "Real-World Pattern - TokenCostAnalytics",
+      "passed": false,
+      "message": "Failed to detect known real-world pattern",
+      "details": {},
+      "timestamp": "2025-08-28T13:46:59.997Z"
+    }
+  ],
+  "performance": {
+    "detectionLatency": 0,
+    "trainingDataGeneration": 0,
+    "exportTime": 0
+  },
+  "recommendations": [
+    "⚠️ 7 tests failed. Review failures before production deployment.",
+    "❌ Pattern Detection - Basic Functionality: Pattern detection failed",
+    "❌ Training Dataset - Negative Samples: Negative sample generation failed: ReferenceError: negativeSamples is not defined",
+    "❌ Training Dataset - Statistics Generation: Statistics generation failed: ReferenceError: negativeSamples is not defined",
+    "❌ Neural Exporter - File Export: File export failed: ReferenceError: negativeSamples is not defined",
+    "❌ End-to-End Workflow: End-to-end workflow failed: ReferenceError: negativeSamples is not defined",
+    "❌ Performance Validation: Performance validation failed: ReferenceError: negativeSamples is not defined",
+    "❌ Real-World Pattern - TokenCostAnalytics: Failed to detect known real-world pattern",
+    "🐌 Performance optimization needed. Consider reducing pattern detection frequency.",
+    "📊 Monitor pattern detection accuracy in real-world usage.",
+    "🔄 Regularly update training dataset with new pattern discoveries.",
+    "🧪 Implement TDD tests for identified high-severity patterns."
+  ]
+}

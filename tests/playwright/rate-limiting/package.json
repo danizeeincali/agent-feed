@@ -1,0 +1,52 @@
+{
+  "name": "rate-limiting-button-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive Playwright tests for button rate limiting fix validation",
+  "scripts": {
+    "test": "node run-all-tests.js full",
+    "test:quick": "node run-all-tests.js quick",
+    "test:cross-browser": "node run-all-tests.js cross-browser",
+    "test:page-load": "npx playwright test button-page-load.spec.ts",
+    "test:first-click": "npx playwright test button-first-click.spec.ts",
+    "test:debouncing": "npx playwright test rapid-clicking-debounce.spec.ts",
+    "test:rate-limit": "npx playwright test rate-limit-engagement.spec.ts",
+    "test:rerender": "npx playwright test component-rerender-stability.spec.ts",
+    "test:timing": "npx playwright test rate-limit-reset-timing.spec.ts",
+    "test:cross-browser-only": "npx playwright test cross-browser-compatibility.spec.ts",
+    "test:visual": "npx playwright test visual-regression.spec.ts",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:webkit": "npx playwright test --project=webkit",
+    "test:mobile": "npx playwright test --project=mobile-chrome",
+    "report": "npx playwright show-report",
+    "clean": "rm -rf test-results playwright-report",
+    "setup": "npx playwright install"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "rate-limiting",
+    "button-interactions",
+    "claude-instances",
+    "ui-testing",
+    "visual-regression",
+    "cross-browser"
+  ],
+  "author": "Agent Feed Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/agent-feed.git",
+    "directory": "tests/playwright/rate-limiting"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/agent-feed/issues"
+  },
+  "homepage": "https://github.com/yourusername/agent-feed#readme"
+}

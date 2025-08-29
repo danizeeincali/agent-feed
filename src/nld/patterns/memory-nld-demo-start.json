@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-08-28T20:57:49.653Z",
+  "objective": "SSE to WebSocket refactoring failure pattern capture",
+  "components": [
+    "RefactoringMonitor",
+    "ConsoleErrorDetector",
+    "AntiPatternsDB",
+    "CommunicationMismatchDetector",
+    "RealTimeMonitor"
+  ]
+}

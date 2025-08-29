@@ -1,0 +1,8 @@
+{
+  "type": "cors-validation-success",
+  "test": "websocket-cors-rejection",
+  "timestamp": "2025-08-29T01:55:21.793Z",
+  "success": true,
+  "rejectedOrigin": "http://malicious-site.com",
+  "wsUrl": "ws://localhost:3001/ws"
+}

@@ -9,7 +9,11 @@
  * EXPECTED: These tests will PASS when character processing is properly fixed
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+// Convert from Vitest to Jest imports
+// // Convert from Vitest to Jest imports
+// // Converted from Vitest to Jest - globals available
+// Jest equivalents are available globally, vi -> jest for mocking
+// Jest equivalents are available globally, vi -> jest for mocking
 
 interface CharacterBug {
   sequence: string;
@@ -117,17 +121,17 @@ describe('Character Sequence Bug Regression - TDD Tests', () => {
     ];
 
     mockProcessor = {
-      detectBug: vi.fn((sequence: string) => {
+      detectBug: jest.fn((sequence: string) => {
         return bugDatabase.some(bug => sequence.includes(bug.sequence));
       }),
-      filterSequence: vi.fn((sequence: string) => {
+      filterSequence: jest.fn((sequence: string) => {
         let filtered = sequence;
         bugDatabase.forEach(bug => {
           filtered = filtered.replace(new RegExp(bug.sequence.replace(/\[/g, '\\['), 'g'), '');
         });
         return filtered;
       }),
-      processSafely: vi.fn((sequence: string) => {
+      processSafely: jest.fn((sequence: string) => {
         const hasBug = mockProcessor.detectBug(sequence);
         if (hasBug) {
           return mockProcessor.filterSequence(sequence);
@@ -138,7 +142,7 @@ describe('Character Sequence Bug Regression - TDD Tests', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Critical Bug Detection', () => {

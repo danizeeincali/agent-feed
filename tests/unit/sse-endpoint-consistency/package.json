@@ -1,0 +1,39 @@
+{
+  "name": "sse-endpoint-consistency-tests",
+  "version": "1.0.0",
+  "description": "TDD tests for SSE endpoint consistency validation",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
+    "test:current-fails": "jest --testNamePattern='SHOULD FAIL'",
+    "test:after-fix": "jest --testNamePattern='SHOULD PASS'",
+    "validate-current": "npm run test:current-fails -- --passWithNoTests=false",
+    "validate-fix": "npm run test:after-fix -- --passWithNoTests=false"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.0.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "jest-html-reporters": "^3.1.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom"
+  },
+  "keywords": [
+    "sse",
+    "endpoint",
+    "consistency",
+    "tdd",
+    "testing",
+    "url-validation"
+  ],
+  "author": "SSE Testing Team",
+  "license": "MIT"
+}

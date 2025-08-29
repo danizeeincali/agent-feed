@@ -16,7 +16,7 @@ interface ClaudeInstanceManagerProps {
 }
 
 const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({ 
-  apiUrl = 'http://localhost:3000' 
+  apiUrl = 'http://localhost:3333' 
 }) => {
   const [instances, setInstances] = useState<ClaudeInstance[]>([]);
   const [selectedInstance, setSelectedInstance] = useState<string | null>(null);
@@ -199,7 +199,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
 
   const fetchInstances = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/claude/instances`);
+      const response = await fetch(`${apiUrl}/api/v1/claude/instances`);
       const data = await response.json();
       if (data.success) {
         setInstances(data.instances);
@@ -211,7 +211,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       
       // Capture potential communication breakdown
       nldCapture.captureCommunicationBreakdown(
-        { endpoint: '/api/claude/instances', method: 'GET', error: err },
+        { endpoint: '/api/v1/claude/instances', method: 'GET', error: err },
         'ClaudeInstanceManager'
       );
     }
@@ -257,7 +257,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       const config = getInstanceConfig(command);
       console.log('🚀 SPARC Sending instance configuration:', config);
       
-      const response = await fetch(`${apiUrl}/api/claude/instances`, {
+      const response = await fetch(`${apiUrl}/api/v1/claude/instances`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config)
@@ -316,7 +316,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       // Capture NLD pattern for instance creation failure
       nldCapture.captureInstanceCreationFailure(
         err instanceof Error ? err.message : errorMessage,
-        `${apiUrl}/api/claude/instances`,
+        `${apiUrl}/api/v1/claude/instances`,
         'POST',
         'ClaudeInstanceManager'
       );
@@ -361,7 +361,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
 
   const terminateInstance = async (instanceId: string) => {
     try {
-      const response = await fetch(`${apiUrl}/api/claude/instances/${instanceId}`, {
+      const response = await fetch(`${apiUrl}/api/v1/claude/instances/${instanceId}`, {
         method: 'DELETE'
       });
       

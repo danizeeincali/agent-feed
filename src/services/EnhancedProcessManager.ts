@@ -1,371 +1,883 @@
 /**
- * Enhanced ProcessManager with NLD Integration
- * Real process spawning with comprehensive failure detection and pattern analysis
+ * Enhanced PTY Process Manager with Escape Sequence Filtering
+ * 
+ * This service replaces or enhances existing PTY process management with:
+ * - Terminal escape sequence detection and filtering 
+ * - Process spawning controls to prevent concurrent instances
+ * - Resource monitoring and automatic cleanup
+ * - Integration with existing codebase architecture
+ * 
+ * Addresses TDD test requirements and NLD analysis root causes.
  */
 
-import { ProcessManager, ProcessConfig, ProcessInfo } from './ProcessManager';
-import { nldProcessMonitor, ProcessFailurePattern } from './NLDProcessHealthMonitor';
+import { EventEmitter } from 'events';
 import { spawn, ChildProcess } from 'child_process';
+import * as pty from 'node-pty';
 import * as fs from 'fs';
 import * as path from 'path';
-import { EventEmitter } from 'events';
+import { logger } from '../utils/logger';
 
-export class EnhancedProcessManager extends ProcessManager {
-  private instanceId: string;
-  private nldIntegrated: boolean = true;
-  private currentInstanceId: string | null = null;
+export interface ProcessConfig {
+  command: string;
+  args: string[];
+  cwd?: string;
+  env?: Record<string, string>;
+  maxMemoryMB?: number;
+  maxCpuPercent?: number;
+  maxRuntimeMs?: number;
+  autoRestart?: boolean;
+  escapeSequenceFiltering?: boolean;
+  cols?: number;
+  rows?: number;
+}
 
-  constructor(instanceId?: string) {
-    super();
-    this.instanceId = instanceId || `claude-${Date.now()}`;
-    this.setupNLDIntegration();
+export interface ProcessInfo {
+  pid: number | null;
+  status: 'starting' | 'running' | 'stopped' | 'error';
+  command: string;
+  startTime: Date | null;
+  uptime: number;
+  memoryUsage?: number;
+  cpuUsage?: number;
+  instanceId: string;
+}
+
+export interface ProcessMetrics {
+  totalProcesses: number;
+  activeProcesses: number;
+  failedProcesses: number;
+  memoryUsage: number;
+  cpuUsage: number;
+  averageUptime: number;
+}
+
+/**
+ * Terminal escape sequence filter for problematic sequences
+ */
+export class EscapeSequenceFilter {
+  private static readonly PROBLEMATIC_SEQUENCES = [
+    /\x1b\[\?25l/g,     // Hide cursor
+    /\x1b\[\?25h/g,     // Show cursor  
+    /\x1b\[\?2004h/g,   // Bracketed paste mode on
+    /\x1b\[\?2004l/g,   // Bracketed paste mode off
+    /\x1b\[A/g,         // Cursor up
+    /\x1b\[B/g,         // Cursor down
+    /\x1b\[C/g,         // Cursor right
+    /\x1b\[D/g,         // Cursor left
+    /\[O\[I/g,          // Problematic sequence from TDD tests
+    /\x1b\[H/g,         // Cursor home
+    /\x1b\[2J/g,        // Clear screen
+    /\x1b\[K/g,         // Clear line
+  ];
+
+  private static readonly SAFE_SEQUENCES = [
+    /\x1b\[\d+m/g,      // Color sequences
+    /\x1b\[\d+;\d+m/g,  // Complex color sequences
+    /\x1b\[0m/g,        // Reset formatting
+  ];
+
+  /**
+   * Filter problematic escape sequences while preserving safe ones
+   */
+  public static filterEscapeSequences(input: string): string {
+    if (!input) return input;
+
+    let filtered = input;
+
+    // Remove problematic sequences
+    this.PROBLEMATIC_SEQUENCES.forEach(regex => {
+      filtered = filtered.replace(regex, '');
+    });
+
+    return filtered;
   }
 
   /**
-   * Setup NLD integration
+   * Check if input contains problematic escape sequences
    */
-  private setupNLDIntegration(): void {
-    // Listen to NLD alerts
-    nldProcessMonitor.on('nld:alert', (alert) => {
-      if (alert.instanceId === this.instanceId) {
-        this.handleNLDAlert(alert);
-      }
-    });
-
-    // Listen to process events
-    nldProcessMonitor.on('process:exit', (data) => {
-      if (data.instanceId === this.instanceId) {
-        this.emit('nld:process:exit', data);
-      }
-    });
-
-    nldProcessMonitor.on('spawn:success', (data) => {
-      if (data.instanceId === this.instanceId) {
-        this.emit('nld:spawn:success', data);
-      }
-    });
+  public static containsProblematicSequences(input: string): boolean {
+    return this.PROBLEMATIC_SEQUENCES.some(regex => regex.test(input));
   }
 
   /**
-   * Handle NLD alerts with automated responses
+   * Sanitize input for safe terminal display
    */
-  private handleNLDAlert(alert: any): void {
-    this.emit('nld:alert', alert);
+  public static sanitizeInput(input: string): string {
+    if (!input) return input;
     
-    switch (alert.pattern) {
-      case ProcessFailurePattern.PROCESS_SPAWN_FAILURE_V1:
-        this.handleSpawnFailure(alert);
-        break;
-      case ProcessFailurePattern.PROCESS_LIFECYCLE_DESYNC_V1:
-        this.handleLifecycleDesync(alert);
-        break;
-      case ProcessFailurePattern.IO_PIPE_COMMUNICATION_BREAK_V1:
-        this.handleIOFailure(alert);
-        break;
-      case ProcessFailurePattern.PROCESS_RESOURCE_LEAK_V1:
-        this.handleResourceLeak(alert);
-        break;
+    let sanitized = this.filterEscapeSequences(input);
+    
+    // Remove other control characters that could cause issues
+    sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+    
+    return sanitized;
+  }
+
+  /**
+   * Extract safe formatting sequences
+   */
+  public static extractSafeSequences(input: string): string[] {
+    const safeSequences: string[] = [];
+    
+    this.SAFE_SEQUENCES.forEach(regex => {
+      const matches = input.match(regex);
+      if (matches) {
+        safeSequences.push(...matches);
+      }
+    });
+
+    return safeSequences;
+  }
+}
+
+/**
+ * Process instance manager with resource monitoring
+ */
+export class ProcessInstance {
+  public readonly instanceId: string;
+  public readonly config: ProcessConfig;
+  public process: ChildProcess | pty.IPty | null = null;
+  public startTime: Date | null = null;
+  public lastActivity: Date = new Date();
+  public status: ProcessInfo['status'] = 'starting';
+  public outputBuffer: string = '';
+  public outputPosition: number = 0;
+  public memoryUsage: number = 0;
+  public cpuUsage: number = 0;
+
+  private activityTimer?: NodeJS.Timeout;
+  private resourceMonitor?: NodeJS.Timeout;
+  private healthCheck?: NodeJS.Timeout;
+
+  constructor(instanceId: string, config: ProcessConfig) {
+    this.instanceId = instanceId;
+    this.config = { ...config };
+  }
+
+  /**
+   * Update activity timestamp
+   */
+  public updateActivity(): void {
+    this.lastActivity = new Date();
+  }
+
+  /**
+   * Check if process is alive
+   */
+  public isAlive(): boolean {
+    if (!this.process) return false;
+    
+    if ('pid' in this.process) {
+      return this.process.pid !== undefined && !(this.process as any).killed;
+    }
+    
+    return false;
+  }
+
+  /**
+   * Get process uptime in milliseconds
+   */
+  public getUptime(): number {
+    if (!this.startTime) return 0;
+    return Date.now() - this.startTime.getTime();
+  }
+
+  /**
+   * Get process info
+   */
+  public getInfo(): ProcessInfo {
+    return {
+      pid: this.process && 'pid' in this.process ? this.process.pid || null : null,
+      status: this.status,
+      command: `${this.config.command} ${this.config.args.join(' ')}`,
+      startTime: this.startTime,
+      uptime: this.getUptime(),
+      memoryUsage: this.memoryUsage,
+      cpuUsage: this.cpuUsage,
+      instanceId: this.instanceId
+    };
+  }
+
+  /**
+   * Cleanup instance resources
+   */
+  public cleanup(): void {
+    if (this.activityTimer) {
+      clearTimeout(this.activityTimer);
+      this.activityTimer = undefined;
+    }
+
+    if (this.resourceMonitor) {
+      clearInterval(this.resourceMonitor);
+      this.resourceMonitor = undefined;
+    }
+
+    if (this.healthCheck) {
+      clearInterval(this.healthCheck);
+      this.healthCheck = undefined;
     }
   }
+}
+
+/**
+ * Output buffer manager with position tracking
+ */
+export class OutputBufferManager {
+  private buffers = new Map<string, {
+    buffer: string;
+    position: number;
+    lastUpdate: Date;
+    lineCount: number;
+  }>();
 
   /**
-   * Enhanced launch instance with NLD monitoring
+   * Append output to buffer
    */
-  async launchInstance(config?: Partial<ProcessConfig>): Promise<ProcessInfo> {
+  public appendOutput(instanceId: string, data: string): void {
+    const filtered = EscapeSequenceFilter.filterEscapeSequences(data);
+    
+    if (!this.buffers.has(instanceId)) {
+      this.buffers.set(instanceId, {
+        buffer: '',
+        position: 0,
+        lastUpdate: new Date(),
+        lineCount: 0
+      });
+    }
+
+    const buffer = this.buffers.get(instanceId)!;
+    buffer.buffer += filtered;
+    buffer.lastUpdate = new Date();
+    buffer.lineCount = buffer.buffer.split('\n').length;
+  }
+
+  /**
+   * Get incremental output since position
+   */
+  public getIncrementalOutput(instanceId: string, fromPosition: number): {
+    output: string;
+    newPosition: number;
+    totalLength: number;
+  } {
+    const buffer = this.buffers.get(instanceId);
+    if (!buffer) {
+      return { output: '', newPosition: 0, totalLength: 0 };
+    }
+
+    const output = buffer.buffer.slice(fromPosition);
+    return {
+      output,
+      newPosition: buffer.buffer.length,
+      totalLength: buffer.buffer.length
+    };
+  }
+
+  /**
+   * Clear buffer for instance
+   */
+  public clearBuffer(instanceId: string): void {
+    this.buffers.delete(instanceId);
+  }
+
+  /**
+   * Get buffer info
+   */
+  public getBufferInfo(instanceId: string): any {
+    return this.buffers.get(instanceId) || null;
+  }
+}
+
+/**
+ * Enhanced PTY Process Manager
+ */
+export class EnhancedProcessManager extends EventEmitter {
+  private processes = new Map<string, ProcessInstance>();
+  private outputBuffers = new OutputBufferManager();
+  private resourceMonitor?: NodeJS.Timeout;
+  private healthMonitor?: NodeJS.Timeout;
+  private maxProcesses: number = 10;
+  private metrics: ProcessMetrics = {
+    totalProcesses: 0,
+    activeProcesses: 0,
+    failedProcesses: 0,
+    memoryUsage: 0,
+    cpuUsage: 0,
+    averageUptime: 0
+  };
+
+  constructor(options: { maxProcesses?: number } = {}) {
+    super();
+    this.maxProcesses = options.maxProcesses || 10;
+    this.startMonitoring();
+  }
+
+  /**
+   * Create a new process instance
+   */
+  public async createInstance(instanceId: string, config: ProcessConfig): Promise<ProcessInfo> {
+    // Check for existing instance
+    if (this.processes.has(instanceId)) {
+      await this.terminateInstance(instanceId);
+    }
+
+    // Check process limit
+    if (this.processes.size >= this.maxProcesses) {
+      throw new Error(`Maximum process limit reached (${this.maxProcesses})`);
+    }
+
+    const processInstance = new ProcessInstance(instanceId, config);
+    this.processes.set(instanceId, processInstance);
+
     try {
-      // Update configuration
-      if (config) {
-        this.updateConfig(config);
-      }
-
-      // Kill existing instance if running
-      if (this.currentProcess) {
-        await this.killInstance();
-      }
-
-      this.loadInstanceName();
-      this.currentInstanceId = this.instanceId;
-
-      // Build command arguments with validation
-      const args = this.buildClaudeArguments();
-      const workingDir = this.getWorkingDirectory();
+      await this.spawnProcess(processInstance);
+      this.metrics.totalProcesses++;
+      this.updateMetrics();
       
-      console.log(`[EnhancedProcessManager] Launching Claude with NLD monitoring`);
-      console.log(`[EnhancedProcessManager] Instance ID: ${this.instanceId}`);
-      console.log(`[EnhancedProcessManager] Args: ${JSON.stringify(args)}`);
-      console.log(`[EnhancedProcessManager] Working Directory: ${workingDir}`);
+      logger.info(`Process instance created: ${instanceId}`, {
+        instanceId,
+        pid: processInstance.process && 'pid' in processInstance.process ? processInstance.process.pid : null,
+        command: config.command
+      });
 
-      // Use NLD monitored spawning
-      const claudeProcess = await nldProcessMonitor.spawnClaudeWithFallback(
-        this.instanceId,
-        'claude',
-        args,
-        {
-          cwd: workingDir,
-          env: {
-            ...process.env,
-            CLAUDE_INSTANCE_NAME: this.getInstanceName(),
-            CLAUDE_MANAGED_INSTANCE: 'true',
-            CLAUDE_HUB_URL: 'http://localhost:3002'
-          },
-          stdio: ['pipe', 'pipe', 'pipe'],
-          shell: false
-        }
-      );
-
-      // Store process reference
-      this.currentProcess = claudeProcess;
-      this.currentPid = claudeProcess.pid || null;
-      this.startTime = new Date();
-
-      // Setup event handlers (delegated to NLD monitor)
-      this.setupEventHandlers(claudeProcess);
-
-      // Setup auto-restart if configured
-      if (this.config.autoRestartHours > 0) {
-        this.setupAutoRestart(this.config.autoRestartHours);
-      }
-
-      const info = this.getProcessInfo();
-      this.emit('launched', info);
-      
-      return info;
+      this.emit('instance:created', processInstance.getInfo());
+      return processInstance.getInfo();
 
     } catch (error) {
-      const errorMessage = `Failed to launch Claude instance: ${error.message}`;
-      console.error(`[EnhancedProcessManager] ${errorMessage}`);
+      this.processes.delete(instanceId);
+      this.metrics.failedProcesses++;
       
-      this.emit('error', error);
-      throw new Error(errorMessage);
+      logger.error(`Failed to create process instance: ${instanceId}`, error);
+      this.emit('instance:error', { instanceId, error });
+      
+      throw error;
     }
   }
 
   /**
-   * Build Claude command arguments based on configuration
+   * Spawn the actual process
    */
-  private buildClaudeArguments(): string[] {
-    const args: string[] = [];
+  private async spawnProcess(processInstance: ProcessInstance): Promise<void> {
+    const { config } = processInstance;
     
-    // Add environment-specific flags
-    if (this.config.environment === 'production') {
-      args.push('--dangerously-skip-permissions');
-    }
-    
-    return args;
-  }
+    try {
+      // Use PTY for terminal applications, regular spawn for others
+      const currentDir = config.cwd || process.cwd();
+      const currentEnv = {
+        ...process.env,
+        TERM: 'xterm-256color',
+        FORCE_COLOR: '1',
+        ...config.env
+      };
 
-  /**
-   * Get working directory with validation
-   */
-  private getWorkingDirectory(): string {
-    const workingDir = this.config.workingDirectory;
-    
-    // Validate directory exists
-    if (!fs.existsSync(workingDir)) {
-      throw new Error(`Working directory does not exist: ${workingDir}`);
-    }
-    
-    return workingDir;
-  }
+      let spawnedProcess: ChildProcess | pty.IPty;
 
-  /**
-   * Setup event handlers with NLD integration
-   */
-  private setupEventHandlers(process: ChildProcess): void {
-    // Output handling with NLD monitoring
-    process.stdout?.on('data', (data) => {
-      const output = data.toString();
-      this.emit('output', output);
-      this.emit('terminal:output', {
-        type: 'stdout',
-        data: output,
-        timestamp: new Date()
-      });
-      
-      // Record with NLD monitor
-      // NLD monitor handles this automatically through attached listeners
-    });
-
-    process.stderr?.on('data', (data) => {
-      const output = data.toString();
-      this.emit('error-output', output);
-      this.emit('terminal:output', {
-        type: 'stderr',
-        data: output,
-        timestamp: new Date()
-      });
-    });
-
-    // Exit handling
-    process.on('exit', (code, signal) => {
-      console.log(`[EnhancedProcessManager] Claude process exited: code=${code}, signal=${signal}`);
-      this.emit('exit', { code, signal });
-      this.currentProcess = null;
-      this.currentPid = null;
-      this.currentInstanceId = null;
-      
-      // Auto-restart logic
-      if (this.autoRestartTimer && code !== 0) {
-        console.log('[EnhancedProcessManager] Scheduling auto-restart due to unexpected exit');
-        this.emit('auto-restart-scheduled');
+      if (config.command === 'claude' || config.cols || config.rows) {
+        spawnedProcess = pty.spawn(config.command, config.args, {
+          name: 'xterm-256color',
+          cols: config.cols || 80,
+          rows: config.rows || 24,
+          cwd: currentDir,
+          env: currentEnv
+        });
+      } else {
+        spawnedProcess = spawn(config.command, config.args, {
+          cwd: currentDir,
+          env: currentEnv,
+          stdio: ['pipe', 'pipe', 'pipe']
+        });
       }
-    });
 
-    // Error handling
-    process.on('error', (error) => {
-      console.error('[EnhancedProcessManager] Process error:', error.message);
-      this.emit('error', error);
-    });
-  }
+      processInstance.process = spawnedProcess;
+      processInstance.startTime = new Date();
+      processInstance.status = 'running';
 
-  /**
-   * Enhanced input sending with monitoring
-   */
-  sendInput(input: string): void {
-    if (this.currentProcess && this.currentProcess.stdin) {
-      this.currentProcess.stdin.write(input);
-      this.emit('input', input);
-      
-      // Record input with NLD monitor
-      if (this.currentInstanceId) {
-        nldProcessMonitor.recordInput(this.currentInstanceId, input);
-      }
+      this.setupProcessHandlers(processInstance);
+
+    } catch (error) {
+      processInstance.status = 'error';
+      throw new Error(`Process spawn failed: ${error.message}`);
     }
   }
 
   /**
-   * Handle spawn failure pattern
+   * Setup event handlers for process
    */
-  private handleSpawnFailure(alert: any): void {
-    console.error(`[NLD] Spawn failure detected:`, alert.context);
+  private setupProcessHandlers(processInstance: ProcessInstance): void {
+    const { instanceId, process } = processInstance;
     
-    // Implement automatic retry logic
-    if (alert.context.phase !== 'fallback') {
+    if (!process) return;
+
+    // Handle PTY processes
+    if ('onData' in process) {
+      process.onData((data: string) => {
+        processInstance.updateActivity();
+        this.handleProcessOutput(instanceId, data, 'stdout');
+      });
+
+      process.onExit(({ exitCode, signal }: any) => {
+        logger.info(`PTY process exited: ${instanceId}`, { exitCode, signal });
+        this.handleProcessExit(instanceId, exitCode, signal);
+      });
+    } 
+    // Handle regular child processes
+    else {
+      if (process.stdout) {
+        process.stdout.on('data', (data: Buffer) => {
+          processInstance.updateActivity();
+          this.handleProcessOutput(instanceId, data.toString(), 'stdout');
+        });
+      }
+
+      if (process.stderr) {
+        process.stderr.on('data', (data: Buffer) => {
+          processInstance.updateActivity();
+          this.handleProcessOutput(instanceId, data.toString(), 'stderr');
+        });
+      }
+
+      process.on('exit', (code: number | null, signal: NodeJS.Signals | null) => {
+        logger.info(`Process exited: ${instanceId}`, { code, signal });
+        this.handleProcessExit(instanceId, code, signal);
+      });
+
+      process.on('error', (error: Error) => {
+        logger.error(`Process error: ${instanceId}`, error);
+        this.handleProcessError(instanceId, error);
+      });
+    }
+  }
+
+  /**
+   * Handle process output with escape sequence filtering
+   */
+  private handleProcessOutput(instanceId: string, data: string, source: 'stdout' | 'stderr'): void {
+    const processInstance = this.processes.get(instanceId);
+    if (!processInstance) return;
+
+    // Filter escape sequences if enabled
+    const filteredData = processInstance.config.escapeSequenceFiltering !== false 
+      ? EscapeSequenceFilter.sanitizeInput(data)
+      : data;
+
+    // Update output buffer
+    this.outputBuffers.appendOutput(instanceId, filteredData);
+
+    // Emit output event
+    this.emit('terminal:output', {
+      instanceId,
+      data: filteredData,
+      source,
+      timestamp: new Date(),
+      filtered: filteredData !== data
+    });
+
+    // Log problematic sequences if detected
+    if (EscapeSequenceFilter.containsProblematicSequences(data)) {
+      logger.warn(`Problematic escape sequences detected and filtered: ${instanceId}`, {
+        instanceId,
+        originalLength: data.length,
+        filteredLength: filteredData.length
+      });
+    }
+  }
+
+  /**
+   * Handle process exit
+   */
+  private handleProcessExit(instanceId: string, code: number | null, signal: NodeJS.Signals | string | null): void {
+    const processInstance = this.processes.get(instanceId);
+    if (!processInstance) return;
+
+    processInstance.status = code === 0 ? 'stopped' : 'error';
+    processInstance.cleanup();
+
+    this.emit('instance:exit', {
+      instanceId,
+      code,
+      signal,
+      uptime: processInstance.getUptime()
+    });
+
+    // Auto-restart if configured
+    if (processInstance.config.autoRestart && code !== 0) {
+      logger.info(`Auto-restarting process: ${instanceId}`);
       setTimeout(() => {
-        console.log('[NLD] Attempting spawn retry after failure...');
-        this.launchInstance().catch(error => {
-          console.error('[NLD] Retry failed:', error.message);
+        this.createInstance(instanceId, processInstance.config).catch(error => {
+          logger.error(`Auto-restart failed: ${instanceId}`, error);
         });
       }, 5000);
     }
   }
 
   /**
-   * Handle lifecycle desynchronization
+   * Handle process error
    */
-  private handleLifecycleDesync(alert: any): void {
-    console.warn(`[NLD] Lifecycle desync detected:`, alert.context);
+  private handleProcessError(instanceId: string, error: Error): void {
+    const processInstance = this.processes.get(instanceId);
+    if (!processInstance) return;
+
+    processInstance.status = 'error';
     
-    // Force refresh process info
-    if (this.currentProcess && alert.context.actualStatus === 'stopped') {
-      console.log('[NLD] Marking process as stopped due to desync');
-      this.currentProcess = null;
-      this.currentPid = null;
-      this.emit('desync:stopped');
+    this.emit('instance:error', {
+      instanceId,
+      error: error.message,
+      uptime: processInstance.getUptime()
+    });
+  }
+
+  /**
+   * Send input to process
+   */
+  public async sendInput(instanceId: string, input: string): Promise<boolean> {
+    const processInstance = this.processes.get(instanceId);
+    if (!processInstance || !processInstance.isAlive()) {
+      throw new Error(`Process instance not available: ${instanceId}`);
     }
-  }
 
-  /**
-   * Handle I/O communication failure
-   */
-  private handleIOFailure(alert: any): void {
-    console.warn(`[NLD] I/O communication issue:`, alert.context);
-    
-    // Attempt to restart I/O streams
-    this.emit('io:failure', alert.context);
-  }
-
-  /**
-   * Handle resource leak detection
-   */
-  private handleResourceLeak(alert: any): void {
-    console.warn(`[NLD] Resource leak detected:`, alert.context);
-    
-    // Trigger cleanup if severe
-    if (alert.severity === 'high' || alert.severity === 'critical') {
-      console.log('[NLD] Triggering cleanup due to resource leak');
-      this.emit('resource:cleanup-required', alert.context);
-    }
-  }
-
-  /**
-   * Get enhanced process info with NLD metrics
-   */
-  getEnhancedProcessInfo(): any {
-    const basicInfo = this.getProcessInfo();
-    
-    if (this.currentInstanceId) {
-      const nldMetrics = nldProcessMonitor.getProcessMetrics(this.currentInstanceId);
-      return {
-        ...basicInfo,
-        instanceId: this.instanceId,
-        nld: {
-          monitoring: true,
-          metrics: nldMetrics,
-          alertCount: nldProcessMonitor.getAlertHistory().filter(
-            alert => alert.instanceId === this.instanceId
-          ).length
-        }
-      };
-    }
-    
-    return {
-      ...basicInfo,
-      instanceId: this.instanceId,
-      nld: {
-        monitoring: false
-      }
-    };
-  }
-
-  /**
-   * Get NLD health report for this instance
-   */
-  getNLDHealthReport(): any {
-    if (this.currentInstanceId) {
-      const metrics = nldProcessMonitor.getProcessMetrics(this.currentInstanceId);
-      const alerts = nldProcessMonitor.getAlertHistory().filter(
-        alert => alert.instanceId === this.instanceId
-      );
+    try {
+      const { process } = processInstance;
       
-      return {
-        instanceId: this.instanceId,
-        currentMetrics: metrics,
-        alertHistory: alerts,
-        healthStatus: this.determineHealthStatus(metrics, alerts)
-      };
+      if ('write' in process) {
+        // PTY process
+        process.write(input);
+      } else if (process.stdin) {
+        // Regular process
+        process.stdin.write(input);
+      } else {
+        throw new Error('Process stdin not available');
+      }
+
+      processInstance.updateActivity();
+      
+      this.emit('instance:input', {
+        instanceId,
+        input,
+        timestamp: new Date()
+      });
+
+      return true;
+
+    } catch (error) {
+      logger.error(`Failed to send input to process: ${instanceId}`, error);
+      this.emit('instance:error', { instanceId, error });
+      return false;
     }
-    
-    return { instanceId: this.instanceId, status: 'not-monitored' };
   }
 
   /**
-   * Determine overall health status
+   * Resize terminal (PTY processes only)
    */
-  private determineHealthStatus(metrics: any, alerts: any[]): string {
-    if (!metrics) return 'unknown';
-    
-    const criticalAlerts = alerts.filter(a => a.severity === 'critical').length;
-    const highAlerts = alerts.filter(a => a.severity === 'high').length;
-    
-    if (criticalAlerts > 0) return 'critical';
-    if (highAlerts > 2) return 'degraded';
-    if (metrics.status === 'running') return 'healthy';
-    
-    return 'unknown';
+  public async resizeTerminal(instanceId: string, cols: number, rows: number): Promise<boolean> {
+    const processInstance = this.processes.get(instanceId);
+    if (!processInstance || !processInstance.isAlive()) {
+      return false;
+    }
+
+    try {
+      const { process } = processInstance;
+      
+      if ('resize' in process) {
+        process.resize(cols, rows);
+        
+        this.emit('instance:resize', {
+          instanceId,
+          cols,
+          rows,
+          timestamp: new Date()
+        });
+
+        return true;
+      }
+
+      return false;
+
+    } catch (error) {
+      logger.error(`Failed to resize terminal: ${instanceId}`, error);
+      return false;
+    }
   }
 
   /**
-   * Cleanup with NLD integration
+   * Get incremental output for instance
    */
-  async cleanup(): Promise<void> {
-    if (this.currentInstanceId) {
-      nldProcessMonitor.unregisterProcess(this.currentInstanceId);
+  public getIncrementalOutput(instanceId: string, fromPosition: number = 0): {
+    output: string;
+    newPosition: number;
+    totalLength: number;
+  } {
+    return this.outputBuffers.getIncrementalOutput(instanceId, fromPosition);
+  }
+
+  /**
+   * Get instance info
+   */
+  public getInstanceInfo(instanceId: string): ProcessInfo | null {
+    const processInstance = this.processes.get(instanceId);
+    return processInstance ? processInstance.getInfo() : null;
+  }
+
+  /**
+   * Get all instances
+   */
+  public getAllInstances(): ProcessInfo[] {
+    return Array.from(this.processes.values()).map(p => p.getInfo());
+  }
+
+  /**
+   * Terminate instance
+   */
+  public async terminateInstance(instanceId: string, signal: NodeJS.Signals = 'SIGTERM'): Promise<boolean> {
+    const processInstance = this.processes.get(instanceId);
+    if (!processInstance || !processInstance.isAlive()) {
+      return false;
     }
+
+    try {
+      const { process } = processInstance;
+      
+      if ('kill' in process) {
+        process.kill(signal);
+      }
+
+      // Force kill after timeout
+      setTimeout(() => {
+        if (processInstance.isAlive() && 'kill' in process) {
+          process.kill('SIGKILL');
+        }
+      }, 5000);
+
+      processInstance.cleanup();
+      this.outputBuffers.clearBuffer(instanceId);
+      this.processes.delete(instanceId);
+
+      this.emit('instance:terminated', { instanceId, signal });
+      
+      logger.info(`Process instance terminated: ${instanceId}`);
+      return true;
+
+    } catch (error) {
+      logger.error(`Failed to terminate process: ${instanceId}`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Start monitoring processes
+   */
+  private startMonitoring(): void {
+    // Resource monitoring every 10 seconds
+    this.resourceMonitor = setInterval(() => {
+      this.updateResourceUsage();
+    }, 10000);
+
+    // Health monitoring every 30 seconds  
+    this.healthMonitor = setInterval(() => {
+      this.performHealthCheck();
+    }, 30000);
+  }
+
+  /**
+   * Update resource usage for all processes
+   */
+  private async updateResourceUsage(): Promise<void> {
+    for (const [instanceId, processInstance] of Array.from(this.processes.entries())) {
+      if (!processInstance.isAlive()) continue;
+
+      try {
+        const usage = await this.getProcessResourceUsage(processInstance);
+        processInstance.memoryUsage = usage.memory;
+        processInstance.cpuUsage = usage.cpu;
+
+        // Check resource limits
+        const config = processInstance.config;
+        if (config.maxMemoryMB && usage.memory > config.maxMemoryMB) {
+          logger.warn(`Process memory limit exceeded: ${instanceId}`, {
+            instanceId,
+            current: usage.memory,
+            limit: config.maxMemoryMB
+          });
+
+          this.emit('instance:resource-violation', {
+            instanceId,
+            type: 'memory',
+            current: usage.memory,
+            limit: config.maxMemoryMB
+          });
+        }
+
+        if (config.maxCpuPercent && usage.cpu > config.maxCpuPercent) {
+          logger.warn(`Process CPU limit exceeded: ${instanceId}`, {
+            instanceId,
+            current: usage.cpu,
+            limit: config.maxCpuPercent
+          });
+
+          this.emit('instance:resource-violation', {
+            instanceId,
+            type: 'cpu',
+            current: usage.cpu,
+            limit: config.maxCpuPercent
+          });
+        }
+
+      } catch (error) {
+        logger.error(`Failed to update resource usage: ${instanceId}`, error);
+      }
+    }
+
+    this.updateMetrics();
+  }
+
+  /**
+   * Get resource usage for a process
+   */
+  private async getProcessResourceUsage(processInstance: ProcessInstance): Promise<{
+    memory: number;
+    cpu: number;
+  }> {
+    return new Promise((resolve) => {
+      try {
+        const { process } = processInstance;
+        const pid = 'pid' in process ? process.pid : null;
+        
+        if (!pid) {
+          resolve({ memory: 0, cpu: 0 });
+          return;
+        }
+
+        const ps = spawn('ps', ['-p', pid.toString(), '-o', 'pid,pcpu,pmem,rss']);
+        
+        let output = '';
+        ps.stdout.on('data', (data) => {
+          output += data.toString();
+        });
+
+        ps.on('close', (code) => {
+          if (code !== 0) {
+            resolve({ memory: 0, cpu: 0 });
+            return;
+          }
+
+          const lines = output.trim().split('\n');
+          if (lines.length < 2) {
+            resolve({ memory: 0, cpu: 0 });
+            return;
+          }
+
+          const stats = lines[1].trim().split(/\s+/);
+          const cpu = parseFloat(stats[1]) || 0;
+          const memoryKB = parseInt(stats[3]) || 0;
+          const memoryMB = Math.round(memoryKB / 1024);
+
+          resolve({ memory: memoryMB, cpu });
+        });
+
+        ps.on('error', () => {
+          resolve({ memory: 0, cpu: 0 });
+        });
+
+      } catch (error) {
+        resolve({ memory: 0, cpu: 0 });
+      }
+    });
+  }
+
+  /**
+   * Perform health check on all processes
+   */
+  private performHealthCheck(): void {
+    const now = Date.now();
     
-    await super.cleanup();
+    for (const [instanceId, processInstance] of Array.from(this.processes.entries())) {
+      // Check for hung processes (no activity in 5 minutes)
+      const timeSinceActivity = now - processInstance.lastActivity.getTime();
+      if (timeSinceActivity > 300000) { // 5 minutes
+        logger.warn(`Process appears hung: ${instanceId}`, {
+          instanceId,
+          timeSinceActivity,
+          uptime: processInstance.getUptime()
+        });
+
+        this.emit('instance:hung', {
+          instanceId,
+          timeSinceActivity,
+          uptime: processInstance.getUptime()
+        });
+      }
+
+      // Check runtime limits
+      const config = processInstance.config;
+      const uptime = processInstance.getUptime();
+      if (config.maxRuntimeMs && uptime > config.maxRuntimeMs) {
+        logger.info(`Process runtime limit exceeded, terminating: ${instanceId}`, {
+          instanceId,
+          uptime,
+          limit: config.maxRuntimeMs
+        });
+
+        this.terminateInstance(instanceId, 'SIGTERM');
+      }
+    }
+  }
+
+  /**
+   * Update performance metrics
+   */
+  private updateMetrics(): void {
+    const activeProcesses = Array.from(this.processes.values()).filter(p => p.status === 'running');
+    
+    this.metrics.activeProcesses = activeProcesses.length;
+    
+    if (activeProcesses.length > 0) {
+      this.metrics.memoryUsage = activeProcesses.reduce((sum, p) => sum + p.memoryUsage, 0) / activeProcesses.length;
+      this.metrics.cpuUsage = activeProcesses.reduce((sum, p) => sum + p.cpuUsage, 0) / activeProcesses.length;
+      this.metrics.averageUptime = activeProcesses.reduce((sum, p) => sum + p.getUptime(), 0) / activeProcesses.length;
+    } else {
+      this.metrics.memoryUsage = 0;
+      this.metrics.cpuUsage = 0;
+      this.metrics.averageUptime = 0;
+    }
+  }
+
+  /**
+   * Get performance metrics
+   */
+  public getMetrics(): ProcessMetrics {
+    return { ...this.metrics };
+  }
+
+  /**
+   * Cleanup all resources
+   */
+  public async shutdown(): Promise<void> {
+    // Stop monitoring
+    if (this.resourceMonitor) {
+      clearInterval(this.resourceMonitor);
+      this.resourceMonitor = undefined;
+    }
+
+    if (this.healthMonitor) {
+      clearInterval(this.healthMonitor);
+      this.healthMonitor = undefined;
+    }
+
+    // Terminate all processes
+    const terminationPromises = Array.from(this.processes.keys()).map(instanceId => 
+      this.terminateInstance(instanceId, 'SIGTERM')
+    );
+
+    await Promise.all(terminationPromises);
+
+    this.processes.clear();
+    
+    logger.info('Enhanced Process Manager shutdown complete');
+    this.emit('shutdown');
   }
 }
 
-// Export enhanced singleton
-export const enhancedProcessManager = new EnhancedProcessManager();
+// Export singleton instance
+export const enhancedProcessManager = new EnhancedProcessManager({
+  maxProcesses: 10
+});
+
+export default EnhancedProcessManager;

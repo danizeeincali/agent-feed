@@ -1,0 +1,703 @@
+[
+  {
+    "id": "event-1756414671679-n5pgy5w6u",
+    "timestamp": "2025-08-28T20:57:51.679Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "success",
+    "source": "refactor_monitor",
+    "data": {
+      "message": "Refactoring session started: SSE_TO_WEBSOCKET",
+      "components": [
+        "ClaudeInstanceManager",
+        "useAdvancedSSEConnection",
+        "TokenCostAnalytics",
+        "SSEConnectionManager",
+        "ClaudeInstanceSelector"
+      ]
+    },
+    "severity": "low",
+    "context": {
+      "refactoringPhase": "session_start"
+    }
+  },
+  {
+    "id": "event-1756414671681-fpfjnzudl",
+    "timestamp": "2025-08-28T20:57:51.681Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "user_feedback",
+    "data": {
+      "component": "ClaudeInstanceManager",
+      "issue": "addHandler method not found after WebSocket migration",
+      "success": false
+    },
+    "severity": "medium",
+    "context": {
+      "component": "ClaudeInstanceManager",
+      "refactoringPhase": "user_validation"
+    }
+  },
+  {
+    "id": "event-1756414671682-y3e513h4b",
+    "timestamp": "2025-08-28T20:57:51.682Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414671681-1zwlgkiby",
+      "timestamp": "2025-08-28T20:57:51.681Z",
+      "errorType": "ReferenceError",
+      "component": "ClaudeInstanceManager",
+      "originalCode": "// Original SSE implementation\nconst eventSource = new EventSource('/sse');\neventSource.addHandler('message', handleMessage);\neventSource.addHandler('error', handleError);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nconst websocket = new WebSocket('ws://localhost:3001/sse');\naddHandler('message', handleMessage); // ERROR: addHandler not defined\nremoveHandler('error', handleError); // ERROR: removeHandler not defined",
+      "errorMessage": "addHandler is not defined",
+      "stackTrace": "at ClaudeInstanceManager.componentDidMount (ClaudeInstanceManager.tsx:45:12)",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "handler_replacement",
+        "methodsInvolved": [
+          "addHandler",
+          "removeHandler"
+        ],
+        "dependencies": [
+          "react",
+          "EventSource",
+          "WebSocket"
+        ]
+      },
+      "severity": "high",
+      "patternSignature": "ReferenceError::ClaudeInstanceManager::handler_replacement::addHandler-removeHandler"
+    },
+    "severity": "high",
+    "context": {
+      "component": "ClaudeInstanceManager",
+      "refactoringPhase": "handler_replacement"
+    }
+  },
+  {
+    "id": "event-1756414671683-hhserphuf",
+    "timestamp": "2025-08-28T20:57:51.683Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "console",
+    "data": {
+      "id": "console-1756414671683-hyxabwu6z",
+      "timestamp": "2025-08-28T20:57:51.683Z",
+      "type": "error",
+      "message": "Uncaught ReferenceError: addHandler is not defined",
+      "source": "ClaudeInstanceManager.tsx",
+      "line": 45,
+      "column": 12,
+      "stack": "ReferenceError: addHandler is not defined\n    at ClaudeInstanceManager.componentDidMount (http://localhost:5173/src/components/ClaudeInstanceManager.tsx:45:12)",
+      "context": {
+        "url": "http://localhost:5173",
+        "userAgent": "Mozilla/5.0 (NLD Monitor)",
+        "component": "ClaudeInstanceManager",
+        "action": "SSE_TO_WEBSOCKET_HANDLER_REPLACEMENT"
+      },
+      "severity": "high",
+      "category": "refactoring"
+    },
+    "severity": "high",
+    "context": {
+      "component": "ClaudeInstanceManager",
+      "file": "ClaudeInstanceManager.tsx",
+      "line": 45
+    }
+  },
+  {
+    "id": "event-1756414671779-t57v4bray",
+    "timestamp": "2025-08-28T20:57:51.779Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414671779-jywmk14y5",
+      "timestamp": "2025-08-28T20:57:51.779Z",
+      "errorType": "TypeError",
+      "component": "useHTTPSSE",
+      "originalCode": "// Original SSE hook\nuseEffect(() => {\n  const eventSource = new EventSource(url);\n  eventSource.addEventListener('message', onMessage);\n  return () => eventSource.close();\n}, [url]);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nuseEffect(() => {\n  const ws = new WebSocket(url);\n  ws.addEventListener('message', onMessage); // May fail if ws is null\n  return () => ws.close();\n}, [url]);",
+      "errorMessage": "Cannot read properties of undefined (reading \"addEventListener\")",
+      "stackTrace": "at useHTTPSSE.tsx:78:23",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "connection_setup",
+        "methodsInvolved": [
+          "addEventListener",
+          "removeEventListener"
+        ],
+        "dependencies": [
+          "react",
+          "useEffect",
+          "WebSocket"
+        ]
+      },
+      "severity": "critical",
+      "patternSignature": "TypeError::useHTTPSSE::connection_setup::addEventListener-removeEventListener"
+    },
+    "severity": "critical",
+    "context": {
+      "component": "useHTTPSSE",
+      "refactoringPhase": "connection_setup"
+    }
+  },
+  {
+    "id": "event-1756414671829-7vwrc9jye",
+    "timestamp": "2025-08-28T20:57:51.829Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "console",
+    "data": {
+      "id": "console-1756414671829-9bplpyete",
+      "timestamp": "2025-08-28T20:57:51.829Z",
+      "type": "error",
+      "message": "Uncaught ReferenceError: removeHandler is not defined",
+      "source": "ClaudeInstanceSelector.tsx",
+      "line": 123,
+      "column": 8,
+      "stack": "ReferenceError: removeHandler is not defined\n    at ClaudeInstanceSelector.componentWillUnmount (http://localhost:5173/src/components/claude-instances/ClaudeInstanceSelector.tsx:123:8)",
+      "context": {
+        "url": "http://localhost:5173",
+        "userAgent": "Mozilla/5.0 (NLD Monitor)",
+        "component": "ClaudeInstanceSelector",
+        "action": "CLEANUP_HANDLER_REMOVAL"
+      },
+      "severity": "high",
+      "category": "refactoring"
+    },
+    "severity": "high",
+    "context": {
+      "component": "ClaudeInstanceSelector",
+      "file": "ClaudeInstanceSelector.tsx",
+      "line": 123
+    }
+  },
+  {
+    "id": "event-1756414671879-ht69xy39t",
+    "timestamp": "2025-08-28T20:57:51.879Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414671879-velwkkltq",
+      "timestamp": "2025-08-28T20:57:51.879Z",
+      "errorType": "ReferenceError",
+      "component": "ClaudeInstanceSelector",
+      "originalCode": "// Original SSE code\neventSource.addHandler('message', handler);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nwebsocket.addHandler('message', handler); // ERROR: method not found",
+      "errorMessage": "removeHandler is not defined",
+      "stackTrace": "at ClaudeInstanceSelector.componentWillUnmount (ClaudeInstanceSelector.tsx:123:8)",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "cleanup",
+        "methodsInvolved": [
+          "removeHandler"
+        ],
+        "dependencies": [
+          "react"
+        ]
+      },
+      "severity": "high",
+      "patternSignature": "ReferenceError::ClaudeInstanceSelector::cleanup::removeHandler"
+    },
+    "severity": "high",
+    "context": {
+      "component": "ClaudeInstanceSelector",
+      "refactoringPhase": "cleanup"
+    }
+  },
+  {
+    "id": "event-1756414671979-aowycr3a3",
+    "timestamp": "2025-08-28T20:57:51.979Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414671979-qmk0kjwkc",
+      "timestamp": "2025-08-28T20:57:51.979Z",
+      "errorType": "ReferenceError",
+      "component": "ClaudeInstanceManager",
+      "originalCode": "// Original SSE implementation\nconst eventSource = new EventSource('/sse');\neventSource.addHandler('message', handleMessage);\neventSource.addHandler('error', handleError);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nconst websocket = new WebSocket('ws://localhost:3001/sse');\naddHandler('message', handleMessage); // ERROR: addHandler not defined\nremoveHandler('error', handleError); // ERROR: removeHandler not defined",
+      "errorMessage": "addHandler undefined: Method not found after refactoring",
+      "stackTrace": "at ClaudeInstanceManager.tsx:45:undefined",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "handler_replacement",
+        "methodsInvolved": [
+          "addHandler"
+        ],
+        "dependencies": [
+          "react",
+          "EventSource",
+          "WebSocket"
+        ]
+      },
+      "severity": "high",
+      "patternSignature": "ReferenceError::ClaudeInstanceManager::handler_replacement::addHandler"
+    },
+    "severity": "high",
+    "context": {
+      "component": "ClaudeInstanceManager",
+      "refactoringPhase": "handler_replacement"
+    }
+  },
+  {
+    "id": "event-1756414671980-ij6hv8awy",
+    "timestamp": "2025-08-28T20:57:51.980Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "console",
+    "data": {
+      "id": "console-1756414671979-wo2dib85l",
+      "timestamp": "2025-08-28T20:57:51.979Z",
+      "type": "error",
+      "message": "Uncaught TypeError: Cannot read properties of undefined (reading 'addEventListener')",
+      "source": "useHTTPSSE.ts",
+      "line": 78,
+      "column": 23,
+      "stack": "TypeError: Cannot read properties of undefined (reading 'addEventListener')\n    at useHTTPSSE (http://localhost:5173/src/hooks/useHTTPSSE.ts:78:23)",
+      "context": {
+        "url": "http://localhost:5173",
+        "userAgent": "Mozilla/5.0 (NLD Monitor)",
+        "component": "useHTTPSSE",
+        "action": "WEBSOCKET_CONNECTION_SETUP"
+      },
+      "severity": "medium",
+      "category": "refactoring"
+    },
+    "severity": "medium",
+    "context": {
+      "component": "useHTTPSSE",
+      "file": "useHTTPSSE.ts",
+      "line": 78
+    }
+  },
+  {
+    "id": "event-1756414672079-ks9zbbkba",
+    "timestamp": "2025-08-28T20:57:52.079Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414672078-qskxx85dd",
+      "timestamp": "2025-08-28T20:57:52.078Z",
+      "errorType": "ReferenceError",
+      "component": "ClaudeInstanceSelector",
+      "originalCode": "// Original SSE code\neventSource.addHandler('message', handler);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nwebsocket.addHandler('message', handler); // ERROR: method not found",
+      "errorMessage": "removeHandler undefined: Method not found after refactoring",
+      "stackTrace": "at ClaudeInstanceSelector.tsx:123:undefined",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "handler_replacement",
+        "methodsInvolved": [
+          "removeHandler"
+        ],
+        "dependencies": [
+          "react"
+        ]
+      },
+      "severity": "high",
+      "patternSignature": "ReferenceError::ClaudeInstanceSelector::handler_replacement::removeHandler"
+    },
+    "severity": "high",
+    "context": {
+      "component": "ClaudeInstanceSelector",
+      "refactoringPhase": "handler_replacement"
+    }
+  },
+  {
+    "id": "event-1756414672130-oe5yzp27e",
+    "timestamp": "2025-08-28T20:57:52.130Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "console",
+    "data": {
+      "id": "console-1756414672129-zwa1q3sic",
+      "timestamp": "2025-08-28T20:57:52.129Z",
+      "type": "error",
+      "message": "WebSocket connection to 'ws://localhost:3001/sse' failed: Error in connection establishment",
+      "source": "useAdvancedSSEConnection.ts",
+      "line": 34,
+      "column": 15,
+      "stack": "Error: WebSocket connection failed\n    at WebSocket.onerror (http://localhost:5173/src/hooks/useAdvancedSSEConnection.ts:34:15)",
+      "context": {
+        "url": "http://localhost:5173",
+        "userAgent": "Mozilla/5.0 (NLD Monitor)",
+        "component": "useAdvancedSSEConnection",
+        "action": "PROTOCOL_MISMATCH"
+      },
+      "severity": "critical",
+      "category": "refactoring"
+    },
+    "severity": "critical",
+    "context": {
+      "component": "useAdvancedSSEConnection",
+      "file": "useAdvancedSSEConnection.ts",
+      "line": 34
+    }
+  },
+  {
+    "id": "event-1756414672180-spw5a78f0",
+    "timestamp": "2025-08-28T20:57:52.180Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414672179-fyimm6dtv",
+      "timestamp": "2025-08-28T20:57:52.179Z",
+      "errorType": "ReferenceError",
+      "component": "useHTTPSSE",
+      "originalCode": "// Original SSE hook\nuseEffect(() => {\n  const eventSource = new EventSource(url);\n  eventSource.addEventListener('message', onMessage);\n  return () => eventSource.close();\n}, [url]);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nuseEffect(() => {\n  const ws = new WebSocket(url);\n  ws.addEventListener('message', onMessage); // May fail if ws is null\n  return () => ws.close();\n}, [url]);",
+      "errorMessage": "connection null: Method not found after refactoring",
+      "stackTrace": "at useHTTPSSE.tsx:78:undefined",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "handler_replacement",
+        "methodsInvolved": [
+          "connection"
+        ],
+        "dependencies": [
+          "react",
+          "useEffect",
+          "WebSocket"
+        ]
+      },
+      "severity": "high",
+      "patternSignature": "ReferenceError::useHTTPSSE::handler_replacement::connection"
+    },
+    "severity": "high",
+    "context": {
+      "component": "useHTTPSSE",
+      "refactoringPhase": "handler_replacement"
+    }
+  },
+  {
+    "id": "event-1756414672183-pp4w3ucp9",
+    "timestamp": "2025-08-28T20:57:52.183Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "user_feedback",
+    "data": {
+      "component": "useAdvancedSSEConnection",
+      "issue": "Protocol mismatch - WebSocket connecting to HTTP endpoint",
+      "success": false
+    },
+    "severity": "medium",
+    "context": {
+      "component": "useAdvancedSSEConnection",
+      "refactoringPhase": "user_validation"
+    }
+  },
+  {
+    "id": "event-1756414672280-ja2vaxfv4",
+    "timestamp": "2025-08-28T20:57:52.280Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414672279-igjqzg5ey",
+      "timestamp": "2025-08-28T20:57:52.279Z",
+      "errorType": "NetworkError",
+      "component": "useAdvancedSSEConnection",
+      "originalCode": "// Original SSE code\neventSource.addHandler('message', handler);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nwebsocket.addHandler('message', handler); // ERROR: method not found",
+      "errorMessage": "Communication mismatch: Protocol mismatch during migration",
+      "stackTrace": "Frontend: WebSocket connection to ws://localhost:3001/sse | Backend: SSE endpoint still at /sse (HTTP)",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "connection_setup",
+        "methodsInvolved": [
+          "WebSocket",
+          "SSE"
+        ],
+        "dependencies": [
+          "react"
+        ]
+      },
+      "severity": "critical",
+      "patternSignature": "NetworkError::useAdvancedSSEConnection::connection_setup::WebSocket-SSE"
+    },
+    "severity": "critical",
+    "context": {
+      "component": "useAdvancedSSEConnection",
+      "refactoringPhase": "connection_setup"
+    }
+  },
+  {
+    "id": "event-1756414672285-f5svdau31",
+    "timestamp": "2025-08-28T20:57:52.285Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "console",
+    "data": {
+      "id": "console-1756414672283-54akmfyyl",
+      "timestamp": "2025-08-28T20:57:52.283Z",
+      "type": "warn",
+      "message": "EventSource constructor is deprecated, use WebSocket instead",
+      "source": "TokenCostAnalytics.tsx",
+      "line": 67,
+      "column": 25,
+      "stack": "",
+      "context": {
+        "url": "http://localhost:5173",
+        "userAgent": "Mozilla/5.0 (NLD Monitor)",
+        "component": "TokenCostAnalytics",
+        "action": "PARTIAL_MIGRATION_WARNING"
+      },
+      "severity": "medium",
+      "category": "network"
+    },
+    "severity": "medium",
+    "context": {
+      "component": "TokenCostAnalytics",
+      "file": "TokenCostAnalytics.tsx",
+      "line": 67
+    }
+  },
+  {
+    "id": "event-1756414672380-80jcys4re",
+    "timestamp": "2025-08-28T20:57:52.380Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414672380-bhyu4r85m",
+      "timestamp": "2025-08-28T20:57:52.380Z",
+      "errorType": "NetworkError",
+      "component": "SSEConnectionManager",
+      "originalCode": "// Original SSE code\neventSource.addHandler('message', handler);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nwebsocket.addHandler('message', handler); // ERROR: method not found",
+      "errorMessage": "Communication mismatch: Message format incompatibility",
+      "stackTrace": "Frontend: WebSocket.send() for SSE-style messages | Backend: Server expects HTTP POST requests",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "connection_setup",
+        "methodsInvolved": [
+          "WebSocket",
+          "SSE"
+        ],
+        "dependencies": [
+          "react"
+        ]
+      },
+      "severity": "critical",
+      "patternSignature": "NetworkError::SSEConnectionManager::connection_setup::WebSocket-SSE"
+    },
+    "severity": "critical",
+    "context": {
+      "component": "SSEConnectionManager",
+      "refactoringPhase": "connection_setup"
+    }
+  },
+  {
+    "id": "event-1756414672429-zjrn8zxzr",
+    "timestamp": "2025-08-28T20:57:52.429Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "console",
+    "data": {
+      "id": "console-1756414672429-5eazvtf24",
+      "timestamp": "2025-08-28T20:57:52.429Z",
+      "type": "error",
+      "message": "Uncaught TypeError: ws.addHandler is not a function",
+      "source": "SSEConnectionManager.ts",
+      "line": 156,
+      "column": 18,
+      "stack": "TypeError: ws.addHandler is not a function\n    at SSEConnectionManager.connect (http://localhost:5173/src/services/SSEConnectionManager.ts:156:18)",
+      "context": {
+        "url": "http://localhost:5173",
+        "userAgent": "Mozilla/5.0 (NLD Monitor)",
+        "component": "SSEConnectionManager",
+        "action": "WEBSOCKET_METHOD_MISMATCH"
+      },
+      "severity": "high",
+      "category": "runtime"
+    },
+    "severity": "high",
+    "context": {
+      "component": "SSEConnectionManager",
+      "file": "SSEConnectionManager.ts",
+      "line": 156
+    }
+  },
+  {
+    "id": "event-1756414672480-7kjt5glev",
+    "timestamp": "2025-08-28T20:57:52.480Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414672480-00pj09em3",
+      "timestamp": "2025-08-28T20:57:52.480Z",
+      "errorType": "StateError",
+      "component": "TokenCostAnalytics",
+      "originalCode": "// Original SSE code\neventSource.addHandler('message', handler);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nwebsocket.addHandler('message', handler); // ERROR: method not found",
+      "errorMessage": "Event binding failure: useEffect cleanup function still references SSE handlers",
+      "stackTrace": "Refactoring incomplete: SSE to WebSocket migration incomplete",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "event_binding",
+        "methodsInvolved": [
+          "useEffect",
+          "addEventListener"
+        ],
+        "dependencies": [
+          "react",
+          "useState",
+          "useEffect"
+        ]
+      },
+      "severity": "medium",
+      "patternSignature": "StateError::TokenCostAnalytics::event_binding::useEffect-addEventListener"
+    },
+    "severity": "medium",
+    "context": {
+      "component": "TokenCostAnalytics",
+      "refactoringPhase": "event_binding"
+    }
+  },
+  {
+    "id": "event-1756414672580-st5110t5s",
+    "timestamp": "2025-08-28T20:57:52.580Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "refactor_monitor",
+    "data": {
+      "id": "sse-ws-1756414672579-ymmnzizoz",
+      "timestamp": "2025-08-28T20:57:52.579Z",
+      "errorType": "TypeError",
+      "component": "ClaudeInstanceManagerModern",
+      "originalCode": "// Original SSE code\neventSource.addHandler('message', handler);",
+      "refactoredCode": "// Incomplete WebSocket refactor\nwebsocket.addHandler('message', handler); // ERROR: method not found",
+      "errorMessage": "Event binding failure: Event listeners not properly migrated to WebSocket events",
+      "stackTrace": "Refactoring incomplete: Handler references not updated",
+      "contextData": {
+        "migration": "SSE_TO_WEBSOCKET",
+        "phase": "event_binding",
+        "methodsInvolved": [
+          "useEffect",
+          "addEventListener"
+        ],
+        "dependencies": [
+          "react"
+        ]
+      },
+      "severity": "medium",
+      "patternSignature": "TypeError::ClaudeInstanceManagerModern::event_binding::useEffect-addEventListener"
+    },
+    "severity": "medium",
+    "context": {
+      "component": "ClaudeInstanceManagerModern",
+      "refactoringPhase": "event_binding"
+    }
+  },
+  {
+    "id": "event-1756414672683-spgtn3578",
+    "timestamp": "2025-08-28T20:57:52.683Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "user_feedback",
+    "data": {
+      "component": "TokenCostAnalytics",
+      "issue": "Event listener cleanup not updated for WebSocket",
+      "success": false
+    },
+    "severity": "medium",
+    "context": {
+      "component": "TokenCostAnalytics",
+      "refactoringPhase": "user_validation"
+    }
+  },
+  {
+    "id": "event-1756414673184-hgl0psi0x",
+    "timestamp": "2025-08-28T20:57:53.184Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "user_feedback",
+    "data": {
+      "component": "SSEConnectionManager",
+      "issue": "Message format incompatibility between SSE and WebSocket",
+      "success": false
+    },
+    "severity": "medium",
+    "context": {
+      "component": "SSEConnectionManager",
+      "refactoringPhase": "user_validation"
+    }
+  },
+  {
+    "id": "event-1756414673686-5ihzo5fwh",
+    "timestamp": "2025-08-28T20:57:53.686Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "user_feedback",
+    "data": {
+      "component": "ClaudeInstanceSelector",
+      "issue": "Authentication method not compatible with WebSocket",
+      "success": false
+    },
+    "severity": "medium",
+    "context": {
+      "component": "ClaudeInstanceSelector",
+      "refactoringPhase": "user_validation"
+    }
+  },
+  {
+    "id": "event-1756414674187-jgfheh205",
+    "timestamp": "2025-08-28T20:57:54.187Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "success",
+    "source": "user_feedback",
+    "data": {
+      "component": "ClaudeInstanceManager",
+      "issue": "Fixed addHandler references to use addEventListener",
+      "resolution": "Updated all SSE handler methods to WebSocket event listeners",
+      "success": true
+    },
+    "severity": "low",
+    "context": {
+      "component": "ClaudeInstanceManager",
+      "refactoringPhase": "user_validation"
+    }
+  },
+  {
+    "id": "event-1756414674488-2uh4xq8ib",
+    "timestamp": "2025-08-28T20:57:54.488Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "success",
+    "source": "user_feedback",
+    "data": {
+      "component": "useAdvancedSSEConnection",
+      "issue": "Updated endpoint URL from HTTP to WebSocket protocol",
+      "resolution": "Changed ws://localhost:3001/websocket and updated backend",
+      "success": true
+    },
+    "severity": "low",
+    "context": {
+      "component": "useAdvancedSSEConnection",
+      "refactoringPhase": "user_validation"
+    }
+  },
+  {
+    "id": "event-1756414674789-453qngqu8",
+    "timestamp": "2025-08-28T20:57:54.789Z",
+    "sessionId": "session-1756414671679-00rw2zu79",
+    "type": "error",
+    "source": "user_feedback",
+    "data": {
+      "component": "TokenCostAnalytics",
+      "issue": "Still getting memory leaks after migration",
+      "success": false
+    },
+    "severity": "medium",
+    "context": {
+      "component": "TokenCostAnalytics",
+      "refactoringPhase": "user_validation"
+    }
+  }
+]

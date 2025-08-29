@@ -100,7 +100,7 @@ export class ClaudeProcessManager extends EventEmitter {
    * Create new Claude instance with configuration
    */
   async createInstance(config: ClaudeInstanceConfig = {}): Promise<string> {
-    const instanceId = uuidv4();
+    const instanceId = `claude-${Math.floor(Math.random() * 9000) + 1000}`;
     
     try {
       const instance = new ClaudeInstance(instanceId, config, this.logger, this.sessionStorage);
@@ -155,6 +155,18 @@ export class ClaudeProcessManager extends EventEmitter {
     }
 
     await instance.sendMessage(content, metadata);
+  }
+
+  /**
+   * Send terminal input to Claude instance (CRITICAL FIX)
+   */
+  async sendInput(instanceId: string, input: string): Promise<void> {
+    const instance = this.instances.get(instanceId);
+    if (!instance) {
+      throw new Error(`Instance ${instanceId} not found`);
+    }
+
+    await instance.sendInput(input);
   }
 
   /**
@@ -419,6 +431,38 @@ class ClaudeInstance extends EventEmitter {
       await this.saveMessageToSession(message);
     } catch (error) {
       this.logger.error(`Failed to send message to instance ${this.id}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send terminal input to Claude instance (CRITICAL FIX)
+   */
+  async sendInput(input: string): Promise<void> {
+    if (!this.process || !this.process.stdin) {
+      throw new Error('Process not available for terminal input');
+    }
+
+    const message: ClaudeMessage = {
+      id: uuidv4(),
+      instanceId: this.id,
+      type: 'input',
+      content: input,
+      timestamp: new Date(),
+      metadata: { terminal: true, isInput: true }
+    };
+
+    try {
+      // For terminal input, write directly without extra newline to preserve user control
+      this.process.stdin.write(input);
+      this.messageQueue.push(message);
+      this.status.lastActivity = new Date();
+      this.status.metrics.messagesProcessed++;
+      await this.saveMessageToSession(message);
+      this.logger.debug(`Terminal input sent to instance ${this.id}: ${input.slice(0, 50)}`);
+    } catch (error) {
+      this.logger.error(`Failed to send terminal input to instance ${this.id}:`, error);
+      this.status.metrics.errorCount++;
       throw error;
     }
   }

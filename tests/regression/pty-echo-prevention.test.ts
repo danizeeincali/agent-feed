@@ -8,7 +8,9 @@
  * EXPECTED: These tests will PASS when PTY echo is properly configured
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+// Convert from Vitest to Jest imports
+// // Converted from Vitest to Jest - globals available
+// Jest equivalents are available globally, vi -> jest for mocking
 
 interface MockPTYProcess {
   write: (data: string) => void;
@@ -37,16 +39,16 @@ describe('PTY Echo Prevention - TDD Tests', () => {
     capturedInput = [];
 
     mockPTY = {
-      write: vi.fn((data: string) => {
+      write: jest.fn((data: string) => {
         capturedInput.push(data);
       }),
-      on: vi.fn((event: string, callback: Function) => {
+      on: jest.fn((event: string, callback: Function) => {
         if (event === 'data') {
           // Simulate PTY output
           setTimeout(() => callback('mock output'), 10);
         }
       }),
-      kill: vi.fn(),
+      kill: jest.fn(),
       killed: false,
       pid: 12345
     };
@@ -61,7 +63,7 @@ describe('PTY Echo Prevention - TDD Tests', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Echo Duplication Prevention', () => {

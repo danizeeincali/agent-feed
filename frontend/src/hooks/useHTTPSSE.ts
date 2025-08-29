@@ -1,60 +1,55 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 
-interface HTTPSSEMessage {
+interface WebSocketMessage {
   type: string;
   data: any;
   timestamp: string;
 }
 
-interface UseHTTPSSEOptions {
+interface UseWebSocketOptions {
   url?: string;
   autoConnect?: boolean;
   reconnectAttempts?: number;
   reconnectDelay?: number;
-  pollingInterval?: number;
   maxBackoffDelay?: number;
 }
 
-interface UseHTTPSSEReturn {
-  socket: any | null;
+interface UseWebSocketReturn {
+  socket: WebSocket | null;
   isConnected: boolean;
-  lastMessage: HTTPSSEMessage | null;
+  lastMessage: WebSocketMessage | null;
   connectionError: string | null;
   connect: () => void;
   disconnect: () => void;
-  emit: (event: string, data?: any) => void;
+  send: (data: any) => void;
   subscribe: (event: string, handler: (data: any) => void) => void;
   unsubscribe: (event: string, handler?: (data: any) => void) => void;
   on: (event: string, handler: (data: any) => void) => void;
   off: (event: string, handler?: (data: any) => void) => void;
-  startPolling: (instanceId: string) => void;
-  stopPolling: () => void;
-  connectSSE: (instanceId: string) => void;
-  disconnectFromInstance: () => void;
+  connectToTerminal: (terminalId: string) => void;
+  disconnectFromTerminal: () => void;
 }
 
 interface ConnectionState {
-  isSSE: boolean;
-  isPolling: boolean;
-  instanceId: string | null;
-  connectionType: 'none' | 'sse' | 'polling';
+  isConnected: boolean;
+  terminalId: string | null;
+  connectionType: 'none' | 'websocket';
 }
 
-export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn => {
+export const useWebSocketTerminal = (options: UseWebSocketOptions = {}): UseWebSocketReturn => {
   const {
-    url = 'http://localhost:3000',
+    url = 'http://localhost:3333',
     autoConnect = true,
     reconnectAttempts = 5,
     reconnectDelay = 1000,
-    pollingInterval = 2000,
     maxBackoffDelay = 30000
   } = options;
 
   // State management
   const [isConnected, setIsConnected] = useState(false);
-  const [lastMessage, setLastMessage] = useState<HTTPSSEMessage | null>(null);
+  const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
   const [connectionError, setConnectionError] = useState<string | null>(null);
-  const [socket, setSocket] = useState<any | null>(null);
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
   // Refs for connection management
   const reconnectCount = useRef(0);
@@ -96,15 +91,15 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
             throw new Error(`Invalid instance ID format for terminal input: ${inputInstanceId}`);
           }
           
-          endpoint = `/api/claude/instances/${inputInstanceId}/terminal/input`;
+          endpoint = `/api/v1/claude/instances/${inputInstanceId}/terminal/input`;
           payload = { input: data.input };
           console.log(`🔧 Terminal input sending to: ${url}${endpoint} with payload:`, payload);
           break;
         case 'instance:create':
-          endpoint = '/api/claude/instances';
+          endpoint = '/api/v1/claude/instances';
           break;
         case 'instance:delete':
-          endpoint = `/api/claude/instances/${data.instanceId}`;
+          endpoint = `/api/v1/claude/instances/${data.instanceId}`;
           break;
         default:
           console.warn(`Unsupported event type: ${event}`);
@@ -287,7 +282,7 @@ export const useHTTPSSE = (options: UseHTTPSSEOptions = {}): UseHTTPSSEReturn =>
 
     try {
       const eventSource = new EventSource(
-        `${url}/api/claude/instances/${instanceId}/terminal/stream`,
+        `${url}/api/v1/claude/instances/${instanceId}/terminal/stream`,
         { withCredentials: false }
       );
       

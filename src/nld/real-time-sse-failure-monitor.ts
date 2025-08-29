@@ -1,11 +1,15 @@
 /**
- * Real-Time SSE Failure Monitor
+ * Real-Time SSE Failure Monitoring System
+ * Monitors SSE connections and detects failures in real-time
+ * Part of NLD (Neuro-Learning Development) system
  * 
  * Continuously monitors SSE connections for failure patterns, specifically:
  * - Status SSE connection not established despite terminal SSE requests
  * - Status broadcasts having 0 connections while terminal shows 1+ connections
  * - UI stuck on "starting" status when instance is actually running
  * - Connection coordination issues between status and terminal streams
+ * - SSE buffer accumulation and replay loop patterns
+ * - Frontend message state accumulation issues
  */
 
 import { EventEmitter } from 'events';

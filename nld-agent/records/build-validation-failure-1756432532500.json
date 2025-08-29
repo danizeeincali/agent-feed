@@ -1,0 +1,10 @@
+{
+  "type": "build-validation-failure",
+  "preventionPattern": true,
+  "test": "backend-typescript-compilation",
+  "timestamp": "2025-08-29T01:55:32.499Z",
+  "error": "Command failed: npm run typecheck",
+  "stdout": "\n> agent-feed@1.0.0 typecheck\n> tsc --noEmit\n\nsrc/nld/network-cors-timeout-detector.ts(106,8): error TS1005: ',' expected.\nsrc/nld/network-cors-timeout-detector.ts(148,8): error TS1005: ',' expected.\nsrc/nld/network-failure-pattern-detector.ts(163,8): error TS1005: ',' expected.\nsrc/nld/network-failure-pattern-detector.ts(174,8): error TS1005: ',' expected.\nsrc/nld/network-failure-pattern-detector.ts(195,10): error TS1005: ',' expected.\nsrc/nld/network-failure-pattern-detector.ts(207,10): error TS1005: ',' expected.\n",
+  "stderr": "",
+  "failureType": "compilation-error"
+}

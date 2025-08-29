@@ -1,12 +1,13 @@
 /**
  * Enhanced ProcessManager API Routes with NLD Integration
  * RESTful endpoints for process management with real-time failure pattern detection
+ * Updated to use new Enhanced PTY Process Manager with escape sequence filtering
  */
 
 import express from 'express';
-import { enhancedProcessManager } from '../services/EnhancedProcessManager';
-import { nldProcessMonitor, ProcessFailurePattern } from '../services/NLDProcessHealthMonitor';
-import { ProcessConfig } from '../services/ProcessManager';
+import { enhancedProcessManager, ProcessConfig, EscapeSequenceFilter } from '../../services/EnhancedProcessManager';
+import { sseEventStreamer } from '../../services/SSEEventStreamer';
+import { logger } from '../../utils/logger';
 
 const router = express.Router();
 
@@ -40,47 +41,68 @@ router.get('/status', (req, res) => {
 
 /**
  * POST /api/process-enhanced/launch
- * Launch Claude instance with NLD monitoring
+ * Launch Claude instance with enhanced PTY management
  */
 router.post('/launch', async (req, res) => {
   try {
-    const config: Partial<ProcessConfig> = req.body.config || {};
+    const { instanceType = 'prod', command = 'claude', args = [], cwd, env = {}, ...options } = req.body;
     
-    // Validate configuration
-    if (config.workingDirectory && !config.workingDirectory.startsWith('/workspaces/agent-feed')) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid working directory. Must be within /workspaces/agent-feed',
-        timestamp: new Date().toISOString()
-      });
-    }
+    // Generate instance ID
+    const instanceId = `claude-${Math.floor(Math.random() * 9000) + 1000}`;
     
-    console.log('[API] Launching enhanced Claude instance with config:', config);
+    // Build process configuration
+    const config: ProcessConfig = {
+      command,
+      args: instanceType === 'skip-permissions' ? ['--dangerously-skip-permissions', ...args] : args,
+      cwd: cwd || process.cwd(),
+      env: {
+        ...process.env,
+        TERM: 'xterm-256color',
+        FORCE_COLOR: '1',
+        CLAUDE_MANAGED_INSTANCE: 'true',
+        ...env
+      },
+      maxMemoryMB: options.maxMemoryMB || 512,
+      maxCpuPercent: options.maxCpuPercent || 80,
+      maxRuntimeMs: options.maxRuntimeMs || 3600000, // 1 hour
+      autoRestart: options.autoRestart || false,
+      escapeSequenceFiltering: options.escapeSequenceFiltering !== false, // Default enabled
+      cols: options.cols || 80,
+      rows: options.rows || 24
+    };
     
-    const processInfo = await enhancedProcessManager.launchInstance(config);
+    logger.info('Launching enhanced Claude instance', { instanceId, config });
+    
+    const processInfo = await enhancedProcessManager.createInstance(instanceId, config);
     
     res.json({
       success: true,
       data: {
-        process: processInfo,
-        nld: {
-          monitoring: true,
-          instanceId: enhancedProcessManager['instanceId']
+        instance: {
+          id: instanceId,
+          name: `${instanceType}/claude`,
+          status: processInfo.status,
+          pid: processInfo.pid,
+          type: instanceType,
+          created: processInfo.startTime?.toISOString(),
+          command: processInfo.command,
+          enhanced: {
+            escapeSequenceFiltering: config.escapeSequenceFiltering,
+            resourceMonitoring: true,
+            hangDetection: true
+          }
         }
       },
-      message: 'Claude instance launched successfully with NLD monitoring',
+      message: 'Claude instance launched successfully with enhanced PTY management',
       timestamp: new Date().toISOString()
     });
     
   } catch (error) {
-    console.error('[API] Failed to launch enhanced Claude instance:', error.message);
+    logger.error('Failed to launch enhanced Claude instance', error);
     
     res.status(500).json({
       success: false,
       error: error.message,
-      nld: {
-        patternDetected: error.message.includes('ENOENT') ? ProcessFailurePattern.PROCESS_SPAWN_FAILURE_V1 : null
-      },
       timestamp: new Date().toISOString()
     });
   }
@@ -145,9 +167,9 @@ router.post('/restart', async (req, res) => {
  * POST /api/process-enhanced/input
  * Send input to Claude instance with I/O monitoring
  */
-router.post('/input', (req, res) => {
+router.post('/input', async (req, res) => {
   try {
-    const { input } = req.body;
+    const { input, instanceId } = req.body;
     
     if (typeof input !== 'string') {
       return res.status(400).json({
@@ -157,12 +179,29 @@ router.post('/input', (req, res) => {
       });
     }
     
-    enhancedProcessManager.sendInput(input);
+    if (!instanceId) {
+      return res.status(400).json({
+        success: false,
+        error: 'Instance ID is required',
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    const success = await enhancedProcessManager.sendInput(instanceId, input);
+    
+    if (!success) {
+      return res.status(404).json({
+        success: false,
+        error: 'Instance not found or not accepting input',
+        timestamp: new Date().toISOString()
+      });
+    }
     
     res.json({
       success: true,
       message: 'Input sent successfully',
       data: {
+        instanceId,
         inputLength: input.length,
         monitoring: true
       },
@@ -170,8 +209,151 @@ router.post('/input', (req, res) => {
     });
     
   } catch (error) {
-    console.error('[API] Failed to send input to enhanced Claude instance:', error.message);
+    logger.error('Failed to send input to enhanced Claude instance', error);
     
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+/**
+ * GET /api/process-enhanced/:instanceId/terminal/stream
+ * Create SSE terminal output stream
+ */
+router.get('/:instanceId/terminal/stream', (req, res) => {
+  try {
+    const { instanceId } = req.params;
+    
+    logger.info(`Creating terminal SSE stream: ${instanceId}`);
+
+    // Check if instance exists
+    const processInfo = enhancedProcessManager.getInstanceInfo(instanceId);
+    if (!processInfo) {
+      return res.status(404).json({
+        success: false,
+        error: 'Instance not found',
+        instanceId,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    // Create SSE stream
+    const connectionId = sseEventStreamer.createTerminalStream(instanceId, res);
+
+    logger.info(`Terminal SSE stream created: ${instanceId}`, { connectionId });
+
+  } catch (error) {
+    logger.error(`Failed to create terminal stream for ${req.params.instanceId}`, error);
+    
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+});
+
+/**
+ * GET /api/process-enhanced/status/stream
+ * Create SSE status stream
+ */
+router.get('/status/stream', (req, res) => {
+  try {
+    logger.info('Creating status SSE stream');
+
+    const connectionId = sseEventStreamer.createStatusStream(res);
+    logger.info('Status SSE stream created', { connectionId });
+
+  } catch (error) {
+    logger.error('Failed to create status stream', error);
+    
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+});
+
+/**
+ * POST /api/process-enhanced/:instanceId/terminal/resize
+ * Resize terminal for PTY processes
+ */
+router.post('/:instanceId/terminal/resize', async (req, res) => {
+  try {
+    const { instanceId } = req.params;
+    const { cols, rows } = req.body;
+
+    if (typeof cols !== 'number' || typeof rows !== 'number') {
+      return res.status(400).json({
+        success: false,
+        error: 'cols and rows must be numbers',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const success = await enhancedProcessManager.resizeTerminal(instanceId, cols, rows);
+
+    if (!success) {
+      return res.status(404).json({
+        success: false,
+        error: 'Instance not found or resize not supported',
+        instanceId,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    res.json({
+      success: true,
+      cols,
+      rows,
+      instanceId,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    logger.error(`Failed to resize terminal for instance ${req.params.instanceId}`, error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+/**
+ * GET /api/process-enhanced/:instanceId/output
+ * Get incremental terminal output
+ */
+router.get('/:instanceId/output', (req, res) => {
+  try {
+    const { instanceId } = req.params;
+    const fromPosition = parseInt(req.query.fromPosition as string) || 0;
+
+    const { output, newPosition, totalLength } = enhancedProcessManager
+      .getIncrementalOutput(instanceId, fromPosition);
+
+    res.json({
+      success: true,
+      output,
+      position: newPosition,
+      totalLength,
+      fromPosition,
+      hasMore: newPosition < totalLength,
+      filtered: EscapeSequenceFilter.containsProblematicSequences(output),
+      instanceId,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    logger.error(`Failed to get output for instance ${req.params.instanceId}`, error);
     res.status(500).json({
       success: false,
       error: error.message,

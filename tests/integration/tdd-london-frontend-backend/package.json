@@ -1,0 +1,18 @@
+{
+  "name": "tdd-london-frontend-backend-integration",
+  "version": "1.0.0",
+  "description": "TDD London School Integration Tests for Frontend-Backend Network Communication",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-modules test-runner.js",
+    "test:verbose": "node --experimental-modules test-runner.js --verbose",
+    "test:watch": "node --experimental-modules --watch test-runner.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "colors": "^1.4.0"
+  }
+}

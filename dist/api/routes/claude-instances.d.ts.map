@@ -1,1 +1,1 @@
-{"version":3,"file":"claude-instances.d.ts","sourceRoot":"","sources":["../../../src/api/routes/claude-instances.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAWH,QAAA,MAAM,MAAM,4CAAW,CAAC;AAqCxB;;;GAGG;AACH,QAAA,MAAM,kBAAkB,WAIvB,CAAC;AAGF,OAAO,EAAE,kBAAkB,EAAE,CAAC;AAib9B,eAAe,MAAM,CAAC"}
+{"version":3,"file":"claude-instances.d.ts","sourceRoot":"","sources":["../../../src/api/routes/claude-instances.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAWH,QAAA,MAAM,MAAM,4CAAW,CAAC;AAqCxB;;;GAGG;AACH,QAAA,MAAM,kBAAkB,WAIvB,CAAC;AAGF,OAAO,EAAE,kBAAkB,EAAE,CAAC;AAqf9B,eAAe,MAAM,CAAC"}

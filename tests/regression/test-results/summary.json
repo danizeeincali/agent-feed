@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-08-29T01:03:59.597Z",
+  "environment": {
+    "node": "v22.17.0",
+    "platform": "linux",
+    "arch": "x64",
+    "workingDirectory": "/workspaces/agent-feed/tests/regression"
+  },
+  "execution": {
+    "startTime": "2025-08-29T01:03:34.399Z",
+    "endTime": "2025-08-29T01:03:59.594Z",
+    "durationMs": 25195,
+    "durationFormatted": "25s"
+  },
+  "results": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0
+  },
+  "performance": {
+    "slowestTests": [],
+    "averageTestTime": 0
+  },
+  "status": "PASSED",
+  "criticalRegression": false
+}

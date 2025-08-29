@@ -8,7 +8,9 @@
  * EXPECTED: These tests will PASS when escape sequences are properly filtered
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+// Convert from Vitest to Jest imports
+// // Converted from Vitest to Jest - globals available
+// Jest equivalents are available globally, vi -> jest for mocking
 
 interface EscapeSequence {
   sequence: string;
@@ -33,14 +35,14 @@ describe('Escape Sequence Filtering - TDD Tests', () => {
     filteredSequences = [];
 
     terminalFilter = {
-      filterEscapes: vi.fn((input: string) => {
+      filterEscapes: jest.fn((input: string) => {
         // Mock escape filtering logic
         return input.replace(/\x1b\[[O|I]/g, '').replace(/\[O\[I/g, '');
       }),
-      isEscapeSequence: vi.fn((input: string) => {
+      isEscapeSequence: jest.fn((input: string) => {
         return input.includes('\x1b') || input.includes('[O[I');
       }),
-      sanitizeInput: vi.fn((input: string) => {
+      sanitizeInput: jest.fn((input: string) => {
         const problematicSequences = ['\x1b[O', '\x1b[I', '[O[I', '\x1b[A', '\x1b[B'];
         let sanitized = input;
         problematicSequences.forEach(seq => {
@@ -52,7 +54,7 @@ describe('Escape Sequence Filtering - TDD Tests', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Problematic Escape Sequence Detection', () => {

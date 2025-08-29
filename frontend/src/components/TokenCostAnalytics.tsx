@@ -11,10 +11,50 @@ import {
   Download,
   Calendar,
   Cpu,
-  BarChart3
+  BarChart3,
+  Clock
 } from 'lucide-react';
-import { useTokenCostTracking, TokenUsage, TokenCostMetrics, BudgetStatus } from '@/hooks/useTokenCostTracking';
+// Temporarily disabled: import { useTokenCostTracking, TokenUsage, TokenCostMetrics, BudgetStatus } from '@/hooks/useTokenCostTracking';
 import { nldLogger } from '@/utils/nld-logger';
+
+// Temporary mock interfaces for disabled state
+interface TokenUsage {
+  id: string;
+  timestamp: Date;
+  provider: 'claude' | 'openai' | 'mcp' | 'claude-flow';
+  model: string;
+  tokensUsed: number;
+  estimatedCost: number;
+  requestType: string;
+  component?: string;
+  metadata?: Record<string, any>;
+}
+
+interface TokenCostMetrics {
+  totalTokensUsed: number;
+  totalCost: number;
+  costByProvider: Record<string, number>;
+  costByModel: Record<string, number>;
+  averageCostPerToken: number;
+  tokensPerMinute: number;
+  costTrend: 'increasing' | 'decreasing' | 'stable';
+  lastUpdated: Date;
+}
+
+interface BudgetStatus {
+  dailyBudget: number;
+  weeklyBudget: number;
+  monthlyBudget: number;
+  dailyUsed: number;
+  weeklyUsed: number;
+  monthlyUsed: number;
+  dailyPercentage: number;
+  weeklyPercentage: number;
+  monthlyPercentage: number;
+  alertLevel: 'safe' | 'warning' | 'critical' | 'exceeded';
+  projectedDailyCost: number;
+  projectedMonthlyCost: number;
+}
 
 interface TokenCostAnalyticsProps {
   className?: string;
@@ -35,9 +75,9 @@ interface ChartDataPoint {
 }
 
 /**
- * Enhanced Token Cost Analytics Component
- * Integrates with existing SimpleAnalytics dashboard
- * Implements NLD-informed memory leak prevention and performance optimization
+ * DISABLED Token Cost Analytics Component
+ * WebSocket dependencies removed - showing placeholder until reimplementation
+ * SPARC Architecture: Graceful degradation without breaking UI
  */
 const TokenCostAnalytics: React.FC<TokenCostAnalyticsProps> = ({
   className = '',
@@ -52,20 +92,18 @@ const TokenCostAnalytics: React.FC<TokenCostAnalyticsProps> = ({
   const [selectedTimeRange, setSelectedTimeRange] = useState<'1h' | '1d' | '7d' | '30d'>('1d');
   const [showSettings, setShowSettings] = useState(false);
   
-  // Use the enhanced token cost tracking hook
-  const {
-    tokenUsages,
-    metrics,
-    budgetStatus,
-    loading,
-    error,
-    isConnected,
-    trackTokenUsage,
-    refetch
-  } = useTokenCostTracking({
-    enableRealTime: true,
-    budgetLimits
-  });
+  // DISABLED: WebSocket-dependent hook replaced with mock data
+  // const { tokenUsages, metrics, budgetStatus, loading, error, isConnected, trackTokenUsage, refetch } = useTokenCostTracking({ enableRealTime: true, budgetLimits });
+  
+  // Mock data for disabled state
+  const tokenUsages: TokenUsage[] = [];
+  const metrics: TokenCostMetrics | null = null;
+  const budgetStatus: BudgetStatus | null = null;
+  const loading = false;
+  const error = null;
+  const isConnected = false;
+  const trackTokenUsage = () => {};
+  const refetch = () => {};
 
   // Log component lifecycle for NLD analysis
   useEffect(() => {
@@ -220,8 +258,29 @@ const TokenCostAnalytics: React.FC<TokenCostAnalyticsProps> = ({
     );
   }
 
+  // SPARC Architecture: Return disabled placeholder with clear messaging
   return (
-    <div className={`space-y-6 ${className}`} data-testid="token-cost-analytics">
+    <div className={`space-y-6 ${className}`} data-testid="token-cost-analytics-disabled">
+      {/* Disabled State Banner */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-6">
+        <div className="flex items-center gap-3 mb-3">
+          <Clock className="w-6 h-6 text-amber-600" />
+          <h3 className="text-lg font-semibold text-amber-800">Token Cost Analytics - Coming Soon</h3>
+        </div>
+        <p className="text-amber-700 mb-4">
+          Token cost tracking is temporarily disabled while we remove WebSocket dependencies. 
+          This feature will be reimplemented with improved performance and reliability.
+        </p>
+        <div className="bg-amber-100 rounded-md p-3">
+          <p className="text-sm text-amber-800">
+            <strong>SPARC Implementation:</strong> Graceful degradation ensures the UI remains functional 
+            while maintaining tab switching behavior and preventing WebSocket connection errors.
+          </p>
+        </div>
+      </div>
+
+      {/* Placeholder Analytics Layout */}
+      <div className={`space-y-6 opacity-50 ${className}`} data-testid="token-cost-analytics-placeholder">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -231,21 +290,11 @@ const TokenCostAnalytics: React.FC<TokenCostAnalyticsProps> = ({
           </h2>
           <p className="text-gray-600">Real-time token usage and cost tracking</p>
           <div className="flex items-center gap-2 mt-1">
-            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-            <span className="text-sm text-gray-500">
-              {isConnected ? 'Real-time updates active' : 'Disconnected'}
+            <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+            <span className="text-sm text-gray-500">Feature Disabled</span>
+            <span className="text-sm text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
+              Placeholder Mode
             </span>
-            {loading && (
-              <span className="text-sm text-blue-600 flex items-center gap-1">
-                <RefreshCw className="w-3 h-3 animate-spin" />
-                Loading...
-              </span>
-            )}
-            {!isConnected && tokenUsages.length > 0 && tokenUsages[0]?.metadata?.demo && (
-              <span className="text-sm text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
-                Demo Mode
-              </span>
-            )}
           </div>
         </div>
 
@@ -513,6 +562,7 @@ const TokenCostAnalytics: React.FC<TokenCostAnalyticsProps> = ({
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 };

@@ -281,114 +281,40 @@ export const useTokenCostTracking = (config?: {
   }, [config?.budgetLimits, metrics, tokenUsages]);
 
   /**
-   * Fetch historical data on mount
+   * DISABLED: Fetch historical data - replaced with no-op
    */
   const fetchHistoricalData = useCallback(async () => {
-    try {
-      setLoading(true);
-      nldLogger.renderAttempt('useTokenCostTracking', 'fetchHistoricalData', {});
-
-      // In production, this would fetch from your API
-      // For now, simulate loading with shorter timeout for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Load any stored data from localStorage as fallback
-      const stored = localStorage.getItem('tokenUsages');
-      if (stored) {
-        try {
-          const parsedUsages = JSON.parse(stored).map((usage: any) => ({
-            ...usage,
-            timestamp: new Date(usage.timestamp)
-          }));
-          setTokenUsages(parsedUsages);
-          nldLogger.renderSuccess('useTokenCostTracking', 'loaded-from-storage');
-        } catch (parseError) {
-          nldLogger.renderFailure('useTokenCostTracking', parseError as Error);
-          // Clear invalid data
-          localStorage.removeItem('tokenUsages');
-        }
-      } else {
-        // Initialize with empty state to show "no data" instead of infinite loading
-        setTokenUsages([]);
-        nldLogger.renderSuccess('useTokenCostTracking', 'initialized-empty-state');
-      }
-
-      setLoading(false);
-      nldLogger.renderSuccess('useTokenCostTracking', 'fetchHistoricalData');
-    } catch (error) {
-      nldLogger.renderFailure('useTokenCostTracking', error as Error, {});
-      setError(error as Error);
-      setLoading(false);
-    }
+    // DISABLED: No data fetching to prevent WebSocket/API usage
+    nldLogger.renderAttempt('useTokenCostTracking', 'fetchHistoricalData-disabled', { reason: 'WebSocket dependencies removed' });
+    
+    // Initialize with empty state immediately
+    setTokenUsages([]);
+    setMetrics(null);
+    setBudgetStatus(null);
+    setLoading(false);
+    setError(null);
+    
+    nldLogger.renderSuccess('useTokenCostTracking', 'disabled-fetch-completed');
   }, []);
 
-  // Initialize and setup real-time updates
+  // DISABLED: Initialize with no-op behavior
   useEffect(() => {
-    fetchHistoricalData();
-
-    if (config?.enableRealTime && socket) {
-      // Set up WebSocket listeners for real-time updates
-      const handleTokenUpdate = (data: TokenUsage) => {
-        setTokenUsages(prev => {
-          const updated = [...prev, { ...data, timestamp: new Date(data.timestamp) }];
-          return updated.length > 1000 ? updated.slice(-1000) : updated;
-        });
-      };
-
-      socket.on('token-usage-update', handleTokenUpdate);
-      subscriptionRef.current = () => {
-        socket.off('token-usage-update', handleTokenUpdate);
-      };
-    }
-
-    // NLD Fix: Ensure loading state completes even if no data
-    const loadingTimeout = setTimeout(() => {
-      if (loading) {
-        nldLogger.renderAttempt('useTokenCostTracking', 'force-loading-complete', { reason: 'timeout' });
-        setLoading(false);
-        
-        // If WebSocket connection failed, provide demo data for better UX
-        if (!isConnected) {
-          const demoData: TokenUsage[] = [
-            {
-              id: 'demo-1',
-              timestamp: new Date(Date.now() - 3600000),
-              provider: 'claude',
-              model: 'claude-3-sonnet',
-              tokensUsed: 1250,
-              estimatedCost: 0.0125,
-              requestType: 'chat',
-              component: 'TokenCostAnalytics',
-              metadata: { demo: true }
-            },
-            {
-              id: 'demo-2', 
-              timestamp: new Date(Date.now() - 1800000),
-              provider: 'openai',
-              model: 'gpt-4',
-              tokensUsed: 890,
-              estimatedCost: 0.0178,
-              requestType: 'completion',
-              component: 'TokenCostAnalytics',
-              metadata: { demo: true }
-            },
-            {
-              id: 'demo-3',
-              timestamp: new Date(Date.now() - 600000),
-              provider: 'claude-flow',
-              model: 'flow-agent',
-              tokensUsed: 445,
-              estimatedCost: 0.0089,
-              requestType: 'swarm-coordination',
-              component: 'TokenCostAnalytics',
-              metadata: { demo: true }
-            }
-          ];
-          setTokenUsages(demoData);
-          nldLogger.renderSuccess('useTokenCostTracking', 'demo-data-loaded');
-        }
-      }
-    }, 3000); // Force complete after 3 seconds
+    // DISABLED: No historical data fetching to prevent WebSocket connections
+    // fetchHistoricalData();
+    
+    nldLogger.renderAttempt('useTokenCostTracking', 'hook-initialization-disabled', { 
+      reason: 'WebSocket dependencies removed',
+      config: config || {} 
+    });
+    
+    // Initialize with empty state immediately
+    setTokenUsages([]);
+    setMetrics(null);
+    setBudgetStatus(null);
+    setLoading(false);
+    setError(null);
+    
+    nldLogger.renderSuccess('useTokenCostTracking', 'disabled-state-initialized');
 
     return () => {
       // Cleanup to prevent memory leaks
@@ -401,38 +327,25 @@ export const useTokenCostTracking = (config?: {
       if (metricsCalculationRef.current) {
         clearTimeout(metricsCalculationRef.current);
       }
-      clearTimeout(loadingTimeout);
     };
-  }, [config?.enableRealTime, socket, fetchHistoricalData, loading]);
+  }, []); // Removed all WebSocket dependencies
 
-  // Calculate metrics with debouncing
+  // DISABLED: Metrics calculation - no-op for empty token usages
   useEffect(() => {
-    if (metricsCalculationRef.current) {
-      clearTimeout(metricsCalculationRef.current);
-    }
+    // Since tokenUsages is always empty in disabled mode, no calculations needed
+    nldLogger.renderAttempt('useTokenCostTracking', 'metrics-calculation-disabled', { 
+      tokenUsagesLength: tokenUsages.length,
+      reason: 'No WebSocket data to calculate' 
+    });
+  }, [tokenUsages]);  // Keep for interface compatibility
 
-    metricsCalculationRef.current = setTimeout(() => {
-      calculateMetrics();
-      calculateBudgetStatus();
-    }, 500); // Debounce calculations
-
-    return () => {
-      if (metricsCalculationRef.current) {
-        clearTimeout(metricsCalculationRef.current);
-      }
-    };
-  }, [tokenUsages, calculateMetrics, calculateBudgetStatus]);
-
-  // Persist data to localStorage
+  // DISABLED: No localStorage persistence needed for empty data
   useEffect(() => {
-    if (tokenUsages.length > 0) {
-      try {
-        localStorage.setItem('tokenUsages', JSON.stringify(tokenUsages.slice(-100))); // Keep last 100 for persistence
-      } catch (error) {
-        // Handle storage quota exceeded
-        nldLogger.renderFailure('useTokenCostTracking', error as Error, { action: 'localStorage' });
-      }
-    }
+    // Since tokenUsages is always empty in disabled mode, no persistence needed
+    nldLogger.renderAttempt('useTokenCostTracking', 'localStorage-persistence-disabled', { 
+      tokenUsagesLength: tokenUsages.length,
+      reason: 'No data to persist' 
+    });
   }, [tokenUsages]);
 
   return {
@@ -444,6 +357,6 @@ export const useTokenCostTracking = (config?: {
     isConnected,
     trackTokenUsage,
     calculateTokenCost,
-    refetch: fetchHistoricalData
+    refetch: fetchHistoricalData  // Returns no-op function in disabled mode
   };
 };

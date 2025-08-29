@@ -273,7 +273,7 @@ export class WorkingDirectoryNLDDeployment {
         trigger: 'prod/claude button spawns in wrong directory',
         userExpectation: 'Button should spawn Claude in /workspaces/agent-feed/prod',
         actualBehavior: 'Process spawns in /workspaces/agent-feed due to hardcoded workingDir',
-        antiPattern: \"const workingDir = '/workspaces/agent-feed';\",
+        antiPattern: 'const workingDir = \'/workspaces/agent-feed\';',
         classification: 'DIRECTORY_CONFIGURATION_HARDCODING'
       },
 

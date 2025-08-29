@@ -1,0 +1,609 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-08-28T04:34:14.088Z",
+    "source": "TokenCostAnalytics WebSocket Failure Analysis",
+    "totalPatterns": 5,
+    "totalComponents": 4,
+    "totalStrategies": 5
+  },
+  "patterns": [
+    {
+      "id": "WSF-001",
+      "name": "Phantom WebSocket Hook Dependency",
+      "category": "dependency_chain",
+      "severity": 8,
+      "features": {
+        "codeSignatures": [
+          "useWebSocketSingleton_usage",
+          "socket_emit_call",
+          "no_fallback_pattern"
+        ],
+        "behaviorIndicators": [
+          "isConnected shows false despite mock returning true",
+          "Real-time token updates never arrive",
+          "Loading states persist indefinitely",
+          "Mock console logs instead of real data flow",
+          "Component shows \"disconnected\" status permanently"
+        ],
+        "contextClues": [
+          "useWebSocketSingleton hook called",
+          "WebSocket implementation is mocked",
+          "Real-time updates expected but not functional",
+          "Component assumes live connection"
+        ],
+        "dependencyPatterns": [
+          "analytics_dependency",
+          "hook_dependency",
+          "component_dependency",
+          "component_dependency"
+        ]
+      },
+      "outcomes": {
+        "failureSymptoms": [
+          "isConnected shows false despite mock returning true",
+          "Real-time token updates never arrive",
+          "Loading states persist indefinitely",
+          "Mock console logs instead of real data flow",
+          "Component shows \"disconnected\" status permanently"
+        ],
+        "userImpact": [
+          "User sees permanent loading states",
+          "User receives outdated information",
+          "User confused about connection status"
+        ],
+        "systemEffects": [
+          "Cascade failures across components",
+          "Broken component tree"
+        ]
+      },
+      "prevention": {
+        "earlyWarningSignals": [
+          "Mock console logs in production",
+          "Real-time features not working",
+          "Infinite loading states"
+        ],
+        "preventionMethods": [
+          "Implement graceful degradation patterns and mock detection"
+        ],
+        "testingApproaches": [
+          "\nit('should detect mock WebSocket and use fallback', () => {\n  const { result } = renderHook(() => useTokenCostTracking());\n  \n  expect(result.current.isConnected).toBe(true); // Mock shows connected\n  expect(result.current.socket.id).toContain('http-sse'); // But it's mocked\n  \n  // Should use fallback mechanisms\n  expect(mockHttpAPI.trackTokenUsage).toHaveBeenCalled();\n});\n    "
+        ]
+      }
+    },
+    {
+      "id": "WSF-002",
+      "name": "Real-time Update Dependency Without Fallback",
+      "category": "real_time_updates",
+      "severity": 10,
+      "features": {
+        "codeSignatures": [
+          "socket_on_listener"
+        ],
+        "behaviorIndicators": [
+          "Token cost data never updates",
+          "Stale data displayed indefinitely",
+          "Budget alerts not triggered",
+          "Cost metrics remain at zero",
+          "Loading states that never resolve"
+        ],
+        "contextClues": [
+          "WebSocket real-time updates removed",
+          "No HTTP polling fallback implemented",
+          "Component expects live data streams",
+          "User interactions require immediate updates"
+        ],
+        "dependencyPatterns": [
+          "analytics_dependency",
+          "hook_dependency",
+          "component_dependency"
+        ]
+      },
+      "outcomes": {
+        "failureSymptoms": [
+          "Token cost data never updates",
+          "Stale data displayed indefinitely",
+          "Budget alerts not triggered",
+          "Cost metrics remain at zero",
+          "Loading states that never resolve"
+        ],
+        "userImpact": [
+          "User sees permanent loading states",
+          "User receives outdated information",
+          "User misses important notifications"
+        ],
+        "systemEffects": [
+          "Data synchronization issues",
+          "Event system breakdown"
+        ]
+      },
+      "prevention": {
+        "earlyWarningSignals": [
+          "Stale data timestamps",
+          "Non-updating metrics",
+          "Permanent loading states"
+        ],
+        "preventionMethods": [
+          "Implement HTTP polling fallback and data refresh mechanisms"
+        ],
+        "testingApproaches": [
+          "\nit('should implement HTTP fallback when WebSocket unavailable', async () => {\n  mockWebSocket.mockImplementation(() => ({ \n    isConnected: false,\n    socket: null \n  }));\n  \n  const { result } = renderHook(() => useTokenCostTracking());\n  \n  await waitFor(() => {\n    expect(mockFetchTokenUsageData).toHaveBeenCalled();\n  });\n  \n  expect(result.current.tokenUsages.length).toBeGreaterThan(0);\n});\n    "
+        ]
+      }
+    },
+    {
+      "id": "WSF-003",
+      "name": "Context Provider Chain Disruption",
+      "category": "state_management",
+      "severity": 8,
+      "features": {
+        "codeSignatures": [
+          "no_fallback_pattern"
+        ],
+        "behaviorIndicators": [
+          "Context value inconsistencies",
+          "55 components affected by mock context",
+          "Connection status shows wrong state",
+          "Notifications system non-functional",
+          "System stats always null"
+        ],
+        "contextClues": [
+          "WebSocketSingletonProvider provides mock socket",
+          "Child components use useWebSocketSingletonContext",
+          "Context switching from real to mock implementation",
+          "Multiple components sharing same context"
+        ],
+        "dependencyPatterns": [
+          "websocket_dependency",
+          "component_dependency",
+          "component_dependency",
+          "context_dependency"
+        ]
+      },
+      "outcomes": {
+        "failureSymptoms": [
+          "Context value inconsistencies",
+          "55 components affected by mock context",
+          "Connection status shows wrong state",
+          "Notifications system non-functional",
+          "System stats always null"
+        ],
+        "userImpact": [],
+        "systemEffects": [
+          "State inconsistency",
+          "Context provider issues"
+        ]
+      },
+      "prevention": {
+        "earlyWarningSignals": [
+          "Context value inconsistencies",
+          "Large number of affected components",
+          "Misleading connection status"
+        ],
+        "preventionMethods": [
+          "Implement context migration pattern with feature flags"
+        ],
+        "testingApproaches": [
+          "\nit('should handle context transition from real to mock', () => {\n  const TestComponent = () => {\n    const { isConnected, isMockMode } = useWebSocketSingletonContext();\n    return <div data-testid=\"status\">{isConnected ? 'connected' : 'disconnected'}</div>;\n  };\n  \n  const { rerender, getByTestId } = render(\n    <WebSocketSingletonProvider config={{ mockMode: true }}>\n      <TestComponent />\n    </WebSocketSingletonProvider>\n  );\n  \n  expect(getByTestId('status')).toHaveTextContent('disconnected');\n});\n    "
+        ]
+      }
+    },
+    {
+      "id": "WSF-004",
+      "name": "Error Boundary Inadequacy for WebSocket Failures",
+      "category": "error_boundaries",
+      "severity": 6,
+      "features": {
+        "codeSignatures": [],
+        "behaviorIndicators": [
+          "Generic error boundary fallback UI",
+          "Loss of entire component tree",
+          "No recovery mechanism for WebSocket failures",
+          "User sees technical error messages",
+          "No graceful degradation"
+        ],
+        "contextClues": [
+          "WebSocket connection fails",
+          "Real-time components throw errors",
+          "Error boundary catches WebSocket errors",
+          "No specific WebSocket error handling"
+        ],
+        "dependencyPatterns": [
+          "component_dependency",
+          "websocket_dependency",
+          "analytics_dependency"
+        ]
+      },
+      "outcomes": {
+        "failureSymptoms": [
+          "Generic error boundary fallback UI",
+          "Loss of entire component tree",
+          "No recovery mechanism for WebSocket failures",
+          "User sees technical error messages",
+          "No graceful degradation"
+        ],
+        "userImpact": [],
+        "systemEffects": [
+          "Unhandled error propagation",
+          "UI degradation"
+        ]
+      },
+      "prevention": {
+        "earlyWarningSignals": [
+          "Generic error messages for WebSocket failures",
+          "No retry/recovery options",
+          "Complete component tree failure"
+        ],
+        "preventionMethods": [
+          "Implement specialized WebSocket error boundaries with recovery"
+        ],
+        "testingApproaches": [
+          "\nit('should handle WebSocket errors gracefully', () => {\n  const ThrowError = () => {\n    throw new Error('WebSocket connection failed');\n  };\n  \n  const { getByText } = render(\n    <WebSocketErrorBoundary>\n      <ThrowError />\n    </WebSocketErrorBoundary>\n  );\n  \n  expect(getByText(/real-time features unavailable/i)).toBeInTheDocument();\n  expect(getByText(/retry connection/i)).toBeInTheDocument();\n});\n    "
+        ]
+      }
+    },
+    {
+      "id": "WSF-005",
+      "name": "Demo Data Confusion in Production",
+      "category": "state_management",
+      "severity": 6,
+      "features": {
+        "codeSignatures": [
+          "no_fallback_pattern"
+        ],
+        "behaviorIndicators": [
+          "Demo data shown as real data",
+          "Confusing token cost metrics",
+          "Budget alerts based on fake data",
+          "Users making decisions on incorrect information",
+          "Small \"Demo Mode\" indicator easily missed"
+        ],
+        "contextClues": [
+          "WebSocket connection unavailable",
+          "Component loads demo/fallback data",
+          "No clear indication of demo mode",
+          "User cannot distinguish real from mock data"
+        ],
+        "dependencyPatterns": [
+          "analytics_dependency",
+          "hook_dependency",
+          "component_dependency"
+        ]
+      },
+      "outcomes": {
+        "failureSymptoms": [
+          "Demo data shown as real data",
+          "Confusing token cost metrics",
+          "Budget alerts based on fake data",
+          "Users making decisions on incorrect information",
+          "Small \"Demo Mode\" indicator easily missed"
+        ],
+        "userImpact": [
+          "User receives outdated information",
+          "User misses important notifications"
+        ],
+        "systemEffects": [
+          "State inconsistency",
+          "Context provider issues"
+        ]
+      },
+      "prevention": {
+        "earlyWarningSignals": [
+          "Demo data presented as real",
+          "Missed or small demo indicators",
+          "User confusion reports"
+        ],
+        "preventionMethods": [
+          "Implement clear demo mode indicators and user education"
+        ],
+        "testingApproaches": [
+          "\nit('should clearly indicate demo mode when WebSocket unavailable', () => {\n  mockWebSocket.mockReturnValue({ isConnected: false });\n  \n  const { getByText } = render(<TokenCostAnalytics />);\n  \n  expect(getByText(/demo mode/i)).toBeVisible();\n  expect(getByText(/sample data/i)).toBeInTheDocument();\n  expect(getByText(/real-time updates.*unavailable/i)).toBeInTheDocument();\n});\n    "
+        ]
+      }
+    }
+  ],
+  "components": [
+    {
+      "componentName": "TokenCostAnalytics",
+      "riskScore": 9,
+      "dependencies": [
+        "useTokenCostTracking",
+        "useWebSocketSingleton",
+        "WebSocketSingletonContext",
+        "getSocketIOUrl",
+        "websocket-url.ts"
+      ],
+      "failureModes": [
+        "Phantom WebSocket Hook Dependency",
+        "Real-time Update Dependency Without Fallback",
+        "Demo Data Confusion in Production"
+      ],
+      "recoveryStrategies": [
+        "Implement HTTP polling fallback and demo data with clear indicators"
+      ],
+      "testingRequirements": [
+        "Mock WebSocket detection test",
+        "HTTP fallback test",
+        "Demo mode indication test"
+      ]
+    },
+    {
+      "componentName": "useTokenCostTracking",
+      "riskScore": 9,
+      "dependencies": [
+        "useWebSocketSingleton",
+        "getSocketIOUrl",
+        "WebSocketSingletonProvider",
+        "socket.emit/on methods"
+      ],
+      "failureModes": [
+        "Phantom WebSocket Hook Dependency",
+        "Real-time Update Dependency Without Fallback"
+      ],
+      "recoveryStrategies": [
+        "Mock detection and localStorage-based persistence"
+      ],
+      "testingRequirements": [
+        "Mock WebSocket detection test",
+        "HTTP fallback test",
+        "Demo mode indication test"
+      ]
+    },
+    {
+      "componentName": "ConnectionStatus",
+      "riskScore": 6,
+      "dependencies": [
+        "useWebSocketSingletonContext",
+        "WebSocketSingletonProvider context value"
+      ],
+      "failureModes": [
+        "Phantom WebSocket Hook Dependency",
+        "Context Provider Chain Disruption"
+      ],
+      "recoveryStrategies": [
+        "Display honest connection status and alternative indicators"
+      ],
+      "testingRequirements": [
+        "Connection status test",
+        "Retry mechanism test"
+      ]
+    },
+    {
+      "componentName": "RealTimeNotifications",
+      "riskScore": 6,
+      "dependencies": [
+        "useWebSocketSingletonContext",
+        "WebSocket notification events"
+      ],
+      "failureModes": [
+        "Phantom WebSocket Hook Dependency",
+        "Context Provider Chain Disruption"
+      ],
+      "recoveryStrategies": [
+        "Local notification management with HTTP sync"
+      ],
+      "testingRequirements": []
+    }
+  ],
+  "strategies": [
+    {
+      "patternId": "WSF-001",
+      "strategyType": "tdd",
+      "effectiveness": 10,
+      "implementation": {
+        "steps": [
+          "Before adding WebSocket dependency: Write test for fallback first",
+          "During implementation: Ensure mock detection works",
+          "Before deployment: Verify fallback API endpoints",
+          "Post-deployment: Monitor fallback usage metrics"
+        ],
+        "testApproach": "\n// RED: Write failing test first\ndescribe('TokenCostAnalytics WebSocket Detection', () => {\n  it('should detect mock WebSocket and implement fallback', () => {\n    // Arrange - Mock the WebSocket hook\n    jest.mocked(useWebSocketSingleton).mockReturnValue({\n      socket: { id: 'http-sse-mock-123' },\n      isConnected: true\n    });\n    \n    // Act\n    const { result } = renderHook(() => useTokenCostTracking());\n    \n    // Assert - Should detect mock and use fallback\n    expect(result.current.isMockMode).toBe(true);\n    expect(result.current.fallbackActive).toBe(true);\n    expect(mockHttpAPI.trackTokenUsage).toHaveBeenCalled();\n  });\n});\n    ",
+        "codeExample": "\n// GREEN: Implement minimum code to pass test\nexport const useTokenCostTracking = (config) => {\n  const { socket, isConnected } = useWebSocketSingleton(config);\n  \n  // TDD: Mock detection logic\n  const isMockSocket = socket?.id?.includes('http-sse') || socket?.id?.includes('mock');\n  const realConnection = isConnected && !isMockSocket;\n  \n  // TDD: Fallback strategy\n  const [fallbackActive, setFallbackActive] = useState(!realConnection);\n  \n  const trackTokenUsage = useCallback(async (usage) => {\n    if (realConnection) {\n      socket.emit('token-usage', usage);\n    } else {\n      setFallbackActive(true);\n      await httpAPI.trackTokenUsage(usage); // Fallback\n    }\n  }, [realConnection, socket]);\n  \n  return {\n    isMockMode: isMockSocket,\n    fallbackActive,\n    trackTokenUsage\n  };\n};\n    "
+      },
+      "validation": {
+        "successCriteria": [
+          "result.current.isMockMode",
+          "result.current.fallbackActive",
+          "result.current.isMockMode"
+        ],
+        "testCases": [
+          "\ndescribe('WebSocket Mock Detection TDD', () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n  });\n  \n  it('should identify real WebSocket connection', () => {\n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: { id: 'real-socket-456', emit: jest.fn() },\n      isConnected: true\n    });\n    \n    const { result } = renderHook(() => useTokenCostTracking());\n    \n    expect(result.current.isMockMode).toBe(false);\n    expect(result.current.fallbackActive).toBe(false);\n  });\n  \n  it('should identify mock by console.log in emit function', () => {\n    const mockEmit = jest.fn().mockImplementation(() => {\n      console.log('Mock emit called');\n    });\n    \n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: { id: 'socket-123', emit: mockEmit },\n      isConnected: true\n    });\n    \n    const { result } = renderHook(() => useTokenCostTracking());\n    \n    expect(result.current.isMockMode).toBe(true);\n  });\n});\n    "
+        ],
+        "ciChecks": [
+          "Test mock detection logic in CI",
+          "Verify fallback mechanisms work",
+          "Check for console.log statements in production builds",
+          "Validate HTTP API fallback endpoints exist"
+        ]
+      }
+    },
+    {
+      "patternId": "WSF-002",
+      "strategyType": "tdd",
+      "effectiveness": 10,
+      "implementation": {
+        "steps": [
+          "Before removing WebSocket: Implement and test HTTP fallback",
+          "During development: Test connection state transitions",
+          "Before deployment: Verify fallback API performance",
+          "Post-deployment: Monitor HTTP vs WebSocket usage"
+        ],
+        "testApproach": "\n// RED: Write failing test for HTTP fallback\ndescribe('Real-time Update Fallback', () => {\n  it('should implement HTTP polling when WebSocket unavailable', async () => {\n    // Arrange - WebSocket unavailable\n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: null,\n      isConnected: false\n    });\n    \n    mockFetchTokenUsageData.mockResolvedValue([\n      { id: '1', timestamp: new Date(), tokensUsed: 100 }\n    ]);\n    \n    // Act\n    const { result } = renderHook(() => useTokenCostTracking());\n    \n    // Assert - Should use HTTP polling\n    await waitFor(() => {\n      expect(mockFetchTokenUsageData).toHaveBeenCalled();\n      expect(result.current.tokenUsages.length).toBeGreaterThan(0);\n    });\n  });\n  \n  it('should stop HTTP polling when WebSocket becomes available', async () => {\n    const { result, rerender } = renderHook(\n      ({ connected }) => {\n        mockUseWebSocketSingleton.mockReturnValue({\n          socket: connected ? { on: jest.fn() } : null,\n          isConnected: connected\n        });\n        return useTokenCostTracking();\n      },\n      { initialProps: { connected: false } }\n    );\n    \n    // Initially should poll\n    await waitFor(() => {\n      expect(mockFetchTokenUsageData).toHaveBeenCalled();\n    });\n    \n    // When WebSocket connects, should stop polling\n    rerender({ connected: true });\n    \n    jest.clearAllMocks();\n    await new Promise(resolve => setTimeout(resolve, 6000)); // Wait beyond polling interval\n    \n    expect(mockFetchTokenUsageData).not.toHaveBeenCalled();\n  });\n});\n    ",
+        "codeExample": "\n// GREEN: Implement HTTP polling fallback\nexport const useTokenCostTracking = (config) => {\n  const { socket, isConnected } = useWebSocketSingleton(config);\n  const [tokenUsages, setTokenUsages] = useState([]);\n  const pollingIntervalRef = useRef(null);\n  \n  // TDD: HTTP polling when WebSocket unavailable\n  useEffect(() => {\n    if (isConnected && socket && !isMockSocket(socket)) {\n      // Use WebSocket\n      socket.on('token-usage-update', handleTokenUpdate);\n      \n      // Clear any existing polling\n      if (pollingIntervalRef.current) {\n        clearInterval(pollingIntervalRef.current);\n        pollingIntervalRef.current = null;\n      }\n    } else {\n      // Fallback to HTTP polling\n      pollingIntervalRef.current = setInterval(async () => {\n        try {\n          const data = await fetchTokenUsageData();\n          setTokenUsages(data);\n        } catch (error) {\n          console.error('HTTP polling failed:', error);\n        }\n      }, 5000);\n    }\n    \n    return () => {\n      if (pollingIntervalRef.current) {\n        clearInterval(pollingIntervalRef.current);\n      }\n    };\n  }, [isConnected, socket]);\n  \n  return { tokenUsages };\n};\n    "
+      },
+      "validation": {
+        "successCriteria": [
+          "strategy.webSocketState.socket.on",
+          "strategy.startHttpPolling"
+        ],
+        "testCases": [
+          "\ndescribe('Data Fetching Strategy TDD', () => {\n  it('should choose WebSocket for real connections', async () => {\n    const mockOnUpdate = jest.fn();\n    const strategy = new DataFetchingStrategy({\n      isConnected: true,\n      socket: { on: jest.fn(), off: jest.fn() }\n    });\n    \n    await strategy.startDataFetching(mockOnUpdate);\n    \n    expect(strategy.webSocketState.socket.on).toHaveBeenCalledWith('token-usage-update', mockOnUpdate);\n  });\n  \n  it('should choose HTTP polling for mock connections', async () => {\n    const mockOnUpdate = jest.fn();\n    const strategy = new DataFetchingStrategy({\n      isConnected: true,\n      socket: { id: 'http-sse-mock' }\n    });\n    \n    jest.spyOn(strategy, 'startHttpPolling');\n    \n    await strategy.startDataFetching(mockOnUpdate);\n    \n    expect(strategy.startHttpPolling).toHaveBeenCalled();\n  });\n});\n    "
+        ],
+        "ciChecks": [
+          "Test HTTP fallback endpoints exist and work",
+          "Verify polling stops when WebSocket connects",
+          "Check polling interval is reasonable",
+          "Test error handling in HTTP polling"
+        ]
+      }
+    },
+    {
+      "patternId": "WSF-003",
+      "strategyType": "tdd",
+      "effectiveness": 10,
+      "implementation": {
+        "steps": [
+          "Before context changes: Test all consumer components",
+          "During development: Verify state transitions",
+          "Before deployment: Test mock/real mode switching",
+          "Post-deployment: Monitor context usage patterns"
+        ],
+        "testApproach": "\n// RED: Write failing test for context state management\ndescribe('WebSocket Context State Management', () => {\n  it('should provide consistent context values during mock transition', () => {\n    const TestConsumer = () => {\n      const { isConnected, isMockMode, socket } = useWebSocketSingletonContext();\n      return (\n        <div>\n          <span data-testid=\"connected\">{isConnected ? 'connected' : 'disconnected'}</span>\n          <span data-testid=\"mock\">{isMockMode ? 'mock' : 'real'}</span>\n          <span data-testid=\"socket-id\">{socket?.id}</span>\n        </div>\n      );\n    };\n    \n    const { getByTestId, rerender } = render(\n      <WebSocketSingletonProvider config={{ mockMode: true }}>\n        <TestConsumer />\n      </WebSocketSingletonProvider>\n    );\n    \n    // Should show honest mock state\n    expect(getByTestId('connected')).toHaveTextContent('disconnected');\n    expect(getByTestId('mock')).toHaveTextContent('mock');\n    expect(getByTestId('socket-id')).toHaveTextContent('http-sse');\n  });\n  \n  it('should provide alternative data sources when in mock mode', () => {\n    const TestConsumer = () => {\n      const { notifications, systemStats, alternativeDataSource } = useWebSocketSingletonContext();\n      return (\n        <div>\n          <span data-testid=\"notifications\">{notifications.length}</span>\n          <span data-testid=\"has-stats\">{systemStats ? 'yes' : 'no'}</span>\n          <span data-testid=\"has-alternative\">{alternativeDataSource ? 'yes' : 'no'}</span>\n        </div>\n      );\n    };\n    \n    render(\n      <WebSocketSingletonProvider config={{ mockMode: true }}>\n        <TestConsumer />\n      </WebSocketSingletonProvider>\n    );\n    \n    expect(getByTestId('notifications')).not.toHaveTextContent('0');\n    expect(getByTestId('has-stats')).toHaveTextContent('yes');\n    expect(getByTestId('has-alternative')).toHaveTextContent('yes');\n  });\n});\n    ",
+        "codeExample": "\n// GREEN: Implement honest context state management\nexport const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProps> = ({ \n  children, \n  config = {} \n}) => {\n  const [connectionState, setConnectionState] = useState({\n    isConnected: false,\n    isMockMode: config.mockMode || false\n  });\n  \n  // TDD: Honest context values\n  const contextValue = useMemo(() => {\n    if (connectionState.isMockMode) {\n      return {\n        socket: { id: 'http-sse-mock-' + Date.now() },\n        isConnected: false, // Honest about mock status\n        isMockMode: true,\n        notifications: generateDemoNotifications(),\n        systemStats: generateDemoStats(),\n        alternativeDataSource: new HttpApiDataSource()\n      };\n    }\n    \n    // Real connection state\n    return {\n      socket: realSocket,\n      isConnected: connectionState.isConnected,\n      isMockMode: false,\n      notifications: realNotifications,\n      systemStats: realStats,\n      alternativeDataSource: null\n    };\n  }, [connectionState]);\n  \n  return (\n    <WebSocketSingletonContext.Provider value={contextValue}>\n      {children}\n    </WebSocketSingletonContext.Provider>\n  );\n};\n    "
+      },
+      "validation": {
+        "successCriteria": [
+          "mockContext.isConnected",
+          "mockContext.isMockMode",
+          "mockContext.socket.id",
+          "mockContext.alternativeDataSource",
+          "realContext.isConnected",
+          "realContext.isMockMode",
+          "realContext.alternativeDataSource"
+        ],
+        "testCases": [
+          "\ndescribe('Context State Factory TDD', () => {\n  it('should create consistent mock context', () => {\n    const mockContext = WebSocketContextFactory.createMockContext();\n    \n    expect(mockContext.isConnected).toBe(false);\n    expect(mockContext.isMockMode).toBe(true);\n    expect(mockContext.socket.id).toContain('http-sse-mock');\n    expect(mockContext.alternativeDataSource).toBeInstanceOf(HttpApiDataSource);\n  });\n  \n  it('should create real context from WebSocket state', () => {\n    const realWebSocketState = {\n      socket: { id: 'real-123' },\n      isConnected: true,\n      notifications: [],\n      systemStats: null\n    };\n    \n    const realContext = WebSocketContextFactory.createRealContext(realWebSocketState);\n    \n    expect(realContext.isConnected).toBe(true);\n    expect(realContext.isMockMode).toBe(false);\n    expect(realContext.alternativeDataSource).toBeNull();\n  });\n});\n    "
+        ],
+        "ciChecks": [
+          "Test context provider with mock configuration",
+          "Verify alternative data sources work",
+          "Check context state consistency",
+          "Test consumer component compatibility"
+        ]
+      }
+    },
+    {
+      "patternId": "WSF-004",
+      "strategyType": "tdd",
+      "effectiveness": 10,
+      "implementation": {
+        "steps": [
+          "Before adding WebSocket dependency: Add specialized error boundary",
+          "During development: Test error scenarios",
+          "Before deployment: Verify error recovery works",
+          "Post-deployment: Monitor error boundary activation"
+        ],
+        "testApproach": "\n// RED: Write failing test for WebSocket error boundary\ndescribe('WebSocket Error Boundary', () => {\n  it('should detect and handle WebSocket-specific errors', () => {\n    const ThrowWebSocketError = () => {\n      throw new Error('useWebSocketSingleton connection failed');\n    };\n    \n    const { getByText, getByTestId } = render(\n      <WebSocketErrorBoundary>\n        <ThrowWebSocketError />\n      </WebSocketErrorBoundary>\n    );\n    \n    expect(getByText(/websocket.*unavailable/i)).toBeInTheDocument();\n    expect(getByTestId('websocket-retry-button')).toBeInTheDocument();\n    expect(getByText(/cached data/i)).toBeInTheDocument();\n  });\n  \n  it('should provide different UI for WebSocket vs generic errors', () => {\n    const ThrowGenericError = () => {\n      throw new Error('Generic component error');\n    };\n    \n    const { queryByText, queryByTestId } = render(\n      <WebSocketErrorBoundary>\n        <ThrowGenericError />\n      </WebSocketErrorBoundary>\n    );\n    \n    // Should fall back to generic error handling\n    expect(queryByText(/websocket.*unavailable/i)).not.toBeInTheDocument();\n    expect(queryByTestId('websocket-retry-button')).not.toBeInTheDocument();\n  });\n});\n    ",
+        "codeExample": "\n// GREEN: Implement specialized WebSocket error boundary\nexport class WebSocketErrorBoundary extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = { hasError: false, errorType: null };\n  }\n  \n  static getDerivedStateFromError(error) {\n    const isWebSocketError = error.message.includes('WebSocket') || \n                            error.message.includes('useWebSocketSingleton') ||\n                            error.stack?.includes('WebSocketSingleton');\n    \n    return {\n      hasError: true,\n      errorType: isWebSocketError ? 'websocket' : 'generic'\n    };\n  }\n  \n  componentDidCatch(error, errorInfo) {\n    if (this.state.errorType === 'websocket') {\n      console.log('WebSocket-specific error caught:', error);\n      // Could report to WebSocket-specific error tracking\n    }\n  }\n  \n  render() {\n    if (this.state.hasError) {\n      if (this.state.errorType === 'websocket') {\n        return (\n          <div className=\"websocket-error-fallback\" data-testid=\"websocket-error-fallback\">\n            <h3>WebSocket Connection Unavailable</h3>\n            <p>Real-time features are temporarily unavailable. Using cached data.</p>\n            <button \n              data-testid=\"websocket-retry-button\"\n              onClick={() => this.setState({ hasError: false, errorType: null })}\n            >\n              Retry Connection\n            </button>\n          </div>\n        );\n      }\n      \n      // Generic error fallback\n      return <div>Something went wrong.</div>;\n    }\n    \n    return this.props.children;\n  }\n}\n    "
+      },
+      "validation": {
+        "successCriteria": [
+          "ErrorClassifier.classifyError(wsError",
+          "ErrorClassifier.classifyError(networkError",
+          "ErrorClassifier.classifyError(genericError",
+          "wsRecovery",
+          "networkRecovery"
+        ],
+        "testCases": [
+          "\ndescribe('Error Classification TDD', () => {\n  it('should classify WebSocket errors correctly', () => {\n    const wsError = new Error('useWebSocketSingleton connection failed');\n    const networkError = new Error('Network request failed');\n    const genericError = new Error('Component failed to render');\n    \n    expect(ErrorClassifier.classifyError(wsError)).toBe('websocket');\n    expect(ErrorClassifier.classifyError(networkError)).toBe('network');\n    expect(ErrorClassifier.classifyError(genericError)).toBe('generic');\n  });\n  \n  it('should provide appropriate recovery strategy', () => {\n    const wsRecovery = ErrorClassifier.getRecoveryStrategy('websocket');\n    const networkRecovery = ErrorClassifier.getRecoveryStrategy('network');\n    \n    expect(wsRecovery).toBeInstanceOf(WebSocketRecoveryStrategy);\n    expect(networkRecovery).toBeInstanceOf(NetworkRecoveryStrategy);\n  });\n});\n    "
+        ],
+        "ciChecks": [
+          "Test error boundary with different error types",
+          "Verify recovery mechanisms work",
+          "Check fallback UI accessibility",
+          "Test error reporting integration"
+        ]
+      }
+    },
+    {
+      "patternId": "WSF-005",
+      "strategyType": "tdd",
+      "effectiveness": 10,
+      "implementation": {
+        "steps": [
+          "Before adding demo data: Test visibility of demo indicators",
+          "During development: Verify demo data is clearly marked",
+          "Before deployment: Test user can distinguish demo vs real",
+          "Post-deployment: Monitor user confusion reports"
+        ],
+        "testApproach": "\n// RED: Write failing test for demo mode indication\ndescribe('Demo Mode Indication', () => {\n  it('should prominently display demo mode when WebSocket unavailable', () => {\n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: null,\n      isConnected: false\n    });\n    \n    const { getByTestId, getByText } = render(<TokenCostAnalytics />);\n    \n    expect(getByTestId('demo-mode-banner')).toBeVisible();\n    expect(getByText(/demo mode/i)).toBeVisible();\n    expect(getByText(/sample data/i)).toBeInTheDocument();\n    expect(getByText(/real-time updates.*unavailable/i)).toBeInTheDocument();\n  });\n  \n  it('should hide demo mode indication when WebSocket connected', () => {\n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: { id: 'real-socket' },\n      isConnected: true\n    });\n    \n    const { queryByTestId } = render(<TokenCostAnalytics />);\n    \n    expect(queryByTestId('demo-mode-banner')).not.toBeInTheDocument();\n  });\n  \n  it('should make demo data visually distinct from real data', () => {\n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: null,\n      isConnected: false\n    });\n    \n    const { container } = render(<TokenCostAnalytics />);\n    \n    const demoElements = container.querySelectorAll('[data-demo=\"true\"]');\n    expect(demoElements.length).toBeGreaterThan(0);\n    \n    demoElements.forEach(element => {\n      expect(element).toHaveClass('demo-data');\n    });\n  });\n});\n    ",
+        "codeExample": "\n// GREEN: Implement prominent demo mode indication\nexport const TokenCostAnalytics = ({ ... }) => {\n  const { isConnected, socket } = useWebSocketSingleton();\n  const isMockMode = !isConnected || socket?.id?.includes('http-sse');\n  const [tokenUsages, setTokenUsages] = useState([]);\n  \n  useEffect(() => {\n    if (isMockMode) {\n      const demoData = generateDemoTokenUsages();\n      setTokenUsages(demoData);\n    }\n  }, [isMockMode]);\n  \n  return (\n    <div>\n      {/* TDD: Prominent demo mode banner */}\n      {isMockMode && (\n        <div \n          data-testid=\"demo-mode-banner\"\n          className=\"demo-mode-banner bg-amber-100 border border-amber-300 rounded-lg p-4 mb-6\"\n        >\n          <div className=\"flex items-center\">\n            <AlertTriangle className=\"w-5 h-5 text-amber-600 mr-2\" />\n            <strong className=\"text-amber-800\">DEMO MODE:</strong>\n            <span className=\"ml-2 text-amber-700\">\n              This is sample data for demonstration purposes. \n              Real-time updates are currently unavailable.\n            </span>\n          </div>\n        </div>\n      )}\n      \n      {/* TDD: Demo data styling */}\n      <div className={isMockMode ? 'demo-data-container' : ''}>\n        {tokenUsages.map(usage => (\n          <div \n            key={usage.id}\n            data-demo={isMockMode}\n            className={isMockMode ? 'demo-data' : ''}\n          >\n            {/* Token usage display */}\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n};\n    "
+      },
+      "validation": {
+        "successCriteria": [
+          "manager.isDemoMode(",
+          "Array.isArray(demoData",
+          "demoData.length",
+          "bannerProps['data-testid']",
+          "containerProps['data-mode']"
+        ],
+        "testCases": [
+          "\ndescribe('Demo Mode Manager TDD', () => {\n  it('should detect demo mode correctly', () => {\n    const mockWebSocketState = {\n      isConnected: true,\n      socket: { id: 'http-sse-mock-123' }\n    };\n    \n    const manager = new DemoModeManager(mockWebSocketState);\n    \n    expect(manager.isDemoMode()).toBe(true);\n  });\n  \n  it('should provide demo data when in demo mode', () => {\n    const manager = new DemoModeManager({ isConnected: false });\n    \n    const demoData = manager.getDemoData();\n    \n    expect(Array.isArray(demoData)).toBe(true);\n    expect(demoData.length).toBeGreaterThan(0);\n  });\n  \n  it('should provide correct styling props', () => {\n    const manager = new DemoModeManager({ isConnected: false });\n    \n    const bannerProps = manager.getDemoBannerProps();\n    const containerProps = manager.getDataContainerProps(true);\n    \n    expect(bannerProps['data-testid']).toBe('demo-mode-banner');\n    expect(containerProps['data-mode']).toBe('demo');\n  });\n});\n    "
+        ],
+        "ciChecks": [
+          "Test demo mode banner visibility",
+          "Verify demo data styling",
+          "Check accessibility of demo mode indicators",
+          "Test demo/real mode transitions"
+        ]
+      }
+    }
+  ],
+  "trainingExamples": [
+    {
+      "id": "example-WSF-001-0",
+      "scenario": "Component imports useWebSocketSingleton but WebSocket is mocked/removed",
+      "inputCode": "\n// ANTI-PATTERN: Expecting real WebSocket functionality\nconst { socket, isConnected } = useWebSocketSingleton({\n  url: getSocketIOUrl(),\n  autoConnect: true\n});\n\n// Component logic assumes real connection\nif (isConnected && socket) {\n  socket.emit('token-usage', newUsage); // This is mocked!\n}\n    ",
+      "expectedDetection": [
+        "WSF-001"
+      ],
+      "correctSolution": "\n// FIXED: Detect mock and implement fallback\nconst { socket, isConnected } = useWebSocketSingleton({\n  url: getSocketIOUrl(),\n  autoConnect: true\n});\n\n// Detect mock implementation\nconst isMockSocket = socket?.id?.includes('http-sse');\nconst realConnection = isConnected && !isMockSocket;\n\nif (realConnection && socket) {\n  socket.emit('token-usage', newUsage);\n} else {\n  // Fallback: Store locally or use HTTP API\n  await httpAPI.trackTokenUsage(newUsage);\n}\n    ",
+      "preventionStrategy": "Mock Detection TDD Pattern",
+      "testValidation": "\ndescribe('WebSocket Mock Detection TDD', () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n  });\n  \n  it('should identify real WebSocket connection', () => {\n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: { id: 'real-socket-456', emit: jest.fn() },\n      isConnected: true\n    });\n    \n    const { result } = renderHook(() => useTokenCostTracking());\n    \n    expect(result.current.isMockMode).toBe(false);\n    expect(result.current.fallbackActive).toBe(false);\n  });\n  \n  it('should identify mock by console.log in emit function', () => {\n    const mockEmit = jest.fn().mockImplementation(() => {\n      console.log('Mock emit called');\n    });\n    \n    mockUseWebSocketSingleton.mockReturnValue({\n      socket: { id: 'socket-123', emit: mockEmit },\n      isConnected: true\n    });\n    \n    const { result } = renderHook(() => useTokenCostTracking());\n    \n    expect(result.current.isMockMode).toBe(true);\n  });\n});\n    "
+    },
+    {
+      "id": "example-WSF-002-1",
+      "scenario": "Component depends on real-time WebSocket events but has no HTTP fallback",
+      "inputCode": "\n// ANTI-PATTERN: Only WebSocket updates, no fallback\nuseEffect(() => {\n  if (socket && isConnected) {\n    socket.on('token-usage-update', handleTokenUpdate);\n  }\n  // No fallback when WebSocket unavailable!\n}, [socket, isConnected]);\n    ",
+      "expectedDetection": [
+        "WSF-002"
+      ],
+      "correctSolution": "\n// FIXED: HTTP fallback when WebSocket unavailable\nuseEffect(() => {\n  if (socket && isConnected && !isMockSocket) {\n    socket.on('token-usage-update', handleTokenUpdate);\n  } else {\n    // HTTP polling fallback\n    const interval = setInterval(async () => {\n      try {\n        const data = await fetchTokenUsageData();\n        setTokenUsages(data);\n      } catch (error) {\n        setError(error);\n      }\n    }, 5000);\n    \n    return () => clearInterval(interval);\n  }\n}, [socket, isConnected]);\n    ",
+      "preventionStrategy": "HTTP Fallback TDD Pattern",
+      "testValidation": "\ndescribe('Data Fetching Strategy TDD', () => {\n  it('should choose WebSocket for real connections', async () => {\n    const mockOnUpdate = jest.fn();\n    const strategy = new DataFetchingStrategy({\n      isConnected: true,\n      socket: { on: jest.fn(), off: jest.fn() }\n    });\n    \n    await strategy.startDataFetching(mockOnUpdate);\n    \n    expect(strategy.webSocketState.socket.on).toHaveBeenCalledWith('token-usage-update', mockOnUpdate);\n  });\n  \n  it('should choose HTTP polling for mock connections', async () => {\n    const mockOnUpdate = jest.fn();\n    const strategy = new DataFetchingStrategy({\n      isConnected: true,\n      socket: { id: 'http-sse-mock' }\n    });\n    \n    jest.spyOn(strategy, 'startHttpPolling');\n    \n    await strategy.startDataFetching(mockOnUpdate);\n    \n    expect(strategy.startHttpPolling).toHaveBeenCalled();\n  });\n});\n    "
+    },
+    {
+      "id": "example-WSF-003-2",
+      "scenario": "WebSocket context provides mock data but child components expect real functionality",
+      "inputCode": "\n// ANTI-PATTERN: Context provides mock but consumers expect real functionality\nconst contextValue = {\n  socket: mockSocket, // Mock object\n  isConnected: true,  // Misleading - not really connected\n  notifications: [],  // Always empty\n  systemStats: null   // Always null\n};\n    ",
+      "expectedDetection": [
+        "WSF-003"
+      ],
+      "correctSolution": "\n// FIXED: Context indicates mock status and provides alternatives\nconst contextValue = {\n  socket: mockSocket,\n  isConnected: false, // Honest about mock status\n  isMockMode: true,   // Explicit mock flag\n  notifications: demoNotifications, // Demo data\n  systemStats: demoStats,          // Demo stats\n  alternativeDataSource: httpAPI   // HTTP fallback\n};\n    ",
+      "preventionStrategy": "Context State Management TDD Pattern",
+      "testValidation": "\ndescribe('Context State Factory TDD', () => {\n  it('should create consistent mock context', () => {\n    const mockContext = WebSocketContextFactory.createMockContext();\n    \n    expect(mockContext.isConnected).toBe(false);\n    expect(mockContext.isMockMode).toBe(true);\n    expect(mockContext.socket.id).toContain('http-sse-mock');\n    expect(mockContext.alternativeDataSource).toBeInstanceOf(HttpApiDataSource);\n  });\n  \n  it('should create real context from WebSocket state', () => {\n    const realWebSocketState = {\n      socket: { id: 'real-123' },\n      isConnected: true,\n      notifications: [],\n      systemStats: null\n    };\n    \n    const realContext = WebSocketContextFactory.createRealContext(realWebSocketState);\n    \n    expect(realContext.isConnected).toBe(true);\n    expect(realContext.isMockMode).toBe(false);\n    expect(realContext.alternativeDataSource).toBeNull();\n  });\n});\n    "
+    },
+    {
+      "id": "example-WSF-004-3",
+      "scenario": "Error boundaries not configured to handle WebSocket dependency failures gracefully",
+      "inputCode": "\n// ANTI-PATTERN: Generic error boundary for WebSocket errors\nclass ErrorBoundary extends React.Component {\n  componentDidCatch(error, errorInfo) {\n    // Generic handling - doesn't distinguish WebSocket errors\n    this.setState({ hasError: true });\n  }\n  \n  render() {\n    if (this.state.hasError) {\n      return <div>Something went wrong.</div>; // Generic message\n    }\n    return this.props.children;\n  }\n}\n    ",
+      "expectedDetection": [
+        "WSF-004"
+      ],
+      "correctSolution": "\n// FIXED: Specialized WebSocket error boundary\nclass WebSocketErrorBoundary extends React.Component {\n  componentDidCatch(error, errorInfo) {\n    if (error.message.includes('WebSocket') || error.stack.includes('useWebSocketSingleton')) {\n      this.setState({ \n        hasWebSocketError: true,\n        canRecover: true \n      });\n    } else {\n      this.setState({ hasError: true });\n    }\n  }\n  \n  render() {\n    if (this.state.hasWebSocketError) {\n      return (\n        <div className=\"websocket-error-fallback\">\n          <p>Real-time features unavailable. Using cached data.</p>\n          <button onClick={this.retry}>Retry Connection</button>\n        </div>\n      );\n    }\n    return this.props.children;\n  }\n}\n    ",
+      "preventionStrategy": "Specialized Error Boundary TDD Pattern",
+      "testValidation": "\ndescribe('Error Classification TDD', () => {\n  it('should classify WebSocket errors correctly', () => {\n    const wsError = new Error('useWebSocketSingleton connection failed');\n    const networkError = new Error('Network request failed');\n    const genericError = new Error('Component failed to render');\n    \n    expect(ErrorClassifier.classifyError(wsError)).toBe('websocket');\n    expect(ErrorClassifier.classifyError(networkError)).toBe('network');\n    expect(ErrorClassifier.classifyError(genericError)).toBe('generic');\n  });\n  \n  it('should provide appropriate recovery strategy', () => {\n    const wsRecovery = ErrorClassifier.getRecoveryStrategy('websocket');\n    const networkRecovery = ErrorClassifier.getRecoveryStrategy('network');\n    \n    expect(wsRecovery).toBeInstanceOf(WebSocketRecoveryStrategy);\n    expect(networkRecovery).toBeInstanceOf(NetworkRecoveryStrategy);\n  });\n});\n    "
+    },
+    {
+      "id": "example-WSF-005-4",
+      "scenario": "Component loads demo data when WebSocket unavailable, confusing users about real vs mock data",
+      "inputCode": "\n// ANTI-PATTERN: Demo data without clear indication\nif (!isConnected) {\n  const demoData = [...]; // Demo data loaded\n  setTokenUsages(demoData);\n  // Small indicator easily missed:\n  // <span className=\"text-amber-600\">Demo Mode</span>\n}\n    ",
+      "expectedDetection": [
+        "WSF-005"
+      ],
+      "correctSolution": "\n// FIXED: Clear demo mode indication\nif (!isConnected) {\n  const demoData = [...];\n  setTokenUsages(demoData);\n  setDemoMode(true);\n}\n\n// In component render:\n{demoMode && (\n  <div className=\"demo-mode-banner\">\n    <AlertTriangle className=\"w-5 h-5\" />\n    <strong>DEMO MODE:</strong> This is sample data for demonstration purposes.\n    Real-time updates are currently unavailable.\n  </div>\n)}\n    ",
+      "preventionStrategy": "Demo Mode Indication TDD Pattern",
+      "testValidation": "\ndescribe('Demo Mode Manager TDD', () => {\n  it('should detect demo mode correctly', () => {\n    const mockWebSocketState = {\n      isConnected: true,\n      socket: { id: 'http-sse-mock-123' }\n    };\n    \n    const manager = new DemoModeManager(mockWebSocketState);\n    \n    expect(manager.isDemoMode()).toBe(true);\n  });\n  \n  it('should provide demo data when in demo mode', () => {\n    const manager = new DemoModeManager({ isConnected: false });\n    \n    const demoData = manager.getDemoData();\n    \n    expect(Array.isArray(demoData)).toBe(true);\n    expect(demoData.length).toBeGreaterThan(0);\n  });\n  \n  it('should provide correct styling props', () => {\n    const manager = new DemoModeManager({ isConnected: false });\n    \n    const bannerProps = manager.getDemoBannerProps();\n    const containerProps = manager.getDataContainerProps(true);\n    \n    expect(bannerProps['data-testid']).toBe('demo-mode-banner');\n    expect(containerProps['data-mode']).toBe('demo');\n  });\n});\n    "
+    }
+  ]
+}

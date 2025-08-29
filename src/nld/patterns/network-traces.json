@@ -1,0 +1,34 @@
+[
+  {
+    "timestamp": "2025-08-28T20:57:49.683Z",
+    "type": "error",
+    "url": "ws://ws://localhost:3001/sse",
+    "protocol": "ws",
+    "errorMessage": "WebSocket connection to 'ws://localhost:3001/sse' failed",
+    "component": "useAdvancedSSEConnection"
+  },
+  {
+    "timestamp": "2025-08-28T20:57:49.879Z",
+    "type": "error",
+    "url": "ws://ws://localhost:3001/websocket",
+    "protocol": "ws",
+    "errorMessage": "WebSocket connection established but no data received",
+    "component": "SSEConnectionManager"
+  },
+  {
+    "timestamp": "2025-08-28T20:57:50.076Z",
+    "type": "error",
+    "url": "ws://ws://localhost:3001/websocket",
+    "protocol": "ws",
+    "errorMessage": "JSON.parse error: Unexpected token in message",
+    "component": "TokenCostAnalytics"
+  },
+  {
+    "timestamp": "2025-08-28T20:57:50.276Z",
+    "type": "error",
+    "url": "ws://ws://localhost:3001/websocket",
+    "protocol": "ws",
+    "errorMessage": "WebSocket connection refused: Authentication failed",
+    "component": "ClaudeInstanceManager"
+  }
+]

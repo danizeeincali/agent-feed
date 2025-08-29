@@ -1,56 +1,52 @@
 {
-  "name": "claude-instance-tdd-london-school",
+  "name": "tdd-london-school-websocket-tests",
   "version": "1.0.0",
-  "description": "TDD London School test suite for Claude Instance Management endpoints",
+  "description": "TDD London School WebSocket command execution tests with comprehensive mock coverage",
   "main": "index.js",
   "scripts": {
-    "test": "jest --config=jest.config.js",
-    "test:unit": "jest --testPathPattern=claude-instance-endpoints --config=jest.config.js",
-    "test:integration": "jest --testPathPattern=frontend-backend-integration --config=jest.config.js",
-    "test:e2e": "jest --testPathPattern=e2e-instance-workflows --config=jest.config.js",
-    "test:performance": "jest --testPathPattern=performance-benchmarks --config=jest.config.js",
-    "test:errors": "jest --testPathPattern=error-handling-scenarios --config=jest.config.js",
-    "test:watch": "jest --watch --config=jest.config.js",
-    "test:coverage": "jest --coverage --config=jest.config.js",
-    "test:ci": "jest --ci --coverage --maxWorkers=2 --config=jest.config.js",
-    "test:mock-validation": "npm run test:unit && npm run validate-mocks",
-    "validate-mocks": "node scripts/validate-mock-contracts.js",
-    "test:workflow-validation": "node scripts/validate-workflow-coverage.js",
-    "test:continuous": "nodemon --exec 'npm run test:ci' --watch '**/*.test.js' --ignore node_modules",
-    "test:benchmark": "node scripts/run-performance-benchmarks.js",
-    "generate-report": "node scripts/generate-test-report.js",
-    "lint:tests": "eslint **/*.test.js",
-    "format:tests": "prettier --write **/*.test.js"
-  },
-  "dependencies": {
-    "@jest/globals": "^29.7.0",
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "jest": "^29.7.0",
-    "nock": "^13.4.0",
-    "playwright": "^1.40.0",
-    "supertest": "^6.3.3",
-    "uuid": "^11.1.0"
-  },
-  "devDependencies": {
-    "eslint": "^8.55.0",
-    "jest-html-reporters": "^3.1.5",
-    "jest-junit": "^16.0.0",
-    "nodemon": "^3.0.2",
-    "performance-now": "^2.1.0",
-    "prettier": "^3.1.1"
-  },
-  "engines": {
-    "node": ">=16.0.0"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:contracts": "jest contracts/",
+    "test:mocks": "jest mocks/",
+    "test:websocket": "jest websocket/",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "lint": "eslint . --ext .ts,.js",
+    "clean": "rm -rf coverage test-results node_modules"
   },
   "keywords": [
     "tdd",
     "london-school",
-    "claude",
-    "testing",
-    "mocks",
-    "behavior-verification"
+    "websocket",
+    "mock-driven-development",
+    "behavior-verification",
+    "claude-cli",
+    "testing"
   ],
-  "author": "",
-  "license": "ISC"
+  "author": "TDD London School Testing Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "jest-html-reporters": "^3.1.7",
+    "jest-junit": "^16.0.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agent-feed/tdd-london-school.git"
+  },
+  "bugs": {
+    "url": "https://github.com/agent-feed/tdd-london-school/issues"
+  },
+  "homepage": "https://github.com/agent-feed/tdd-london-school#readme"
 }

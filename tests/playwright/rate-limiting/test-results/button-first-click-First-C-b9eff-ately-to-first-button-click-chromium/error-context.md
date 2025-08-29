@@ -1,0 +1,119 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "🚀 HTTP Terminal" [ref=e12] [cursor=pointer]:
+        - /url: /http-terminal
+        - img [ref=e13] [cursor=pointer]
+        - text: 🚀 HTTP Terminal
+      - link "Claude Instances" [ref=e16] [cursor=pointer]:
+        - /url: /claude-instances
+        - img [ref=e17] [cursor=pointer]
+        - text: Claude Instances
+      - link "Claude Manager" [ref=e20] [cursor=pointer]:
+        - /url: /dual-instance
+        - img [ref=e21] [cursor=pointer]
+        - text: Claude Manager
+      - link "Feed" [ref=e26] [cursor=pointer]:
+        - /url: /
+        - img [ref=e27] [cursor=pointer]
+        - text: Feed
+      - link "Agents" [ref=e29] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e30] [cursor=pointer]
+        - text: Agents
+      - link "Workflows" [ref=e33] [cursor=pointer]:
+        - /url: /workflows
+        - img [ref=e34] [cursor=pointer]
+        - text: Workflows
+      - link "Claude Code" [ref=e38] [cursor=pointer]:
+        - /url: /claude-code
+        - img [ref=e39] [cursor=pointer]
+        - text: Claude Code
+      - link "Live Activity" [ref=e42] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e43] [cursor=pointer]
+        - text: Live Activity
+      - link "Analytics" [ref=e47] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e48] [cursor=pointer]
+        - text: Analytics
+      - link "Terminal Debug" [ref=e50] [cursor=pointer]:
+        - /url: /terminal-debug
+        - img [ref=e51] [cursor=pointer]
+        - text: Terminal Debug
+      - link "Performance Monitor" [ref=e54] [cursor=pointer]:
+        - /url: /performance-monitor
+        - img [ref=e55] [cursor=pointer]
+        - text: Performance Monitor
+      - link "Settings" [ref=e57] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e58] [cursor=pointer]
+        - text: Settings
+    - generic [ref=e62]:
+      - generic [ref=e63]:
+        - generic [ref=e65]: Connected
+        - img [ref=e66]
+      - generic [ref=e70]:
+        - img [ref=e71]
+        - generic [ref=e76]: "0"
+  - generic [ref=e77]:
+    - banner [ref=e78]:
+      - generic [ref=e79]:
+        - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e81]
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - img [ref=e84]
+            - textbox "Search posts..." [ref=e87]
+          - button "Notifications" [ref=e89] [cursor=pointer]:
+            - img [ref=e90] [cursor=pointer]
+    - main [ref=e93]:
+      - generic [ref=e95]:
+        - generic [ref=e96]:
+          - heading "Claude Instance Manager" [level=1] [ref=e97]
+          - paragraph [ref=e98]: Launch and manage Claude instances with modern interface
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - heading "Launch Claude Instance" [level=2] [ref=e103]
+            - generic [ref=e106]: Ready to launch
+          - generic [ref=e107]:
+            - button "🚀 prod/claude Launch Claude in production directory with full permissions and safety checks" [ref=e109] [cursor=pointer]:
+              - generic [ref=e112] [cursor=pointer]:
+                - generic [ref=e113] [cursor=pointer]: 🚀
+                - heading "prod/claude" [level=3] [ref=e114] [cursor=pointer]
+              - paragraph [ref=e115] [cursor=pointer]: Launch Claude in production directory with full permissions and safety checks
+            - button "⚡ skip-permissions Launch with permissions skipped for rapid development and testing" [ref=e117] [cursor=pointer]:
+              - generic [ref=e120] [cursor=pointer]:
+                - generic [ref=e121] [cursor=pointer]: ⚡
+                - heading "skip-permissions" [level=3] [ref=e122] [cursor=pointer]
+              - paragraph [ref=e123] [cursor=pointer]: Launch with permissions skipped for rapid development and testing
+            - button "⚡ skip-permissions -c Launch with permissions skipped and continue from previous session" [ref=e125] [cursor=pointer]:
+              - generic [ref=e128] [cursor=pointer]:
+                - generic [ref=e129] [cursor=pointer]: ⚡
+                - heading "skip-permissions -c" [level=3] [ref=e130] [cursor=pointer]
+              - paragraph [ref=e131] [cursor=pointer]: Launch with permissions skipped and continue from previous session
+            - button "↻ skip-permissions --resume Resume previous session with permissions skipped for quick continuation" [ref=e133] [cursor=pointer]:
+              - generic [ref=e136] [cursor=pointer]:
+                - generic [ref=e137] [cursor=pointer]: ↻
+                - heading "skip-permissions --resume" [level=3] [ref=e138] [cursor=pointer]
+              - paragraph [ref=e139] [cursor=pointer]: Resume previous session with permissions skipped for quick continuation
+        - generic [ref=e140]:
+          - generic [ref=e142]:
+            - heading "Active Instances" [level=3] [ref=e145]
+            - generic [ref=e147]:
+              - img [ref=e149]
+              - paragraph [ref=e151]: No active instances. Launch one to get started!
+          - generic [ref=e154]:
+            - generic [ref=e156]:
+              - heading "Select an Instance" [level=3] [ref=e157]
+              - generic [ref=e159]: Disconnected
+            - generic [ref=e163]:
+              - img [ref=e165]
+              - heading "No Instance Selected" [level=3] [ref=e167]
+              - paragraph [ref=e168]: Select an instance from the list or launch a new one to start chatting with Claude.
+```

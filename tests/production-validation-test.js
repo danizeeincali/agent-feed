@@ -8,7 +8,7 @@ const WebSocket = require('ws');
 const { spawn } = require('child_process');
 
 const BASE_URL = 'http://localhost:3000';
-const WS_URL = 'ws://localhost:3001';
+const WS_URL = 'ws://localhost:3002';
 
 // Test configuration
 const TEST_CONFIG = {

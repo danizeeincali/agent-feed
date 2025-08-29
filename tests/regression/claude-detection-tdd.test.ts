@@ -3,23 +3,23 @@
  * Tests the complete API-frontend integration flow to prevent regression
  */
 
-import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
+// Converted from Vitest to Jest - globals available
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { SimpleLauncher } from '@/components/SimpleLauncher';
 
 // Mock fetch for API testing
-const mockFetch = vi.fn();
+const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
 describe('Claude Code Detection TDD Suite', () => {
   beforeAll(() => {
     // Setup console spy to capture debug logs
-    vi.spyOn(console, 'log').mockImplementation(() => {});
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterAll(() => {
-    vi.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   beforeEach(() => {

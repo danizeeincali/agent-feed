@@ -55,14 +55,14 @@ export default defineConfig({
     }]
   ],
   
-  // Global setup and teardown
-  globalSetup: './global-setup.ts',
-  globalTeardown: './global-teardown.ts',
+  // Global setup and teardown - disabled for simple testing
+  // globalSetup: './global-setup.ts',
+  // globalTeardown: './global-teardown.ts',
   
   // Shared settings for all projects
   use: {
     // Base URL for frontend testing
-    baseURL: 'http://localhost:3001',
+    baseURL: 'http://localhost:5173',
     
     // Global test artifacts
     trace: 'retain-on-failure',
@@ -117,23 +117,23 @@ export default defineConfig({
     },
   ],
   
-  // Configure local dev server
-  webServer: [
-    {
-      command: 'cd /workspaces/agent-feed/frontend && npm run dev',
-      url: 'http://localhost:3001',
-      reuseExistingServer: !process.env.CI,
-      timeout: 120000,
-      stdout: 'pipe',
-      stderr: 'pipe'
-    },
-    {
-      command: 'cd /workspaces/agent-feed && node simple-backend.js',
-      url: 'http://localhost:3000',
-      reuseExistingServer: !process.env.CI,
-      timeout: 60000,
-      stdout: 'pipe', 
-      stderr: 'pipe'
-    }
-  ]
+  // Configure local dev server - disabled since services are manually started
+  // webServer: [
+  //   {
+  //     command: 'cd /workspaces/agent-feed/frontend && npm run dev',
+  //     url: 'http://localhost:5173',
+  //     reuseExistingServer: !process.env.CI,
+  //     timeout: 120000,
+  //     stdout: 'pipe',
+  //     stderr: 'pipe'
+  //   },
+  //   {
+  //     command: 'cd /workspaces/agent-feed && node simple-backend.js',
+  //     url: 'http://localhost:3000',
+  //     reuseExistingServer: !process.env.CI,
+  //     timeout: 60000,
+  //     stdout: 'pipe', 
+  //     stderr: 'pipe'
+  //   }
+  // ]
 });

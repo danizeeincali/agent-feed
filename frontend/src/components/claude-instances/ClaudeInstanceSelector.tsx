@@ -163,27 +163,25 @@ export const ClaudeInstanceSelector: React.FC<ClaudeInstanceSelectorProps> = ({
       setIsLoading(true);
       setError(null);
       
-      // Make API call to backend to create Claude instance
-      const response = await fetch('http://localhost:3000/api/claude/instances', {
+      // Make API call to terminal server to launch terminal
+      const response = await fetch('http://localhost:3002/api/launch', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: mapping.name,
-          command: mapping.command,
-          description: mapping.description,
-          config: mapping.config
+          cwd: '/workspaces/agent-feed',
+          command: 'claude'
         })
       });
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || `Failed to create instance: ${response.statusText}`);
+        throw new Error(errorData.error || `Failed to launch terminal: ${response.statusText}`);
       }
       
-      const newInstance = await response.json();
-      console.log('✅ Instance created successfully:', newInstance);
+      const newTerminal = await response.json();
+      console.log('✅ Terminal launched successfully:', newTerminal);
       
       // Call the onCreateNew callback if provided
       if (onCreateNew) {
@@ -195,9 +193,9 @@ export const ClaudeInstanceSelector: React.FC<ClaudeInstanceSelectorProps> = ({
       
       recordRender(performance.now() - startTime);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create instance';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to launch terminal';
       setError(errorMessage);
-      console.error('❌ Instance creation failed:', errorMessage);
+      console.error('❌ Terminal launch failed:', errorMessage);
       
       recordError(error as Error);
       
@@ -208,7 +206,7 @@ export const ClaudeInstanceSelector: React.FC<ClaudeInstanceSelectorProps> = ({
           userAgent: navigator.userAgent,
           url: window.location.href,
           networkState: navigator.onLine ? 'online' : 'offline'
-        }, `Instance creation failed: ${errorMessage}`);
+        }, `Terminal launch failed: ${errorMessage}`);
       }
     } finally {
       setIsLoading(false);
@@ -218,7 +216,7 @@ export const ClaudeInstanceSelector: React.FC<ClaudeInstanceSelectorProps> = ({
   // Fetch instances from API
   const fetchInstances = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/claude/instances', {
+      const response = await fetch('http://localhost:3002/api/terminals', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -226,18 +224,18 @@ export const ClaudeInstanceSelector: React.FC<ClaudeInstanceSelectorProps> = ({
       });
       
       if (!response.ok) {
-        throw new Error(`Failed to fetch instances: ${response.statusText}`);
+        throw new Error(`Failed to fetch terminals: ${response.statusText}`);
       }
       
       const data = await response.json();
-      console.log('📋 Fetched instances from API:', data);
+      console.log('📋 Fetched terminals from API:', data);
       
       // If we have an onSelect callback and no instances are provided via props,
       // we could potentially update the parent component
       // For now, just log the available instances
       
     } catch (error) {
-      console.error('❌ Failed to fetch instances:', error);
+      console.error('❌ Failed to fetch terminals:', error);
       // Don't set component error for fetch failures, as it might be expected
     }
   }, []);

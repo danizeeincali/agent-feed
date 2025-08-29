@@ -62,6 +62,10 @@ export declare class ClaudeProcessManager extends EventEmitter {
      */
     sendMessage(instanceId: string, content: string, metadata?: Record<string, any>): Promise<void>;
     /**
+     * Send terminal input to Claude instance (CRITICAL FIX)
+     */
+    sendInput(instanceId: string, input: string): Promise<void>;
+    /**
      * Terminate Claude instance
      */
     terminateInstance(instanceId: string, force?: boolean): Promise<void>;

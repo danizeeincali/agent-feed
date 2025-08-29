@@ -9,7 +9,9 @@
  * EXPECTED: These tests will PASS when input buffering is properly implemented
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+// Convert from Vitest to Jest imports
+// // Converted from Vitest to Jest - globals available
+// Jest equivalents are available globally, vi -> jest for mocking
 import { WebSocket } from 'ws';
 
 interface MockTerminalSession {
@@ -28,13 +30,13 @@ describe('Input Buffering Validation - TDD Tests', () => {
 
   beforeEach(() => {
     mockProcess = {
-      write: vi.fn(),
+      write: jest.fn(),
       killed: false,
       pid: 12345
     };
 
     mockWebSocket = {
-      send: vi.fn(),
+      send: jest.fn(),
       readyState: WebSocket.OPEN
     };
 
@@ -43,13 +45,13 @@ describe('Input Buffering Validation - TDD Tests', () => {
       outputBuffer: '',
       isBuffering: false,
       pendingCommand: null,
-      handleBufferedInput: vi.fn(),
-      bufferOutput: vi.fn()
+      handleBufferedInput: jest.fn(),
+      bufferOutput: jest.fn()
     };
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('Character-by-Character Input Prevention', () => {

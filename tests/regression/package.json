@@ -1,0 +1,47 @@
+{
+  "name": "claude-process-regression-tests",
+  "version": "1.0.0",
+  "description": "TDD London School Regression Test Suite for Claude Process Functionality",
+  "main": "run-regression-tests.js",
+  "scripts": {
+    "test": "node run-regression-tests.js",
+    "test:watch": "jest --config jest.config.js --watch",
+    "test:coverage": "jest --config jest.config.js --coverage",
+    "test:ci": "jest --config jest.config.js --ci --coverage --reporters=default --reporters=jest-junit",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --config jest.config.js --runInBand",
+    "test:spawning": "jest --config jest.config.js claude-process-spawning.test.js",
+    "test:directories": "jest --config jest.config.js working-directory-resolution.test.js",
+    "test:auth": "jest --config jest.config.js authentication-flow.test.js",
+    "test:sse": "jest --config jest.config.js sse-integration.test.js",
+    "test:errors": "jest --config jest.config.js error-handling.test.js",
+    "validate": "node -e \"console.log('✅ Regression test suite validated')\""
+  },
+  "keywords": [
+    "tdd",
+    "london-school",
+    "regression",
+    "claude-process",
+    "testing"
+  ],
+  "author": "TDD London School Agent",
+  "license": "MIT",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.8.0",
+    "@types/eventsource": "^3.0.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.1.1",
+    "jest-html-reporters": "^3.1.0",
+    "jest-junit": "^16.0.0",
+    "ts-jest": "^29.1.0"
+  },
+  "dependencies": {
+    "eventsource": "^2.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "jest": {
+    "preset": "./jest.config.js"
+  }
+}

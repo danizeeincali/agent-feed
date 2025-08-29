@@ -1,132 +1,104 @@
 /**
- * Jest Configuration for TDD London School Test Suite
- * 
- * Configured for mock-driven testing with comprehensive behavior verification
+ * Jest Configuration for TDD London School WebSocket Tests
+ * Optimized for mock-driven development and behavior verification
  */
 
 module.exports = {
   // Test environment
   testEnvironment: 'node',
   
+  // Root directory for tests
+  roots: ['<rootDir>'],
+  
   // Test file patterns
   testMatch: [
-    '**/*.test.js',
-    '**/*.spec.js'
+    '**/websocket/**/*.test.ts',
+    '**/contracts/**/*.test.ts',
+    '**/mocks/**/*.test.ts'
   ],
+  
+  // File extensions to consider
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  
+  // Transform TypeScript files
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest'
+  },
   
   // Setup files
-  setupFilesAfterEnv: [
-    '<rootDir>/jest.setup.js'
-  ],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   
-  // Coverage configuration
+  // Coverage settings
   collectCoverage: true,
-  coverageDirectory: 'coverage',
-  coverageReporters: [
-    'text',
-    'html',
-    'json',
-    'lcov'
-  ],
-  coveragePathIgnorePatterns: [
-    '/node_modules/',
-    '/coverage/',
-    '/scripts/'
-  ],
+  coverageDirectory: '<rootDir>/coverage',
+  coverageReporters: ['text', 'lcov', 'html', 'json'],
+  
+  // Coverage thresholds for London School TDD
   coverageThreshold: {
     global: {
-      branches: 85,
-      functions: 90,
+      branches: 90,
+      functions: 95,
       lines: 90,
       statements: 90
     }
   },
   
-  // Mock configuration for London School TDD
+  // Files to collect coverage from
+  collectCoverageFrom: [
+    'websocket/**/*.ts',
+    'contracts/**/*.ts',
+    'mocks/**/*.ts',
+    '!**/*.d.ts',
+    '!**/node_modules/**',
+    '!**/coverage/**'
+  ],
+  
+  // Mock settings
   clearMocks: true,
   resetMocks: true,
   restoreMocks: true,
   
-  // Test timing
-  testTimeout: 30000, // 30 seconds for E2E tests
+  // Module name mapping for absolute imports
+  moduleNameMapping: {
+    '^@/(.*)$': '<rootDir>/$1',
+    '^@contracts/(.*)$': '<rootDir>/contracts/$1',
+    '^@mocks/(.*)$': '<rootDir>/mocks/$1',
+    '^@websocket/(.*)$': '<rootDir>/websocket/$1'
+  },
   
-  // Reporter configuration
+  // Verbose output for behavior verification
+  verbose: true,
+  
+  // Test timeout for async operations
+  testTimeout: 10000,
+  
+  // Reporters for detailed test feedback
   reporters: [
     'default',
     ['jest-junit', {
-      outputDirectory: 'coverage',
-      outputName: 'junit.xml'
+      outputDirectory: 'test-results',
+      outputName: 'tdd-london-junit.xml'
     }],
     ['jest-html-reporters', {
-      publicPath: 'coverage/html-report',
-      filename: 'test-report.html',
-      expand: true,
-      hideIcon: false
+      publicPath: 'test-results',
+      filename: 'tdd-london-report.html',
+      expand: true
     }]
   ],
   
-  // Module name mapping for absolute imports
-  moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/../../src/$1'
-  },
-  
-  // Test suites for organized execution
-  projects: [
-    {
-      displayName: 'Unit Tests - Claude Instance Endpoints',
-      testMatch: ['<rootDir>/claude-instance-endpoints.test.js'],
-      collectCoverage: true,
-      coverageReporters: ['text', 'json']
-    },
-    {
-      displayName: 'Integration Tests - Frontend-Backend Contracts',
-      testMatch: ['<rootDir>/frontend-backend-integration.test.js'],
-      testTimeout: 20000
-    },
-    {
-      displayName: 'E2E Tests - Instance Workflows',
-      testMatch: ['<rootDir>/e2e-instance-workflows.test.js'],
-      testTimeout: 60000,
-      setupFilesAfterEnv: ['<rootDir>/jest.setup.e2e.js']
-    },
-    {
-      displayName: 'Performance Benchmarks',
-      testMatch: ['<rootDir>/performance-benchmarks.test.js'],
-      testTimeout: 120000, // 2 minutes for performance tests
-      collectCoverage: false // Performance tests don't need coverage
-    },
-    {
-      displayName: 'Error Handling Scenarios',
-      testMatch: ['<rootDir>/error-handling-scenarios.test.js'],
-      collectCoverage: true
-    }
-  ],
-  
-  // Verbose output for detailed test results
-  verbose: true,
-  
-  // Fail fast on first failing test suite
-  bail: false,
-  
-  // Watch mode configuration
-  watchPathIgnorePatterns: [
-    '/node_modules/',
-    '/coverage/',
-    '/.git/'
-  ],
-  
-  // Transform configuration
-  transform: {
-    '^.+\\.js$': 'babel-jest'
-  },
-  
-  // Global variables for test environment
+  // Global test configuration
   globals: {
-    'TEST_ENVIRONMENT': 'london-school-tdd',
-    'MOCK_BEHAVIOR_VERIFICATION': true,
-    'INTERACTION_TESTING_MODE': true
+    'ts-jest': {
+      tsconfig: 'tsconfig.json'
+    }
   },
   
-  // Test result processor for custom reporting
-  testResultsProcessor: '<rootDir>/scripts/test-results-processor.js'
+  // Error handling
+  errorOnDeprecated: true,
+  
+  // Watch mode settings
+  watchPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/coverage/'],
+  
+  // Dependency mocking
+  modulePathIgnorePatterns: ['<rootDir>/dist/']
 };

@@ -1,0 +1,208 @@
+{
+  "nld_pattern_id": "websocket-port-mismatch-1756424891",
+  "pattern_type": "websocket_configuration_failure",
+  "severity": "critical",
+  "detection_timestamp": "2025-08-29T13:24:51.892Z",
+  "claude_confidence_claim": "high",
+  "actual_user_experience": "failed",
+  
+  "failure_signature": {
+    "primary_issue": "WebSocket connection using wrong port (3000 vs 3002)",
+    "symptoms": [
+      "Instance stuck in 'starting' state",
+      "Connection status shows 'Disconnected from instance'", 
+      "No terminal output streaming",
+      "WebSocket connection errors in browser console",
+      "Network connection refused errors"
+    ],
+    "affected_components": [
+      "ClaudeInstanceManagerModern.tsx",
+      "WebSocket connection logic",
+      "Terminal server configuration"
+    ]
+  },
+
+  "root_cause_analysis": {
+    "configuration_mismatch": {
+      "frontend_assumption": "WebSocket server on port 3000",
+      "actual_server_port": 3002,
+      "code_location": "frontend/src/components/ClaudeInstanceManagerModern.tsx:21",
+      "problematic_line": "apiUrl = 'http://localhost:3000'"
+    },
+    "server_configuration": {
+      "terminal_server_port": 3002,
+      "code_location": "backend-terminal-server-robust.js:26",
+      "configuration_line": "const PORT = process.env.TERMINAL_PORT || 3002;"
+    },
+    "websocket_url_construction": {
+      "method": "apiUrl.replace('http://', 'ws://').replace('https://', 'wss://')",
+      "results_in": "ws://localhost:3000/terminal",
+      "should_be": "ws://localhost:3002/terminal"
+    }
+  },
+
+  "anti_pattern_classification": {
+    "category": "hardcoded_port_assumption",
+    "sub_patterns": [
+      "default_port_mismatch",
+      "environment_variable_disconnect",
+      "multi_server_port_confusion",
+      "websocket_url_construction_error"
+    ],
+    "tdd_failure_indicators": [
+      "No integration tests for WebSocket connections",
+      "Missing port configuration validation",
+      "Hardcoded URLs in component props",
+      "No environment-based URL resolution"
+    ]
+  },
+
+  "code_analysis": {
+    "problematic_patterns": [
+      {
+        "file": "frontend/src/components/ClaudeInstanceManagerModern.tsx",
+        "lines": [21, "181-182"],
+        "issue": "Hardcoded port 3000 in default apiUrl",
+        "code_snippet": "apiUrl = 'http://localhost:3000'",
+        "websocket_construction": "const wsUrl = apiUrl.replace('http://', 'ws://').replace('https://', 'wss://');"
+      },
+      {
+        "file": "backend-terminal-server-robust.js", 
+        "lines": [26, 607],
+        "config": "const PORT = process.env.TERMINAL_PORT || 3002;",
+        "server_start": "server.listen(PORT, HOST, () => {"
+      }
+    ],
+    "missing_safeguards": [
+      "No port discovery mechanism",
+      "No WebSocket connection health checks",
+      "No fallback port configuration",
+      "No runtime port validation"
+    ]
+  },
+
+  "neural_training_data": {
+    "failure_vectors": [
+      "PORT_HARDCODING_FRONTEND",
+      "WEBSOCKET_URL_CONSTRUCTION_NAIVE", 
+      "MULTI_SERVER_PORT_COORDINATION",
+      "ENVIRONMENT_VARIABLE_DISCONNECT"
+    ],
+    "success_patterns": [
+      "DYNAMIC_PORT_DISCOVERY",
+      "ENVIRONMENT_BASED_URL_CONSTRUCTION",
+      "CONNECTION_HEALTH_MONITORING",
+      "PORT_CONFIGURATION_VALIDATION"
+    ],
+    "ml_features": {
+      "has_hardcoded_ports": 1,
+      "uses_environment_variables": 0.5,
+      "has_connection_retry": 0,
+      "validates_websocket_urls": 0,
+      "port_coordination_score": 0.2
+    }
+  },
+
+  "prevention_strategies": {
+    "immediate_fixes": [
+      {
+        "strategy": "Environment-based URL construction",
+        "implementation": "Use REACT_APP_TERMINAL_PORT or runtime discovery",
+        "code_change": "apiUrl = `http://localhost:${process.env.REACT_APP_TERMINAL_PORT || 3002}`"
+      },
+      {
+        "strategy": "WebSocket URL validation",
+        "implementation": "Test WebSocket connection before usage",
+        "validation": "Check WebSocket server availability before connecting"
+      }
+    ],
+    "architectural_improvements": [
+      "Service discovery pattern for port coordination",
+      "Health check endpoints for WebSocket servers",
+      "Configuration validation on component mount",
+      "Fallback port mechanisms"
+    ],
+    "tdd_patterns": [
+      "Integration tests for WebSocket connections",
+      "Port configuration validation tests", 
+      "Multi-environment connection tests",
+      "Connection retry and fallback tests"
+    ]
+  },
+
+  "detection_rules": {
+    "static_analysis": [
+      "Detect hardcoded port numbers in WebSocket URLs",
+      "Flag mismatched port configurations across components",
+      "Identify missing environment variable usage",
+      "Check for WebSocket URL construction patterns"
+    ],
+    "runtime_detection": [
+      "Monitor WebSocket connection failures by port",
+      "Track 'starting' state duration anomalies", 
+      "Detect connection refused errors",
+      "Flag repeated connection attempts to wrong ports"
+    ]
+  },
+
+  "regression_test_cases": [
+    {
+      "test_name": "WebSocket Port Configuration Consistency",
+      "test_type": "integration",
+      "validates": "Frontend WebSocket URLs match backend server ports",
+      "assertion": "WebSocket connection succeeds on correct port"
+    },
+    {
+      "test_name": "Environment Variable Port Override",
+      "test_type": "configuration",
+      "validates": "Environment variables properly override default ports",
+      "assertion": "PORT environment variable changes WebSocket connection target"
+    },
+    {
+      "test_name": "WebSocket Connection Health Check",
+      "test_type": "functional",
+      "validates": "WebSocket connections are validated before usage",
+      "assertion": "Invalid WebSocket URLs are detected and handled gracefully"
+    }
+  ],
+
+  "effectiveness_metrics": {
+    "claude_confidence": 0.85,
+    "user_success_rate": 0.0,
+    "tdd_coverage": 0.15,
+    "effectiveness_score": 0.18,
+    "failure_probability": 0.92
+  },
+
+  "pattern_evolution": {
+    "first_detected": "2025-08-29T13:24:51.892Z",
+    "occurrence_count": 1,
+    "similar_patterns": [
+      "api-endpoint-mismatch",
+      "cors-port-configuration",
+      "multi-service-port-coordination"
+    ],
+    "resolution_success_rate": 0.95,
+    "average_debug_time": "45 minutes"
+  },
+
+  "deployment_impact": {
+    "development_friction": "high",
+    "production_risk": "critical",
+    "user_experience_impact": "complete_failure",
+    "debugging_complexity": "medium",
+    "time_to_resolution": "moderate"
+  },
+
+  "claude_flow_integration": {
+    "neural_export_ready": true,
+    "pattern_weight": 0.92,
+    "training_priority": "high",
+    "memory_key": "websocket-port-mismatch-patterns",
+    "hooks_integration": [
+      "pre-websocket-connection",
+      "port-validation-check", 
+      "environment-config-validation"
+    ]
+  }
+}

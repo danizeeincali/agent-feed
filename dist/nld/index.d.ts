@@ -1,98 +1,145 @@
 /**
- * NLD (Neuro Learning Development) Connection Learning System
- * Main export file for all NLD components
+ * NLD (Neuro-Learning Development) System - Entry Point
+ *
+ * Complete NLD system for failure pattern detection and prevention across:
+ * - SSE connection failures
+ * - Silent process failures (TTY, authentication, permissions, environment)
+ * - Process I/O capture failures
+ * - Working directory and terminal issues
+ *
+ * Features:
+ * - Real-time failure monitoring and pattern detection
+ * - Comprehensive anti-pattern databases with prevention strategies
+ * - Neural training data export for claude-flow integration
+ * - TDD prevention strategies and automated test generation
+ * - Silent process failure detection with automated recovery
+ * - Integrated monitoring and reporting system
  */
-export { ConnectionFailureDetector, type ConnectionFailureContext, type NetworkConditions, type ClientInfo, type ErrorDetails, type ConnectionAttempt, type ConnectionStrategy, type RecoveryContext, type FailurePattern, type ConnectionMetrics } from './connection-failure-detector';
-export { ConnectionLearningDatabase, type NLTRecord, type ConnectionLearningRecord, type NeuralFeatures, type StrategyPerformance } from './learning-database';
-export { AdaptiveConnectionManager, type AdaptiveConnectionConfig, type ConnectionHealth, type ConnectionAttemptResult } from './adaptive-connection-manager';
-export { NeuralConnectionTrainer, type NeuralTrainingConfig, type TrainingDataPoint, type TrainingLabels, type TrainingMetadata, type ModelPerformance, type PredictionResult } from './neural-connection-trainer';
-export { ClaudeFlowIntegration, type ClaudeFlowConfig, type NeuralTrainingRequest, type TaskOrchestrationRequest } from './claude-flow-integration';
-export { NLDPerformanceMonitor, type PerformanceMetric, type PerformanceThreshold, type PerformanceAlert, type PerformanceTrend, type PerformanceReport } from './performance-monitor';
-export { TroubleshootingEngine, type TroubleshootingRequest, type TroubleshootingSuggestion, type TroubleshootingStep, type TroubleshootingResource, type TroubleshootingResult, type DiagnosticTest, type DiagnosticResult } from './troubleshooting-engine';
-export { NLDWebSocketIntegration, createNLDWebSocketService, integrateNLDWithWebSocket, type NLDWebSocketConfig, type EnhancedWebSocketMessage } from './websocket-integration';
-export declare const NLD_VERSION = "1.0.0";
-export declare const DEFAULT_NLD_CONFIG: Partial<NLDWebSocketConfig>;
-export declare const DEFAULT_PERFORMANCE_MONITOR_CONFIG: {
-    metricsRetentionMs: number;
-    monitoringIntervalMs: number;
-    reportingIntervalMs: number;
-    alertingEnabled: boolean;
-};
-export declare const DEFAULT_NEURAL_TRAINING_CONFIG: NeuralTrainingConfig;
-export declare const DEFAULT_CLAUDE_FLOW_CONFIG: ClaudeFlowConfig;
+export { SSEConnectionPatternDetector, SSEConnectionPattern, SSETriggerCondition } from './sse-connection-pattern-detector';
+export { RealTimeSSEFailureMonitor, SSEConnectionMetrics, FailureAlert } from './real-time-sse-failure-monitor';
+export { SSEAntiPatternsDatabase, SSEAntiPattern } from './sse-anti-patterns-database';
+export { TDDSSEPreventionStrategies, TDDSSETestSuite, TDDSSETestCase, MockingStrategy, AssertionPattern } from './tdd-sse-prevention-strategies';
+export { SilentProcessFailureDetector, SilentProcessMetrics, SilentProcessAlert, SilentProcessPattern, silentProcessDetector } from './silent-process-failure-detector';
+export { SilentProcessAntiPatternsDatabase, SilentProcessAntiPattern, silentProcessAntiPatternsDB } from './silent-process-anti-patterns-database';
+export { TDDSilentProcessPreventionStrategies, SilentProcessTDDTestCase, SilentProcessTDDSuite, tddSilentProcessPrevention } from './tdd-silent-process-prevention-strategies';
+export { SilentProcessNeuralTrainingExport, SilentProcessNeuralRecord, SilentProcessNeuralDataset, silentProcessNeuralExport } from './silent-process-neural-training-export';
+export { ProcessIOAntiPatternsDatabase, ProcessIOFailurePattern } from './process-io-anti-patterns-database';
+export { StdoutCaptureFailureMonitor, StdoutCaptureEvent, StdoutCaptureMetrics, stdoutCaptureMonitor } from './stdout-capture-failure-monitor';
+export { TerminalAntiPatternsDatabase, AntiPattern } from './terminal-anti-patterns-database';
+export { NeuralTrainingExportSystem, NeuralTrainingDataset, NeuralTrainingRecord, NeuralArchitectureSpec } from './neural-training-export-system';
+export { NLDSSEIntegrationSystem, NLDSSEValidationResult } from './nld-sse-integration';
+export { NLDSilentProcessIntegrationSystem, NLDSilentProcessConfig, NLDSilentProcessReport, nldSilentProcessIntegration } from './nld-silent-process-integration';
+export { validateNLDSystem, demonstratePatternDetectionFlow } from './validate-nld-system';
+export { SilentProcessNLDDeployment, deploySilentProcessNLD } from './deploy-silent-process-nld';
 /**
- * Create a complete NLD system with all components
+ * Quick Start Guide
+ * ================
+ *
+ * 1. Initialize the complete NLD system:
+ * ```typescript
+ * import { nldSilentProcessIntegration, NLDSSEIntegrationSystem } from '@/src/nld';
+ *
+ * // Initialize SSE monitoring
+ * const sseSystem = new NLDSSEIntegrationSystem();
+ * await sseSystem.initialize();
+ *
+ * // Initialize silent process monitoring
+ * await nldSilentProcessIntegration.initialize();
+ * ```
+ *
+ * 2. Register processes for monitoring:
+ * ```typescript
+ * // When spawning a new process
+ * nldSilentProcessIntegration.registerProcess(instanceId, processId, command, workingDirectory);
+ *
+ * // Record process output
+ * nldSilentProcessIntegration.recordProcessOutput(instanceId, 'stdout', data);
+ * nldSilentProcessIntegration.recordProcessInput(instanceId, input);
+ * ```
+ *
+ * 3. Monitor for failure patterns:
+ * ```typescript
+ * const systemReport = nldSilentProcessIntegration.generateSystemReport();
+ * console.log('System Status:', systemReport.systemStatus);
+ * console.log('Silent Processes:', systemReport.silentProcesses);
+ * console.log('Detected Patterns:', systemReport.detectedPatterns);
+ * ```
+ *
+ * 4. Run TDD prevention tests:
+ * ```typescript
+ * const testResults = await nldSilentProcessIntegration.runTDDTestSuite();
+ * console.log('TDD Coverage:', testResults.patternsCovered);
+ * ```
+ *
+ * 5. Deploy complete silent process detection:
+ * ```typescript
+ * import { deploySilentProcessNLD } from '@/src/nld';
+ *
+ * const deploymentResult = await deploySilentProcessNLD();
+ * console.log('Deployment Status:', deploymentResult.validationResults);
+ * ```
  */
-export declare function createCompleteNLDSystem(config?: {
-    webSocketConfig?: Partial<NLDWebSocketConfig>;
-    performanceConfig?: Partial<any>;
-    neuralConfig?: Partial<NeuralTrainingConfig>;
-    claudeFlowConfig?: Partial<ClaudeFlowConfig>;
-}): {
-    webSocketService: any;
-    nldIntegration: any;
-    performanceMonitor: any;
-    neuralTrainer: any;
-    claudeFlowIntegration: any;
-    learningDatabase: any;
-    troubleshootingEngine: any;
-    shutdown(): Promise<void>;
-    getSystemStatus(): {
-        nld_integration: any;
-        performance_metrics: any;
-        connection_health: any;
-        system_statistics: any;
-    };
-    exportAllData(): Promise<{
-        nld_data: any;
-        neural_models: any;
-        performance_report: any;
-        exported_at: string;
-        version: string;
-    }>;
-};
 /**
- * Quick setup function for basic NLD integration
+ * Detected SSE Anti-Patterns
+ * ==========================
+ *
+ * 1. Status SSE Zero Connections While Terminal Connected (Critical)
+ *    - Symptoms: UI stuck on "starting", terminal works, status SSE = 0 connections
+ *    - Prevention: Establish status SSE before terminal SSE
+ *    - Recovery: Restart status SSE connections
+ *
+ * 2. Terminal Input Forwarding Breakdown (High)
+ *    - Symptoms: Input accepted but no command responses
+ *    - Prevention: Input path validation before sending
+ *    - Recovery: Reset terminal input connection
+ *
+ * 3. Mixed Connection State Inconsistency (Medium)
+ *    - Symptoms: Frontend/backend connection state mismatch
+ *    - Prevention: Connection state synchronization
+ *    - Recovery: Force state reconciliation
+ *
+ * 4. UI State Lock on Instance Status (High)
+ *    - Symptoms: Status stuck despite backend showing "running"
+ *    - Prevention: Status update timeout detection
+ *    - Recovery: Force status refresh
+ *
+ * 5. Connection Recovery Loop Failure (Medium)
+ *    - Symptoms: Infinite reconnection attempts
+ *    - Prevention: Circuit breaker pattern
+ *    - Recovery: Manual recovery override
  */
-export declare function quickSetupNLD(options?: {
-    enableAll?: boolean;
-    learningOnly?: boolean;
-    monitoringOnly?: boolean;
-}): any;
 /**
- * Utility function to check NLD system compatibility
+ * TDD Implementation Priority
+ * ===========================
+ *
+ * Critical:
+ * - Connection establishment order validation tests
+ * - Connection state synchronization tests
+ *
+ * High:
+ * - UI status update timeout tests
+ * - Terminal input forwarding validation tests
+ *
+ * Medium:
+ * - Connection recovery mechanism tests
+ * - Performance benchmark tests
  */
-export declare function checkNLDCompatibility(): {
-    compatible: boolean;
-    issues: string[];
-    recommendations: string[];
-};
 /**
- * Development utilities
+ * Neural Training Capabilities
+ * ============================
+ *
+ * - Pattern classification and prediction
+ * - Failure probability estimation
+ * - Recovery action effectiveness tracking
+ * - TDD test case generation
+ * - Continuous learning from user feedback
+ * - Integration with claude-flow neural network
  */
-export declare const NLDDevUtils: {
-    /**
-     * Create mock failure context for testing
-     */
-    createMockFailureContext(overrides?: Partial<ConnectionFailureContext>): ConnectionFailureContext;
-    /**
-     * Create mock connection strategy for testing
-     */
-    createMockStrategy(overrides?: Partial<ConnectionStrategy>): ConnectionStrategy;
-    /**
-     * Simulate network conditions for testing
-     */
-    simulateNetworkConditions(type: "slow-2g" | "2g" | "3g" | "4g" | "wifi" | "ethernet"): NetworkConditions;
-};
-export declare const NLD_METADATA: {
-    version: string;
-    name: string;
-    description: string;
-    author: string;
-    license: string;
-    repository: string;
-    documentation: string;
-    components: string[];
-    features: string[];
-};
+export { claudeProcessIODetector, ClaudeProcessIOMetrics, ClaudeProcessIOErrorPattern, ClaudeProcessIOTriggerCondition } from './claude-process-io-failure-detector';
+export { claudeProcessIOMonitor, ClaudeProcessIOAlert } from './claude-process-io-real-time-monitor';
+export { claudeProcessIONeuralDataset, ClaudeProcessIONeuralRecord, ClaudeProcessIONeuralDataset } from './claude-process-io-neural-training-dataset';
+export { claudeProcessIOTDDPrevention, ClaudeProcessIOTDDTestCase, ClaudeProcessIOTDDSuite } from './claude-process-io-tdd-prevention-strategies';
+export { claudeProcessIOIntegration, ClaudeProcessIOSystemReport } from './claude-process-io-integration-system';
+export { claudeProcessIODeployment, ClaudeProcessIODeploymentResult } from './claude-process-io-deployment-demo';
+export default NLDSSEIntegrationSystem;
 //# sourceMappingURL=index.d.ts.map

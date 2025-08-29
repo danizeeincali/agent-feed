@@ -27,6 +27,7 @@ import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
 import ClaudeInstanceManager from '@/components/ClaudeInstanceManager';
+import ClaudeInstanceManagerModern from '@/components/ClaudeInstanceManagerModern';
 import { TerminalDebug } from '@/components/TerminalDebug';
 import { SimpleTerminalTest } from '@/components/SimpleTerminalTest';
 import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
@@ -246,7 +247,7 @@ const App: React.FC = () => {
                   <Route path="/claude-instances" element={
                     <RouteErrorBoundary routeName="ClaudeInstances">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Claude Instances..." />}>
-                        <ClaudeInstanceManager />
+                        <ClaudeInstanceManagerModern />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

@@ -3,28 +3,28 @@
  * Prevents "fix one, break another" cascade failures
  */
 
-import { describe, it, expect, beforeAll, afterAll, vi, beforeEach } from 'vitest';
+// Converted from Vitest to Jest - globals available
 import { render, screen, waitFor } from '@testing-library/react';
 import { io } from 'socket.io-client';
 
 // Mock Socket.IO
-vi.mock('socket.io-client');
-const mockIo = vi.mocked(io);
+jest.mock('socket.io-client');
+const mockIo = jest.mocked(io);
 
 // Mock WebSocket
-global.WebSocket = vi.fn();
+global.WebSocket = jest.fn();
 
 describe('WebSocket Terminal Regression Prevention', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     
     // Mock Socket.IO client
     const mockSocket = {
-      on: vi.fn(),
-      off: vi.fn(),
-      emit: vi.fn(),
-      connect: vi.fn(),
-      disconnect: vi.fn(),
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+      connect: jest.fn(),
+      disconnect: jest.fn(),
       connected: false,
       id: 'test-socket-id'
     };
@@ -33,10 +33,10 @@ describe('WebSocket Terminal Regression Prevention', () => {
     
     // Mock WebSocket
     const mockWebSocket = {
-      send: vi.fn(),
-      close: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
+      send: jest.fn(),
+      close: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
       readyState: WebSocket.OPEN
     };
     
@@ -134,7 +134,7 @@ describe('WebSocket Terminal Regression Prevention', () => {
   describe('Integration: HTTP API + WebSocket Together', () => {
     it('should maintain Claude detection API while fixing WebSocket terminal', async () => {
       // Mock successful API call (HTTP proxy working)
-      global.fetch = vi.fn().mockResolvedValue({
+      global.fetch = jest.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
           success: true,
@@ -191,11 +191,11 @@ describe('WebSocket Terminal Regression Prevention', () => {
     it('should prevent infinite reconnection loops', async () => {
       // Mock failed connection scenario
       const mockSocket = {
-        on: vi.fn(),
-        off: vi.fn(),
-        emit: vi.fn(),
-        connect: vi.fn(),
-        disconnect: vi.fn(),
+        on: jest.fn(),
+        off: jest.fn(),
+        emit: jest.fn(),
+        connect: jest.fn(),
+        disconnect: jest.fn(),
         connected: false,
         id: null
       };
