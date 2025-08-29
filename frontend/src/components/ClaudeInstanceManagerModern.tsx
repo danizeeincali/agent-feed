@@ -35,17 +35,23 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
   const wsConnectionError = null;
   const eventHandlersRef = useRef<Map<string, Set<(data: any) => void>>>(new Map());
   
+  // SSE status stream management
+  const [statusEventSource, setStatusEventSource] = useState<EventSource | null>(null);
+  const [isStatusConnected, setIsStatusConnected] = useState(false);
+  
   // Legacy compatibility for existing code
   const socketCompat = { connected: isConnected };
   const connectionError = wsConnectionError;
 
-  // Setup event handlers and fetch instances
+  // Setup event handlers, fetch instances, and establish SSE connection
   useEffect(() => {
     fetchInstances();
     setupEventHandlers();
+    connectToStatusStream();
     
     return () => {
       cleanupEventHandlers();
+      disconnectStatusStream();
     };
   }, []);
 
@@ -156,6 +162,90 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       socket.close();
       setSocket(null);
       setIsConnected(false);
+    }
+  };
+
+  // SSE Status Stream Management
+  const connectToStatusStream = () => {
+    console.log('🔗 Connecting to SSE status stream...');
+    
+    // Close existing connection if any
+    if (statusEventSource) {
+      statusEventSource.close();
+    }
+    
+    try {
+      // Connect to the SSE status endpoint that backend provides
+      const eventSource = new EventSource(`${apiUrl}/api/status/stream`);
+      
+      eventSource.onopen = () => {
+        console.log('✅ SSE Status stream connected');
+        setIsStatusConnected(true);
+        setError(null);
+      };
+      
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log('📨 SSE Status message received:', data.type, data);
+          
+          // Handle status updates for instances
+          if (data.type === 'instance:status') {
+            console.log(`📲 Status update for ${data.instanceId}: ${data.status}`);
+            
+            // Update instances state with new status
+            setInstances(prev => prev.map(instance => 
+              instance.id === data.instanceId 
+                ? { ...instance, status: data.status as ClaudeInstance['status'] }
+                : instance
+            ));
+            
+            // Also trigger existing event handlers for compatibility
+            triggerHandlers('terminal:status', {
+              terminalId: data.instanceId,
+              status: data.status,
+              timestamp: data.timestamp
+            });
+          }
+          
+          // Handle connection confirmations
+          if (data.type === 'connected') {
+            console.log('✅ SSE Status stream connection confirmed');
+          }
+          
+        } catch (parseError) {
+          console.error('❌ SSE Status message parsing error:', parseError);
+        }
+      };
+      
+      eventSource.onerror = (error) => {
+        console.error('❌ SSE Status stream error:', error);
+        setIsStatusConnected(false);
+        
+        // Only attempt to reconnect if the connection was previously established
+        if (eventSource.readyState === EventSource.CLOSED || eventSource.readyState === EventSource.CONNECTING) {
+          setTimeout(() => {
+            console.log('🔄 Attempting to reconnect SSE status stream...');
+            connectToStatusStream();
+          }, 2000);
+        }
+      };
+      
+      setStatusEventSource(eventSource);
+      
+    } catch (error) {
+      console.error('❌ Failed to create SSE status connection:', error);
+      setError('Failed to connect to status stream');
+    }
+  };
+  
+  const disconnectStatusStream = () => {
+    console.log('🔌 Disconnecting from SSE status stream');
+    
+    if (statusEventSource) {
+      statusEventSource.close();
+      setStatusEventSource(null);
+      setIsStatusConnected(false);
     }
   };
 
@@ -288,6 +378,23 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       setError(null);
     }
   }, [connectionError, isConnected]);
+  
+  // Monitor SSE status connection and update connection type
+  useEffect(() => {
+    const updateConnectionStatus = () => {
+      if (isStatusConnected && isConnected) {
+        setConnectionType(`Connected (WebSocket + SSE Status)`);
+      } else if (isStatusConnected) {
+        setConnectionType('Connected (SSE Status Only)');
+      } else if (isConnected) {
+        setConnectionType('Connected (WebSocket Only)');
+      } else {
+        setConnectionType('Disconnected');
+      }
+    };
+    
+    updateConnectionStatus();
+  }, [isStatusConnected, isConnected]);
 
   const fetchInstances = async () => {
     try {
@@ -379,6 +486,11 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
         setSelectedInstance(instance.id);
         setOutput(prev => ({ ...prev, [instance.id]: 'Claude instance created! Connecting to WebSocket...\n' }));
         
+        // Ensure SSE status stream is connected for status updates
+        if (!isStatusConnected) {
+          connectToStatusStream();
+        }
+        
         console.log('✅ Real Claude terminal ready for WebSocket connection');
       } else {
         const errorMsg = data.error || 'Failed to launch terminal';
@@ -443,21 +555,20 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
 
   const terminateInstance = async (instanceId: string) => {
     try {
-      // Terminal termination uses DELETE /api/terminals/:id
-      const response = await fetch(`${apiUrl}/api/terminals/${instanceId}`, {
+      // Use the correct Claude instance deletion endpoint
+      const response = await fetch(`/api/claude/instances/${instanceId}`, {
         method: 'DELETE'
       });
       
       const data = await response.json();
       if (data.success) {
-        console.log('Terminal terminated successfully, refreshing terminals list...');
+        console.log('Claude instance terminated successfully, refreshing instances list...');
         await fetchInstances();
         
-        // Clean up UI state for terminated terminal
+        // Clean up UI state for terminated instance
         if (selectedInstance === instanceId) {
           setSelectedInstance(null);
-          // Disconnect from SSE if connected
-          disconnectFromTerminal();
+          disconnectFromInstance();
         }
         
         setOutput(prev => {
@@ -468,14 +579,14 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
         
         setError(null); // Clear any previous errors
       } else {
-        const errorMessage = data.error || data.message || 'Failed to terminate terminal';
+        const errorMessage = data.error || data.message || 'Failed to terminate instance';
         setError(errorMessage);
       }
     } catch (err) {
-      console.error('Failed to terminate terminal:', err);
+      console.error('Failed to terminate instance:', err);
       const errorMessage = err instanceof Error ? 
         `Termination failed: ${err.message}` : 
-        'Failed to terminate terminal';
+        'Failed to terminate instance';
       setError(errorMessage);
     }
   };
@@ -537,7 +648,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
           {/* API Versioning Info for Development */}
           {process.env.NODE_ENV === 'development' && (
             <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-              API: Instance operations via /api/claude/ • SSE streaming via /api/v1/
+              API: Instance operations via /api/claude/ • SSE streaming via /api/v1/ • Status: {isStatusConnected ? '✅ Connected' : '❌ Disconnected'}
             </div>
           )}
         </div>

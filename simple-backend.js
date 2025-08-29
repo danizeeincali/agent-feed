@@ -1296,6 +1296,86 @@ app.get('/api/claude/instances/:instanceId/terminal/stream', (req, res) => {
   createTerminalSSEStream(req, res, instanceId);
 });
 
+// Instance-specific status SSE endpoint 
+app.get('/api/claude/instances/status-stream', (req, res) => {
+  console.log('📡 Claude instances status SSE stream requested');
+  
+  // Set SSE headers
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Cache-Control'
+  });
+
+  // Add connection to general status tracking (BOTH maps for proper counting)
+  if (!sseConnections.has('__status__')) {
+    sseConnections.set('__status__', []);
+  }
+  if (!activeSSEConnections.has('__status__')) {
+    activeSSEConnections.set('__status__', []);
+  }
+  sseConnections.get('__status__').push(res);
+  activeSSEConnections.get('__status__').push(res);
+  
+  console.log(`📊 Claude instances status SSE connections: ${activeSSEConnections.get('__status__').length}`);
+
+  // Send initial connection message with current instances status
+  const instanceList = Array.from(instances.values());
+  res.write(`data: ${JSON.stringify({
+    type: 'connected',
+    message: '✅ Claude instances status stream connected',
+    instances: instanceList,
+    timestamp: new Date().toISOString()
+  })}\\n\\n`);
+
+  // Handle client disconnect for status connections
+  let statusConnectionClosed = false;
+  
+  const statusCloseHandler = () => {
+    if (!statusConnectionClosed) {
+      console.log('🔌 Claude instances status SSE connection closed');
+      statusConnectionClosed = true;
+      
+      // Remove connection from both tracking maps
+      const connections = sseConnections.get('__status__') || [];
+      const activeConnections = activeSSEConnections.get('__status__') || [];
+      const index = connections.indexOf(res);
+      const activeIndex = activeConnections.indexOf(res);
+      
+      if (index !== -1) {
+        connections.splice(index, 1);
+      }
+      if (activeIndex !== -1) {
+        activeConnections.splice(activeIndex, 1);
+      }
+      
+      console.log(`📊 Claude instances status SSE connections remaining: ${activeConnections.length}`);
+    }
+  };
+  
+  req.on('close', statusCloseHandler);
+  req.on('end', statusCloseHandler);
+  
+  // Handle status connection errors gracefully
+  req.on('error', (err) => {
+    if (err.code === 'ECONNRESET' || err.code === 'EPIPE' || err.message?.includes('aborted')) {
+      console.log('🔄 Claude instances status SSE connection reset - normal behavior');
+    } else {
+      console.error('❌ Claude instances status SSE connection error:', err);
+    }
+  });
+  
+  res.on('error', (err) => {
+    if (err.code === 'ECONNRESET' || err.code === 'EPIPE' || err.message?.includes('aborted')) {
+      console.log('🔄 Claude instances status SSE response error - normal behavior');
+    } else {
+      console.error('❌ Claude instances status SSE response error:', err);
+    }
+  });
+});
+
 // General status SSE endpoint for frontend status updates
 app.get('/api/status/stream', (req, res) => {
   console.log('📡 General status SSE stream requested');

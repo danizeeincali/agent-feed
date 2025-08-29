@@ -405,3 +405,180 @@
 📤 Broadcasting incremental output for claude-9641: 486 bytes (pos: 1899 -> 2385)
 ⚠️ No connections for claude-9641 - message will be buffered
 📤 SPARC: Broadcasted to 1 WebSocket connections for claude-9641
+🔍 Fetching Claude instances for frontend
+📋 Returning 4 instances: [
+  'claude-6601 (prod/claude)',
+  'claude-3884 (prod/claude)',
+  'claude-6803 (prod/claude)',
+  'claude-9641 (prod/claude)'
+]
+🆕 SPARC Creating Claude instance: { command: undefined, instanceType: undefined, usePty: true }
+✅ Directory resolved successfully in 1ms:
+   Instance Type: prod
+   Directory Hint: prod
+   Resolved Path: /workspaces/agent-feed/prod
+🚀 SPARC Enhanced Claude process spawning (PTY: true):
+   Command: claude 
+   Working Directory: /workspaces/agent-feed/prod
+   Instance Type: prod
+   Instance ID: claude-2440
+🚀 Creating REAL Claude instance (Mock Claude system removed)
+✅ PTY process created successfully for claude-2440 with Claude flags
+🔧 Setting up process handlers for claude-2440 (pty mode)
+🔧 Setting up PTY handlers for claude-2440
+🔧 PTY Claude process spawned: claude-2440
+📁 Working directory: /workspaces/agent-feed/prod
+📊 PTY Process configuration:
+   PID: 221020
+   Killed: undefined
+   Process Type: PTY (better terminal emulation)
+📡 Ready to stream REAL Claude PTY output
+📡 Broadcasting initial 'starting' status for claude-2440
+📡 Broadcasting status starting for instance claude-2440
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ SPARC Enhanced Claude process spawned: claude-2440 (PID: 221020)
+   Working Directory: /workspaces/agent-feed/prod
+   Process Type: pty
+   PTY Enabled: true
+🆕 SPARC Creating Claude instance: { command: undefined, instanceType: undefined, usePty: true }
+✅ Directory resolved successfully in 0ms:
+   Instance Type: prod
+   Directory Hint: prod
+   Resolved Path: /workspaces/agent-feed/prod
+🚀 SPARC Enhanced Claude process spawning (PTY: true):
+   Command: claude 
+   Working Directory: /workspaces/agent-feed/prod
+   Instance Type: prod
+   Instance ID: claude-6492
+🚀 Creating REAL Claude instance (Mock Claude system removed)
+✅ PTY process created successfully for claude-6492 with Claude flags
+🔧 Setting up process handlers for claude-6492 (pty mode)
+🔧 Setting up PTY handlers for claude-6492
+🔧 PTY Claude process spawned: claude-6492
+📁 Working directory: /workspaces/agent-feed/prod
+📊 PTY Process configuration:
+   PID: 221032
+   Killed: undefined
+   Process Type: PTY (better terminal emulation)
+📡 Ready to stream REAL Claude PTY output
+📡 Broadcasting initial 'starting' status for claude-6492
+📡 Broadcasting status starting for instance claude-6492
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ SPARC Enhanced Claude process spawned: claude-6492 (PID: 221032)
+   Working Directory: /workspaces/agent-feed/prod
+   Process Type: pty
+   PTY Enabled: true
+✅ PTY Claude process claude-2440 ready (PID: 221020)
+📡 Broadcasting status running for instance claude-2440
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ PTY Claude process claude-6492 ready (PID: 221032)
+📡 Broadcasting status running for instance claude-6492
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+📤 REAL Claude claude-2440 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-2440: 6 bytes (pos: 0 -> 6)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-6492: 6 bytes (pos: 0 -> 6)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (20 bytes): [?2004h[?25h[?25h
+📤 Broadcasting incremental output for claude-2440: 20 bytes (pos: 6 -> 26)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (20 bytes): [?2004h[?25h[?25h
+📤 Broadcasting incremental output for claude-6492: 20 bytes (pos: 6 -> 26)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (8 bytes): [?2004l
+📤 Broadcasting incremental output for claude-6492: 8 bytes (pos: 26 -> 34)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (1233 bytes): [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                         [38;2;215;119;...
+📤 Broadcasting incremental output for claude-6492: 1233 bytes (pos: 34 -> 1267)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-6492: 6 bytes (pos: 1267 -> 1273)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (16 bytes): [?2004h[?1004h
+📤 Broadcasting incremental output for claude-6492: 16 bytes (pos: 1273 -> 1289)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (8 bytes): [?2004l
+📤 Broadcasting incremental output for claude-2440: 8 bytes (pos: 26 -> 34)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (76 bytes): [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+📤 Broadcasting incremental output for claude-2440: 76 bytes (pos: 34 -> 110)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (680 bytes): 
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                         [38;2;215;119;87m│[39m
+[38;2;215;119;87m│[39m                                         ...
+📤 Broadcasting incremental output for claude-2440: 680 bytes (pos: 110 -> 790)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (483 bytes): 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;136;136m│[39m[22m > [7m [27m                ...
+📤 Broadcasting incremental output for claude-2440: 483 bytes (pos: 790 -> 1273)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (8 bytes): [?2004h
+📤 Broadcasting incremental output for claude-2440: 8 bytes (pos: 1273 -> 1281)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (8 bytes): [?1004h
+📤 Broadcasting incremental output for claude-2440: 8 bytes (pos: 1281 -> 1289)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (47 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+📤 Broadcasting incremental output for claude-2440: 47 bytes (pos: 1289 -> 1336)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (486 bytes): 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;136;136m│[39m[22m > [7mT[27m[2mry "edit met...
+📤 Broadcasting incremental output for claude-2440: 486 bytes (pos: 1336 -> 1822)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (533 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-6492: 533 bytes (pos: 1289 -> 1822)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (647 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-6492: 647 bytes (pos: 1822 -> 2469)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (647 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-2440: 647 bytes (pos: 1822 -> 2469)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (647 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-2440: 647 bytes (pos: 2469 -> 3116)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (47 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+📤 Broadcasting incremental output for claude-6492: 47 bytes (pos: 2469 -> 2516)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (600 bytes): 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;136;136m│[39m[22m > [7mT[27m[2mry "fix type...
+📤 Broadcasting incremental output for claude-6492: 600 bytes (pos: 2516 -> 3116)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-6492 PTY output (533 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+📤 Broadcasting incremental output for claude-6492: 533 bytes (pos: 3116 -> 3649)
+⚠️ No connections for claude-6492 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (47 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+📤 Broadcasting incremental output for claude-2440: 47 bytes (pos: 3116 -> 3163)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (2 bytes): 
+
+📤 Broadcasting incremental output for claude-2440: 2 bytes (pos: 3163 -> 3165)
+⚠️ No connections for claude-2440 - message will be buffered
+📤 REAL Claude claude-2440 PTY output (484 bytes): [2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;136;136m│[39m[22m > [7mT[27m[2mry "edit metri...
+📤 Broadcasting incremental output for claude-2440: 484 bytes (pos: 3165 -> 3649)
+⚠️ No connections for claude-2440 - message will be buffered
+🔌 SPARC: WebSocket connection closed
