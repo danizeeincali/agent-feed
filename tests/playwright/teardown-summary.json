@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-08-29T16:23:05.026Z",
+  "artifacts": {
+    "screenshots": [
+      "/workspaces/agent-feed/tests/playwright/screenshots/after-create-click.png",
+      "/workspaces/agent-feed/tests/playwright/screenshots/create-button-not-found.png",
+      "/workspaces/agent-feed/tests/playwright/screenshots/frontend-loaded.png",
+      "/workspaces/agent-feed/tests/playwright/screenshots/test-failed-Create-Instance-button-functionality.png",
+      "/workspaces/agent-feed/tests/playwright/screenshots/test-failed-Frontend-loads-correctly-without-connection-errors.png",
+      "/workspaces/agent-feed/tests/playwright/screenshots/test-failed-WebSocket-terminal-connections-work.png"
+    ],
+    "reports": [
+      "index.html"
+    ],
+    "results": [
+      "codespaces-connectivity-Co-41e82-PI-endpoints-are-accessible-chromium-retry1",
+      "codespaces-connectivity-Co-52fce-stance-button-functionality-chromium-retry1",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium-retry1",
+      "codespaces-connectivity-Co-ea420-y-without-connection-errors-chromium-retry1",
+      "codespaces-connectivity-Co-41e82-PI-endpoints-are-accessible-chromium-retry1/trace.zip",
+      "codespaces-connectivity-Co-52fce-stance-button-functionality-chromium-retry1/trace.zip",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium/error-context.md",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium/test-failed-1.png",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium/video.webm",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium-retry1/error-context.md",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium-retry1/test-failed-1.png",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium-retry1/trace.zip",
+      "codespaces-connectivity-Co-bd2ca-t-terminal-connections-work-chromium-retry1/video.webm",
+      "codespaces-connectivity-Co-ea420-y-without-connection-errors-chromium-retry1/trace.zip"
+    ]
+  },
+  "counts": {
+    "screenshots": 6,
+    "reports": 1,
+    "results": 15
+  }
+}

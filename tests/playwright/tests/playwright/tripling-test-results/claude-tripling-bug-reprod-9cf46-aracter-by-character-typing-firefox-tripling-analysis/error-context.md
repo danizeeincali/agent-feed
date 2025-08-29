@@ -1,0 +1,81 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "🚀 HTTP Terminal" [ref=e12] [cursor=pointer]:
+        - /url: /http-terminal
+        - img [ref=e13] [cursor=pointer]
+        - text: 🚀 HTTP Terminal
+      - link "Claude Instances" [ref=e16] [cursor=pointer]:
+        - /url: /claude-instances
+        - img [ref=e17] [cursor=pointer]
+        - text: Claude Instances
+      - link "Claude Manager" [ref=e24] [cursor=pointer]:
+        - /url: /dual-instance
+        - img [ref=e25] [cursor=pointer]
+        - text: Claude Manager
+      - link "Feed" [ref=e30] [cursor=pointer]:
+        - /url: /
+        - img [ref=e31] [cursor=pointer]
+        - text: Feed
+      - link "Agents" [ref=e33] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e34] [cursor=pointer]
+        - text: Agents
+      - link "Workflows" [ref=e41] [cursor=pointer]:
+        - /url: /workflows
+        - img [ref=e42] [cursor=pointer]
+        - text: Workflows
+      - link "Claude Code" [ref=e46] [cursor=pointer]:
+        - /url: /claude-code
+        - img [ref=e47] [cursor=pointer]
+        - text: Claude Code
+      - link "Live Activity" [ref=e50] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e51] [cursor=pointer]
+        - text: Live Activity
+      - link "Analytics" [ref=e56] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e57] [cursor=pointer]
+        - text: Analytics
+      - link "Terminal Debug" [ref=e62] [cursor=pointer]:
+        - /url: /terminal-debug
+        - img [ref=e63] [cursor=pointer]
+        - text: Terminal Debug
+      - link "Performance Monitor" [ref=e66] [cursor=pointer]:
+        - /url: /performance-monitor
+        - img [ref=e67] [cursor=pointer]
+        - text: Performance Monitor
+      - link "Settings" [ref=e69] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e70] [cursor=pointer]
+        - text: Settings
+    - generic [ref=e74]:
+      - generic [ref=e75]:
+        - generic [ref=e77]: Connected
+        - img [ref=e78]
+      - generic [ref=e83]:
+        - img [ref=e84]
+        - generic [ref=e89]: "0"
+  - generic [ref=e90]:
+    - banner [ref=e91]:
+      - generic [ref=e92]:
+        - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e94]
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - img [ref=e97]
+            - textbox "Search posts..." [ref=e100]
+          - button "Notifications" [ref=e102] [cursor=pointer]:
+            - img [ref=e103] [cursor=pointer]
+    - main [ref=e106]:
+      - generic [ref=e108]:
+        - img [ref=e110]
+        - heading "Unable to load feed" [level=3] [ref=e113]
+        - paragraph [ref=e114]: Error connecting to AgentLink API
+        - button "Try again" [ref=e115] [cursor=pointer]
+```

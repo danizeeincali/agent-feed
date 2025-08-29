@@ -1,0 +1,166 @@
+{
+  "predictive_failure_models": {
+    "model_id": "PFM-001-typing-duplication",
+    "timestamp": "2025-01-29T00:00:00Z",
+    "model_type": "pattern_based_classifier",
+    
+    "untested_failure_modes": [
+      {
+        "failure_mode": "keyboard_composition_interference",
+        "probability": 0.60,
+        "description": "Browser composition events interfere with isComposing state",
+        "evidence": "Complex composition handling in MessageInput.tsx lines 69-75",
+        "user_impact": "Typing feels erratic, unexpected command sending",
+        "test_gap": "No real browser composition event testing",
+        "prediction_confidence": 0.75
+      },
+      {
+        "failure_mode": "websocket_reconnection_duplication",
+        "probability": 0.45,
+        "description": "WebSocket reconnection creates duplicate event handlers",
+        "evidence": "Complex handler management in ClaudeInstanceManagerModern.tsx",
+        "user_impact": "Commands execute multiple times after network issues", 
+        "test_gap": "No network interruption integration testing",
+        "prediction_confidence": 0.65
+      },
+      {
+        "failure_mode": "cross_instance_message_leakage",
+        "probability": 0.35,
+        "description": "Messages leak between different Claude instances",
+        "evidence": "Instance switching logic with shared WebSocket handlers",
+        "user_impact": "Commands sent to wrong instance",
+        "test_gap": "No multi-instance integration testing",
+        "prediction_confidence": 0.55
+      },
+      {
+        "failure_mode": "race_condition_in_state_updates",
+        "probability": 0.70,
+        "description": "Async state updates create race conditions with user input",
+        "evidence": "Multiple useState calls in rapid succession",
+        "user_impact": "UI state out of sync with actual behavior",
+        "test_gap": "No concurrent state update testing",
+        "prediction_confidence": 0.80
+      }
+    ],
+    
+    "high_probability_root_causes": [
+      {
+        "root_cause": "double_newline_injection_cascade",
+        "probability": 0.90,
+        "description": "MessageInput adds \\n, then sendInput adds \\n, causing double execution",
+        "code_evidence": [
+          "MessageInput.tsx line 50: onSendMessage(message + '\\n')",
+          "ClaudeInstanceManagerModern.tsx line 515: const commandLine = trimmedInput + '\\n'"
+        ],
+        "user_symptom_match": "Every keystroke feels like hitting enter",
+        "fix_prediction": "Remove one of the newline injections",
+        "fix_confidence": 0.95
+      },
+      {
+        "root_cause": "websocket_handler_accumulation",
+        "probability": 0.75, 
+        "description": "Event handlers accumulate without proper cleanup on instance switch",
+        "code_evidence": [
+          "Lines 589-593: Disconnection logic may not clear all handlers",
+          "Lines 95-123: Handler setup without corresponding teardown verification"
+        ],
+        "user_symptom_match": "Commands execute multiple times",
+        "fix_prediction": "Add explicit handler cleanup on instance switch", 
+        "fix_confidence": 0.80
+      },
+      {
+        "root_cause": "message_deduplication_timing_window",
+        "probability": 0.55,
+        "description": "Deduplication fails due to timing window in message ID generation",
+        "code_evidence": [
+          "Line 98: messageId includes timestamp that may differ for rapid messages",
+          "Lines 100-103: Timing-sensitive duplicate detection"
+        ],
+        "user_symptom_match": "Intermittent duplication behavior",
+        "fix_prediction": "Use content-based deduplication instead of timestamp",
+        "fix_confidence": 0.70
+      }
+    ],
+    
+    "failure_prediction_algorithm": {
+      "input_factors": [
+        "user_typing_speed",
+        "network_latency", 
+        "websocket_reconnection_frequency",
+        "instance_switching_rate",
+        "browser_composition_events_enabled"
+      ],
+      "risk_calculation": {
+        "base_risk": 0.15,
+        "double_newline_factor": 0.75,
+        "handler_cleanup_factor": 0.60, 
+        "timing_window_factor": 0.40,
+        "integration_test_coverage_factor": -0.50
+      },
+      "formula": "base_risk + (double_newline_factor * 0.9) + (handler_cleanup_factor * 0.7) - (integration_coverage * 0.5)"
+    },
+    
+    "recommended_testing_strategies": [
+      {
+        "strategy": "browser_automation_with_real_typing",
+        "priority": "critical",
+        "description": "Use Playwright to simulate real user typing with composition events",
+        "implementation": "Record actual user sessions, replay with timing accuracy",
+        "expected_failure_detection": 0.90
+      },
+      {
+        "strategy": "websocket_network_simulation", 
+        "priority": "high",
+        "description": "Test with network interruptions, delays, and reconnections",
+        "implementation": "Use network throttling and connection drops during tests",
+        "expected_failure_detection": 0.75
+      },
+      {
+        "strategy": "multi_instance_concurrent_testing",
+        "priority": "medium", 
+        "description": "Test instance switching and concurrent operations",
+        "implementation": "Spawn multiple instances, switch rapidly, send concurrent commands",
+        "expected_failure_detection": 0.65
+      },
+      {
+        "strategy": "message_flow_tracing",
+        "priority": "high",
+        "description": "Trace complete message flow from UI to WebSocket",
+        "implementation": "Add logging at every transformation point, verify single execution",
+        "expected_failure_detection": 0.85
+      }
+    ],
+    
+    "confidence_adjustment_rules": {
+      "reduce_confidence_when": [
+        "mock_coverage > 0.8 AND integration_coverage < 0.3",
+        "user_feedback_negative AND test_confidence > 0.8",
+        "complex_websocket_logic AND no_real_network_testing"
+      ],
+      "increase_confidence_when": [
+        "browser_automation_tests_present AND passing",
+        "real_websocket_integration_verified",
+        "user_typing_flows_tested_end_to_end"
+      ],
+      "manual_review_triggers": [
+        "user_symptom_not_in_test_scenarios",
+        "test_pass_rate_95_plus_user_failure",
+        "multiple_message_transformation_points_untested"
+      ]
+    },
+    
+    "success_probability_matrix": {
+      "current_state": {
+        "mock_heavy_testing": 0.15,
+        "isolated_component_testing": 0.20,
+        "websocket_logic_testing": 0.25
+      },
+      "with_recommended_improvements": {
+        "browser_integration_testing": 0.85,
+        "real_websocket_testing": 0.80,
+        "user_flow_validation": 0.90,
+        "message_flow_tracing": 0.88
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "pattern_id": "NLD-INPUT-HANDLING-001",
+  "pattern_name": "Character-by-Character Terminal Input Failure",
+  "detection_timestamp": "2025-08-29T00:00:00Z",
+  "severity": "critical",
+  "domain": "terminal_input_processing",
+  
+  "failure_patterns": {
+    "NLD-INPUT-001": {
+      "name": "character_by_character_sending",
+      "description": "Input sent as individual keystrokes instead of buffered lines",
+      "symptoms": [
+        "Every character echoed separately",
+        "Commands fragmented across multiple events",
+        "Missing line termination handling",
+        "Raw keystroke streaming instead of command parsing"
+      ],
+      "root_cause": "PTY or WebSocket configured in raw character mode",
+      "prevention_strategy": "Implement proper line buffering and command aggregation"
+    },
+    
+    "NLD-INPUT-002": {
+      "name": "missing_enter_key_buffering",
+      "description": "Enter key not properly buffering complete command lines",
+      "symptoms": [
+        "Commands not executing on Enter press",
+        "Partial command execution",
+        "Input stream fragmentation",
+        "Missing newline character handling"
+      ],
+      "root_cause": "Event handlers not accumulating input until line termination",
+      "prevention_strategy": "Buffer input until \\n or \\r\\n detected, then send complete line"
+    },
+    
+    "NLD-INPUT-003": {
+      "name": "pty_raw_mode_issues",
+      "description": "Terminal PTY configured incorrectly for interactive use",
+      "symptoms": [
+        "No input echoing or double echoing",
+        "Special characters not processed",
+        "Command history not working",
+        "Tab completion broken"
+      ],
+      "root_cause": "PTY mode settings inappropriate for shell interaction",
+      "prevention_strategy": "Configure PTY in canonical mode with proper echo settings"
+    },
+    
+    "NLD-INPUT-004": {
+      "name": "websocket_keystroke_streaming",
+      "description": "WebSocket sending individual keystrokes instead of command batches",
+      "symptoms": [
+        "High frequency of small WebSocket messages",
+        "Network overhead from excessive messages",
+        "Race conditions in command processing",
+        "Input ordering issues"
+      ],
+      "root_cause": "WebSocket event handler firing on every keypress",
+      "prevention_strategy": "Batch keystrokes and send on line completion or timeout"
+    },
+    
+    "NLD-INPUT-005": {
+      "name": "command_execution_fragmentation",
+      "description": "Commands executed partially due to input fragmentation",
+      "symptoms": [
+        "Incomplete command execution",
+        "Error messages for partial commands",
+        "Shell prompt appearing mid-command",
+        "Command state corruption"
+      ],
+      "root_cause": "Command processor receiving fragmented input stream",
+      "prevention_strategy": "Implement command boundary detection and atomic execution"
+    }
+  },
+  
+  "tdd_prevention_patterns": {
+    "test_patterns": [
+      {
+        "test_name": "should_buffer_complete_lines_before_sending",
+        "description": "Test that input is accumulated until newline before transmission",
+        "test_case": "Type 'hello' + Enter, verify single command sent with newline"
+      },
+      {
+        "test_name": "should_handle_backspace_in_buffer",
+        "description": "Test proper character deletion from input buffer",
+        "test_case": "Type 'helo' + Backspace + 'l' + Enter, verify 'hello' sent"
+      },
+      {
+        "test_name": "should_preserve_command_atomicity",
+        "description": "Test that multi-word commands stay intact",
+        "test_case": "Type 'ls -la /home' + Enter, verify complete command executed"
+      },
+      {
+        "test_name": "should_handle_rapid_typing",
+        "description": "Test buffer integrity with fast input",
+        "test_case": "Rapidly type command, verify no character loss or duplication"
+      }
+    ],
+    
+    "implementation_patterns": [
+      {
+        "pattern": "Input Buffer Pattern",
+        "implementation": "Maintain client-side buffer, flush on line termination",
+        "code_example": "buffer += char; if (char === '\\n') { send(buffer); buffer = ''; }"
+      },
+      {
+        "pattern": "Command Boundary Detection",
+        "implementation": "Detect command completion before transmission",
+        "code_example": "if (input.endsWith('\\n') || input.endsWith('\\r\\n')) { executeCommand(input.trim()); }"
+      },
+      {
+        "pattern": "PTY Canonical Mode",
+        "implementation": "Configure PTY for line-based input processing",
+        "code_example": "pty.spawn('bash', [], { name: 'xterm-color', cols: 80, rows: 24, encoding: null });"
+      }
+    ]
+  },
+  
+  "effectiveness_metrics": {
+    "failure_frequency": "high",
+    "user_impact": "critical",
+    "detection_confidence": 0.95,
+    "tdd_coverage_factor": 0.3,
+    "prevention_success_rate": 0.85
+  },
+  
+  "neural_training_data": {
+    "input_patterns": [
+      "character_by_character_input",
+      "websocket_keystroke_events",
+      "pty_raw_mode_config",
+      "terminal_input_buffering"
+    ],
+    "expected_outputs": [
+      "line_based_command_sending",
+      "proper_input_buffering",
+      "atomic_command_execution",
+      "terminal_echo_handling"
+    ],
+    "failure_classifications": [
+      "input_handling_error",
+      "terminal_configuration_error",
+      "websocket_streaming_error",
+      "command_fragmentation_error"
+    ]
+  },
+  
+  "recommendations": {
+    "immediate_fixes": [
+      "Implement client-side input buffering before WebSocket transmission",
+      "Add newline detection to trigger command sending",
+      "Configure PTY in canonical mode for proper line handling",
+      "Add input validation to prevent fragmented commands"
+    ],
+    "long_term_improvements": [
+      "Implement comprehensive terminal emulation layer",
+      "Add command history and editing capabilities",
+      "Create robust input state management",
+      "Build automated testing for terminal interaction patterns"
+    ],
+    "tdd_recommendations": [
+      "Write tests for input buffering before implementation",
+      "Test edge cases: rapid typing, special characters, long commands",
+      "Mock WebSocket and PTY layers for isolated testing",
+      "Add integration tests for complete terminal workflows"
+    ]
+  }
+}

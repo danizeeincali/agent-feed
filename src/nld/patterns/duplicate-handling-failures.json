@@ -1,0 +1,338 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-28",
+    "description": "NLD failure patterns for duplicate output/input handling in React applications",
+    "scope": "WebSocket connections, React useEffect cleanup, event listeners, and output streams",
+    "trigger_phrases": ["duplicate output", "triple sending", "multiple connections", "welcome message repeated", "event listeners not cleaned up"]
+  },
+  "patterns": {
+    "NLD-DUP-001": {
+      "id": "duplicate_output_streams",
+      "name": "Duplicate Output Streams",
+      "description": "Multiple output streams writing to the same UI component causing duplicate messages",
+      "severity": "high",
+      "category": "output_handling",
+      "detection_signatures": [
+        {
+          "type": "code_pattern",
+          "pattern": "setOutput\\(prev => \\{[\\s\\S]*?\\[.*?\\]: \\(prev\\[.*?\\] \\|\\| ''\\) \\+ .*?\\}\\)",
+          "file_types": [".tsx", ".ts"],
+          "context": "React state updates that accumulate output without proper deduplication"
+        },
+        {
+          "type": "log_pattern",
+          "pattern": "Welcome to Claude.*Welcome to Claude",
+          "context": "Duplicate welcome messages indicating multiple output handlers"
+        },
+        {
+          "type": "behavior_pattern",
+          "pattern": "same_message_multiple_times",
+          "indicators": [
+            "identical content repeated in output",
+            "timestamps within <100ms of each other",
+            "same terminal ID but duplicate content"
+          ]
+        }
+      ],
+      "failure_conditions": [
+        "Multiple WebSocket connections to same instance",
+        "SSE and WebSocket both handling same data stream",
+        "React state updates not debounced or deduplicated",
+        "Event handlers registered multiple times"
+      ],
+      "code_locations": [
+        {
+          "file": "ClaudeInstanceManagerModern.tsx",
+          "lines": [100, 103, 114, 117],
+          "context": "setOutput accumulation without deduplication"
+        }
+      ],
+      "tdd_prevention": {
+        "test_cases": [
+          "should not duplicate messages when multiple handlers process same data",
+          "should deduplicate identical content within time window",
+          "should handle concurrent WebSocket and SSE messages properly"
+        ],
+        "prevention_strategies": [
+          "Implement message deduplication using content hash + timestamp",
+          "Use Set-based tracking for processed message IDs",
+          "Add debouncing to output state updates"
+        ]
+      }
+    },
+    "NLD-DUP-002": {
+      "id": "multiple_event_listeners",
+      "name": "Multiple Event Listeners",
+      "description": "Event listeners registered multiple times without proper cleanup, causing duplicate event handling",
+      "severity": "high",
+      "category": "event_handling",
+      "detection_signatures": [
+        {
+          "type": "code_pattern",
+          "pattern": "addEventListener.*?addEventListener",
+          "file_types": [".tsx", ".ts", ".js"],
+          "context": "Multiple addEventListener calls without corresponding removeEventListener"
+        },
+        {
+          "type": "react_pattern",
+          "pattern": "useEffect\\(\\(\\) => \\{[\\s\\S]*?addHandler\\([\\s\\S]*?\\}, \\[\\]\\)",
+          "context": "useEffect with empty dependency array but missing cleanup"
+        },
+        {
+          "type": "behavior_pattern",
+          "pattern": "event_handler_multiplication",
+          "indicators": [
+            "same event fired multiple times per trigger",
+            "handlers count increasing over time",
+            "memory leaks in event handler registry"
+          ]
+        }
+      ],
+      "failure_conditions": [
+        "useEffect missing cleanup function",
+        "Component remounting without cleanup",
+        "Event handlers added in non-idempotent way",
+        "Map/Set-based handler registry not cleared"
+      ],
+      "code_locations": [
+        {
+          "file": "ClaudeInstanceManagerModern.tsx",
+          "lines": [47, 85, 159],
+          "context": "setupEventHandlers without proper cleanup validation"
+        }
+      ],
+      "tdd_prevention": {
+        "test_cases": [
+          "should remove event listeners on component unmount",
+          "should not register duplicate event listeners on re-render",
+          "should clear event handler registry completely"
+        ],
+        "prevention_strategies": [
+          "Always return cleanup function from useEffect",
+          "Use WeakMap for automatic garbage collection",
+          "Implement idempotent event handler registration"
+        ]
+      }
+    },
+    "NLD-DUP-003": {
+      "id": "websocket_connection_leak",
+      "name": "WebSocket Connection Leak",
+      "description": "Multiple WebSocket connections opened to same endpoint without closing previous connections",
+      "severity": "critical",
+      "category": "connection_management",
+      "detection_signatures": [
+        {
+          "type": "code_pattern",
+          "pattern": "new WebSocket\\([\\s\\S]*?new WebSocket\\(",
+          "file_types": [".tsx", ".ts", ".js"],
+          "context": "Multiple WebSocket instantiations without proper connection cleanup"
+        },
+        {
+          "type": "network_pattern",
+          "pattern": "websocket_connection_count > 1",
+          "context": "Multiple active WebSocket connections to same terminal endpoint"
+        },
+        {
+          "type": "log_pattern",
+          "pattern": "WebSocket connection established.*WebSocket connection established",
+          "context": "Multiple connection establishment logs for same session"
+        }
+      ],
+      "failure_conditions": [
+        "Previous WebSocket not closed before creating new one",
+        "Connection state not properly tracked",
+        "Instance switching without connection cleanup",
+        "Network reconnection creating additional connections"
+      ],
+      "code_locations": [
+        {
+          "file": "ClaudeInstanceManagerModern.tsx",
+          "lines": [253, 262, 269],
+          "context": "connectToTerminal function WebSocket creation logic"
+        }
+      ],
+      "tdd_prevention": {
+        "test_cases": [
+          "should close existing WebSocket before opening new one",
+          "should maintain single connection per terminal ID",
+          "should handle connection cleanup on component unmount"
+        ],
+        "prevention_strategies": [
+          "Implement connection singleton pattern",
+          "Add connection state validation before creating new connections",
+          "Use connection pooling with proper lifecycle management"
+        ]
+      }
+    },
+    "NLD-DUP-004": {
+      "id": "missing_useeffect_cleanup",
+      "name": "Missing useEffect Cleanup",
+      "description": "React useEffect hooks without proper cleanup functions, causing resource leaks and duplicate effects",
+      "severity": "high",
+      "category": "react_lifecycle",
+      "detection_signatures": [
+        {
+          "type": "react_pattern",
+          "pattern": "useEffect\\(\\(\\) => \\{[^}]*\\}, \\[\\]\\);(?![\\s\\S]*?return)",
+          "file_types": [".tsx", ".ts"],
+          "context": "useEffect with empty deps but no cleanup function"
+        },
+        {
+          "type": "code_pattern",
+          "pattern": "useEffect\\([\\s\\S]*?(addEventListener|setInterval|setTimeout|new WebSocket)[\\s\\S]*?\\}, \\[[^\\]]*\\]\\)(?![\\s\\S]*?return)",
+          "context": "useEffect with side effects but missing cleanup"
+        },
+        {
+          "type": "behavior_pattern",
+          "pattern": "effect_accumulation",
+          "indicators": [
+            "timers not cleared on unmount",
+            "event listeners persisting after component unmount",
+            "WebSocket connections not closed"
+          ]
+        }
+      ],
+      "failure_conditions": [
+        "Component unmounts with active side effects",
+        "Re-renders causing effect duplication",
+        "Memory leaks from unreleased resources",
+        "Event listeners outliving components"
+      ],
+      "code_locations": [
+        {
+          "file": "ClaudeInstanceManagerModern.tsx",
+          "lines": [47, 373, 383],
+          "context": "useEffect hooks with side effects requiring cleanup"
+        }
+      ],
+      "tdd_prevention": {
+        "test_cases": [
+          "should cleanup all side effects on unmount",
+          "should not create duplicate effects on re-render",
+          "should properly handle dependency array changes"
+        ],
+        "prevention_strategies": [
+          "Always return cleanup function for side effects",
+          "Use AbortController for cancellable operations",
+          "Implement useCallback for stable effect dependencies"
+        ]
+      }
+    },
+    "NLD-DUP-005": {
+      "id": "input_handler_duplication",
+      "name": "Input Handler Duplication",
+      "description": "Input handlers (sendInput, command processing) being called multiple times for single user action",
+      "severity": "medium",
+      "category": "input_handling",
+      "detection_signatures": [
+        {
+          "type": "log_pattern",
+          "pattern": "Sending input.*Sending input.*Sending input",
+          "context": "Same input command logged multiple times in quick succession"
+        },
+        {
+          "type": "behavior_pattern",
+          "pattern": "triple_command_execution",
+          "indicators": [
+            "same command ('hello') sent 3 times",
+            "identical timestamps for multiple sends",
+            "WebSocket messages duplicated"
+          ]
+        },
+        {
+          "type": "code_pattern",
+          "pattern": "socket\\.send\\([\\s\\S]*?socket\\.send\\(",
+          "file_types": [".tsx", ".ts"],
+          "context": "Multiple socket.send calls without proper synchronization"
+        }
+      ],
+      "failure_conditions": [
+        "Event handlers not debounced",
+        "Form submissions not prevented from multiple triggers",
+        "WebSocket send not protected against rapid calls",
+        "Input validation triggering multiple submissions"
+      ],
+      "code_locations": [
+        {
+          "file": "ClaudeInstanceManagerModern.tsx",
+          "lines": [517, 535, 539],
+          "context": "sendInput function and WebSocket message sending"
+        }
+      ],
+      "tdd_prevention": {
+        "test_cases": [
+          "should send input only once per user action",
+          "should debounce rapid input submissions",
+          "should validate WebSocket state before sending"
+        ],
+        "prevention_strategies": [
+          "Add input debouncing with useState + useEffect",
+          "Implement submission state tracking",
+          "Use button disabled state during processing"
+        ]
+      }
+    }
+  },
+  "detection_rules": {
+    "trigger_conditions": [
+      "User reports duplicate messages in chat interface",
+      "Commands being sent multiple times (e.g., 'hello' sent 3 times)",
+      "Welcome messages appearing multiple times",
+      "WebSocket connection count > 1 for same terminal",
+      "Memory usage growing due to uncleaned listeners"
+    ],
+    "monitoring_metrics": [
+      "websocket_connection_count_per_terminal",
+      "event_listener_registry_size",
+      "duplicate_message_rate",
+      "cleanup_function_coverage"
+    ],
+    "prevention_score_calculation": {
+      "formula": "(cleanup_functions_present / total_useeffects) * (unique_event_handlers / total_event_handlers) * (single_websocket_per_terminal ? 1 : 0.5)",
+      "weight_factors": {
+        "cleanup_coverage": 0.4,
+        "event_handler_uniqueness": 0.3,
+        "connection_singularity": 0.3
+      }
+    }
+  },
+  "neural_training_export": {
+    "features": [
+      "useEffect_cleanup_ratio",
+      "event_listener_registration_pattern",
+      "websocket_connection_lifecycle",
+      "state_update_deduplication",
+      "component_remount_frequency"
+    ],
+    "labels": [
+      "has_duplicates",
+      "cleanup_complete",
+      "connection_leaks",
+      "event_handler_leaks"
+    ],
+    "training_scenarios": [
+      {
+        "scenario": "proper_cleanup",
+        "code_example": "useEffect(() => { const handler = ...; addEventListener('event', handler); return () => removeEventListener('event', handler); }, [])",
+        "label": "cleanup_complete"
+      },
+      {
+        "scenario": "missing_cleanup",
+        "code_example": "useEffect(() => { const ws = new WebSocket(url); ws.onmessage = handler; }, [])",
+        "label": "connection_leaks"
+      }
+    ]
+  },
+  "integration": {
+    "claude_flow_hooks": [
+      "pre-component-mount",
+      "post-component-unmount", 
+      "websocket-connection-change",
+      "event-handler-registration"
+    ],
+    "tdd_test_generation": true,
+    "real_time_monitoring": true,
+    "pattern_learning": true
+  }
+}

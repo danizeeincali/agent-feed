@@ -26,5 +26,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "eventsource-parser": "^3.0.5",
+    "playwright-core": "^1.55.0",
+    "ws": "^8.18.3"
+  }
 }

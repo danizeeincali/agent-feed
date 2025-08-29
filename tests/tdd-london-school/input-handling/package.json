@@ -1,0 +1,58 @@
+{
+  "name": "@agent-feed/tdd-london-input-handling-tests",
+  "version": "1.0.0",
+  "description": "TDD London School tests for input handling deduplication",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:websocket": "jest websocket",
+    "test:events": "jest event-handling",
+    "test:deduplication": "jest deduplication",
+    "test:swarm": "jest swarm-coordination"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "../../../../src/**/*.js",
+      "!../../../../src/**/*.test.js",
+      "!../../../../src/**/node_modules/**"
+    ],
+    "coverageDirectory": "./coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.js",
+      "**/*.test.js"
+    ],
+    "setupFilesAfterEnv": [
+      "./test-setup.js"
+    ],
+    "verbose": true,
+    "testTimeout": 10000
+  },
+  "keywords": [
+    "tdd",
+    "london-school",
+    "mocks",
+    "input-handling",
+    "deduplication",
+    "websocket",
+    "event-handling",
+    "swarm-testing"
+  ],
+  "author": "Agent Feed TDD Team",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.8"
+  },
+  "dependencies": {
+    "jest-extended": "^4.0.2"
+  }
+}

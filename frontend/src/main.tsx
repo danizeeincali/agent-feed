@@ -27,12 +27,19 @@ if (!rootElement) {
     const root = ReactDOM.createRoot(rootElement);
     
     console.log('AgentLink: Rendering application...');
+    // SPARC + NLD SOLUTION: Conditional StrictMode to prevent WebSocket duplication
+    const AppWithErrorBoundary = (
+      <SimpleErrorBoundary>
+        <App />
+      </SimpleErrorBoundary>
+    );
+    
     root.render(
-      <React.StrictMode>
-        <SimpleErrorBoundary>
-          <App />
-        </SimpleErrorBoundary>
-      </React.StrictMode>
+      process.env.NODE_ENV === 'production' ? AppWithErrorBoundary : (
+        <React.StrictMode>
+          {AppWithErrorBoundary}
+        </React.StrictMode>
+      )
     );
     
     console.log('AgentLink: ✅ Application started successfully');

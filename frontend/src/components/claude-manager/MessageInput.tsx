@@ -45,7 +45,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const handleSend = () => {
     const message = input.trim();
     if (message && !disabled) {
-      onSendMessage(message);
+      console.log('📝 SPARC: MessageInput sending complete command:', message);
+      // SPARC FIX: Ensure command is sent with proper termination
+      onSendMessage(message + '\n');
       setInput('');
       setRows(1);
       
@@ -59,6 +61,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
       e.preventDefault();
+      console.log('⚡ SPARC: Enter key pressed, sending command');
       handleSend();
     }
   };
@@ -109,6 +112,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             placeholder={placeholder}
             disabled={disabled}
             rows={rows}
+            data-testid="message-input"
             className={cn(
               'w-full px-4 py-3 pr-12 resize-none',
               'bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600',

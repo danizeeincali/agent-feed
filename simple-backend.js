@@ -148,8 +148,12 @@ class DirectoryResolver {
 // Initialize SPARC directory resolver
 const directoryResolver = new DirectoryResolver();
 
-// Import Mock Claude Process for development
-const MockClaudeProcess = require('./src/services/MockClaudeProcess');
+// SPARC Helper: Regex escaping function for echo filtering
+function escapeRegex(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// SPARC FIX: Mock system completely removed for 100% real functionality
 
 // Check Claude CLI authentication status - FIXED for Claude Code environment
 async function checkClaudeAuthentication() {
@@ -222,8 +226,13 @@ async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty 
           },
           cols: 100,
           rows: 30,
-          name: 'xterm-color'
+          name: 'xterm-color',
+          // NLD PATTERN FIX: Disable PTY echo to prevent character-by-character display
+          echo: false,  // CRITICAL: Prevents terminal echo duplication (TTY-ECHO-001)
+          handleFlowControl: false,
+          experimentalUseConpty: false
         });
+        
         processType = 'pty';
         console.log(`✅ PTY process created successfully for ${instanceId} with ${isClaudeCommand ? 'Claude flags' : 'standard flags'}`);
       } catch (ptyError) {
@@ -262,7 +271,13 @@ async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty 
       processType,
       usePty,
       outputPosition: 0,
-      outputBuffer: ''
+      outputBuffer: '',
+      // SPARC FIX: Set up input echo filtering to prevent character-by-character feedback
+      lastSentInput: '',
+      inputEchoFilter: new Set(),
+      // SPARC FIX: Content deduplication tracking
+      lastBroadcastContent: '',
+      lastMeaningfulContent: ''
     };
     
     // Initialize unified output buffer tracking with line counting
@@ -483,8 +498,79 @@ function setupPTYHandlers(instanceId, processInfo) {
   claudeProcess.onData((data) => {
     console.log(`📤 REAL Claude ${instanceId} PTY output (${data.length} bytes):`, data.substring(0, 200) + (data.length > 200 ? '...' : ''));
     
-    // Use incremental broadcast to prevent repetition
-    broadcastIncrementalOutput(instanceId, data, 'pty');
+    // SPARC FIX: Simplified echo filtering - PTY echo disabled, minimal filtering needed
+    let filteredData = data;
+    
+    // Only filter if we have recent input and it appears in output
+    if (processInfo.lastSentInput && processInfo.lastSentInput.length > 0 && filteredData.includes(processInfo.lastSentInput)) {
+      filteredData = filteredData.replace(processInfo.lastSentInput, '');
+      processInfo.lastSentInput = ''; // Clear after filtering
+      console.log(`🔧 SPARC: Filtered echoed input, remaining output: ${filteredData.length} bytes`);
+    }
+    
+    // SPARC FIX: Comprehensive ANSI filtering to prevent content duplication
+    filteredData = filteredData
+      // Cursor control sequences
+      .replace(/\[\?25[lh]/g, '') // Hide/show cursor
+      .replace(/\[\?2004[hl]/g, '') // Bracketed paste mode
+      .replace(/\[\?1004[hl]/g, '') // Focus events
+      // Clear and positioning sequences that cause duplication
+      .replace(/\[2K\[1A/g, '') // Clear line and move up
+      .replace(/\[2K/g, '') // Clear line
+      .replace(/\[1A/g, '') // Move up
+      .replace(/\[\d+A/g, '') // Move up N lines
+      .replace(/\[\d+G/g, '') // Move to column N
+      .replace(/\[G/g, '') // Move to column 1
+      // Complex clear sequences that cause screen refreshes
+      .replace(/(\[2K\[1A){2,}/g, '') // Multiple clear+up sequences
+      .replace(/(\[2K)+/g, '') // Multiple clear sequences
+      .replace(/(\[1A)+/g, '') // Multiple up sequences
+    
+    // SPARC FIX: ULTRA-AGGRESSIVE content deduplication for Claude Code UI
+    const cleanContent = filteredData.trim();
+    if (cleanContent.length > 0) {
+      // ULTRA-AGGRESSIVE meaningful content extraction for Claude Code patterns
+      const meaningfulContent = cleanContent
+        // Remove all box drawing characters and UI elements
+        .replace(/[╭╮╯╰│─┌┐└┘]/g, '')
+        .replace(/[┬┤├┴┼]/g, '')
+        .replace(/◯.*?(connected|disconnected|IDE\s+(connected|disconnected))/gi, '')
+        // Remove Claude Code specific UI patterns
+        .replace(/Try "create a.*?"/gi, '') // Remove the "Try create..." suggestions
+        .replace(/\? for shortcuts/gi, '')
+        .replace(/Claude Opus limit reached.*?/gi, '')
+        .replace(/now using Sonnet \d+/gi, '')
+        .replace(/>\s*$/, '') // Remove trailing prompt markers
+        .replace(/cwd:\s*[^\n]*/gi, '') // Remove current working directory
+        .replace(/\/help for help.*?/gi, '') // Remove help text
+        .replace(/\/status for your current setup/gi, '')
+        // Normalize all whitespace and remove empty elements
+        .replace(/\s+/g, ' ')
+        .replace(/\|\s*\|/g, '|') // Remove empty table cells
+        .trim();
+      
+      // ULTRA-STRICT deduplication - only broadcast if meaningfully different
+      const isReallyNewContent = !processInfo.lastMeaningfulContent || 
+          (meaningfulContent !== processInfo.lastMeaningfulContent && meaningfulContent.length > 5);
+      
+      // Additional check: if this looks like a UI refresh (same meaningful content), skip it
+      const looksLikeUIRefresh = processInfo.lastMeaningfulContent && 
+          meaningfulContent.length > 0 && 
+          meaningfulContent === processInfo.lastMeaningfulContent;
+      
+      if (isReallyNewContent && !looksLikeUIRefresh) {
+        processInfo.lastBroadcastContent = cleanContent;
+        processInfo.lastMeaningfulContent = meaningfulContent;
+        broadcastIncrementalOutput(instanceId, filteredData, 'pty');
+        console.log(`📤 SPARC ULTRA: Broadcasting unique content (${cleanContent.length} chars, meaningful: ${meaningfulContent.length})`);
+        console.log(`📝 SPARC ULTRA: Content="${meaningfulContent.slice(0, 100)}"`);
+      } else {
+        console.log(`🚫 SPARC ULTRA: Blocked duplicate/UI refresh (${cleanContent.length} chars, meaningful: ${meaningfulContent.length})`);
+        if (looksLikeUIRefresh) {
+          console.log(`🔄 SPARC ULTRA: Detected UI refresh pattern - blocking`);
+        }
+      }
+    }
   });
 
   // PTY process exit handling
@@ -652,9 +738,20 @@ function broadcastIncrementalOutput(instanceId, newData, source = 'stdout') {
   // Update last sent position
   outputBuffer.lastSentPosition = outputBuffer.buffer.length;
   
-  // Broadcast to connections (SSE and WebSocket)
-  broadcastToConnections(instanceId, message);
-  broadcastToWebSockets(instanceId, message);
+  // SPARC FIX: Avoid double broadcasting - use WebSocket primarily for real-time terminal
+  // Only broadcast to SSE if there are no WebSocket connections (fallback)
+  const instanceWSConnections = wsConnections.get(instanceId);
+  const hasActiveWSConnections = instanceWSConnections && instanceWSConnections.size > 0;
+  
+  if (hasActiveWSConnections) {
+    // Primary: Use WebSocket for real-time terminal output
+    console.log(`📤 SPARC: Broadcasting to ${instanceWSConnections.size} WebSocket connections for ${instanceId}`);
+    broadcastToWebSockets(instanceId, message);
+  } else {
+    // Fallback: Use SSE if no WebSocket connections
+    console.log(`📤 SPARC: Fallback to SSE broadcasting for ${instanceId}`);
+    broadcastToConnections(instanceId, message);
+  }
 }
 
 // CRITICAL FIX 4: Enhanced broadcast function with robust error handling
@@ -1507,14 +1604,35 @@ app.post('/api/claude/instances/:instanceId/terminal/input', (req, res) => {
   try {
     console.log(`⌨️ Forwarding input to Claude ${instanceId} (${processInfo.processType}): ${input}`);
     
-    // Handle input differently for PTY vs regular pipes
+    // SPARC FIX: Validate input before sending
+    if (!input || typeof input !== 'string') {
+      console.error(`❌ Invalid input for Claude ${instanceId}: ${typeof input} - ${input}`);
+      return res.status(400).json({ success: false, error: 'Invalid input data' });
+    }
+    
+    // SPARC FIX: Enhanced input handling for both PTY and pipes with proper command termination
     if (processInfo.usePty && processInfo.processType === 'pty') {
-      // PTY input handling
-      processInfo.process.write(input);
+      // PTY input handling with command termination
+      let inputData = input;
+      
+      // Ensure proper command termination
+      if (!inputData.endsWith('\n') && !inputData.endsWith('\r\n')) {
+        inputData += '\n';
+      }
+      
+      // Track sent input for echo filtering (without newline)
+      processInfo.lastSentInput = inputData.replace(/[\r\n]+$/, '');
+      
+      console.log(`⌨️ SPARC: Sending command to PTY: "${processInfo.lastSentInput}"`);
+      processInfo.process.write(inputData);
       console.log(`✅ PTY Input sent to Claude ${instanceId}`);
     } else {
-      // Regular pipe input handling
-      processInfo.process.stdin.write(input);
+      // Regular pipe input handling with termination
+      let inputData = input;
+      if (!inputData.endsWith('\n')) {
+        inputData += '\n';
+      }
+      processInfo.process.stdin.write(inputData);
       console.log(`✅ Pipe Input sent to Claude ${instanceId}`);
     }
     
@@ -1637,14 +1755,29 @@ app.post('/api/v1/terminal/input/:instanceId', (req, res) => {
   try {
     console.log(`⌨️ Forwarding input to REAL Claude ${instanceId} (${processInfo.processType}): ${input}`);
     
-    // Handle input differently for PTY vs regular pipes
+    // SPARC FIX: Enhanced input handling for both PTY and pipes with proper command termination
     if (processInfo.usePty && processInfo.processType === 'pty') {
-      // PTY input handling - write directly to PTY
-      processInfo.process.write(input);
+      // PTY input handling with command termination
+      let inputData = input;
+      
+      // Ensure proper command termination
+      if (!inputData.endsWith('\n') && !inputData.endsWith('\r\n')) {
+        inputData += '\n';
+      }
+      
+      // Track sent input for echo filtering (without newline)
+      processInfo.lastSentInput = inputData.replace(/[\r\n]+$/, '');
+      
+      console.log(`⌨️ SPARC: Sending command to PTY: "${processInfo.lastSentInput}"`);
+      processInfo.process.write(inputData);
       console.log(`✅ PTY Input forwarded to REAL Claude ${instanceId}`);
     } else {
-      // Regular pipe input handling - write to stdin
-      processInfo.process.stdin.write(input);
+      // Regular pipe input handling with termination
+      let inputData = input;
+      if (!inputData.endsWith('\n')) {
+        inputData += '\n';
+      }
+      processInfo.process.stdin.write(inputData);
       console.log(`✅ Pipe Input forwarded to REAL Claude ${instanceId}`);
     }
     
@@ -1730,19 +1863,38 @@ wss.on('connection', (ws, req) => {
             console.log(`⌨️ SPARC: Forwarding WebSocket input to Claude ${instanceId}: ${message.data}`);
             
             try {
+              // SPARC FIX: Validate WebSocket input
+              if (!message.data || typeof message.data !== 'string') {
+                console.error(`❌ Invalid WebSocket input for Claude ${instanceId}: ${typeof message.data} - ${message.data}`);
+                ws.send(JSON.stringify({
+                  type: 'error',
+                  error: 'Invalid input data',
+                  terminalId: instanceId,
+                  timestamp: Date.now()
+                }));
+                return;
+              }
+              
               if (processInfo.usePty && processInfo.processType === 'pty') {
-                processInfo.process.write(message.data);
+                // SPARC FIX: Enhanced input handling with proper command termination
+                let inputData = message.data;
+                
+                // Ensure proper command termination
+                if (!inputData.endsWith('\n') && !inputData.endsWith('\r\n')) {
+                  inputData += '\n';
+                }
+                
+                // Track sent input for comprehensive echo filtering (without newline for comparison)
+                processInfo.lastSentInput = inputData.replace(/[\r\n]+$/, '');
+                
+                console.log(`⌨️ SPARC: Sending command to PTY: "${processInfo.lastSentInput}"`);
+                processInfo.process.write(inputData);
               } else {
                 processInfo.process.stdin.write(message.data);
               }
               
-              // Echo back to WebSocket for immediate feedback
-              ws.send(JSON.stringify({
-                type: 'echo',
-                data: message.data,
-                terminalId: instanceId,
-                timestamp: Date.now()
-              }));
+              // SPARC FIX: Remove immediate echo - causes character-by-character display
+              // Let PTY handle all output naturally without artificial echoing
               
             } catch (error) {
               console.error(`❌ SPARC: Failed to forward input to Claude ${instanceId}:`, error);

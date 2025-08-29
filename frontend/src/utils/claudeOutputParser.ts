@@ -69,12 +69,24 @@ export class ClaudeOutputParser {
     thinking: /(thinking|processing|analyzing)/i
   };
 
+  // SPARC FIX: Cache to prevent unnecessary re-parsing
+  private static parseCache = new Map<string, { output: string; messages: ParsedMessage[] }>();
+  
   /**
    * Main parsing function - converts raw terminal output to structured messages
    */
   static parseOutput(rawOutput: string, instanceId: string): ParsedMessage[] {
+    // SPARC FIX: Check cache first to avoid re-parsing same content
+    const cacheKey = `${instanceId}-${rawOutput.length}-${rawOutput.slice(-100)}`;
+    const cached = this.parseCache.get(cacheKey);
+    
+    if (cached && cached.output === rawOutput) {
+      console.log(`⚡ SPARC: Using cached parse result for ${instanceId}`);
+      return cached.messages;
+    }
+    
     if (!rawOutput?.trim()) {
-      return [{
+      const welcomeMessage = [{
         id: `${instanceId}-welcome-${Date.now()}`,
         content: `Connected to Claude instance ${instanceId.slice(0, 8)}\nWaiting for Claude responses...`,
         role: 'system',
@@ -85,7 +97,11 @@ export class ClaudeOutputParser {
           hasANSI: false,
           messageType: 'welcome'
         }
-      }];
+      }] as ParsedMessage[];
+      
+      // Cache the welcome message
+      this.parseCache.set(cacheKey, { output: rawOutput, messages: welcomeMessage });
+      return welcomeMessage;
     }
 
     const messages: ParsedMessage[] = [];
@@ -103,7 +119,19 @@ export class ClaudeOutputParser {
       }
     }
     
-    return messages.length > 0 ? messages : this.createFallbackMessage(rawOutput, instanceId);
+    const result = messages.length > 0 ? messages : this.createFallbackMessage(rawOutput, instanceId);
+    
+    // SPARC FIX: Cache the result for future use
+    this.parseCache.set(cacheKey, { output: rawOutput, messages: result });
+    
+    // Limit cache size to prevent memory leaks
+    if (this.parseCache.size > 50) {
+      const firstKey = this.parseCache.keys().next().value;
+      this.parseCache.delete(firstKey);
+    }
+    
+    console.log(`✅ SPARC: Parsed ${result.length} messages for ${instanceId} (cached)`);
+    return result;
   }
 
   /**

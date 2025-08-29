@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { cn } from '../../lib/utils';
 import { ClaudeOutputParser, ParsedMessage } from '../../utils/claudeOutputParser';
+import RenderTracker from '../test/RenderTracker';
 
 // Use ParsedMessage interface from the parser
 interface Message extends ParsedMessage {}
@@ -20,7 +21,7 @@ const parseTerminalOutput = (output: string, instanceId: string): Message[] => {
 const MessageBubble: React.FC<{
   message: Message;
   isLast: boolean;
-}> = ({ message, isLast }) => {
+}> = React.memo(({ message, isLast }) => {
   const isUser = message.role === 'user';
   const isSystem = message.role === 'system';
   const isClaudeResponse = message.metadata?.messageType === 'claude_response';
@@ -28,7 +29,7 @@ const MessageBubble: React.FC<{
   
   return (
     <div className={cn(
-      'flex mb-4 animate-in slide-in-from-bottom-2 duration-300',
+      'flex mb-4 animate-in slide-in-from-bottom-2 duration-300 message-bubble',
       isUser ? 'justify-end' : 'justify-start'
     )}>
       <div className={cn(
@@ -104,7 +105,7 @@ const MessageBubble: React.FC<{
       </div>
     </div>
   );
-};
+});
 
 const TypingIndicator: React.FC = () => {
   return (
@@ -132,7 +133,21 @@ const MessageList: React.FC<MessageListProps> = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
-  const messages = parseTerminalOutput(output, instanceId);
+  // SPARC FIX: Optimize message parsing with incremental approach
+  const messages = useMemo(() => {
+    console.log(`🔄 SPARC: Parsing messages for ${instanceId} - Output length: ${output.length}`);
+    
+    // Skip expensive parsing if output is very large (> 50KB) and hasn't changed much
+    const outputLength = output.length;
+    if (outputLength > 50000) {
+      console.log(`⚡ SPARC: Large output detected (${outputLength} chars), using optimized parsing`);
+      // Parse only the last 10KB for performance
+      const recentOutput = output.slice(-10000);
+      return ClaudeOutputParser.parseOutput(recentOutput, instanceId);
+    }
+    
+    return parseTerminalOutput(output, instanceId);
+  }, [output, instanceId]);
   
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -208,6 +223,14 @@ const MessageList: React.FC<MessageListProps> = ({
         {/* Auto-scroll anchor */}
         <div ref={messagesEndRef} className="h-1" />
       </div>
+      
+      {/* SPARC: Render tracking for performance debugging */}
+      {process.env.NODE_ENV === 'development' && (
+        <RenderTracker 
+          componentName="MessageList" 
+          data={{ instanceId, outputLength: output.length, messagesCount: messages.length }}
+        />
+      )}
     </div>
   );
 };

@@ -19,6 +19,11 @@ export default defineConfig({
     host: true, // Allow external connections
     cors: true,
     strictPort: true, // Exit if port is already in use
+    // SPARC DEBUG FIX: Codespaces HMR configuration
+    hmr: {
+      clientPort: process.env.CODESPACES ? 443 : 5173,
+      host: process.env.CODESPACES ? 'localhost' : undefined
+    },
     // Proxy configuration for backend services
     proxy: {
       // HTTP API proxy (working for Claude detection) - FIXED TO PORT 3000

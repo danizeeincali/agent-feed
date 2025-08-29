@@ -4,6 +4,8 @@ import { nldCapture } from '../utils/nld-ui-capture';
 import { ClaudeInstanceButtons, ChatInterface } from './claude-manager';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
+import { useWebSocketSingleton } from '../hooks/useWebSocketSingleton';
+import RenderTracker from './test/RenderTracker';
 
 interface ClaudeInstance {
   id: string;
@@ -23,378 +25,89 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
   const [instances, setInstances] = useState<ClaudeInstance[]>([]);
   const [selectedInstance, setSelectedInstance] = useState<string | null>(null);
   const [output, setOutput] = useState<{ [key: string]: string }>({});
+  const [messages, setMessages] = useState<{ [key: string]: any[] }>({});
+  const [lastProcessedPosition, setLastProcessedPosition] = useState<{ [key: string]: number }>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connectionType, setConnectionType] = useState<string>('Disconnected');
-  const [currentInstanceId, setCurrentInstanceId] = useState<string | null>(null);
   
-  // WebSocket state management
-  const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [lastMessage, setLastMessage] = useState<any>(null);
-  const wsConnectionError = null;
-  const eventHandlersRef = useRef<Map<string, Set<(data: any) => void>>>(new Map());
+  // SPARC + NLD SOLUTION: Use WebSocket Singleton to prevent StrictMode duplicates
+  const webSocketSingleton = useWebSocketSingleton(apiUrl);
+  const { isConnected, connect, disconnect, send, addHandler, removeHandler, currentTerminalId } = webSocketSingleton;
   
-  // SSE status stream management
-  const [statusEventSource, setStatusEventSource] = useState<EventSource | null>(null);
-  const [isStatusConnected, setIsStatusConnected] = useState(false);
-  
-  // Legacy compatibility for existing code
-  const socketCompat = { connected: isConnected };
-  const connectionError = wsConnectionError;
-
-  // Setup event handlers, fetch instances, and establish SSE connection
+  // SPARC FIX: Setup singleton event handlers only
   useEffect(() => {
     fetchInstances();
-    setupEventHandlers();
-    connectToStatusStream();
     
-    return () => {
-      cleanupEventHandlers();
-      disconnectStatusStream();
-    };
-  }, []);
-
-  // WebSocket event handler management
-  const addHandler = (event: string, handler: (data: any) => void) => {
-    if (!eventHandlersRef.current.has(event)) {
-      eventHandlersRef.current.set(event, new Set());
-    }
-    eventHandlersRef.current.get(event)!.add(handler);
-  };
-
-  const removeHandler = (event: string, handler?: (data: any) => void) => {
-    if (handler) {
-      eventHandlersRef.current.get(event)?.delete(handler);
-    } else {
-      eventHandlersRef.current.delete(event);
-    }
-  };
-
-  const triggerHandlers = (event: string, data: any) => {
-    const handlers = eventHandlersRef.current.get(event);
-    handlers?.forEach(handler => {
-      try {
-        handler(data);
-      } catch (error) {
-        console.error(`Handler error for event ${event}:`, error);
-      }
-    });
-  };
-
-  const setupEventHandlers = () => {
-    // Handle connection events
-    addHandler('connect', (data) => {
-      console.log('✅ WebSocket Connected:', data);
-      setError(null);
-      setCurrentInstanceId(data.terminalId || null);
-      setConnectionType(data.connectionType === 'websocket' ? `Connected via WebSocket${data.terminalId ? ` (${data.terminalId.slice(0,8)})` : ''}` : 
-                      'Connected via WebSocket');
-    });
-    
-    // Handle ALL terminal output (the parser will handle Claude vs system content)
-    addHandler('terminal:output', (data) => {
+    // Terminal output handler
+    const outputHandler = (data) => {
       if (data.output && data.terminalId) {
-        console.log(`📺 Terminal output for ${data.terminalId.slice(0,8)}:`, data.output.slice(0, 100));
+        console.log(`📺 SPARC Singleton: Processing output for ${data.terminalId.slice(0,8)}:`, data.output.slice(0, 100));
         
         setOutput(prev => ({
           ...prev,
           [data.terminalId]: (prev[data.terminalId] || '') + data.output
         }));
       }
-    });
+    };
     
-    // Handle alternative message format
-    addHandler('message', (data) => {
-      if ((data.type === 'output' || data.type === 'terminal_output') && data.terminalId) {
-        const output = data.output || data.data;
-        if (output) {
-          console.log(`📺 Message output for ${data.terminalId.slice(0,8)}:`, output.slice(0, 100));
-          
-          setOutput(prev => ({
-            ...prev,
-            [data.terminalId]: (prev[data.terminalId] || '') + output
-          }));
-        }
-      }
-    });
-    
-    // Handle instance status updates
-    addHandler('terminal:status', (data) => {
-      console.log('📲 Terminal status update received:', data);
+    // Terminal status handler
+    const statusHandler = (data) => {
+      console.log('📲 SPARC Singleton: Status update received:', data);
       
       setInstances(prev => prev.map(instance => 
         instance.id === data.terminalId 
           ? { ...instance, status: data.status as ClaudeInstance['status'] }
           : instance
       ));
-      
-      if (data.instanceId === selectedInstance) {
-        const timestamp = new Date().toLocaleTimeString();
-        const statusMessage = `[${timestamp}] Status changed to: ${data.status}\n`;
-        setOutput(prev => ({
-          ...prev,
-          [data.instanceId]: (prev[data.instanceId] || '') + statusMessage
-        }));
-      }
-    });
-    
-    // Handle connection errors
-    addHandler('error', (error) => {
-      console.error('WebSocket Connection error:', error);
-      setError(error.message || error.error || 'Connection error');
-      setConnectionType('Connection Error');
-    });
-    
-    // Handle disconnection
-    addHandler('disconnect', (data) => {
-      console.log('🔌 WebSocket Disconnected:', data);
-      setConnectionType('Disconnected');
-      if (data.instanceId === selectedInstance) {
-        setCurrentInstanceId(null);
-      }
-    });
-  };
-
-  const cleanupEventHandlers = () => {
-    eventHandlersRef.current.clear();
-    if (socket) {
-      socket.close();
-      setSocket(null);
-      setIsConnected(false);
-    }
-  };
-
-  // SSE Status Stream Management
-  const connectToStatusStream = () => {
-    console.log('🔗 Connecting to SSE status stream...');
-    
-    // Close existing connection if any
-    if (statusEventSource) {
-      statusEventSource.close();
-    }
-    
-    try {
-      // Connect to the SSE status endpoint that backend provides
-      const eventSource = new EventSource(`${apiUrl}/api/status/stream`);
-      
-      eventSource.onopen = () => {
-        console.log('✅ SSE Status stream connected');
-        setIsStatusConnected(true);
-        setError(null);
-      };
-      
-      eventSource.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log('📨 SSE Status message received:', data.type, data);
-          
-          // Handle status updates for instances
-          if (data.type === 'instance:status') {
-            console.log(`📲 Status update for ${data.instanceId}: ${data.status}`);
-            
-            // Update instances state with new status
-            setInstances(prev => prev.map(instance => 
-              instance.id === data.instanceId 
-                ? { ...instance, status: data.status as ClaudeInstance['status'] }
-                : instance
-            ));
-            
-            // Also trigger existing event handlers for compatibility
-            triggerHandlers('terminal:status', {
-              terminalId: data.instanceId,
-              status: data.status,
-              timestamp: data.timestamp
-            });
-          }
-          
-          // Handle connection confirmations
-          if (data.type === 'connected') {
-            console.log('✅ SSE Status stream connection confirmed');
-          }
-          
-        } catch (parseError) {
-          console.error('❌ SSE Status message parsing error:', parseError);
-        }
-      };
-      
-      eventSource.onerror = (error) => {
-        console.error('❌ SSE Status stream error:', error);
-        setIsStatusConnected(false);
-        
-        // Only attempt to reconnect if the connection was previously established
-        if (eventSource.readyState === EventSource.CLOSED || eventSource.readyState === EventSource.CONNECTING) {
-          setTimeout(() => {
-            console.log('🔄 Attempting to reconnect SSE status stream...');
-            connectToStatusStream();
-          }, 2000);
-        }
-      };
-      
-      setStatusEventSource(eventSource);
-      
-    } catch (error) {
-      console.error('❌ Failed to create SSE status connection:', error);
-      setError('Failed to connect to status stream');
-    }
-  };
-  
-  const disconnectStatusStream = () => {
-    console.log('🔌 Disconnecting from SSE status stream');
-    
-    if (statusEventSource) {
-      statusEventSource.close();
-      setStatusEventSource(null);
-      setIsStatusConnected(false);
-    }
-  };
-
-  // WebSocket connection management
-  const connectToTerminal = (terminalId: string) => {
-    if (!terminalId || terminalId === 'undefined' || !terminalId.trim()) {
-      console.error('🚨 Cannot connect WebSocket with invalid terminal ID:', terminalId);
-      setError('Invalid terminal ID for WebSocket connection');
-      return;
-    }
-
-    console.log('🔄 Connecting WebSocket to terminal:', terminalId);
-    
-    // Clean up existing connection
-    if (socket) {
-      console.log('🔌 Closing existing WebSocket connection');
-      socket.close();
-      setSocket(null);
-    }
-
-    try {
-      // Connect to WebSocket terminal endpoint - SPARC UNIFIED ARCHITECTURE: Single server
-      // HTTP API + WebSocket Terminal both on localhost:3000
-      const wsUrl = apiUrl.replace('http://', 'ws://')
-                          .replace('https://', 'wss://');
-      const ws = new WebSocket(`${wsUrl}/terminal`);
-      
-      ws.onopen = () => {
-        console.log('✅ WebSocket connection established');
-        setIsConnected(true);
-        setError(null);
-        setSocket(ws);
-        
-        // Send terminal connection message
-        ws.send(JSON.stringify({
-          type: 'connect',
-          terminalId: terminalId,
-          timestamp: Date.now()
-        }));
-        
-        triggerHandlers('connect', { 
-          transport: 'websocket', 
-          terminalId,
-          connectionType: 'websocket'
-        });
-      };
-      
-      ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log('📨 SPARC: WebSocket message received:', data.type, data);
-          
-          // Route messages to appropriate handlers
-          if (data.type === 'output' || data.type === 'terminal_output') {
-            triggerHandlers('terminal:output', {
-              output: data.data || data.output,
-              terminalId: data.terminalId || terminalId,
-              timestamp: data.timestamp
-            });
-          } else if (data.type === 'echo') {
-            // Handle echo messages for immediate feedback
-            triggerHandlers('terminal:output', {
-              output: data.data,
-              terminalId: data.terminalId || terminalId,
-              timestamp: data.timestamp,
-              isEcho: true
-            });
-          } else if (data.type === 'status') {
-            triggerHandlers('terminal:status', {
-              terminalId: data.terminalId || terminalId,
-              status: data.status,
-              timestamp: data.timestamp
-            });
-          } else if (data.type === 'connect') {
-            console.log('✅ SPARC: WebSocket connection confirmed for terminal:', data.terminalId);
-          } else if (data.type === 'error') {
-            console.error('❌ SPARC: WebSocket error from server:', data.error);
-            setError(data.error);
-          }
-          
-          // Generic message handler
-          triggerHandlers('message', data);
-          
-        } catch (parseError) {
-          console.error('WebSocket message parsing error:', parseError);
-        }
-      };
-      
-      ws.onerror = (error) => {
-        console.error('❌ WebSocket error:', error);
-        setError('WebSocket connection error');
-        triggerHandlers('error', error);
-      };
-      
-      ws.onclose = (event) => {
-        console.log('🔌 WebSocket connection closed:', event.code, event.reason);
-        setIsConnected(false);
-        setSocket(null);
-        
-        triggerHandlers('disconnect', { 
-          code: event.code, 
-          reason: event.reason 
-        });
-      };
-      
-    } catch (error) {
-      console.error('Failed to create WebSocket connection:', error);
-      setError(error instanceof Error ? error.message : 'WebSocket connection failed');
-    }
-  };
-
-  const disconnectFromInstance = () => {
-    console.log('🔌 Disconnecting from current instance');
-    
-    if (socket) {
-      socket.close(1000, 'Manual disconnect');
-      setSocket(null);
-    }
-    
-    setIsConnected(false);
-    setCurrentInstanceId(null);
-  };
-
-  // Update connection status when connectionError changes
-  useEffect(() => {
-    if (connectionError) {
-      setError(connectionError);
-      setConnectionType('Connection Error');
-    } else if (isConnected) {
-      setError(null);
-    }
-  }, [connectionError, isConnected]);
-  
-  // Monitor SSE status connection and update connection type
-  useEffect(() => {
-    const updateConnectionStatus = () => {
-      if (isStatusConnected && isConnected) {
-        setConnectionType(`Connected (WebSocket + SSE Status)`);
-      } else if (isStatusConnected) {
-        setConnectionType('Connected (SSE Status Only)');
-      } else if (isConnected) {
-        setConnectionType('Connected (WebSocket Only)');
-      } else {
-        setConnectionType('Disconnected');
-      }
     };
     
-    updateConnectionStatus();
-  }, [isStatusConnected, isConnected]);
+    // Connection handler
+    const connectHandler = (data) => {
+      console.log('✅ SPARC Singleton: Connected to terminal:', data);
+      setError(null);
+      setConnectionType(`Connected via WebSocket${data.terminalId ? ` (${data.terminalId.slice(0,8)})` : ''}`);
+    };
+    
+    // Error handler
+    const errorHandler = (error) => {
+      console.error('❌ SPARC Singleton: Error:', error);
+      setError(error.message || error.error || 'Connection error');
+      setConnectionType('Connection Error');
+    };
+    
+    // Disconnect handler
+    const disconnectHandler = (data) => {
+      console.log('🔌 SPARC Singleton: Disconnected:', data);
+      setConnectionType('Disconnected');
+    };
+    
+    // Add handlers
+    addHandler('terminal:output', outputHandler);
+    addHandler('terminal:status', statusHandler);
+    addHandler('connect', connectHandler);
+    addHandler('error', errorHandler);
+    addHandler('disconnect', disconnectHandler);
+    
+    return () => {
+      // Cleanup singleton handlers on unmount
+      removeHandler('terminal:output', outputHandler);
+      removeHandler('terminal:status', statusHandler);
+      removeHandler('connect', connectHandler);
+      removeHandler('error', errorHandler);
+      removeHandler('disconnect', disconnectHandler);
+    };
+  }, [addHandler, removeHandler]);
+
+  // SPARC FIX: Connection status management using singleton
+  useEffect(() => {
+    if (isConnected) {
+      setError(null);
+      setConnectionType('Connected (WebSocket)');
+    } else {
+      setConnectionType('Disconnected');
+    }
+  }, [isConnected]);
 
   const fetchInstances = async () => {
     try {
@@ -475,21 +188,26 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
         
         console.log(`✅ Claude instance ${instance.id} created successfully`);
         
-        // Connect to the new instance terminal WebSocket  
-        connectToTerminal(instance.id);
+        // Connect to the new instance using singleton
+        connect(instance.id);
         
-        // Update instances list
-        await fetchInstances();
+        // SPARC FIX: Add instance to state manually instead of fetchInstances()
+        // This prevents race condition with SSE status updates
+        setInstances(prev => [...prev, {
+          id: instance.id,
+          name: instance.name || `Claude ${instance.id}`,
+          status: instance.status,
+          pid: instance.pid,
+          startTime: new Date(instance.created || Date.now())
+        }]);
         
-        // Set up the terminal for WebSocket connection
-        setCurrentInstanceId(instance.id);
+        // Set up the terminal state
         setSelectedInstance(instance.id);
         setOutput(prev => ({ ...prev, [instance.id]: 'Claude instance created! Connecting to WebSocket...\n' }));
+        setMessages(prev => ({ ...prev, [instance.id]: [] }));
+        setLastProcessedPosition(prev => ({ ...prev, [instance.id]: 0 }));
         
-        // Ensure SSE status stream is connected for status updates
-        if (!isStatusConnected) {
-          connectToStatusStream();
-        }
+        // SPARC FIX: Status updates handled via WebSocket
         
         console.log('✅ Real Claude terminal ready for WebSocket connection');
       } else {
@@ -521,7 +239,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       return;
     }
     
-    if (!input.trim()) {
+    if (!input || !input.trim()) {
       console.warn('Cannot send empty input');
       return;
     }
@@ -532,24 +250,36 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       return;
     }
     
-    if (isConnected && socket) {
-      console.log('⌨️ SPARC: Sending input via WebSocket to instance:', selectedInstance, 'Input:', input);
-      try {
-        // SPARC FIX: Use socket.send() method properly with JSON message format
-        socket.send(JSON.stringify({
-          type: 'input',
-          data: input,
-          terminalId: selectedInstance,
-          timestamp: Date.now()
-        }));
-        setError(null);
-      } catch (err) {
-        console.error('Failed to send WebSocket command:', err);
-        setError(`Failed to send command: ${err instanceof Error ? err.message : err}`);
-      }
-    } else {
+    if (!isConnected) {
       console.warn('Not connected to WebSocket, cannot send input');
       setError('Not connected to terminal');
+      return;
+    }
+
+    // SPARC FIX: Proper line-based input handling
+    const trimmedInput = input.trim();
+    console.log('⌨️ SPARC: Sending complete command line to Claude CLI:', trimmedInput);
+    
+    try {
+      // Send complete command with newline terminator for proper CLI execution
+      const commandLine = trimmedInput + '\n';
+      
+      const message = {
+        type: 'input',
+        data: commandLine,
+        terminalId: selectedInstance,
+        timestamp: Date.now()
+      };
+      
+      console.log('📤 SPARC Singleton: Sending WebSocket message:', message);
+      send(message);
+      
+      setError(null);
+      console.log('✅ SPARC Singleton: Command sent successfully to Claude CLI');
+      
+    } catch (err) {
+      console.error('Failed to send WebSocket command:', err);
+      setError(`Failed to send command: ${err instanceof Error ? err.message : err}`);
     }
   };
 
@@ -568,7 +298,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
         // Clean up UI state for terminated instance
         if (selectedInstance === instanceId) {
           setSelectedInstance(null);
-          disconnectFromInstance();
+          disconnect();
         }
         
         setOutput(prev => {
@@ -604,38 +334,43 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       return;
     }
     
-    console.log('Selecting validated instance:', instanceId);
+    console.log('🎯 SPARC Singleton: Selecting instance with clean switch:', instanceId);
     
-    if (selectedInstance && selectedInstance !== instanceId) {
-      console.log('Disconnecting from previous instance:', selectedInstance);
-      disconnectFromTerminal();
+    // SPARC FIX: Always disconnect first for clean switch
+    if (currentTerminalId && currentTerminalId !== instanceId) {
+      console.log('🔌 SPARC Singleton: Disconnecting from previous instance:', currentTerminalId);
+      disconnect();
     }
     
     setSelectedInstance(instanceId);
+    
+    // Initialize output buffer for new instance if needed
     if (!output[instanceId]) {
       setOutput(prev => ({ ...prev, [instanceId]: '' }));
+      setMessages(prev => ({ ...prev, [instanceId]: [] }));
+      setLastProcessedPosition(prev => ({ ...prev, [instanceId]: 0 }));
     }
     
     const instance = instances.find(i => i.id === instanceId);
     if (instance && instance.status === 'running') {
-      setTimeout(async () => {
-        try {
-          // WebSocket connections to terminal server
-          console.log('🔗 SPARC: Starting WebSocket for selected terminal:', instanceId);
-          connectToTerminal(instanceId);
-          console.log('✅ SPARC: Connecting to selected terminal:', instanceId);
-        } catch (wsError) {
-          console.log('⚠️ SPARC: Failed to connect to selected terminal:', wsError);
-          setError(`Failed to connect: ${wsError instanceof Error ? wsError.message : wsError}`);
-        }
-      }, 100);
+      // SPARC FIX: Only connect if not already connected to this instance
+      if (currentTerminalId !== instanceId) {
+        console.log('🔗 SPARC Singleton: Connecting exclusively to selected terminal:', instanceId);
+        // Small delay to ensure clean disconnect
+        setTimeout(() => connect(instanceId), 100);
+      } else {
+        console.log('✅ SPARC Singleton: Already connected to selected instance');
+      }
+    } else {
+      console.warn(`⚠️ Instance ${instanceId} is not running (status: ${instance?.status})`);
+      setError(`Instance ${instanceId} is not running`);
     }
   };
 
   const selectedInstanceObject = instances.find(i => i.id === selectedInstance);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6" data-testid="claude-instance-manager">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center mb-8">
@@ -648,7 +383,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
           {/* API Versioning Info for Development */}
           {process.env.NODE_ENV === 'development' && (
             <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-              API: Instance operations via /api/claude/ • SSE streaming via /api/v1/ • Status: {isStatusConnected ? '✅ Connected' : '❌ Disconnected'}
+              API: Instance operations via /api/claude/ • <span data-testid="connection-status">WebSocket connection: {isConnected ? '✅ Connected' : '❌ Disconnected'}</span>
             </div>
           )}
         </div>
@@ -699,7 +434,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
                       <div 
                         key={instance.id}
                         className={cn(
-                          'p-4 rounded-lg border cursor-pointer transition-all duration-200',
+                          'claude-instance-item p-4 rounded-lg border cursor-pointer transition-all duration-200',
                           'hover:border-blue-300 dark:hover:border-blue-600',
                           selectedInstance === instance.id 
                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-500' 
@@ -778,6 +513,14 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
               </div>
             </CardContent>
           </Card>
+        )}
+        
+        {/* SPARC: Render tracking for performance debugging */}
+        {process.env.NODE_ENV === 'development' && (
+          <RenderTracker 
+            componentName="ClaudeInstanceManager" 
+            data={{ instancesCount: instances.length, selectedInstance, outputKeys: Object.keys(output) }}
+          />
         )}
       </div>
     </div>

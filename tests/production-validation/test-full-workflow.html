@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Claude Instance Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border: 1px solid #ccc; }
+        .running { background: #d4edda; }
+        .starting { background: #fff3cd; }
+        button { padding: 10px 20px; margin: 10px 0; }
+        #log { background: #f8f9fa; padding: 10px; height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Claude Instance Test Page</h1>
+    
+    <button onclick="createInstance()">Create Instance</button>
+    <button onclick="connectSSE()">Connect SSE</button>
+    <button onclick="checkInstances()">Check Instances</button>
+    
+    <div id="status" class="status">Status: Not connected</div>
+    <div id="instances"></div>
+    <div id="log"></div>
+
+    <script>
+        let eventSource = null;
+        const apiUrl = 'http://localhost:3000';
+        
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${time}] ${msg}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        async function createInstance() {
+            log('Creating instance...');
+            try {
+                const response = await fetch(`${apiUrl}/api/claude/instances`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        instanceType: 'prod',
+                        command: ['claude'],
+                        usePty: true
+                    })
+                });
+                const data = await response.json();
+                log(`✅ Instance created: ${data.instance.id} (PID: ${data.instance.pid})`);
+                log(`Initial status: ${data.instance.status}`);
+            } catch (err) {
+                log(`❌ Error: ${err.message}`);
+            }
+        }
+        
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
+            
+            log('Connecting to SSE status stream...');
+            eventSource = new EventSource(`${apiUrl}/api/status/stream`);
+            
+            eventSource.onopen = () => {
+                log('✅ SSE Connected');
+                document.getElementById('status').textContent = 'Status: SSE Connected';
+                document.getElementById('status').className = 'status running';
+            };
+            
+            eventSource.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    log(`📨 SSE Message: ${data.type}`);
+                    
+                    if (data.type === 'instance:status') {
+                        log(`📊 Status Update: ${data.instanceId} → ${data.status}`);
+                        updateInstanceStatus(data.instanceId, data.status);
+                    }
+                } catch (err) {
+                    log(`Parse error: ${err.message}`);
+                }
+            };
+            
+            eventSource.onerror = (err) => {
+                log('❌ SSE Error');
+                document.getElementById('status').textContent = 'Status: SSE Error';
+                document.getElementById('status').className = 'status';
+            };
+        }
+        
+        async function checkInstances() {
+            log('Fetching instances...');
+            try {
+                const response = await fetch(`${apiUrl}/api/claude/instances`);
+                const data = await response.json();
+                
+                const instancesDiv = document.getElementById('instances');
+                instancesDiv.innerHTML = '<h3>Instances:</h3>';
+                
+                data.instances.forEach(inst => {
+                    const div = document.createElement('div');
+                    div.className = `status ${inst.status}`;
+                    div.innerHTML = `ID: ${inst.id} | Status: ${inst.status} | PID: ${inst.pid}`;
+                    instancesDiv.appendChild(div);
+                    log(`Instance: ${inst.id} - ${inst.status}`);
+                });
+            } catch (err) {
+                log(`❌ Error: ${err.message}`);
+            }
+        }
+        
+        function updateInstanceStatus(id, status) {
+            // Update UI if instance div exists
+            const instanceDivs = document.querySelectorAll('#instances .status');
+            instanceDivs.forEach(div => {
+                if (div.textContent.includes(id)) {
+                    div.className = `status ${status}`;
+                    div.innerHTML = div.innerHTML.replace(/Status: \w+/, `Status: ${status}`);
+                }
+            });
+        }
+        
+        // Auto-connect on load
+        window.onload = () => {
+            log('Test page loaded');
+            connectSSE();
+            checkInstances();
+        };
+    </script>
+</body>
+</html>
