@@ -1,0 +1,163 @@
+🚀 SPARC UNIFIED SERVER running on http://localhost:3000
+✅ HTTP API + WebSocket Terminal on single port!
+📡 Claude Terminal endpoints available:
+   - WebSocket Terminal: ws://localhost:3000/terminal
+   - Health: http://localhost:3000/health
+   - Claude Instances API: http://localhost:3000/api/claude/instances
+   - Claude Terminal Stream: http://localhost:3000/api/claude/instances/{instanceId}/terminal/stream
+   - Terminal Input: http://localhost:3000/api/claude/instances/{instanceId}/terminal/input
+🎉 SPARC: Unified architecture - WebSocket + HTTP on single server!
+🆕 SPARC Creating Claude instance: { command: null, instanceType: 'interactive', usePty: true }
+🤖 Using Claude in interactive mode for AI responses
+🔍 Enhanced Claude CLI authentication check...
+✅ Claude CLI credentials found at: /home/codespace/.claude/.credentials.json
+✅ Claude authentication verified: credentials_file (reliable: true)
+📁 Using base directory for instance type 'interactive': /workspaces/agent-feed
+🚀 SPARC Enhanced Claude process spawning (PTY: true):
+   Command: claude 
+   Working Directory: /workspaces/agent-feed
+   Instance Type: interactive
+   Instance ID: claude-1619
+🚀 Creating REAL Claude instance (Mock Claude system removed)
+✅ PTY process created successfully for claude-1619 with Claude flags
+🔧 Setting up process handlers for claude-1619 (pty mode)
+🔧 Setting up PTY handlers for claude-1619
+🔧 PTY Claude process spawned: claude-1619
+📁 Working directory: /workspaces/agent-feed
+📊 PTY Process configuration:
+   PID: 271524
+   Killed: undefined
+   Process Type: PTY (better terminal emulation)
+📡 Ready to stream REAL Claude PTY output
+📡 Broadcasting initial 'starting' status for claude-1619
+📡 Broadcasting status starting for instance claude-1619
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+✅ SPARC Enhanced Claude process spawned: claude-1619 (PID: 271524)
+   Working Directory: /workspaces/agent-feed
+   Process Type: pty
+   PTY Enabled: true
+✅ PTY Claude process claude-1619 ready (PID: 271524)
+🤖 Initializing Claude AI interactive mode...
+📡 Broadcasting status running for instance claude-1619
+   → Instance connections: 0
+   → General status connections: 0
+📊 Total broadcasts sent: 0
+🚀 Sending Claude initialization sequence...
+📤 REAL Claude claude-1619 PTY output (2 bytes): 
+
+📝 Empty content after filtering - raw data: "
+"
+📤 REAL Claude claude-1619 PTY output (6 bytes): [?25l
+📤 Broadcasting incremental output for claude-1619: 1 bytes (pos: 0 -> 1)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (1 chars)
+📝 Content preview: ""
+📤 REAL Claude claude-1619 PTY output (8 bytes): [?2004h
+📤 Broadcasting incremental output for claude-1619: 1 bytes (pos: 1 -> 2)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (1 chars)
+📝 Content preview: ""
+📤 REAL Claude claude-1619 PTY output (6 bytes): [?25h
+🚫 Blocked rapid duplicate (within 50ms)
+📤 REAL Claude claude-1619 PTY output (6 bytes): [?25h
+🚫 Blocked rapid duplicate (within 50ms)
+📤 REAL Claude claude-1619 PTY output (8 bytes): [?2004l
+📤 Broadcasting incremental output for claude-1619: 1 bytes (pos: 2 -> 3)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (1 chars)
+📝 Content preview: ""
+📤 REAL Claude claude-1619 PTY output (76 bytes): [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+🤖 DETECTED Claude AI response: [38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m
+📝 Empty content after filtering - raw data: "[38;2;215;119;87m╭───────────────────────────────────────────────────╮[39m"
+📊 No new output for claude-1619 - already sent
+📤 Broadcasting raw Claude output (76 chars) - bypassing filters
+📤 REAL Claude claude-1619 PTY output (680 bytes): 
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                         [38;2;215;119;87m│[39m
+[38;2;215;119;87m│[39m                                         ...
+🤖 DETECTED Claude AI response: 
+[38;2;215;119;87m│[39m [38;2;215;119;87m✻[39m Welcome to [1mClaude Code[22m!                
+📤 Broadcasting incremental output for claude-1619: 102 bytes (pos: 3 -> 105)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (102 chars)
+📝 Content preview: "✻ Welcome to Claude Code!
+/help for help, /status for your current setup
+cwd: /workspaces/agent-feed
+"
+📤 REAL Claude claude-1619 PTY output (135 bytes): 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+🤖 DETECTED Claude AI response: 
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────
+📝 Empty content after filtering - raw data: "
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m"
+📊 No new output for claude-1619 - already sent
+📤 Broadcasting raw Claude output (135 chars) - bypassing filters
+📤 REAL Claude claude-1619 PTY output (356 bytes): 
+[2m[38;2;136;136;136m│[39m[22m > [7m [27m                                                                                              [2m[38;2;136;136;136m│[39m[22m
+[2m[38;2;136;136;13...
+🤖 DETECTED Claude AI response: 
+[2m[38;2;136;136;136m│[39m[22m > [7m [27m                                                   
+📤 Broadcasting incremental output for claude-1619: 20 bytes (pos: 105 -> 125)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (20 chars)
+📝 Content preview: ">
+? for shortcuts
+"
+📤 REAL Claude claude-1619 PTY output (8 bytes): [?1004h
+📤 Broadcasting incremental output for claude-1619: 1 bytes (pos: 125 -> 126)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (1 chars)
+📝 Content preview: ""
+📤 REAL Claude claude-1619 PTY output (503 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+🤖 DETECTED Claude AI response: [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭───────────────────────────
+📤 Broadcasting incremental output for claude-1619: 54 bytes (pos: 126 -> 180)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (54 chars)
+📝 Content preview: "> Try "write a test for WebSocketSingletonContext.tsx""
+📤 REAL Claude claude-1619 PTY output (91 bytes): 
+  [2mFound invalid settings files. They will be ignored. Run /doctor for details.[22m
+
+🤖 DETECTED Claude AI response: 
+  [2mFound invalid settings files. They will be ignored. Run /doctor for details.[22m
+
+📤 Broadcasting incremental output for claude-1619: 76 bytes (pos: 180 -> 256)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (76 chars)
+📝 Content preview: "Found invalid settings files. They will be ignored. Run /doctor for details."
+📤 REAL Claude claude-1619 PTY output (753 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38;2;136;1...
+🤖 DETECTED Claude AI response: [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭───────────────────────────
+📤 Broadcasting incremental output for claude-1619: 78 bytes (pos: 256 -> 334)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (78 chars)
+📝 Content preview: ">
+Found invalid settings files. They will be ignored. Run /doctor for details."
+🛑 Shutting down HTTP/SSE server...
+✅ HTTP/SSE server shutdown complete
+📤 REAL Claude claude-1619 PTY output (672 bytes): [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭──────────────────────────────────────────────────────────────────────────────────────────────────╮[39m[22m
+[2m[38...
+🤖 DETECTED Claude AI response: [2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
+[2m[38;2;136;136;136m╭───────────────────
+📤 Broadcasting incremental output for claude-1619: 1 bytes (pos: 334 -> 335)
+📤 SPARC: Fallback to SSE broadcasting for claude-1619
+⚠️ No connections for claude-1619 - message will be buffered
+📤 Broadcasting Claude output (1 chars)
+📝 Content preview: ">"
+🛑 Shutting down HTTP/SSE server...
+✅ HTTP/SSE server shutdown complete

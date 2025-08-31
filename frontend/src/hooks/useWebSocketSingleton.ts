@@ -90,11 +90,19 @@ export const useWebSocketSingleton = (apiUrl: string = 'http://localhost:3000'):
   // WebSocket connection management
   const createConnection = useCallback(async (terminalId: string): Promise<WebSocket> => {
     if (globalWebSocket?.readyState === WebSocket.OPEN) {
-      console.log('🔄 SPARC Singleton: Reusing existing connection');
+      console.log('🔄 SPARC Singleton: Reusing existing connection for terminal:', terminalId);
+      
+      // Send connect message for new terminal on existing connection
+      globalWebSocket.send(JSON.stringify({
+        type: 'connect',
+        terminalId,
+        timestamp: Date.now()
+      }));
+      
       return globalWebSocket;
     }
 
-    console.log('🚀 SPARC Singleton: Creating new WebSocket connection');
+    console.log('🚀 SPARC Singleton: Creating new WebSocket connection for terminal:', terminalId);
     
     const wsUrl = apiUrl.replace('http://', 'ws://').replace('https://', 'wss://');
     const ws = new WebSocket(`${wsUrl}/terminal`);
@@ -174,17 +182,21 @@ export const useWebSocketSingleton = (apiUrl: string = 'http://localhost:3000'):
       return;
     }
 
+    // Extract base instance ID if formatted (e.g., "claude-6038 (Claude AI)" -> "claude-6038")
+    const baseTerminalId = terminalId.includes('(') ? terminalId.split(' (')[0].trim() : terminalId;
+    console.log('🎯 SPARC Singleton: Connecting to base terminal ID:', baseTerminalId, 'from:', terminalId);
+
     // StrictMode protection: delay connection if development mode
     if (process.env.NODE_ENV === 'development') {
       console.log('🛡️ SPARC Singleton: Dev mode detected, delaying connection');
       clearTimeout(strictModeDelayRef.current);
       strictModeDelayRef.current = setTimeout(() => {
         if (mountedRef.current) {
-          connectImmediate(terminalId);
+          connectImmediate(baseTerminalId);
         }
       }, 100);
     } else {
-      connectImmediate(terminalId);
+      connectImmediate(baseTerminalId);
     }
 
     function connectImmediate(terminalId: string) {
@@ -192,7 +204,12 @@ export const useWebSocketSingleton = (apiUrl: string = 'http://localhost:3000'):
       setCurrentTerminalId(terminalId);
 
       if (!globalConnectionPromise) {
+        console.log('🚀 SPARC Singleton: Initiating new connection for:', terminalId);
         globalConnectionPromise = createConnection(terminalId);
+      } else {
+        console.log('🔄 SPARC Singleton: Reusing connection, sending connect message for:', terminalId);
+        // If connection already exists, just send connect message
+        createConnection(terminalId);
       }
 
       globalConnectionPromise.catch(error => {
@@ -225,8 +242,14 @@ export const useWebSocketSingleton = (apiUrl: string = 'http://localhost:3000'):
   // Send function
   const send = useCallback((message: object) => {
     if (globalWebSocket?.readyState === WebSocket.OPEN) {
-      const messageStr = JSON.stringify(message);
-      console.log('📤 SPARC Singleton: Sending message:', messageStr);
+      // Extract base terminal ID for consistent routing
+      const msg = message as any;
+      if (msg.terminalId && msg.terminalId.includes('(')) {
+        msg.terminalId = msg.terminalId.split(' (')[0].trim();
+      }
+      
+      const messageStr = JSON.stringify(msg);
+      console.log('📤 SPARC Singleton: Sending message with base terminal ID:', messageStr.slice(0, 200));
       globalWebSocket.send(messageStr);
     } else {
       console.warn('⚠️ SPARC Singleton: Cannot send, WebSocket not connected');

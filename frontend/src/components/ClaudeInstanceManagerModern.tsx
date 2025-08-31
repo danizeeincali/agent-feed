@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '../lib/utils';
 import { nldCapture } from '../utils/nld-ui-capture';
-import { ClaudeInstanceButtons, ChatInterface } from './claude-manager';
+import { ClaudeInstanceButtons } from './claude-manager';
+import DualModeInterface from './claude-manager/DualModeInterface';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { useWebSocketSingleton } from '../hooks/useWebSocketSingleton';
@@ -35,9 +36,14 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
   const webSocketSingleton = useWebSocketSingleton(apiUrl);
   const { isConnected, connect, disconnect, send, addHandler, removeHandler, currentTerminalId } = webSocketSingleton;
   
-  // SPARC FIX: Setup singleton event handlers only
+  // SPARC FIX: Setup singleton event handlers and status polling
   useEffect(() => {
     fetchInstances();
+    
+    // Poll for status updates every 2 seconds to catch status changes
+    const statusPolling = setInterval(() => {
+      fetchInstances();
+    }, 2000);
     
     // Terminal output handler
     const outputHandler = (data) => {
@@ -90,7 +96,8 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
     addHandler('disconnect', disconnectHandler);
     
     return () => {
-      // Cleanup singleton handlers on unmount
+      // Cleanup polling and singleton handlers on unmount
+      clearInterval(statusPolling);
       removeHandler('terminal:output', outputHandler);
       removeHandler('terminal:status', statusHandler);
       removeHandler('connect', connectHandler);
@@ -328,42 +335,45 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       return;
     }
     
-    if (!/^claude-[a-zA-Z0-9]+$/.test(instanceId)) {
-      console.error('Instance ID does not match expected format:', instanceId);
-      setError(`Invalid instance ID format: ${instanceId}`);
+    // Extract base instance ID if formatted
+    const baseInstanceId = instanceId.includes('(') ? instanceId.split(' (')[0].trim() : instanceId;
+    
+    if (!/^claude-[a-zA-Z0-9]+$/.test(baseInstanceId)) {
+      console.error('Instance ID does not match expected format:', baseInstanceId);
+      setError(`Invalid instance ID format: ${baseInstanceId}`);
       return;
     }
     
-    console.log('🎯 SPARC Singleton: Selecting instance with clean switch:', instanceId);
+    console.log('🎯 SPARC Singleton: Selecting instance with clean switch:', baseInstanceId, 'from:', instanceId);
     
     // SPARC FIX: Always disconnect first for clean switch
-    if (currentTerminalId && currentTerminalId !== instanceId) {
+    if (currentTerminalId && currentTerminalId !== baseInstanceId) {
       console.log('🔌 SPARC Singleton: Disconnecting from previous instance:', currentTerminalId);
       disconnect();
     }
     
-    setSelectedInstance(instanceId);
+    setSelectedInstance(baseInstanceId);
     
     // Initialize output buffer for new instance if needed
-    if (!output[instanceId]) {
-      setOutput(prev => ({ ...prev, [instanceId]: '' }));
-      setMessages(prev => ({ ...prev, [instanceId]: [] }));
-      setLastProcessedPosition(prev => ({ ...prev, [instanceId]: 0 }));
+    if (!output[baseInstanceId]) {
+      setOutput(prev => ({ ...prev, [baseInstanceId]: '' }));
+      setMessages(prev => ({ ...prev, [baseInstanceId]: [] }));
+      setLastProcessedPosition(prev => ({ ...prev, [baseInstanceId]: 0 }));
     }
     
-    const instance = instances.find(i => i.id === instanceId);
+    const instance = instances.find(i => i.id === baseInstanceId);
     if (instance && instance.status === 'running') {
       // SPARC FIX: Only connect if not already connected to this instance
-      if (currentTerminalId !== instanceId) {
-        console.log('🔗 SPARC Singleton: Connecting exclusively to selected terminal:', instanceId);
-        // Small delay to ensure clean disconnect
-        setTimeout(() => connect(instanceId), 100);
+      if (currentTerminalId !== baseInstanceId) {
+        console.log('🔗 SPARC Singleton: Connecting exclusively to selected terminal:', baseInstanceId);
+        // Connect immediately to existing running instance
+        connect(baseInstanceId);
       } else {
         console.log('✅ SPARC Singleton: Already connected to selected instance');
       }
     } else {
-      console.warn(`⚠️ Instance ${instanceId} is not running (status: ${instance?.status})`);
-      setError(`Instance ${instanceId} is not running`);
+      console.warn(`⚠️ Instance ${baseInstanceId} is not running (status: ${instance?.status})`);
+      setError(`Instance ${baseInstanceId} is not running`);
     }
   };
 
@@ -486,7 +496,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
           {/* Chat Interface */}
           <div className="lg:col-span-2">
             <div className="h-[600px]">
-              <ChatInterface
+              <DualModeInterface
                 selectedInstance={selectedInstanceObject || null}
                 output={output}
                 connectionType={connectionType}

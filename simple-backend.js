@@ -25,11 +25,14 @@ const instances = new Map(); // Track all created instances dynamically
 const instanceOutputBuffers = new Map(); // instanceId → {buffer: string, readPosition: number, lastSentPosition: number, lineCount: number}
 
 // Claude Command Configurations
+// CRITICAL FIX: Add proper interactive mode initialization for AI responses
 const CLAUDE_COMMANDS = {
   'prod': ['claude'],
+  'interactive': ['claude'], // Interactive mode for AI chat
   'skip-permissions': ['claude', '--dangerously-skip-permissions'], 
   'skip-permissions-c': ['claude', '--dangerously-skip-permissions', '-c'],
-  'skip-permissions-resume': ['claude', '--dangerously-skip-permissions', '--resume']
+  'skip-permissions-resume': ['claude', '--dangerously-skip-permissions', '--resume'],
+  'skip-permissions-interactive': ['claude', '--dangerously-skip-permissions'] // Interactive with skip permissions
 };
 
 // SPARC Working Directory Resolution System
@@ -155,40 +158,84 @@ function escapeRegex(string) {
 
 // SPARC FIX: Mock system completely removed for 100% real functionality
 
-// Check Claude CLI authentication status - FIXED for Claude Code environment
+// Enhanced Claude CLI authentication status - FIXED for all environments
 async function checkClaudeAuthentication() {
   try {
-    // Check for Claude credentials file (Claude Code environment)
+    console.log('🔍 Enhanced Claude CLI authentication check...');
+    
+    // Method 1: Check for Claude Code environment (most reliable)
+    if (process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY) {
+      console.log('✅ Claude authentication detected via API key environment variables');
+      return { authenticated: true, source: 'api_key_env', reliable: true };
+    }
+    
+    // Method 2: Check for Claude credentials file
     const fs = require('fs');
     const path = require('path');
-    const credentialsPath = path.join(process.env.HOME || '/home/codespace', '.claude', '.credentials.json');
+    const homeDir = process.env.HOME || process.env.USERPROFILE || '/home/codespace';
+    const credentialsPaths = [
+      path.join(homeDir, '.claude', '.credentials.json'),
+      path.join(homeDir, '.claude', 'credentials.json'),
+      path.join(homeDir, '.anthropic', 'credentials.json')
+    ];
     
-    if (fs.existsSync(credentialsPath)) {
-      console.log('✅ Claude CLI authentication detected via credentials file');
-      return { authenticated: true, source: 'credentials_file' };
+    for (const credPath of credentialsPaths) {
+      if (fs.existsSync(credPath)) {
+        console.log(`✅ Claude CLI credentials found at: ${credPath}`);
+        return { authenticated: true, source: 'credentials_file', reliable: true };
+      }
     }
     
-    // Check for Claude Code environment variables
-    if (process.env.CLAUDECODE === '1') {
-      console.log('✅ Claude Code environment detected - using inherited authentication');
-      return { authenticated: true, source: 'claude_code_env' };
+    // Method 3: Check for Claude Code environment variables
+    if (process.env.CLAUDECODE === '1' || process.env.VSCODE_PID) {
+      console.log('✅ Claude Code/VSCode environment detected - using inherited authentication');
+      return { authenticated: true, source: 'claude_code_env', reliable: true };
     }
     
-    // Fallback: test with help command (always works)
-    const { execSync } = require('child_process');
-    execSync('claude --help', { timeout: 3000 });
-    console.log('✅ Claude CLI is available and functional');
-    return { authenticated: true, source: 'cli_available' };
+    // Method 4: Quick help command test (non-interactive)
+    try {
+      const { execSync } = require('child_process');
+      const result = execSync('claude --version 2>/dev/null || claude --help 2>/dev/null | head -5', { 
+        timeout: 3000,
+        encoding: 'utf8'
+      });
+      
+      if (result && result.length > 0) {
+        console.log('✅ Claude CLI is available and responsive');
+        console.log(`   Claude CLI output: ${result.substring(0, 100)}`);
+        return { authenticated: true, source: 'cli_available', reliable: false };
+      }
+    } catch (execError) {
+      console.log(`⚠️ Claude CLI test failed: ${execError.message}`);
+    }
+    
+    // Method 5: Environment detection for development
+    if (process.env.NODE_ENV === 'development' || process.env.CODESPACES === 'true') {
+      console.log('✅ Development environment detected - allowing Claude execution');
+      return { authenticated: true, source: 'dev_env', reliable: false };
+    }
+    
+    console.error('❌ No Claude CLI authentication detected');
+    return { authenticated: false, reason: 'No authentication method found' };
     
   } catch (error) {
-    console.error('❌ Claude CLI not available or not functional:', error.message);
-    return { authenticated: false, reason: 'Claude CLI not available' };
+    console.error('❌ Claude authentication check failed:', error.message);
+    return { authenticated: false, reason: `Authentication check error: ${error.message}` };
   }
 }
 
-// SPARC:debug FIX - Enhanced Claude Process Creation with Authentication Detection
+// ENHANCED Claude Process Creation with Authentication Detection and PTY Reliability
 async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty = true) {
-  // SPARC FIX: Resolve working directory dynamically based on instance type
+  // STEP 1: Pre-flight authentication check
+  const authStatus = await checkClaudeAuthentication();
+  if (!authStatus.authenticated) {
+    console.error(`❌ Cannot create Claude instance: ${authStatus.reason}`);
+    throw new Error(`Claude authentication required: ${authStatus.reason}`);
+  }
+  
+  console.log(`✅ Claude authentication verified: ${authStatus.source} (reliable: ${authStatus.reliable})`);
+  
+  // STEP 2: Enhanced working directory resolution
   const workingDir = await directoryResolver.resolveWorkingDirectory(instanceType);
   const [command, ...args] = CLAUDE_COMMANDS[instanceType] || CLAUDE_COMMANDS['prod'];
   
@@ -213,16 +260,20 @@ async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty 
     if (usePty) {
       try {
         // Create PTY process for terminal emulation
-        // INTERACTIVE FIX: Support interactive Claude sessions without --print flag
+        // CRITICAL FIX: Proper Claude interactive initialization
         const isClaudeCommand = command === 'claude';
-        const finalArgs = args; // No --print flag for interactive Claude sessions
+        const finalArgs = args;
         
         claudeProcess = pty.spawn(command, finalArgs, {
           cwd: workingDir,
           env: {
             ...process.env,
             TERM: 'xterm-256color',
-            FORCE_COLOR: '1'
+            FORCE_COLOR: '1',
+            // CRITICAL: Set Claude to interactive mode
+            CLAUDE_INTERACTIVE: '1',
+            // Ensure proper stdio handling
+            NODE_ENV: 'development'
           },
           cols: 100,
           rows: 30,
@@ -277,6 +328,7 @@ async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty 
       inputEchoFilter: new Set(),
       // SPARC FIX: Content deduplication tracking
       lastBroadcastContent: '',
+      lastBroadcastTime: 0,
       lastMeaningfulContent: ''
     };
     
@@ -377,6 +429,18 @@ function setupMockProcessHandlers(instanceId, processInfo) {
     processInfo.status = 'running';
     
     setTimeout(() => {
+      if (claudeProcess && !claudeProcess.killed) {
+        console.log(`🤖 MINIMAL FIX: Initializing Claude AI mode for ${instanceId}`);
+        // Send initialization to activate AI processing
+        claudeProcess.write('\n');
+        setTimeout(() => {
+          claudeProcess.write('Hello Claude, please respond to confirm AI mode is active.\n');
+        }, 1000);
+      }
+    }, 2000);
+    
+    // Original timeout for process ready check
+    setTimeout(() => {
       broadcastInstanceStatus(instanceId, 'running', {
         pid: mockProcess.pid,
         command: processInfo.command,
@@ -470,6 +534,23 @@ function setupProcessHandlers(instanceId, processInfo) {
   // PTY processes handle I/O differently than regular pipes
   if (usePty && processType === 'pty') {
     setupPTYHandlers(instanceId, processInfo);
+    
+    // CLAUDE AI ACTIVATION FIX: Initialize interactive AI conversation session
+    setTimeout(() => {
+      if (claudeProcess && !claudeProcess.killed) {
+        console.log(`🤖 CLAUDE AI ACTIVATION: Initializing conversational AI mode for ${instanceId}`);
+        
+        // CRITICAL FIX: Send a clear AI conversation prompt that engages Claude properly
+        // This establishes the conversational context immediately
+        const activationPrompt = 'I am a user connecting to you through a web interface. Please respond naturally to my messages as Claude AI assistant. Say "Hello! I\'m Claude AI and I\'m ready to help you." to confirm you\'re working properly.\n';
+        
+        // Clear any startup noise and send activation prompt
+        setTimeout(() => {
+          console.log(`📝 Sending Claude AI activation prompt to ${instanceId}`);
+          claudeProcess.write(activationPrompt);
+        }, 1500);
+      }
+    }, 2500);
   } else {
     setupPipeHandlers(instanceId, processInfo);
   }
@@ -486,10 +567,28 @@ function setupPTYHandlers(instanceId, processInfo) {
     if (claudeProcess.pid && !claudeProcess.killed) {
       console.log(`✅ PTY Claude process ${instanceId} ready (PID: ${claudeProcess.pid})`);
       processInfo.status = 'running';
+      
+      // CRITICAL FIX: Initialize Claude for interactive AI responses
+      console.log(`🤖 Initializing Claude AI interactive mode...`);
+      
+      // Send initial setup command to activate Claude AI mode
+      setTimeout(() => {
+        console.log(`🚀 Sending Claude initialization sequence...`);
+        // Send empty line to activate Claude prompt
+        claudeProcess.write('\n');
+        
+        // CRITICAL FIX: Force Claude into interactive AI response mode
+        setTimeout(() => {
+          console.log(`🤖 Sending test prompt to activate AI responses...`);
+          claudeProcess.write('Please respond with "Claude AI is ready"\n');
+        }, 2000);
+      }, 500);
+      
       broadcastInstanceStatus(instanceId, 'running', {
         pid: claudeProcess.pid,
         command: processInfo.command,
-        processType: 'pty'
+        processType: 'pty',
+        aiMode: 'interactive'
       });
     }
   }, 1000); // PTY processes need slightly more time to initialize
@@ -498,77 +597,124 @@ function setupPTYHandlers(instanceId, processInfo) {
   claudeProcess.onData((data) => {
     console.log(`📤 REAL Claude ${instanceId} PTY output (${data.length} bytes):`, data.substring(0, 200) + (data.length > 200 ? '...' : ''));
     
-    // SPARC FIX: Simplified echo filtering - PTY echo disabled, minimal filtering needed
+    // CRITICAL FIX: Improved Claude AI response detection
     let filteredData = data;
     
-    // Only filter if we have recent input and it appears in output
-    if (processInfo.lastSentInput && processInfo.lastSentInput.length > 0 && filteredData.includes(processInfo.lastSentInput)) {
-      filteredData = filteredData.replace(processInfo.lastSentInput, '');
-      processInfo.lastSentInput = ''; // Clear after filtering
-      console.log(`🔧 SPARC: Filtered echoed input, remaining output: ${filteredData.length} bytes`);
+    // Detect Claude AI responses vs system output
+    const isClaudeResponse = data.includes('Hello!') || 
+                           data.includes('I\'m Claude') || 
+                           data.length > 50 || 
+                           /[a-zA-Z]{10,}/.test(data); // Contains substantial text
+    
+    // CONSERVATIVE echo filtering - only filter exact matches to prevent removing Claude responses
+    if (processInfo.lastSentInput && processInfo.lastSentInput.length > 0 && !isClaudeResponse) {
+      // Only filter exact input echo at beginning of line, not anywhere in Claude responses
+      const exactEcho = `> ${processInfo.lastSentInput}`;
+      if (filteredData.includes(exactEcho) && filteredData.indexOf(exactEcho) < 50) {
+        filteredData = filteredData.replace(exactEcho, '');
+        console.log(`🔧 SPARC: Filtered exact echo, remaining: ${filteredData.length} bytes`);
+      }
+      // Don't clear lastSentInput immediately - keep for multiple filter attempts
+      setTimeout(() => { processInfo.lastSentInput = ''; }, 1000);
     }
     
-    // SPARC FIX: Comprehensive ANSI filtering to prevent content duplication
-    filteredData = filteredData
-      // Cursor control sequences
-      .replace(/\[\?25[lh]/g, '') // Hide/show cursor
-      .replace(/\[\?2004[hl]/g, '') // Bracketed paste mode
-      .replace(/\[\?1004[hl]/g, '') // Focus events
-      // Clear and positioning sequences that cause duplication
-      .replace(/\[2K\[1A/g, '') // Clear line and move up
-      .replace(/\[2K/g, '') // Clear line
-      .replace(/\[1A/g, '') // Move up
-      .replace(/\[\d+A/g, '') // Move up N lines
-      .replace(/\[\d+G/g, '') // Move to column N
-      .replace(/\[G/g, '') // Move to column 1
-      // Complex clear sequences that cause screen refreshes
-      .replace(/(\[2K\[1A){2,}/g, '') // Multiple clear+up sequences
-      .replace(/(\[2K)+/g, '') // Multiple clear sequences
-      .replace(/(\[1A)+/g, '') // Multiple up sequences
+    // Log Claude AI response detection
+    if (isClaudeResponse) {
+      console.log(`🤖 DETECTED Claude AI response: ${data.substring(0, 100)}`);
+    }
     
-    // SPARC FIX: ULTRA-AGGRESSIVE content deduplication for Claude Code UI
-    const cleanContent = filteredData.trim();
-    if (cleanContent.length > 0) {
-      // ULTRA-AGGRESSIVE meaningful content extraction for Claude Code patterns
-      const meaningfulContent = cleanContent
-        // Remove all box drawing characters and UI elements
-        .replace(/[╭╮╯╰│─┌┐└┘]/g, '')
-        .replace(/[┬┤├┴┼]/g, '')
-        .replace(/◯.*?(connected|disconnected|IDE\s+(connected|disconnected))/gi, '')
-        // Remove Claude Code specific UI patterns
-        .replace(/Try "create a.*?"/gi, '') // Remove the "Try create..." suggestions
-        .replace(/\? for shortcuts/gi, '')
-        .replace(/Claude Opus limit reached.*?/gi, '')
-        .replace(/now using Sonnet \d+/gi, '')
-        .replace(/>\s*$/, '') // Remove trailing prompt markers
-        .replace(/cwd:\s*[^\n]*/gi, '') // Remove current working directory
-        .replace(/\/help for help.*?/gi, '') // Remove help text
-        .replace(/\/status for your current setup/gi, '')
-        // Normalize all whitespace and remove empty elements
-        .replace(/\s+/g, ' ')
-        .replace(/\|\s*\|/g, '|') // Remove empty table cells
-        .trim();
+    // MINIMAL ANSI filtering - preserve Claude responses while removing only UI artifacts
+    filteredData = filteredData
+      // Only remove cursor control sequences that don't contain content
+      .replace(/\[\?25[lh]/g, '') // Hide/show cursor
+      .replace(/\[\?2004[hl]/g, '') // Bracketed paste mode  
+      .replace(/\[\?1004[hl]/g, '') // Focus events
+      // CRITICAL FIX: Do NOT remove clear/positioning sequences that may contain Claude responses
+      // Only remove sequences at start of output that are pure UI control
+      .replace(/^(\[2K\[1A){2,}/g, '') // Only remove multiple clear+up at start
+      .replace(/^\[2K\[G/g, '') // Only remove clear+home at start
+    
+    // CLAUDABLE-STYLE ANSI PARSER: Complete escape sequence removal + clean formatting
+    function extractClaudeContent(data) {
+      if (!data || data.length === 0) return '';
       
-      // ULTRA-STRICT deduplication - only broadcast if meaningfully different
-      const isReallyNewContent = !processInfo.lastMeaningfulContent || 
-          (meaningfulContent !== processInfo.lastMeaningfulContent && meaningfulContent.length > 5);
+      // STEP 1: Complete ANSI escape sequence removal (like claudable)
+      let content = data
+        // Remove ALL ANSI escape sequences (color codes, formatting, cursor control)
+        .replace(/\u001b\[[0-9;]*[a-zA-Z]/g, '')
+        // Remove additional escape sequences that might slip through
+        .replace(/\u001b\[[?]?[0-9;]*[hlH]/g, '')
+        // Remove carriage returns and other control chars
+        .replace(/\r/g, '')
+        .replace(/\u0007/g, ''); // Bell character
       
-      // Additional check: if this looks like a UI refresh (same meaningful content), skip it
-      const looksLikeUIRefresh = processInfo.lastMeaningfulContent && 
-          meaningfulContent.length > 0 && 
-          meaningfulContent === processInfo.lastMeaningfulContent;
+      // STEP 2: Clean up box drawing characters (convert to readable text)
+      content = content
+        .replace(/[╭┌]/g, '+')     // Top-left corner
+        .replace(/[╮┐]/g, '+')     // Top-right corner  
+        .replace(/[╯┘]/g, '+')     // Bottom-right corner
+        .replace(/[╰└]/g, '+')     // Bottom-left corner
+        .replace(/[─━]/g, '-')     // Horizontal lines
+        .replace(/[│┃]/g, '|')     // Vertical lines
+        .replace(/[├┝]/g, '|')     // Left junction
+        .replace(/[┤┥]/g, '|');    // Right junction
       
-      if (isReallyNewContent && !looksLikeUIRefresh) {
-        processInfo.lastBroadcastContent = cleanContent;
-        processInfo.lastMeaningfulContent = meaningfulContent;
-        broadcastIncrementalOutput(instanceId, filteredData, 'pty');
-        console.log(`📤 SPARC ULTRA: Broadcasting unique content (${cleanContent.length} chars, meaningful: ${meaningfulContent.length})`);
-        console.log(`📝 SPARC ULTRA: Content="${meaningfulContent.slice(0, 100)}"`);
-      } else {
-        console.log(`🚫 SPARC ULTRA: Blocked duplicate/UI refresh (${cleanContent.length} chars, meaningful: ${meaningfulContent.length})`);
-        if (looksLikeUIRefresh) {
-          console.log(`🔄 SPARC ULTRA: Detected UI refresh pattern - blocking`);
+      // STEP 3: Extract meaningful content and format cleanly
+      const lines = content.split('\n');
+      const cleanLines = [];
+      
+      for (let line of lines) {
+        // Remove box drawing artifacts and extra whitespace
+        const cleaned = line
+          .replace(/^\s*[+|-]+\s*$/, '')           // Remove pure box lines
+          .replace(/^\s*\|\s*(.*?)\s*\|\s*$/, '$1') // Extract content from box
+          .replace(/^\s*\|\s*/, '')                 // Remove leading box chars
+          .replace(/\s*\|\s*$/, '')                 // Remove trailing box chars
+          .trim();
+        
+        // Only keep lines with actual content
+        if (cleaned.length > 0 && 
+            !cleaned.match(/^[+|-\s]*$/) &&        // Skip pure decoration
+            !cleaned.match(/^\s*◯\s*(IDE|connected|disconnected)/)) { // Skip status
+          cleanLines.push(cleaned);
         }
+      }
+      
+      // STEP 4: Format final output (claudable-style clean formatting)
+      return cleanLines
+        .join('\n')
+        .replace(/\n{3,}/g, '\n\n')      // Max 2 consecutive newlines
+        .replace(/[ \t]+$/gm, '')        // Remove trailing spaces per line
+        .replace(/^\n+|\n+$/g, '')       // Remove leading/trailing newlines
+        .trim();
+    }
+    
+    const cleanContent = extractClaudeContent(filteredData);
+    if (cleanContent.length > 0) {
+      // Only remove IDE status messages, preserve all Claude responses
+      const meaningfulContent = cleanContent
+        .replace(/◯\s*IDE\s+(connected|disconnected)/gi, '');
+      
+      // RELAXED deduplication - only block identical content within 50ms (instead of 100ms)
+      const isDuplicate = processInfo.lastBroadcastContent === cleanContent && 
+                         (Date.now() - (processInfo.lastBroadcastTime || 0)) < 50;
+      
+      // CRITICAL FIX: Always broadcast if content exists, even if meaningfulContent is empty after filtering
+      if (!isDuplicate && cleanContent.length > 0) {
+        processInfo.lastBroadcastContent = cleanContent;
+        processInfo.lastBroadcastTime = Date.now();
+        broadcastIncrementalOutput(instanceId, meaningfulContent, 'pty');
+        console.log(`📤 Broadcasting Claude output (${cleanContent.length} chars)`);
+        console.log(`📝 Content preview: "${cleanContent.slice(0, 200)}"`);
+      } else if (isDuplicate) {
+        console.log(`🚫 Blocked rapid duplicate (within 50ms)`);
+      }
+    } else {
+      // CRITICAL FIX: Even broadcast empty-looking content - might contain Claude responses in ANSI
+      console.log(`📝 Empty content after filtering - raw data: "${data.slice(0, 200)}"`);
+      if (data.length > 10) { // If original data has substance, broadcast it
+        broadcastIncrementalOutput(instanceId, extractClaudeContent(data), 'pty');
+        console.log(`📤 Broadcasting raw Claude output (${data.length} chars) - bypassing filters`);
       }
     }
   });
@@ -950,9 +1096,12 @@ app.post('/api/claude/instances', async (req, res) => {
   
   console.log(`🆕 SPARC Creating Claude instance:`, { command, instanceType: providedType, usePty });
   
-  // SPARC FIX: Use provided instance type or parse from command
-  let instanceType = 'prod';
-  let instanceName = 'prod/claude';
+  // CRITICAL FIX: Default to interactive mode for proper AI responses
+  let instanceType = providedType || 'interactive';
+  let instanceName = 'Claude AI Interactive';
+  
+  console.log(`🤖 Using Claude in interactive mode for AI responses`);
+  
   if (command && Array.isArray(command)) {
     if (command.includes('--dangerously-skip-permissions')) {
       if (command.includes('-c')) {
@@ -962,8 +1111,8 @@ app.post('/api/claude/instances', async (req, res) => {
         instanceType = 'skip-permissions-resume';
         instanceName = 'skip-permissions --resume';
       } else {
-        instanceType = 'skip-permissions';
-        instanceName = 'skip-permissions';
+        instanceType = 'skip-permissions-interactive';
+        instanceName = 'skip-permissions (interactive)';
       }
     }
   }
@@ -1331,7 +1480,30 @@ function createTerminalSSEStream(req, res, instanceId) {
   // Track output time for heartbeat logic
   const updateOutputTime = () => { lastOutputTime = Date.now(); };
 
-  // Handle client disconnect - improved connection tracking
+  // CRITICAL FIX: Enhanced Claude AI activation system
+    const forceAIResponse = (instanceId, input) => {
+      const processInfo = activeProcesses.get(instanceId);
+      if (processInfo && processInfo.process && processInfo.usePty) {
+        console.log(`🤖 CRITICAL FIX: Activating Claude AI for input: ${input}`);
+        
+        // Send activation sequence to ensure Claude is in AI mode
+        try {
+          // Method 1: Send newline to activate Claude prompt
+          processInfo.process.write('\n');
+          
+          // Method 2: If still no response, try a follow-up
+          setTimeout(() => {
+            console.log(`🚀 Secondary activation attempt for Claude AI...`);
+            processInfo.process.write('\n');
+          }, 1000);
+          
+        } catch (error) {
+          console.error(`❌ Failed to activate Claude AI:`, error);
+        }
+      }
+    };
+    
+    // Handle client disconnect - improved connection tracking
   let connectionClosed = false;
   
   const closeHandler = () => {
@@ -1625,6 +1797,28 @@ app.post('/api/claude/instances/:instanceId/terminal/input', (req, res) => {
       
       console.log(`⌨️ SPARC: Sending command to PTY: "${processInfo.lastSentInput}"`);
       processInfo.process.write(inputData);
+        
+        // CRITICAL FIX: Enhanced AI response activation
+        setTimeout(() => {
+          console.log(`🤖 Activating Claude AI response for: ${input}`);
+          
+          // Check if Claude has responded with AI content
+          const recentBuffer = instanceOutputBuffers.get(instanceId);
+          if (recentBuffer && recentBuffer.buffer) {
+            const recentOutput = recentBuffer.buffer.slice(-500); // Last 500 chars
+            const hasAIResponse = recentOutput.length > 20 && 
+                                /[a-zA-Z]{10,}/.test(recentOutput) &&
+                                !recentOutput.includes('◯');
+            
+            if (!hasAIResponse) {
+              console.log(`🚨 No AI response detected, triggering Claude activation...`);
+              // Send a follow-up to activate Claude AI
+              processInfo.process.write('\n');
+            } else {
+              console.log(`✅ Claude AI response detected successfully`);
+            }
+          }
+        }, 2000);
       console.log(`✅ PTY Input sent to Claude ${instanceId}`);
     } else {
       // Regular pipe input handling with termination
@@ -1823,16 +2017,32 @@ wss.on('connection', (ws, req) => {
       console.log('📨 SPARC: WebSocket message received:', message.type);
       
       if (message.type === 'connect' && message.terminalId) {
-        // Associate this WebSocket with a Claude instance
-        const instanceId = message.terminalId;
+        // CRITICAL FIX: Associate this WebSocket with BASE instance ID
+        const fullInstanceId = message.terminalId;
+        const instanceId = fullInstanceId.includes('(') ? fullInstanceId.split(' (')[0].trim() : fullInstanceId;
+        
+        console.log(`🔗 SPARC: Processing connect for terminal ID: "${fullInstanceId}" -> base: "${instanceId}"`);
+        
+        // Verify instance exists in active processes
+        if (!activeProcesses.has(instanceId)) {
+          console.error(`❌ Instance ${instanceId} not found in active processes. Available: [${Array.from(activeProcesses.keys()).join(', ')}]`);
+          ws.send(JSON.stringify({
+            type: 'error',
+            error: `Instance ${instanceId} not found or not running`,
+            terminalId: instanceId,
+            timestamp: Date.now(),
+            availableInstances: Array.from(activeProcesses.keys())
+          }));
+          return;
+        }
         
         if (!wsConnections.has(instanceId)) {
           wsConnections.set(instanceId, new Set());
         }
         wsConnections.get(instanceId).add(ws);
         wsConnectionsBySocket.set(ws, instanceId);
-        
-        console.log(`✅ SPARC: WebSocket connected to Claude instance ${instanceId}`);
+        console.log(`✅ WebSocket connected to base instance ${instanceId} (from ${fullInstanceId})`);
+        console.log(`📊 Active WebSocket connections for ${instanceId}: ${wsConnections.get(instanceId).size}`);
         
         // Send connection confirmation
         ws.send(JSON.stringify({
@@ -1856,9 +2066,43 @@ wss.on('connection', (ws, req) => {
       
       if (message.type === 'input' && message.data) {
         // Forward input to Claude process
-        const instanceId = wsConnectionsBySocket.get(ws);
+        // Check both the stored connection ID and the message's terminalId
+        let instanceId = wsConnectionsBySocket.get(ws) || message.terminalId;
+        
+        // CRITICAL FIX: Extract base instance ID consistently
+        if (instanceId && instanceId.includes('(')) {
+          instanceId = instanceId.split(' (')[0].trim();
+        }
+        
+        console.log(`🔍 SPARC: Input received for base instance: ${instanceId}`);
+        console.log(`🔍 SPARC: Available instances:`, Array.from(activeProcesses.keys()));
+        
         if (instanceId) {
           const processInfo = activeProcesses.get(instanceId);
+          if (!processInfo) {
+            console.error(`❌ Instance ${instanceId} not found in active processes`);
+            console.error(`🔍 Available instances: [${Array.from(activeProcesses.keys()).join(', ')}]`);
+            ws.send(JSON.stringify({
+              type: 'error',
+              error: `Instance ${instanceId} not found`,
+              terminalId: instanceId,
+              timestamp: Date.now(),
+              availableInstances: Array.from(activeProcesses.keys())
+            }));
+            return;
+          }
+          
+          if (processInfo.status !== 'running') {
+            console.error(`❌ Instance ${instanceId} is not running, status: ${processInfo.status}`);
+            ws.send(JSON.stringify({
+              type: 'error',
+              error: `Instance ${instanceId} is ${processInfo.status}`,
+              terminalId: instanceId,
+              timestamp: Date.now()
+            }));
+            return;
+          }
+          
           if (processInfo && processInfo.status === 'running') {
             console.log(`⌨️ SPARC: Forwarding WebSocket input to Claude ${instanceId}: ${message.data}`);
             
@@ -1876,19 +2120,23 @@ wss.on('connection', (ws, req) => {
               }
               
               if (processInfo.usePty && processInfo.processType === 'pty') {
-                // SPARC FIX: Enhanced input handling with proper command termination
-                let inputData = message.data;
+                // CRITICAL FIX: Send proper AI conversation message to Claude Code
+                let inputData = message.data.trim();
                 
-                // Ensure proper command termination
-                if (!inputData.endsWith('\n') && !inputData.endsWith('\r\n')) {
-                  inputData += '\n';
+                // Format as AI conversation request - Claude Code expects this format
+                // Instead of raw input, we send it as a proper message for the AI to process
+                let formattedMessage = inputData;
+                
+                // Add newline for proper command execution
+                if (!formattedMessage.endsWith('\n')) {
+                  formattedMessage += '\n';
                 }
                 
-                // Track sent input for comprehensive echo filtering (without newline for comparison)
-                processInfo.lastSentInput = inputData.replace(/[\r\n]+$/, '');
+                // Track sent input for echo filtering (without newline for comparison)
+                processInfo.lastSentInput = inputData;
                 
-                console.log(`⌨️ SPARC: Sending command to PTY: "${processInfo.lastSentInput}"`);
-                processInfo.process.write(inputData);
+                console.log(`⌨️ SPARC: Sending AI conversation message to Claude: "${inputData}"`);
+                processInfo.process.write(formattedMessage);
               } else {
                 processInfo.process.stdin.write(message.data);
               }

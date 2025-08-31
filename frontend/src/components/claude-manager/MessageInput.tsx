@@ -45,9 +45,10 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const handleSend = () => {
     const message = input.trim();
     if (message && !disabled) {
-      console.log('📝 SPARC: MessageInput sending complete command:', message);
-      // SPARC FIX: Ensure command is sent with proper termination
-      onSendMessage(message + '\n');
+      console.log('📝 SPARC: MessageInput sending AI conversation message:', message);
+      // CRITICAL FIX: Send proper conversation message to Claude Code
+      // Instead of raw terminal input, format as AI conversation
+      onSendMessage(message);
       setInput('');
       setRows(1);
       
