@@ -48,6 +48,7 @@
     "regression:all": "npm run test:build-validation && npm run test:cors-validation && npm run test:terminal-integration"
   },
   "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.98",
     "@types/http-proxy-middleware": "^1.0.0",
     "@types/ws": "^8.18.1",
     "bcryptjs": "^2.4.3",

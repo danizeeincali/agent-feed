@@ -278,8 +278,8 @@ async function createRealClaudeInstanceWithPTY(instanceType, instanceId, usePty 
           cols: 100,
           rows: 30,
           name: 'xterm-color',
-          // NLD PATTERN FIX: Disable PTY echo to prevent character-by-character display
-          echo: false,  // CRITICAL: Prevents terminal echo duplication (TTY-ECHO-001)
+          // CLAUDE CODE FIX: Enable PTY echo so Claude can process input properly  
+          echo: true,  // CRITICAL: Claude Code needs echo to process commands as AI input
           handleFlowControl: false,
           experimentalUseConpty: false
         });
@@ -535,20 +535,12 @@ function setupProcessHandlers(instanceId, processInfo) {
   if (usePty && processType === 'pty') {
     setupPTYHandlers(instanceId, processInfo);
     
-    // CLAUDE AI ACTIVATION FIX: Initialize interactive AI conversation session
+    // CLAUDE AI NATURAL STARTUP: Let Claude Code start in its natural interactive state
     setTimeout(() => {
       if (claudeProcess && !claudeProcess.killed) {
-        console.log(`🤖 CLAUDE AI ACTIVATION: Initializing conversational AI mode for ${instanceId}`);
-        
-        // CRITICAL FIX: Send a clear AI conversation prompt that engages Claude properly
-        // This establishes the conversational context immediately
-        const activationPrompt = 'I am a user connecting to you through a web interface. Please respond naturally to my messages as Claude AI assistant. Say "Hello! I\'m Claude AI and I\'m ready to help you." to confirm you\'re working properly.\n';
-        
-        // Clear any startup noise and send activation prompt
-        setTimeout(() => {
-          console.log(`📝 Sending Claude AI activation prompt to ${instanceId}`);
-          claudeProcess.write(activationPrompt);
-        }, 1500);
+        console.log(`🤖 CLAUDE AI READY: Instance ${instanceId} started in natural interactive mode`);
+        console.log(`📝 Claude Code is ready to receive user messages and respond naturally`);
+        // No automated prompts - let users interact directly with Claude
       }
     }, 2500);
   } else {
@@ -577,11 +569,8 @@ function setupPTYHandlers(instanceId, processInfo) {
         // Send empty line to activate Claude prompt
         claudeProcess.write('\n');
         
-        // CRITICAL FIX: Force Claude into interactive AI response mode
-        setTimeout(() => {
-          console.log(`🤖 Sending test prompt to activate AI responses...`);
-          claudeProcess.write('Please respond with "Claude AI is ready"\n');
-        }, 2000);
+        // CLAUDE CODE NATURAL STATE: Ready for user interaction
+        console.log(`🤖 Claude Code instance ready for natural user interaction`);
       }, 500);
       
       broadcastInstanceStatus(instanceId, 'running', {
@@ -2119,30 +2108,114 @@ wss.on('connection', (ws, req) => {
                 return;
               }
               
-              if (processInfo.usePty && processInfo.processType === 'pty') {
-                // CRITICAL FIX: Send proper AI conversation message to Claude Code
-                let inputData = message.data.trim();
-                
-                // Format as AI conversation request - Claude Code expects this format
-                // Instead of raw input, we send it as a proper message for the AI to process
-                let formattedMessage = inputData;
-                
-                // Add newline for proper command execution
-                if (!formattedMessage.endsWith('\n')) {
-                  formattedMessage += '\n';
-                }
-                
-                // Track sent input for echo filtering (without newline for comparison)
-                processInfo.lastSentInput = inputData;
-                
-                console.log(`⌨️ SPARC: Sending AI conversation message to Claude: "${inputData}"`);
-                processInfo.process.write(formattedMessage);
-              } else {
-                processInfo.process.stdin.write(message.data);
-              }
+              // CLAUDE CODE API INTEGRATION: Use --print --output-format json for real AI responses
+              const inputData = message.data.trim();
+              console.log(`🚀 CLAUDE API: Processing prompt: "${inputData}"`);
               
-              // SPARC FIX: Remove immediate echo - causes character-by-character display
-              // Let PTY handle all output naturally without artificial echoing
+              // Use Claude Code API instead of PTY terminal interaction  
+              const { spawn } = require('child_process');
+              const claudeApiProcess = spawn('claude', [
+                '--print',
+                '--output-format', 'json',
+                '--dangerously-skip-permissions'
+              ], {
+                cwd: '/workspaces/agent-feed',
+                stdio: ['pipe', 'pipe', 'pipe']
+              });
+              
+              // Send input through stdin instead of command argument
+              claudeApiProcess.stdin.write(inputData + '\n');
+              claudeApiProcess.stdin.end();
+
+              let apiResponse = '';
+              let apiError = '';
+              let processCompleted = false;
+
+              // Set timeout for the API call (15 seconds)
+              const apiTimeout = setTimeout(() => {
+                if (!processCompleted) {
+                  console.error(`⏰ CLAUDE API TIMEOUT: Killing process after 15s for "${inputData}"`);
+                  claudeApiProcess.kill('SIGKILL');
+                  broadcastToWebSockets(instanceId, {
+                    type: 'output',
+                    data: `> ${inputData}\nError: Claude Code API timeout after 15 seconds\n\n`,
+                    terminalId: instanceId,
+                    timestamp: Date.now(),
+                    source: 'error'
+                  });
+                }
+              }, 15000);
+
+              claudeApiProcess.stdout.on('data', (data) => {
+                console.log(`📥 CLAUDE API stdout: ${data.toString().substring(0, 100)}...`);
+                apiResponse += data.toString();
+              });
+
+              claudeApiProcess.stderr.on('data', (data) => {
+                console.log(`📥 CLAUDE API stderr: ${data.toString()}`);
+                apiError += data.toString();
+              });
+
+              claudeApiProcess.on('close', (code) => {
+                processCompleted = true;
+                clearTimeout(apiTimeout);
+                
+                console.log(`🔄 CLAUDE API Process closed with code: ${code}`);
+                console.log(`📊 Response length: ${apiResponse.length}, Error length: ${apiError.length}`);
+                
+                if (code === 0 && apiResponse) {
+                  try {
+                    const response = JSON.parse(apiResponse.trim());
+                    console.log(`✅ CLAUDE API SUCCESS: Got real AI response for "${inputData}"`);
+                    console.log(`📝 AI Response: ${response.result}`);
+                    
+                    // Broadcast the AI response to WebSocket clients
+                    if (response.result) {
+                      broadcastToWebSockets(instanceId, {
+                        type: 'output',
+                        data: `> ${inputData}\n${response.result}\n\n`,
+                        terminalId: instanceId,
+                        timestamp: Date.now(),
+                        source: 'claude-api',
+                        isAI: true,
+                        session: response.session_id
+                      });
+                    }
+                  } catch (parseError) {
+                    console.error(`❌ CLAUDE API Parse Error:`, parseError);
+                    console.error(`🔍 Raw response: ${apiResponse}`);
+                    broadcastToWebSockets(instanceId, {
+                      type: 'output', 
+                      data: `> ${inputData}\nError: Invalid response from Claude Code\n\n`,
+                      terminalId: instanceId,
+                      timestamp: Date.now(),
+                      source: 'error'
+                    });
+                  }
+                } else {
+                  console.error(`❌ CLAUDE API Error (code ${code}):`, apiError);
+                  broadcastToWebSockets(instanceId, {
+                    type: 'output',
+                    data: `> ${inputData}\nError: Claude Code API failed (exit code: ${code})\n\n`, 
+                    terminalId: instanceId,
+                    timestamp: Date.now(),
+                    source: 'error'
+                  });
+                }
+              });
+
+              claudeApiProcess.on('error', (error) => {
+                processCompleted = true;
+                clearTimeout(apiTimeout);
+                console.error(`❌ CLAUDE API Process Error:`, error);
+                broadcastToWebSockets(instanceId, {
+                  type: 'output',
+                  data: `> ${inputData}\nError: Failed to start Claude Code API\n\n`,
+                  terminalId: instanceId,
+                  timestamp: Date.now(),
+                  source: 'error'
+                });
+              });
               
             } catch (error) {
               console.error(`❌ SPARC: Failed to forward input to Claude ${instanceId}:`, error);
