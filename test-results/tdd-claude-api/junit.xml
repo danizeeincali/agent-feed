@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Claude API Timeout TDD Tests" tests="11" failures="3" errors="0" time="29.019">
+  <testsuite name="Claude API Communication (Unit Tests)" errors="0" failures="3" skipped="0" timestamp="2025-08-31T16:01:14" time="28.937" tests="11">
+    <testcase classname="Claude API Communication (Unit Tests) Basic Claude Process Spawning FAILING: should spawn claude process without timeout" name="Claude API Communication (Unit Tests) Basic Claude Process Spawning FAILING: should spawn claude process without timeout" time="0.106">
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Basic Claude Process Spawning FAILING: should handle 15 second timeout gracefully" name="Claude API Communication (Unit Tests) Basic Claude Process Spawning FAILING: should handle 15 second timeout gracefully" time="15.016">
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Basic Claude Process Spawning FAILING: should complete simple prompts under 5 seconds" name="Claude API Communication (Unit Tests) Basic Claude Process Spawning FAILING: should complete simple prompts under 5 seconds" time="2">
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Process Management and Cleanup FAILING: should properly kill hanging processes" name="Claude API Communication (Unit Tests) Process Management and Cleanup FAILING: should properly kill hanging processes" time="1.5">
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Process Management and Cleanup FAILING: should escalate to SIGKILL if SIGTERM fails" name="Claude API Communication (Unit Tests) Process Management and Cleanup FAILING: should escalate to SIGKILL if SIGTERM fails" time="0.202">
+      <failure>Error: Unhandled error. (Error: ESRCH
+    at Timeout._onTimeout (/workspaces/agent-feed/tests/tdd-claude-api/unit/claude-api-communication.test.js:134:54)
+    at listOnTimeout (node:internal/timers:588:17)
+    at processTimers (node:internal/timers:523:7))
+    at EventEmitter.emit (node:events:507:17)
+    at Timeout.emit [as _onTimeout] (/workspaces/agent-feed/tests/tdd-claude-api/unit/claude-api-communication.test.js:134:40)
+    at listOnTimeout (node:internal/timers:588:17)
+    at processTimers (node:internal/timers:523:7)</failure>
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Process Management and Cleanup FAILING: should track process memory usage" name="Claude API Communication (Unit Tests) Process Management and Cleanup FAILING: should track process memory usage" time="0">
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Error Recovery Mechanisms FAILING: should retry failed process spawn" name="Claude API Communication (Unit Tests) Error Recovery Mechanisms FAILING: should retry failed process spawn" time="0.011">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 1
+Received:   1
+    at Object.toBeGreaterThan (/workspaces/agent-feed/tests/tdd-claude-api/unit/claude-api-communication.test.js:195:31)</failure>
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Error Recovery Mechanisms FAILING: should recover from network errors" name="Claude API Communication (Unit Tests) Error Recovery Mechanisms FAILING: should recover from network errors" time="0.101">
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Error Recovery Mechanisms FAILING: should handle authentication failures gracefully" name="Claude API Communication (Unit Tests) Error Recovery Mechanisms FAILING: should handle authentication failures gracefully" time="0.102">
+      <failure>Error: expect(received).toContain(expected) // indexOf
+
+Expected substring: &quot;run claude auth login&quot;
+Received string:    &quot;Error: Not authenticated&quot;
+    at Object.toContain (/workspaces/agent-feed/tests/tdd-claude-api/unit/claude-api-communication.test.js:252:29)</failure>
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Performance and Load Testing FAILING: should handle multiple concurrent processes" name="Claude API Communication (Unit Tests) Performance and Load Testing FAILING: should handle multiple concurrent processes" time="1.381">
+    </testcase>
+    <testcase classname="Claude API Communication (Unit Tests) Performance and Load Testing FAILING: should process large prompts efficiently" name="Claude API Communication (Unit Tests) Performance and Load Testing FAILING: should process large prompts efficiently" time="8.002">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,9 +1,10 @@
 /**
- * Jest Test Setup Configuration
- * Sets up testing environment for React components and DOM testing
+ * Test Setup Configuration for London School TDD
+ * Global test configuration and mock setup
  */
 
 import '@testing-library/jest-dom';
+import { MockWebSocket } from '../mocks/MockWebSocket';
 
 // Mock window.matchMedia which is not implemented in JSDOM
 Object.defineProperty(window, 'matchMedia', {
@@ -34,14 +35,25 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 
-// Mock WebSocket
-global.WebSocket = jest.fn().mockImplementation(() => ({
-  readyState: 1,
-  send: jest.fn(),
-  close: jest.fn(),
-  addEventListener: jest.fn(),
-  removeEventListener: jest.fn(),
-}));
+// Mock WebSocket with our enhanced MockWebSocket
+global.WebSocket = MockWebSocket as any;
+
+// Global test configuration
+beforeEach(() => {
+  // Clear all mocks before each test
+  jest.clearAllMocks();
+  
+  // Reset WebSocket mock instances
+  MockWebSocket.reset();
+});
+
+afterEach(() => {
+  // Clean up timers
+  jest.clearAllTimers();
+  
+  // Reset WebSocket instances
+  MockWebSocket.reset();
+});
 
 // Mock canvas context for xterm
 HTMLCanvasElement.prototype.getContext = jest.fn(() => ({
@@ -96,6 +108,87 @@ console.error = (...args: any[]) => {
 
 // Set up fetch mock
 global.fetch = jest.fn();
+
+// Global test utilities
+global.TestUtils = {
+  waitFor: (condition: () => boolean, timeout: number = 5000): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
+      const checkCondition = () => {
+        if (condition()) {
+          resolve();
+        } else if (Date.now() - startTime > timeout) {
+          reject(new Error(`Condition not met within ${timeout}ms`));
+        } else {
+          setTimeout(checkCondition, 10);
+        }
+      };
+      checkCondition();
+    });
+  },
+  
+  flushPromises: (): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, 0));
+  }
+};
+
+// Add custom matchers for London School TDD
+expect.extend({
+  toHaveBeenCalledAfter(received: jest.MockedFunction<any>, other: jest.MockedFunction<any>) {
+    const receivedCalls = received.mock.invocationCallOrder;
+    const otherCalls = other.mock.invocationCallOrder;
+    
+    if (receivedCalls.length === 0 || otherCalls.length === 0) {
+      return {
+        message: () => 'Both functions must have been called',
+        pass: false,
+      };
+    }
+    
+    const lastReceivedCall = Math.max(...receivedCalls);
+    const lastOtherCall = Math.max(...otherCalls);
+    const pass = lastReceivedCall > lastOtherCall;
+    
+    return {
+      message: () => 
+        pass
+          ? `Expected ${received.getMockName()} not to be called after ${other.getMockName()}`
+          : `Expected ${received.getMockName()} to be called after ${other.getMockName()}`,
+      pass,
+    };
+  },
+  
+  toHaveInteractedWith(received: any, mockObject: any) {
+    const interactions = Object.keys(mockObject).filter(key => 
+      typeof mockObject[key] === 'function' && mockObject[key].mock?.calls?.length > 0
+    );
+    
+    const pass = interactions.length > 0;
+    
+    return {
+      message: () => 
+        pass
+          ? `Expected no interactions with mock object`
+          : `Expected interactions with mock object, but found none`,
+      pass,
+    };
+  }
+});
+
+// Declare global types for TypeScript
+declare global {
+  namespace jest {
+    interface Matchers<R> {
+      toHaveBeenCalledAfter(other: jest.MockedFunction<any>): R;
+      toHaveInteractedWith(mockObject: any): R;
+    }
+  }
+  
+  var TestUtils: {
+    waitFor: (condition: () => boolean, timeout?: number) => Promise<void>;
+    flushPromises: () => Promise<void>;
+  };
+}
 
 // Increase test timeout for complex integration tests
 jest.setTimeout(30000);

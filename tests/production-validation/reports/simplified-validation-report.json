@@ -1,0 +1,60 @@
+{
+  "timestamp": "2025-08-31T15:56:58.615Z",
+  "passed": 8,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "Frontend Accessibility",
+      "status": "PASSED",
+      "duration": 22,
+      "error": null
+    },
+    {
+      "name": "Backend API Functionality",
+      "status": "PASSED",
+      "duration": 6,
+      "error": null
+    },
+    {
+      "name": "Claude Instances Running",
+      "status": "PASSED",
+      "duration": 2,
+      "error": null
+    },
+    {
+      "name": "No Connection Errors",
+      "status": "PASSED",
+      "duration": 2512,
+      "error": null
+    },
+    {
+      "name": "Instance Creation API",
+      "status": "PASSED",
+      "duration": 5,
+      "error": null
+    },
+    {
+      "name": "Real-time Features",
+      "status": "PASSED",
+      "duration": 4009,
+      "error": null
+    },
+    {
+      "name": "Performance Benchmarks",
+      "status": "PASSED",
+      "duration": 26,
+      "error": null
+    },
+    {
+      "name": "Production Readiness",
+      "status": "PASSED",
+      "duration": 25,
+      "error": null
+    }
+  ],
+  "summary": {
+    "totalTests": 8,
+    "passRate": "100.0",
+    "duration": 6607
+  }
+}

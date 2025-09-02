@@ -4,6 +4,8 @@ import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { SearchAddon } from '@xterm/addon-search';
 import 'xterm/css/xterm.css';
+import { useWebSocketTerminal } from '../hooks/useWebSocketTerminal';
+import { ToolCallFormatter } from '../utils/tool-call-formatter';
 
 interface TerminalProps {
   isVisible: boolean;
@@ -13,34 +15,41 @@ interface TerminalProps {
     status: string;
   };
   initialCommand?: string;
+  instanceId?: string;
 }
 
-export const TerminalFixed: React.FC<TerminalProps> = ({ 
+export const TerminalFixedComponent: React.FC<TerminalProps> = ({ 
   isVisible, 
   processStatus,
-  initialCommand 
+  initialCommand,
+  instanceId = `claude-terminal-${Date.now()}`
 }) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const terminal = useRef<Terminal | null>(null);
   const fitAddon = useRef<FitAddon | null>(null);
-  const socket = useRef<WebSocket | null>(null);
-  const [connectionStatus, setConnectionStatus] = useState<'disconnected' | 'connecting' | 'connected'>('disconnected');
-  const [error, setError] = useState<string | null>(null);
-  const [debugLogs, setDebugLogs] = useState<string[]>([]);
   
-  // Add debug log
-  const addDebugLog = useCallback((message: string) => {
-    const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
-    const logMessage = `[${timestamp}] ${message}`;
-    console.log('🚨 EMERGENCY DEBUG:', logMessage);
-    setDebugLogs(prev => [...prev.slice(-19), logMessage]);
-  }, []);
+  // Use ONLY useWebSocketTerminal hook for all WebSocket communication
+  const { 
+    connectionState, 
+    connectToInstance,
+    disconnectFromInstance, 
+    sendCommand, 
+    addHandler, 
+    removeHandler,
+    config
+  } = useWebSocketTerminal({
+    url: 'ws://localhost:3000'
+  });
+  
+  const [error, setError] = useState<string | null>(null);
 
   // Initialize terminal when visible
   useEffect(() => {
     if (!isVisible || terminal.current) return;
 
     if (terminalRef.current) {
+      console.log('🔍 DEBUG: Initializing fixed terminal');
+      
       terminal.current = new Terminal({
         cursorBlink: true,
         fontSize: 14,
@@ -49,44 +58,24 @@ export const TerminalFixed: React.FC<TerminalProps> = ({
           background: '#1e1e1e',
           foreground: '#d4d4d4',
           cursor: '#d4d4d4',
-          selectionBackground: '#264f78',
-          black: '#000000',
-          red: '#cd3131',
-          green: '#0dbc79',
-          yellow: '#e5e510',
-          blue: '#2472c8',
-          magenta: '#bc3fbc',
-          cyan: '#11a8cd',
-          white: '#e5e5e5',
         },
-        cols: 120,
-        rows: 30,
-        disableStdin: false,
-        convertEol: false,
-        macOptionIsMeta: true,
-        scrollback: 1000,
-        allowTransparency: false,
-        drawBoldTextInBrightColors: false,
-        fastScrollModifier: 'alt',
-        tabStopWidth: 4,
-        logLevel: 'warn'
+        cols: 80,
+        rows: 24,
       });
 
+      // Add addons
       fitAddon.current = new FitAddon();
       terminal.current.loadAddon(fitAddon.current);
       terminal.current.loadAddon(new WebLinksAddon());
       terminal.current.loadAddon(new SearchAddon());
 
+      // Open terminal
       terminal.current.open(terminalRef.current);
-      
-      if (fitAddon.current) {
-        fitAddon.current.fit();
-      }
+      fitAddon.current.fit();
 
-      // 🚨 EMERGENCY WELCOME MESSAGE
-      terminal.current.writeln('\\x1b[1;31m🚨 EMERGENCY TERMINAL (JSON→Output Fix Active)\\x1b[0m');
-      terminal.current.writeln('\\x1b[2mConnecting to emergency backend...\\x1b[0m');
-      terminal.current.writeln('\\x1b[33m🔧 Fix: Raw JSON messages → Terminal output display\\x1b[0m');
+      // Welcome message
+      terminal.current.writeln('\\x1b[1;32m🚀 Claude Terminal (FIXED WebSocket Integration)\\x1b[0m');
+      terminal.current.writeln('\\x1b[2mConnecting via useWebSocketTerminal hook...\\x1b[0m');
       terminal.current.writeln('');
     }
 
@@ -97,244 +86,158 @@ export const TerminalFixed: React.FC<TerminalProps> = ({
       }
     };
   }, [isVisible]);
-
-  // WebSocket connection with CRITICAL JSON FIX
-  const connectWebSocket = useCallback(() => {
-    addDebugLog('🚨 EMERGENCY: Connecting to emergency backend on port 3002');
+  
+  // Handle WebSocket connection based on process status
+  useEffect(() => {
+    if (!processStatus.isRunning || !isVisible) return;
     
-    if (socket.current?.readyState === WebSocket.OPEN) {
-      addDebugLog('✅ Socket already connected');
-      return;
-    }
-
-    if (socket.current) {
-      addDebugLog('🔄 Closing existing socket');
-      socket.current.close();
-      socket.current = null;
-    }
-
-    setConnectionStatus('connecting');
-    setError(null);
+    console.log(`🔌 Connecting to WebSocket terminal for instance: ${instanceId}`);
+    connectToInstance(instanceId).catch(error => {
+      console.error('❌ Failed to connect to terminal:', error);
+      setError(`Connection failed: ${error.message}`);
+    });
     
-    const wsUrl = 'ws://localhost:3002/terminal';
-    addDebugLog(`🔌 Creating WebSocket: ${wsUrl}`);
-    const newSocket = new WebSocket(wsUrl);
-    socket.current = newSocket;
-
-    newSocket.onopen = () => {
-      addDebugLog('✅ WebSocket connected to emergency backend');
-      setConnectionStatus('connected');
-      setError(null);
-      terminal.current?.writeln('\\x1b[32m🚨 EMERGENCY: Connected to Backend (Port 3002)\\x1b[0m');
-      terminal.current?.writeln('\\x1b[33m🔧 JSON Processing: ACTIVE\\x1b[0m');
-      
-      const initMessage = {
-        type: 'init',
-        pid: processStatus.pid,
-        cols: terminal.current?.cols || 120,
-        rows: terminal.current?.rows || 30
-      };
-      addDebugLog(`📤 Sending init: ${JSON.stringify(initMessage)}`);
-      newSocket.send(JSON.stringify(initMessage));
-      
-      if (initialCommand) {
-        setTimeout(() => {
-          if (newSocket.readyState === WebSocket.OPEN) {
-            const commandMessage = {
-              type: 'input', 
-              data: initialCommand + '\\n'
-            };
-            addDebugLog(`📤 Executing initial command: ${initialCommand}`);
-            newSocket.send(JSON.stringify(commandMessage));
-          }
-        }, 1000);
-      }
+    return () => {
+      console.log(`🔌 Disconnecting from WebSocket terminal for instance: ${instanceId}`);
+      disconnectFromInstance(instanceId);
     };
+  }, [processStatus.isRunning, isVisible, instanceId, connectToInstance, disconnectFromInstance]);
 
-    // 🚨 CRITICAL FIX: Proper JSON message processing
-    newSocket.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        addDebugLog(`📥 Received: ${message.type} (${message.data ? message.data.length : 0} chars)`);
-        
-        // 🎯 THE CRITICAL FIX: Extract terminal data from JSON and display ONLY the data
-        if (message.type === 'data' && message.data) {
-          // Log for debugging
-          console.log('🚨 EMERGENCY FIX: Processing JSON message', {
-            messageType: message.type,
-            rawDataLength: message.data.length,
-            rawDataPreview: JSON.stringify(message.data.substring(0, 50)),
-            showingRawJSON: false // This is the fix!
-          });
-          
-          // ✅ CRITICAL: Write ONLY the terminal data, NOT the JSON wrapper
-          terminal.current?.write(message.data);
-          
-          addDebugLog(`✅ Terminal data displayed (${message.data.length} chars)`);
-          
-        } else if (message.type === 'output' && message.data) {
-          // Alternative output format
-          terminal.current?.write(message.data);
-          addDebugLog(`✅ Output data displayed (${message.data.length} chars)`);
-          
-        } else if (message.type === 'connect') {
-          setError(null);
-          addDebugLog('📡 Backend connection established');
-          
-        } else if (message.type === 'error') {
-          terminal.current?.writeln(`\\x1b[31m❌ Terminal Error: ${message.error}\\x1b[0m`);
-          setError(`Terminal error: ${message.error}`);
-          
-        } else if (message.type === 'exit') {
-          terminal.current?.writeln(`\\x1b[33m⚠️ Terminal process exited (code: ${message.code})\\x1b[0m`);
-          
-        } else if (message.type === 'init_ack') {
-          setError(null);
-          addDebugLog(`✅ Terminal initialized (PID: ${message.pid})`);
+  // Setup event handlers for WebSocket messages
+  useEffect(() => {
+    console.log('📡 Setting up WebSocket event handlers');
+    
+    // Handle regular messages (including 'data' type from backend)
+    const handleMessage = (data: any) => {
+      console.log('📨 WebSocket message received:', data);
+      
+      if (data.type === 'data' && terminal.current) {
+        // This is the message type that backend sends
+        const formattedData = ToolCallFormatter.formatOutputWithToolCalls(data.data);
+        terminal.current.write(formattedData);
+      } else if (data.type === 'error') {
+        console.error('📨 Error message:', data);
+        if (terminal.current) {
+          terminal.current.writeln(`\\x1b[31m❌ Error: ${data.error}\\x1b[0m`);
         }
-        
-      } catch (err) {
-        // Fallback for non-JSON data
-        addDebugLog('📥 Non-JSON data received');
-        terminal.current?.write(event.data);
+        setError(data.error);
       }
     };
-
-    newSocket.onerror = (error) => {
-      addDebugLog(`❌ WebSocket error during connection`);
-    };
-
-    newSocket.onclose = (event) => {
-      addDebugLog(`🔌 WebSocket closed: ${event.code} - ${event.reason || 'No reason'}`);
-      setConnectionStatus('disconnected');
-      
-      if (event.code === 1000 || event.code === 1001) {
-        addDebugLog('✅ Connection closed normally');
-        terminal.current?.writeln('\\x1b[90m📤 Connection closed cleanly\\x1b[0m');
-      } else if (event.code === 1006) {
-        if (connectionStatus === 'connecting') {
-          setError('Failed to connect to emergency backend');
-          terminal.current?.writeln('\\x1b[31m❌ Failed to connect to emergency backend\\x1b[0m');
-        } else {
-          terminal.current?.writeln('\\x1b[33m⚠️ Connection lost unexpectedly\\x1b[0m');
+    
+    // Handle connection state changes
+    const handleConnect = (data: any) => {
+      console.log('✅ WebSocket connected:', data);
+      if (terminal.current) {
+        terminal.current.writeln('\\x1b[32m✅ WebSocket Connected (Fixed)\\x1b[0m');
+        terminal.current.writeln('\\x1b[33m🔍 Ready for input - start typing!\\x1b[0m');
+        
+        // Execute initial command if provided
+        if (initialCommand) {
           setTimeout(() => {
-            if (isVisible) {
-              addDebugLog('🔄 Auto-reconnecting...');
-              connectWebSocket();
-            }
-          }, 3000);
+            console.log('📝 Executing initial command:', initialCommand);
+            sendCommand(instanceId, initialCommand).catch(error => {
+              console.error('❌ Failed to send initial command:', error);
+            });
+          }, 500);
         }
       }
     };
-  }, [initialCommand, addDebugLog, connectionStatus, processStatus.pid, isVisible]);
+    
+    const handleDisconnect = (data: any) => {
+      console.log('❌ WebSocket disconnected:', data);
+      if (terminal.current) {
+        terminal.current.writeln('\\x1b[33m⚠️ WebSocket Disconnected\\x1b[0m');
+      }
+    };
+    
+    const handleError = (data: any) => {
+      console.error('❌ WebSocket error:', data);
+      setError(data.error || 'WebSocket connection error');
+      if (terminal.current) {
+        terminal.current.writeln(`\\x1b[31m❌ Connection Error: ${data.error}\\x1b[0m`);
+      }
+    };
+    
+    // Add all event handlers
+    addHandler('message', handleMessage);
+    addHandler('connect', handleConnect);
+    addHandler('disconnect', handleDisconnect);
+    addHandler('error', handleError);
+    
+    return () => {
+      // Remove all event handlers on cleanup
+      removeHandler('message', handleMessage);
+      removeHandler('connect', handleConnect);
+      removeHandler('disconnect', handleDisconnect);
+      removeHandler('error', handleError);
+    };
+  }, [instanceId, addHandler, removeHandler, sendCommand, initialCommand]);
 
-  // Handle user input
+  // Handle terminal input
   useEffect(() => {
     if (!terminal.current) return;
 
-    let inputBuffer = '';
+    console.log('🔍 Setting up terminal input handler (Fixed)');
+    
+    let currentCommand = '';
     
     const handleData = (data: string) => {
-      console.log('🚨 INPUT:', JSON.stringify(data));
+      console.log('🎯 Terminal input data (Fixed):', JSON.stringify(data));
       
-      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-        const isEnter = data.includes('\\r') || data.includes('\\n');
-        
-        if (isEnter) {
-          const completeInput = inputBuffer + '\\n';
-          const message = {
-            type: 'input',
-            data: completeInput,
-            timestamp: Date.now()
-          };
-          
-          socket.current.send(JSON.stringify(message));
-          inputBuffer = '';
-          addDebugLog(`📤 Sent input: ${JSON.stringify(completeInput.replace('\\n', ''))}`);
-        } else {
-          inputBuffer += data;
+      // Handle Enter key
+      if (data === '\\r' || data === '\\n') {
+        if (currentCommand.trim()) {
+          console.log('📝 Sending command via useWebSocketTerminal:', currentCommand);
+          sendCommand(instanceId, currentCommand).catch(error => {
+            console.error('❌ Failed to send command:', error);
+          });
+          currentCommand = '';
         }
-      } else {
-        addDebugLog('❌ Socket not connected - input ignored');
+        terminal.current?.write('\\r\\n');
+      } 
+      // Handle backspace
+      else if (data === '\\u007F' || data === '\\b') {
+        if (currentCommand.length > 0) {
+          currentCommand = currentCommand.slice(0, -1);
+          terminal.current?.write('\\b \\b');
+        }
+      } 
+      // Handle regular characters
+      else {
+        currentCommand += data;
+        terminal.current?.write(data);
       }
     };
 
     const disposable = terminal.current.onData(handleData);
-    return () => disposable.dispose();
-  }, [connectionStatus, addDebugLog]);
-
-  // Connect when visible
-  useEffect(() => {
-    if (isVisible && !socket.current) {
-      addDebugLog('🔧 Component visible - connecting to emergency backend');
-      connectWebSocket();
-    }
+    
     return () => {
-      if (!isVisible && socket.current) {
-        addDebugLog('🔧 Component hidden - closing connection');
-        socket.current.close(1000, 'Component hidden');
-        socket.current = null;
-        setConnectionStatus('disconnected');
+      if (disposable) {
+        disposable.dispose();
       }
     };
-  }, [isVisible, connectWebSocket]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (socket.current) {
-        addDebugLog('🧹 Component unmounting - closing connection');
-        socket.current.close(1000, 'Component unmounted');
-        socket.current = null;
-      }
-    };
-  }, [addDebugLog]);
-
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (fitAddon.current && terminal.current) {
-        fitAddon.current.fit();
-        
-        if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-          const resizeMessage = {
-            type: 'resize',
-            cols: terminal.current.cols,
-            rows: terminal.current.rows
-          };
-          socket.current.send(JSON.stringify(resizeMessage));
-        }
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const getConnectionStatusColor = () => {
-    switch (connectionStatus) {
-      case 'connected': return 'text-green-500';
-      case 'connecting': return 'text-yellow-500';
-      case 'disconnected': return 'text-red-500';
-    }
-  };
-
-  const getConnectionStatusText = () => {
-    switch (connectionStatus) {
-      case 'connected': return '🟢 Connected (Emergency)';
-      case 'connecting': return '🟡 Connecting...';
-      case 'disconnected': return '🔴 Disconnected';
-    }
-  };
+  }, [connectionState.isConnected, instanceId, sendCommand]);
 
   if (!isVisible) return null;
 
+  const getConnectionStatusColor = () => {
+    if (connectionState.isConnected) return 'text-green-500';
+    if (connectionState.connectionType === 'websocket') return 'text-yellow-500';
+    return 'text-red-500';
+  };
+
+  const getConnectionStatusText = () => {
+    if (connectionState.isConnected) return '🟢 Connected (Fixed)';
+    if (connectionState.connectionType === 'websocket') return '🟡 Connecting... (Fixed)';
+    return '🔴 Disconnected (Fixed)';
+  };
+
   return (
-    <div className="bg-gray-900 border border-gray-700 rounded-lg overflow-hidden">
+    <div className="terminal-container">
       {/* Terminal Header */}
-      <div className="bg-gray-800 px-4 py-2 border-b border-gray-700 flex items-center justify-between">
+      <div className="bg-gray-800 text-white px-4 py-2 flex justify-between items-center">
         <div className="flex items-center space-x-2">
-          <span className="text-white font-medium">🚨 EMERGENCY Terminal (JSON→Output Fixed)</span>
+          <span className="font-medium">Claude Terminal (FIXED)</span>
           {processStatus.pid && (
             <span className="text-gray-400 text-sm">PID: {processStatus.pid}</span>
           )}
@@ -343,31 +246,34 @@ export const TerminalFixed: React.FC<TerminalProps> = ({
           <span className={`text-sm ${getConnectionStatusColor()}`}>
             {getConnectionStatusText()}
           </span>
+          <span className="text-gray-400 text-sm">
+            Instance: {instanceId}
+          </span>
           {error && (
             <span className="text-red-400 text-sm" title={error}>
-              ⚠️
+              ⚠️ {error}
             </span>
           )}
         </div>
       </div>
 
-      {/* Terminal Container - Full Width */}
-      <div className="h-[500px] p-2">
+      {/* Terminal Container */}
+      <div className="bg-black">
         <div 
           ref={terminalRef} 
-          className="w-full h-full min-w-full"
-          style={{ background: '#1e1e1e' }}
+          className="w-full h-96"
         />
       </div>
 
-      {/* Debug Logs */}
-      <div className="bg-gray-800 px-4 py-2 border-t border-gray-700">
-        <div className="text-xs text-gray-400 max-h-20 overflow-y-auto">
-          {debugLogs.slice(-3).map((log, i) => (
-            <div key={i}>{log}</div>
-          ))}
+      {/* Terminal Footer */}
+      <div className="bg-gray-800 text-gray-400 px-4 py-2 text-xs">
+        <div className="flex items-center justify-between">
+          <span>WebSocket URL: {config.url}/terminal</span>
+          <span>Status: {connectionState.connectionType}</span>
         </div>
       </div>
     </div>
   );
 };
+
+export default TerminalFixedComponent;

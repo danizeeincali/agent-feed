@@ -1,0 +1,145 @@
+{
+  "timestamp": "2025-09-01T15:26:10.951Z",
+  "duration": "5277ms",
+  "overallScore": "50%",
+  "verdict": "⚠️ NEEDS IMPROVEMENT - SIGNIFICANT ISSUES DETECTED",
+  "productionReady": false,
+  "categoryScores": {
+    "environment": false,
+    "realEndpoints": true,
+    "userWorkflow": false,
+    "websocketFlow": true,
+    "realFunctionality": true,
+    "criticalValidation": false
+  },
+  "detailedResults": {
+    "timestamp": "2025-09-01T15:26:10.951Z",
+    "environment": {
+      "backendHealthy": true,
+      "healthData": {
+        "status": "healthy",
+        "timestamp": "2025-09-01T15:26:10.968Z",
+        "server": "HTTP/SSE Only - WebSocket Eliminated",
+        "message": "WebSocket connection storm successfully eliminated!"
+      },
+      "frontendAvailable": false,
+      "apiResponsive": true,
+      "apiData": {
+        "success": true,
+        "instances": [],
+        "timestamp": "2025-09-01T15:26:10.973Z"
+      }
+    },
+    "realEndpoints": [
+      {
+        "name": "List Instances",
+        "success": true,
+        "status": 200,
+        "response": {
+          "success": true,
+          "instances": [],
+          "timestamp": "2025-09-01T15:26:10.975Z"
+        }
+      },
+      {
+        "name": "Create Instance",
+        "success": true,
+        "status": 201,
+        "response": {
+          "success": true,
+          "instance": {
+            "id": "claude-5766",
+            "name": "Claude AI Interactive",
+            "status": "starting",
+            "pid": 96972,
+            "type": "interactive",
+            "created": "2025-09-01T15:26:10.980Z",
+            "command": "claude ",
+            "workingDirectory": "/workspaces/agent-feed",
+            "processType": "pty",
+            "usePty": true
+          }
+        }
+      }
+    ],
+    "userWorkflow": [
+      {
+        "step": "Open Application",
+        "success": false,
+        "details": "Frontend loads in browser"
+      },
+      {
+        "step": "Create Claude Instance",
+        "success": true,
+        "details": "Instance ID: undefined",
+        "response": {
+          "status": 201,
+          "data": {
+            "success": true,
+            "instance": {
+              "id": "claude-4478",
+              "name": "Claude AI Interactive",
+              "status": "starting",
+              "pid": 96974,
+              "type": "interactive",
+              "created": "2025-09-01T15:26:10.987Z",
+              "command": "claude ",
+              "workingDirectory": "/workspaces/agent-feed",
+              "processType": "pty",
+              "usePty": true
+            }
+          },
+          "raw": "{\"success\":true,\"instance\":{\"id\":\"claude-4478\",\"name\":\"Claude AI Interactive\",\"status\":\"starting\",\"pid\":96974,\"type\":\"interactive\",\"created\":\"2025-09-01T15:26:10.987Z\",\"command\":\"claude \",\"workingDirectory\":\"/workspaces/agent-feed\",\"processType\":\"pty\",\"usePty\":true}}"
+        }
+      }
+    ],
+    "websocketFlow": {
+      "connectionEstablished": true,
+      "messagesExchanged": false,
+      "terminalCommunication": false,
+      "realTimeUpdates": false
+    },
+    "realFunctionality": {
+      "productionMockFree": false,
+      "mockCount": 1,
+      "realProcessSpawning": true,
+      "processResponse": {
+        "success": true,
+        "instance": {
+          "id": "claude-7053",
+          "name": "Claude AI Interactive",
+          "status": "starting",
+          "pid": 97354,
+          "type": "interactive",
+          "created": "2025-09-01T15:26:16.089Z",
+          "command": "claude ",
+          "workingDirectory": "/workspaces/agent-feed",
+          "processType": "pty",
+          "usePty": true
+        }
+      },
+      "fileSystemAccess": true
+    },
+    "criticalValidation": {
+      "servicesRunning": false,
+      "apiEndpointsWorking": true,
+      "userWorkflowComplete": false,
+      "websocketCommunication": true,
+      "realProcesses": true,
+      "noProductionMocks": false
+    }
+  },
+  "executiveSummary": [
+    "✗ Infrastructure issues detected",
+    "✓ API endpoints responding correctly",
+    "✗ User workflow has significant issues",
+    "✓ Real-time WebSocket communication working",
+    "✓ Real functionality confirmed (no mocks)",
+    "✗ Critical validation failures"
+  ],
+  "recommendations": [
+    "🔧 Fix infrastructure: Ensure all services are healthy and responsive",
+    "👤 Fix user workflow: Test each step individually to identify failure points",
+    "🎯 Address critical failures: Review system architecture and error handling"
+  ]
+}

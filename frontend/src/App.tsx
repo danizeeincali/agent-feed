@@ -27,7 +27,7 @@ import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
 import ClaudeInstanceManager from '@/components/ClaudeInstanceManager';
-import ClaudeInstanceManagerModern from '@/components/ClaudeInstanceManagerModern';
+import SafeClaudeInstanceManager from '@/components/SafeClaudeInstanceManager';
 import { TerminalDebug } from '@/components/TerminalDebug';
 import { SimpleTerminalTest } from '@/components/SimpleTerminalTest';
 import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
@@ -37,6 +37,8 @@ import SimpleSettings from '@/components/SimpleSettings';
 import DualInstanceDashboardEnhanced from '@/components/DualInstanceDashboardEnhanced';
 import DualInstance from './pages/DualInstance';
 import DualInstancePage from '@/pages/DualInstancePage';
+import DualModeClaudeManager from '@/components/claude-manager/DualModeClaudeManager';
+import { ClaudeInstanceManagerComponentSSE } from '@/components/claude-manager/ClaudeInstanceManagerComponentSSE';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
 import { TerminalDebugTest } from '@/components/TerminalDebugTest';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
@@ -98,7 +100,9 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const navigation = React.useMemo(() => [
     { name: '🚀 HTTP Terminal', href: '/http-terminal', icon: Code }, // NUCLEAR OPTION: First item
     { name: 'Claude Instances', href: '/claude-instances', icon: Bot },
-    { name: 'Claude Manager', href: '/dual-instance', icon: LayoutDashboard },
+    { name: 'Interactive Control (SSE)', href: '/interactive-control', icon: Bot },
+    { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
+    { name: 'Dual Instance', href: '/dual-instance', icon: Bot },
     { name: 'Feed', href: '/', icon: Activity },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
@@ -247,7 +251,7 @@ const App: React.FC = () => {
                   <Route path="/claude-instances" element={
                     <RouteErrorBoundary routeName="ClaudeInstances">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Claude Instances..." />}>
-                        <ClaudeInstanceManagerModern />
+                        <SafeClaudeInstanceManager />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
@@ -258,7 +262,35 @@ const App: React.FC = () => {
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
+                  {/* SPARC Phase 5: SSE-based Interactive Control */}
+                  <Route path="/interactive-control" element={
+                    <RouteErrorBoundary routeName="InteractiveControlSSE" fallback={<FallbackComponents.DualInstanceFallback />}>
+                      <AsyncErrorBoundary componentName="ClaudeInstanceManagerComponentSSE">
+                        <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading SSE Interactive Control..." />}>
+                          <div className="p-6">
+                            <div className="mb-6">
+                              <h1 className="text-2xl font-bold mb-2">🔄 Interactive Control via SSE</h1>
+                              <p className="text-gray-600">
+                                Real-time Claude instance terminal interaction using Server-Sent Events (migrated from WebSocket).
+                              </p>
+                            </div>
+                            <ClaudeInstanceManagerComponentSSE />
+                          </div>
+                        </Suspense>
+                      </AsyncErrorBoundary>
+                    </RouteErrorBoundary>
+                  } />
+                  
                   {/* New Claude Instance Manager Routes */}
+                  <Route path="/claude-manager" element={
+                    <RouteErrorBoundary routeName="ClaudeManager" fallback={<FallbackComponents.DualInstanceFallback />}>
+                      <AsyncErrorBoundary componentName="DualModeClaudeManager">
+                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
+                          <DualModeClaudeManager />
+                        </Suspense>
+                      </AsyncErrorBoundary>
+                    </RouteErrorBoundary>
+                  } />
                   <Route path="/dual-instance" element={
                     <RouteErrorBoundary routeName="DualInstanceManager" fallback={<FallbackComponents.DualInstanceFallback />}>
                       <AsyncErrorBoundary componentName="DualInstancePage">

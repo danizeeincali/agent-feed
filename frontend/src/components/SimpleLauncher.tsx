@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNLDCapture } from '../utils/nld-ui-capture';
-import { TerminalComponent } from './Terminal';
+import { TerminalUnified } from './TerminalUnified';
 import { TerminalEmergencyFixed } from './TerminalEmergencyFixed';
 import { TerminalExpandedWidth } from './TerminalExpandedWidth';
 import TerminalDiagnostic from './TerminalDiagnostic';
@@ -295,6 +295,7 @@ export const SimpleLauncher: React.FC = () => {
               disabled={isLoading}
               className="launch-button"
               title="Launch Claude in prod directory"
+              data-testid="launch-claude-button"
             >
               {isLoading ? '🔄 Launching...' : '🚀 prod/claude'}
             </button>
@@ -392,7 +393,7 @@ export const SimpleLauncher: React.FC = () => {
       {viewMode === 'terminal' ? (
         // Terminal View
         processStatus.status === 'running' && (
-          <div className="terminal-section mt-6">
+          <div className="terminal-section mt-6" data-testid="terminal-section">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white">🔬 Claude Terminal - Deep Diagnostic</h3>
               <div className="flex items-center space-x-2">
@@ -430,8 +431,8 @@ export const SimpleLauncher: React.FC = () => {
               <div className="space-y-6">
                 {terminalMode === 'original' && (
                   <div>
-                    <h4 className="text-md font-medium text-gray-300 mb-2">📟 Original Terminal</h4>
-                    <TerminalComponent 
+                    <h4 className="text-md font-medium text-gray-300 mb-2">🚀 SPARC Unified Terminal (Fixed Dual Manager Conflict)</h4>
+                    <TerminalUnified 
                       isVisible={showTerminal}
                       processStatus={processStatus}
                       initialCommand={selectedCommand}

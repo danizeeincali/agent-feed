@@ -54,7 +54,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 120000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/test-results",
@@ -68,7 +68,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 120000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/test-results",
@@ -82,7 +82,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 120000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/test-results",
@@ -96,7 +96,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 120000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/test-results",
@@ -110,7 +110,7 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 120000
+        "timeout": 60000
       }
     ],
     "shard": null,
@@ -123,23 +123,1273 @@
   "suites": [],
   "errors": [
     {
-      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/@playwright/test/index.js:17:18)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/playwright.config.ts:1:1)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Module.newCompile2 (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:46:29)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .ts] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:218:18)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:89)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:28)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
-      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/@playwright/test/index.js:17:18)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/playwright.config.ts:1:1)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Module.newCompile2 (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:46:29)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .ts] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:218:18)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:89)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:28)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/playwright.config.ts:1:1)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/e2e-validation.spec.js:1:26)",
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/claude-launcher.test.jsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/claude-launcher.test.jsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/components/DualInstanceDashboard.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/components/DualInstanceDashboard.test.tsx"
+    },
+    {
+      "message": "Error: Do not import `@jest/globals` outside of the Jest test environment",
+      "stack": "Error: Do not import `@jest/globals` outside of the Jest test environment\n    at Object.<anonymous> (/workspaces/agent-feed/tests/comprehensive-sparc-validation/node_modules/@jest/globals/build/index.js:12:7)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/comprehensive-sparc-validation/sparc-comprehensive-terminal-validation.spec.js:10:80)",
       "location": {
-        "file": "/workspaces/agent-feed/playwright.config.ts",
+        "file": "/workspaces/agent-feed/tests/comprehensive-sparc-validation/sparc-comprehensive-terminal-validation.spec.js",
+        "column": 80,
+        "line": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mcomprehensive-sparc-validation/sparc-comprehensive-terminal-validation.spec.js:10\n\n   8 |  */\n   9 |\n> 10 | const { test, expect, describe, beforeAll, afterAll, beforeEach, afterEach } = require('@jest/globals');\n     |                                                                                ^\n  11 | const WebSocket = require('ws');\n  12 | const axios = require('axios');\n  13 | const { spawn, exec } = require('child_process');"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'"
+    },
+    {
+      "message": "Error: Cannot find package '@/test-utils' imported from /workspaces/agent-feed/tests/e2e/claude/claude-instance-creation.spec.ts",
+      "stack": "Error: Cannot find package '@/test-utils' imported from /workspaces/agent-feed/tests/e2e/claude/claude-instance-creation.spec.ts"
+    },
+    {
+      "message": "Error: Cannot find package '@/orchestration' imported from /workspaces/agent-feed/tests/e2e/complete-workflow.spec.ts",
+      "stack": "Error: Cannot find package '@/orchestration' imported from /workspaces/agent-feed/tests/e2e/complete-workflow.spec.ts"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/frontend/websocket-port-config.test.ts:15:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/frontend/websocket-port-config.test.ts",
+        "column": 1,
+        "line": 15
+      },
+      "snippet": "\u001b[90m   at \u001b[39mfrontend/websocket-port-config.test.ts:15\n\n  13 |  */\n  14 |\n> 15 | describe('WebSocket Port Configuration', () => {\n     | ^\n  16 |   const mockApiUrl = 'http://localhost:3000';\n  17 |   const expectedWebSocketUrl = 'ws://localhost:3002/terminal';\n  18 |"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/http-500-error/e2e-button-clicks.spec.ts:13:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/http-500-error/e2e-button-clicks.spec.ts",
+        "column": 1,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39mhttp-500-error/e2e-button-clicks.spec.ts:13\n\n  11 | const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3001';\n  12 |\n> 13 | describe('E2E Button Click HTTP 500 Error Tests', () => {\n     | ^\n  14 |   let browser: Browser;\n  15 |   let page: Page;\n  16 |"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/http-500-error/react-error-boundary.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/http-500-error/react-error-boundary.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package '@/orchestration' imported from /workspaces/agent-feed/tests/integration/agent-orchestration.test.ts",
+      "stack": "Error: Cannot find package '@/orchestration' imported from /workspaces/agent-feed/tests/integration/agent-orchestration.test.ts"
+    },
+    {
+      "message": "Error: Cannot find package '@/test-utils' imported from /workspaces/agent-feed/tests/integration/claude/claude-e2e-communication.test.ts",
+      "stack": "Error: Cannot find package '@/test-utils' imported from /workspaces/agent-feed/tests/integration/claude/claude-e2e-communication.test.ts"
+    },
+    {
+      "message": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/integration/claude/claude-multi-instance.test.ts",
+      "stack": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/integration/claude/claude-multi-instance.test.ts"
+    },
+    {
+      "message": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/integration/claude/claude-websocket-communication.test.ts",
+      "stack": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/integration/claude/claude-websocket-communication.test.ts"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'beforeAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'beforeAll'"
+    },
+    {
+      "message": "SyntaxError: /workspaces/agent-feed/tests/integration/escape-sequence-storm/end-to-end-prevention.test.ts: Unexpected token, expected \",\" (100:58)\n\n   98 |       };\n   99 |       \n> 100 |       const { container } = render(<ClaudeInstanceManager />);\n      |                                                           ^\n  101 |       \n  102 |       // Step 1: Rapid button clicks (should be debounced but isn't)\n  103 |       const prodButton = screen.getByTitle('Launch Claude in prod directory');",
+      "stack": "SyntaxError: /workspaces/agent-feed/tests/integration/escape-sequence-storm/end-to-end-prevention.test.ts: Unexpected token, expected \",\" (100:58)\n\n   98 |       };\n   99 |       \n> 100 |       const { container } = render(<ClaudeInstanceManager />);\n      |                                                           ^\n  101 |       \n  102 |       // Step 1: Rapid button clicks (should be debounced but isn't)\n  103 |       const prodButton = screen.getByTitle('Launch Claude in prod directory');",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/integration/escape-sequence-storm/end-to-end-prevention.test.ts",
+        "line": 100,
+        "column": 58
+      },
+      "snippet": "\u001b[90m   at \u001b[39mintegration/escape-sequence-storm/end-to-end-prevention.test.ts:100\n\n   98 |       };\n   99 |       \n> 100 |       const { container } = render(<ClaudeInstanceManager />);\n      |                                                          ^\n  101 |       \n  102 |       // Step 1: Rapid button clicks (should be debounced but isn't)\n  103 |       const prodButton = screen.getByTitle('Launch Claude in prod directory');"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/integration/frontend-backend-sync.test.js:8:55",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/integration/frontend-backend-sync.test.js",
+        "column": 55,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mintegration/frontend-backend-sync.test.js:8\n\n   6 |  */\n   7 |\n>  8 | const { describe, it, expect, beforeAll, afterAll } = require('@jest/globals');\n     |                                                       ^\n   9 | const { spawn } = require('child_process');\n  10 | const fs = require('fs');\n  11 | const path = require('path');"
+    },
+    {
+      "message": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'",
+      "stack": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/integration/swarm/comprehensive-testing-swarm.test.js:6:57",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/integration/swarm/comprehensive-testing-swarm.test.js",
+        "column": 57,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mintegration/swarm/comprehensive-testing-swarm.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { SwarmExecutor, runComprehensiveTestingSwarm } = require('../../../src/agents/SwarmExecutor');\n    |                                                         ^\n  7 | const ComprehensiveTestingSwarm = require('../../../src/agents/ComprehensiveTestingSwarm');\n  8 |\n  9 | describe('Comprehensive Testing Swarm', () => {"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/integration/swarm/message-handling-integration.test.js:7:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/integration/swarm/message-handling-integration.test.js",
+        "column": 18,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39mintegration/swarm/message-handling-integration.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { jest } = require('@jest/globals');\n     |                  ^\n   8 |\n   9 | // Import unit test mocks for integration testing\n  10 | const { "
+    },
+    {
+      "message": "Error: Cannot find package 'socket.io-client' imported from /workspaces/agent-feed/tests/integration/system-validation.test.ts",
+      "stack": "Error: Cannot find package 'socket.io-client' imported from /workspaces/agent-feed/tests/integration/system-validation.test.ts"
+    },
+    {
+      "message": "TypeError: Cannot redefine property: Symbol($$jest-matchers-object)",
+      "stack": "TypeError: Cannot redefine property: Symbol($$jest-matchers-object)\n    at /workspaces/agent-feed/node_modules/@vitest/expect/dist/index.js:667:9"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/integration/tool-call-display/websocket-tool-integration.test.js:7:80",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/integration/tool-call-display/websocket-tool-integration.test.js",
+        "column": 80,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39mintegration/tool-call-display/websocket-tool-integration.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { describe, test, expect, beforeAll, afterAll, beforeEach, afterEach } = require('@jest/globals');\n     |                                                                                ^\n   8 | const WebSocket = require('ws');\n   9 | const { spawn } = require('child_process');\n  10 |"
+    },
+    {
+      "message": "SyntaxError: /workspaces/agent-feed/tests/integration/ToolCallVisualizationIntegration.test.js: Expecting Unicode escape sequence \\uXXXX. (154:28)\n\n  152 |       serverProcess.on('close', (code) => {\n  153 |         if (code !== 0) {\n> 154 |           reject(new Error(\\`Server exited with code \\${code}\\`));\n      |                             ^\n  155 |         }\n  156 |       });\n  157 |     });",
+      "stack": "SyntaxError: /workspaces/agent-feed/tests/integration/ToolCallVisualizationIntegration.test.js: Expecting Unicode escape sequence \\uXXXX. (154:28)\n\n  152 |       serverProcess.on('close', (code) => {\n  153 |         if (code !== 0) {\n> 154 |           reject(new Error(\\`Server exited with code \\${code}\\`));\n      |                             ^\n  155 |         }\n  156 |       });\n  157 |     });",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/integration/ToolCallVisualizationIntegration.test.js",
+        "line": 154,
+        "column": 28
+      },
+      "snippet": "\u001b[90m   at \u001b[39mintegration/ToolCallVisualizationIntegration.test.js:154\n\n  152 |       serverProcess.on('close', (code) => {\n  153 |         if (code !== 0) {\n> 154 |           reject(new Error(\\`Server exited with code \\${code}\\`));\n      |                            ^\n  155 |         }\n  156 |       });\n  157 |     });"
+    },
+    {
+      "message": "Error: Cannot find package 'socket.io-client' imported from /workspaces/agent-feed/tests/integration/websocket-final-integration.test.ts",
+      "stack": "Error: Cannot find package 'socket.io-client' imported from /workspaces/agent-feed/tests/integration/websocket-final-integration.test.ts"
+    },
+    {
+      "message": "SyntaxError: The requested module '../utils/logger' does not provide an export named 'logger'",
+      "stack": "SyntaxError: The requested module '../utils/logger' does not provide an export named 'logger'"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/nld-patterns/process-lifecycle.test.ts:8:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/nld-patterns/process-lifecycle.test.ts",
+        "column": 1,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mnld-patterns/process-lifecycle.test.ts:8\n\n   6 | import { SimpleProcessManager } from '../../src/services/SimpleProcessManager';\n   7 |\n>  8 | describe('Process Lifecycle - NLD Pattern Prevention', () => {\n     | ^\n   9 |   let processManager: SimpleProcessManager;\n  10 |\n  11 |   beforeEach(() => {"
+    },
+    {
+      "message": "SyntaxError: /workspaces/agent-feed/tests/nld-patterns/react-hooks-initialization.test.ts: Unexpected token, expected \",\" (43:20)\n\n  41 |         expect(attemptSelfReference).toThrow();\n  42 |         \n> 43 |         return <div data-testid=\"component\">Component rendered</div>;\n     |                     ^\n  44 |       };\n  45 |       \n  46 |       // The component should fail to render due to the error",
+      "stack": "SyntaxError: /workspaces/agent-feed/tests/nld-patterns/react-hooks-initialization.test.ts: Unexpected token, expected \",\" (43:20)\n\n  41 |         expect(attemptSelfReference).toThrow();\n  42 |         \n> 43 |         return <div data-testid=\"component\">Component rendered</div>;\n     |                     ^\n  44 |       };\n  45 |       \n  46 |       // The component should fail to render due to the error",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/nld-patterns/react-hooks-initialization.test.ts",
+        "line": 43,
+        "column": 20
+      },
+      "snippet": "\u001b[90m   at \u001b[39mnld-patterns/react-hooks-initialization.test.ts:43\n\n  41 |         expect(attemptSelfReference).toThrow();\n  42 |         \n> 43 |         return <div data-testid=\"component\">Component rendered</div>;\n     |                    ^\n  44 |       };\n  45 |       \n  46 |       // The component should fail to render due to the error"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/nld-patterns/temporal-dead-zone-validation.test.ts:13:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/nld-patterns/temporal-dead-zone-validation.test.ts",
+        "column": 1,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39mnld-patterns/temporal-dead-zone-validation.test.ts:13\n\n  11 |  */\n  12 |\n> 13 | describe('NLD Pattern: Temporal Dead Zone Validation', () => {\n     | ^\n  14 |   describe('JavaScript Variable Hoisting Violations', () => {\n  15 |     it('should detect self-referencing variable patterns', () => {\n  16 |       // Test the exact pattern that caused the bug using eval to bypass TypeScript"
+    },
+    {
+      "message": "Error: Cannot find package '@/orchestration' imported from /workspaces/agent-feed/tests/performance/load-testing.test.ts",
+      "stack": "Error: Cannot find package '@/orchestration' imported from /workspaces/agent-feed/tests/performance/load-testing.test.ts"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/performance/tool-call-rendering/performance-benchmarks.test.js:7:69",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/performance/tool-call-rendering/performance-benchmarks.test.js",
+        "column": 69,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39mperformance/tool-call-rendering/performance-benchmarks.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { describe, test, expect, beforeAll, afterAll, beforeEach } = require('@jest/globals');\n     |                                                                     ^\n   8 | const { performance } = require('perf_hooks');\n   9 |\n  10 | // Mock components that will be implemented"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/specs/01-complete-workflow.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/playwright-claude-code/specs/01-complete-workflow.spec.ts",
         "column": 1,
         "line": 1
       },
-      "snippet": "\u001b[90m   at \u001b[39m../playwright.config.ts:1\n\n> 1 | import { defineConfig, devices } from '@playwright/test';\n    | ^\n  2 |\n  3 | /**\n  4 |  * @see https://playwright.dev/docs/test-configuration"
+      "snippet": "\u001b[90m   at \u001b[39mplaywright-claude-code/specs/01-complete-workflow.spec.ts:1\n\n> 1 | import { test, expect, Page } from '@playwright/test';\n    | ^\n  2 | import ClaudeCodeTestHelpers from '../utils/test-helpers';\n  3 |\n  4 | /**"
     },
     {
-      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
-      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/specs/02-message-handling.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/playwright-claude-code/specs/02-message-handling.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mplaywright-claude-code/specs/02-message-handling.spec.ts:1\n\n> 1 | import { test, expect } from '@playwright/test';\n    | ^\n  2 | import ClaudeCodeTestHelpers from '../utils/test-helpers';\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/specs/03-tool-usage-display.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/playwright-claude-code/specs/03-tool-usage-display.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mplaywright-claude-code/specs/03-tool-usage-display.spec.ts:1\n\n> 1 | import { test, expect } from '@playwright/test';\n    | ^\n  2 | import ClaudeCodeTestHelpers from '../utils/test-helpers';\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/specs/04-regression-tests.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/playwright-claude-code/specs/04-regression-tests.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mplaywright-claude-code/specs/04-regression-tests.spec.ts:1\n\n> 1 | import { test, expect } from '@playwright/test';\n    | ^\n  2 | import ClaudeCodeTestHelpers from '../utils/test-helpers';\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/specs/05-visual-regression.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/playwright-claude-code/specs/05-visual-regression.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mplaywright-claude-code/specs/05-visual-regression.spec.ts:1\n\n> 1 | import { test, expect } from '@playwright/test';\n    | ^\n  2 | import ClaudeCodeTestHelpers from '../utils/test-helpers';\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/specs/06-performance-benchmarks.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/playwright-claude-code/specs/06-performance-benchmarks.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mplaywright-claude-code/specs/06-performance-benchmarks.spec.ts:1\n\n> 1 | import { test, expect } from '@playwright/test';\n    | ^\n  2 | import ClaudeCodeTestHelpers from '../utils/test-helpers';\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/playwright-claude-code/specs/07-ci-integration.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/playwright-claude-code/specs/07-ci-integration.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mplaywright-claude-code/specs/07-ci-integration.spec.ts:1\n\n> 1 | import { test, expect } from '@playwright/test';\n    | ^\n  2 | import ClaudeCodeTestHelpers from '../utils/test-helpers';\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/tests/performance-validation.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-e2e-validation/tests/performance-validation.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-e2e-validation/tests/performance-validation.spec.ts:1\n\n> 1 | import { test, expect } from '@playwright/test';\n    | ^\n  2 |\n  3 | test.describe('Performance Validation', () => {\n  4 |   test('WebSocket connection performance metrics', async ({ page }) => {"
+    },
+    {
+      "message": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: ",
+      "stack": "Error: Requiring @playwright/test second time, \nFirst:\nError: \n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/index.js:60:33)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at Module.require (node:internal/modules/cjs/loader:1487:12)\n    at require (node:internal/modules/helpers:135:16)\n    at Object.<anonymous> (/workspaces/agent-feed/node_modules/playwright/test.js:17:13)\n    at Module._compile (node:internal/modules/cjs/loader:1730:14)\n    at Object.<anonymous> (node:internal/modules/cjs/loader:1895:10)\n    at Object.newLoader2 [as .js] (/workspaces/agent-feed/node_modules/playwright/lib/third_party/pirates.js:52:22)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n    at cjsLoader (node:internal/modules/esm/translators:266:5)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:200:7)\n    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)\n    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)\n    at requireOrImport (/workspaces/agent-feed/node_modules/playwright/lib/transform/transform.js:214:12)\n    at loadUserConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:107:46)\n    at loadConfig (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:119:22)\n    at loadConfigFromFile (/workspaces/agent-feed/node_modules/playwright/lib/common/configLoader.js:331:10)\n    at runTests (/workspaces/agent-feed/node_modules/playwright/lib/program.js:145:18)\n    at i.<anonymous> (/workspaces/agent-feed/node_modules/playwright/lib/program.js:64:7)\n\nSecond: \n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/node_modules/playwright/lib/index.js:55:11)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/node_modules/playwright/test.js:17:13)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/node_modules/@playwright/test/index.js:17:18)\n    at Object.<anonymous> (/workspaces/agent-feed/tests/production-e2e-validation/tests/websocket-validation.spec.ts:1:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-e2e-validation/tests/websocket-validation.spec.ts",
+        "column": 1,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-e2e-validation/tests/websocket-validation.spec.ts:1\n\n> 1 | import { test, expect, Page } from '@playwright/test';\n    | ^\n  2 |\n  3 | class WebSocketMonitor {\n  4 |   private connections: Set<any> = new Set();"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation/mobile-browser-tool-call.spec.ts",
+        "line": 35,
+        "column": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation/mobile-browser-tool-call.spec.ts:35\n\n  33 |   MOBILE_DEVICES.forEach(({ name, config }) => {\n  34 |     test.describe(`${name} Tests`, () => {\n> 35 |       test.use({ ...config });\n     |            ^\n  36 |       \n  37 |       test(`should handle tool calls on ${name}`, async ({ page }) => {\n  38 |         console.log(`🌟 Testing: Tool calls on ${name}`);"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation/mobile-browser-tool-call.spec.ts",
+        "line": 35,
+        "column": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation/mobile-browser-tool-call.spec.ts:35\n\n  33 |   MOBILE_DEVICES.forEach(({ name, config }) => {\n  34 |     test.describe(`${name} Tests`, () => {\n> 35 |       test.use({ ...config });\n     |            ^\n  36 |       \n  37 |       test(`should handle tool calls on ${name}`, async ({ page }) => {\n  38 |         console.log(`🌟 Testing: Tool calls on ${name}`);"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation/mobile-browser-tool-call.spec.ts",
+        "line": 35,
+        "column": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation/mobile-browser-tool-call.spec.ts:35\n\n  33 |   MOBILE_DEVICES.forEach(({ name, config }) => {\n  34 |     test.describe(`${name} Tests`, () => {\n> 35 |       test.use({ ...config });\n     |            ^\n  36 |       \n  37 |       test(`should handle tool calls on ${name}`, async ({ page }) => {\n  38 |         console.log(`🌟 Testing: Tool calls on ${name}`);"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation/mobile-browser-tool-call.spec.ts",
+        "line": 35,
+        "column": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation/mobile-browser-tool-call.spec.ts:35\n\n  33 |   MOBILE_DEVICES.forEach(({ name, config }) => {\n  34 |     test.describe(`${name} Tests`, () => {\n> 35 |       test.use({ ...config });\n     |            ^\n  36 |       \n  37 |       test(`should handle tool calls on ${name}`, async ({ page }) => {\n  38 |         console.log(`🌟 Testing: Tool calls on ${name}`);"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation/mobile-browser-tool-call.spec.ts",
+        "line": 35,
+        "column": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation/mobile-browser-tool-call.spec.ts:35\n\n  33 |   MOBILE_DEVICES.forEach(({ name, config }) => {\n  34 |     test.describe(`${name} Tests`, () => {\n> 35 |       test.use({ ...config });\n     |            ^\n  36 |       \n  37 |       test(`should handle tool calls on ${name}`, async ({ page }) => {\n  38 |         console.log(`🌟 Testing: Tool calls on ${name}`);"
+    },
+    {
+      "message": "Cannot use({ defaultBrowserType }) in a describe group, because it forces a new worker.\nMake it top-level in the test file or put in the configuration file.",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation/mobile-browser-tool-call.spec.ts",
+        "line": 35,
+        "column": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation/mobile-browser-tool-call.spec.ts:35\n\n  33 |   MOBILE_DEVICES.forEach(({ name, config }) => {\n  34 |     test.describe(`${name} Tests`, () => {\n> 35 |       test.use({ ...config });\n     |            ^\n  36 |       \n  37 |       test(`should handle tool calls on ${name}`, async ({ page }) => {\n  38 |         console.log(`🌟 Testing: Tool calls on ${name}`);"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/production-validation-comprehensive.test.js:13:22",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation-comprehensive.test.js",
+        "column": 22,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation-comprehensive.test.js:13\n\n  11 |  */\n  12 |\n> 13 | const { chromium } = require('playwright');\n     |                      ^\n  14 | const axios = require('axios');\n  15 | const WebSocket = require('ws');\n  16 |"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/production-validation-simple.test.js:6:15",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/production-validation-simple.test.js",
+        "column": 15,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mproduction-validation-simple.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const axios = require('axios');\n    |               ^\n  7 | const WebSocket = require('ws');\n  8 |\n  9 | const BACKEND_URL = 'http://localhost:3000';"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/build-validation.test.ts:10:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/build-validation.test.ts",
+        "column": 1,
+        "line": 10
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/build-validation.test.ts:10\n\n   8 | import { join } from 'path';\n   9 |\n> 10 | describe('Build Validation - Regression Prevention', () => {\n     | ^\n  11 |   const frontendDir = join(__dirname, '../../frontend');\n  12 |   const backendDir = join(__dirname, '../..');\n  13 |"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/character-sequence-bugs.test.ts:34:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/character-sequence-bugs.test.ts",
+        "column": 1,
+        "line": 34
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/character-sequence-bugs.test.ts:34\n\n  32 | }\n  33 |\n> 34 | describe('Character Sequence Bug Regression - TDD Tests', () => {\n     | ^\n  35 |   let bugDatabase: CharacterBug[];\n  36 |   let testResults: BugTestResult[];\n  37 |   let mockProcessor: any;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/claude-cli-detection-fix.test.ts:13:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/claude-cli-detection-fix.test.ts",
+        "column": 1,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/claude-cli-detection-fix.test.ts:13\n\n  11 | import * as os from 'os';\n  12 |\n> 13 | describe('Claude CLI Detection Regression', () => {\n     | ^\n  14 |   let originalPath: string | undefined;\n  15 |   let testEnvironment: Record<string, string>;\n  16 |   "
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\n    at /workspaces/agent-feed/tests/regression/claude-cli-detection.test.ts:6:12",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/claude-cli-detection.test.ts",
+        "column": 12,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/claude-cli-detection.test.ts:6\n\n  4 |  */\n  5 |\n> 6 | const fs = require('fs');\n    |            ^\n  7 | const path = require('path');\n  8 |\n  9 | // Import the CLI detector"
+    },
+    {
+      "message": "SyntaxError: /workspaces/agent-feed/tests/regression/claude-detection-tdd.test.ts: Unexpected token, expected \",\" (47:29)\n\n  45 |\n  46 |       // Act: Render component\n> 47 |       render(<SimpleLauncher />);\n     |                              ^\n  48 |\n  49 |       // Assert: Check API call and state update\n  50 |       await waitFor(() => {",
+      "stack": "SyntaxError: /workspaces/agent-feed/tests/regression/claude-detection-tdd.test.ts: Unexpected token, expected \",\" (47:29)\n\n  45 |\n  46 |       // Act: Render component\n> 47 |       render(<SimpleLauncher />);\n     |                              ^\n  48 |\n  49 |       // Assert: Check API call and state update\n  50 |       await waitFor(() => {",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/claude-detection-tdd.test.ts",
+        "line": 47,
+        "column": 29
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/claude-detection-tdd.test.ts:47\n\n  45 |\n  46 |       // Act: Render component\n> 47 |       render(<SimpleLauncher />);\n     |                             ^\n  48 |\n  49 |       // Assert: Check API call and state update\n  50 |       await waitFor(() => {"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/regression/component-initialization.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/regression/component-initialization.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/regression/component-integration.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/regression/component-integration.test.tsx"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/cors-validation.test.ts:11:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/cors-validation.test.ts",
+        "column": 1,
+        "line": 11
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/cors-validation.test.ts:11\n\n   9 | import WebSocket from 'ws';\n  10 |\n> 11 | describe('CORS Validation - Regression Prevention', () => {\n     | ^\n  12 |   let backendProcess: any;\n  13 |   const backendPort = 3001;\n  14 |   const frontendPort = 5173;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/escape-sequence-filtering.test.ts:28:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/escape-sequence-filtering.test.ts",
+        "column": 1,
+        "line": 28
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/escape-sequence-filtering.test.ts:28\n\n  26 | }\n  27 |\n> 28 | describe('Escape Sequence Filtering - TDD Tests', () => {\n     | ^\n  29 |   let terminalFilter: TerminalFilter;\n  30 |   let capturedOutput: string[];\n  31 |   let filteredSequences: string[];"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/input-buffering-validation.test.ts:26:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/input-buffering-validation.test.ts",
+        "column": 1,
+        "line": 26
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/input-buffering-validation.test.ts:26\n\n  24 | }\n  25 |\n> 26 | describe('Input Buffering Validation - TDD Tests', () => {\n     | ^\n  27 |   let mockSession: MockTerminalSession;\n  28 |   let mockProcess: any;\n  29 |   let mockWebSocket: any;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/pty-echo-prevention.test.ts:31:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/pty-echo-prevention.test.ts",
+        "column": 1,
+        "line": 31
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/pty-echo-prevention.test.ts:31\n\n  29 | }\n  30 |\n> 31 | describe('PTY Echo Prevention - TDD Tests', () => {\n     | ^\n  32 |   let mockPTY: MockPTYProcess;\n  33 |   let mockTerminalConfig: MockTerminalConfig;\n  34 |   let capturedOutput: string[];"
+    },
+    {
+      "message": "Error: Cannot find package '@xterm/addon-fit' imported from /workspaces/agent-feed/tests/regression/syntax-fix-validation.test.ts",
+      "stack": "Error: Cannot find package '@xterm/addon-fit' imported from /workspaces/agent-feed/tests/regression/syntax-fix-validation.test.ts"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/terminal-e2e.test.ts:11:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/terminal-e2e.test.ts",
+        "column": 1,
+        "line": 11
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/terminal-e2e.test.ts:11\n\n   9 | import { join } from 'path';\n  10 |\n> 11 | describe('Terminal E2E - Regression Prevention', () => {\n     | ^\n  12 |   let browser: Browser;\n  13 |   let page: Page;\n  14 |   let backendProcess: ChildProcess;"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/regression/tool-call/extend-existing-regression.test.js:7:80",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/tool-call/extend-existing-regression.test.js",
+        "column": 80,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/tool-call/extend-existing-regression.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { describe, test, expect, beforeAll, afterAll, beforeEach, afterEach } = require('@jest/globals');\n     |                                                                                ^\n   8 | const WebSocket = require('ws');\n   9 | const { spawn } = require('child_process');\n  10 |"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/regression/tool-call/websocket-stability-regression.test.js:7:80",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/tool-call/websocket-stability-regression.test.js",
+        "column": 80,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/tool-call/websocket-stability-regression.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { describe, test, expect, beforeAll, afterAll, beforeEach, afterEach } = require('@jest/globals');\n     |                                                                                ^\n   8 | const WebSocket = require('ws');\n   9 | const { spawn } = require('child_process');\n  10 |"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/ui-cascade-prevention.test.ts:36:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/ui-cascade-prevention.test.ts",
+        "column": 1,
+        "line": 36
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/ui-cascade-prevention.test.ts:36\n\n  34 | }\n  35 |\n> 36 | describe('UI Cascade Prevention - TDD Tests', () => {\n     | ^\n  37 |   let uiState: UIState;\n  38 |   let mockTerminal: TerminalComponent;\n  39 |   let renderEvents: string[];"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterAll'"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/regression/websocket-stability-regression.test.js:11:57",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/websocket-stability-regression.test.js",
+        "column": 57,
+        "line": 11
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/websocket-stability-regression.test.js:11\n\n   9 |  */\n  10 |\n> 11 | const { describe, it, expect, beforeEach, afterEach } = require('@jest/globals');\n     |                                                         ^\n  12 | const WebSocket = require('ws');\n  13 | const fs = require('fs');\n  14 | const path = require('path');"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/websocket-stability.test.ts:37:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/websocket-stability.test.ts",
+        "column": 1,
+        "line": 37
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/websocket-stability.test.ts:37\n\n  35 | }\n  36 |\n> 37 | describe('WebSocket Connection Stability - TDD Tests', () => {\n     | ^\n  38 |   let mockWebSocket: MockWebSocket;\n  39 |   let connectionState: ConnectionState;\n  40 |   let messageQueue: string[];"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/regression/websocket-terminal-integration.test.ts:26:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/websocket-terminal-integration.test.ts",
+        "column": 1,
+        "line": 26
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/websocket-terminal-integration.test.ts:26\n\n  24 | }\n  25 |\n> 26 | describe('WebSocket Terminal Integration - NO MOCKS', () => {\n     | ^\n  27 |   let createdInstances: string[] = [];\n  28 |\n  29 |   afterEach(async () => {"
+    },
+    {
+      "message": "SyntaxError: /workspaces/agent-feed/tests/regression/websocket-terminal-regression.test.ts: Unexpected token, expected \",\" (59:28)\n\n  57 |       };\n  58 |       \n> 59 |       render(<TerminalFixed isVisible={true} processStatus={mockProcessStatus} />);\n     |                             ^\n  60 |       \n  61 |       // Verify Socket.IO is called with relative URL (proxy-compatible)\n  62 |       await waitFor(() => {",
+      "stack": "SyntaxError: /workspaces/agent-feed/tests/regression/websocket-terminal-regression.test.ts: Unexpected token, expected \",\" (59:28)\n\n  57 |       };\n  58 |       \n> 59 |       render(<TerminalFixed isVisible={true} processStatus={mockProcessStatus} />);\n     |                             ^\n  60 |       \n  61 |       // Verify Socket.IO is called with relative URL (proxy-compatible)\n  62 |       await waitFor(() => {",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/regression/websocket-terminal-regression.test.ts",
+        "line": 59,
+        "column": 28
+      },
+      "snippet": "\u001b[90m   at \u001b[39mregression/websocket-terminal-regression.test.ts:59\n\n  57 |       };\n  58 |       \n> 59 |       render(<TerminalFixed isVisible={true} processStatus={mockProcessStatus} />);\n     |                            ^\n  60 |       \n  61 |       // Verify Socket.IO is called with relative URL (proxy-compatible)\n  62 |       await waitFor(() => {"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'beforeAll'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'beforeAll'"
+    },
+    {
+      "message": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/sparc-debug/terminal-websocket-tdd.test.ts",
+      "stack": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/sparc-debug/terminal-websocket-tdd.test.ts"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/sparc-debug-verification/sparc-user-workflow-validation.test.ts:12:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/sparc-debug-verification/sparc-user-workflow-validation.test.ts",
+        "column": 1,
+        "line": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39msparc-debug-verification/sparc-user-workflow-validation.test.ts:12\n\n  10 | import { test, expect, Page, BrowserContext } from '@playwright/test';\n  11 |\n> 12 | describe('SPARC User Workflow Validation Suite', () => {\n     | ^\n  13 |   let page: Page;\n  14 |   let context: BrowserContext;\n  15 |   let websocketMessages: any[] = [];"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/sparc-tdd/claude-api-timeout-fix.test.js:8:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/sparc-tdd/claude-api-timeout-fix.test.js",
+        "column": 19,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39msparc-tdd/claude-api-timeout-fix.test.js:8\n\n   6 |  */\n   7 |\n>  8 | const { spawn } = require('child_process');\n     |                   ^\n   9 | const fs = require('fs');\n  10 | const path = require('path');\n  11 |"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/sparc-tdd/sparc-e2e-validation.spec.js:8:26",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/sparc-tdd/sparc-e2e-validation.spec.js",
+        "column": 26,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39msparc-tdd/sparc-e2e-validation.spec.js:8\n\n   6 |  */\n   7 |\n>  8 | const { test, expect } = require('@playwright/test');\n     |                          ^\n   9 |\n  10 | test.describe('SPARC Claude API Timeout Fix - E2E Validation', () => {\n  11 |   "
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/sparc-websocket-stability/production-validation.test.js:8:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/sparc-websocket-stability/production-validation.test.js",
+        "column": 19,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39msparc-websocket-stability/production-validation.test.js:8\n\n   6 |  */\n   7 |\n>  8 | const WebSocket = require('ws');\n     |                   ^\n   9 | const { spawn } = require('child_process');\n  10 | const assert = require('assert');\n  11 |"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/sparc-websocket-stability/websocket-persistence.test.js:6:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/sparc-websocket-stability/websocket-persistence.test.js",
+        "column": 19,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39msparc-websocket-stability/websocket-persistence.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const WebSocket = require('ws');\n    |                   ^\n  7 | const { spawn } = require('child_process');\n  8 | const http = require('http');\n  9 | const assert = require('assert');"
+    },
+    {
+      "message": "SyntaxError: Duplicate export of 'ConnectionMonitor'",
+      "stack": "SyntaxError: Duplicate export of 'ConnectionMonitor'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@playwright/test' does not provide an export named 'describe'",
+      "stack": "SyntaxError: The requested module '@playwright/test' does not provide an export named 'describe'"
+    },
+    {
+      "message": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/tdd/integration/real-time/websocket.test.ts",
+      "stack": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/tdd/integration/real-time/websocket.test.ts"
+    },
+    {
+      "message": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'",
+      "stack": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'",
+      "stack": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd/unit/components/CommentThread.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd/unit/components/CommentThread.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package '@testing-library/react' imported from /workspaces/agent-feed/tests/tdd/websocket-singleton-validation.test.ts",
+      "stack": "Error: Cannot find package '@testing-library/react' imported from /workspaces/agent-feed/tests/tdd/websocket-singleton-validation.test.ts"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-claude-api/integration/error-recovery.test.js:6:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-claude-api/integration/error-recovery.test.js",
+        "column": 19,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-claude-api/integration/error-recovery.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { spawn } = require('child_process');\n    |                   ^\n  7 | const { EventEmitter } = require('events');\n  8 |\n  9 | describe('Error Recovery Mechanisms', () => {"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-claude-api/integration/process-cleanup.test.js:6:25",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-claude-api/integration/process-cleanup.test.js",
+        "column": 25,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-claude-api/integration/process-cleanup.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { spawn, exec } = require('child_process');\n    |                         ^\n  7 | const { promisify } = require('util');\n  8 | const fs = require('fs').promises;\n  9 | const path = require('path');"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-claude-api/integration/subprocess-management.test.js:6:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-claude-api/integration/subprocess-management.test.js",
+        "column": 19,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-claude-api/integration/subprocess-management.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { spawn } = require('child_process');\n    |                   ^\n  7 | const path = require('path');\n  8 | const EventEmitter = require('events');\n  9 |"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-claude-api/integration/timeout-handling.test.js:6:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-claude-api/integration/timeout-handling.test.js",
+        "column": 19,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-claude-api/integration/timeout-handling.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { spawn } = require('child_process');\n    |                   ^\n  7 | const { EventEmitter } = require('events');\n  8 |\n  9 | describe('Timeout Handling Scenarios', () => {"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-claude-api/performance/load-testing.test.js:6:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-claude-api/performance/load-testing.test.js",
+        "column": 19,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-claude-api/performance/load-testing.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { spawn } = require('child_process');\n    |                   ^\n  7 | const { performance } = require('perf_hooks');\n  8 | const { EventEmitter } = require('events');\n  9 |"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-claude-api/unit/claude-api-communication.test.js:6:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-claude-api/unit/claude-api-communication.test.js",
+        "column": 19,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-claude-api/unit/claude-api-communication.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { spawn } = require('child_process');\n    |                   ^\n  7 | const { testUtils } = global;\n  8 |\n  9 | describe('Claude API Communication (Unit Tests)', () => {"
+    },
+    {
+      "message": "SyntaxError: The requested module '../utils/logger' does not provide an export named 'logger'",
+      "stack": "SyntaxError: The requested module '../utils/logger' does not provide an export named 'logger'"
+    },
+    {
+      "message": "SyntaxError: The requested module '../utils/logger' does not provide an export named 'logger'",
+      "stack": "SyntaxError: The requested module '../utils/logger' does not provide an export named 'logger'"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/tdd-sse/claude-output-parsing.test.ts:11:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-sse/claude-output-parsing.test.ts",
+        "column": 1,
+        "line": 11
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-sse/claude-output-parsing.test.ts:11\n\n   9 |  */\n  10 |\n> 11 | describe('Claude Output Parsing - London School TDD', () => {\n     | ^\n  12 |   let mockAnsiParser: jest.Mocked<any>;\n  13 |   let mockMessageExtractor: jest.Mocked<any>;\n  14 |   let mockOutputFormatter: jest.Mocked<any>;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/tdd-sse/connection-lifecycle.test.ts:13:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-sse/connection-lifecycle.test.ts",
+        "column": 1,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-sse/connection-lifecycle.test.ts:13\n\n  11 | import { MockEventSource } from './mocks/event-source.mock';\n  12 |\n> 13 | describe('Connection Lifecycle - London School TDD', () => {\n     | ^\n  14 |   let mockLifecycleManager: jest.Mocked<any>;\n  15 |   let mockResourceTracker: jest.Mocked<any>;\n  16 |   let mockStateTransition: jest.Mocked<any>;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/tdd-sse/error-recovery.test.ts:13:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-sse/error-recovery.test.ts",
+        "column": 1,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-sse/error-recovery.test.ts:13\n\n  11 | import { MockEventSource } from './mocks/event-source.mock';\n  12 |\n> 13 | describe('Error Recovery - London School TDD', () => {\n     | ^\n  14 |   let mockRecoveryManager: jest.Mocked<any>;\n  15 |   let mockRetryStrategy: jest.Mocked<any>;\n  16 |   let mockErrorReporter: jest.Mocked<any>;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/tdd-sse/message-bubble-integration.test.ts:13:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-sse/message-bubble-integration.test.ts",
+        "column": 1,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-sse/message-bubble-integration.test.ts:13\n\n  11 | import { MockEventSource } from './mocks/event-source.mock';\n  12 |\n> 13 | describe('Message Bubble Integration - London School TDD', () => {\n     | ^\n  14 |   let mockMessageRenderer: jest.Mocked<any>;\n  15 |   let mockChatStore: jest.Mocked<any>;\n  16 |   let mockUIManager: jest.Mocked<any>;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/tdd-sse/sse-connection-management.test.ts:12:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-sse/sse-connection-management.test.ts",
+        "column": 1,
+        "line": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-sse/sse-connection-management.test.ts:12\n\n  10 | import { MockEventSource } from './mocks/event-source.mock';\n  11 |\n> 12 | describe('SSE Connection Management - London School TDD', () => {\n     | ^\n  13 |   let mockConnectionManager: jest.Mocked<any>;\n  14 |   let mockStateManager: jest.Mocked<any>;\n  15 |   let connectionInstances: Map<string, any>;"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/accessibility-ux.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/accessibility-ux.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/ChatInterface.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/ChatInterface.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/ClaudeInstanceButtons.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/ClaudeInstanceButtons.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/MessageInput.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/MessageInput.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/MessageList.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/MessageList.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/ui-integration.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/ui-integration.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/visual-regression.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/tdd-ui/visual-regression.test.tsx"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-websocket-connection-suite.spec.js:1:26",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-websocket-connection-suite.spec.js",
+        "column": 26,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-websocket-connection-suite.spec.js:1\n\n> 1 | const { test, expect } = require('@playwright/test');\n    |                          ^\n  2 | const WebSocket = require('ws');\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/tdd-websocket-message-flow.spec.js:1:26",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/tdd-websocket-message-flow.spec.js",
+        "column": 26,
+        "line": 1
+      },
+      "snippet": "\u001b[90m   at \u001b[39mtdd-websocket-message-flow.spec.js:1\n\n> 1 | const { test, expect } = require('@playwright/test');\n    |                          ^\n  2 | const WebSocket = require('ws');\n  3 |\n  4 | /**"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'beforeEach'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'beforeEach'"
+    },
+    {
+      "message": "Error: Cannot find package '@/controllers' imported from /workspaces/agent-feed/tests/unit/claude/claude-api-endpoints.test.ts",
+      "stack": "Error: Cannot find package '@/controllers' imported from /workspaces/agent-feed/tests/unit/claude/claude-api-endpoints.test.ts"
+    },
+    {
+      "message": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/unit/claude/claude-instance-lifecycle.test.ts",
+      "stack": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/unit/claude/claude-instance-lifecycle.test.ts"
+    },
+    {
+      "message": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/unit/claude/claude-process-manager.test.ts",
+      "stack": "Error: Cannot find package '@/services' imported from /workspaces/agent-feed/tests/unit/claude/claude-process-manager.test.ts"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/claude-instance-buttons-refinement.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/claude-instance-buttons-refinement.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/components/PostCreator.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/components/PostCreator.test.tsx"
+    },
+    {
+      "message": "SyntaxError: /workspaces/agent-feed/tests/unit/escape-sequence-storm/button-click-debouncing.test.ts: Unexpected token, expected \",\" (70:58)\n\n  68 |   describe('Single Button Click Prevention', () => {\n  69 |     test('SHOULD FAIL: Multiple rapid clicks on prod/claude button create multiple instances', async () => {\n> 70 |       const { container } = render(<ClaudeInstanceManager />);\n     |                                                           ^\n  71 |       \n  72 |       // Find the prod/claude launch button\n  73 |       const prodButton = screen.getByTitle('Launch Claude in prod directory');",
+      "stack": "SyntaxError: /workspaces/agent-feed/tests/unit/escape-sequence-storm/button-click-debouncing.test.ts: Unexpected token, expected \",\" (70:58)\n\n  68 |   describe('Single Button Click Prevention', () => {\n  69 |     test('SHOULD FAIL: Multiple rapid clicks on prod/claude button create multiple instances', async () => {\n> 70 |       const { container } = render(<ClaudeInstanceManager />);\n     |                                                           ^\n  71 |       \n  72 |       // Find the prod/claude launch button\n  73 |       const prodButton = screen.getByTitle('Launch Claude in prod directory');",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/escape-sequence-storm/button-click-debouncing.test.ts",
+        "line": 70,
+        "column": 58
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/escape-sequence-storm/button-click-debouncing.test.ts:70\n\n  68 |   describe('Single Button Click Prevention', () => {\n  69 |     test('SHOULD FAIL: Multiple rapid clicks on prod/claude button create multiple instances', async () => {\n> 70 |       const { container } = render(<ClaudeInstanceManager />);\n     |                                                          ^\n  71 |       \n  72 |       // Find the prod/claude launch button\n  73 |       const prodButton = screen.getByTitle('Launch Claude in prod directory');"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/unit/escape-sequence-storm/output-buffer-management.test.ts:116:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/escape-sequence-storm/output-buffer-management.test.ts",
+        "column": 1,
+        "line": 116
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/escape-sequence-storm/output-buffer-management.test.ts:116\n\n  114 | }\n  115 |\n> 116 | describe('Output Buffer Management - Escape Sequence Storm Prevention', () => {\n      | ^\n  117 |   let bufferManager: MockOutputBufferManager;\n  118 |   \n  119 |   beforeEach(() => {"
+    },
+    {
+      "message": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'",
+      "stack": "SyntaxError: The requested module '@/utils/logger' does not provide an export named 'logger'"
+    },
+    {
+      "message": "Error: Cannot find package '@testing-library/react' imported from /workspaces/agent-feed/tests/unit/escape-sequence-storm/sse-connection-management.test.ts",
+      "stack": "Error: Cannot find package '@testing-library/react' imported from /workspaces/agent-feed/tests/unit/escape-sequence-storm/sse-connection-management.test.ts"
+    },
+    {
+      "message": "ReferenceError: jest is not defined",
+      "stack": "ReferenceError: jest is not defined\n    at /workspaces/agent-feed/tests/unit/instance-endpoint-consistency/error-handling-versioning.test.ts:20:16",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/instance-endpoint-consistency/error-handling-versioning.test.ts",
+        "column": 16,
+        "line": 20
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/instance-endpoint-consistency/error-handling-versioning.test.ts:20\n\n  18 | import { APIClient, defaultAPIConfig } from '../../../frontend/src/config/api';\n  19 |\n> 20 | global.fetch = jest.fn();\n     |                ^\n  21 |\n  22 | describe('Error Handling for Versioned/Unversioned Endpoints', () => {\n  23 |   let mockBackend: MockBackendServer;"
+    },
+    {
+      "message": "ReferenceError: jest is not defined",
+      "stack": "ReferenceError: jest is not defined\n    at /workspaces/agent-feed/tests/unit/instance-endpoint-consistency/instance-lifecycle-integration.test.ts:36:16",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/instance-endpoint-consistency/instance-lifecycle-integration.test.ts",
+        "column": 16,
+        "line": 36
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/instance-endpoint-consistency/instance-lifecycle-integration.test.ts:36\n\n  34 |\n  35 | // Mock fetch and EventSource globally\n> 36 | global.fetch = jest.fn();\n     |                ^\n  37 | global.EventSource = MockEventSource as any;\n  38 |\n  39 | describe('Instance Lifecycle Integration Tests', () => {"
+    },
+    {
+      "message": "ReferenceError: jest is not defined",
+      "stack": "ReferenceError: jest is not defined\n    at /workspaces/agent-feed/tests/unit/instance-endpoint-consistency/mixed-versioning-scenarios.test.ts:18:16",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/instance-endpoint-consistency/mixed-versioning-scenarios.test.ts",
+        "column": 16,
+        "line": 18
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/instance-endpoint-consistency/mixed-versioning-scenarios.test.ts:18\n\n  16 | import { APIClient, defaultAPIConfig } from '../../../frontend/src/config/api';\n  17 |\n> 18 | global.fetch = jest.fn();\n     |                ^\n  19 |\n  20 | describe('Mixed API Versioning Scenarios', () => {\n  21 |   let mockBackend: MockBackendServer;"
+    },
+    {
+      "message": "ReferenceError: jest is not defined",
+      "stack": "ReferenceError: jest is not defined\n    at /workspaces/agent-feed/tests/unit/instance-endpoint-consistency/simple-validation.test.ts:11:16",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/instance-endpoint-consistency/simple-validation.test.ts",
+        "column": 16,
+        "line": 11
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/instance-endpoint-consistency/simple-validation.test.ts:11\n\n   9 |\n  10 | // Mock fetch globally\n> 11 | global.fetch = jest.fn();\n     |                ^\n  12 |\n  13 | describe('Instance Endpoint Consistency - Simple Validation', () => {\n  14 |   let mockBackend: ReturnType<typeof createMockBackend>;"
+    },
+    {
+      "message": "ReferenceError: jest is not defined",
+      "stack": "ReferenceError: jest is not defined\n    at /workspaces/agent-feed/tests/unit/instance-endpoint-consistency/url-mismatch-scenarios.test.ts:19:16",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/instance-endpoint-consistency/url-mismatch-scenarios.test.ts",
+        "column": 16,
+        "line": 19
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/instance-endpoint-consistency/url-mismatch-scenarios.test.ts:19\n\n  17 |\n  18 | // Mock fetch globally\n> 19 | global.fetch = jest.fn();\n     |                ^\n  20 |\n  21 | describe('Instance Endpoint Consistency - URL Mismatch Scenarios', () => {\n  22 |   let mockBackend: MockBackendServer;"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/message/message-sequencing.test.js:7:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/message/message-sequencing.test.js",
+        "column": 18,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/message/message-sequencing.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { jest } = require('@jest/globals');\n     |                  ^\n   8 |\n   9 | // Mock contracts for message sequencing collaborators\n  10 | const mockMessageStore = {"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at /workspaces/agent-feed/tests/unit/rate-limit-logic-validation.test.ts:6:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/rate-limit-logic-validation.test.ts",
+        "column": 1,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/rate-limit-logic-validation.test.ts:6\n\n  4 |  */\n  5 |\n> 6 | describe('Rate Limiting Logic Validation', () => {\n    | ^\n  7 |   // Simulate the rate limiting logic without React hooks\n  8 |   class RateLimitSimulator {\n  9 |     private callTimestamps: number[] = [];"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-integration.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-integration.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-performance.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-performance.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-render-behavior.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-render-behavior.test.tsx"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-state-management.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/rate-limiting/rate-limit-state-management.test.tsx"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'afterEach'"
+    },
+    {
+      "message": "SyntaxError: /workspaces/agent-feed/tests/unit/tdd-london/behavior-verification/service-layer-interactions.test.js: Support for the experimental syntax 'optionalChainingAssign' isn't currently enabled (379:5):\n\n  377 |   async function propagateStateUpdate(stateUpdate) {\n  378 |     // Update each service with new state\n> 379 |     instanceManager.instances.get('mock-id')?.status = stateUpdate.status;\n      |     ^\n  380 |     animationTracker.setProgress(stateUpdate.progress);\n  381 |     \n  382 |     // Notify all services of state change\n\nIf you already added the plugin for this syntax to your config, it's possible that your config isn't being loaded.\nYou can re-run Babel with the BABEL_SHOW_CONFIG_FOR environment variable to show the loaded configuration:\n\tnpx cross-env BABEL_SHOW_CONFIG_FOR=/workspaces/agent-feed/tests/unit/tdd-london/behavior-verification/service-layer-interactions.test.js <your build command>\nSee https://babeljs.io/docs/configuration#print-effective-configs for more info.\n",
+      "stack": "SyntaxError: /workspaces/agent-feed/tests/unit/tdd-london/behavior-verification/service-layer-interactions.test.js: Support for the experimental syntax 'optionalChainingAssign' isn't currently enabled (379:5):\n\n  377 |   async function propagateStateUpdate(stateUpdate) {\n  378 |     // Update each service with new state\n> 379 |     instanceManager.instances.get('mock-id')?.status = stateUpdate.status;\n      |     ^\n  380 |     animationTracker.setProgress(stateUpdate.progress);\n  381 |     \n  382 |     // Notify all services of state change\n\nIf you already added the plugin for this syntax to your config, it's possible that your config isn't being loaded.\nYou can re-run Babel with the BABEL_SHOW_CONFIG_FOR environment variable to show the loaded configuration:\n\tnpx cross-env BABEL_SHOW_CONFIG_FOR=/workspaces/agent-feed/tests/unit/tdd-london/behavior-verification/service-layer-interactions.test.js <your build command>\nSee https://babeljs.io/docs/configuration#print-effective-configs for more info.\n",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tdd-london/behavior-verification/service-layer-interactions.test.js",
+        "line": 379,
+        "column": 4
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tdd-london/behavior-verification/service-layer-interactions.test.js:379\n\n  377 |   async function propagateStateUpdate(stateUpdate) {\n  378 |     // Update each service with new state\n> 379 |     instanceManager.instances.get('mock-id')?.status = stateUpdate.status;\n      |    ^\n  380 |     animationTracker.setProgress(stateUpdate.progress);\n  381 |     \n  382 |     // Notify all services of state change"
+    },
+    {
+      "message": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/tdd-london/ButtonClickInteractions.test.tsx",
+      "stack": "Error: Cannot find package 'react' imported from /workspaces/agent-feed/tests/unit/tdd-london/ButtonClickInteractions.test.tsx"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tdd-london/e2e/complete-workflow-validation.test.js:6:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tdd-london/e2e/complete-workflow-validation.test.js",
+        "column": 18,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tdd-london/e2e/complete-workflow-validation.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { jest } = require('@jest/globals');\n    |                  ^\n  7 | const { ClaudeInstanceManagerMock } = require('../mocks/claude-instance-manager.mock');\n  8 | const { LoadingAnimationTrackerSpy } = require('../spies/loading-animation-tracker.spy');\n  9 | const { PermissionDialogStub } = require('../stubs/permission-dialog.stub');"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tdd-london/integration/frontend-backend-contract.test.js:6:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tdd-london/integration/frontend-backend-contract.test.js",
+        "column": 18,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tdd-london/integration/frontend-backend-contract.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { jest } = require('@jest/globals');\n    |                  ^\n  7 | const { WebSocketCommunicationContract } = require('../contracts/websocket-communication.contract');\n  8 |\n  9 | describe('Frontend-Backend Contract Validation', () => {"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tdd-london/interaction-patterns/collaboration-verification.test.js:6:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tdd-london/interaction-patterns/collaboration-verification.test.js",
+        "column": 18,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tdd-london/interaction-patterns/collaboration-verification.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { jest } = require('@jest/globals');\n    |                  ^\n  7 | const { ClaudeInstanceManagerMock } = require('../mocks/claude-instance-manager.mock');\n  8 | const { LoadingAnimationTrackerSpy } = require('../spies/loading-animation-tracker.spy');\n  9 | const { PermissionDialogStub } = require('../stubs/permission-dialog.stub');"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tdd-london/outside-in/user-interaction-workflow.test.js:6:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tdd-london/outside-in/user-interaction-workflow.test.js",
+        "column": 18,
+        "line": 6
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tdd-london/outside-in/user-interaction-workflow.test.js:6\n\n  4 |  */\n  5 |\n> 6 | const { jest } = require('@jest/globals');\n    |                  ^\n  7 | const { ClaudeInstanceManagerMock } = require('../mocks/claude-instance-manager.mock');\n  8 | const { LoadingAnimationTrackerSpy } = require('../spies/loading-animation-tracker.spy');\n  9 | const { PermissionDialogStub } = require('../stubs/permission-dialog.stub');"
+    },
+    {
+      "message": "SyntaxError: The requested module '../mock-contracts' does not provide an export named 'createCompleteMockEnvironment'",
+      "stack": "SyntaxError: The requested module '../mock-contracts' does not provide an export named 'createCompleteMockEnvironment'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "ReferenceError: jest is not defined",
+      "stack": "ReferenceError: jest is not defined\n    at /workspaces/agent-feed/tests/unit/terminal-hang-tdd/process-manager.test.ts:12:1",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/terminal-hang-tdd/process-manager.test.ts",
+        "column": 1,
+        "line": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/terminal-hang-tdd/process-manager.test.ts:12\n\n  10 |\n  11 | // Mock child_process\n> 12 | jest.mock('child_process', () => ({\n     | ^\n  13 |   spawn: jest.fn()\n  14 | }));\n  15 |"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tool/tool-usage-capture.test.js:7:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tool/tool-usage-capture.test.js",
+        "column": 18,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tool/tool-usage-capture.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { jest } = require('@jest/globals');\n     |                  ^\n   8 |\n   9 | // Mock contracts for tool usage capture collaborators\n  10 | const mockToolCapture = {"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tool/ToolCallFormatter.test.js:13:50",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tool/ToolCallFormatter.test.js",
+        "column": 50,
+        "line": 13
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tool/ToolCallFormatter.test.js:13\n\n  11 |  */\n  12 |\n> 13 | const { ToolCallFormatter, toolCallFormatter } = require('../../../src/services/ToolCallFormatter');\n     |                                                  ^\n  14 | const { ToolCallStatusManager } = require('../../../src/services/ToolCallStatusManager');\n  15 |\n  16 | describe('ToolCallFormatter', () => {"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tool/WebSocketIntegration.test.js:12:19",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tool/WebSocketIntegration.test.js",
+        "column": 19,
+        "line": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tool/WebSocketIntegration.test.js:12\n\n  10 |  */\n  11 |\n> 12 | const WebSocket = require('ws');\n     |                   ^\n  13 | const { toolCallFormatter } = require('../../../src/services/ToolCallFormatter');\n  14 | const { ToolCallStatusManager } = require('../../../src/services/ToolCallStatusManager');\n  15 |"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tool-call-formatting/error-handling.test.js:7:59",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tool-call-formatting/error-handling.test.js",
+        "column": 59,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tool-call-formatting/error-handling.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { describe, test, expect, beforeEach, afterEach } = require('@jest/globals');\n     |                                                           ^\n   8 |\n   9 | // Mock components - will be replaced with actual implementation\n  10 | const ToolCallFormatter = require('../../../src/services/ToolCallFormatter');"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/tool-call-formatting/tool-call-formatter.test.js:7:59",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/tool-call-formatting/tool-call-formatter.test.js",
+        "column": 59,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/tool-call-formatting/tool-call-formatter.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { describe, test, expect, beforeEach, afterEach } = require('@jest/globals');\n     |                                                           ^\n   8 |\n   9 | // Mock dependencies - will be replaced with actual implementation\n  10 | const ToolCallFormatter = require('../../../src/services/ToolCallFormatter');"
+    },
+    {
+      "message": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/unit/websocket/websocket-handler.test.ts",
+      "stack": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/unit/websocket/websocket-handler.test.ts"
+    },
+    {
+      "message": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.",
+      "stack": "ReferenceError: require is not defined in ES module scope, you can use import instead\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at /workspaces/agent-feed/tests/unit/websocket/websocket-message-handling.test.js:7:18",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/unit/websocket/websocket-message-handling.test.js",
+        "column": 18,
+        "line": 7
+      },
+      "snippet": "\u001b[90m   at \u001b[39munit/websocket/websocket-message-handling.test.js:7\n\n   5 |  */\n   6 |\n>  7 | const { jest } = require('@jest/globals');\n     |                  ^\n   8 |\n   9 | // Mock contracts for WebSocket message handling collaborators\n  10 | const mockMessageQueue = {"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/websocket-hub/integration.test.ts",
+      "stack": "Error: Cannot find package 'socket.io' imported from /workspaces/agent-feed/tests/websocket-hub/integration.test.ts"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'",
+      "stack": "SyntaxError: The requested module '@jest/globals' does not provide an export named 'jest'"
+    },
+    {
+      "message": "Error: Cannot find package 'socket.io-client' imported from /workspaces/agent-feed/tests/websocket-hub/WebSocketHub.test.ts",
+      "stack": "Error: Cannot find package 'socket.io-client' imported from /workspaces/agent-feed/tests/websocket-hub/WebSocketHub.test.ts"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/claude-api-concurrent-test.test.js:12:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/claude-api-concurrent-test.test.js",
+        "column": 1,
+        "line": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/claude-api-concurrent-test.test.js:12\n\n  10 | const { expect } = require('chai');\n  11 |\n> 12 | describe('Claude API + WebSocket Concurrent Tests', function() {\n     | ^\n  13 |   this.timeout(90000); // 90 seconds\n  14 |\n  15 |   let wsConnection;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/integration/frontend-integration.test.js:8:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/integration/frontend-integration.test.js",
+        "column": 1,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/integration/frontend-integration.test.js:8\n\n   6 | const { TestServer, WebSocketTestClient, ConnectionMonitor, performanceUtils, sleep } = require('../utils/test-helpers');\n   7 |\n>  8 | describe('Frontend WebSocket Integration', () => {\n     | ^\n   9 |   let testServer;\n  10 |   let wsClient;\n  11 |   let connectionMonitor;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/performance/connection-benchmarks.test.js:8:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/performance/connection-benchmarks.test.js",
+        "column": 1,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/performance/connection-benchmarks.test.js:8\n\n   6 | const { TestServer, WebSocketTestClient, ConnectionMonitor, performanceUtils, sleep } = require('../utils/test-helpers');\n   7 |\n>  8 | describe('WebSocket Connection Performance Benchmarks', () => {\n     | ^\n   9 |   let testServer;\n  10 |   let wsClient;\n  11 |   let connectionMonitor;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/regression-prevention-tests.test.js:12:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/regression-prevention-tests.test.js",
+        "column": 1,
+        "line": 12
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/regression-prevention-tests.test.js:12\n\n  10 | const { expect } = require('chai');\n  11 |\n> 12 | describe('WebSocket Stability - Regression Prevention Suite', function() {\n     | ^\n  13 |   this.timeout(150000); // 2.5 minutes for thorough testing\n  14 |\n  15 |   let wsConnection;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/unit/api-isolation.test.js:8:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/unit/api-isolation.test.js",
+        "column": 1,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/unit/api-isolation.test.js:8\n\n   6 | const { TestServer, WebSocketTestClient, ConnectionMonitor, performanceUtils, sleep } = require('../utils/test-helpers');\n   7 |\n>  8 | describe('Claude API Isolation Tests', () => {\n     | ^\n   9 |   let testServer;\n  10 |   let wsClient;\n  11 |   let connectionMonitor;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/unit/connection-persistence.test.js:8:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/unit/connection-persistence.test.js",
+        "column": 1,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/unit/connection-persistence.test.js:8\n\n   6 | const { TestServer, WebSocketTestClient, ConnectionMonitor, performanceUtils, sleep, retry } = require('../utils/test-helpers');\n   7 |\n>  8 | describe('WebSocket Connection Persistence', () => {\n     | ^\n   9 |   let testServer;\n  10 |   let wsClient;\n  11 |   let connectionMonitor;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/unit/error-recovery.test.js:8:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/unit/error-recovery.test.js",
+        "column": 1,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/unit/error-recovery.test.js:8\n\n   6 | const { TestServer, WebSocketTestClient, ConnectionMonitor, performanceUtils, sleep, retry } = require('../utils/test-helpers');\n   7 |\n>  8 | describe('WebSocket Error Recovery and Reconnection', () => {\n     | ^\n   9 |   let testServer;\n  10 |   let wsClient;\n  11 |   let connectionMonitor;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/unit/multiple-commands.test.js:8:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/unit/multiple-commands.test.js",
+        "column": 1,
+        "line": 8
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/unit/multiple-commands.test.js:8\n\n   6 | const { TestServer, WebSocketTestClient, ConnectionMonitor, performanceUtils, sleep } = require('../utils/test-helpers');\n   7 |\n>  8 | describe('Multiple Commands on Same WebSocket', () => {\n     | ^\n   9 |   let testServer;\n  10 |   let wsClient;\n  11 |   let connectionMonitor;"
+    },
+    {
+      "message": "ReferenceError: describe is not defined",
+      "stack": "ReferenceError: describe is not defined\n    at Object.<anonymous> (/workspaces/agent-feed/tests/websocket-stability/websocket-connection-stability.test.js:11:1)",
+      "location": {
+        "file": "/workspaces/agent-feed/tests/websocket-stability/websocket-connection-stability.test.js",
+        "column": 1,
+        "line": 11
+      },
+      "snippet": "\u001b[90m   at \u001b[39mwebsocket-stability/websocket-connection-stability.test.js:11\n\n   9 | const { expect } = require('chai');\n  10 |\n> 11 | describe('WebSocket Connection Stability - Long Duration Tests', function() {\n     | ^\n  12 |   // Extended timeout for long-running tests\n  13 |   this.timeout(120000); // 2 minutes\n  14 |"
     }
   ],
   "stats": {
-    "startTime": "2025-08-30T02:26:10.916Z",
-    "duration": 1769.9540000000002,
+    "startTime": "2025-09-01T15:40:21.210Z",
+    "duration": 3320.136,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

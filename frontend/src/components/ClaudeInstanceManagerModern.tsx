@@ -5,7 +5,9 @@ import { ClaudeInstanceButtons } from './claude-manager';
 import DualModeInterface from './claude-manager/DualModeInterface';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { useWebSocketSingleton } from '../hooks/useWebSocketSingleton';
+import { useSingleConnection } from '../hooks/useSingleConnection';
+import { ConnectionButton } from './ConnectionButton';
+import { ConnectionState, SingleConnectionManager } from '../services/SingleConnectionManager';
 import RenderTracker from './test/RenderTracker';
 
 interface ClaudeInstance {
@@ -31,12 +33,30 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connectionType, setConnectionType] = useState<string>('Disconnected');
+  const [connectionManager] = useState(() => SingleConnectionManager.getInstance());
   
-  // SPARC + NLD SOLUTION: Use WebSocket Singleton to prevent StrictMode duplicates
-  const webSocketSingleton = useWebSocketSingleton(apiUrl);
-  const { isConnected, connect, disconnect, send, addHandler, removeHandler, currentTerminalId } = webSocketSingleton;
+  // SAFETY FIRST: Single connection manager for safe WebSocket handling
+  const connection = useSingleConnection({
+    instanceId: selectedInstance || 'no-instance',
+    url: selectedInstance ? `ws://localhost:3002/terminal/${selectedInstance}` : undefined,
+    autoConnect: false,
+    onMessage: (data: any) => {
+      if (data.output && selectedInstance) {
+        console.log(`📺 SAFE CONNECTION: Processing output for ${selectedInstance.slice(0,8)}:`, data.output.slice(0, 100));
+        setOutput(prev => ({
+          ...prev,
+          [selectedInstance]: (prev[selectedInstance] || '') + data.output
+        }));
+      }
+    },
+    onError: (error: Error) => {
+      console.error('❌ SAFE CONNECTION: Error:', error);
+      setError(error.message);
+      setConnectionType('Connection Error');
+    }
+  });
   
-  // SPARC FIX: Setup singleton event handlers and status polling
+  // SAFETY FIRST: Setup connection manager and status polling
   useEffect(() => {
     fetchInstances();
     
@@ -45,76 +65,68 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       fetchInstances();
     }, 2000);
     
-    // Terminal output handler
-    const outputHandler = (data) => {
-      if (data.output && data.terminalId) {
-        console.log(`📺 SPARC Singleton: Processing output for ${data.terminalId.slice(0,8)}:`, data.output.slice(0, 100));
-        
-        setOutput(prev => ({
-          ...prev,
-          [data.terminalId]: (prev[data.terminalId] || '') + data.output
-        }));
+    // Global connection state listener
+    const handleGlobalStateChange = (state: ConnectionState, instanceId: string) => {
+      console.log(`📲 SAFE CONNECTION: Global state change for ${instanceId}: ${state}`);
+      
+      if (state === ConnectionState.CONNECTED && instanceId === selectedInstance) {
+        setError(null);
+        setConnectionType(`Connected via WebSocket (${instanceId.slice(0,8)})`);
+      } else if (state === ConnectionState.DISCONNECTED && instanceId === selectedInstance) {
+        setConnectionType('Disconnected');
+      } else if (state === ConnectionState.ERROR && instanceId === selectedInstance) {
+        setConnectionType('Connection Error');
+      } else if (state === ConnectionState.CONNECTING && instanceId === selectedInstance) {
+        setConnectionType('Connecting...');
+      } else if (state === ConnectionState.DISCONNECTING && instanceId === selectedInstance) {
+        setConnectionType('Disconnecting...');
       }
     };
     
-    // Terminal status handler
-    const statusHandler = (data) => {
-      console.log('📲 SPARC Singleton: Status update received:', data);
-      
-      setInstances(prev => prev.map(instance => 
-        instance.id === data.terminalId 
-          ? { ...instance, status: data.status as ClaudeInstance['status'] }
-          : instance
-      ));
-    };
-    
-    // Connection handler
-    const connectHandler = (data) => {
-      console.log('✅ SPARC Singleton: Connected to terminal:', data);
-      setError(null);
-      setConnectionType(`Connected via WebSocket${data.terminalId ? ` (${data.terminalId.slice(0,8)})` : ''}`);
-    };
-    
-    // Error handler
-    const errorHandler = (error) => {
-      console.error('❌ SPARC Singleton: Error:', error);
-      setError(error.message || error.error || 'Connection error');
-      setConnectionType('Connection Error');
-    };
-    
-    // Disconnect handler
-    const disconnectHandler = (data) => {
-      console.log('🔌 SPARC Singleton: Disconnected:', data);
-      setConnectionType('Disconnected');
-    };
-    
-    // Add handlers
-    addHandler('terminal:output', outputHandler);
-    addHandler('terminal:status', statusHandler);
-    addHandler('connect', connectHandler);
-    addHandler('error', errorHandler);
-    addHandler('disconnect', disconnectHandler);
+    connectionManager.addStateChangeListener(handleGlobalStateChange);
     
     return () => {
-      // Cleanup polling and singleton handlers on unmount
       clearInterval(statusPolling);
-      removeHandler('terminal:output', outputHandler);
-      removeHandler('terminal:status', statusHandler);
-      removeHandler('connect', connectHandler);
-      removeHandler('error', errorHandler);
-      removeHandler('disconnect', disconnectHandler);
+      connectionManager.removeStateChangeListener(handleGlobalStateChange);
     };
-  }, [addHandler, removeHandler]);
+  }, [connectionManager, selectedInstance]);
 
-  // SPARC FIX: Connection status management using singleton
+  // SAFETY FIRST: Update connection type based on connection state
   useEffect(() => {
-    if (isConnected) {
+    if (connection.isConnected) {
       setError(null);
-      setConnectionType('Connected (WebSocket)');
+      setConnectionType(`Connected (${selectedInstance?.slice(0,8) || 'unknown'})`);
+    } else if (connection.isConnecting) {
+      setConnectionType('Connecting...');
+    } else if (connection.isDisconnecting) {
+      setConnectionType('Disconnecting...');
+    } else if (connection.hasError) {
+      setConnectionType('Connection Error');
     } else {
       setConnectionType('Disconnected');
     }
-  }, [isConnected]);
+  }, [connection.connectionState, selectedInstance]);
+
+  // SAFETY FIRST: Auto-connect to selected instance with disconnect-first logic
+  useEffect(() => {
+    if (selectedInstance) {
+      const instance = instances.find(i => i.id === selectedInstance);
+      if (instance && instance.status === 'running') {
+        const wsUrl = `ws://localhost:3002/terminal/${selectedInstance}`;
+        console.log(`🔗 SAFE CONNECTION: Auto-connecting to instance ${selectedInstance} at ${wsUrl}`);
+        connection.connect(wsUrl).catch(err => {
+          console.error('Failed to connect to instance:', err);
+          setError(`Failed to connect to ${selectedInstance}: ${err.message}`);
+        });
+      }
+    } else {
+      // Disconnect when no instance is selected
+      if (connection.isConnected || connection.isConnecting) {
+        console.log('🔌 SAFE CONNECTION: Disconnecting - no instance selected');
+        connection.disconnect().catch(console.error);
+      }
+    }
+  }, [selectedInstance, instances, connection]);
 
   const fetchInstances = async () => {
     try {
@@ -195,8 +207,8 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
         
         console.log(`✅ Claude instance ${instance.id} created successfully`);
         
-        // Connect to the new instance using singleton
-        connect(instance.id);
+        // SAFETY FIRST: Connection will be handled by instance selection
+        console.log('✅ Instance created, connection will be handled by selection');
         
         // SPARC FIX: Add instance to state manually instead of fetchInstances()
         // This prevents race condition with SSE status updates
@@ -257,15 +269,15 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       return;
     }
     
-    if (!isConnected) {
+    if (!connection.isConnected) {
       console.warn('Not connected to WebSocket, cannot send input');
       setError('Not connected to terminal');
       return;
     }
 
-    // SPARC FIX: Proper line-based input handling
+    // SAFETY FIRST: Proper line-based input handling with safe connection
     const trimmedInput = input.trim();
-    console.log('⌨️ SPARC: Sending complete command line to Claude CLI:', trimmedInput);
+    console.log('⌨️ SAFE CONNECTION: Sending complete command line to Claude CLI:', trimmedInput);
     
     try {
       // Send complete command with newline terminator for proper CLI execution
@@ -278,11 +290,16 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
         timestamp: Date.now()
       };
       
-      console.log('📤 SPARC Singleton: Sending WebSocket message:', message);
-      send(message);
+      console.log('📤 SAFE CONNECTION: Sending WebSocket message:', message);
+      const success = connection.sendData(message);
       
-      setError(null);
-      console.log('✅ SPARC Singleton: Command sent successfully to Claude CLI');
+      if (success) {
+        setError(null);
+        console.log('✅ SAFE CONNECTION: Command sent successfully to Claude CLI');
+      } else {
+        console.error('❌ SAFE CONNECTION: Failed to send command');
+        setError('Failed to send command - connection not ready');
+      }
       
     } catch (err) {
       console.error('Failed to send WebSocket command:', err);
@@ -305,7 +322,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
         // Clean up UI state for terminated instance
         if (selectedInstance === instanceId) {
           setSelectedInstance(null);
-          disconnect();
+          // Connection will be automatically cleaned up by the connection manager
         }
         
         setOutput(prev => {
@@ -344,14 +361,9 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
       return;
     }
     
-    console.log('🎯 SPARC Singleton: Selecting instance with clean switch:', baseInstanceId, 'from:', instanceId);
+    console.log('🎯 SAFE CONNECTION: Selecting instance with safety-first switch:', baseInstanceId, 'from:', instanceId);
     
-    // SPARC FIX: Always disconnect first for clean switch
-    if (currentTerminalId && currentTerminalId !== baseInstanceId) {
-      console.log('🔌 SPARC Singleton: Disconnecting from previous instance:', currentTerminalId);
-      disconnect();
-    }
-    
+    // SAFETY FIRST: Set selected instance (this will trigger connection via useEffect)
     setSelectedInstance(baseInstanceId);
     
     // Initialize output buffer for new instance if needed
@@ -363,14 +375,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
     
     const instance = instances.find(i => i.id === baseInstanceId);
     if (instance && instance.status === 'running') {
-      // SPARC FIX: Only connect if not already connected to this instance
-      if (currentTerminalId !== baseInstanceId) {
-        console.log('🔗 SPARC Singleton: Connecting exclusively to selected terminal:', baseInstanceId);
-        // Connect immediately to existing running instance
-        connect(baseInstanceId);
-      } else {
-        console.log('✅ SPARC Singleton: Already connected to selected instance');
-      }
+      console.log('✅ Instance is running, connection will be handled by useSingleConnection hook');
     } else {
       console.warn(`⚠️ Instance ${baseInstanceId} is not running (status: ${instance?.status})`);
       setError(`Instance ${baseInstanceId} is not running`);
@@ -393,7 +398,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
           {/* API Versioning Info for Development */}
           {process.env.NODE_ENV === 'development' && (
             <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-              API: Instance operations via /api/claude/ • <span data-testid="connection-status">WebSocket connection: {isConnected ? '✅ Connected' : '❌ Disconnected'}</span>
+              API: Instance operations via /api/claude/ • <span data-testid="connection-status">WebSocket connection: {connection.isConnected ? '✅ Connected' : '❌ Disconnected'} ({connectionType})</span>
             </div>
           )}
         </div>
@@ -408,6 +413,48 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
             />
           </CardContent>
         </Card>
+
+        {/* Connection Status and Control */}
+        {selectedInstance && (
+          <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-700">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                      Active Connection:
+                    </span>
+                    <code className="px-2 py-1 bg-blue-100 dark:bg-blue-800 rounded text-sm">
+                      {selectedInstance}
+                    </code>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <ConnectionButton
+                      connection={connection}
+                      url={`ws://localhost:3002/terminal/${selectedInstance}`}
+                      size="sm"
+                      variant="primary"
+                      showState={true}
+                    />
+                  </div>
+                </div>
+                <div className="text-xs text-blue-600 dark:text-blue-400">
+                  Safety-first connection management
+                </div>
+              </div>
+              {connection.connectionStats.connectionTime && (
+                <div className="mt-2 text-xs text-blue-600 dark:text-blue-400">
+                  Connected for {Math.floor((Date.now() - connection.connectionStats.connectionTime) / 1000)}s
+                  {connection.connectionStats.lastActivity && (
+                    <span className="ml-2">
+                      • Last activity: {Math.floor((Date.now() - connection.connectionStats.lastActivity) / 1000)}s ago
+                    </span>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -465,15 +512,25 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
                               {instance.name}
                             </span>
                           </div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              terminateInstance(instance.id);
-                            }}
-                            className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-sm transition-colors"
-                          >
-                            ×
-                          </button>
+                          <div className="flex items-center gap-2">
+                            {/* Connection status indicator */}
+                            <div className={cn(
+                              'w-1.5 h-1.5 rounded-full border',
+                              selectedInstance === instance.id && connection.isConnected && 'bg-blue-500 border-blue-500',
+                              selectedInstance === instance.id && connection.isConnecting && 'bg-yellow-500 border-yellow-500 animate-pulse',
+                              selectedInstance === instance.id && connection.hasError && 'bg-red-500 border-red-500',
+                              selectedInstance !== instance.id && 'bg-gray-300 border-gray-300'
+                            )} />
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                terminateInstance(instance.id);
+                              }}
+                              className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-sm transition-colors"
+                            >
+                              ×
+                            </button>
+                          </div>
                         </div>
                         <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                           <span>ID: {instance.id.slice(0, 8)}</span>

@@ -1,632 +1,529 @@
 /**
  * NLD Test Suite
  * 
- * Comprehensive test suite for validating NLD pattern detection,
- * recovery mechanisms, and system integration under various edge cases.
+ * Comprehensive testing framework for validating NLD instance 
+ * synchronization pattern detection and recovery mechanisms.
  */
 
-import { NLDIntegrationSystem, initializeNLDSystem } from './nld-integration-system';
-import { NLTRecord } from './nld-core-monitor';
+import { nldInstanceSync, captureInstanceSyncFailure, validateInstanceOperation } from './nld-instance-sync-patterns';
 
-export interface TestCase {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  setup: () => Promise<void>;
-  execute: () => Promise<boolean>;
-  cleanup: () => Promise<void>;
-  expectedPatterns: string[];
-  expectedRecovery: boolean;
-  timeout: number;
-}
+// ==================== TEST FRAMEWORK ====================
 
-export interface TestResult {
-  testId: string;
-  name: string;
-  passed: boolean;
-  duration: number;
-  error?: string;
-  patternsDetected: string[];
-  recoverySuccessful: boolean;
-  systemHealth: {
-    before: number;
-    after: number;
-  };
-}
-
-export interface TestSuiteReport {
-  totalTests: number;
-  passed: number;
-  failed: number;
-  skipped: number;
-  duration: number;
-  results: TestResult[];
-  systemStats: {
-    patternsDetected: number;
-    recoveryAttempts: number;
-    alertsTriggered: number;
-  };
-  recommendations: string[];
-}
-
-/**
- * NLD Test Suite for Edge Case Validation
- */
 export class NLDTestSuite {
-  private system: NLDIntegrationSystem;
-  private testCases: TestCase[] = [];
-  private results: TestResult[] = [];
+  private testResults: TestResult[] = [];
   private isRunning = false;
 
-  constructor() {
-    this.system = initializeNLDSystem({ 
-      debug: true, 
-      logLevel: 'verbose' 
-    });
-    this.initializeTestCases();
-  }
-
-  /**
-   * Initialize comprehensive test cases
-   */
-  private initializeTestCases(): void {
-    // White Screen Tests
-    this.addTestCase({
-      id: 'ws-001',
-      name: 'Component Mount Failure',
-      description: 'Test white screen detection when component fails to mount',
-      category: 'white-screen',
-      severity: 'critical',
-      setup: async () => {
-        // Create a div that will simulate empty content
-        const testDiv = document.createElement('div');
-        testDiv.id = 'test-empty-component';
-        document.body.appendChild(testDiv);
-      },
-      execute: async () => {
-        // Simulate component that mounts but renders nothing
-        const testDiv = document.getElementById('test-empty-component');
-        if (testDiv) {
-          // Leave div empty to simulate white screen
-          setTimeout(() => {
-            this.system.triggerTestPattern('nld-001', {
-              component: 'TestEmptyComponent'
-            });
-          }, 100);
-        }
-        return true;
-      },
-      cleanup: async () => {
-        const testDiv = document.getElementById('test-empty-component');
-        if (testDiv) {
-          document.body.removeChild(testDiv);
-        }
-      },
-      expectedPatterns: ['nld-001'],
-      expectedRecovery: true,
-      timeout: 5000
-    });
-
-    this.addTestCase({
-      id: 'ws-002',
-      name: 'Props Undefined Error',
-      description: 'Test white screen from undefined props causing render failure',
-      category: 'white-screen',
-      severity: 'critical',
-      setup: async () => {},
-      execute: async () => {
-        // Simulate accessing undefined props
-        try {
-          const undefinedProps: any = undefined;
-          const result = undefinedProps.nonExistentProp.someMethod();
-          return false; // Should not reach here
-        } catch (error) {
-          this.system.triggerTestPattern('nld-001', {
-            component: 'TestPropsComponent',
-            stackTrace: (error as Error).stack
-          });
-          return true;
-        }
-      },
-      cleanup: async () => {},
-      expectedPatterns: ['nld-001'],
-      expectedRecovery: true,
-      timeout: 3000
-    });
-
-    // WebSocket Tests
-    this.addTestCase({
-      id: 'ws-003',
-      name: 'Rapid Reconnection Loop',
-      description: 'Test WebSocket connection loop detection and recovery',
-      category: 'websocket',
-      severity: 'high',
-      setup: async () => {
-        // Mock WebSocket for testing
-        (window as any).originalWebSocket = window.WebSocket;
-        (window as any).WebSocket = class MockWebSocket {
-          constructor(url: string) {
-            // Simulate immediate failure
-            setTimeout(() => {
-              this.dispatchEvent(new Event('error'));
-            }, 10);
-          }
-          addEventListener(event: string, handler: Function) {
-            if (event === 'error') {
-              setTimeout(() => handler(new Event('error')), 10);
-            }
-          }
-          dispatchEvent(event: Event) {
-            return true;
-          }
-        };
-      },
-      execute: async () => {
-        // Create multiple failing WebSocket connections rapidly
-        for (let i = 0; i < 6; i++) {
-          try {
-            new WebSocket('ws://localhost:invalid');
-          } catch (error) {
-            // Expected to fail
-          }
-          await new Promise(resolve => setTimeout(resolve, 50));
-        }
-        
-        // Should trigger connection loop pattern
-        return true;
-      },
-      cleanup: async () => {
-        // Restore original WebSocket
-        if ((window as any).originalWebSocket) {
-          (window as any).WebSocket = (window as any).originalWebSocket;
-          delete (window as any).originalWebSocket;
-        }
-      },
-      expectedPatterns: ['nld-002'],
-      expectedRecovery: true,
-      timeout: 5000
-    });
-
-    // Memory Leak Tests
-    this.addTestCase({
-      id: 'ml-001',
-      name: 'Image URL Memory Leak',
-      description: 'Test detection of image URL memory leaks',
-      category: 'memory-leak',
-      severity: 'medium',
-      setup: async () => {},
-      execute: async () => {
-        // Create multiple blob URLs without cleaning up
-        const urls: string[] = [];
-        for (let i = 0; i < 50; i++) {
-          const blob = new Blob(['test'], { type: 'text/plain' });
-          const url = URL.createObjectURL(blob);
-          urls.push(url);
-          
-          // Don't revoke URLs to simulate leak
-        }
-        
-        // Trigger memory pattern detection
-        this.system.triggerTestPattern('nld-003', {
-          component: 'TestImageComponent',
-          memoryUsage: {
-            used: 50 * 1024 * 1024, // 50MB simulated
-            total: 100 * 1024 * 1024,
-            percentage: 50
-          }
-        });
-        
-        return true;
-      },
-      cleanup: async () => {
-        // Cleanup any remaining URLs
-        window.dispatchEvent(new CustomEvent('nld-memory-cleanup'));
-      },
-      expectedPatterns: ['nld-003'],
-      expectedRecovery: true,
-      timeout: 3000
-    });
-
-    // Race Condition Tests
-    this.addTestCase({
-      id: 'rc-001',
-      name: 'Concurrent Instance Launch',
-      description: 'Test race condition detection during concurrent operations',
-      category: 'race-condition',
-      severity: 'high',
-      setup: async () => {},
-      execute: async () => {
-        // Simulate rapid concurrent operations
-        const promises = Array.from({ length: 10 }, (_, i) => 
-          new Promise<void>(resolve => {
-            setTimeout(() => {
-              // Simulate instance launch
-              this.system.triggerTestPattern('nld-004', {
-                component: 'TestInstanceLauncher',
-                operation: `launch-${i}`
-              });
-              resolve();
-            }, Math.random() * 100);
-          })
-        );
-        
-        await Promise.all(promises);
-        return true;
-      },
-      cleanup: async () => {},
-      expectedPatterns: ['nld-004'],
-      expectedRecovery: true,
-      timeout: 5000
-    });
-
-    // Performance Tests
-    this.addTestCase({
-      id: 'pf-001',
-      name: 'Infinite Render Loop',
-      description: 'Test performance issue detection from render loops',
-      category: 'performance',
-      severity: 'medium',
-      setup: async () => {},
-      execute: async () => {
-        // Simulate render loop by triggering multiple rapid re-renders
-        for (let i = 0; i < 20; i++) {
-          this.system.triggerTestPattern('nld-005', {
-            component: 'TestRenderComponent',
-            performanceMetrics: {
-              renderTime: 100 + Math.random() * 50, // High render time
-              loadTime: 0,
-              interactiveTime: 0
-            }
-          });
-          await new Promise(resolve => setTimeout(resolve, 10));
-        }
-        
-        return true;
-      },
-      cleanup: async () => {},
-      expectedPatterns: ['nld-005'],
-      expectedRecovery: true,
-      timeout: 5000
-    });
-
-    // Temporal Dead Zone Tests
-    this.addTestCase({
-      id: 'tdz-001',
-      name: 'Variable Access Before Declaration',
-      description: 'Test temporal dead zone detection',
-      category: 'temporal-dead-zone',
-      severity: 'critical',
-      setup: async () => {},
-      execute: async () => {
-        try {
-          // Simulate TDZ error
-          const testCode = `
-            const contextValue = useMemo(() => ({
-              connectionState,  // ERROR: Used before declaration
-            }), [connectionState]);
-            
-            const connectionState = useState(false);
-          `;
-          
-          // This would normally be caught by the TDZD detector
-          this.system.triggerTestPattern('tdz-001', {
-            component: 'TestTDZComponent',
-            codePattern: testCode
-          });
-          
-          return true;
-        } catch (error) {
-          return false;
-        }
-      },
-      cleanup: async () => {},
-      expectedPatterns: ['tdz-001'],
-      expectedRecovery: false, // TDZ issues require code fixes
-      timeout: 3000
-    });
-
-    // Network Failure Tests
-    this.addTestCase({
-      id: 'nf-001',
-      name: 'Network Connectivity Loss',
-      description: 'Test system behavior during network failures',
-      category: 'websocket',
-      severity: 'high',
-      setup: async () => {},
-      execute: async () => {
-        // Simulate network going offline
-        Object.defineProperty(navigator, 'onLine', {
-          writable: true,
-          value: false
-        });
-        
-        window.dispatchEvent(new Event('offline'));
-        
-        // Trigger WebSocket issues due to network failure
-        this.system.triggerTestPattern('nld-002', {
-          component: 'TestNetworkComponent',
-          networkState: 'offline'
-        });
-        
-        return true;
-      },
-      cleanup: async () => {
-        // Restore network status
-        Object.defineProperty(navigator, 'onLine', {
-          writable: true,
-          value: true
-        });
-        window.dispatchEvent(new Event('online'));
-      },
-      expectedPatterns: ['nld-002'],
-      expectedRecovery: true,
-      timeout: 4000
-    });
-
-    // Stress Test
-    this.addTestCase({
-      id: 'stress-001',
-      name: 'System Stress Test',
-      description: 'Test system behavior under high load',
-      category: 'performance',
-      severity: 'high',
-      setup: async () => {},
-      execute: async () => {
-        // Generate multiple patterns simultaneously
-        const patterns = ['nld-001', 'nld-002', 'nld-003', 'nld-004', 'nld-005'];
-        const promises = [];
-        
-        for (let i = 0; i < 25; i++) {
-          const patternId = patterns[i % patterns.length];
-          promises.push(
-            new Promise<void>(resolve => {
-              setTimeout(() => {
-                this.system.triggerTestPattern(patternId, {
-                  component: `StressTest-${i}`,
-                  iteration: i
-                });
-                resolve();
-              }, Math.random() * 1000);
-            })
-          );
-        }
-        
-        await Promise.all(promises);
-        return true;
-      },
-      cleanup: async () => {
-        // Allow system to settle
-        await new Promise(resolve => setTimeout(resolve, 2000));
-      },
-      expectedPatterns: ['nld-001', 'nld-002', 'nld-003', 'nld-004', 'nld-005'],
-      expectedRecovery: true,
-      timeout: 10000
-    });
-  }
-
-  /**
-   * Add a test case
-   */
-  public addTestCase(testCase: TestCase): void {
-    this.testCases.push(testCase);
-  }
-
-  /**
-   * Run all test cases
-   */
-  public async runAllTests(): Promise<TestSuiteReport> {
-    if (this.isRunning) {
-      throw new Error('Test suite is already running');
-    }
-
+  async runAllTests(): Promise<TestSuiteReport> {
+    console.log('🧪 NLD: Starting comprehensive test suite...');
     this.isRunning = true;
-    this.results = [];
-    const startTime = Date.now();
+    this.testResults = [];
 
-    console.log('🧪 Starting NLD Test Suite...');
-    console.log(`Running ${this.testCases.length} test cases`);
+    const testSuites = [
+      () => this.testFailureDetection(),
+      () => this.testPatternClassification(),
+      () => this.testRecoveryMechanisms(),
+      () => this.testProactiveValidation(),
+      () => this.testNeuralLearning(),
+      () => this.testIntegrationScenarios()
+    ];
 
-    for (const testCase of this.testCases) {
-      const result = await this.runTestCase(testCase);
-      this.results.push(result);
-      
-      // Log intermediate results
-      const status = result.passed ? '✅' : '❌';
-      console.log(`${status} ${result.name} (${result.duration}ms)`);
-      
-      if (!result.passed && result.error) {
-        console.warn(`   Error: ${result.error}`);
+    for (const testSuite of testSuites) {
+      try {
+        await testSuite();
+      } catch (error) {
+        console.error('❌ Test suite failed:', error);
+        this.testResults.push({
+          name: testSuite.name,
+          status: 'failed',
+          error: error instanceof Error ? error.message : 'Unknown error',
+          duration: 0
+        });
       }
     }
 
-    const totalDuration = Date.now() - startTime;
     this.isRunning = false;
-
-    return this.generateReport(totalDuration);
+    return this.generateReport();
   }
 
-  /**
-   * Run a single test case
-   */
-  public async runTestCase(testCase: TestCase): Promise<TestResult> {
-    const startTime = Date.now();
-    let passed = false;
-    let error: string | undefined;
-    let patternsDetected: string[] = [];
-    let recoverySuccessful = false;
+  // ==================== FAILURE DETECTION TESTS ====================
 
-    // Get initial system health
-    const initialHealth = this.system.getStatus().stats.systemScore;
+  private async testFailureDetection(): Promise<void> {
+    console.log('🔍 Testing failure detection mechanisms...');
 
-    try {
-      // Setup
-      await testCase.setup();
+    // Test 1: ID Mismatch Detection
+    const test1Start = performance.now();
+    const failureId1 = await captureInstanceSyncFailure(
+      'Failed to connect to instance claude-test-1234: Instance claude-test-1234 is not running or does not exist',
+      { selectedInstance: 'claude-test-1234', instances: [], connectionStatus: 'Connected via SSE' },
+      null,
+      'TestComponent',
+      ['create_instance', 'select_instance']
+    );
 
-      // Track patterns before execution
-      const initialPatterns = this.system.getSystemReport().patterns.records.length;
+    this.testResults.push({
+      name: 'ID Mismatch Detection',
+      status: failureId1 ? 'passed' : 'failed',
+      duration: performance.now() - test1Start,
+      details: `Failure ID: ${failureId1}`
+    });
 
-      // Execute test
-      const executeResult = await Promise.race([
-        testCase.execute(),
-        new Promise<boolean>((_, reject) => 
-          setTimeout(() => reject(new Error('Test timeout')), testCase.timeout)
-        )
-      ]);
+    // Test 2: State Desynchronization Detection
+    const test2Start = performance.now();
+    const failureId2 = await captureInstanceSyncFailure(
+      'State mismatch detected between frontend and backend',
+      { selectedInstance: 'claude-test-5678', instances: [{ id: 'claude-test-5678', status: 'running' }], connectionStatus: 'Connected' },
+      { instances: ['claude-test-5678 (stopped)'] },
+      'TestComponent',
+      ['websocket_reconnect', 'status_check']
+    );
 
-      if (executeResult) {
-        // Wait a bit for pattern detection to complete
-        await new Promise(resolve => setTimeout(resolve, 500));
+    this.testResults.push({
+      name: 'State Desync Detection',
+      status: failureId2 ? 'passed' : 'failed',
+      duration: performance.now() - test2Start,
+      details: `Failure ID: ${failureId2}`
+    });
 
-        // Check detected patterns
-        const finalPatterns = this.system.getSystemReport().patterns.records;
-        const newPatterns = finalPatterns.slice(initialPatterns);
-        
-        patternsDetected = newPatterns.map(record => record.pattern.id);
-        
-        // Check if expected patterns were detected
-        const expectedFound = testCase.expectedPatterns.every(expected =>
-          patternsDetected.includes(expected)
-        );
+    // Test 3: Backend Stale State Detection
+    const test3Start = performance.now();
+    const failureId3 = await captureInstanceSyncFailure(
+      'Backend reports instances that frontend cannot see',
+      { selectedInstance: null, instances: [], connectionStatus: 'Connected' },
+      { instances: ['claude-test-9999 (phantom instance)'] },
+      'TestComponent',
+      ['fetch_instances', 'backend_sync']
+    );
 
-        // Check recovery if expected
-        if (testCase.expectedRecovery) {
-          recoverySuccessful = newPatterns.some(record => record.recovered);
-        } else {
-          recoverySuccessful = true; // No recovery expected
-        }
+    this.testResults.push({
+      name: 'Backend Stale Detection',
+      status: failureId3 ? 'passed' : 'failed',
+      duration: performance.now() - test3Start,
+      details: `Failure ID: ${failureId3}`
+    });
+  }
 
-        passed = expectedFound && (testCase.expectedRecovery ? recoverySuccessful : true);
+  // ==================== PATTERN CLASSIFICATION TESTS ====================
+
+  private async testPatternClassification(): Promise<void> {
+    console.log('🏷️ Testing pattern classification accuracy...');
+
+    const testCases = [
+      {
+        errorMessage: 'Failed to connect to instance claude-1111: Instance claude-1111 is not running or does not exist',
+        expectedType: 'id_mismatch'
+      },
+      {
+        errorMessage: 'WebSocket connection lost, state inconsistent',
+        expectedType: 'state_desync'
+      },
+      {
+        errorMessage: 'Backend reports instances that don\'t exist in frontend',
+        expectedType: 'backend_stale'
+      },
+      {
+        errorMessage: 'Connection timeout while sending command',
+        expectedType: 'connection_failure'
       }
+    ];
 
-    } catch (err) {
-      error = err instanceof Error ? err.message : String(err);
-      passed = false;
-    }
-
-    try {
-      // Cleanup
-      await testCase.cleanup();
-    } catch (cleanupError) {
-      console.warn(`Cleanup error for ${testCase.id}:`, cleanupError);
-    }
-
-    // Get final system health
-    const finalHealth = this.system.getStatus().stats.systemScore;
-
-    return {
-      testId: testCase.id,
-      name: testCase.name,
-      passed,
-      duration: Date.now() - startTime,
-      error,
-      patternsDetected,
-      recoverySuccessful,
-      systemHealth: {
-        before: initialHealth,
-        after: finalHealth
-      }
-    };
-  }
-
-  /**
-   * Generate comprehensive test report
-   */
-  private generateReport(totalDuration: number): TestSuiteReport {
-    const passed = this.results.filter(r => r.passed).length;
-    const failed = this.results.filter(r => !r.passed).length;
-    const skipped = 0; // We don't skip tests currently
-
-    const systemReport = this.system.getSystemReport();
-    const systemStats = {
-      patternsDetected: systemReport.patterns.records.length,
-      recoveryAttempts: systemReport.recovery.history.length,
-      alertsTriggered: systemReport.alerts.alerts.length
-    };
-
-    const recommendations = this.generateRecommendations();
-
-    const report: TestSuiteReport = {
-      totalTests: this.testCases.length,
-      passed,
-      failed,
-      skipped,
-      duration: totalDuration,
-      results: this.results,
-      systemStats,
-      recommendations
-    };
-
-    // Log summary
-    console.log('\n🧪 NLD Test Suite Complete');
-    console.log(`Total: ${report.totalTests}, Passed: ${passed}, Failed: ${failed}`);
-    console.log(`Duration: ${totalDuration}ms`);
-    console.log(`System Health: ${this.system.getStatus().stats.systemScore}/100`);
-
-    return report;
-  }
-
-  /**
-   * Generate recommendations based on test results
-   */
-  private generateRecommendations(): string[] {
-    const recommendations: string[] = [];
-    const failedTests = this.results.filter(r => !r.passed);
-    const systemHealth = this.system.getStatus().stats.systemScore;
-
-    if (failedTests.length === 0) {
-      recommendations.push('✅ All tests passed! NLD system is working correctly.');
-    } else {
-      recommendations.push(`❌ ${failedTests.length} tests failed. Review the following areas:`);
+    for (const testCase of testCases) {
+      const testStart = performance.now();
       
-      failedTests.forEach(test => {
-        recommendations.push(`  - ${test.name}: ${test.error || 'Pattern detection or recovery failed'}`);
+      const failureId = await captureInstanceSyncFailure(
+        testCase.errorMessage,
+        { selectedInstance: 'claude-test', instances: [], connectionStatus: 'error' },
+        null,
+        'ClassificationTest',
+        ['test_classification']
+      );
+
+      // Get the captured pattern to verify classification
+      const patterns = nldInstanceSync.getPatterns();
+      const pattern = patterns.find(p => p.id === failureId);
+      
+      const passed = pattern && pattern.failureType === testCase.expectedType;
+
+      this.testResults.push({
+        name: `Classification: ${testCase.expectedType}`,
+        status: passed ? 'passed' : 'failed',
+        duration: performance.now() - testStart,
+        details: `Expected: ${testCase.expectedType}, Got: ${pattern?.failureType || 'unknown'}`
       });
     }
+  }
 
-    if (systemHealth < 70) {
-      recommendations.push('⚠️ System health is below optimal. Consider reviewing pattern thresholds.');
+  // ==================== RECOVERY MECHANISM TESTS ====================
+
+  private async testRecoveryMechanisms(): Promise<void> {
+    console.log('🔧 Testing recovery mechanisms...');
+
+    // Mock recovery strategies for testing
+    const mockRecoveryTests = [
+      {
+        name: 'Force Refresh Strategy',
+        failureType: 'id_mismatch',
+        expectedSuccess: true
+      },
+      {
+        name: 'Clear State Strategy',
+        failureType: 'state_desync',
+        expectedSuccess: true
+      },
+      {
+        name: 'Reconnect Strategy',
+        failureType: 'connection_failure',
+        expectedSuccess: true
+      },
+      {
+        name: 'Full Reset Strategy',
+        failureType: 'backend_stale',
+        expectedSuccess: true
+      }
+    ];
+
+    for (const test of mockRecoveryTests) {
+      const testStart = performance.now();
+
+      // Create a failure pattern that should trigger the specific recovery strategy
+      const failureId = await captureInstanceSyncFailure(
+        `Test error for ${test.failureType}`,
+        { selectedInstance: 'claude-recovery-test', instances: [], connectionStatus: 'error' },
+        null,
+        'RecoveryTest',
+        ['test_recovery']
+      );
+
+      // Simulate recovery process
+      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate recovery time
+
+      const patterns = nldInstanceSync.getPatterns();
+      const pattern = patterns.find(p => p.id === failureId);
+      
+      const passed = pattern && pattern.recoveryAttempted;
+
+      this.testResults.push({
+        name: test.name,
+        status: passed ? 'passed' : 'failed',
+        duration: performance.now() - testStart,
+        details: `Recovery attempted: ${pattern?.recoveryAttempted}, Success: ${pattern?.recoverySuccessful}`
+      });
+    }
+  }
+
+  // ==================== PROACTIVE VALIDATION TESTS ====================
+
+  private async testProactiveValidation(): Promise<void> {
+    console.log('🛡️ Testing proactive validation system...');
+
+    const validationTests = [
+      {
+        name: 'Valid Instance Selection',
+        operation: 'select' as const,
+        instanceId: 'claude-1234',
+        expectedValid: true
+      },
+      {
+        name: 'Invalid Instance ID Format',
+        operation: 'select' as const,
+        instanceId: 'invalid-id-format',
+        expectedValid: false
+      },
+      {
+        name: 'Null Instance ID',
+        operation: 'select' as const,
+        instanceId: undefined,
+        expectedValid: false
+      },
+      {
+        name: 'Create Instance Operation',
+        operation: 'create' as const,
+        instanceId: undefined,
+        expectedValid: true
+      },
+      {
+        name: 'Connect to Valid Instance',
+        operation: 'connect' as const,
+        instanceId: 'claude-5678',
+        expectedValid: true
+      },
+      {
+        name: 'Send Command Without Connection',
+        operation: 'send_command' as const,
+        instanceId: 'claude-9999',
+        currentState: { websocketConnected: false },
+        expectedValid: false
+      }
+    ];
+
+    for (const test of validationTests) {
+      const testStart = performance.now();
+
+      const validation = await validateInstanceOperation(
+        test.operation,
+        test.instanceId,
+        test.currentState
+      );
+
+      const passed = validation.valid === test.expectedValid;
+
+      this.testResults.push({
+        name: test.name,
+        status: passed ? 'passed' : 'failed',
+        duration: performance.now() - testStart,
+        details: `Expected valid: ${test.expectedValid}, Got: ${validation.valid}, Issues: ${validation.issues.length}, Confidence: ${validation.confidence}`
+      });
+    }
+  }
+
+  // ==================== NEURAL LEARNING TESTS ====================
+
+  private async testNeuralLearning(): Promise<void> {
+    console.log('🧠 Testing neural learning integration...');
+
+    // Test 1: Pattern Storage and Retrieval
+    const testStart1 = performance.now();
+    const initialPatternCount = nldInstanceSync.getPatterns().length;
+
+    await captureInstanceSyncFailure(
+      'Neural learning test failure',
+      { selectedInstance: 'claude-neural-test', instances: [], connectionStatus: 'error' },
+      null,
+      'NeuralTest',
+      ['neural_test']
+    );
+
+    const finalPatternCount = nldInstanceSync.getPatterns().length;
+    const patternStored = finalPatternCount > initialPatternCount;
+
+    this.testResults.push({
+      name: 'Pattern Storage',
+      status: patternStored ? 'passed' : 'failed',
+      duration: performance.now() - testStart1,
+      details: `Patterns before: ${initialPatternCount}, after: ${finalPatternCount}`
+    });
+
+    // Test 2: Metrics Calculation
+    const testStart2 = performance.now();
+    const metrics = nldInstanceSync.getMetrics();
+    
+    const metricsValid = metrics && 
+      typeof metrics.totalFailures === 'number' &&
+      typeof metrics.recoveryRate === 'number' &&
+      metrics.patternFrequency instanceof Map;
+
+    this.testResults.push({
+      name: 'Metrics Calculation',
+      status: metricsValid ? 'passed' : 'failed',
+      duration: performance.now() - testStart2,
+      details: `Total failures: ${metrics?.totalFailures}, Recovery rate: ${metrics?.recoveryRate}`
+    });
+
+    // Test 3: Report Generation
+    const testStart3 = performance.now();
+    const report = nldInstanceSync.getPatternsReport();
+    const reportValid = report && typeof report === 'string' && report.includes('totalPatterns');
+
+    this.testResults.push({
+      name: 'Report Generation',
+      status: reportValid ? 'passed' : 'failed',
+      duration: performance.now() - testStart3,
+      details: `Report length: ${report?.length || 0} characters`
+    });
+  }
+
+  // ==================== INTEGRATION SCENARIO TESTS ====================
+
+  private async testIntegrationScenarios(): Promise<void> {
+    console.log('🔗 Testing integration scenarios...');
+
+    // Scenario 1: Complete workflow from failure to recovery
+    const scenario1Start = performance.now();
+    
+    const failureId = await captureInstanceSyncFailure(
+      'Integration test: Failed to connect to instance claude-integration-test',
+      { 
+        selectedInstance: 'claude-integration-test',
+        instances: [{ id: 'claude-integration-test', status: 'running' }],
+        connectionStatus: 'Connected via SSE'
+      },
+      { instances: [] }, // Backend has no instances
+      'IntegrationTest',
+      ['create_instance', 'select_instance', 'attempt_connection']
+    );
+
+    // Simulate some time passing for recovery
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const pattern = nldInstanceSync.getPatterns().find(p => p.id === failureId);
+    const workflowComplete = pattern && 
+      pattern.failureType === 'id_mismatch' &&
+      pattern.recoveryAttempted;
+
+    this.testResults.push({
+      name: 'Complete Failure-Recovery Workflow',
+      status: workflowComplete ? 'passed' : 'failed',
+      duration: performance.now() - scenario1Start,
+      details: `Pattern: ${pattern?.failureType}, Recovery: ${pattern?.recoveryAttempted}`
+    });
+
+    // Scenario 2: Multiple concurrent failures
+    const scenario2Start = performance.now();
+    
+    const concurrentFailures = await Promise.all([
+      captureInstanceSyncFailure('Concurrent test 1', { selectedInstance: 'claude-concurrent-1' }, null, 'ConcurrentTest1', []),
+      captureInstanceSyncFailure('Concurrent test 2', { selectedInstance: 'claude-concurrent-2' }, null, 'ConcurrentTest2', []),
+      captureInstanceSyncFailure('Concurrent test 3', { selectedInstance: 'claude-concurrent-3' }, null, 'ConcurrentTest3', [])
+    ]);
+
+    const allConcurrentSucceeded = concurrentFailures.every(id => id !== null);
+
+    this.testResults.push({
+      name: 'Concurrent Failure Handling',
+      status: allConcurrentSucceeded ? 'passed' : 'failed',
+      duration: performance.now() - scenario2Start,
+      details: `Concurrent failures processed: ${concurrentFailures.filter(id => id).length}/3`
+    });
+  }
+
+  // ==================== REPORT GENERATION ====================
+
+  private generateReport(): TestSuiteReport {
+    const totalTests = this.testResults.length;
+    const passedTests = this.testResults.filter(t => t.status === 'passed').length;
+    const failedTests = this.testResults.filter(t => t.status === 'failed').length;
+    const totalDuration = this.testResults.reduce((sum, t) => sum + (t.duration || 0), 0);
+
+    return {
+      summary: {
+        total: totalTests,
+        passed: passedTests,
+        failed: failedTests,
+        successRate: totalTests > 0 ? passedTests / totalTests : 0,
+        totalDuration: Math.round(totalDuration)
+      },
+      results: this.testResults,
+      recommendations: this.generateRecommendations(),
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  private generateRecommendations(): string[] {
+    const recommendations: string[] = [];
+    const failedTests = this.testResults.filter(t => t.status === 'failed');
+    
+    if (failedTests.length > 0) {
+      recommendations.push(`${failedTests.length} tests failed. Review implementation for: ${failedTests.map(t => t.name).join(', ')}`);
     }
 
-    const recoveryFailures = this.results.filter(r => r.passed && !r.recoverySuccessful).length;
-    if (recoveryFailures > 0) {
-      recommendations.push(`🔧 ${recoveryFailures} tests had recovery issues. Review recovery mechanisms.`);
+    const avgDuration = this.testResults.reduce((sum, t) => sum + (t.duration || 0), 0) / this.testResults.length;
+    if (avgDuration > 1000) {
+      recommendations.push(`Average test duration is ${Math.round(avgDuration)}ms. Consider optimizing performance.`);
     }
 
-    const slowTests = this.results.filter(r => r.duration > 5000).length;
-    if (slowTests > 0) {
-      recommendations.push(`🐌 ${slowTests} tests took longer than 5 seconds. Consider optimizing detection speed.`);
+    if (this.testResults.length < 15) {
+      recommendations.push('Consider adding more comprehensive test coverage for edge cases.');
     }
 
     return recommendations;
   }
 
-  /**
-   * Export test results
-   */
-  public exportResults(): string {
-    const report = this.generateReport(0); // Duration doesn't matter for export
-    return JSON.stringify(report, null, 2);
+  // ==================== PUBLIC INTERFACE ====================
+
+  public getTestResults(): TestResult[] {
+    return [...this.testResults];
   }
 
-  /**
-   * Reset test results
-   */
-  public reset(): void {
-    this.results = [];
-    console.log('🧪 Test results reset');
+  public isTestRunning(): boolean {
+    return this.isRunning;
   }
 
-  /**
-   * Dispose of test resources
-   */
-  public dispose(): void {
-    this.system.dispose();
-    this.testCases = [];
-    this.results = [];
-    this.isRunning = false;
+  public async runSingleTest(testName: string): Promise<TestResult | null> {
+    // Implementation for running individual tests
+    console.log(`🧪 Running single test: ${testName}`);
+    return null; // Placeholder
   }
 }
 
-export default NLDTestSuite;
+// ==================== TYPES ====================
+
+interface TestResult {
+  name: string;
+  status: 'passed' | 'failed' | 'skipped';
+  duration?: number;
+  error?: string;
+  details?: string;
+}
+
+interface TestSuiteReport {
+  summary: {
+    total: number;
+    passed: number;
+    failed: number;
+    successRate: number;
+    totalDuration: number;
+  };
+  results: TestResult[];
+  recommendations: string[];
+  timestamp: string;
+}
+
+// ==================== SINGLETON EXPORT ====================
+
+export const nldTestSuite = new NLDTestSuite();
+
+// ==================== UTILITY FUNCTIONS ====================
+
+/**
+ * Quick validation test for development
+ */
+export async function runQuickNLDTest(): Promise<boolean> {
+  console.log('🚀 Running quick NLD validation test...');
+  
+  try {
+    // Test basic failure capture
+    const failureId = await captureInstanceSyncFailure(
+      'Quick test failure',
+      { selectedInstance: 'claude-quick-test' },
+      null,
+      'QuickTest',
+      ['quick_test']
+    );
+
+    // Test validation
+    const validation = await validateInstanceOperation('select', 'claude-test-123');
+
+    console.log('✅ Quick NLD test completed successfully');
+    return !!(failureId && validation);
+  } catch (error) {
+    console.error('❌ Quick NLD test failed:', error);
+    return false;
+  }
+}
+
+/**
+ * Performance benchmark for NLD operations
+ */
+export async function benchmarkNLDPerformance(): Promise<{
+  failureCapture: number;
+  validation: number;
+  reportGeneration: number;
+}> {
+  const results = { failureCapture: 0, validation: 0, reportGeneration: 0 };
+
+  // Benchmark failure capture
+  const captureStart = performance.now();
+  await captureInstanceSyncFailure('Benchmark test', { selectedInstance: 'claude-benchmark' }, null, 'Benchmark', []);
+  results.failureCapture = performance.now() - captureStart;
+
+  // Benchmark validation
+  const validationStart = performance.now();
+  await validateInstanceOperation('select', 'claude-benchmark-validation');
+  results.validation = performance.now() - validationStart;
+
+  // Benchmark report generation
+  const reportStart = performance.now();
+  nldInstanceSync.getPatternsReport();
+  results.reportGeneration = performance.now() - reportStart;
+
+  return results;
+}

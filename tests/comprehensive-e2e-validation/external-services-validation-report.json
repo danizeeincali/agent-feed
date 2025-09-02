@@ -1,0 +1,301 @@
+{
+  "timestamp": "2025-09-01T15:39:15.066Z",
+  "executionTime": 25734,
+  "passRate": "66.7",
+  "results": {
+    "architecture": {
+      "frontend_serving": true,
+      "backend_api": true,
+      "websocket_server": true,
+      "static_files": true
+    },
+    "workflow": {
+      "browser_navigation": true,
+      "page_load": true,
+      "ui_elements_present": true,
+      "ui_interaction": true,
+      "api_communication": true,
+      "terminal_interface": true
+    },
+    "commands": {
+      "simple_input": true,
+      "keyboard_interaction": true,
+      "output_detection": false
+    },
+    "realtime": {
+      "websocket_activity": true,
+      "network_requests": true,
+      "dom_updates": false,
+      "state_changes": false
+    },
+    "failures": {
+      "network_interruption": false,
+      "invalid_interactions": false,
+      "error_recovery": false,
+      "graceful_degradation": false
+    }
+  },
+  "networkActivity": {
+    "totalRequests": 100,
+    "requests": [
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/",
+        "timestamp": 1756741152368
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/@vite/client",
+        "timestamp": 1756741152582
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/network-connectivity-fix.js",
+        "timestamp": 1756741152583
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/main.tsx",
+        "timestamp": 1756741152583
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/@react-refresh",
+        "timestamp": 1756741152595
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=d06d351a",
+        "timestamp": 1756741152596
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/react.js?v=d06d351a",
+        "timestamp": 1756741152596
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=d06d351a",
+        "timestamp": 1756741152596
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/App.tsx",
+        "timestamp": 1756741152596
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/SimpleErrorBoundary.tsx",
+        "timestamp": 1756741152596
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/index.css",
+        "timestamp": 1756741152597
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/vite/dist/client/env.mjs",
+        "timestamp": 1756741152628
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/chunk-DRWLMN53.js?v=d06d351a",
+        "timestamp": 1756741152654
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=d06d351a",
+        "timestamp": 1756741152655
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d06d351a",
+        "timestamp": 1756741152655
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/lucide-react.js?v=d06d351a",
+        "timestamp": 1756741152769
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=d06d351a",
+        "timestamp": 1756741152773
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=d06d351a",
+        "timestamp": 1756741152773
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/ErrorBoundary.tsx",
+        "timestamp": 1756741152773
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/FallbackComponents.tsx",
+        "timestamp": 1756741152774
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/RealTimeNotifications.tsx",
+        "timestamp": 1756741152774
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/SocialMediaFeed.tsx",
+        "timestamp": 1756741152774
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/SimpleAgentManager.tsx",
+        "timestamp": 1756741152774
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/EnhancedAgentManagerWrapper.tsx",
+        "timestamp": 1756741152774
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/SimpleAnalytics.tsx",
+        "timestamp": 1756741152774
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/BulletproofClaudeCodePanel.tsx",
+        "timestamp": 1756741152775
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/AgentDashboard.tsx",
+        "timestamp": 1756741152775
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/ClaudeInstanceManagerModern.tsx",
+        "timestamp": 1756741152777
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/WorkflowVisualizationFixed.tsx",
+        "timestamp": 1756741152777
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/BulletproofAgentProfile.tsx",
+        "timestamp": 1756741152778
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/BulletproofActivityPanel.tsx",
+        "timestamp": 1756741152778
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/SimpleSettings.tsx",
+        "timestamp": 1756741152778
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/DualInstanceDashboardEnhanced.tsx",
+        "timestamp": 1756741152778
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/pages/DualInstancePage.tsx",
+        "timestamp": 1756741152778
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/PerformanceMonitor.tsx",
+        "timestamp": 1756741152778
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/TerminalDebugTest.tsx",
+        "timestamp": 1756741152778
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/context/WebSocketSingletonContext.tsx",
+        "timestamp": 1756741152779
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/HTTPPollingTerminal.tsx",
+        "timestamp": 1756741152779
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/styles/agents.css",
+        "timestamp": 1756741152779
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/utils/cn.ts",
+        "timestamp": 1756741152779
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/ConnectionStatus.tsx",
+        "timestamp": 1756741152779
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/react-error-boundary.js?v=d06d351a",
+        "timestamp": 1756741152809
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/utils/errorHandling.ts",
+        "timestamp": 1756741152814
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/node_modules/.vite/deps/chunk-6PXSGDAH.js?v=d06d351a",
+        "timestamp": 1756741152835
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/EnhancedAgentManager.tsx",
+        "timestamp": 1756741152850
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/utils/nld-logger.ts",
+        "timestamp": 1756741152852
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/PostCreator.tsx",
+        "timestamp": 1756741152852
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/context/WebSocketContext.tsx",
+        "timestamp": 1756741152853
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/TypingIndicator.tsx",
+        "timestamp": 1756741152853
+      },
+      {
+        "method": "GET",
+        "url": "http://localhost:5173/src/components/LiveActivityIndicator.tsx",
+        "timestamp": 1756741152853
+      }
+    ]
+  },
+  "environment": {
+    "nodeVersion": "v22.17.0",
+    "platform": "linux",
+    "arch": "x64",
+    "cwd": "/workspaces/agent-feed/tests/comprehensive-e2e-validation",
+    "frontendUrl": "http://localhost:5173",
+    "backendUrl": "http://localhost:3000"
+  }
+}

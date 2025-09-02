@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-08-31T15:55:43Z",
+  "overall_status": "FAILED",
+  "validation_type": "COMPREHENSIVE_PRODUCTION_VALIDATION",
+  "environment": {
+    "frontend_url": "http://localhost:5173",
+    "backend_url": "http://localhost:3000",
+    "test_environment": "production-like"
+  },
+  "test_results": {
+    "service_availability": true,
+    "real_browser_test": true,
+    "claude_instances": false,
+    "playwright_e2e": false,
+    "load_tests": false,
+    "manual_validation": false
+  },
+  "validation_criteria": {
+    "four_instance_buttons": "Must create Claude instances without Connection Error",
+    "terminal_interaction": "Must get real Claude responses, not timeouts",
+    "concurrent_instances": "Must handle multiple instances simultaneously",
+    "performance": "Page load under 5s, navigation under 3s",
+    "api_stability": "All endpoints must respond within SLA",
+    "no_mocks": "100% real functionality validation"
+  }
+}

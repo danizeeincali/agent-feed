@@ -2,16 +2,62 @@ import { Agent, Task, Workflow, OrchestrationState } from '@/types';
 
 class ApiService {
   private baseUrl: string;
+  private cache: Map<string, { data: any; timestamp: number; ttl: number }> = new Map();
 
   constructor(baseUrl: string = '/api/v1') {
     this.baseUrl = baseUrl;
   }
 
+  // Cache management
+  private getCacheKey(endpoint: string, params?: string): string {
+    return `${endpoint}${params ? `?${params}` : ''}`;
+  }
+
+  private getCachedData<T>(key: string): T | null {
+    const cached = this.cache.get(key);
+    if (cached && Date.now() - cached.timestamp < cached.ttl) {
+      return cached.data as T;
+    }
+    this.cache.delete(key);
+    return null;
+  }
+
+  private setCachedData(key: string, data: any, ttl: number = 5000): void {
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now(),
+      ttl
+    });
+  }
+
+  public clearCache(pattern?: string): void {
+    if (pattern) {
+      for (const key of this.cache.keys()) {
+        if (key.includes(pattern)) {
+          this.cache.delete(key);
+        }
+      }
+    } else {
+      this.cache.clear();
+    }
+  }
+
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    useCache: boolean = false,
+    cacheTtl: number = 5000
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
+    const cacheKey = this.getCacheKey(endpoint, options.method === 'GET' ? JSON.stringify(options) : undefined);
+    
+    // Check cache for GET requests
+    if (useCache && (!options.method || options.method === 'GET')) {
+      const cachedData = this.getCachedData<T>(cacheKey);
+      if (cachedData) {
+        return cachedData;
+      }
+    }
     
     const config: RequestInit = {
       headers: {
@@ -28,7 +74,14 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // Cache successful GET requests
+      if (useCache && (!options.method || options.method === 'GET')) {
+        this.setCachedData(cacheKey, data, cacheTtl);
+      }
+      
+      return data;
     } catch (error) {
       console.error(`API request failed: ${endpoint}`, error);
       throw error;
@@ -156,6 +209,32 @@ class ApiService {
 
   async getPerformanceMetrics(): Promise<any> {
     return this.request<any>('/metrics/performance');
+  }
+
+  // Claude Instance Management
+  async getClaudeInstances(useCache: boolean = false): Promise<any> {
+    return this.request<any>('/claude/instances', {}, useCache, 2000); // 2 second cache
+  }
+
+  async createClaudeInstance(config: any): Promise<any> {
+    // Clear cache after creating instance
+    this.clearCache('/claude/instances');
+    return this.request<any>('/v1/claude/instances', {
+      method: 'POST',
+      body: JSON.stringify(config),
+    });
+  }
+
+  async terminateClaudeInstance(instanceId: string): Promise<any> {
+    // Clear cache after terminating instance
+    this.clearCache('/claude/instances');
+    return this.request<any>(`/v1/claude/instances/${instanceId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getClaudeInstanceStatus(instanceId: string): Promise<any> {
+    return this.request<any>(`/claude/instances/${instanceId}/status`);
   }
 
   // Health Check

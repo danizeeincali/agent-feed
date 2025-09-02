@@ -1,0 +1,68 @@
+{
+  "suiteId": "production-validation-1756774083153",
+  "timestamp": "2025-09-02T00:48:03.154Z",
+  "config": {
+    "frontendUrl": "http://localhost:5173",
+    "backendUrl": "http://localhost:3000",
+    "wsUrl": "ws://localhost:3001",
+    "apiUrl": "http://localhost:3000/api",
+    "runParallel": true,
+    "detailedReports": true,
+    "skipSlowTests": true,
+    "minReliabilityScore": 95,
+    "maxErrorRate": 0.05,
+    "maxResponseTime": 5000,
+    "minStabilityScore": 90
+  },
+  "validationResults": {
+    "healthCheck": {
+      "systemHealthy": false,
+      "components": {
+        "frontend": {
+          "available": true,
+          "responseTime": 1756774083178
+        },
+        "backend": {
+          "available": true,
+          "health": {
+            "status": "healthy",
+            "timestamp": "2025-09-02T00:48:03.184Z",
+            "server": "HTTP/SSE Only - WebSocket Eliminated",
+            "message": "WebSocket connection storm successfully eliminated!"
+          }
+        },
+        "websocket": {
+          "available": false,
+          "error": ""
+        }
+      },
+      "issues": [
+        "WebSocket not available: "
+      ]
+    }
+  },
+  "summary": {},
+  "overallScore": 0,
+  "passed": false,
+  "duration": 37,
+  "error": "System health check failed. Cannot proceed with validation.",
+  "systemInfo": {
+    "nodeVersion": "v22.17.0",
+    "platform": "linux",
+    "arch": "x64",
+    "memoryUsage": {
+      "rss": 158740480,
+      "heapTotal": 84021248,
+      "heapUsed": 55282592,
+      "external": 3768397,
+      "arrayBuffers": 175570
+    },
+    "uptime": 1.19744916
+  },
+  "environment": {
+    "frontendUrl": "http://localhost:5173",
+    "backendUrl": "http://localhost:3000",
+    "wsUrl": "ws://localhost:3001",
+    "apiUrl": "http://localhost:3000/api"
+  }
+}

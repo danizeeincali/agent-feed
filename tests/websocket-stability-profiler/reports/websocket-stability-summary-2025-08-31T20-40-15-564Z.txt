@@ -1,0 +1,28 @@
+================================================================================
+WEBSOCKET CONNECTION STABILITY PROFILING REPORT
+================================================================================
+
+EXECUTIVE SUMMARY
+----------------------------------------
+Test Duration: 75s
+Total Connections: 8
+Success Rate: 100.0%
+Premature Disconnections: 3
+Average Connection Lifetime: 32s
+
+KEY FINDINGS
+----------------------------------------
+🚨 CRITICAL: 3 connections dropped at ~30 seconds
+   Average failure time: 32s
+   This suggests a timeout or keepalive issue
+
+RECOMMENDATIONS
+----------------------------------------
+HIGH: 30-second connection drop pattern detected
+   → Implement connection keepalive with 20-second ping interval
+   Evidence: 3 connections dropped at ~30 seconds
+
+FAILURE TIME DISTRIBUTION
+----------------------------------------
+32s: 2 failures
+33s: 1 failures

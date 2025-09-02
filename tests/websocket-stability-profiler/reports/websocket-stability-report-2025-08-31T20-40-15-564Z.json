@@ -1,0 +1,2429 @@
+{
+  "meta": {
+    "testDuration": 75002,
+    "startTime": 1756672740560,
+    "endTime": 1756672815562,
+    "serverUrl": "ws://localhost:8080",
+    "maxConnections": 5
+  },
+  "summary": {
+    "totalConnections": 8,
+    "successfulConnections": 8,
+    "failedConnections": 0,
+    "successRate": 100,
+    "prematureDisconnections": 3,
+    "avgConnectionLifetime": 32298.333333333332,
+    "medianConnectionLifetime": 32201
+  },
+  "failureAnalysis": {
+    "intervalPatterns": {
+      "30s": 3,
+      "60s": 0,
+      "90s": 0,
+      "120s": 0,
+      "300s": 0
+    },
+    "topFailureTimes": [
+      {
+        "seconds": 32,
+        "count": 2
+      },
+      {
+        "seconds": 33,
+        "count": 1
+      }
+    ],
+    "thirtySecondAnalysis": {
+      "detected": true,
+      "count": 3,
+      "averageLifetime": 32298.333333333332,
+      "commonCauses": {
+        "missed_pongs": 3
+      },
+      "resourcePatterns": {
+        "highMemoryGrowth": 0,
+        "maxConnections": 3,
+        "averageMemoryAtFailure": 1275221.3333333333
+      },
+      "apiCallContext": {
+        "withActiveApiCalls": 0,
+        "recentClaudeApiCalls": 0,
+        "averageApiCallsInProgress": 0
+      },
+      "timing": {
+        "distribution": {
+          "min": 31780,
+          "max": 32914,
+          "median": 32201,
+          "q1": 31780,
+          "q3": 32914
+        },
+        "clustering": [
+          {
+            "window": 30,
+            "count": 3
+          }
+        ]
+      }
+    },
+    "resourceCorrelations": [
+      {
+        "type": "connection_limit",
+        "connectionLifetime": 31780,
+        "activeConnections": 7,
+        "correlation": "medium"
+      },
+      {
+        "type": "connection_limit",
+        "connectionLifetime": 32201,
+        "activeConnections": 6,
+        "correlation": "medium"
+      },
+      {
+        "type": "connection_limit",
+        "connectionLifetime": 32914,
+        "activeConnections": 5,
+        "correlation": "medium"
+      }
+    ],
+    "apiCallCorrelations": {
+      "totalCorrelations": 0,
+      "correlationsByType": {},
+      "averageCorrelationDelay": 0,
+      "strongCorrelations": []
+    }
+  },
+  "performance": {
+    "resourceUsage": {
+      "memoryAnalysis": {
+        "maxGrowth": 2105344,
+        "avgGrowth": 1346366.2702702703,
+        "leakDetected": false,
+        "growthRate": 18053.191343745293
+      },
+      "stabilityMetrics": {
+        "memoryStable": true,
+        "connectionStable": false
+      }
+    },
+    "connectionHealthMetrics": {
+      "pingResponseRate": 0,
+      "averagePingTime": 0,
+      "connectionStability": 100
+    },
+    "systemStability": {
+      "memoryStable": true,
+      "connectionStable": false,
+      "apiCallStable": true
+    }
+  },
+  "recommendations": [
+    {
+      "category": "Connection Stability",
+      "priority": "HIGH",
+      "issue": "30-second connection drop pattern detected",
+      "recommendation": "Implement connection keepalive with 20-second ping interval",
+      "evidence": "3 connections dropped at ~30 seconds"
+    }
+  ],
+  "rawData": {
+    "connectionStats": [
+      {
+        "timestamp": 1756672774341,
+        "connectionId": "conn_1",
+        "lifetime": 31780,
+        "category": "thirty_second_pattern",
+        "messagesSent": 3,
+        "messagesReceived": 4,
+        "bytesSent": 5338,
+        "bytesReceived": 1019,
+        "apiCalls": 3,
+        "successfulApiCalls": 3,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Thirty second timeout simulation"
+      },
+      {
+        "timestamp": 1756672777763,
+        "connectionId": "conn_1756672745562_1",
+        "lifetime": 32201,
+        "category": "thirty_second_pattern",
+        "messagesSent": 4,
+        "messagesReceived": 5,
+        "bytesSent": 4432,
+        "bytesReceived": 1115,
+        "apiCalls": 4,
+        "successfulApiCalls": 4,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Thirty second timeout simulation"
+      },
+      {
+        "timestamp": 1756672778476,
+        "connectionId": "conn_1756672745561_0",
+        "lifetime": 32914,
+        "category": "thirty_second_pattern",
+        "messagesSent": 4,
+        "messagesReceived": 5,
+        "bytesSent": 2385,
+        "bytesReceived": 952,
+        "apiCalls": 4,
+        "successfulApiCalls": 4,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Thirty second timeout simulation"
+      },
+      {
+        "timestamp": 1756672815569,
+        "connectionId": "conn_1756672780565_0",
+        "lifetime": 35004,
+        "category": "normal_closure",
+        "messagesSent": 5,
+        "messagesReceived": 6,
+        "bytesSent": 7486,
+        "bytesReceived": 1451,
+        "apiCalls": 5,
+        "successfulApiCalls": 4,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Profiling session ended"
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_4",
+        "lifetime": 67010,
+        "category": "normal_closure",
+        "messagesSent": 7,
+        "messagesReceived": 8,
+        "bytesSent": 8714,
+        "bytesReceived": 1864,
+        "apiCalls": 7,
+        "successfulApiCalls": 7,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Profiling session ended"
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_3",
+        "lifetime": 69009,
+        "category": "normal_closure",
+        "messagesSent": 7,
+        "messagesReceived": 8,
+        "bytesSent": 5602,
+        "bytesReceived": 1591,
+        "apiCalls": 7,
+        "successfulApiCalls": 7,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Profiling session ended"
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_2",
+        "lifetime": 71009,
+        "category": "normal_closure",
+        "messagesSent": 6,
+        "messagesReceived": 7,
+        "bytesSent": 5589,
+        "bytesReceived": 1484,
+        "apiCalls": 6,
+        "successfulApiCalls": 6,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Profiling session ended"
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_0",
+        "lifetime": 75008,
+        "category": "normal_closure",
+        "messagesSent": 7,
+        "messagesReceived": 8,
+        "bytesSent": 10759,
+        "bytesReceived": 2028,
+        "apiCalls": 7,
+        "successfulApiCalls": 7,
+        "errors": 0,
+        "averagePingTime": 0,
+        "closeCode": 1000,
+        "closeReason": "Profiling session ended"
+      }
+    ],
+    "resourceMetrics": [
+      {
+        "timestamp": 1756672741568,
+        "memory": {
+          "rss": 66912256,
+          "heapUsed": 6531344,
+          "heapTotal": 10706944,
+          "external": 2191304,
+          "arrayBuffers": 28473,
+          "growthFromBaseline": 786432
+        },
+        "cpu": {
+          "user": 78677,
+          "system": 18845
+        },
+        "connections": {
+          "active": 1,
+          "total": 1,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672742568,
+        "memory": {
+          "rss": 66912256,
+          "heapUsed": 6710296,
+          "heapTotal": 10969088,
+          "external": 2192079,
+          "arrayBuffers": 29248,
+          "growthFromBaseline": 786432
+        },
+        "cpu": {
+          "user": 83447,
+          "system": 19634
+        },
+        "connections": {
+          "active": 2,
+          "total": 2,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672743568,
+        "memory": {
+          "rss": 66912256,
+          "heapUsed": 6711616,
+          "heapTotal": 10969088,
+          "external": 2192079,
+          "arrayBuffers": 29248,
+          "growthFromBaseline": 786432
+        },
+        "cpu": {
+          "user": 83583,
+          "system": 19666
+        },
+        "connections": {
+          "active": 2,
+          "total": 2,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672744569,
+        "memory": {
+          "rss": 67043328,
+          "heapUsed": 6832968,
+          "heapTotal": 10969088,
+          "external": 2192621,
+          "arrayBuffers": 29790,
+          "growthFromBaseline": 917504
+        },
+        "cpu": {
+          "user": 85475,
+          "system": 20871
+        },
+        "connections": {
+          "active": 3,
+          "total": 3,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672745570,
+        "memory": {
+          "rss": 67043328,
+          "heapUsed": 7079360,
+          "heapTotal": 11231232,
+          "external": 2194785,
+          "arrayBuffers": 31954,
+          "growthFromBaseline": 917504
+        },
+        "cpu": {
+          "user": 90383,
+          "system": 21089
+        },
+        "connections": {
+          "active": 5,
+          "total": 5,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672746570,
+        "memory": {
+          "rss": 67698688,
+          "heapUsed": 7315800,
+          "heapTotal": 11231232,
+          "external": 2198018,
+          "arrayBuffers": 35187,
+          "growthFromBaseline": 1572864
+        },
+        "cpu": {
+          "user": 97818,
+          "system": 23194
+        },
+        "connections": {
+          "active": 6,
+          "total": 6,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672747570,
+        "memory": {
+          "rss": 67698688,
+          "heapUsed": 7360544,
+          "heapTotal": 11231232,
+          "external": 2200495,
+          "arrayBuffers": 37664,
+          "growthFromBaseline": 1572864
+        },
+        "cpu": {
+          "user": 100451,
+          "system": 23575
+        },
+        "connections": {
+          "active": 6,
+          "total": 6,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672748571,
+        "memory": {
+          "rss": 67698688,
+          "heapUsed": 7470888,
+          "heapTotal": 11231232,
+          "external": 2201285,
+          "arrayBuffers": 38454,
+          "growthFromBaseline": 1572864
+        },
+        "cpu": {
+          "user": 103419,
+          "system": 24574
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672749571,
+        "memory": {
+          "rss": 66002944,
+          "heapUsed": 6371336,
+          "heapTotal": 8609792,
+          "external": 2195149,
+          "arrayBuffers": 32318,
+          "growthFromBaseline": -122880
+        },
+        "cpu": {
+          "user": 131757,
+          "system": 25531
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672750570,
+        "memory": {
+          "rss": 66002944,
+          "heapUsed": 6469608,
+          "heapTotal": 8609792,
+          "external": 2195386,
+          "arrayBuffers": 32555,
+          "growthFromBaseline": -122880
+        },
+        "cpu": {
+          "user": 134020,
+          "system": 26199
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672751571,
+        "memory": {
+          "rss": 66134016,
+          "heapUsed": 6487936,
+          "heapTotal": 8609792,
+          "external": 2195406,
+          "arrayBuffers": 32575,
+          "growthFromBaseline": 8192
+        },
+        "cpu": {
+          "user": 134707,
+          "system": 26333
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672752572,
+        "memory": {
+          "rss": 66265088,
+          "heapUsed": 6581480,
+          "heapTotal": 8609792,
+          "external": 2208540,
+          "arrayBuffers": 45709,
+          "growthFromBaseline": 139264
+        },
+        "cpu": {
+          "user": 137345,
+          "system": 26649
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672753573,
+        "memory": {
+          "rss": 66265088,
+          "heapUsed": 6598840,
+          "heapTotal": 8609792,
+          "external": 2208550,
+          "arrayBuffers": 45719,
+          "growthFromBaseline": 139264
+        },
+        "cpu": {
+          "user": 138061,
+          "system": 26652
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672754573,
+        "memory": {
+          "rss": 66265088,
+          "heapUsed": 6692248,
+          "heapTotal": 8609792,
+          "external": 2221034,
+          "arrayBuffers": 58203,
+          "growthFromBaseline": 139264
+        },
+        "cpu": {
+          "user": 140278,
+          "system": 26817
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672755574,
+        "memory": {
+          "rss": 66396160,
+          "heapUsed": 6739352,
+          "heapTotal": 8609792,
+          "external": 2221946,
+          "arrayBuffers": 59115,
+          "growthFromBaseline": 270336
+        },
+        "cpu": {
+          "user": 141626,
+          "system": 27879
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672756574,
+        "memory": {
+          "rss": 66396160,
+          "heapUsed": 6822064,
+          "heapTotal": 8609792,
+          "external": 2222055,
+          "arrayBuffers": 59224,
+          "growthFromBaseline": 270336
+        },
+        "cpu": {
+          "user": 143808,
+          "system": 27934
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672757576,
+        "memory": {
+          "rss": 66396160,
+          "heapUsed": 6845152,
+          "heapTotal": 8609792,
+          "external": 2222312,
+          "arrayBuffers": 59481,
+          "growthFromBaseline": 270336
+        },
+        "cpu": {
+          "user": 144946,
+          "system": 28155
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672758577,
+        "memory": {
+          "rss": 66527232,
+          "heapUsed": 6900768,
+          "heapTotal": 8609792,
+          "external": 2222480,
+          "arrayBuffers": 59649,
+          "growthFromBaseline": 401408
+        },
+        "cpu": {
+          "user": 146500,
+          "system": 28456
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672759577,
+        "memory": {
+          "rss": 66527232,
+          "heapUsed": 6924216,
+          "heapTotal": 8609792,
+          "external": 2222736,
+          "arrayBuffers": 59905,
+          "growthFromBaseline": 401408
+        },
+        "cpu": {
+          "user": 147878,
+          "system": 28613
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672760578,
+        "memory": {
+          "rss": 66527232,
+          "heapUsed": 6993728,
+          "heapTotal": 8609792,
+          "external": 2222766,
+          "arrayBuffers": 59935,
+          "growthFromBaseline": 401408
+        },
+        "cpu": {
+          "user": 149683,
+          "system": 28662
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672761579,
+        "memory": {
+          "rss": 66527232,
+          "heapUsed": 7004440,
+          "heapTotal": 8609792,
+          "external": 2222776,
+          "arrayBuffers": 59945,
+          "growthFromBaseline": 401408
+        },
+        "cpu": {
+          "user": 150172,
+          "system": 28756
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672762578,
+        "memory": {
+          "rss": 66658304,
+          "heapUsed": 7046072,
+          "heapTotal": 8609792,
+          "external": 2222786,
+          "arrayBuffers": 59955,
+          "growthFromBaseline": 532480
+        },
+        "cpu": {
+          "user": 151456,
+          "system": 28759
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672763578,
+        "memory": {
+          "rss": 66658304,
+          "heapUsed": 7072672,
+          "heapTotal": 8609792,
+          "external": 2222975,
+          "arrayBuffers": 60144,
+          "growthFromBaseline": 532480
+        },
+        "cpu": {
+          "user": 152766,
+          "system": 28759
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672764578,
+        "memory": {
+          "rss": 66658304,
+          "heapUsed": 7143008,
+          "heapTotal": 8609792,
+          "external": 2225441,
+          "arrayBuffers": 62610,
+          "growthFromBaseline": 532480
+        },
+        "cpu": {
+          "user": 154865,
+          "system": 28759
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672765579,
+        "memory": {
+          "rss": 66789376,
+          "heapUsed": 7170080,
+          "heapTotal": 8609792,
+          "external": 2225471,
+          "arrayBuffers": 62640,
+          "growthFromBaseline": 663552
+        },
+        "cpu": {
+          "user": 155911,
+          "system": 28759
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672766579,
+        "memory": {
+          "rss": 66920448,
+          "heapUsed": 7230424,
+          "heapTotal": 8609792,
+          "external": 2227622,
+          "arrayBuffers": 64791,
+          "growthFromBaseline": 794624
+        },
+        "cpu": {
+          "user": 157497,
+          "system": 28759
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672767580,
+        "memory": {
+          "rss": 66920448,
+          "heapUsed": 7245480,
+          "heapTotal": 8609792,
+          "external": 2227954,
+          "arrayBuffers": 65123,
+          "growthFromBaseline": 794624
+        },
+        "cpu": {
+          "user": 158401,
+          "system": 28759
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672768581,
+        "memory": {
+          "rss": 67051520,
+          "heapUsed": 6495616,
+          "heapTotal": 8609792,
+          "external": 2215200,
+          "arrayBuffers": 52369,
+          "growthFromBaseline": 925696
+        },
+        "cpu": {
+          "user": 161203,
+          "system": 29016
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672769580,
+        "memory": {
+          "rss": 67051520,
+          "heapUsed": 6527824,
+          "heapTotal": 8609792,
+          "external": 2217569,
+          "arrayBuffers": 54738,
+          "growthFromBaseline": 925696
+        },
+        "cpu": {
+          "user": 162065,
+          "system": 29576
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672770581,
+        "memory": {
+          "rss": 67182592,
+          "heapUsed": 6610744,
+          "heapTotal": 8609792,
+          "external": 2218244,
+          "arrayBuffers": 55413,
+          "growthFromBaseline": 1056768
+        },
+        "cpu": {
+          "user": 164402,
+          "system": 29926
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672771581,
+        "memory": {
+          "rss": 67182592,
+          "heapUsed": 6628728,
+          "heapTotal": 8609792,
+          "external": 2218344,
+          "arrayBuffers": 55513,
+          "growthFromBaseline": 1056768
+        },
+        "cpu": {
+          "user": 165378,
+          "system": 29968
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672772583,
+        "memory": {
+          "rss": 67182592,
+          "heapUsed": 6675760,
+          "heapTotal": 8609792,
+          "external": 2218513,
+          "arrayBuffers": 55682,
+          "growthFromBaseline": 1056768
+        },
+        "cpu": {
+          "user": 166553,
+          "system": 30087
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672773584,
+        "memory": {
+          "rss": 67313664,
+          "heapUsed": 6700064,
+          "heapTotal": 8609792,
+          "external": 2218770,
+          "arrayBuffers": 55939,
+          "growthFromBaseline": 1187840
+        },
+        "cpu": {
+          "user": 168023,
+          "system": 30158
+        },
+        "connections": {
+          "active": 7,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672774585,
+        "memory": {
+          "rss": 67444736,
+          "heapUsed": 6870432,
+          "heapTotal": 8609792,
+          "external": 2219936,
+          "arrayBuffers": 57105,
+          "growthFromBaseline": 1318912
+        },
+        "cpu": {
+          "user": 173116,
+          "system": 30219
+        },
+        "connections": {
+          "active": 6,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672775585,
+        "memory": {
+          "rss": 67444736,
+          "heapUsed": 6901944,
+          "heapTotal": 8609792,
+          "external": 2220183,
+          "arrayBuffers": 57352,
+          "growthFromBaseline": 1318912
+        },
+        "cpu": {
+          "user": 173559,
+          "system": 31069
+        },
+        "connections": {
+          "active": 6,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672776586,
+        "memory": {
+          "rss": 67444736,
+          "heapUsed": 6949384,
+          "heapTotal": 8609792,
+          "external": 2220193,
+          "arrayBuffers": 57362,
+          "growthFromBaseline": 1318912
+        },
+        "cpu": {
+          "user": 173636,
+          "system": 32140
+        },
+        "connections": {
+          "active": 6,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672777587,
+        "memory": {
+          "rss": 67444736,
+          "heapUsed": 6951744,
+          "heapTotal": 8609792,
+          "external": 2220193,
+          "arrayBuffers": 57362,
+          "growthFromBaseline": 1318912
+        },
+        "cpu": {
+          "user": 173881,
+          "system": 32200
+        },
+        "connections": {
+          "active": 6,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672778587,
+        "memory": {
+          "rss": 67575808,
+          "heapUsed": 7134784,
+          "heapTotal": 8609792,
+          "external": 2221652,
+          "arrayBuffers": 58821,
+          "growthFromBaseline": 1449984
+        },
+        "cpu": {
+          "user": 177956,
+          "system": 33434
+        },
+        "connections": {
+          "active": 4,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672779587,
+        "memory": {
+          "rss": 67706880,
+          "heapUsed": 7157864,
+          "heapTotal": 8609792,
+          "external": 2222743,
+          "arrayBuffers": 59912,
+          "growthFromBaseline": 1581056
+        },
+        "cpu": {
+          "user": 177978,
+          "system": 34507
+        },
+        "connections": {
+          "active": 4,
+          "total": 7,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672780588,
+        "memory": {
+          "rss": 67969024,
+          "heapUsed": 7407456,
+          "heapTotal": 8609792,
+          "external": 2233847,
+          "arrayBuffers": 71016,
+          "growthFromBaseline": 1843200
+        },
+        "cpu": {
+          "user": 184399,
+          "system": 34520
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672781588,
+        "memory": {
+          "rss": 67969024,
+          "heapUsed": 6697936,
+          "heapTotal": 8609792,
+          "external": 2236646,
+          "arrayBuffers": 56763,
+          "growthFromBaseline": 1843200
+        },
+        "cpu": {
+          "user": 184982,
+          "system": 36354
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672782588,
+        "memory": {
+          "rss": 67969024,
+          "heapUsed": 6741776,
+          "heapTotal": 8609792,
+          "external": 2236646,
+          "arrayBuffers": 56763,
+          "growthFromBaseline": 1843200
+        },
+        "cpu": {
+          "user": 186123,
+          "system": 36382
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672783596,
+        "memory": {
+          "rss": 67969024,
+          "heapUsed": 6744792,
+          "heapTotal": 8609792,
+          "external": 2236646,
+          "arrayBuffers": 56763,
+          "growthFromBaseline": 1843200
+        },
+        "cpu": {
+          "user": 186422,
+          "system": 36427
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672784597,
+        "memory": {
+          "rss": 67969024,
+          "heapUsed": 6803192,
+          "heapTotal": 8609792,
+          "external": 2219614,
+          "arrayBuffers": 56783,
+          "growthFromBaseline": 1843200
+        },
+        "cpu": {
+          "user": 186890,
+          "system": 37592
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672785597,
+        "memory": {
+          "rss": 67969024,
+          "heapUsed": 6839952,
+          "heapTotal": 8609792,
+          "external": 2221775,
+          "arrayBuffers": 58944,
+          "growthFromBaseline": 1843200
+        },
+        "cpu": {
+          "user": 188007,
+          "system": 37817
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672786597,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6898288,
+          "heapTotal": 8609792,
+          "external": 2222109,
+          "arrayBuffers": 59278,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 189233,
+          "system": 38706
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672787597,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6900016,
+          "heapTotal": 8609792,
+          "external": 2222109,
+          "arrayBuffers": 59278,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 189383,
+          "system": 38737
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672788598,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6951288,
+          "heapTotal": 8609792,
+          "external": 2222119,
+          "arrayBuffers": 59288,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 190536,
+          "system": 38753
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672789599,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6993936,
+          "heapTotal": 8609792,
+          "external": 2223678,
+          "arrayBuffers": 60847,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 193061,
+          "system": 38830
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672790599,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7080440,
+          "heapTotal": 8609792,
+          "external": 2232136,
+          "arrayBuffers": 69305,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 195535,
+          "system": 38910
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672791600,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7090336,
+          "heapTotal": 8609792,
+          "external": 2232146,
+          "arrayBuffers": 69315,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 196034,
+          "system": 38990
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672792600,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7148128,
+          "heapTotal": 8609792,
+          "external": 2233227,
+          "arrayBuffers": 70396,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 198604,
+          "system": 38990
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672793600,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7163264,
+          "heapTotal": 8609792,
+          "external": 2233455,
+          "arrayBuffers": 70624,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 199592,
+          "system": 39050
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672794599,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7209464,
+          "heapTotal": 8609792,
+          "external": 2233465,
+          "arrayBuffers": 70634,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 200691,
+          "system": 39054
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672795599,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7227968,
+          "heapTotal": 8609792,
+          "external": 2233485,
+          "arrayBuffers": 70654,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 201519,
+          "system": 39058
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672796601,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7273848,
+          "heapTotal": 8609792,
+          "external": 2233495,
+          "arrayBuffers": 70664,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 201647,
+          "system": 40112
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672797602,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7316728,
+          "heapTotal": 8609792,
+          "external": 2238101,
+          "arrayBuffers": 75270,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 202748,
+          "system": 40331
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672798601,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7363200,
+          "heapTotal": 8609792,
+          "external": 2238111,
+          "arrayBuffers": 75280,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 204099,
+          "system": 40383
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672799603,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 7372728,
+          "heapTotal": 8609792,
+          "external": 2238121,
+          "arrayBuffers": 75290,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 204491,
+          "system": 40460
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672800603,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6729056,
+          "heapTotal": 8609792,
+          "external": 2239691,
+          "arrayBuffers": 52577,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 207310,
+          "system": 41462
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672801603,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6744472,
+          "heapTotal": 8609792,
+          "external": 2215740,
+          "arrayBuffers": 52909,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 208360,
+          "system": 41462
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672802614,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6782464,
+          "heapTotal": 8609792,
+          "external": 2215740,
+          "arrayBuffers": 52909,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 208380,
+          "system": 42264
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672803614,
+        "memory": {
+          "rss": 68100096,
+          "heapUsed": 6791992,
+          "heapTotal": 8609792,
+          "external": 2215750,
+          "arrayBuffers": 52919,
+          "growthFromBaseline": 1974272
+        },
+        "cpu": {
+          "user": 208769,
+          "system": 42406
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672804614,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 6851576,
+          "heapTotal": 8609792,
+          "external": 2216004,
+          "arrayBuffers": 53173,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 209918,
+          "system": 43122
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672805615,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 6883280,
+          "heapTotal": 8609792,
+          "external": 2225296,
+          "arrayBuffers": 62465,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 210901,
+          "system": 43484
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672806616,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 6937160,
+          "heapTotal": 8609792,
+          "external": 2225523,
+          "arrayBuffers": 62692,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 213937,
+          "system": 43546
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672807617,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 6938520,
+          "heapTotal": 8609792,
+          "external": 2225523,
+          "arrayBuffers": 62692,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 214056,
+          "system": 43546
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672808617,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 7007832,
+          "heapTotal": 8609792,
+          "external": 2227998,
+          "arrayBuffers": 65167,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 214848,
+          "system": 44714
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672809619,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 7017360,
+          "heapTotal": 8609792,
+          "external": 2228008,
+          "arrayBuffers": 65177,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 215288,
+          "system": 44806
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672810620,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 7124680,
+          "heapTotal": 8609792,
+          "external": 2232631,
+          "arrayBuffers": 69800,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 217922,
+          "system": 44898
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672811621,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 7139728,
+          "heapTotal": 8609792,
+          "external": 2232965,
+          "arrayBuffers": 70134,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 218676,
+          "system": 45053
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672812621,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 7178512,
+          "heapTotal": 8609792,
+          "external": 2232965,
+          "arrayBuffers": 70134,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 219671,
+          "system": 45088
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672813623,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 7201120,
+          "heapTotal": 8609792,
+          "external": 2242249,
+          "arrayBuffers": 79418,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 219693,
+          "system": 45863
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      },
+      {
+        "timestamp": 1756672814625,
+        "memory": {
+          "rss": 68231168,
+          "heapUsed": 7252144,
+          "heapTotal": 8609792,
+          "external": 2242478,
+          "arrayBuffers": 79647,
+          "growthFromBaseline": 2105344
+        },
+        "cpu": {
+          "user": 219693,
+          "system": 47465
+        },
+        "connections": {
+          "active": 5,
+          "total": 8,
+          "failed": 0
+        }
+      }
+    ],
+    "failurePatterns": [
+      {
+        "timestamp": 1756672774341,
+        "connectionId": "conn_1",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              84,
+              104,
+              105,
+              114,
+              116,
+              121,
+              32,
+              115,
+              101,
+              99,
+              111,
+              110,
+              100,
+              32,
+              116,
+              105,
+              109,
+              101,
+              111,
+              117,
+              116,
+              32,
+              115,
+              105,
+              109,
+              117,
+              108,
+              97,
+              116,
+              105,
+              111,
+              110
+            ]
+          },
+          "lifetime": 31780
+        },
+        "connectionLifetime": 31780,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 67313664,
+            "heapUsed": 6799936,
+            "growthFromBaseline": 1187840
+          },
+          "activeConnections": 7,
+          "totalConnectionsCreated": 7
+        },
+        "apiCallsInProgress": 0,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672745111_0.5369369940938944",
+            "connectionId": "conn_1",
+            "startTime": 1756672745111,
+            "endTime": 1756672746803,
+            "duration": 1692,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672754196_0.6882932691285686",
+            "connectionId": "conn_1",
+            "startTime": 1756672754196,
+            "endTime": 1756672756549,
+            "duration": 2353,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672765829_0.7541981149607837",
+            "connectionId": "conn_1",
+            "startTime": 1756672765829,
+            "endTime": 1756672768486,
+            "duration": 2657,
+            "success": true,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672772569
+        }
+      },
+      {
+        "timestamp": 1756672777764,
+        "connectionId": "conn_1756672745562_1",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              84,
+              104,
+              105,
+              114,
+              116,
+              121,
+              32,
+              115,
+              101,
+              99,
+              111,
+              110,
+              100,
+              32,
+              116,
+              105,
+              109,
+              101,
+              111,
+              117,
+              116,
+              32,
+              115,
+              105,
+              109,
+              117,
+              108,
+              97,
+              116,
+              105,
+              111,
+              110
+            ]
+          },
+          "lifetime": 32201
+        },
+        "connectionLifetime": 32201,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 67444736,
+            "heapUsed": 6995088,
+            "growthFromBaseline": 1318912
+          },
+          "activeConnections": 6,
+          "totalConnectionsCreated": 7
+        },
+        "apiCallsInProgress": 0,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672754661_0.5050857240521607",
+            "connectionId": "conn_1756672745562_1",
+            "startTime": 1756672754661,
+            "endTime": 1756672756648,
+            "duration": 1987,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672763759_0.2521849819749993",
+            "connectionId": "conn_1756672745562_1",
+            "startTime": 1756672763759,
+            "endTime": 1756672765126,
+            "duration": 1367,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672772858_0.9851407433896253",
+            "connectionId": "conn_1756672745562_1",
+            "startTime": 1756672772858,
+            "endTime": 1756672773405,
+            "duration": 547,
+            "success": true,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672775566
+        }
+      },
+      {
+        "timestamp": 1756672778476,
+        "connectionId": "conn_1756672745561_0",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              84,
+              104,
+              105,
+              114,
+              116,
+              121,
+              32,
+              115,
+              101,
+              99,
+              111,
+              110,
+              100,
+              32,
+              116,
+              105,
+              109,
+              101,
+              111,
+              117,
+              116,
+              32,
+              115,
+              105,
+              109,
+              117,
+              108,
+              97,
+              116,
+              105,
+              111,
+              110
+            ]
+          },
+          "lifetime": 32914
+        },
+        "connectionLifetime": 32914,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 67444736,
+            "heapUsed": 7057536,
+            "growthFromBaseline": 1318912
+          },
+          "activeConnections": 5,
+          "totalConnectionsCreated": 7
+        },
+        "apiCallsInProgress": 0,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672754196_0.3345806684483117",
+            "connectionId": "conn_1756672745561_0",
+            "startTime": 1756672754196,
+            "endTime": 1756672754384,
+            "duration": 188,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672762828_0.42890107032518787",
+            "connectionId": "conn_1756672745561_0",
+            "startTime": 1756672762828,
+            "endTime": 1756672763833,
+            "duration": 1005,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672771460_0.30990330278582534",
+            "connectionId": "conn_1756672745561_0",
+            "startTime": 1756672771460,
+            "endTime": 1756672773285,
+            "duration": 1825,
+            "success": true,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672775564
+        }
+      },
+      {
+        "timestamp": 1756672815569,
+        "connectionId": "conn_1756672780565_0",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              80,
+              114,
+              111,
+              102,
+              105,
+              108,
+              105,
+              110,
+              103,
+              32,
+              115,
+              101,
+              115,
+              115,
+              105,
+              111,
+              110,
+              32,
+              101,
+              110,
+              100,
+              101,
+              100
+            ]
+          },
+          "lifetime": 35004
+        },
+        "connectionLifetime": 35004,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 68755456,
+            "heapUsed": 7556584,
+            "growthFromBaseline": 2629632
+          },
+          "activeConnections": 5,
+          "totalConnectionsCreated": 8
+        },
+        "apiCallsInProgress": 1,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672797082_0.4296392628685739",
+            "connectionId": "conn_1756672780565_0",
+            "startTime": 1756672797082,
+            "endTime": 1756672798107,
+            "duration": 1025,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672805339_0.7223943544274141",
+            "connectionId": "conn_1756672780565_0",
+            "startTime": 1756672805339,
+            "endTime": 1756672806424,
+            "duration": 1085,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672813620_0.003229940460653058",
+            "connectionId": "conn_1756672780565_0",
+            "startTime": 1756672813620,
+            "endTime": null,
+            "duration": null,
+            "success": false,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672810573
+        }
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_4",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              80,
+              114,
+              111,
+              102,
+              105,
+              108,
+              105,
+              110,
+              103,
+              32,
+              115,
+              101,
+              115,
+              115,
+              105,
+              111,
+              110,
+              32,
+              101,
+              110,
+              100,
+              101,
+              100
+            ]
+          },
+          "lifetime": 67010
+        },
+        "connectionLifetime": 67010,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 68755456,
+            "heapUsed": 7563392,
+            "growthFromBaseline": 2629632
+          },
+          "activeConnections": 4,
+          "totalConnectionsCreated": 8
+        },
+        "apiCallsInProgress": 0,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672789826_0.0515244389669427",
+            "connectionId": "conn_4",
+            "startTime": 1756672789826,
+            "endTime": 1756672791223,
+            "duration": 1397,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672800142_0.43748014793637835",
+            "connectionId": "conn_4",
+            "startTime": 1756672800142,
+            "endTime": 1756672800665,
+            "duration": 523,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672810457_0.44209900107545397",
+            "connectionId": "conn_4",
+            "startTime": 1756672810457,
+            "endTime": 1756672811976,
+            "duration": 1519,
+            "success": true,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672813621
+        }
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_3",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              80,
+              114,
+              111,
+              102,
+              105,
+              108,
+              105,
+              110,
+              103,
+              32,
+              115,
+              101,
+              115,
+              115,
+              105,
+              111,
+              110,
+              32,
+              101,
+              110,
+              100,
+              101,
+              100
+            ]
+          },
+          "lifetime": 69009
+        },
+        "connectionLifetime": 69009,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 68755456,
+            "heapUsed": 7569888,
+            "growthFromBaseline": 2629632
+          },
+          "activeConnections": 3,
+          "totalConnectionsCreated": 8
+        },
+        "apiCallsInProgress": 0,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672789134_0.00945511103916763",
+            "connectionId": "conn_3",
+            "startTime": 1756672789134,
+            "endTime": 1756672791851,
+            "duration": 2717,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672799775_0.052159550140606026",
+            "connectionId": "conn_3",
+            "startTime": 1756672799775,
+            "endTime": 1756672800196,
+            "duration": 421,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672810417_0.557672468345479",
+            "connectionId": "conn_3",
+            "startTime": 1756672810417,
+            "endTime": 1756672811820,
+            "duration": 1403,
+            "success": true,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672811570
+        }
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_2",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              80,
+              114,
+              111,
+              102,
+              105,
+              108,
+              105,
+              110,
+              103,
+              32,
+              115,
+              101,
+              115,
+              115,
+              105,
+              111,
+              110,
+              32,
+              101,
+              110,
+              100,
+              101,
+              100
+            ]
+          },
+          "lifetime": 71009
+        },
+        "connectionLifetime": 71009,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 68755456,
+            "heapUsed": 7576728,
+            "growthFromBaseline": 2629632
+          },
+          "activeConnections": 2,
+          "totalConnectionsCreated": 8
+        },
+        "apiCallsInProgress": 0,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672780141_0.09138242326882873",
+            "connectionId": "conn_2",
+            "startTime": 1756672780141,
+            "endTime": 1756672782603,
+            "duration": 2462,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672792001_0.21904445339364487",
+            "connectionId": "conn_2",
+            "startTime": 1756672792001,
+            "endTime": 1756672792882,
+            "duration": 881,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672803861_0.842214108889497",
+            "connectionId": "conn_2",
+            "startTime": 1756672803861,
+            "endTime": 1756672804599,
+            "duration": 738,
+            "success": true,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672814572
+        }
+      },
+      {
+        "timestamp": 1756672815570,
+        "connectionId": "conn_0",
+        "eventType": "close",
+        "eventData": {
+          "code": 1000,
+          "reason": {
+            "type": "Buffer",
+            "data": [
+              80,
+              114,
+              111,
+              102,
+              105,
+              108,
+              105,
+              110,
+              103,
+              32,
+              115,
+              101,
+              115,
+              115,
+              105,
+              111,
+              110,
+              32,
+              101,
+              110,
+              100,
+              101,
+              100
+            ]
+          },
+          "lifetime": 75008
+        },
+        "connectionLifetime": 75008,
+        "resourceMetricsAtFailure": {
+          "memory": {
+            "rss": 68755456,
+            "heapUsed": 7583536,
+            "growthFromBaseline": 2629632
+          },
+          "activeConnections": 1,
+          "totalConnectionsCreated": 8
+        },
+        "apiCallsInProgress": 0,
+        "recentApiCalls": [
+          {
+            "id": "api_1756672785421_0.7094422383243404",
+            "connectionId": "conn_0",
+            "startTime": 1756672785421,
+            "endTime": 1756672786636,
+            "duration": 1215,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672796631_0.5577733435363872",
+            "connectionId": "conn_0",
+            "startTime": 1756672796631,
+            "endTime": 1756672797296,
+            "duration": 665,
+            "success": true,
+            "error": null
+          },
+          {
+            "id": "api_1756672807841_0.4882540717530317",
+            "connectionId": "conn_0",
+            "startTime": 1756672807841,
+            "endTime": 1756672808452,
+            "duration": 611,
+            "success": true,
+            "error": null
+          }
+        ],
+        "pingHealth": {
+          "averagePingTime": 0,
+          "lastPongDelay": null,
+          "missedPongs": 1756672810583
+        }
+      }
+    ],
+    "apiCallCorrelations": []
+  }
+}

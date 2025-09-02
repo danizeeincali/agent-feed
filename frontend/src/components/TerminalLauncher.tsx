@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Terminal, Play, Square, Settings, Maximize2 } from 'lucide-react';
-import { TerminalComponent } from './Terminal';
+import { TerminalUnified } from './TerminalUnified';
 import { useTerminal } from '../hooks/useTerminal';
 import { getWebSocketUrl } from '../utils/websocket-url';
 
@@ -213,7 +213,7 @@ const TerminalLauncher: React.FC<TerminalLauncherProps> = ({
         <div className={`terminal-container mt-2 ${
           isFullscreen ? 'fixed inset-0 z-50 bg-black' : 'relative'
         }`}>
-          <TerminalComponent
+          <TerminalUnified
             isVisible={isVisible}
             processStatus={{
               isRunning: isConnected || false,

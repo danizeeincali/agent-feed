@@ -1,164 +1,251 @@
 /**
- * NLD (Neuro-Learning Development) System - Entry Point
- * 
- * Complete NLD system for failure pattern detection and prevention across:
- * - SSE connection failures
- * - Silent process failures (TTY, authentication, permissions, environment)
- * - Process I/O capture failures
- * - Working directory and terminal issues
- * 
- * Features:
- * - Real-time failure monitoring and pattern detection
- * - Comprehensive anti-pattern databases with prevention strategies
- * - Neural training data export for claude-flow integration
- * - TDD prevention strategies and automated test generation
- * - Silent process failure detection with automated recovery
- * - Integrated monitoring and reporting system
+ * NLD (Natural Learning Database) System - Main Export
+ * Comprehensive failure prevention system for WebSocket to SSE migrations
  */
 
-// Core SSE Components
-export { SSEConnectionPatternDetector, SSEConnectionPattern, SSETriggerCondition } from './sse-connection-pattern-detector';
-export { RealTimeSSEFailureMonitor, SSEConnectionMetrics, FailureAlert } from './real-time-sse-failure-monitor';
-export { SSEAntiPatternsDatabase, SSEAntiPattern } from './sse-anti-patterns-database';
-export { TDDSSEPreventionStrategies, TDDSSETestSuite, TDDSSETestCase, MockingStrategy, AssertionPattern } from './tdd-sse-prevention-strategies';
+// Core modules
+export { SSEFailurePreventionEngine, sseFailurePreventionEngine } from './sse-failure-prevention';
+export { EnhancedConnectionManager } from './enhanced-connection-manager';
+export { BrowserCompatibilityManager, browserCompatibility } from './browser-compatibility-layer';
+export { StateSynchronizationManager, stateSynchronizationManager } from './state-synchronization-manager';
+export { NLDNeuralLearningSystem, nldNeuralLearningSystem } from './nld-neural-learning-system';
+export { NLDIntegrationLayer, nldIntegration } from './nld-integration-layer';
 
-// Silent Process Failure Components
-export { SilentProcessFailureDetector, SilentProcessMetrics, SilentProcessAlert, SilentProcessPattern, silentProcessDetector } from './silent-process-failure-detector';
-export { SilentProcessAntiPatternsDatabase, SilentProcessAntiPattern, silentProcessAntiPatternsDB } from './silent-process-anti-patterns-database';
-export { TDDSilentProcessPreventionStrategies, SilentProcessTDDTestCase, SilentProcessTDDSuite, tddSilentProcessPrevention } from './tdd-silent-process-prevention-strategies';
-export { SilentProcessNeuralTrainingExport, SilentProcessNeuralRecord, SilentProcessNeuralDataset, silentProcessNeuralExport } from './silent-process-neural-training-export';
+// Types
+export type {
+  SSEFailurePattern,
+  SSEConnectionMetrics
+} from './sse-failure-prevention';
 
-// Process I/O and Terminal Components
-export { ProcessIOAntiPatternsDatabase, ProcessIOFailurePattern } from './process-io-anti-patterns-database';
-export { StdoutCaptureFailureMonitor, StdoutCaptureEvent, StdoutCaptureMetrics, stdoutCaptureMonitor } from './stdout-capture-failure-monitor';
-export { TerminalAntiPatternsDatabase, AntiPattern } from './terminal-anti-patterns-database';
+export type {
+  ConnectionState,
+  ConnectionConfig,
+  TransportCapabilities
+} from './enhanced-connection-manager';
 
-// Neural Training and Export Systems
-export { NeuralTrainingExportSystem, NeuralTrainingDataset, NeuralTrainingRecord, NeuralArchitectureSpec } from './neural-training-export-system';
+export type {
+  BrowserCapabilities,
+  PolyfillOptions
+} from './browser-compatibility-layer';
 
-// Integration Systems
-export { NLDSSEIntegrationSystem, NLDSSEValidationResult } from './nld-sse-integration';
-export { NLDSilentProcessIntegrationSystem, NLDSilentProcessConfig, NLDSilentProcessReport, nldSilentProcessIntegration } from './nld-silent-process-integration';
+export type {
+  StateUpdate,
+  SynchronizationRule,
+  StateConflict
+} from './state-synchronization-manager';
 
-// Deployment and Validation
-export { validateNLDSystem, demonstratePatternDetectionFlow } from './validate-nld-system';
-export { SilentProcessNLDDeployment, deploySilentProcessNLD } from './deploy-silent-process-nld';
+export type {
+  FailureRecord,
+  LearningPattern,
+  NeuralModel
+} from './nld-neural-learning-system';
+
+export type {
+  NLDConfiguration,
+  NLDStatus,
+  ConnectionOptions
+} from './nld-integration-layer';
 
 /**
- * Quick Start Guide
- * ================
- * 
- * 1. Initialize the complete NLD system:
- * ```typescript
- * import { nldSilentProcessIntegration, NLDSSEIntegrationSystem } from '@/src/nld';
- * 
- * // Initialize SSE monitoring
- * const sseSystem = new NLDSSEIntegrationSystem();
- * await sseSystem.initialize();
- * 
- * // Initialize silent process monitoring
- * await nldSilentProcessIntegration.initialize();
- * ```
- * 
- * 2. Register processes for monitoring:
- * ```typescript
- * // When spawning a new process
- * nldSilentProcessIntegration.registerProcess(instanceId, processId, command, workingDirectory);
- * 
- * // Record process output
- * nldSilentProcessIntegration.recordProcessOutput(instanceId, 'stdout', data);
- * nldSilentProcessIntegration.recordProcessInput(instanceId, input);
- * ```
- * 
- * 3. Monitor for failure patterns:
- * ```typescript
- * const systemReport = nldSilentProcessIntegration.generateSystemReport();
- * console.log('System Status:', systemReport.systemStatus);
- * console.log('Silent Processes:', systemReport.silentProcesses);
- * console.log('Detected Patterns:', systemReport.detectedPatterns);
- * ```
- * 
- * 4. Run TDD prevention tests:
- * ```typescript
- * const testResults = await nldSilentProcessIntegration.runTDDTestSuite();
- * console.log('TDD Coverage:', testResults.patternsCovered);
- * ```
- * 
- * 5. Deploy complete silent process detection:
- * ```typescript
- * import { deploySilentProcessNLD } from '@/src/nld';
- * 
- * const deploymentResult = await deploySilentProcessNLD();
- * console.log('Deployment Status:', deploymentResult.validationResults);
- * ```
+ * Quick start function for immediate NLD protection
  */
+export async function enableNLDProtection(options: {
+  url: string;
+  transport?: 'auto' | 'websocket' | 'sse' | 'polling';
+  config?: Partial<import('./nld-integration-layer').NLDConfiguration>;
+}): Promise<string> {
+  console.log('🚀 [NLD] Quick start - enabling NLD protection...');
+  
+  // Initialize with custom config if provided
+  if (options.config) {
+    nldIntegration.updateConfig(options.config);
+  }
+  
+  // Create protected connection
+  const connectionId = await nldIntegration.createConnection({
+    url: options.url,
+    transport: options.transport,
+    enablePredictiveFailure: true,
+    enableAutoRecovery: true
+  });
+  
+  console.log(`✅ [NLD] Protection enabled - Connection ID: ${connectionId}`);
+  return connectionId;
+}
 
 /**
- * Detected SSE Anti-Patterns
- * ==========================
- * 
- * 1. Status SSE Zero Connections While Terminal Connected (Critical)
- *    - Symptoms: UI stuck on "starting", terminal works, status SSE = 0 connections
- *    - Prevention: Establish status SSE before terminal SSE
- *    - Recovery: Restart status SSE connections
- * 
- * 2. Terminal Input Forwarding Breakdown (High)
- *    - Symptoms: Input accepted but no command responses
- *    - Prevention: Input path validation before sending
- *    - Recovery: Reset terminal input connection
- * 
- * 3. Mixed Connection State Inconsistency (Medium)
- *    - Symptoms: Frontend/backend connection state mismatch
- *    - Prevention: Connection state synchronization
- *    - Recovery: Force state reconciliation
- * 
- * 4. UI State Lock on Instance Status (High)
- *    - Symptoms: Status stuck despite backend showing "running"
- *    - Prevention: Status update timeout detection
- *    - Recovery: Force status refresh
- * 
- * 5. Connection Recovery Loop Failure (Medium)
- *    - Symptoms: Infinite reconnection attempts
- *    - Prevention: Circuit breaker pattern
- *    - Recovery: Manual recovery override
+ * Get comprehensive NLD system status
  */
+export function getNLDStatus(): import('./nld-integration-layer').NLDStatus {
+  return nldIntegration.getStatus();
+}
 
 /**
- * TDD Implementation Priority
- * ===========================
- * 
- * Critical:
- * - Connection establishment order validation tests
- * - Connection state synchronization tests
- * 
- * High:
- * - UI status update timeout tests  
- * - Terminal input forwarding validation tests
- * 
- * Medium:
- * - Connection recovery mechanism tests
- * - Performance benchmark tests
+ * Export system data for analysis and debugging
  */
+export function exportNLDData(): {
+  status: import('./nld-integration-layer').NLDStatus;
+  systemData: any;
+  browserCompatibility: any;
+  neuralPatterns: any[];
+  failureHistory: any[];
+} {
+  const status = nldIntegration.getStatus();
+  const systemData = nldIntegration.exportSystemData();
+  const browserReport = browserCompatibility.getCompatibilityReport();
+  const patterns = nldNeuralLearningSystem.getPatterns();
+  const history = nldNeuralLearningSystem.getFailureHistory(100);
+
+  return {
+    status,
+    systemData,
+    browserCompatibility: browserReport,
+    neuralPatterns: patterns,
+    failureHistory: history
+  };
+}
 
 /**
- * Neural Training Capabilities
- * ============================
- * 
- * - Pattern classification and prediction
- * - Failure probability estimation
- * - Recovery action effectiveness tracking
- * - TDD test case generation
- * - Continuous learning from user feedback
- * - Integration with claude-flow neural network
+ * Manual failure recording for external integrations
  */
+export async function recordFailure(
+  type: import('./nld-neural-learning-system').FailureRecord['type'],
+  context: Partial<import('./nld-neural-learning-system').FailureRecord['context']>,
+  userDescription?: string
+): Promise<string> {
+  const browserInfo = browserCompatibility.getCapabilities();
+  
+  const fullContext: import('./nld-neural-learning-system').FailureRecord['context'] = {
+    browser: context.browser || browserInfo.browser,
+    browserVersion: context.browserVersion || browserInfo.browserVersion,
+    platform: context.platform || browserInfo.platform,
+    transport: context.transport || 'unknown',
+    url: context.url || '',
+    error: context.error || userDescription || 'User reported failure',
+    userAgent: context.userAgent || (typeof navigator !== 'undefined' ? navigator.userAgent : ''),
+    connectionState: context.connectionState || 'unknown'
+  };
 
-// Claude Process I/O Components (NEW)
-export { claudeProcessIODetector, ClaudeProcessIOMetrics, ClaudeProcessIOErrorPattern, ClaudeProcessIOTriggerCondition } from './claude-process-io-failure-detector';
-export { claudeProcessIOMonitor, ClaudeProcessIOAlert } from './claude-process-io-real-time-monitor';
-export { claudeProcessIONeuralDataset, ClaudeProcessIONeuralRecord, ClaudeProcessIONeuralDataset } from './claude-process-io-neural-training-dataset';
-export { claudeProcessIOTDDPrevention, ClaudeProcessIOTDDTestCase, ClaudeProcessIOTDDSuite } from './claude-process-io-tdd-prevention-strategies';
-export { claudeProcessIOIntegration, ClaudeProcessIOSystemReport } from './claude-process-io-integration-system';
-export { claudeProcessIODeployment, ClaudeProcessIODeploymentResult } from './claude-process-io-deployment-demo';
+  return await nldNeuralLearningSystem.recordFailure(
+    type,
+    'user_reported',
+    fullContext,
+    { strategy: 'manual', successful: false, timeToResolve: 0 }
+  );
+}
+
+/**
+ * Predict failure likelihood for given context
+ */
+export async function predictFailure(context: {
+  transport: string;
+  url: string;
+  browser?: string;
+  error?: string;
+}): Promise<{
+  likelihood: number;
+  confidence: number;
+  recommendations: string[];
+}> {
+  const browserInfo = browserCompatibility.getCapabilities();
+  
+  const fullContext: import('./nld-neural-learning-system').FailureRecord['context'] = {
+    browser: context.browser || browserInfo.browser,
+    browserVersion: browserInfo.browserVersion,
+    platform: browserInfo.platform,
+    transport: context.transport,
+    url: context.url,
+    error: context.error || '',
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+    connectionState: 'predicting'
+  };
+
+  const prediction = await nldNeuralLearningSystem.predictFailure(fullContext);
+  
+  return {
+    likelihood: prediction.likelihood,
+    confidence: prediction.confidence,
+    recommendations: prediction.recommendedActions
+  };
+}
+
+/**
+ * Create quick diagnostic report
+ */
+export function createDiagnosticReport(): {
+  timestamp: number;
+  browserCompatibility: {
+    score: number;
+    issues: string[];
+    recommendations: string[];
+  };
+  systemHealth: number;
+  activeThreats: Array<{
+    type: string;
+    severity: string;
+    recommendation: string;
+  }>;
+  recentPatterns: any[];
+  connectionStatus: {
+    total: number;
+    connected: number;
+    disconnected: number;
+  };
+} {
+  const status = nldIntegration.getStatus();
+  const browserReport = browserCompatibility.getCompatibilityReport();
+  const patterns = nldNeuralLearningSystem.getPatterns().slice(-5); // Last 5 patterns
+  
+  return {
+    timestamp: Date.now(),
+    browserCompatibility: {
+      score: browserReport.score,
+      issues: browserReport.issues,
+      recommendations: browserReport.recommendations
+    },
+    systemHealth: status.metrics.systemHealth,
+    activeThreats: status.currentThreats,
+    recentPatterns: patterns,
+    connectionStatus: {
+      total: 0, // This would be tracked in real implementation
+      connected: 0,
+      disconnected: 0
+    }
+  };
+}
+
+/**
+ * Initialize NLD system with default configuration
+ */
+export async function initializeNLD(config?: Partial<import('./nld-integration-layer').NLDConfiguration>): Promise<void> {
+  if (config) {
+    nldIntegration.updateConfig(config);
+  }
+  await nldIntegration.initialize();
+}
+
+/**
+ * Shutdown NLD system gracefully
+ */
+export async function shutdownNLD(): Promise<void> {
+  await nldIntegration.shutdown();
+}
 
 // Default export for convenience
-export default NLDSSEIntegrationSystem;
+export default {
+  enableNLDProtection,
+  getNLDStatus,
+  exportNLDData,
+  recordFailure,
+  predictFailure,
+  createDiagnosticReport,
+  initializeNLD,
+  shutdownNLD,
+  
+  // Modules
+  sseFailurePreventionEngine,
+  browserCompatibility,
+  stateSynchronizationManager,
+  nldNeuralLearningSystem,
+  nldIntegration
+};

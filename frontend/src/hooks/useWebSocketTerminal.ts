@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import ClaudeOutputParser, { ParsedClaudeMessage } from '../utils/claude-output-parser';
+import { nldIntegration } from '../lib/nld/integration';
 
 interface ConnectionState {
   isConnected: boolean;
@@ -37,7 +38,7 @@ class WebSocketTerminalManager {
   private reconnectTimeouts: Map<string, NodeJS.Timeout> = new Map();
   private baseUrl: string;
   
-  constructor(baseUrl: string = 'ws://localhost:3002') {
+  constructor(baseUrl: string = 'ws://localhost:3000') {
     this.baseUrl = baseUrl;
   }
 
@@ -48,6 +49,12 @@ class WebSocketTerminalManager {
     const existing = this.connections.get(terminalId);
     if (existing && existing.readyState === WebSocket.OPEN) {
       console.log(`♻️ Reusing existing WebSocket connection for ${terminalId}`);
+      // Capture NLD event for reuse
+      nldIntegration.reportUserFeedback({
+        type: 'success',
+        description: 'Reused existing connection',
+        context: { terminalId, action: 'connection_reuse' }
+      });
       return existing;
     }
     
@@ -63,6 +70,9 @@ class WebSocketTerminalManager {
     const ws = new WebSocket(url);
     this.connections.set(terminalId, ws);
     
+    // Wrap WebSocket with NLD monitoring
+    nldIntegration.wrapWebSocket(ws, url);
+    
     // Setup event handlers
     ws.onopen = () => {
       console.log(`✅ WebSocket connected for ${terminalId}`);
@@ -77,6 +87,28 @@ class WebSocketTerminalManager {
       try {
         const data = JSON.parse(event.data);
         console.log(`📨 WebSocket message for ${terminalId}:`, data);
+        
+        // Handle loading animations
+        if (data.type === 'loading') {
+          this.emit('loading', {
+            instanceId: terminalId,
+            terminalId,
+            message: data.data,
+            isComplete: data.isComplete || false
+          });
+          return;
+        }
+        
+        // Handle permission requests
+        if (data.type === 'permission_request') {
+          this.emit('permission_request', {
+            instanceId: terminalId,
+            terminalId,
+            message: data.data,
+            requestId: data.requestId || Date.now().toString()
+          });
+          return;
+        }
         
         // Handle terminal output
         if (data.type === 'terminal_output' || data.type === 'output' || data.output) {
@@ -310,7 +342,7 @@ export const useWebSocketTerminal = (
     maxRetryAttempts = 3,
     retryDelay = 2000,
     enableFallback = true,
-    url = 'ws://localhost:3002'
+    url = 'ws://localhost:3000'
   } = options;
 
   const [connectionState, setConnectionState] = useState<ConnectionState>({
@@ -346,7 +378,34 @@ export const useWebSocketTerminal = (
         lastConnectionTime: Date.now()
       }));
 
-      wsManager.getConnection(instanceId);
+      const ws = wsManager.getConnection(instanceId);
+      
+      // FIXED: Send proper 'connect' message that backend expects
+      const connectMessage = {
+        type: 'connect',
+        terminalId: instanceId,
+        timestamp: Date.now()
+      };
+      
+      // Wait for connection to be established before sending connect message
+      if (ws.readyState === WebSocket.CONNECTING) {
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('Connection timeout')), 5000);
+          ws.addEventListener('open', () => {
+            clearTimeout(timeout);
+            resolve(null);
+          }, { once: true });
+          ws.addEventListener('error', () => {
+            clearTimeout(timeout);
+            reject(new Error('Connection failed'));
+          }, { once: true });
+        });
+      }
+      
+      if (ws.readyState === WebSocket.OPEN) {
+        console.log('📤 Sending connect message to backend:', connectMessage);
+        ws.send(JSON.stringify(connectMessage));
+      }
       
       setConnectionState(prev => ({
         ...prev,

@@ -1,0 +1,48 @@
+{
+  "name": "sparc-comprehensive-terminal-validation",
+  "version": "1.0.0",
+  "description": "SPARC Methodology Comprehensive Terminal Integration Validation Suite",
+  "main": "sparc-comprehensive-terminal-validation.spec.js",
+  "scripts": {
+    "test": "jest --verbose --detectOpenHandles --forceExit",
+    "test:watch": "jest --watch --verbose",
+    "test:coverage": "jest --coverage --verbose",
+    "validate:full": "npm test -- --testTimeout=120000",
+    "validate:quick": "npm test -- --testTimeout=30000 --testNamePattern=\"Button Click\"",
+    "validate:websocket": "npm test -- --testTimeout=60000 --testNamePattern=\"WebSocket|Command\"",
+    "validate:performance": "npm test -- --testTimeout=120000 --testNamePattern=\"Performance|Concurrent\"",
+    "report": "node generate-validation-report.js"
+  },
+  "keywords": [
+    "sparc",
+    "terminal",
+    "claude",
+    "validation",
+    "integration-testing",
+    "real-system-testing"
+  ],
+  "author": "SPARC Methodology",
+  "license": "MIT",
+  "dependencies": {
+    "@jest/globals": "^29.7.0",
+    "axios": "^1.6.0",
+    "ws": "^8.14.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true,
+    "detectOpenHandles": true,
+    "forceExit": true,
+    "testTimeout": 60000,
+    "setupFilesAfterEnv": ["<rootDir>/test-setup.js"],
+    "collectCoverageFrom": [
+      "*.js",
+      "!node_modules/**",
+      "!coverage/**",
+      "!jest.config.js"
+    ]
+  }
+}

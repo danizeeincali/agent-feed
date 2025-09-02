@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-08-31T20:53:29.961Z",
+  "checks": [
+    {
+      "name": "Server Running",
+      "passed": false
+    },
+    {
+      "name": "WebSocket Connect",
+      "passed": false
+    },
+    {
+      "name": "Message Flow",
+      "passed": false
+    },
+    {
+      "name": "Real Claude Responses",
+      "passed": false
+    },
+    {
+      "name": "Connection Stability",
+      "passed": false
+    },
+    {
+      "name": "No Connection Errors",
+      "passed": true
+    }
+  ],
+  "successRate": 16.7,
+  "overallSuccess": false,
+  "responsesReceived": 0,
+  "errors": [
+    "Server check failed: Request failed with status code 404"
+  ],
+  "criticalFindings": {
+    "unknownErrorDetected": false,
+    "connectionDropped": false,
+    "noRealResponses": true,
+    "serverNotRunning": true
+  }
+}

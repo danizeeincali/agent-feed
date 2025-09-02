@@ -1,0 +1,181 @@
+{
+  "version": "1.0.0",
+  "created": "2025-08-31",
+  "description": "WebSocket failure patterns database for NLD neural training",
+  "patterns": {
+    "websocket-premature-cleanup": {
+      "id": "WS-001",
+      "pattern_name": "WebSocket_Premature_Cleanup",
+      "severity": "HIGH",
+      "category": "connection_lifecycle",
+      "trigger_conditions": [
+        "Claude API subprocess completes",
+        "claudeApiProcess.on('close') event fired",
+        "Process cleanup logic executes"
+      ],
+      "symptoms": [
+        "Console message: '🚑 Removing dead connection: {connectionId}'",
+        "WebSocket connections count drops to 0",
+        "Frontend reports disconnection immediately after API call",
+        "SSE stream terminates prematurely"
+      ],
+      "root_cause": "WebSocket cleanup logic is incorrectly tied to API subprocess lifecycle",
+      "failure_mechanism": "Process close handler triggers WebSocket connection cleanup",
+      "affected_components": [
+        "simple-backend.js",
+        "WebSocket connection manager", 
+        "SSE streaming endpoints",
+        "Frontend WebSocket service"
+      ],
+      "detection_patterns": {
+        "log_signatures": [
+          "🚑 Removing dead connection",
+          "WebSocket connections: 0",
+          "Process cleanup executed"
+        ],
+        "metric_anomalies": [
+          "connection_count_drops_to_zero",
+          "api_success_but_websocket_closed",
+          "premature_stream_termination"
+        ]
+      },
+      "fix_strategy": "Decouple WebSocket lifecycle from API subprocess lifecycle",
+      "prevention_rules": [
+        "Only close WebSocket on explicit client disconnect",
+        "Separate process cleanup from connection cleanup",
+        "Implement connection health checks independent of API status"
+      ],
+      "test_scenarios": [
+        "API call completes successfully - WebSocket should remain open",
+        "Multiple sequential API calls - connection should persist",
+        "Long-running API operations - connection stability maintained"
+      ]
+    },
+    
+    "frontend-polling-storm": {
+      "id": "WS-002", 
+      "pattern_name": "Frontend_Polling_Storm",
+      "severity": "HIGH",
+      "category": "reconnection_behavior",
+      "trigger_conditions": [
+        "WebSocket connection lost",
+        "Frontend detects disconnection",
+        "Aggressive reconnection attempts initiated"
+      ],
+      "symptoms": [
+        "Hundreds of /api/claude/instances calls per second",
+        "Server CPU/memory spike",
+        "Frontend becomes unresponsive",
+        "Network request queue overflow"
+      ],
+      "root_cause": "Missing exponential backoff in reconnection logic",
+      "failure_mechanism": "Immediate retry without delay causes request storm",
+      "affected_components": [
+        "Frontend WebSocket service",
+        "API endpoints",
+        "Server request handlers",
+        "Client connection management"
+      ],
+      "detection_patterns": {
+        "log_signatures": [
+          "Excessive API endpoint hits",
+          "Connection retry loop detected",
+          "Rate limiting triggered"
+        ],
+        "metric_anomalies": [
+          "request_rate_spike",
+          "connection_attempts_exceed_threshold",
+          "cpu_memory_usage_spike"
+        ]
+      },
+      "fix_strategy": "Implement exponential backoff with jitter for reconnection attempts",
+      "prevention_rules": [
+        "Limit reconnection frequency",
+        "Implement circuit breaker pattern",
+        "Add connection state management"
+      ],
+      "test_scenarios": [
+        "Simulate connection loss - verify graceful backoff",
+        "Multiple connection failures - test rate limiting",
+        "Server restart scenarios - prevent storm on reconnect"
+      ]
+    },
+
+    "api-completion-kills-websocket": {
+      "id": "WS-003",
+      "pattern_name": "API_Close_Kills_WebSocket", 
+      "severity": "CRITICAL",
+      "category": "lifecycle_coupling",
+      "trigger_conditions": [
+        "claudeApiProcess.on('close') handler executes",
+        "API subprocess terminates normally",
+        "Process cleanup logic runs"
+      ],
+      "symptoms": [
+        "WebSocket connections immediately drop to 0",
+        "All active connections terminated",
+        "Frontend reports sudden disconnection",
+        "Subsequent API calls fail to maintain connection"
+      ],
+      "root_cause": "Incorrect cleanup logic in API close handler",
+      "failure_mechanism": "Process close event incorrectly triggers WebSocket cleanup",
+      "affected_components": [
+        "Claude API process manager",
+        "WebSocket connection handler",
+        "Process lifecycle management",
+        "Connection state tracking"
+      ],
+      "detection_patterns": {
+        "log_signatures": [
+          "Process closed, cleaning up connections",
+          "WebSocket connections: 0 after API call",
+          "Connection cleanup in close handler"
+        ],
+        "metric_anomalies": [
+          "connection_drop_correlates_with_api_completion",
+          "successful_api_call_followed_by_disconnect",
+          "process_close_triggers_websocket_cleanup"
+        ]
+      },
+      "fix_strategy": "Remove WebSocket cleanup from API process close handlers",
+      "prevention_rules": [
+        "Only cleanup connections on explicit client disconnect",
+        "Separate process lifecycle from connection lifecycle", 
+        "Implement proper connection state management"
+      ],
+      "test_scenarios": [
+        "API process completes - WebSocket should remain active",
+        "Process restart - connections should survive",
+        "Multiple API processes - individual completion doesn't affect others"
+      ]
+    }
+  },
+
+  "pattern_relationships": {
+    "cascade_failures": [
+      {
+        "trigger": "WS-003",
+        "leads_to": "WS-002", 
+        "description": "API completion killing WebSocket triggers polling storm"
+      }
+    ],
+    "common_root_causes": [
+      "Lifecycle coupling between API and WebSocket",
+      "Missing connection state management",
+      "Incorrect cleanup logic placement"
+    ]
+  },
+
+  "neural_training_metadata": {
+    "feature_extraction": {
+      "log_pattern_features": ["connection_count", "api_completion_events", "cleanup_triggers"],
+      "timing_features": ["connection_duration", "api_response_time", "cleanup_delay"],
+      "state_features": ["process_status", "connection_health", "message_queue_size"]
+    },
+    "classification_labels": {
+      "failure_types": ["premature_cleanup", "polling_storm", "lifecycle_coupling"],
+      "severity_levels": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+      "fix_categories": ["decouple_lifecycle", "add_backoff", "improve_state_mgmt"]
+    }
+  }
+}

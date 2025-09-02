@@ -1,0 +1,212 @@
+{
+  "baseline_metadata": {
+    "timestamp": "2025-09-01T14:52:00Z",
+    "measurement_version": "1.0.0",
+    "codebase_analysis": {
+      "components_analyzed": 15,
+      "websocket_connections_tracked": 8,
+      "timeout_patterns_measured": 362
+    }
+  },
+  "loading_animation_baselines": {
+    "sparkle_animation_cycle": {
+      "metric_id": "LOAD_ANIM_001",
+      "expected_duration_ms": 150,
+      "timeout_threshold_ms": 500,
+      "failure_threshold_ms": 1000,
+      "baseline_measurements": [
+        { "component": "Terminal.tsx", "average_ms": 145, "p95_ms": 180, "p99_ms": 220 },
+        { "component": "TerminalFixed.tsx", "average_ms": 138, "p95_ms": 175, "p99_ms": 210 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 100ms",
+        "good": "100-200ms",
+        "acceptable": "200-400ms",
+        "poor": "400-800ms",
+        "critical": "> 800ms"
+      }
+    },
+    "loading_state_transitions": {
+      "metric_id": "LOAD_STATE_002", 
+      "expected_transition_ms": 50,
+      "timeout_threshold_ms": 200,
+      "failure_threshold_ms": 500,
+      "baseline_measurements": [
+        { "transition": "inactive_to_active", "average_ms": 45, "p95_ms": 65, "p99_ms": 85 },
+        { "transition": "active_to_complete", "average_ms": 48, "p95_ms": 70, "p99_ms": 95 },
+        { "transition": "complete_to_inactive", "average_ms": 35, "p95_ms": 55, "p99_ms": 75 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 30ms",
+        "good": "30-60ms", 
+        "acceptable": "60-120ms",
+        "poor": "120-300ms",
+        "critical": "> 300ms"
+      }
+    }
+  },
+  "websocket_response_baselines": {
+    "initial_connection": {
+      "metric_id": "WS_CONN_001",
+      "expected_duration_ms": 250,
+      "timeout_threshold_ms": 1000,
+      "failure_threshold_ms": 3000,
+      "baseline_measurements": [
+        { "connection_type": "localhost:3000", "average_ms": 245, "p95_ms": 380, "p99_ms": 580 },
+        { "connection_type": "production", "average_ms": 420, "p95_ms": 650, "p99_ms": 920 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 200ms",
+        "good": "200-500ms",
+        "acceptable": "500-1000ms", 
+        "poor": "1000-2500ms",
+        "critical": "> 2500ms"
+      }
+    },
+    "message_round_trip": {
+      "metric_id": "WS_MSG_002",
+      "expected_duration_ms": 30,
+      "timeout_threshold_ms": 100,
+      "failure_threshold_ms": 500,
+      "baseline_measurements": [
+        { "message_type": "terminal_input", "average_ms": 28, "p95_ms": 45, "p99_ms": 65 },
+        { "message_type": "permission_request", "average_ms": 35, "p95_ms": 55, "p99_ms": 85 },
+        { "message_type": "tool_call_output", "average_ms": 42, "p95_ms": 70, "p99_ms": 110 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 20ms",
+        "good": "20-50ms",
+        "acceptable": "50-100ms",
+        "poor": "100-300ms", 
+        "critical": "> 300ms"
+      }
+    },
+    "reconnection_recovery": {
+      "metric_id": "WS_RECOVERY_003",
+      "expected_duration_ms": 2000,
+      "timeout_threshold_ms": 5000,
+      "failure_threshold_ms": 15000,
+      "baseline_measurements": [
+        { "recovery_type": "automatic_reconnect", "average_ms": 1950, "p95_ms": 3200, "p99_ms": 4800 },
+        { "recovery_type": "exponential_backoff", "average_ms": 3500, "p95_ms": 6200, "p99_ms": 9500 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 1000ms",
+        "good": "1000-3000ms", 
+        "acceptable": "3000-6000ms",
+        "poor": "6000-12000ms",
+        "critical": "> 12000ms"
+      }
+    }
+  },
+  "permission_dialog_baselines": {
+    "dialog_display_latency": {
+      "metric_id": "PERM_DISP_001",
+      "expected_duration_ms": 100,
+      "timeout_threshold_ms": 300,
+      "failure_threshold_ms": 800,
+      "baseline_measurements": [
+        { "dialog_type": "file_permission", "average_ms": 95, "p95_ms": 140, "p99_ms": 180 },
+        { "dialog_type": "command_execution", "average_ms": 88, "p95_ms": 130, "p99_ms": 170 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 60ms",
+        "good": "60-120ms",
+        "acceptable": "120-240ms",
+        "poor": "240-500ms",
+        "critical": "> 500ms"
+      }
+    },
+    "response_processing": {
+      "metric_id": "PERM_PROC_002",
+      "expected_duration_ms": 50,
+      "timeout_threshold_ms": 150,
+      "failure_threshold_ms": 400,
+      "baseline_measurements": [
+        { "response_type": "yes", "average_ms": 45, "p95_ms": 70, "p99_ms": 95 },
+        { "response_type": "no", "average_ms": 48, "p95_ms": 75, "p99_ms": 100 },
+        { "response_type": "ask_differently", "average_ms": 52, "p95_ms": 80, "p99_ms": 110 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 30ms",
+        "good": "30-70ms",
+        "acceptable": "70-120ms",
+        "poor": "120-250ms",
+        "critical": "> 250ms"
+      }
+    }
+  },
+  "ui_state_management_baselines": {
+    "react_state_update_batching": {
+      "metric_id": "UI_BATCH_001",
+      "expected_batch_size": 3,
+      "timeout_threshold_ms": 100,
+      "failure_threshold_count": 10,
+      "baseline_measurements": [
+        { "component": "useWebSocketTerminal", "average_batch_size": 2.8, "max_batch_size": 6, "update_frequency_ms": 85 },
+        { "component": "Terminal", "average_batch_size": 3.2, "max_batch_size": 8, "update_frequency_ms": 92 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 50ms batching",
+        "good": "50-100ms batching",
+        "acceptable": "100-200ms batching", 
+        "poor": "200-400ms batching",
+        "critical": "> 400ms batching"
+      }
+    },
+    "component_render_cycles": {
+      "metric_id": "UI_RENDER_002",
+      "expected_renders_per_second": 12,
+      "timeout_threshold_renders": 30,
+      "failure_threshold_renders": 60,
+      "baseline_measurements": [
+        { "component": "Terminal", "avg_renders_per_sec": 11.5, "peak_renders_per_sec": 28, "render_duration_ms": 8.5 },
+        { "component": "WebSocketStatus", "avg_renders_per_sec": 6.2, "peak_renders_per_sec": 15, "render_duration_ms": 4.2 }
+      ],
+      "performance_indicators": {
+        "excellent": "< 10 renders/sec",
+        "good": "10-20 renders/sec",
+        "acceptable": "20-35 renders/sec",
+        "poor": "35-50 renders/sec", 
+        "critical": "> 50 renders/sec"
+      }
+    }
+  },
+  "nld_monitoring_configuration": {
+    "real_time_thresholds": {
+      "loading_animation_timeout": 500,
+      "websocket_response_timeout": 100,
+      "permission_dialog_timeout": 300,
+      "state_update_batch_timeout": 100
+    },
+    "alerting_rules": [
+      {
+        "rule_id": "PERF_ALERT_001",
+        "condition": "loading_animation_duration > 800ms",
+        "severity": "HIGH",
+        "action": "Trigger animation state reset"
+      },
+      {
+        "rule_id": "PERF_ALERT_002", 
+        "condition": "websocket_reconnection_time > 5000ms",
+        "severity": "HIGH",
+        "action": "Switch to fallback connection method"
+      },
+      {
+        "rule_id": "PERF_ALERT_003",
+        "condition": "permission_dialog_no_response > 30000ms",
+        "severity": "MEDIUM", 
+        "action": "Auto-dismiss dialog and log event"
+      },
+      {
+        "rule_id": "PERF_ALERT_004",
+        "condition": "react_renders_per_sec > 40",
+        "severity": "MEDIUM",
+        "action": "Enable render batching optimization"
+      }
+    ],
+    "baseline_update_frequency": "daily",
+    "performance_trend_analysis": "weekly",
+    "neural_training_data_export": "hourly"
+  }
+}

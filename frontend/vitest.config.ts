@@ -7,22 +7,22 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./tests/setup/vitest-setup.ts'],
+    setupFiles: ['./src/tests/setup/vitestSetup.ts'],
     include: [
-      'tests/unit/**/*.test.{ts,tsx}',
-      'tests/integration/**/*.test.{ts,tsx}', 
-      'tests/mock-server/**/*.test.{ts,tsx}',
-      'tests/tdd-london-school/**/*.test.{ts,tsx}'
+      'src/tests/**/*.{test,spec}.{js,ts,tsx}',
     ],
     exclude: [
-      'tests/e2e/**/*',
-      'node_modules/**/*',
-      'tests/docker/**/*'
+      'src/tests/e2e/**/*',
+      'src/tests/mocks/**/*',
+      'src/tests/utils/**/*',
+      'src/tests/config/**/*',
+      'src/tests/fixtures/**/*',
+      'node_modules/**/*'
     ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'json', 'json-summary'],
-      reportsDirectory: './coverage',
+      reportsDirectory: './src/tests/coverage',
       exclude: [
         'node_modules/',
         'tests/',
@@ -62,8 +62,8 @@ export default defineConfig({
       'json'
     ],
     outputFile: {
-      junit: './test-results/unit-junit.xml',
-      json: './test-results/unit-results.json'
+      junit: './src/tests/reports/unit-junit.xml',
+      json: './src/tests/reports/unit-results.json'
     }
   },
   resolve: {

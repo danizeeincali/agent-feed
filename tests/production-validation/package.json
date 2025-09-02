@@ -1,0 +1,34 @@
+{
+  "name": "production-validation-suite",
+  "version": "1.0.0",
+  "description": "Comprehensive production validation for single-connection architecture",
+  "main": "production-validation-suite.js",
+  "scripts": {
+    "validate": "node run-validation.js",
+    "validate:quick": "node run-validation.js --skip-slow",
+    "validate:sequential": "node run-validation.js --sequential",
+    "validate:minimal": "node run-validation.js --skip-slow --min-score 80",
+    "test": "npm run validate"
+  },
+  "keywords": [
+    "production",
+    "validation",
+    "testing",
+    "reliability",
+    "websocket",
+    "browser",
+    "api",
+    "performance"
+  ],
+  "dependencies": {
+    "puppeteer": "^21.0.0",
+    "ws": "^8.14.0",
+    "axios": "^1.5.0",
+    "lighthouse": "^11.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "Production Validation Team",
+  "license": "MIT"
+}

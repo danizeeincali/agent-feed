@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import './ClaudeInstanceManager.css';
 import { nldCapture } from '../utils/nld-ui-capture';
 import { useHTTPSSE } from '../hooks/useHTTPSSE';
+import { useNLDClaudeInstanceManager } from '../patterns/nld-integration-hooks';
+import { useClaudeInstanceSync } from '../hooks/useClaudeInstanceSync';
+import { apiService } from '../services/api';
 
 interface ClaudeInstance {
   id: string;
@@ -16,18 +19,47 @@ interface ClaudeInstanceManagerProps {
 }
 
 const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({ 
-  apiUrl = 'http://localhost:3333' 
+  apiUrl = 'http://localhost:3000' // Fixed: Use correct backend port
 }) => {
-  const [instances, setInstances] = useState<ClaudeInstance[]>([]);
-  const [selectedInstance, setSelectedInstance] = useState<string | null>(null);
+  // SPARC SYNC FIX: Use enhanced synchronization hook
+  const {
+    instances: syncedInstances,
+    selectedInstanceId: syncedSelectedInstance,
+    selectInstance: syncSelectInstance,
+    forceSync,
+    validateInstanceExists,
+    error: syncError,
+    syncInProgress,
+    lastSync
+  } = useClaudeInstanceSync({
+    autoSync: true,
+    syncInterval: 3000,
+    validateInstances: true,
+    clearCacheOnMount: true
+  });
+
   const [output, setOutput] = useState<{ [key: string]: string }>({});
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [connectionType, setConnectionType] = useState<string>('Disconnected');
   const [currentInstanceId, setCurrentInstanceId] = useState<string | null>(null);
+
+  // Convert synced instances to local format
+  const instances = syncedInstances.map(instance => ({
+    id: instance.id,
+    name: instance.name,
+    status: instance.status,
+    pid: instance.pid,
+    startTime: instance.startTime
+  }));
+
+  const selectedInstance = syncedSelectedInstance;
+  const error = syncError;
   
   const outputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  
+  // NLD Integration for intelligent failure detection and recovery
+  const nld = useNLDClaudeInstanceManager();
   
   // Use HTTP/SSE hook instead of WebSocket
   const { 
@@ -45,9 +77,8 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     autoConnect: true
   });
 
-  // Setup event handlers and fetch instances
+  // Setup event handlers - no need for periodic fetching, handled by sync hook
   useEffect(() => {
-    fetchInstances();
     setupEventHandlers();
     
     return () => {
@@ -115,34 +146,29 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     on('instance:create:success', async (data) => {
       console.log('Instance creation success event received:', data);
       try {
-        await fetchInstances();
+        // SPARC SYNC FIX: Use sync hook to refresh instances
+        await forceSync();
         if (data.instanceId) {
-          setSelectedInstance(data.instanceId);
-          setOutput(prev => ({ ...prev, [data.instanceId]: '' }));
+          const success = await syncSelectInstance(data.instanceId);
+          if (success) {
+            setOutput(prev => ({ ...prev, [data.instanceId]: '' }));
+          }
         }
       } catch (error) {
         console.error('Failed to refresh instances after creation success:', error);
-        setError('Failed to refresh instances list');
       }
     });
     
     // Handle instance creation error events
     on('instance:create:error', (error) => {
       console.error('Instance creation error event received:', error);
-      setError(error.message || 'Failed to create instance');
       setLoading(false);
+      // Error is already handled by sync hook
     });
     
     // CRITICAL FIX: Handle instance status updates from backend SSE
     on('instance:status', (data) => {
       console.log('📲 Instance status update received:', data);
-      
-      // Update instances list with new status and ensure type safety
-      setInstances(prev => prev.map(instance => 
-        instance.id === data.instanceId 
-          ? { ...instance, status: data.status as ClaudeInstance['status'] }
-          : instance
-      ));
       
       // Show status change notification in output if this instance is selected
       if (data.instanceId === selectedInstance) {
@@ -154,23 +180,23 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
         }));
         console.log('🔄 Updated selected instance status in UI');
       }
+      
+      // Force sync to get latest instances state
+      forceSync();
     });
     
     // Handle status updates (alternative event name)
     on('status_update', (data) => {
       console.log('📲 Status update received:', data);
-      setInstances(prev => prev.map(instance => 
-        instance.id === data.instanceId 
-          ? { ...instance, status: data.status }
-          : instance
-      ));
+      // Force sync instead of updating state directly
+      forceSync();
     });
     
     // Handle connection errors
     on('error', (error) => {
       console.error('HTTP/SSE error:', error);
-      setError(connectionError || 'Connection error');
       setConnectionType('Connection Error');
+      // Let sync hook handle error state
     });
   };
 
@@ -190,38 +216,18 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
   // Update connection status when connectionError changes
   useEffect(() => {
     if (connectionError) {
-      setError(connectionError);
       setConnectionType('Connection Error');
     } else if (isConnected) {
-      setError(null);
+      // Connection restored
+      setConnectionType('Connected');
     }
   }, [connectionError, isConnected]);
 
-  const fetchInstances = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/api/v1/claude/instances`);
-      const data = await response.json();
-      if (data.success) {
-        setInstances(data.instances);
-      }
-    } catch (err) {
-      console.error('Failed to fetch instances:', err);
-      const errorMessage = 'Failed to fetch instances';
-      setError(errorMessage);
-      
-      // Capture potential communication breakdown
-      nldCapture.captureCommunicationBreakdown(
-        { endpoint: '/api/v1/claude/instances', method: 'GET', error: err },
-        'ClaudeInstanceManager'
-      );
-    }
-  };
+  // REMOVED: fetchInstances function - replaced by useClaudeInstanceSync hook
 
   const createInstance = async (command: string) => {
     const startTime = performance.now();
     setLoading(true);
-    setError(null);
-    
     
     // SPARC Enhanced instance configuration mapping
     const getInstanceConfig = (cmd: string) => {
@@ -257,13 +263,8 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       const config = getInstanceConfig(command);
       console.log('🚀 SPARC Sending instance configuration:', config);
       
-      const response = await fetch(`${apiUrl}/api/v1/claude/instances`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config)
-      });
-      
-      const data = await response.json();
+      // SPARC SYNC FIX: Use API service for instance creation
+      const data = await apiService.createClaudeInstance(config);
       if (data.success) {
         // CRITICAL FIX: Extract instanceId from correct response structure
         // Backend returns { success: true, instance: { id: instanceId } }
@@ -286,11 +287,13 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
         console.log('   Instance Type:', data.instance?.type || 'unknown');
         console.log('   Working Directory:', data.instance?.workingDirectory || 'unknown');
         
-        // Refresh instances list immediately after successful creation
-        await fetchInstances();
+        // SPARC SYNC FIX: Use sync hook to refresh and select instance
+        await forceSync();
+        const success = await syncSelectInstance(instanceId);
         
-        setSelectedInstance(instanceId);
-        setOutput(prev => ({ ...prev, [instanceId]: '' }));
+        if (success) {
+          setOutput(prev => ({ ...prev, [instanceId]: '' }));
+        }
         
         // Wait a moment for the instance to be ready, then start streaming
         setTimeout(() => {
@@ -306,16 +309,15 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       } else {
         const errorMsg = data.error || 'Failed to create instance';
         console.error('❌ Instance creation failed:', errorMsg, data);
-        setError(errorMsg);
+        // Error handling is managed by sync hook
       }
     } catch (err) {
       console.error('Create instance error:', err);
-      const errorMessage = 'Failed to create instance';
-      setError(errorMessage);
+      // Error handling managed by sync hook and API service
       
       // Capture NLD pattern for instance creation failure
       nldCapture.captureInstanceCreationFailure(
-        err instanceof Error ? err.message : errorMessage,
+        err instanceof Error ? err.message : 'Failed to create instance',
         `${apiUrl}/api/v1/claude/instances`,
         'POST',
         'ClaudeInstanceManager'
@@ -325,11 +327,10 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     }
   };
 
-  const sendInput = () => {
-    // TDD London School Fix: Enhanced validation before sending input
+  const sendInput = async () => {
+    // SPARC SYNC FIX: Enhanced validation using sync hook
     if (!selectedInstance || selectedInstance === 'undefined' || !selectedInstance.trim()) {
       console.warn('Cannot send input: no valid instance selected', { selectedInstance });
-      setError('No valid instance selected');
       return;
     }
     
@@ -338,10 +339,11 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
       return;
     }
     
-    // Validate instance ID format
-    if (!/^claude-[a-zA-Z0-9]+$/.test(selectedInstance)) {
-      console.error('Invalid instance ID format:', selectedInstance);
-      setError(`Invalid instance ID format: ${selectedInstance}`);
+    // Validate instance exists in backend before sending
+    const exists = await validateInstanceExists(selectedInstance);
+    if (!exists) {
+      console.error('Instance not found in backend:', selectedInstance);
+      await forceSync(); // Refresh to get latest state
       return;
     }
     
@@ -352,26 +354,26 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
         instanceId: selectedInstance
       });
       setInput('');
-      setError(null); // Clear any previous errors
     } else {
       console.warn('Not connected, cannot send input');
-      setError('Not connected to terminal');
     }
   };
 
   const terminateInstance = async (instanceId: string) => {
     try {
-      const response = await fetch(`${apiUrl}/api/v1/claude/instances/${instanceId}`, {
-        method: 'DELETE'
-      });
+      // SPARC SYNC FIX: Use API service for termination
+      const data = await apiService.terminateClaudeInstance(instanceId);
       
-      const data = await response.json();
       if (data.success) {
         console.log('Instance terminated successfully, refreshing instances list...');
-        await fetchInstances();
+        
+        // Force sync to get latest instances
+        await forceSync();
+        
         if (selectedInstance === instanceId) {
-          setSelectedInstance(null);
+          await syncSelectInstance(null);
         }
+        
         // Clear output for terminated instance
         setOutput(prev => {
           const newOutput = { ...prev };
@@ -380,7 +382,8 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
         });
       }
     } catch (err) {
-      setError('Failed to terminate instance');
+      console.error('Failed to terminate instance:', err);
+      // Error handling managed by API service and sync hook
     }
   };
 
@@ -397,6 +400,10 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
           )}
           {instances && instances.length > 0 && (
             <span className="count">Active: {instances.filter(i => i.status === 'running').length}/{instances.length}</span>
+          )}
+          {syncInProgress && <span className="sync-status">⟳ Syncing...</span>}
+          {lastSync && !syncInProgress && (
+            <span className="sync-time">Last sync: {lastSync.toLocaleTimeString()}</span>
           )}
         </div>
       </div>
@@ -449,22 +456,11 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                 <li 
                   key={instance.id}
                   className={`instance-item ${selectedInstance === instance.id ? 'selected' : ''} status-${instance.status}`}
-                  onClick={() => {
-                    // TDD London School Fix: Enhanced instance selection validation
-                    if (!instance.id || instance.id === 'undefined' || !instance.id.trim()) {
-                      console.error('Cannot select instance with invalid ID:', instance.id);
-                      setError('Invalid instance ID');
-                      return;
-                    }
-                    
-                    // Validate instance ID format
-                    if (!/^claude-[a-zA-Z0-9]+$/.test(instance.id)) {
-                      console.error('Instance ID does not match expected format:', instance.id);
-                      setError(`Invalid instance ID format: ${instance.id}`);
-                      return;
-                    }
-                    
-                    console.log('Selecting validated instance:', instance.id);
+                  data-testid="instance-card"
+                  data-instance-id={instance.id}
+                  onClick={async () => {
+                    // SPARC SYNC FIX: Use sync hook for instance selection with validation
+                    console.log('Selecting instance:', instance.id);
                     
                     // Disconnect from current instance first
                     if (selectedInstance && selectedInstance !== instance.id) {
@@ -472,7 +468,13 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                       disconnectFromInstance();
                     }
                     
-                    setSelectedInstance(instance.id);
+                    // Use sync hook to validate and select instance
+                    const success = await syncSelectInstance(instance.id);
+                    if (!success) {
+                      console.error('Failed to select instance - not found in backend');
+                      return;
+                    }
+                    
                     // Initialize output for this instance if not already present
                     if (!output[instance.id]) {
                       setOutput(prev => ({ ...prev, [instance.id]: '' }));
@@ -494,7 +496,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                 >
                   <div className="instance-header">
                     <span className="instance-name">{instance.name}</span>
-                    <div className={`instance-status status-${instance.status || 'starting'}`}>
+                    <div className={`instance-status status-${instance.status || 'starting'}`} data-testid={`status-${instance.id}`}>
                       <span className={`status-indicator status-${instance.status || 'starting'}`}>●</span>
                       <span className="status-text">{instance.status || 'starting'}</span>
                     </div>
@@ -505,6 +507,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                   </div>
                   <button 
                     className="btn-terminate"
+                    data-testid={`disconnect-button-${instance.id}`}
                     onClick={(e) => {
                       e.stopPropagation();
                       terminateInstance(instance.id);
@@ -524,6 +527,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
               <h3>Instance Output</h3>
               <div 
                 className="output-area"
+                data-testid="terminal-output"
                 ref={el => outputRefs.current[selectedInstance] = el}
               >
                 <pre>
@@ -542,8 +546,9 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
                   onKeyPress={(e) => e.key === 'Enter' && sendInput()}
                   placeholder="Type command and press Enter..."
                   className="input-field"
+                  data-testid="command-input"
                 />
-                <button onClick={sendInput} className="btn-send">
+                <button onClick={sendInput} className="btn-send" data-testid="send-command-button">
                   Send
                 </button>
               </div>
