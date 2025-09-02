@@ -27,24 +27,25 @@ export const DualModeClaudeManager: React.FC<DualModeClaudeManagerProps> = ({
   const [activeTab, setActiveTab] = useState<'global' | 'interactive' | 'feed'>('global');
   const [feedIntegration, setFeedIntegration] = useState<FeedIntegrationService | null>(null);
   const [feedWorkerStatus, setFeedWorkerStatus] = useState<FeedWorkerStatus | null>(null);
-  const [isInitializing, setIsInitializing] = useState(true);
+  const [isInitializing, setIsInitializing] = useState(false); // Changed from true
+  const [isInitialized, setIsInitialized] = useState(false); // Track initialization state
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize feed integration
-  useEffect(() => {
-    const initializeFeedIntegration = async () => {
-      if (!enableFeedIntegration) {
-        setIsInitializing(false);
-        return;
-      }
+  // User-controlled feed integration initialization
+  const initializeFeedIntegration = async () => {
+    if (!enableFeedIntegration || isInitialized) {
+      return;
+    }
 
-      try {
-        console.log('[DualModeClaudeManager] Initializing feed integration');
-        
-        const feedService = createProductionFeedIntegration(apiUrl);
-        await feedService.initialize();
-        
-        setFeedIntegration(feedService);
+    setIsInitializing(true);
+    try {
+      console.log('[DualModeClaudeManager] User requested feed integration initialization');
+      
+      const feedService = createProductionFeedIntegration(apiUrl);
+      await feedService.initialize();
+      
+      setFeedIntegration(feedService);
+      setIsInitialized(true);
         
         // Setup feed service event listeners
         feedService.on('feed:integration:ready', (data: any) => {
@@ -74,28 +75,36 @@ export const DualModeClaudeManager: React.FC<DualModeClaudeManagerProps> = ({
 
         updateFeedStatus();
         const statusInterval = setInterval(updateFeedStatus, 10000);
-
+      
+        // Store cleanup reference for component unmount
         return () => {
           clearInterval(statusInterval);
           feedService.cleanup();
         };
-      } catch (err) {
-        console.error('[DualModeClaudeManager] Feed integration failed:', err);
-        setError(`Feed integration failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      } finally {
-        setIsInitializing(false);
+    } catch (err) {
+      console.error('[DualModeClaudeManager] Feed integration failed:', err);
+      setError(`Feed integration failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setIsInitializing(false);
+    }
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (feedIntegration) {
+        console.log('[DualModeClaudeManager] Cleaning up feed integration on unmount');
+        feedIntegration.cleanup();
       }
     };
-
-    initializeFeedIntegration();
-  }, [apiUrl, enableFeedIntegration]);
+  }, [feedIntegration]);
 
   if (isInitializing) {
     return (
       <div className="dual-mode-manager initializing">
         <div className="initialization-status">
-          <h2>Initializing Claude Management System</h2>
-          <p>Setting up production-ready dual Claude management...</p>
+          <h2>Initializing Feed Integration</h2>
+          <p>Setting up feed integration service...</p>
           <div className="loading-indicator">
             <div className="spinner"></div>
           </div>
@@ -182,7 +191,29 @@ export const DualModeClaudeManager: React.FC<DualModeClaudeManagerProps> = ({
             </div>
             
             <div className="feed-integration-dashboard">
-              {feedWorkerStatus ? (
+              {!isInitialized ? (
+                <div className="feed-integration-setup">
+                  <h4>Feed Integration Setup</h4>
+                  <p>
+                    Initialize the feed integration system to monitor and manage
+                    always-on Claude worker instances for continuous feed processing.
+                  </p>
+                  <button 
+                    className={`initialize-button ${isInitializing ? 'loading' : ''}`}
+                    onClick={initializeFeedIntegration}
+                    disabled={isInitializing}
+                  >
+                    {isInitializing ? (
+                      <>
+                        <span className="spinner"></span>
+                        Initializing Feed Integration...
+                      </>
+                    ) : (
+                      'Initialize Feed Integration'
+                    )}
+                  </button>
+                </div>
+              ) : feedWorkerStatus ? (
                 <>
                   <div className="worker-overview">
                     <h4>Worker Instance Status</h4>
@@ -242,7 +273,7 @@ export const DualModeClaudeManager: React.FC<DualModeClaudeManagerProps> = ({
                 <div className="feed-integration-unavailable">
                   <h4>Feed Integration Unavailable</h4>
                   <p>
-                    Feed integration system is not available. 
+                    Feed integration system is initialized but no worker status available. 
                     Ensure a worker instance is created in the Global Monitor tab.
                   </p>
                 </div>

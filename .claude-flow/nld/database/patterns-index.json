@@ -1,0 +1,57 @@
+{
+  "index_version": "1.0.0",
+  "last_updated": "2025-01-02T00:00:00.000Z",
+  "total_patterns": 1,
+  "patterns": [
+    {
+      "pattern_id": "REACT_STRICTMODE_AUTO_RESOURCE_CREATION",
+      "record_id": "NLT-2025-001-STRICTMODE-20250102", 
+      "pattern_type": "AUTOMATIC_RESOURCE_CREATION_BUG",
+      "severity": "HIGH",
+      "domain": "React Component Lifecycle",
+      "framework": "React 18+",
+      "file_locations": [
+        "/workspaces/agent-feed/src/nld/patterns/react-strictmode-resource-leak-pattern.json",
+        "/workspaces/agent-feed/.claude-flow/nld/database/nlt-record-2025-001-strictmode.json",
+        "/workspaces/agent-feed/src/nld/patterns/react-resource-leak-tdd-patterns.ts",
+        "/workspaces/agent-feed/src/nld/detection/react-strictmode-resource-detector.ts",
+        "/workspages/agent-feed/src/nld/neural-training/react-strictmode-training-dataset.ts"
+      ],
+      "neural_training_status": "exported",
+      "effectiveness_score": 0.1,
+      "prevention_strategies_count": 4,
+      "test_patterns_count": 4,
+      "related_patterns": [
+        "REACT_USEEFFECT_DOUBLE_EXECUTION",
+        "AUTOMATIC_API_INITIALIZATION", 
+        "COMPONENT_RESOURCE_LEAK",
+        "STRICTMODE_SIDE_EFFECTS"
+      ],
+      "tags": [
+        "react", 
+        "strictmode", 
+        "resource-leak", 
+        "useeffect", 
+        "automatic-initialization",
+        "component-lifecycle",
+        "tdd-preventable"
+      ]
+    }
+  ],
+  "statistics": {
+    "by_severity": {
+      "HIGH": 1,
+      "MEDIUM": 0,
+      "LOW": 0,
+      "CRITICAL": 0
+    },
+    "by_domain": {
+      "React Component Lifecycle": 1
+    },
+    "by_framework": {
+      "React 18+": 1
+    },
+    "tdd_preventable": 1,
+    "neural_training_exported": 1
+  }
+}

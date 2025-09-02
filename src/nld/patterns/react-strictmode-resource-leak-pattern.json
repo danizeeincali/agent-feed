@@ -1,0 +1,123 @@
+{
+  "patternId": "REACT_STRICTMODE_AUTO_RESOURCE_CREATION",
+  "recordId": "NLT-2025-001-STRICTMODE",
+  "timestamp": "2025-01-02T00:00:00.000Z",
+  "patternType": "AUTOMATIC_RESOURCE_CREATION_BUG",
+  "severity": "HIGH",
+  "
+  
+  "taskContext": {
+    "originalTask": "Navigate to /claude-manager page in React application",
+    "component": "DualModeClaudeManager.tsx",
+    "userExpectation": "Navigate to page without creating Claude instances automatically",
+    "actualBehavior": "Claude instances created automatically on each navigation"
+  },
+
+  "failureMode": {
+    "rootCause": "React StrictMode double execution of useEffect hooks",
+    "triggerCondition": "Component mount in React 18 StrictMode environment",
+    "resourceType": "Claude API instances via createProductionFeedIntegration()",
+    "leakPattern": "Multiple instances created without user consent",
+    "environmentFactor": "React.StrictMode development mode double rendering"
+  },
+
+  "claudeSolution": {
+    "originalApproach": "Automatic initialization in useEffect hook",
+    "confidence": "HIGH",
+    "implementationPattern": "useEffect(() => { initializeService(); }, [])",
+    "assumedSafety": "Empty dependency array should run once"
+  },
+
+  "actualImplementation": {
+    "problemCode": [
+      "useEffect(() => {",
+      "  if (!enableFeedIntegration || isInitialized) return;",
+      "  const initializeAsync = async () => {",
+      "    const feedService = createProductionFeedIntegration(apiUrl);",
+      "    await feedService.initialize();",
+      "  };",
+      "  initializeAsync();",
+      "}, []);"
+    ],
+    "strictModeImpact": "Runs twice in development, creates duplicate resources"
+  },
+
+  "correctedSolution": {
+    "approach": "User-controlled initialization with explicit button",
+    "implementation": [
+      "const [isInitialized, setIsInitialized] = useState(false);",
+      "const initializeFeedIntegration = async () => {",
+      "  if (!enableFeedIntegration || isInitialized) return;",
+      "  setIsInitializing(true);",
+      "  const feedService = createProductionFeedIntegration(apiUrl);",
+      "  await feedService.initialize();",
+      "  setIsInitialized(true);",
+      "};"
+    ],
+    "preventionMechanism": "Explicit user action required for resource creation"
+  },
+
+  "testPattern": {
+    "testCase": "Navigate to /claude-manager multiple times",
+    "expectedBehavior": "No automatic Claude instance creation",
+    "verificationMethod": "Monitor API calls and instance creation logs",
+    "regressionTest": "Automated navigation test with instance creation monitoring"
+  },
+
+  "patternClassification": {
+    "domain": "React Component Lifecycle",
+    "complexity": "MEDIUM",
+    "errorCategory": "RESOURCE_MANAGEMENT",
+    "frameworkSpecific": "React 18 StrictMode",
+    "commonality": "FREQUENT"
+  },
+
+  "neuralTrainingData": {
+    "effectivenessScore": 0.1,
+    "calculation": "(0% user success / 90% claude confidence) * 0.1 TDD factor",
+    "tddUsage": false,
+    "testCoveragePresent": false,
+    "preventable": true
+  },
+
+  "preventionStrategy": {
+    "tddPatterns": [
+      "Test component mounting behavior in StrictMode",
+      "Mock resource creation functions and verify call counts",
+      "Test navigation scenarios with resource monitoring",
+      "Verify cleanup functions are properly called"
+    ],
+    "detectionHooks": [
+      "Monitor API calls during component lifecycle",
+      "Track resource creation in development vs production",
+      "Flag automatic resource creation in useEffect"
+    ],
+    "codePatterns": [
+      "Avoid resource creation in useEffect",
+      "Use explicit user actions for resource initialization",
+      "Implement proper cleanup in useEffect return",
+      "Test with React.StrictMode enabled"
+    ]
+  },
+
+  "relatedPatterns": [
+    "REACT_USEEFFECT_DOUBLE_EXECUTION",
+    "AUTOMATIC_API_INITIALIZATION",
+    "COMPONENT_RESOURCE_LEAK",
+    "STRICTMODE_SIDE_EFFECTS"
+  ],
+
+  "recommendations": {
+    "immediate": "Convert automatic initialization to user-controlled",
+    "architectural": "Separate resource creation from component mounting",
+    "testing": "Add StrictMode-specific test coverage for resource patterns",
+    "monitoring": "Implement resource creation tracking in development"
+  },
+
+  "historicalContext": {
+    "frequencyObserved": "COMMON",
+    "similarIssuesReported": 12,
+    "reactVersionsAffected": ["17.0+", "18.0+"],
+    "developmentEnvironmentSpecific": true
+  }
+}

@@ -39,6 +39,7 @@ import DualInstance from './pages/DualInstance';
 import DualInstancePage from '@/pages/DualInstancePage';
 import DualModeClaudeManager from '@/components/claude-manager/DualModeClaudeManager';
 import { ClaudeInstanceManagerComponentSSE } from '@/components/claude-manager/ClaudeInstanceManagerComponentSSE';
+import EnhancedSSEInterface from '@/components/claude-manager/EnhancedSSEInterface';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
 import { TerminalDebugTest } from '@/components/TerminalDebugTest';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
@@ -265,16 +266,10 @@ const App: React.FC = () => {
                   {/* SPARC Phase 5: SSE-based Interactive Control */}
                   <Route path="/interactive-control" element={
                     <RouteErrorBoundary routeName="InteractiveControlSSE" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="ClaudeInstanceManagerComponentSSE">
-                        <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading SSE Interactive Control..." />}>
-                          <div className="p-6">
-                            <div className="mb-6">
-                              <h1 className="text-2xl font-bold mb-2">🔄 Interactive Control via SSE</h1>
-                              <p className="text-gray-600">
-                                Real-time Claude instance terminal interaction using Server-Sent Events (migrated from WebSocket).
-                              </p>
-                            </div>
-                            <ClaudeInstanceManagerComponentSSE />
+                      <AsyncErrorBoundary componentName="EnhancedSSEInterface">
+                        <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Enhanced Interactive Control..." />}>
+                          <div className="h-screen flex flex-col">
+                            <EnhancedSSEInterface />
                           </div>
                         </Suspense>
                       </AsyncErrorBoundary>

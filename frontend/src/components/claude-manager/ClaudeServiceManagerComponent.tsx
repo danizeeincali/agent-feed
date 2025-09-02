@@ -249,8 +249,8 @@ export const ClaudeServiceManagerComponent: React.FC<ClaudeServiceManagerCompone
                 <div className="instance-header">
                   <span className="instance-name">{instance.name}</span>
                   <div className="instance-badges">
-                    <span className={`badge type-${instance.type}`}>
-                      {instance.type}
+                    <span className={`badge type-${instance.type === 'skip-permissions-interactive' ? 'worker' : instance.type}`}>
+                      {instance.type === 'skip-permissions-interactive' ? 'worker' : instance.type}
                     </span>
                     {instance.isAlwaysOn && (
                       <span className="badge always-on">Always-On</span>

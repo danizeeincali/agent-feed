@@ -55,6 +55,12 @@ export const ClaudeInstanceManagerComponent: React.FC<ClaudeInstanceManagerCompo
       if (data.success) {
         const runningInstances = data.instances
           .filter((i: any) => i.status === 'running');
+        console.log('🔍 DEBUG: Available instances:', runningInstances.map(i => ({
+          id: i.id,
+          type: i.type,
+          displayType: i.type === 'skip-permissions-interactive' ? 'worker' : i.type,
+          cssClass: `type-${i.type === 'skip-permissions-interactive' ? 'worker' : i.type}`
+        })));
         setAvailableInstances(runningInstances);
       }
     } catch (err) {
@@ -247,6 +253,7 @@ export const ClaudeInstanceManagerComponent: React.FC<ClaudeInstanceManagerCompo
               <thead>
                 <tr>
                   <th>Instance ID</th>
+                  <th>Type</th>
                   <th>PID</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -260,6 +267,34 @@ export const ClaudeInstanceManagerComponent: React.FC<ClaudeInstanceManagerCompo
                   >
                     <td className="instance-id-cell">
                       <span className="full-id">{instance.id}</span>
+                    </td>
+                    <td className="type-cell">
+                      {(() => {
+                        const displayType = instance.type === 'skip-permissions-interactive' ? 'worker' : instance.type;
+                        const cssClass = `type-badge type-${displayType}`;
+                        console.log(`🔍 Rendering type badge for ${instance.id}:`, { 
+                          originalType: instance.type, 
+                          displayType, 
+                          cssClass 
+                        });
+                        return (
+                          <span 
+                            className={cssClass}
+                            style={{
+                              backgroundColor: displayType === 'worker' ? '#d1fae5' : '#dbeafe',
+                              color: displayType === 'worker' ? '#065f46' : '#1e40af',
+                              padding: '0.25rem 0.75rem',
+                              borderRadius: '9999px',
+                              fontSize: '0.75rem',
+                              fontWeight: '600',
+                              textTransform: 'capitalize',
+                              display: 'inline-block'
+                            }}
+                          >
+                            {displayType} DEBUG
+                          </span>
+                        );
+                      })()}
                     </td>
                     <td className="pid-cell">
                       <code>{instance.pid}</code>
