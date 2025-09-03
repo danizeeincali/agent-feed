@@ -1,8 +1,8 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/TokenCostAnalytics-1CzVPFRB.js","assets/query-DK6N4Fs0.js","assets/router-CSWfVKJC.js","assets/vendor-CMtS3IUq.js","assets/ui-B04FAfO3.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/TokenCostAnalytics-gAPN_IQI.js","assets/query-DK6N4Fs0.js","assets/router-CSWfVKJC.js","assets/vendor-CMtS3IUq.js","assets/ui-Cdmm9s1Q.js"])))=>i.map(i=>d[i]);
 import { j as jsxRuntimeExports, u as useQueryClient, a as useQuery, b as useMutation, Q as QueryClient, c as QueryClientProvider } from "./query-DK6N4Fs0.js";
 import { r as reactExports, R as React, u as useParams, a as useNavigate, b as useLocation, c as React$1, L as Link$1, B as BrowserRouter, d as Routes, e as Route } from "./router-CSWfVKJC.js";
 import { a as requireReactDom, g as getDefaultExportFromCjs } from "./vendor-CMtS3IUq.js";
-import { A as AlertTriangle, R as RefreshCw, H as Home, S as Shield, C as Copy, B as Bug, M as Mail, L as Loader2, a as Split, b as Monitor, U as Users, W as Workflow, c as BarChart3, d as Code, e as Activity, f as Clock, g as Settings, h as Bell, X, i as AlertCircle, I as Info, j as CheckCircle, k as Search, F as FileText, l as Save, E as EyeOff, m as Eye, n as HelpCircle, o as Smartphone, p as Bold, q as Italic, r as Link, s as List, t as ListOrdered, u as AtSign, v as Smile, P as Paperclip, w as Bot, x as Check, y as Send, z as Wifi, D as WifiOff, G as Power, T as TrendingUp, J as PenLine, K as MessageCircle, N as Star, O as MoreHorizontal, Q as Tag, V as Heart, Y as Share2, Z as Plus, _ as Pause, $ as Play, a0 as Trash2, a1 as Zap, a2 as Server, a3 as Layers, a4 as DollarSign, a5 as Cpu, a6 as StopCircle, a7 as PlayCircle, a8 as Terminal, a9 as Key, aa as Database, ab as Download, ac as User, ad as Globe, ae as GitBranch, af as Grid3x3, ag as ArrowLeft, ah as RotateCcw, ai as MessageSquare, aj as Volume2, ak as VolumeX, al as Briefcase, am as ArrowRightLeft, an as XCircle, ao as Loader, ap as Square, aq as Minimize, ar as Maximize, as as LayoutDashboard, at as Menu } from "./ui-B04FAfO3.js";
+import { A as AlertTriangle, R as RefreshCw, H as Home, S as Shield, C as Copy, B as Bug, M as Mail, L as Loader2, a as Split, b as Monitor, U as Users, W as Workflow, c as BarChart3, d as Code, e as Activity, f as Clock, g as Settings, h as Bell, X, i as AlertCircle, I as Info, j as CheckCircle, k as Search, F as FileText, l as Save, E as EyeOff, m as Eye, n as HelpCircle, o as Smartphone, p as Bold, q as Italic, r as Link, s as List, t as ListOrdered, u as AtSign, v as Smile, P as Paperclip, w as Bot, x as Check, y as Send, z as Wifi, D as WifiOff, G as Power, T as TrendingUp, J as PenLine, K as MessageCircle, N as Star, O as MoreHorizontal, Q as Tag, V as Heart, Y as Share2, Z as Plus, _ as Pause, $ as Play, a0 as Trash2, a1 as Zap, a2 as Server, a3 as Layers, a4 as DollarSign, a5 as Cpu, a6 as StopCircle, a7 as PlayCircle, a8 as Terminal, a9 as Key, aa as Database, ab as Download, ac as User, ad as Globe, ae as GitBranch, af as Grid3x3, ag as ArrowLeft, ah as RotateCcw, ai as MessageSquare, aj as Volume2, ak as VolumeX, al as Briefcase, am as ArrowRightLeft, an as XCircle, ao as Loader, ap as Square, aq as Minimize, ar as Maximize, as as FileJson, at as FileCode, au as Upload, av as ChevronRight, aw as LayoutDashboard, ax as Menu } from "./ui-Cdmm9s1Q.js";
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) return;
@@ -6670,7 +6670,7 @@ class SimpleErrorBoundary extends reactExports.Component {
   }
 }
 const TokenCostAnalytics = reactExports.lazy(
-  () => __vitePreload(() => import("./TokenCostAnalytics-1CzVPFRB.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0).catch((error) => {
+  () => __vitePreload(() => import("./TokenCostAnalytics-gAPN_IQI.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0).catch((error) => {
     console.error("Failed to load TokenCostAnalytics:", error);
     return {
       default: () => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6 bg-red-50 border border-red-200 rounded-lg", children: [
@@ -9475,210 +9475,6 @@ const useSSEClaudeInstance = (options = {}) => {
     lastActivity
   };
 };
-const ClaudeInstanceManagerComponentSSE = ({
-  apiUrl = "http://localhost:3000",
-  autoConnect = false,
-  reconnectAttempts = 5,
-  reconnectInterval = 2e3
-}) => {
-  const {
-    isConnected,
-    connectionState,
-    connectionError,
-    availableInstances,
-    selectedInstanceId,
-    output,
-    connectToInstance,
-    disconnectFromInstance,
-    sendCommand,
-    refreshInstances,
-    clearOutput,
-    loading,
-    messageCount,
-    lastActivity
-  } = useSSEClaudeInstance({
-    apiUrl,
-    autoConnect,
-    reconnectAttempts,
-    reconnectInterval
-  });
-  const [input, setInput] = reactExports.useState("");
-  const outputRef = reactExports.useRef(null);
-  React.useEffect(() => {
-    if (outputRef.current) {
-      outputRef.current.scrollTop = outputRef.current.scrollHeight;
-    }
-  }, [output]);
-  const handleSendCommand = reactExports.useCallback(async () => {
-    if (!input.trim() || !selectedInstanceId) return;
-    try {
-      await sendCommand(selectedInstanceId, input);
-      setInput("");
-    } catch (error) {
-      console.error("Failed to send command:", error);
-    }
-  }, [input, selectedInstanceId, sendCommand]);
-  const handleInstanceSelection = reactExports.useCallback(async (instanceId) => {
-    if (selectedInstanceId === instanceId && isConnected) {
-      await disconnectFromInstance(instanceId);
-    } else {
-      await connectToInstance(instanceId);
-    }
-  }, [selectedInstanceId, isConnected, connectToInstance, disconnectFromInstance]);
-  const handleClearOutput = reactExports.useCallback(() => {
-    if (selectedInstanceId) {
-      clearOutput(selectedInstanceId);
-    }
-  }, [selectedInstanceId, clearOutput]);
-  const getConnectionStatusText = () => {
-    if (!selectedInstanceId) return "No instance selected";
-    switch (connectionState) {
-      case ConnectionState$1.CONNECTED:
-        return `Connected to ${selectedInstanceId.slice(0, 12)}...`;
-      case ConnectionState$1.CONNECTING:
-        return "Connecting...";
-      case ConnectionState$1.RECONNECTING:
-        return "Reconnecting...";
-      case ConnectionState$1.ERROR:
-        return "Connection error";
-      case ConnectionState$1.DISCONNECTED:
-      default:
-        return "Disconnected";
-    }
-  };
-  const isActiveConnection = isConnected && selectedInstanceId;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "claude-instance-manager-component", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "header", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Claude Instance Controller (SSE)" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "connection-info", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `connection-status ${connectionState}`, children: getConnectionStatusText() }),
-        messageCount > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "message-count", children: [
-          "Messages: ",
-          messageCount
-        ] }),
-        lastActivity && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "last-activity", children: [
-          "Last: ",
-          lastActivity.toLocaleTimeString()
-        ] })
-      ] })
-    ] }),
-    connectionError && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "error-banner", children: [
-      connectionError,
-      /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: () => window.location.reload(), children: "Dismiss" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "instance-selection", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Select Instance" }),
-      availableInstances.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "no-instances", children: "No running instances available. Create an instance using the Service Manager." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "instance-table-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "instance-table", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Instance ID" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "PID" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Status" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Actions" })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: availableInstances.map((instance) => {
-          const isSelected = selectedInstanceId === instance.id;
-          const isConnectedToThis = isSelected && isConnected;
-          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "tr",
-            {
-              className: `instance-row ${isSelected ? "selected" : ""}`,
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "instance-id-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "full-id", children: instance.id }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "pid-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: instance.pid }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "status-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `status-badge status-${isConnectedToThis ? "connected" : instance.status}`, children: isConnectedToThis ? "connected" : instance.status }) }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "actions-cell", children: isConnectedToThis ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "button",
-                  {
-                    onClick: () => handleInstanceSelection(instance.id),
-                    disabled: loading,
-                    className: "btn btn-disconnect btn-sm",
-                    children: "Disconnect"
-                  }
-                ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "button",
-                  {
-                    onClick: () => handleInstanceSelection(instance.id),
-                    disabled: loading,
-                    className: "btn btn-connect btn-sm",
-                    children: "Connect"
-                  }
-                ) })
-              ]
-            },
-            instance.id
-          );
-        }) })
-      ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          onClick: refreshInstances,
-          disabled: loading,
-          className: "btn btn-refresh",
-          children: loading ? "Refreshing..." : "Refresh Instances"
-        }
-      )
-    ] }),
-    isActiveConnection && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "interactive-terminal", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-header", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("h3", { children: [
-          "Terminal - ",
-          selectedInstanceId?.slice(0, 12),
-          "..."
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-controls", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: handleClearOutput, className: "btn btn-clear", children: [
-            "Clear (",
-            messageCount,
-            ")"
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "connection-state", children: connectionState })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "terminal-output", ref: outputRef, children: output.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "welcome-message", children: "Connected to Claude instance. Type commands below." }) : output.map((message) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "div",
-        {
-          className: `output-line ${message.type} ${message.isReal ? "real" : "synthetic"}`,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "timestamp", children: message.timestamp.toLocaleTimeString() }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "content", children: message.content })
-          ]
-        },
-        message.id
-      )) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "terminal-input", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            type: "text",
-            value: input,
-            onChange: (e) => setInput(e.target.value),
-            onKeyPress: (e) => e.key === "Enter" && handleSendCommand(),
-            placeholder: "Type command and press Enter...",
-            className: "command-input",
-            disabled: !isActiveConnection
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            onClick: handleSendCommand,
-            disabled: !isActiveConnection || !input.trim() || loading,
-            className: "btn btn-send",
-            children: loading ? "Sending..." : "Send"
-          }
-        )
-      ] })
-    ] }),
-    !isActiveConnection && selectedInstanceId && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "connection-pending", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: connectionState === ConnectionState$1.CONNECTING ? "Connecting to instance..." : connectionState === ConnectionState$1.RECONNECTING ? "Reconnecting to instance..." : "Select an instance and click Connect to start interactive session" }),
-      connectionError && /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "connection-error", children: [
-        "Error: ",
-        connectionError
-      ] })
-    ] })
-  ] });
-};
 var ConnectionState = /* @__PURE__ */ ((ConnectionState2) => {
   ConnectionState2["DISCONNECTED"] = "disconnected";
   ConnectionState2["CONNECTING"] = "connecting";
@@ -10019,6 +9815,12 @@ const ClaudeInstanceManagerComponent = ({
       const data = await response.json();
       if (data.success) {
         const runningInstances = data.instances.filter((i) => i.status === "running");
+        console.log("🔍 DEBUG: Available instances:", runningInstances.map((i) => ({
+          id: i.id,
+          type: i.type,
+          displayType: i.type === "skip-permissions-interactive" ? "worker" : i.type,
+          cssClass: `type-${i.type === "skip-permissions-interactive" ? "worker" : i.type}`
+        })));
         setAvailableInstances(runningInstances);
       }
     } catch (err) {
@@ -10158,6 +9960,7 @@ const ClaudeInstanceManagerComponent = ({
       availableInstances.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "no-instances", children: "No running instances available. Create an instance using the Service Manager." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "instance-table-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "instance-table", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Instance ID" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Type" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "PID" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Status" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Actions" })
@@ -10168,6 +9971,35 @@ const ClaudeInstanceManagerComponent = ({
             className: `instance-row ${selectedInstanceId === instance.id ? "selected" : ""}`,
             children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "instance-id-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "full-id", children: instance.id }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "type-cell", children: (() => {
+                const displayType = instance.type === "skip-permissions-interactive" ? "worker" : instance.type;
+                const cssClass = `type-badge type-${displayType}`;
+                console.log(`🔍 Rendering type badge for ${instance.id}:`, {
+                  originalType: instance.type,
+                  displayType,
+                  cssClass
+                });
+                return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "span",
+                  {
+                    className: cssClass,
+                    style: {
+                      backgroundColor: displayType === "worker" ? "#d1fae5" : "#dbeafe",
+                      color: displayType === "worker" ? "#065f46" : "#1e40af",
+                      padding: "0.25rem 0.75rem",
+                      borderRadius: "9999px",
+                      fontSize: "0.75rem",
+                      fontWeight: "600",
+                      textTransform: "capitalize",
+                      display: "inline-block"
+                    },
+                    children: [
+                      displayType,
+                      " DEBUG"
+                    ]
+                  }
+                );
+              })() }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "pid-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: instance.pid }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "status-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `status-badge status-${instance.status}`, children: instance.status }) }),
               /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "actions-cell", children: selectedInstanceId === instance.id && isConnected ? /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -24035,7 +23867,7 @@ const ClaudeServiceManagerComponent = ({
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "instance-header", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "instance-name", children: instance.name }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "instance-badges", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `badge type-${instance.type}`, children: instance.type }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `badge type-${instance.type === "skip-permissions-interactive" ? "worker" : instance.type}`, children: instance.type === "skip-permissions-interactive" ? "worker" : instance.type }),
                 instance.isAlwaysOn && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "badge always-on", children: "Always-On" })
               ] })
             ] }),
@@ -24516,58 +24348,65 @@ const DualModeClaudeManager = ({
   const [activeTab, setActiveTab] = reactExports.useState("global");
   const [feedIntegration, setFeedIntegration] = reactExports.useState(null);
   const [feedWorkerStatus, setFeedWorkerStatus] = reactExports.useState(null);
-  const [isInitializing, setIsInitializing] = reactExports.useState(true);
+  const [isInitializing, setIsInitializing] = reactExports.useState(false);
+  const [isInitialized, setIsInitialized] = reactExports.useState(false);
   const [error, setError] = reactExports.useState(null);
+  const initializeFeedIntegration = async () => {
+    if (!enableFeedIntegration || isInitialized) {
+      return;
+    }
+    setIsInitializing(true);
+    try {
+      console.log("[DualModeClaudeManager] User requested feed integration initialization");
+      const feedService = createProductionFeedIntegration(apiUrl);
+      await feedService.initialize();
+      setFeedIntegration(feedService);
+      setIsInitialized(true);
+      feedService.on("feed:integration:ready", (data) => {
+        console.log("Feed integration ready:", data);
+        setError(null);
+      });
+      feedService.on("feed:worker:failed", (data) => {
+        console.error("Feed worker failed:", data);
+        setError(`Feed worker failed: ${data.error}`);
+      });
+      feedService.on("feed:worker:recovered", (data) => {
+        console.log("Feed worker recovered:", data);
+        setError(null);
+      });
+      const updateFeedStatus = async () => {
+        try {
+          const status = await feedService.getWorkerStatus();
+          setFeedWorkerStatus(status);
+        } catch (err) {
+          console.error("Failed to get feed worker status:", err);
+        }
+      };
+      updateFeedStatus();
+      const statusInterval = setInterval(updateFeedStatus, 1e4);
+      return () => {
+        clearInterval(statusInterval);
+        feedService.cleanup();
+      };
+    } catch (err) {
+      console.error("[DualModeClaudeManager] Feed integration failed:", err);
+      setError(`Feed integration failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+    } finally {
+      setIsInitializing(false);
+    }
+  };
   reactExports.useEffect(() => {
-    const initializeFeedIntegration = async () => {
-      if (!enableFeedIntegration) {
-        setIsInitializing(false);
-        return;
-      }
-      try {
-        console.log("[DualModeClaudeManager] Initializing feed integration");
-        const feedService = createProductionFeedIntegration(apiUrl);
-        await feedService.initialize();
-        setFeedIntegration(feedService);
-        feedService.on("feed:integration:ready", (data) => {
-          console.log("Feed integration ready:", data);
-          setError(null);
-        });
-        feedService.on("feed:worker:failed", (data) => {
-          console.error("Feed worker failed:", data);
-          setError(`Feed worker failed: ${data.error}`);
-        });
-        feedService.on("feed:worker:recovered", (data) => {
-          console.log("Feed worker recovered:", data);
-          setError(null);
-        });
-        const updateFeedStatus = async () => {
-          try {
-            const status = await feedService.getWorkerStatus();
-            setFeedWorkerStatus(status);
-          } catch (err) {
-            console.error("Failed to get feed worker status:", err);
-          }
-        };
-        updateFeedStatus();
-        const statusInterval = setInterval(updateFeedStatus, 1e4);
-        return () => {
-          clearInterval(statusInterval);
-          feedService.cleanup();
-        };
-      } catch (err) {
-        console.error("[DualModeClaudeManager] Feed integration failed:", err);
-        setError(`Feed integration failed: ${err instanceof Error ? err.message : "Unknown error"}`);
-      } finally {
-        setIsInitializing(false);
+    return () => {
+      if (feedIntegration) {
+        console.log("[DualModeClaudeManager] Cleaning up feed integration on unmount");
+        feedIntegration.cleanup();
       }
     };
-    initializeFeedIntegration();
-  }, [apiUrl, enableFeedIntegration]);
+  }, [feedIntegration]);
   if (isInitializing) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "dual-mode-manager initializing", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "initialization-status", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Initializing Claude Management System" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Setting up production-ready dual Claude management..." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Initializing Feed Integration" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Setting up feed integration service..." }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "loading-indicator", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "spinner" }) })
     ] }) });
   }
@@ -24621,7 +24460,22 @@ const DualModeClaudeManager = ({
           /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Feed Integration System" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Always-on worker instance management for continuous feed processing. Monitor feed processing metrics and worker health." })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feed-integration-dashboard", children: feedWorkerStatus ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "feed-integration-dashboard", children: !isInitialized ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "feed-integration-setup", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Feed Integration Setup" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Initialize the feed integration system to monitor and manage always-on Claude worker instances for continuous feed processing." }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "button",
+            {
+              className: `initialize-button ${isInitializing ? "loading" : ""}`,
+              onClick: initializeFeedIntegration,
+              disabled: isInitializing,
+              children: isInitializing ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "spinner" }),
+                "Initializing Feed Integration..."
+              ] }) : "Initialize Feed Integration"
+            }
+          )
+        ] }) : feedWorkerStatus ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "worker-overview", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Worker Instance Status" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "worker-stats", children: [
@@ -24679,10 +24533,1014 @@ const DualModeClaudeManager = ({
           ] })
         ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "feed-integration-unavailable", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { children: "Feed Integration Unavailable" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Feed integration system is not available. Ensure a worker instance is created in the Global Monitor tab." })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Feed integration system is initialized but no worker status available. Ensure a worker instance is created in the Global Monitor tab." })
         ] }) })
       ] })
     ] })
+  ] });
+};
+class TerminalCommandHistoryImpl {
+  commands = [];
+  currentIndex = -1;
+  maxHistory = 100;
+  constructor(maxHistory = 100) {
+    this.maxHistory = maxHistory;
+    this.loadFromStorage();
+  }
+  addCommand(command) {
+    if (!command.trim()) return;
+    if (this.commands[this.commands.length - 1] === command) return;
+    this.commands.push(command);
+    if (this.commands.length > this.maxHistory) {
+      this.commands.shift();
+    }
+    this.currentIndex = this.commands.length;
+    this.saveToStorage();
+  }
+  getPreviousCommand() {
+    if (this.commands.length === 0) return null;
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
+    return this.commands[this.currentIndex] || null;
+  }
+  getNextCommand() {
+    if (this.commands.length === 0) return null;
+    if (this.currentIndex < this.commands.length - 1) {
+      this.currentIndex++;
+      return this.commands[this.currentIndex];
+    } else {
+      this.currentIndex = this.commands.length;
+      return "";
+    }
+  }
+  clearHistory() {
+    this.commands = [];
+    this.currentIndex = -1;
+    this.saveToStorage();
+  }
+  saveToStorage() {
+    try {
+      localStorage.setItem("claude_terminal_history", JSON.stringify({
+        commands: this.commands,
+        timestamp: Date.now()
+      }));
+    } catch (error) {
+      console.warn("Failed to save command history to localStorage:", error);
+    }
+  }
+  loadFromStorage() {
+    try {
+      const stored = localStorage.getItem("claude_terminal_history");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        this.commands = parsed.commands || [];
+        this.currentIndex = this.commands.length;
+      }
+    } catch (error) {
+      console.warn("Failed to load command history from localStorage:", error);
+    }
+  }
+}
+const useTerminalCommandHistory = (maxHistory = 100) => {
+  const [history] = reactExports.useState(() => new TerminalCommandHistoryImpl(maxHistory));
+  const [currentCommand, setCurrentCommand] = reactExports.useState("");
+  const navigateHistory = reactExports.useCallback((direction) => {
+    let command;
+    if (direction === "up") {
+      command = history.getPreviousCommand();
+    } else {
+      command = history.getNextCommand();
+    }
+    if (command !== null) {
+      setCurrentCommand(command);
+      return command;
+    }
+    return currentCommand;
+  }, [history, currentCommand]);
+  const addCommand = reactExports.useCallback((command) => {
+    history.addCommand(command);
+    setCurrentCommand("");
+  }, [history]);
+  const clearHistory = reactExports.useCallback(() => {
+    history.clearHistory();
+    setCurrentCommand("");
+  }, [history]);
+  const handleKeyDown = reactExports.useCallback((event) => {
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const command = navigateHistory("up");
+      if (event.currentTarget) {
+        event.currentTarget.value = command;
+      }
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      const command = navigateHistory("down");
+      if (event.currentTarget) {
+        event.currentTarget.value = command;
+      }
+    }
+  }, [navigateHistory]);
+  return {
+    history,
+    currentCommand,
+    navigateHistory,
+    addCommand,
+    clearHistory,
+    handleKeyDown,
+    commands: history.commands,
+    hasHistory: history.commands.length > 0
+  };
+};
+class CopyExportOutputImpl {
+  output;
+  chatMessages;
+  constructor(output, chatMessages) {
+    this.output = output;
+    this.chatMessages = chatMessages;
+  }
+  async copyMessage(messageId) {
+    try {
+      const message = this.findMessageById(messageId);
+      if (!message) return false;
+      await navigator.clipboard.writeText(message.content);
+      return true;
+    } catch (error) {
+      console.error("Failed to copy message:", error);
+      return false;
+    }
+  }
+  async copyAllOutput() {
+    try {
+      const content = this.formatAllOutputForClipboard();
+      await navigator.clipboard.writeText(content);
+      return true;
+    } catch (error) {
+      console.error("Failed to copy all output:", error);
+      return false;
+    }
+  }
+  async copySelectedRange(startId, endId) {
+    try {
+      const content = this.formatRangeForClipboard(startId, endId);
+      await navigator.clipboard.writeText(content);
+      return true;
+    } catch (error) {
+      console.error("Failed to copy selected range:", error);
+      return false;
+    }
+  }
+  async exportToText(scope) {
+    switch (scope) {
+      case "current":
+        return this.formatCurrentSessionAsText();
+      case "all":
+        return this.formatAllOutputAsText();
+      case "selected":
+        return this.formatSelectedAsText();
+      default:
+        throw new Error(`Invalid export scope: ${scope}`);
+    }
+  }
+  async exportToJSON(scope) {
+    const data = {
+      exportedAt: (/* @__PURE__ */ new Date()).toISOString(),
+      scope,
+      totalMessages: 0,
+      messages: []
+    };
+    switch (scope) {
+      case "current":
+        data.messages = this.chatMessages;
+        break;
+      case "all":
+        data.messages = [...this.output, ...this.chatMessages];
+        break;
+      case "selected":
+        data.messages = this.getSelectedMessages();
+        break;
+    }
+    data.totalMessages = data.messages.length;
+    return data;
+  }
+  async exportToMarkdown(scope) {
+    let markdown = `# Claude Session Export
+
+`;
+    markdown += `**Exported:** ${(/* @__PURE__ */ new Date()).toLocaleString()}
+`;
+    markdown += `**Scope:** ${scope}
+
+`;
+    const messages = await this.getMessagesForScope(scope);
+    for (const message of messages) {
+      markdown += `## ${message.role || "System"}
+
+`;
+      markdown += `**Time:** ${message.timestamp ? new Date(message.timestamp).toLocaleString() : "Unknown"}
+
+`;
+      markdown += `${message.content}
+
+`;
+      if (message.images && message.images.length > 0) {
+        markdown += `**Images:** ${message.images.length} attached
+
+`;
+      }
+      markdown += `---
+
+`;
+    }
+    return markdown;
+  }
+  downloadFile(content, filename, mimeType) {
+    try {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to download file:", error);
+      throw error;
+    }
+  }
+  // Private helper methods
+  findMessageById(id) {
+    return [...this.output, ...this.chatMessages].find((msg) => msg.id === id);
+  }
+  formatAllOutputForClipboard() {
+    return [...this.output, ...this.chatMessages].map((msg) => `[${msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : ""}] ${msg.content}`).join("\n");
+  }
+  formatRangeForClipboard(startId, endId) {
+    const allMessages = [...this.output, ...this.chatMessages];
+    const startIndex = allMessages.findIndex((msg) => msg.id === startId);
+    const endIndex = allMessages.findIndex((msg) => msg.id === endId);
+    if (startIndex === -1 || endIndex === -1) return "";
+    return allMessages.slice(Math.min(startIndex, endIndex), Math.max(startIndex, endIndex) + 1).map((msg) => msg.content).join("\n");
+  }
+  formatCurrentSessionAsText() {
+    return this.chatMessages.map(
+      (msg) => `${msg.role}: ${msg.content}`
+    ).join("\n\n");
+  }
+  formatAllOutputAsText() {
+    return [...this.output, ...this.chatMessages].map(
+      (msg) => `[${msg.type || msg.role}] ${msg.content}`
+    ).join("\n\n");
+  }
+  formatSelectedAsText() {
+    return this.formatCurrentSessionAsText();
+  }
+  getSelectedMessages() {
+    return this.chatMessages;
+  }
+  async getMessagesForScope(scope) {
+    switch (scope) {
+      case "current":
+        return this.chatMessages;
+      case "all":
+        return [...this.output, ...this.chatMessages];
+      case "selected":
+        return this.getSelectedMessages();
+      default:
+        return [];
+    }
+  }
+}
+const useCopyExportOutput = (output, chatMessages) => {
+  const copyExport = new CopyExportOutputImpl(output, chatMessages);
+  const copyMessage = reactExports.useCallback(async (messageId) => {
+    return await copyExport.copyMessage(messageId);
+  }, [copyExport]);
+  const copyAllOutput = reactExports.useCallback(async () => {
+    return await copyExport.copyAllOutput();
+  }, [copyExport]);
+  const copySelectedRange = reactExports.useCallback(async (startId, endId) => {
+    return await copyExport.copySelectedRange(startId, endId);
+  }, [copyExport]);
+  const exportSession = reactExports.useCallback(async (format, scope = "current") => {
+    try {
+      let content;
+      let filename;
+      let mimeType;
+      const timestamp = (/* @__PURE__ */ new Date()).toISOString().slice(0, 19).replace(/:/g, "-");
+      switch (format) {
+        case "txt":
+          content = await copyExport.exportToText(scope);
+          filename = `claude-session-${timestamp}.txt`;
+          mimeType = "text/plain";
+          break;
+        case "json":
+          content = JSON.stringify(await copyExport.exportToJSON(scope), null, 2);
+          filename = `claude-session-${timestamp}.json`;
+          mimeType = "application/json";
+          break;
+        case "md":
+          content = await copyExport.exportToMarkdown(scope);
+          filename = `claude-session-${timestamp}.md`;
+          mimeType = "text/markdown";
+          break;
+        default:
+          throw new Error(`Unsupported format: ${format}`);
+      }
+      copyExport.downloadFile(content, filename, mimeType);
+      return true;
+    } catch (error) {
+      console.error("Failed to export session:", error);
+      return false;
+    }
+  }, [copyExport]);
+  return {
+    copyMessage,
+    copyAllOutput,
+    copySelectedRange,
+    exportSession,
+    copyExport
+  };
+};
+const falsyToString = (value) => typeof value === "boolean" ? `${value}` : value === 0 ? "0" : value;
+const cx = clsx;
+const cva = (base, config) => (props) => {
+  var _config_compoundVariants;
+  if ((config === null || config === void 0 ? void 0 : config.variants) == null) return cx(base, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+  const { variants, defaultVariants } = config;
+  const getVariantClassNames = Object.keys(variants).map((variant) => {
+    const variantProp = props === null || props === void 0 ? void 0 : props[variant];
+    const defaultVariantProp = defaultVariants === null || defaultVariants === void 0 ? void 0 : defaultVariants[variant];
+    if (variantProp === null) return null;
+    const variantKey = falsyToString(variantProp) || falsyToString(defaultVariantProp);
+    return variants[variant][variantKey];
+  });
+  const propsWithoutUndefined = props && Object.entries(props).reduce((acc, param) => {
+    let [key, value] = param;
+    if (value === void 0) {
+      return acc;
+    }
+    acc[key] = value;
+    return acc;
+  }, {});
+  const getCompoundVariantClassNames = config === null || config === void 0 ? void 0 : (_config_compoundVariants = config.compoundVariants) === null || _config_compoundVariants === void 0 ? void 0 : _config_compoundVariants.reduce((acc, param) => {
+    let { class: cvClass, className: cvClassName, ...compoundVariantOptions } = param;
+    return Object.entries(compoundVariantOptions).every((param2) => {
+      let [key, value] = param2;
+      return Array.isArray(value) ? value.includes({
+        ...defaultVariants,
+        ...propsWithoutUndefined
+      }[key]) : {
+        ...defaultVariants,
+        ...propsWithoutUndefined
+      }[key] === value;
+    }) ? [
+      ...acc,
+      cvClass,
+      cvClassName
+    ] : acc;
+  }, []);
+  return cx(base, getVariantClassNames, getCompoundVariantClassNames, props === null || props === void 0 ? void 0 : props.class, props === null || props === void 0 ? void 0 : props.className);
+};
+const alertVariants = cva(
+  "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
+  {
+    variants: {
+      variant: {
+        default: "bg-background text-foreground",
+        destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
+      }
+    },
+    defaultVariants: {
+      variant: "default"
+    }
+  }
+);
+const Alert = reactExports.forwardRef(({ className, variant, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  "div",
+  {
+    ref,
+    role: "alert",
+    className: cn(alertVariants({ variant }), className),
+    ...props
+  }
+));
+Alert.displayName = "Alert";
+const AlertTitle = reactExports.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  "h5",
+  {
+    ref,
+    className: cn("mb-1 font-medium leading-none tracking-tight", className),
+    ...props
+  }
+));
+AlertTitle.displayName = "AlertTitle";
+const AlertDescription = reactExports.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  "div",
+  {
+    ref,
+    className: cn("text-sm [&_p]:leading-relaxed", className),
+    ...props
+  }
+));
+AlertDescription.displayName = "AlertDescription";
+const QUICK_TEMPLATES = [
+  {
+    id: "default",
+    name: "Default Claude",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Terminal, { className: "w-4 h-4" }),
+    command: "claude",
+    description: "Standard Claude instance"
+  },
+  {
+    id: "skip-permissions",
+    name: "Skip Permissions",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { className: "w-4 h-4" }),
+    command: "claude --dangerously-skip-permissions",
+    description: "Claude with permissions bypassed"
+  },
+  {
+    id: "interactive",
+    name: "Interactive Mode",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { className: "w-4 h-4" }),
+    command: "claude --interactive",
+    description: "Interactive Claude session"
+  }
+];
+const EnhancedSSEInterface = ({
+  apiUrl = "http://localhost:3000",
+  autoConnect = false,
+  reconnectAttempts = 5,
+  reconnectInterval = 2e3
+}) => {
+  const {
+    isConnected,
+    connectionState,
+    connectionError,
+    availableInstances,
+    selectedInstanceId,
+    output,
+    connectToInstance,
+    disconnectFromInstance,
+    sendCommand,
+    refreshInstances,
+    loading,
+    messageCount,
+    lastActivity
+  } = useSSEClaudeInstance({
+    apiUrl,
+    autoConnect,
+    reconnectAttempts,
+    reconnectInterval
+  });
+  const [viewMode, setViewMode] = reactExports.useState("split");
+  const [chatMessages, setChatMessages] = reactExports.useState([]);
+  const [input, setInput] = reactExports.useState("");
+  const [selectedImages, setSelectedImages] = reactExports.useState([]);
+  const [showMetrics, setShowMetrics] = reactExports.useState(false);
+  const [connectionStats, setConnectionStats] = reactExports.useState({
+    connectedAt: null,
+    messagesExchanged: 0,
+    bytesTransferred: 0
+  });
+  const [showCopyExportMenu, setShowCopyExportMenu] = reactExports.useState(false);
+  const {
+    handleKeyDown: handleHistoryKeyDown,
+    addCommand: addToHistory,
+    clearHistory,
+    hasHistory,
+    commands: commandHistory
+  } = useTerminalCommandHistory(100);
+  const {
+    copyMessage,
+    copyAllOutput,
+    exportSession
+  } = useCopyExportOutput(output, chatMessages);
+  const outputRef = reactExports.useRef(null);
+  const chatEndRef = reactExports.useRef(null);
+  const fileInputRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages]);
+  reactExports.useEffect(() => {
+    if (outputRef.current) {
+      outputRef.current.scrollTop = outputRef.current.scrollHeight;
+    }
+  }, [output]);
+  reactExports.useEffect(() => {
+    if (output.length > 0 && selectedInstanceId) {
+      const lastMessage = output[output.length - 1];
+      if (lastMessage.type === "output" && lastMessage.content) {
+        const chatMessage = {
+          id: `chat-${Date.now()}`,
+          role: "assistant",
+          content: lastMessage.content,
+          timestamp: lastMessage.timestamp,
+          metadata: {
+            duration: Date.now() - lastMessage.timestamp.getTime()
+          }
+        };
+        setChatMessages((prev) => [...prev, chatMessage]);
+      }
+    }
+  }, [output, selectedInstanceId]);
+  const handleSendMessage = reactExports.useCallback(async () => {
+    if (!input.trim() && selectedImages.length === 0) return;
+    if (!selectedInstanceId || !isConnected) return;
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: input,
+      timestamp: /* @__PURE__ */ new Date(),
+      images: selectedImages
+    };
+    setChatMessages((prev) => [...prev, userMessage]);
+    addToHistory(input);
+    await sendCommand(selectedInstanceId, input);
+    setInput("");
+    setSelectedImages([]);
+  }, [input, selectedImages, selectedInstanceId, isConnected, sendCommand, addToHistory]);
+  const handleImageUpload = reactExports.useCallback((e) => {
+    const files = e.target.files;
+    if (!files) return;
+    const newImages = [];
+    Array.from(files).forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e2) => {
+          if (e2.target?.result) {
+            newImages.push(e2.target.result);
+            setSelectedImages((prev) => [...prev, ...newImages]);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }, []);
+  const handleQuickLaunch = reactExports.useCallback(async (template) => {
+    try {
+      const response = await fetch(`${apiUrl}/api/claude/instances`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          command: template.command,
+          name: template.name,
+          type: template.id
+        })
+      });
+      if (response.ok) {
+        await refreshInstances();
+      }
+    } catch (error) {
+      console.error("Failed to launch instance:", error);
+    }
+  }, [apiUrl, refreshInstances]);
+  const ConnectionStatus2 = reactExports.useMemo(() => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: cn(
+      "w-2 h-2 rounded-full",
+      isConnected ? "bg-green-500 animate-pulse" : "bg-gray-400"
+    ) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-sm text-gray-600", children: isConnected ? `Connected to ${selectedInstanceId?.slice(0, 8)}...` : "Not connected" }),
+    lastActivity && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "text-xs text-gray-400", children: [
+      "Last activity: ",
+      lastActivity.toLocaleTimeString()
+    ] })
+  ] }), [isConnected, selectedInstanceId, lastActivity]);
+  const PerformanceMetrics = reactExports.useMemo(() => showMetrics ? /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "mb-4", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(CardTitle, { className: "text-sm flex items-center gap-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Activity, { className: "w-4 h-4" }),
+      "Performance Metrics"
+    ] }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-3 gap-4 text-xs", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-500", children: "Messages" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono", children: messageCount })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-500", children: "Connection Time" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono", children: connectionStats.connectedAt ? `${Math.floor((Date.now() - connectionStats.connectedAt.getTime()) / 1e3)}s` : "N/A" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gray-500", children: "State" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-mono", children: connectionState })
+      ] })
+    ] }) })
+  ] }) : null, [showMetrics, messageCount, connectionStats, connectionState]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "enhanced-sse-interface h-full flex flex-col", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "header-section border-b p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-xl font-bold flex items-center gap-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Terminal, { className: "w-5 h-5" }),
+          "Enhanced Claude Control (SSE)"
+        ] }),
+        ConnectionStatus2
+      ] }),
+      connectionError && /* @__PURE__ */ jsxRuntimeExports.jsxs(Alert, { variant: "destructive", className: "mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AlertCircle, { className: "h-4 w-4" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AlertDescription, { children: connectionError })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: refreshInstances,
+            disabled: loading,
+            size: "sm",
+            variant: "outline",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(RefreshCw, { className: cn("w-4 h-4 mr-1", loading && "animate-spin") }),
+              "Refresh"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            Button,
+            {
+              onClick: () => setShowCopyExportMenu(!showCopyExportMenu),
+              size: "sm",
+              variant: "outline",
+              disabled: output.length === 0 && chatMessages.length === 0,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "w-4 h-4 mr-1" }),
+                "Copy/Export"
+              ]
+            }
+          ),
+          showCopyExportMenu && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-full left-0 mt-1 bg-white border rounded-lg shadow-lg z-10 min-w-48", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-semibold text-gray-500 mb-2", children: "Copy" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Button,
+              {
+                onClick: async () => {
+                  await copyAllOutput();
+                  setShowCopyExportMenu(false);
+                },
+                size: "sm",
+                variant: "ghost",
+                className: "w-full justify-start mb-1",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "w-3 h-3 mr-2" }),
+                  "Copy All Output"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-semibold text-gray-500 mb-2 mt-3", children: "Export" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Button,
+              {
+                onClick: async () => {
+                  await exportSession("txt");
+                  setShowCopyExportMenu(false);
+                },
+                size: "sm",
+                variant: "ghost",
+                className: "w-full justify-start mb-1",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(FileText, { className: "w-3 h-3 mr-2" }),
+                  "Export as TXT"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Button,
+              {
+                onClick: async () => {
+                  await exportSession("json");
+                  setShowCopyExportMenu(false);
+                },
+                size: "sm",
+                variant: "ghost",
+                className: "w-full justify-start mb-1",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(FileJson, { className: "w-3 h-3 mr-2" }),
+                  "Export as JSON"
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              Button,
+              {
+                onClick: async () => {
+                  await exportSession("md");
+                  setShowCopyExportMenu(false);
+                },
+                size: "sm",
+                variant: "ghost",
+                className: "w-full justify-start",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(FileCode, { className: "w-3 h-3 mr-2" }),
+                  "Export as Markdown"
+                ]
+              }
+            )
+          ] }) })
+        ] }),
+        hasHistory && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: clearHistory,
+            size: "sm",
+            variant: "ghost",
+            title: "Clear command history",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-4 h-4 mr-1" }),
+              "Clear History"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: () => setShowMetrics(!showMetrics),
+            size: "sm",
+            variant: "ghost",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Activity, { className: "w-4 h-4 mr-1" }),
+              "Metrics"
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: () => setViewMode(viewMode === "split" ? "chat" : viewMode === "chat" ? "terminal" : "split"),
+            size: "sm",
+            variant: "ghost",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { className: "w-4 h-4 mr-1" }),
+              viewMode === "split" ? "Split" : viewMode === "chat" ? "Chat" : "Terminal"
+            ]
+          }
+        )
+      ] }),
+      PerformanceMetrics
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "instance-section border-b p-4", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-sm font-semibold mb-2", children: "Instances" }),
+      availableInstances.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-500", children: "No instances available" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2", children: QUICK_TEMPLATES.map((template) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Button,
+          {
+            onClick: () => handleQuickLaunch(template),
+            size: "sm",
+            variant: "outline",
+            className: "flex items-center gap-2",
+            children: [
+              template.icon,
+              template.name
+            ]
+          },
+          template.id
+        )) })
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "instance-table-container", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "instance-table", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Instance ID" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "PID" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Status" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("th", { children: "Actions" })
+        ] }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: availableInstances.map((instance) => {
+          const isSelected = selectedInstanceId === instance.id;
+          const isConnectedToThis = isSelected && isConnected;
+          return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "tr",
+            {
+              className: cn("instance-row", isSelected && "selected"),
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "instance-id-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "full-id", children: instance.id }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "pid-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: instance.pid }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "status-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Badge, { variant: isConnectedToThis ? "success" : "default", children: isConnectedToThis ? "connected" : instance.status }) }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "actions-cell", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Button,
+                  {
+                    onClick: () => isConnectedToThis ? disconnectFromInstance() : connectToInstance(instance.id),
+                    disabled: loading,
+                    size: "sm",
+                    variant: isConnectedToThis ? "destructive" : "default",
+                    children: isConnectedToThis ? "Disconnect" : "Connect"
+                  }
+                ) })
+              ]
+            },
+            instance.id
+          );
+        }) })
+      ] }) })
+    ] }),
+    isConnected && selectedInstanceId && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Tabs$1, { value: viewMode, onValueChange: (v) => setViewMode(v), className: "h-full", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(TabsList$1, { className: "mx-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(TabsTrigger$1, { value: "chat", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(MessageSquare, { className: "w-4 h-4 mr-1" }),
+          "Chat"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(TabsTrigger$1, { value: "terminal", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Terminal, { className: "w-4 h-4 mr-1" }),
+          "Terminal"
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(TabsTrigger$1, { value: "split", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(Monitor, { className: "w-4 h-4 mr-1" }),
+          "Split View"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-full p-4", children: viewMode === "split" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4 h-full", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "flex flex-col h-full", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-sm", children: "Chat" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "flex-1 overflow-y-auto p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2 p-4", children: [
+            chatMessages.map((msg) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: cn(
+                  "p-3 rounded-lg group relative",
+                  msg.role === "user" ? "bg-blue-100 ml-auto max-w-[80%]" : "bg-gray-100 max-w-[80%]"
+                ),
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm", children: msg.content }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      onClick: () => copyMessage(msg.id),
+                      size: "sm",
+                      variant: "ghost",
+                      className: "absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0",
+                      title: "Copy this message",
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "w-3 h-3" })
+                    }
+                  ),
+                  msg.images && msg.images.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2 mt-2", children: msg.images.map((img, idx) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "img",
+                    {
+                      src: img,
+                      alt: "Attached",
+                      className: "w-16 h-16 object-cover rounded"
+                    },
+                    idx
+                  )) })
+                ]
+              },
+              msg.id
+            )),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: chatEndRef })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t p-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "text",
+                  value: input,
+                  onChange: (e) => setInput(e.target.value),
+                  onKeyPress: (e) => e.key === "Enter" && handleSendMessage(),
+                  placeholder: "Type a message...",
+                  className: "flex-1 px-3 py-2 border rounded-lg"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  ref: fileInputRef,
+                  type: "file",
+                  multiple: true,
+                  accept: "image/*",
+                  onChange: handleImageUpload,
+                  className: "hidden"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                Button,
+                {
+                  onClick: () => fileInputRef.current?.click(),
+                  size: "icon",
+                  variant: "outline",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(Upload, { className: "w-4 h-4" })
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: handleSendMessage, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { className: "w-4 h-4" }) })
+            ] }),
+            selectedImages.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2 mt-2", children: selectedImages.map((img, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: img, alt: "Preview", className: "w-16 h-16 object-cover rounded" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "button",
+                {
+                  onClick: () => setSelectedImages((prev) => prev.filter((_, i) => i !== idx)),
+                  className: "absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center",
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "w-3 h-3" })
+                }
+              )
+            ] }, idx)) })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "flex flex-col h-full", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardHeader, { className: "py-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(CardTitle, { className: "text-sm", children: "Terminal" }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "flex-1 overflow-y-auto p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              ref: outputRef,
+              className: "bg-black text-green-400 font-mono text-xs p-4 h-full overflow-y-auto",
+              children: output.map((message) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "whitespace-pre-wrap", children: message.content }, message.id))
+            }
+          ) })
+        ] })
+      ] }) : viewMode === "chat" ? (
+        /* Chat Only View */
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "h-full flex flex-col", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "flex-1 overflow-y-auto p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+            chatMessages.map((msg) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "div",
+              {
+                className: cn(
+                  "p-3 rounded-lg group relative",
+                  msg.role === "user" ? "bg-blue-100 ml-auto max-w-[80%]" : "bg-gray-100 max-w-[80%]"
+                ),
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm", children: msg.content }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Button,
+                    {
+                      onClick: () => copyMessage(msg.id),
+                      size: "sm",
+                      variant: "ghost",
+                      className: "absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0",
+                      title: "Copy this message",
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "w-3 h-3" })
+                    }
+                  )
+                ]
+              },
+              msg.id
+            )),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { ref: chatEndRef })
+          ] }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "text",
+                value: input,
+                onChange: (e) => setInput(e.target.value),
+                onKeyPress: (e) => e.key === "Enter" && handleSendMessage(),
+                placeholder: "Type a message...",
+                className: "flex-1 px-3 py-2 border rounded-lg"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: handleSendMessage, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Send, { className: "w-4 h-4" }) })
+          ] }) })
+        ] })
+      ) : (
+        /* Terminal Only View */
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(Card, { className: "h-full flex flex-col", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(CardContent, { className: "flex-1 overflow-y-auto p-0", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              ref: outputRef,
+              className: "bg-black text-green-400 font-mono text-sm p-4 h-full overflow-y-auto",
+              children: output.map((message, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "whitespace-pre-wrap group relative", children: [
+                message.content,
+                /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  Button,
+                  {
+                    onClick: () => copyMessage(message.id),
+                    size: "sm",
+                    variant: "ghost",
+                    className: "absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-gray-300 h-6 w-6 p-0",
+                    title: "Copy this message",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx(Copy, { className: "w-3 h-3" })
+                  }
+                )
+              ] }, message.id))
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border-t p-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  type: "text",
+                  value: input,
+                  onChange: (e) => setInput(e.target.value),
+                  onKeyDown: handleHistoryKeyDown,
+                  onKeyPress: (e) => e.key === "Enter" && handleSendMessage(),
+                  placeholder: "Enter command... (Use ↑↓ for history)",
+                  className: "flex-1 px-3 py-2 border rounded-lg font-mono"
+                }
+              ),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { onClick: handleSendMessage, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { className: "w-4 h-4" }) })
+            ] }),
+            hasHistory && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-xs text-gray-500 mt-2", children: [
+              "Command history: ",
+              commandHistory.length,
+              " commands stored"
+            ] })
+          ] })
+        ] })
+      ) })
+    ] }) })
   ] });
 };
 const WebSocketDebugPanel = () => {
@@ -25870,13 +26728,7 @@ const App = () => {
   }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(BrowserRouter, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary2, { componentName: "AppRouter", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.LoadingFallback, { message: "Loading page...", size: "lg" }), children: /* @__PURE__ */ jsxRuntimeExports.jsxs(Routes, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/claude-instances", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "ClaudeInstances", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.LoadingFallback, { message: "Loading Claude Instances..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsx(SafeClaudeInstanceManager, {}) }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "Feed", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.FeedFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(SocialMediaFeed, {}) }) }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/interactive-control", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "InteractiveControlSSE", fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AsyncErrorBoundary, { componentName: "ClaudeInstanceManagerComponentSSE", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.LoadingFallback, { message: "Loading SSE Interactive Control..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "p-6", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold mb-2", children: "🔄 Interactive Control via SSE" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-gray-600", children: "Real-time Claude instance terminal interaction using Server-Sent Events (migrated from WebSocket)." })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(ClaudeInstanceManagerComponentSSE, {})
-    ] }) }) }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/interactive-control", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "InteractiveControlSSE", fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AsyncErrorBoundary, { componentName: "EnhancedSSEInterface", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.LoadingFallback, { message: "Loading Enhanced Interactive Control..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-screen flex flex-col", children: /* @__PURE__ */ jsxRuntimeExports.jsx(EnhancedSSEInterface, {}) }) }) }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/claude-manager", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "ClaudeManager", fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AsyncErrorBoundary, { componentName: "DualModeClaudeManager", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(DualModeClaudeManager, {}) }) }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/dual-instance", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "DualInstanceManager", fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AsyncErrorBoundary, { componentName: "DualInstancePage", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(DualInstancePage, {}) }) }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/dual-instance/:tab", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "DualInstanceManager", fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(AsyncErrorBoundary, { componentName: "DualInstancePage", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.DualInstanceFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(DualInstancePage, {}) }) }) }) }),
@@ -25953,4 +26805,4 @@ ${error instanceof Error ? error.message : String(error)}
 export {
   nldLogger as n
 };
-//# sourceMappingURL=index-B3ShLTuz.js.map
+//# sourceMappingURL=index-DmY3hc3G.js.map

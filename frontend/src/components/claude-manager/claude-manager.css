@@ -636,3 +636,228 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+
+/* Enhanced SSE Interface Styles */
+
+/* Feature 16: Command History Styles */
+.command-history-indicator {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.terminal-input-container {
+  position: relative;
+}
+
+.terminal-input-container input {
+  padding-right: 2.5rem;
+}
+
+.history-indicator-badge {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+/* Feature 18: Copy/Export Menu Styles */
+.copy-export-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.25rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  min-width: 12rem;
+  overflow: hidden;
+}
+
+.copy-export-dropdown .dropdown-header {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.copy-export-dropdown .dropdown-section {
+  padding: 0.25rem 0;
+}
+
+.copy-export-dropdown .dropdown-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  padding: 0.5rem 0.75rem 0.25rem;
+}
+
+.copy-export-dropdown .dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #374151;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.copy-export-dropdown .dropdown-item:hover {
+  background-color: #f3f4f6;
+}
+
+.copy-export-dropdown .dropdown-item:active {
+  background-color: #e5e7eb;
+}
+
+.copy-export-dropdown .dropdown-item svg {
+  margin-right: 0.5rem;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Individual message copy button styles */
+.message-copy-button {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+  opacity: 0;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-copy-button:hover {
+  background: white;
+  border-color: #d1d5db;
+  transform: scale(1.05);
+}
+
+.group:hover .message-copy-button {
+  opacity: 1;
+}
+
+/* Terminal message copy button for dark background */
+.terminal-message .message-copy-button {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+.terminal-message .message-copy-button:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+/* History status indicator */
+.history-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.history-status-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  opacity: 0.7;
+}
+
+/* Export format icons */
+.export-format-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Success/error feedback for copy operations */
+.copy-feedback {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 100;
+  animation: slideInRight 0.3s ease;
+}
+
+.copy-feedback.success {
+  background: #10b981;
+}
+
+.copy-feedback.error {
+  background: #ef4444;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .copy-export-dropdown {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .copy-export-dropdown .dropdown-header {
+    border-bottom-color: #374151;
+  }
+  
+  .copy-export-dropdown .dropdown-label {
+    color: #9ca3af;
+  }
+  
+  .copy-export-dropdown .dropdown-item {
+    color: #e5e7eb;
+  }
+  
+  .copy-export-dropdown .dropdown-item:hover {
+    background-color: #374151;
+  }
+  
+  .copy-export-dropdown .dropdown-item:active {
+    background-color: #4b5563;
+  }
+  
+  .command-history-indicator {
+    color: #9ca3af;
+  }
+  
+  .history-status {
+    border-top-color: #374151;
+    color: #9ca3af;
+  }
+}

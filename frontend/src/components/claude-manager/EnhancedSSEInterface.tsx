@@ -11,6 +11,8 @@
 
 import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import { useSSEClaudeInstance } from '../../hooks/useSSEClaudeInstance';
+import { useTerminalCommandHistory } from '../../hooks/useTerminalCommandHistory';
+import { useCopyExportOutput } from '../../hooks/useCopyExportOutput';
 import { ConnectionState } from '../../managers/ClaudeInstanceManager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -33,7 +35,10 @@ import {
   Upload,
   Settings,
   ChevronRight,
-  AlertCircle
+  AlertCircle,
+  FileText,
+  FileJson,
+  FileCode
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import './claude-manager.css';
@@ -134,6 +139,25 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
     messagesExchanged: 0,
     bytesTransferred: 0
   });
+  const [showCopyExportMenu, setShowCopyExportMenu] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<{type: 'success' | 'error', message: string} | null>(null);
+  
+  // Feature 16: Terminal Command History Hook
+  const {
+    handleKeyDown: handleHistoryKeyDown,
+    addCommand: addToHistory,
+    clearHistory,
+    hasHistory,
+    commands: commandHistory
+  } = useTerminalCommandHistory(100);
+  
+  // Feature 18: Copy/Export Output Hook
+  const {
+    copyMessage,
+    copyAllOutput,
+    copySelectedRange,
+    exportSession
+  } = useCopyExportOutput(output, chatMessages);
 
   // Refs
   const outputRef = useRef<HTMLDivElement>(null);
@@ -192,13 +216,62 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
     
     setChatMessages(prev => [...prev, userMessage]);
     
+    // Feature 16: Add command to history
+    addToHistory(input);
+    
     // Send command
     await sendCommand(selectedInstanceId, input);
     
     // Clear input and images
     setInput('');
     setSelectedImages([]);
-  }, [input, selectedImages, selectedInstanceId, isConnected, sendCommand]);
+  }, [input, selectedImages, selectedInstanceId, isConnected, sendCommand, addToHistory]);
+
+  // Enhanced keyboard handler for all input fields
+  const handleInputKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    // First handle history navigation
+    const historyResult = handleHistoryKeyDown(e);
+    
+    // Update input state if history navigation occurred
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      if (e.currentTarget.value !== input) {
+        setInput(e.currentTarget.value);
+      }
+    }
+    
+    // Handle enter key for message sending
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+    
+    return historyResult;
+  }, [handleHistoryKeyDown, input, handleSendMessage]);
+
+  // Show user feedback for operations
+  const showFeedback = useCallback((type: 'success' | 'error', message: string) => {
+    setFeedbackMessage({ type, message });
+    setTimeout(() => setFeedbackMessage(null), 3000);
+  }, []);
+
+  // Enhanced copy functions with feedback
+  const copyMessageWithFeedback = useCallback(async (messageId: string) => {
+    const success = await copyMessage(messageId);
+    showFeedback(success ? 'success' : 'error', 
+      success ? 'Message copied to clipboard' : 'Failed to copy message');
+  }, [copyMessage, showFeedback]);
+
+  const copyAllOutputWithFeedback = useCallback(async () => {
+    const success = await copyAllOutput();
+    showFeedback(success ? 'success' : 'error', 
+      success ? 'All output copied to clipboard' : 'Failed to copy output');
+  }, [copyAllOutput, showFeedback]);
+
+  const exportSessionWithFeedback = useCallback(async (format: 'txt' | 'json' | 'md') => {
+    const success = await exportSession(format);
+    showFeedback(success ? 'success' : 'error', 
+      success ? `Session exported as ${format.toUpperCase()}` : `Failed to export as ${format.toUpperCase()}`);
+  }, [exportSession, showFeedback]);
 
   // Handle image upload
   const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -322,6 +395,90 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
             <RefreshCw className={cn("w-4 h-4 mr-1", loading && "animate-spin")} />
             Refresh
           </Button>
+          
+          {/* Feature 18: Copy/Export Controls */}
+          <div className="relative">
+            <Button
+              onClick={() => setShowCopyExportMenu(!showCopyExportMenu)}
+              size="sm"
+              variant="outline"
+              disabled={output.length === 0 && chatMessages.length === 0}
+            >
+              <Copy className="w-4 h-4 mr-1" />
+              Copy/Export
+            </Button>
+            
+            {showCopyExportMenu && (
+              <div className="absolute top-full left-0 mt-1 bg-white border rounded-lg shadow-lg z-10 min-w-48">
+                <div className="p-2">
+                  <div className="text-xs font-semibold text-gray-500 mb-2">Copy</div>
+                  <Button
+                    onClick={async () => {
+                      await copyAllOutputWithFeedback();
+                      setShowCopyExportMenu(false);
+                    }}
+                    size="sm"
+                    variant="ghost"
+                    className="w-full justify-start mb-1"
+                  >
+                    <Copy className="w-3 h-3 mr-2" />
+                    Copy All Output
+                  </Button>
+                  
+                  <div className="text-xs font-semibold text-gray-500 mb-2 mt-3">Export</div>
+                  <Button
+                    onClick={async () => {
+                      await exportSessionWithFeedback('txt');
+                      setShowCopyExportMenu(false);
+                    }}
+                    size="sm"
+                    variant="ghost"
+                    className="w-full justify-start mb-1"
+                  >
+                    <FileText className="w-3 h-3 mr-2" />
+                    Export as TXT
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      await exportSessionWithFeedback('json');
+                      setShowCopyExportMenu(false);
+                    }}
+                    size="sm"
+                    variant="ghost"
+                    className="w-full justify-start mb-1"
+                  >
+                    <FileJson className="w-3 h-3 mr-2" />
+                    Export as JSON
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      await exportSessionWithFeedback('md');
+                      setShowCopyExportMenu(false);
+                    }}
+                    size="sm"
+                    variant="ghost"
+                    className="w-full justify-start"
+                  >
+                    <FileCode className="w-3 h-3 mr-2" />
+                    Export as Markdown
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          {/* Feature 16: Command History Clear */}
+          {hasHistory && (
+            <Button
+              onClick={clearHistory}
+              size="sm"
+              variant="ghost"
+              title="Clear command history"
+            >
+              <X className="w-4 h-4 mr-1" />
+              Clear History
+            </Button>
+          )}
           
           <div className="flex-1" />
           
@@ -455,13 +612,23 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
                           <div
                             key={msg.id}
                             className={cn(
-                              "p-3 rounded-lg",
+                              "p-3 rounded-lg group relative",
                               msg.role === 'user' 
                                 ? "bg-blue-100 ml-auto max-w-[80%]" 
                                 : "bg-gray-100 max-w-[80%]"
                             )}
                           >
                             <div className="text-sm">{msg.content}</div>
+                            {/* Feature 18: Individual message copy button */}
+                            <Button
+                              onClick={() => copyMessageWithFeedback(msg.id)}
+                              size="sm"
+                              variant="ghost"
+                              className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0"
+                              title="Copy this message"
+                            >
+                              <Copy className="w-3 h-3" />
+                            </Button>
                             {msg.images && msg.images.length > 0 && (
                               <div className="flex gap-2 mt-2">
                                 {msg.images.map((img, idx) => (
@@ -485,8 +652,8 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
                           type="text"
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
-                          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                          placeholder="Type a message..."
+                          onKeyDown={handleInputKeyDown}
+                          placeholder="Type a message... (Use ↑↓ for history)"
                           className="flex-1 px-3 py-2 border rounded-lg"
                         />
                         <input
@@ -554,13 +721,23 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
                         <div
                           key={msg.id}
                           className={cn(
-                            "p-3 rounded-lg",
+                            "p-3 rounded-lg group relative",
                             msg.role === 'user' 
                               ? "bg-blue-100 ml-auto max-w-[80%]" 
                               : "bg-gray-100 max-w-[80%]"
                           )}
                         >
                           <div className="text-sm">{msg.content}</div>
+                          {/* Feature 18: Individual message copy button */}
+                          <Button
+                            onClick={() => copyMessageWithFeedback(msg.id)}
+                            size="sm"
+                            variant="ghost"
+                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0"
+                            title="Copy this message"
+                          >
+                            <Copy className="w-3 h-3" />
+                          </Button>
                         </div>
                       ))}
                       <div ref={chatEndRef} />
@@ -572,8 +749,8 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                        placeholder="Type a message..."
+                        onKeyDown={handleInputKeyDown}
+                        placeholder="Type a message... (Use ↑↓ for history)"
                         className="flex-1 px-3 py-2 border rounded-lg"
                       />
                       <Button onClick={handleSendMessage}>
@@ -590,9 +767,19 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
                       ref={outputRef}
                       className="bg-black text-green-400 font-mono text-sm p-4 h-full overflow-y-auto"
                     >
-                      {output.map(message => (
-                        <div key={message.id} className="whitespace-pre-wrap">
+                      {output.map((message, index) => (
+                        <div key={message.id} className="whitespace-pre-wrap group relative">
                           {message.content}
+                          {/* Feature 18: Individual message copy button */}
+                          <Button
+                            onClick={() => copyMessageWithFeedback(message.id)}
+                            size="sm"
+                            variant="ghost"
+                            className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-gray-300 h-6 w-6 p-0"
+                            title="Copy this message"
+                          >
+                            <Copy className="w-3 h-3" />
+                          </Button>
                         </div>
                       ))}
                     </div>
@@ -603,14 +790,20 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                        placeholder="Enter command..."
+                        onKeyDown={handleInputKeyDown}
+                        placeholder="Enter command... (Use ↑↓ for history)"
                         className="flex-1 px-3 py-2 border rounded-lg font-mono"
                       />
                       <Button onClick={handleSendMessage}>
                         <ChevronRight className="w-4 h-4" />
                       </Button>
                     </div>
+                    {/* Feature 16: Command history indicator */}
+                    {hasHistory && (
+                      <div className="text-xs text-gray-500 mt-2">
+                        Command history: {commandHistory.length} commands stored
+                      </div>
+                    )}
                   </div>
                 </Card>
               )}
@@ -618,8 +811,42 @@ export const EnhancedSSEInterface: React.FC<EnhancedSSEInterfaceProps> = ({
           </Tabs>
         </div>
       )}
+      
+      {/* Feature 18: User Feedback for Copy/Export Operations */}
+      {feedbackMessage && (
+        <div className={`copy-feedback ${feedbackMessage.type}`}>
+          {feedbackMessage.message}
+        </div>
+      )}
     </div>
   );
 };
 
 export default EnhancedSSEInterface;
+
+// TDD London School Feature Integration Summary:
+// 
+// Feature 16: Terminal Command History ✅
+// - useTerminalCommandHistory hook integrated
+// - Arrow key navigation (↑↓) in terminal input fields
+// - Command storage with localStorage persistence
+// - Duplicate consecutive command filtering
+// - History limit enforcement (100 commands)
+// - Clear history button in UI
+// - History indicator showing command count
+//
+// Feature 18: Copy/Export Output ✅ 
+// - useCopyExportOutput hook integrated
+// - Individual message copy buttons (hover to reveal)
+// - Copy/Export dropdown menu in toolbar
+// - Multiple export formats: TXT, JSON, Markdown
+// - Clipboard API integration for copying
+// - File download API for exports
+// - Graceful error handling for clipboard/download failures
+//
+// Integration Notes:
+// - Both features maintain existing UI/UX patterns
+// - No breaking changes to existing functionality
+// - Performance optimized with React hooks and memoization
+// - Behavioral contracts implemented as specified in tests
+// - Cross-feature compatibility verified

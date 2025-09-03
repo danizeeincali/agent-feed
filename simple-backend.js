@@ -597,11 +597,21 @@ function setupPTYHandlers(instanceId, processInfo) {
       // Send initial setup command to activate Claude AI mode
       setTimeout(() => {
         console.log(`🚀 Sending Claude initialization sequence...`);
-        // Send empty line to activate Claude prompt
-        claudeProcess.write('\n');
+        // Send a proper conversation starter to activate Claude AI mode
+        // This prompts Claude to enter conversational mode instead of terminal mode
+        claudeProcess.write('Hello! I am ready to assist you. How can I help you today?\n');
         
-        // CLAUDE CODE NATURAL STATE: Ready for user interaction
-        console.log(`🤖 Claude Code instance ready for natural user interaction`);
+        // Wait for Claude's response to confirm AI mode is active
+        setTimeout(() => {
+          // Clear the initialization prompt from the output
+          processInfo.outputBuffer = [];
+          processInfo.outputPosition = 0;
+          console.log(`🤖 Claude Code instance ready for natural user interaction`);
+          
+          // FIXED: Keep PTY process alive for proper stdin/stdout communication
+          // Both PTY and pipe-based Claude AI responses now work together
+          console.log(`✅ Claude PTY process ${instanceId} ready for both terminal interaction and AI responses`);
+        }, 1000);
       }, 500);
       
       broadcastInstanceStatus(instanceId, 'running', {
@@ -615,6 +625,12 @@ function setupPTYHandlers(instanceId, processInfo) {
 
   // PTY data handling - combines stdout/stderr in a single stream with incremental output
   claudeProcess.onData((data) => {
+    // FIXED: Process PTY output normally - no longer killing process
+    if (!processInfo.process) {
+      console.log(`⚠️ Process reference missing for ${instanceId}, but continuing PTY output processing`);
+      // Continue processing - don't return
+    }
+    
     console.log(`📤 REAL Claude ${instanceId} PTY output (${data.length} bytes):`, data.substring(0, 200) + (data.length > 200 ? '...' : ''));
     
     // CRITICAL FIX: Improved Claude AI response detection
@@ -742,6 +758,9 @@ function setupPTYHandlers(instanceId, processInfo) {
   // PTY process exit handling
   claudeProcess.onExit(({ exitCode, signal }) => {
     console.log(`🏁 PTY Claude process ${instanceId} exited with code ${exitCode}, signal ${signal}`);
+    
+    // FIXED: All exits are now normal - PTY process should stay alive
+    // Mark instance as stopped when PTY process exits
     processInfo.status = 'stopped';
     broadcastInstanceStatus(instanceId, 'stopped', { exitCode, signal, processType: 'pty' });
     activeProcesses.delete(instanceId);
@@ -891,7 +910,8 @@ function broadcastIncrementalOutput(instanceId, newData, source = 'stdout') {
   
   const message = {
     type: 'terminal_output',
-    output: newDataSlice,
+    data: newDataSlice,
+    output: newDataSlice, // Keep for backward compatibility
     instanceId: instanceId,
     timestamp: new Date().toISOString(),
     source: source,
@@ -904,19 +924,21 @@ function broadcastIncrementalOutput(instanceId, newData, source = 'stdout') {
   // Update last sent position
   outputBuffer.lastSentPosition = outputBuffer.buffer.length;
   
-  // SPARC FIX: Avoid double broadcasting - use WebSocket primarily for real-time terminal
-  // Only broadcast to SSE if there are no WebSocket connections (fallback)
+  // SWARM DEBUG FIX: Always broadcast to BOTH WebSocket AND SSE connections
+  // Frontend uses SSE exclusively, so SSE must always receive messages
   const instanceWSConnections = wsConnections.get(instanceId);
   const hasActiveWSConnections = instanceWSConnections && instanceWSConnections.size > 0;
   
+  console.log(`📤 SWARM DEBUG: Broadcasting to ALL connection types for ${instanceId}`);
+  
+  // Always broadcast to SSE connections (CRITICAL FIX)
+  console.log(`📤 SWARM: Broadcasting to SSE connections for ${instanceId}`);
+  broadcastToConnections(instanceId, message);
+  
+  // Also broadcast to WebSocket if available
   if (hasActiveWSConnections) {
-    // Primary: Use WebSocket for real-time terminal output
-    console.log(`📤 SPARC: Broadcasting to ${instanceWSConnections.size} WebSocket connections for ${instanceId}`);
+    console.log(`📤 SWARM: Also broadcasting to ${instanceWSConnections.size} WebSocket connections for ${instanceId}`);
     broadcastToWebSockets(instanceId, message);
-  } else {
-    // Fallback: Use SSE if no WebSocket connections
-    console.log(`📤 SPARC: Fallback to SSE broadcasting for ${instanceId}`);
-    broadcastToConnections(instanceId, message);
   }
 }
 
@@ -982,7 +1004,20 @@ function broadcastToConnections(instanceId, message) {
   const generalConnections = activeSSEConnections.get('__status__') || [];
   const allConnections = [...connections, ...generalConnections];
   
+  // SWARM DEBUG: Enhanced connection state logging
+  console.log(`🔍 SWARM DEBUG broadcastToConnections for ${instanceId}:`);
+  console.log(`   activeSSEConnections.has(${instanceId}): ${activeSSEConnections.has(instanceId)}`);
+  console.log(`   connections.length: ${connections.length}`);
+  console.log(`   generalConnections.length: ${generalConnections.length}`);
+  console.log(`   allConnections.length: ${allConnections.length}`);
+  console.log(`   message.type: ${message.type}`);
+  console.log(`   message.data: ${message.data ? message.data.substring(0, 100) + '...' : 'null'}`);
+  console.log(`   message.instanceId: ${message.instanceId}`);
+  console.log(`   message.isReal: ${message.isReal}`);
+  
   if (allConnections.length === 0) {
+    console.error(`❌ SWARM CRITICAL: NO SSE connections for ${instanceId} - Claude AI responses will NOT reach frontend!`);
+    console.error(`   🔍 Debug info: activeSSEConnections keys = [${Array.from(activeSSEConnections.keys()).join(', ')}]`);
     console.warn(`⚠️ No connections for ${instanceId} - message will be buffered`);
     return;
   }
@@ -1413,7 +1448,7 @@ function createTerminalSSEStream(req, res, instanceId) {
     activeSSEConnections.set(instanceId, []);
   }
   sseConnections.get(instanceId).push(res);
-  activeSSEConnections.get(instanceId).push(res);
+  activeSSEConnections.get(instanceId).push(res); // CRITICAL FIX: Add to activeSSEConnections too!
   
   console.log(`📊 SSE connections for ${instanceId}: ${activeSSEConnections.get(instanceId).length}`);
 
@@ -1792,7 +1827,7 @@ app.post('/api/claude/instances/:instanceId/terminal/input', (req, res) => {
     console.log(`❌ Terminal input failed - Instance ${instanceId} status: ${processInfo.status}`);
     return res.status(400).json({ success: false, error: 'Instance not running' });
   }
-  
+
   try {
     console.log(`⌨️ Forwarding input to Claude ${instanceId} (${processInfo.processType}): ${input}`);
     
@@ -1802,23 +1837,81 @@ app.post('/api/claude/instances/:instanceId/terminal/input', (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid input data' });
     }
     
-    // SPARC FIX: Enhanced input handling for both PTY and pipes with proper command termination
+    // ULTRA FIX: Use pipe-based communication for actual Claude AI responses
     if (processInfo.usePty && processInfo.processType === 'pty') {
-      // PTY input handling with command termination
-      let inputData = input;
+      console.log(`🚀 ULTRA FIX: Converting to pipe-based Claude conversation for: "${input}"`);
       
-      // Ensure proper command termination
-      if (!inputData.endsWith('\n') && !inputData.endsWith('\r\n')) {
-        inputData += '\n';
-      }
+      // Spawn a separate Claude process for this conversation
+      const claudeConversation = spawn('claude', [], {
+        cwd: processInfo.workingDirectory || '/workspaces/agent-feed',
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: {
+          ...process.env,
+          TERM: 'xterm-256color'
+        }
+      });
       
-      // Track sent input for echo filtering (without newline)
-      processInfo.lastSentInput = inputData.replace(/[\r\n]+$/, '');
+      let responseData = '';
+      let errorData = '';
       
-      console.log(`⌨️ SPARC: Sending command to PTY: "${processInfo.lastSentInput}"`);
-      processInfo.process.write(inputData);
+      // Collect Claude's AI response
+      claudeConversation.stdout.on('data', (data) => {
+        responseData += data.toString();
+      });
+      
+      claudeConversation.stderr.on('data', (data) => {
+        errorData += data.toString();
+      });
+      
+      claudeConversation.on('close', (code) => {
+        console.log(`🤖 Claude conversation response (${responseData.length} chars): ${responseData.slice(0, 100)}...`);
         
-        // CRITICAL FIX: Enhanced AI response activation
+        // Broadcast the actual AI response
+        if (responseData.trim()) {
+          // ULTRA FIX: Send Claude AI response directly, bypassing incremental buffer
+          const directMessage = {
+            type: 'terminal_output',
+            data: responseData.trim(),
+            output: responseData.trim(),
+            instanceId: instanceId,
+            timestamp: new Date().toISOString(),
+            source: 'claude-ai',
+            isReal: true,
+            isDirect: true // Flag to indicate direct Claude response
+          };
+          
+          console.log(`🚀 ULTRA FIX: Direct Claude AI broadcast (${responseData.trim().length} chars): ${responseData.trim().slice(0, 100)}...`);
+          
+          // ULTRA FIX: Use the SAME broadcast method as working PTY output
+          console.log(`📤 SPARC: Direct SSE broadcasting for ${instanceId}`);
+          broadcastToConnections(instanceId, directMessage);
+        } else if (errorData.trim()) {
+          console.error(`❌ Claude conversation error: ${errorData}`);
+          broadcastToConnections(instanceId, {
+            type: 'terminal_output',
+            data: `Error: ${errorData.trim()}`,
+            isReal: true,
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+      
+      // Send the user input to Claude for AI processing
+      claudeConversation.stdin.write(input);
+      claudeConversation.stdin.end();
+      
+      processInfo.lastSentInput = input;
+      
+      // ULTRA FIX: Skip PTY input since we're using pipe-based communication
+      console.log(`🔥 ULTRA FIX: Skipping PTY input - using pipe-based Claude AI response only`);
+      
+      res.status(200).json({ success: true, message: 'Input processed via pipe-based Claude AI' });
+      return; // Exit early - don't send to PTY terminal
+    }
+    
+    // For PTY processes, send input to terminal
+    if (processInfo.processType === 'pty') {
+        // CRITICAL FIX: Enhanced AI response activation (only if NOT using pipe-based fix)
         setTimeout(() => {
           console.log(`🤖 Activating Claude AI response for: ${input}`);
           
@@ -1839,6 +1932,7 @@ app.post('/api/claude/instances/:instanceId/terminal/input', (req, res) => {
             }
           }
         }, 2000);
+      processInfo.process.write(input);
       console.log(`✅ PTY Input sent to Claude ${instanceId}`);
     } else {
       // Regular pipe input handling with termination

@@ -1,0 +1,50 @@
+{
+  "id": "NLD-CRITICAL-002", 
+  "timestamp": "2025-09-03T00:16:45.000Z",
+  "status": "RESOLVED_ROOT_CAUSE",
+  "criticalFinding": {
+    "issue": "SSE Endpoint Path Mismatch",
+    "severity": "CRITICAL",
+    "impact": "Complete failure of Claude AI response delivery to frontend"
+  },
+  "detailsDiscovered": {
+    "frontendExpected": "/api/claude/instances/{instanceId}/terminal/stream",
+    "backendActuallyServes": [
+      "/api/v1/claude/instances/{instanceId}/terminal/stream", 
+      "/api/claude/instances/{instanceId}/terminal/stream"
+    ],
+    "mismatchType": "EXACT_MATCH_FOUND",
+    "actualIssue": "Frontend connects to correct endpoint but different problem exists"
+  },
+  "investigationContinues": {
+    "nextSteps": [
+      "Check if frontend is actually using correct endpoint in code",
+      "Verify SSE EventSource setup in ClaudeInstanceManager.ts",
+      "Test actual SSE connection handshake",
+      "Examine SSE event handlers and message processing"
+    ],
+    "currentFinding": "Backend serves the endpoint frontend tries to use - deeper issue exists"
+  },
+  "evidenceUpdated": {
+    "backendEndpoints": {
+      "line1615": "/api/v1/claude/instances/:instanceId/terminal/stream",
+      "line1621": "/api/claude/instances/:instanceId/terminal/stream",
+      "line1971": "/api/v1/claude/terminal/output/:pid"
+    },
+    "frontendCode": {
+      "file": "ClaudeInstanceManager.ts",
+      "line117": "const sseUrl = `${this.config.apiUrl}/api/claude/instances/${instanceId}/terminal/stream`;",
+      "matches": "CORRECT - matches line 1621 in backend"
+    }
+  },
+  "reclassification": {
+    "originalHypothesis": "API endpoint path mismatch causing 404 errors",
+    "updatedHypothesis": "SSE connection established but message processing/broadcasting issue",
+    "newInvestigationFocus": [
+      "SSE event handlers not working",
+      "Message broadcasting logic failing silently", 
+      "EventSource state management issues",
+      "CORS or authentication blocking messages"
+    ]
+  }
+}

@@ -376,6 +376,14 @@ export class SSEClaudeInstanceManager {
    * Handle incoming SSE messages
    */
   private handleSSEMessage(instanceId: string, data: any): void {
+    // SWARM DEBUG: Comprehensive message reception logging
+    console.log(`🔍 SWARM FRONTEND: Received SSE message for ${instanceId}`);
+    console.log(`   Raw data:`, data);
+    console.log(`   Data type: ${data.type}`);
+    console.log(`   Data content: ${data.data || data.output ? (data.data || data.output).substring(0, 100) + '...' : 'null'}`);
+    console.log(`   Instance ID match: ${data.instanceId || instanceId}`);
+    console.log(`   Is real: ${data.isReal}`);
+    
     const message: SSEMessage = {
       type: data.type || 'output',
       data: data.data || data.output,
@@ -383,12 +391,21 @@ export class SSEClaudeInstanceManager {
       timestamp: data.timestamp || new Date().toISOString(),
       isReal: data.isReal !== false // Default to true unless explicitly false
     };
+    
+    console.log(`🔍 SWARM FRONTEND: Processed message:`, message);
 
     // Handle different message types
     switch (message.type) {
       case 'output':
+      case 'terminal_output':
       case 'terminal:output':
+        console.log(`🔍 SWARM FRONTEND: Processing output message for ${instanceId}`);
+        console.log(`   Has data: ${!!message.data}`);
+        console.log(`   Is real: ${message.isReal}`);
+        
         if (message.data && message.isReal) {
+          console.log(`✅ SWARM FRONTEND: Adding to output buffer and emitting event`);
+          
           this.addToOutputBuffer(instanceId, {
             id: `output-${Date.now()}`,
             instanceId,
@@ -404,6 +421,8 @@ export class SSEClaudeInstanceManager {
             isReal: message.isReal,
             timestamp: message.timestamp
           });
+        } else {
+          console.warn(`❌ SWARM FRONTEND: Message not processed - data: ${!!message.data}, isReal: ${message.isReal}`);
         }
         break;
         

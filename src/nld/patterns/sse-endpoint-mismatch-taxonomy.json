@@ -1,0 +1,53 @@
+{
+  "taxonomyId": "SSE-ENDPOINT-MISMATCH",
+  "classification": "API_CONTRACT_VIOLATION",
+  "severity": "CRITICAL",
+  "detectionPatterns": {
+    "primaryIndicators": [
+      "backend_logs_show_broadcast_success",
+      "frontend_shows_no_response", 
+      "sse_connection_404_errors",
+      "api_endpoint_path_mismatch"
+    ],
+    "secondaryIndicators": [
+      "no_visible_error_handling",
+      "misleading_success_logs",
+      "multiple_process_instances"
+    ]
+  },
+  "commonVariations": [
+    {
+      "variation": "wrong_endpoint_path",
+      "frontend": "/api/resource/{id}/sse",
+      "backend": "/api/resource/{id}/stream/sse",
+      "result": "404_connection_failure"
+    },
+    {
+      "variation": "version_mismatch", 
+      "frontend": "/api/v1/sse",
+      "backend": "/api/v2/sse",
+      "result": "404_or_unexpected_response"
+    },
+    {
+      "variation": "parameter_mismatch",
+      "frontend": "GET /sse?id=123",
+      "backend": "expects POST /sse with body",
+      "result": "method_not_allowed"
+    }
+  ],
+  "debuggingSteps": [
+    "check_network_tab_for_404_errors",
+    "compare_frontend_request_urls_with_backend_routes",
+    "verify_api_contract_documentation",
+    "test_endpoints_manually_with_curl",
+    "check_for_middleware_route_conflicts"
+  ],
+  "preventionTddPatterns": [
+    "api_contract_testing",
+    "endpoint_integration_testing", 
+    "mock_server_contract_validation",
+    "openapi_schema_validation",
+    "cross_reference_testing"
+  ],
+  "diagnosticScript": "curl -I {apiUrl}/path/to/endpoint && compare_with_frontend_code"
+}

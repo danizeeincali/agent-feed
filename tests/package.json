@@ -7,7 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:sparc": "jest --config=jest.config.sparc.js",
+    "test:watch": "jest --config=jest.config.sparc.js --watch",
+    "test:coverage": "jest --config=jest.config.sparc.js --coverage"
   },
   "keywords": [],
   "author": "",
