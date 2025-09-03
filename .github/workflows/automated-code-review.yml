@@ -1,0 +1,201 @@
+name: Automated Code Review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'simple-backend.js'
+      - 'frontend/src/**/*.tsx'
+      - 'frontend/src/**/*.ts'
+      - 'frontend/src/managers/**'
+      - 'frontend/src/components/claude-manager/**'
+      - 'src/**/*.js'
+      - 'tests/**'
+
+env:
+  NODE_VERSION: '18'
+  SWARM_ID: 'code-review-swarm'
+
+jobs:
+  code-review-swarm:
+    name: AI Code Review Swarm
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      checks: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd scripts/code-analysis && npm ci 2>/dev/null || npm install
+          
+      - name: Setup GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          
+      - name: Get PR Context
+        id: pr-context
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          echo "pr_number=$PR_NUM" >> $GITHUB_OUTPUT
+          
+          # Get PR data with gh CLI
+          PR_DATA=$(gh pr view $PR_NUM --json files,additions,deletions,title,body,labels,headRefOid)
+          echo "pr_data<<EOF" >> $GITHUB_OUTPUT
+          echo "$PR_DATA" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          # Get diff data
+          PR_DIFF=$(gh pr diff $PR_NUM --color never)
+          echo "pr_diff<<EOF" >> $GITHUB_OUTPUT
+          echo "$PR_DIFF" >> $GITHUB_OUTPUT  
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          # Get changed files
+          CHANGED_FILES=$(echo "$PR_DATA" | jq -r '.files[].path' | tr '\n' ',' | sed 's/,$//')
+          echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          
+      - name: Initialize Review Swarm
+        run: |
+          echo "🔍 Initializing Code Review Swarm for PR #${{ steps.pr-context.outputs.pr_number }}"
+          node scripts/code-analysis/review-orchestrator.js initialize \
+            --pr "${{ steps.pr-context.outputs.pr_number }}" \
+            --files "${{ steps.pr-context.outputs.changed_files }}" \
+            --swarm-id "${{ env.SWARM_ID }}"
+            
+      - name: Security Review Agent
+        id: security-review
+        run: |
+          echo "🔒 Running Security Analysis"
+          SECURITY_RESULTS=$(node scripts/code-analysis/security-scanner.js \
+            --pr "${{ steps.pr-context.outputs.pr_number }}" \
+            --files "${{ steps.pr-context.outputs.changed_files }}" \
+            --diff-data "${{ steps.pr-context.outputs.pr_diff }}")
+          
+          echo "security_results<<EOF" >> $GITHUB_OUTPUT
+          echo "$SECURITY_RESULTS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Performance Review Agent  
+        id: performance-review
+        run: |
+          echo "⚡ Running Performance Analysis"
+          PERFORMANCE_RESULTS=$(node scripts/code-analysis/performance-checker.js \
+            --pr "${{ steps.pr-context.outputs.pr_number }}" \
+            --files "${{ steps.pr-context.outputs.changed_files }}" \
+            --diff-data "${{ steps.pr-context.outputs.pr_diff }}")
+            
+          echo "performance_results<<EOF" >> $GITHUB_OUTPUT
+          echo "$PERFORMANCE_RESULTS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Architecture Review Agent
+        id: architecture-review
+        run: |
+          echo "🏗️ Running Architecture Analysis"
+          ARCHITECTURE_RESULTS=$(node scripts/code-analysis/pattern-validator.js \
+            --pr "${{ steps.pr-context.outputs.pr_number }}" \
+            --files "${{ steps.pr-context.outputs.changed_files }}" \
+            --diff-data "${{ steps.pr-context.outputs.pr_diff }}")
+            
+          echo "architecture_results<<EOF" >> $GITHUB_OUTPUT
+          echo "$ARCHITECTURE_RESULTS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Testing Coverage Agent
+        id: testing-review
+        run: |
+          echo "🧪 Running Test Coverage Analysis"
+          
+          # Run tests with coverage if they exist
+          if [ -f "package.json" ] && npm run test --if-present 2>/dev/null; then
+            npm run test:coverage 2>/dev/null || npm test -- --coverage 2>/dev/null || echo "No coverage available"
+          fi
+          
+          TESTING_RESULTS=$(node scripts/code-analysis/test-analyzer.js \
+            --pr "${{ steps.pr-context.outputs.pr_number }}" \
+            --files "${{ steps.pr-context.outputs.changed_files }}")
+            
+          echo "testing_results<<EOF" >> $GITHUB_OUTPUT
+          echo "$TESTING_RESULTS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Consolidate Review Results
+        id: consolidate
+        run: |
+          echo "📊 Consolidating Review Results"
+          CONSOLIDATED_REPORT=$(node scripts/code-analysis/review-orchestrator.js consolidate \
+            --security-results "${{ steps.security-review.outputs.security_results }}" \
+            --performance-results "${{ steps.performance-review.outputs.performance_results }}" \
+            --architecture-results "${{ steps.architecture-review.outputs.architecture_results }}" \
+            --testing-results "${{ steps.testing-review.outputs.testing_results }}")
+            
+          echo "consolidated_report<<EOF" >> $GITHUB_OUTPUT
+          echo "$CONSOLIDATED_REPORT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          # Extract risk score
+          RISK_SCORE=$(echo "$CONSOLIDATED_REPORT" | jq -r '.riskScore // "medium"')
+          echo "risk_score=$RISK_SCORE" >> $GITHUB_OUTPUT
+          
+      - name: Post Review Comments
+        run: |
+          echo "💬 Posting Review Comments"
+          
+          # Post consolidated review as PR comment
+          gh pr comment ${{ steps.pr-context.outputs.pr_number }} --body "$(cat <<'EOF'
+          ## 🤖 AI Code Review Results
+          
+          ${{ steps.consolidate.outputs.consolidated_report }}
+          
+          ---
+          *Automated review by Claude Code Review Swarm*
+          EOF
+          )"
+          
+      - name: Set PR Status
+        run: |
+          RISK_SCORE="${{ steps.consolidate.outputs.risk_score }}"
+          PR_NUM="${{ steps.pr-context.outputs.pr_number }}"
+          
+          if [[ "$RISK_SCORE" == "critical" ]]; then
+            echo "🚨 Critical issues found - requesting changes"
+            gh pr review $PR_NUM --request-changes --body "Critical security or performance issues detected. Please review the automated analysis above."
+            gh pr edit $PR_NUM --add-label "security-review-required,performance-review-required"
+          elif [[ "$RISK_SCORE" == "high" ]]; then
+            echo "⚠️ High-risk changes detected"
+            gh pr edit $PR_NUM --add-label "high-risk-change"
+            gh pr comment $PR_NUM --body "⚠️ High-risk changes detected. Manual review recommended."
+          elif [[ "$RISK_SCORE" == "low" ]]; then
+            echo "✅ Low-risk changes - auto-approving"
+            gh pr review $PR_NUM --approve --body "✅ Automated review passed. No significant issues detected."
+            gh pr edit $PR_NUM --add-label "auto-approved"
+          else
+            echo "📝 Medium-risk changes - adding comment"
+            gh pr edit $PR_NUM --add-label "automated-review-complete"
+          fi
+          
+      - name: Update Review Dashboard
+        if: always()
+        run: |
+          echo "📈 Updating Review Metrics"
+          node scripts/code-analysis/review-orchestrator.js updateMetrics \
+            --pr "${{ steps.pr-context.outputs.pr_number }}" \
+            --risk-score "${{ steps.consolidate.outputs.risk_score }}" \
+            --timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)"

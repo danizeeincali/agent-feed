@@ -1,0 +1,204 @@
+name: Performance Monitoring & Regression Detection
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Run performance monitoring daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  performance-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../tests && npm ci
+
+      - name: Run performance benchmarks
+        run: |
+          # Start services
+          node simple-backend.js &
+          BACKEND_PID=$!
+          
+          cd frontend && npm run build
+          npx serve -s dist -l 5173 &
+          FRONTEND_PID=$!
+          
+          # Wait for services
+          sleep 10
+          
+          # Run comprehensive performance tests
+          cd ../tests && npm run test:performance:comprehensive
+          
+          # Stop services
+          kill $BACKEND_PID $FRONTEND_PID
+
+      - name: Store performance metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-baseline-${{ github.sha }}
+          path: |
+            tests/performance-results/
+            tests/benchmarks/
+
+  claude-ai-performance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../tests && npm ci
+
+      - name: Claude AI Response Time Testing
+        run: |
+          # Start backend with performance monitoring
+          PERFORMANCE_MONITORING=true node simple-backend.js &
+          BACKEND_PID=$!
+          
+          sleep 5
+          
+          # Run Claude AI specific performance tests
+          cd tests && npm run test:claude-ai:performance
+          
+          kill $BACKEND_PID
+
+      - name: SSE Connection Performance
+        run: |
+          node simple-backend.js &
+          BACKEND_PID=$!
+          
+          sleep 5
+          
+          # Test SSE connection performance and stability
+          cd tests && npm run test:sse:performance
+          
+          kill $BACKEND_PID
+
+      - name: Memory Usage Analysis
+        run: |
+          # Run memory profiling tests
+          cd tests && npm run test:memory-profile
+
+  regression-detection:
+    needs: [performance-baseline, claude-ai-performance]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download performance results
+        uses: actions/download-artifact@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Analyze performance regression
+        run: |
+          node scripts/analyze-performance-regression.js
+
+      - name: Generate performance report
+        run: |
+          node scripts/generate-performance-report.js
+
+      - name: Check for performance regressions
+        run: |
+          # Check if performance has degraded beyond acceptable thresholds
+          if [ -f "performance-regression-detected.flag" ]; then
+            echo "Performance regression detected!"
+            exit 1
+          fi
+
+      - name: Upload performance analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-analysis-${{ github.run_number }}
+          path: |
+            performance-reports/
+            performance-regression-detected.flag
+
+  load-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd tests && npm ci
+
+      - name: Run load tests
+        run: |
+          # Start backend
+          node simple-backend.js &
+          BACKEND_PID=$!
+          
+          sleep 5
+          
+          # Run load tests with multiple concurrent users
+          cd tests && npm run test:load
+          
+          kill $BACKEND_PID
+
+      - name: Stress test Claude AI endpoints
+        run: |
+          node simple-backend.js &
+          BACKEND_PID=$!
+          
+          sleep 5
+          
+          # Stress test specific Claude AI endpoints
+          cd tests && npm run test:stress:claude-ai
+          
+          kill $BACKEND_PID
+
+  monitoring-dashboard:
+    needs: [regression-detection, load-testing]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Update performance dashboard
+        run: |
+          echo "Updating performance monitoring dashboard..."
+          # Add logic to update monitoring dashboard
+          
+      - name: Send alerts if needed
+        if: needs.regression-detection.result == 'failure'
+        run: |
+          echo "Performance regression detected - sending alerts"
+          # Add Slack/email alert logic here

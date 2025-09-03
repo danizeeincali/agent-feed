@@ -1,0 +1,31 @@
+{
+  "name": "code-analysis-tools",
+  "version": "1.0.0",
+  "description": "AI-powered code analysis and review tools",
+  "main": "review-orchestrator.js",
+  "scripts": {
+    "test": "jest",
+    "security-scan": "node security-scanner.js",
+    "performance-check": "node performance-checker.js",
+    "pattern-validate": "node pattern-validator.js",
+    "review": "node review-orchestrator.js"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/types": "^7.23.0",
+    "acorn": "^8.11.0",
+    "acorn-walk": "^8.3.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "eslint": "^8.54.0",
+    "jscodeshift": "^0.15.1",
+    "semver": "^7.5.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

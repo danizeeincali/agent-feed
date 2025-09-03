@@ -8,6 +8,17 @@
   },
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --config=../jest.ci.config.js",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:e2e": "playwright test",
+    "test:performance": "jest --testPathPattern=performance",
+    "test:performance:comprehensive": "jest --testPathPattern=performance --verbose",
+    "test:claude-ai": "jest --testPathPattern=claude",
+    "test:sse-stability": "jest --testPathPattern=sse.*stability",
+    "test:claude-manager": "jest --testPathPattern=claude.*manager",
+    "test:load": "jest --testPathPattern=load",
+    "test:stress:claude-ai": "jest --testPathPattern=stress.*claude",
+    "test:memory-profile": "jest --testPathPattern=memory",
     "test:sparc": "jest --config=jest.config.sparc.js",
     "test:watch": "jest --config=jest.config.sparc.js --watch",
     "test:coverage": "jest --config=jest.config.sparc.js --coverage"
@@ -25,7 +36,12 @@
     "@testing-library/user-event": "^14.6.1",
     "babel-jest": "^30.1.2",
     "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.1.2",
     "jest-environment-jsdom": "^30.1.2",
+    "jest-environment-node": "^30.1.2",
+    "jest-junit": "^16.0.0",
+    "jest-html-reporter": "^3.10.2",
+    "node-fetch": "^3.3.2",
     "ts-jest": "^29.4.1"
   }
 }
