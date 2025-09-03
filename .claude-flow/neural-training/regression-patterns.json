@@ -1,0 +1,178 @@
+{
+  "regressionPatternId": "share-removal-regression-training-v1",
+  "trainingDataset": {
+    "feature_removal_scenarios": {
+      "sharing_functionality": {
+        "components_affected": 6,
+        "ui_references": 12,
+        "state_references": 8,
+        "type_references": 7,
+        "api_references": 2,
+        "complexity_score": 0.74
+      },
+      "similar_features": {
+        "bookmarking": {
+          "estimated_complexity": 0.68,
+          "ui_similarity": 0.89,
+          "state_similarity": 0.92
+        },
+        "favoriting": {
+          "estimated_complexity": 0.71,
+          "ui_similarity": 0.94,
+          "state_similarity": 0.87
+        }
+      }
+    },
+    "dependency_patterns": {
+      "high_coupling": [
+        {
+          "pattern": "parallel_state_updates",
+          "description": "Feature updates multiple state arrays simultaneously",
+          "examples": ["posts", "search.results"],
+          "risk_multiplier": 1.4,
+          "detection": "look for conditional state updates based on search/filter flags"
+        },
+        {
+          "pattern": "shared_ui_patterns",
+          "description": "Feature uses same UI patterns as adjacent features",
+          "examples": ["like", "comment", "share buttons in same group"],
+          "risk_multiplier": 1.2,
+          "detection": "buttons/icons in same container with similar handlers"
+        }
+      ],
+      "medium_coupling": [
+        {
+          "pattern": "api_integration",
+          "description": "Feature has dedicated API endpoints or parameters",
+          "examples": ["updatePostEngagement action parameter"],
+          "risk_multiplier": 1.1,
+          "detection": "union types or string literals in API calls"
+        }
+      ],
+      "low_coupling": [
+        {
+          "pattern": "isolated_display",
+          "description": "Feature only displays data without complex logic",
+          "examples": ["share counter display"],
+          "risk_multiplier": 0.8,
+          "detection": "simple property access with fallback values"
+        }
+      ]
+    },
+    "failure_mode_training": {
+      "compilation_failures": {
+        "triggers": [
+          "premature_interface_removal",
+          "incomplete_import_cleanup",
+          "missing_type_property_removal"
+        ],
+        "success_patterns": [
+          "remove_usage_before_definition",
+          "gradual_type_narrowing",
+          "comprehensive_reference_audit"
+        ],
+        "neural_weights": {
+          "interface_reference_count": 0.9,
+          "import_usage_density": 0.7,
+          "type_chain_depth": 0.8
+        }
+      },
+      "runtime_failures": {
+        "triggers": [
+          "orphaned_event_handlers",
+          "stale_state_references",
+          "incomplete_conditional_removal"
+        ],
+        "success_patterns": [
+          "ui_removal_first",
+          "handler_audit_second", 
+          "state_cleanup_third"
+        ],
+        "neural_weights": {
+          "event_handler_complexity": 0.8,
+          "state_update_frequency": 0.7,
+          "conditional_logic_density": 0.6
+        }
+      },
+      "ui_regressions": {
+        "triggers": [
+          "layout_container_changes",
+          "missing_spacing_adjustments",
+          "responsive_breakpoint_issues"
+        ],
+        "success_patterns": [
+          "gradual_ui_removal",
+          "layout_testing_each_step",
+          "responsive_validation"
+        ],
+        "neural_weights": {
+          "ui_element_density": 0.6,
+          "layout_complexity": 0.7,
+          "responsive_breakpoints": 0.5
+        }
+      }
+    }
+  },
+  "neural_model_training": {
+    "input_features": [
+      "component_reference_count",
+      "ui_element_count", 
+      "state_update_paths",
+      "type_definition_count",
+      "api_integration_complexity",
+      "adjacent_feature_similarity",
+      "test_coverage_percentage"
+    ],
+    "target_predictions": [
+      "compilation_failure_probability",
+      "runtime_failure_probability", 
+      "ui_regression_probability",
+      "adjacent_feature_impact_probability"
+    ],
+    "training_examples": {
+      "sharing_removal": {
+        "inputs": [6, 12, 2, 7, 2, 0.91, 0],
+        "targets": [0.85, 0.72, 0.65, 0.42],
+        "actual_outcome": null,
+        "notes": "prediction phase - will update with actual results"
+      }
+    }
+  },
+  "pattern_recognition": {
+    "successful_removal_signatures": [
+      {
+        "signature": "ui_first_sequential_removal",
+        "characteristics": [
+          "remove_visual_elements_first",
+          "remove_interactions_second", 
+          "remove_data_logic_third",
+          "remove_types_last"
+        ],
+        "success_rate": 0.89,
+        "applicable_scenarios": ["medium_to_high_coupling_features"]
+      },
+      {
+        "signature": "parallel_path_synchronization", 
+        "characteristics": [
+          "identify_all_state_update_paths",
+          "remove_feature_logic_simultaneously",
+          "validate_state_consistency"
+        ],
+        "success_rate": 0.94,
+        "applicable_scenarios": ["features_with_search_integration"]
+      }
+    ],
+    "failure_signatures": [
+      {
+        "signature": "cascade_dependency_break",
+        "characteristics": [
+          "remove_core_before_dependents",
+          "incomplete_dependency_mapping",
+          "missing_type_reference_audit"
+        ],
+        "failure_rate": 0.67,
+        "prevention": "comprehensive_dependency_analysis_first"
+      }
+    ]
+  }
+}

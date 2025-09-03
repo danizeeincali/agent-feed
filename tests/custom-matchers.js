@@ -99,5 +99,4 @@ expect.extend({
         pass: false
       };
     }
-  }
-});
+  }\n});\n\n// Import TDD behavior matchers\nconst behaviorMatchers = require('./tdd-persistent-feed/matchers/behavior-matchers');\n\n// Register TDD behavior matchers\nexpect.extend(behaviorMatchers);\n\nmodule.exports = {\n  // Export for backwards compatibility\n};

@@ -93,9 +93,62 @@ class ApiService {
     return this.request<Agent[]>('/agents');
   }
 
-  // Agent Posts
-  async getAgentPosts(limit = 20, offset = 0): Promise<any> {
-    return this.request<any>(`/agent-posts?limit=${limit}&offset=${offset}`);
+  // Agent Posts - Enhanced with full database API
+  async getAgentPosts(
+    limit = 50, 
+    offset = 0, 
+    filter = 'all', 
+    search = '', 
+    sortBy = 'published_at', 
+    sortOrder = 'DESC'
+  ): Promise<any> {
+    const params = new URLSearchParams({
+      limit: limit.toString(),
+      offset: offset.toString(),
+      filter,
+      search,
+      sortBy,
+      sortOrder
+    });
+    return this.request<any>(`/agent-posts?${params}`, {}, false);
+  }
+
+  async getAgentPost(id: string): Promise<any> {
+    return this.request<any>(`/agent-posts/${id}`);
+  }
+
+  async createAgentPost(postData: {
+    title: string;
+    content: string;
+    authorAgent: string;
+    metadata?: any;
+  }): Promise<any> {
+    this.clearCache('/agent-posts');
+    return this.request<any>('/agent-posts', {
+      method: 'POST',
+      body: JSON.stringify(postData),
+    });
+  }
+
+  async updatePostEngagement(postId: string, action: 'like' | 'unlike' | 'comment'): Promise<any> {
+    this.clearCache('/agent-posts');
+    return this.request<any>(`/agent-posts/${postId}/engagement`, {
+      method: 'PUT',
+      body: JSON.stringify({ action }),
+    });
+  }
+
+  async searchPosts(query: string, limit = 20, offset = 0): Promise<any> {
+    const params = new URLSearchParams({
+      q: query,
+      limit: limit.toString(),
+      offset: offset.toString()
+    });
+    return this.request<any>(`/search/posts?${params}`);
+  }
+
+  async getFeedStats(): Promise<any> {
+    return this.request<any>('/stats', {}, true, 30000); // Cache for 30 seconds
   }
 
   async getAgent(id: string): Promise<Agent> {
@@ -240,6 +293,22 @@ class ApiService {
   // Health Check
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     return this.request<{ status: string; timestamp: string }>('/health');
+  }
+
+  // Connection status check
+  async checkDatabaseConnection(): Promise<{ connected: boolean; fallback: boolean }> {
+    try {
+      const health = await this.healthCheck();
+      return {
+        connected: health.status === 'healthy',
+        fallback: false
+      };
+    } catch (error) {
+      return {
+        connected: false,
+        fallback: true
+      };
+    }
   }
 }
 

@@ -31,6 +31,54 @@ const app = express();
 const server = http.createServer(app);
 const PORT = 3000;
 
+// Import database and feed services for API integration
+import { dbPool } from './src/database/connection/pool.js';
+import { feedDataService } from './src/services/FeedDataService.js';
+import feedRoutes from './src/routes/api/feed-routes.js';
+
+// Database connection state
+let databaseAvailable = false;
+
+// Initialize database services on startup
+const initializeDatabaseServices = async () => {
+  try {
+    // Check if database is explicitly disabled
+    if (process.env.DISABLE_DATABASE === 'true' || 
+        process.env.DATABASE_HOST === 'skip' || 
+        process.env.DATABASE_HOST === 'disabled') {
+      console.log('⚠️ Database explicitly disabled - running in fallback mode');
+      databaseAvailable = false;
+      return;
+    }
+    
+    console.log('🔄 Initializing database services...');
+    
+    // Check for required environment variables
+    const requiredEnvVars = ['DATABASE_HOST', 'DATABASE_NAME', 'DATABASE_USER'];
+    const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+    
+    if (missingVars.length > 0) {
+      console.log(`⚠️ Missing database environment variables: ${missingVars.join(', ')}`);
+      console.log('⚠️ Using default database configuration');
+    }
+    
+    await dbPool.initialize();
+    await feedDataService.initialize();
+    databaseAvailable = true;
+    console.log('✅ Database services initialized successfully');
+    
+    // Log connection details (without sensitive info)
+    const stats = dbPool.getPoolStats();
+    console.log(`📊 Database pool: ${stats.totalCount}/${stats.maxConnections} connections active`);
+    
+  } catch (error) {
+    console.error('❌ Failed to initialize database services:', error.message);
+    console.log('⚠️ Continuing in fallback mode - using mock data for feed endpoints');
+    databaseAvailable = false;
+    // Continue without database - fallback to mock data
+  }
+};
+
 // Real Claude Process Management
 const activeProcesses = new Map(); // instanceId → {process, pid, status, startTime, command, workingDirectory, outputPosition, outputBuffer}
 const sseConnections = new Map(); // Track SSE connections per instance
@@ -1063,14 +1111,101 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    server: 'HTTP/SSE Only - WebSocket Eliminated',
-    message: 'WebSocket connection storm successfully eliminated!'
-  });
+// Initialize database services and add API routes
+const setupApiRoutes = () => {
+  try {
+    if (databaseAvailable) {
+      // Add the database-backed feed API routes
+      app.use('/api/v1', feedRoutes);
+      
+      console.log('✅ Database-backed Feed API routes registered:');
+      console.log('   GET  /api/v1/agent-posts');
+      console.log('   POST /api/v1/agent-posts');
+      console.log('   GET  /api/v1/agent-posts/:id');
+      console.log('   PUT  /api/v1/agent-posts/:id/engagement');
+      console.log('   GET  /api/v1/search/posts');
+      console.log('   GET  /api/v1/health');
+    } else {
+      // Fallback: Register minimal mock endpoints when database unavailable
+      console.log('⚠️ Database unavailable - registering fallback endpoints');
+      
+      app.get('/api/v1/agent-posts', (req, res) => {
+        res.json({
+          success: true,
+          message: 'Database unavailable - using fallback data',
+          posts: [
+            {
+              id: 'fallback-1',
+              title: 'System Status - Fallback Mode',
+              content: 'Database services are currently unavailable. The system is running in fallback mode with Claude terminal functionality intact.',
+              authorAgent: 'System',
+              publishedAt: new Date().toISOString(),
+              metadata: {
+                businessImpact: 5.0,
+                tags: ['system', 'fallback', 'database-unavailable'],
+                isAgentResponse: true
+              }
+            }
+          ],
+          pagination: { total: 1, limit: 50, offset: 0, hasMore: false }
+        });
+      });
+      
+      app.get('/api/v1/health', async (req, res) => {
+        res.status(503).json({
+          success: false,
+          message: 'Database services unavailable',
+          timestamp: new Date().toISOString()
+        });
+      });
+      
+      console.log('📋 Fallback API routes registered');
+    }
+  } catch (error) {
+    console.error('❌ Failed to register API routes:', error.message);
+    console.log('⚠️ Continuing without API routes - Claude terminal still available');
+  }
+};
+
+// Health check endpoint with database status
+app.get('/health', async (req, res) => {
+  try {
+    const health = {
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      server: 'SPARC Unified Server',
+      message: 'Claude terminal and API services operational',
+      services: {
+        claude_terminal: 'healthy',
+        http_api: 'healthy',
+        sse_streaming: 'healthy',
+        database: databaseAvailable ? 'healthy' : 'unavailable'
+      }
+    };
+    
+    // Add database health check if available
+    if (databaseAvailable) {
+      try {
+        const dbHealth = await feedDataService.healthCheck();
+        health.database = dbHealth;
+        health.services.database_pool = dbPool.getPoolStats();
+      } catch (error) {
+        health.services.database = 'error';
+        health.database_error = error.message;
+      }
+    }
+    
+    const statusCode = databaseAvailable ? 200 : 206; // 206 = Partial Content when DB unavailable
+    res.status(statusCode).json(health);
+    
+  } catch (error) {
+    console.error('Health check failed:', error);
+    res.status(500).json({
+      status: 'error',
+      timestamp: new Date().toISOString(),
+      error: error.message
+    });
+  }
 });
 
 // Mock Claude instances endpoint
@@ -1113,39 +1248,8 @@ app.get('/api/v1/claude-live/prod/activities', (req, res) => {
   ]);
 });
 
-// Mock agent posts endpoint
-app.get('/api/v1/agent-posts', (req, res) => {
-  res.json({
-    success: true,
-    message: 'HTTP/SSE mode active - WebSocket eliminated',
-    posts: [
-      {
-        id: '1',
-        title: 'System Status Update',
-        content: 'AgentLink API is now successfully connected and running in HTTP/SSE mode. WebSocket connection issues have been resolved.',
-        authorAgent: 'System',
-        publishedAt: new Date().toISOString(),
-        metadata: {
-          businessImpact: 9.2,
-          tags: ['system', 'api', 'connection', 'success'],
-          isAgentResponse: true
-        }
-      },
-      {
-        id: '2',
-        title: 'Backend Services Online',
-        content: 'All backend services are operational. Feed data is loading successfully from the AgentLink API.',
-        authorAgent: 'BackendAgent',
-        publishedAt: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
-        metadata: {
-          businessImpact: 8.5,
-          tags: ['backend', 'services', 'operational'],
-          isAgentResponse: true
-        }
-      }
-    ]
-  });
-});
+// Note: /api/v1/agent-posts now handled by database-backed feedRoutes
+// Mock endpoint removed - using real PostgreSQL integration
 
 // Frontend-compatible Claude instances endpoint (GET - fetch instances)
 app.get('/api/claude/instances', (req, res) => {
@@ -2743,20 +2847,49 @@ function broadcastToWebSockets(instanceId, message) {
 // SPARC INTEGRATION: Initialize tool call status manager with broadcast function
 // toolCallStatusManager.setBroadcastFunction(broadcastToWebSockets);
 
-// Start server
-server.listen(PORT, () => {
-  console.log(`🚀 SPARC UNIFIED SERVER running on http://localhost:${PORT}`);
-  console.log(`🛠️ Tool Call Visualization System: ACTIVE`);
-  console.log(`📊 Real-time Status Updates: ENABLED`);
-  console.log(`✅ HTTP API + WebSocket Terminal on single port!`);
-  console.log(`📡 Claude Terminal endpoints available:`);
-  console.log(`   - WebSocket Terminal: ws://localhost:${PORT}/terminal`);
-  console.log(`   - Health: http://localhost:${PORT}/health`);
-  console.log(`   - Claude Instances API: http://localhost:${PORT}/api/claude/instances`);
-  console.log(`   - Claude Terminal Stream: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/stream`);
-  console.log(`   - Terminal Input: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/input`);
-  console.log(`🎉 SPARC: Unified architecture - WebSocket + HTTP on single server!`);
-});
+// Setup and start the server
+const startServer = async () => {
+  try {
+    console.log('🔄 Initializing SPARC unified server...');
+    
+    // Initialize database services
+    await initializeDatabaseServices();
+    
+    // Setup API routes
+    setupApiRoutes();
+    
+    // Start the server
+    server.listen(PORT, () => {
+      console.log(`🚀 SPARC UNIFIED SERVER running on http://localhost:${PORT}`);
+      console.log(`🛠️ Tool Call Visualization System: ACTIVE`);
+      console.log(`📊 Real-time Status Updates: ENABLED`);
+      console.log(`✅ HTTP API + WebSocket Terminal on single port!`);
+      console.log(`📡 Claude Terminal endpoints available:`);
+      console.log(`   - WebSocket Terminal: ws://localhost:${PORT}/terminal`);
+      console.log(`   - Health: http://localhost:${PORT}/health`);
+      console.log(`   - Claude Instances API: http://localhost:${PORT}/api/claude/instances`);
+      console.log(`   - Claude Terminal Stream: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/stream`);
+      console.log(`   - Terminal Input: http://localhost:${PORT}/api/claude/instances/{instanceId}/terminal/input`);
+      console.log(`🎉 SPARC: Unified architecture - WebSocket + HTTP on single server!`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    console.log('⚠️ Continuing without database services (fallback mode)');
+    
+    // Continue with just Claude terminal functionality
+    server.listen(PORT, () => {
+      console.log(`🚀 SPARC SERVER (FALLBACK MODE) running on http://localhost:${PORT}`);
+      console.log(`⚠️ Database services unavailable - using mock data`);
+      console.log(`📡 Claude Terminal endpoints available:`);
+      console.log(`   - WebSocket Terminal: ws://localhost:${PORT}/terminal`);
+      console.log(`   - Health: http://localhost:${PORT}/health`);
+      console.log(`   - Claude Instances API: http://localhost:${PORT}/api/claude/instances`);
+    });
+  }
+};
+
+// Start the server
+startServer();
 
 // Graceful shutdown
 process.on('SIGTERM', () => {

@@ -90,7 +90,6 @@ export interface SafePost {
   };
   likes?: number;
   comments?: number;
-  shares?: number;
 }
 
 // Activity types with safety
@@ -344,13 +343,12 @@ export const agentValidationSchema: ComponentValidationSchema<SafeAgent> = {
 
 export const postValidationSchema: ComponentValidationSchema<SafePost> = {
   required: ['id', 'content'],
-  optional: ['title', 'authorAgent', 'publishedAt', 'metadata', 'likes', 'comments', 'shares'],
+  optional: ['title', 'authorAgent', 'publishedAt', 'metadata', 'likes', 'comments'],
   validators: {
     id: isString,
     content: isString,
     likes: isNumber,
     comments: isNumber,
-    shares: isNumber
   }
 };
 

@@ -5,7 +5,7 @@ const { defineConfig } = require('@playwright/test');
  * Configured for real server testing against localhost:5173 and localhost:3000
  */
 module.exports = defineConfig({
-  testDir: './tests',
+  testDir: './e2e-sharing-removal',
   timeout: 60000, // 60 seconds per test
   expect: {
     timeout: 10000 // 10 seconds for assertions
@@ -81,6 +81,6 @@ module.exports = defineConfig({
   ],
 
   // Global setup and teardown
-  globalSetup: require.resolve('./tests/global-setup.js'),
-  globalTeardown: require.resolve('./tests/global-teardown.js'),
+  globalSetup: require.resolve('./e2e-sharing-removal-setup.js'),
+  globalTeardown: require.resolve('./e2e-sharing-removal-teardown.js'),
 });

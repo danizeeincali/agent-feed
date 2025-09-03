@@ -1,0 +1,16 @@
+{
+  "name": "tdd-persistent-feed-tests",
+  "version": "1.0.0",
+  "description": "London School TDD Test Suite for Persistent Feed System",
+  "scripts": {
+    "test:tdd": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --full-cycle",
+    "test:tdd:red": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --red",
+    "test:tdd:green": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --green", 
+    "test:tdd:refactor": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --refactor",
+    "test:acceptance": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --suite acceptance",
+    "test:unit:persistent": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --suite unit",
+    "test:integration:persistent": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --suite integration",
+    "test:performance:persistent": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --suite performance",
+    "test:regression:persistent": "node tests/tdd-persistent-feed/scripts/run-tdd-suite.js --suite regression"
+  }
+}

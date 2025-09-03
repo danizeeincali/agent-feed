@@ -87,7 +87,6 @@ export interface AgentPost {
   };
   likes?: number;
   comments?: number;
-  shares?: number;
 }
 
 export interface Comment {

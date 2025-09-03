@@ -8,16 +8,23 @@ import {
   MoreHorizontal,
   Tag,
   Heart,
-  Share2,
   Plus,
   X,
-  Edit3
+  Edit3,
+  Search,
+  ChevronDown,
+  Database,
+  Wifi,
+  WifiOff,
+  AlertCircle
 } from 'lucide-react';
 import { PostCreator } from './PostCreator';
 import LoadingSpinner from './LoadingSpinner';
 import { useWebSocketContext } from '@/context/WebSocketContext';
 import { TypingIndicator } from '@/components/TypingIndicator';
 import { LiveActivityIndicator } from '@/components/LiveActivityIndicator';
+import { apiService } from '@/services/api';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface AgentPost {
   id: string;
@@ -32,7 +39,26 @@ interface AgentPost {
   };
   likes?: number;
   comments?: number;
-  shares?: number;
+}
+
+interface ConnectionStatus {
+  connected: boolean;
+  fallback: boolean;
+  lastChecked: Date;
+}
+
+interface PaginationState {
+  hasMore: boolean;
+  loading: boolean;
+  offset: number;
+  limit: number;
+}
+
+interface SearchState {
+  query: string;
+  results: AgentPost[];
+  loading: boolean;
+  hasResults: boolean;
 }
 
 interface SocialMediaFeedProps {
@@ -44,10 +70,37 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'published_at' | 'title' | 'author'>('published_at');
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
   const [refreshing, setRefreshing] = useState(false);
   const [showPostCreator, setShowPostCreator] = useState(false);
   const [productionAgents, setProductionAgents] = useState<any[]>([]);
   const [productionActivities, setProductionActivities] = useState<any[]>([]);
+  
+  // New state for enhanced functionality
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>({
+    connected: true,
+    fallback: false,
+    lastChecked: new Date()
+  });
+  
+  const [pagination, setPagination] = useState<PaginationState>({
+    hasMore: true,
+    loading: false,
+    offset: 0,
+    limit: 20
+  });
+  
+  const [search, setSearch] = useState<SearchState>({
+    query: '',
+    results: [],
+    loading: false,
+    hasResults: false
+  });
+  
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const debouncedSearchQuery = useDebounce(search.query, 300);
   
   // WebSocket integration
   const { 
@@ -60,6 +113,32 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
     sendLike,
     addNotification
   } = useWebSocketContext();
+  
+  // Connection status check
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const status = await apiService.checkDatabaseConnection();
+        setConnectionStatus({
+          connected: status.connected,
+          fallback: status.fallback,
+          lastChecked: new Date()
+        });
+      } catch (error) {
+        setConnectionStatus(prev => ({
+          ...prev,
+          connected: false,
+          fallback: true,
+          lastChecked: new Date()
+        }));
+      }
+    };
+    
+    checkConnection();
+    const interval = setInterval(checkConnection, 30000); // Check every 30 seconds
+    
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     fetchPosts();
@@ -198,34 +277,101 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
     }
   };
 
-  const fetchPosts = async (showRefreshing = false) => {
+  // Enhanced fetch function with database integration
+  const fetchPosts = async (showRefreshing = false, append = false) => {
     if (showRefreshing) setRefreshing(true);
+    if (!append) {
+      setLoading(true);
+      setPagination(prev => ({ ...prev, offset: 0 }));
+    } else {
+      setPagination(prev => ({ ...prev, loading: true }));
+    }
     
     try {
-      const response = await fetch('/api/v1/agent-posts');
-      const data = await response.json();
+      // Check connection status first
+      const connStatus = await apiService.checkDatabaseConnection();
+      setConnectionStatus({
+        connected: connStatus.connected,
+        fallback: connStatus.fallback,
+        lastChecked: new Date()
+      });
       
-      if (data.success && data.posts) {
-        // Add mock social engagement data
-        const postsWithEngagement = data.posts.map((post: AgentPost) => ({
-          ...post,
-          likes: Math.floor(Math.random() * 20) + 1,
-          comments: Math.floor(Math.random() * 8),
-          shares: Math.floor(Math.random() * 5)
+      const currentOffset = append ? pagination.offset : 0;
+      const response = await apiService.getAgentPosts(
+        pagination.limit,
+        currentOffset,
+        filter,
+        '',
+        sortBy,
+        sortOrder
+      );
+      
+      if (response.success && response.posts) {
+        const newPosts = response.posts;
+        
+        if (append) {
+          setPosts(prev => [...prev, ...newPosts]);
+        } else {
+          setPosts(newPosts);
+        }
+        
+        setPagination(prev => ({
+          ...prev,
+          offset: currentOffset + newPosts.length,
+          hasMore: newPosts.length === pagination.limit,
+          loading: false
         }));
-        setPosts(postsWithEngagement);
+        
         setError(null);
       } else {
         setError('Failed to fetch agent posts');
       }
     } catch (err) {
-      setError('Error connecting to AgentLink API');
       console.error('Failed to fetch agent posts:', err);
+      const fallbackStatus = connectionStatus.fallback;
+      setError(fallbackStatus ? 
+        'Using fallback mode - database unavailable' : 
+        'Error connecting to API');
+        
+      // Set fallback mode if connection failed
+      setConnectionStatus(prev => ({ ...prev, connected: false, fallback: true }));
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setPagination(prev => ({ ...prev, loading: false }));
     }
   };
+  
+  // Search functionality
+  const performSearch = useCallback(async (query: string) => {
+    if (!query.trim() || query.length < 2) {
+      setSearch(prev => ({ ...prev, results: [], hasResults: false, loading: false }));
+      return;
+    }
+    
+    setSearch(prev => ({ ...prev, loading: true }));
+    
+    try {
+      const response = await apiService.searchPosts(query.trim());
+      
+      setSearch(prev => ({
+        ...prev,
+        results: response.success ? response.posts : [],
+        hasResults: response.success && response.posts.length > 0,
+        loading: false
+      }));
+    } catch (err) {
+      console.error('Search failed:', err);
+      setSearch(prev => ({ ...prev, results: [], hasResults: false, loading: false }));
+    }
+  }, []);
+  
+  // Load more posts (pagination)
+  const loadMorePosts = useCallback(() => {
+    if (pagination.hasMore && !pagination.loading && !isSearching) {
+      fetchPosts(false, true);
+    }
+  }, [pagination.hasMore, pagination.loading, isSearching, filter, sortBy, sortOrder]);
 
   const handleRefresh = () => {
     fetchPosts(true);
@@ -301,30 +447,77 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
       .join(' ');
   };
 
-  const handleLikePost = (postId: string, currentLikes: number) => {
+  // Enhanced engagement handling
+  const handleLikePost = async (postId: string, currentLikes: number) => {
     // Optimistically update UI
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { ...post, likes: currentLikes + 1 }
-        : post
-    ));
+    const updatePosts = (posts: AgentPost[]) => 
+      posts.map(post => 
+        post.id === postId 
+          ? { ...post, likes: currentLikes + 1 }
+          : post
+      );
     
-    // Send like event via WebSocket
-    sendLike(postId, 'add');
-  };
-
-  const filteredPosts = posts.filter(post => {
-    if (filter === 'all') return true;
-    if (filter === 'high-impact') return post.metadata.businessImpact >= 7;
-    if (filter === 'recent') {
-      const postTime = new Date(post.publishedAt);
-      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-      return postTime > oneHourAgo;
+    setPosts(updatePosts);
+    if (isSearching) {
+      setSearch(prev => ({ ...prev, results: updatePosts(prev.results) }));
     }
-    return post.metadata.tags.some(tag => 
-      tag.toLowerCase().includes(filter.toLowerCase())
-    );
-  });
+    
+    try {
+      // Send to database
+      await apiService.updatePostEngagement(postId, 'like');
+      // Send like event via WebSocket for real-time updates
+      sendLike(postId, 'add');
+    } catch (error) {
+      console.error('Failed to update like:', error);
+      // Revert optimistic update on failure
+      const revertPosts = (posts: AgentPost[]) => 
+        posts.map(post => 
+          post.id === postId 
+            ? { ...post, likes: currentLikes }
+            : post
+        );
+      setPosts(revertPosts);
+      if (isSearching) {
+        setSearch(prev => ({ ...prev, results: revertPosts(prev.results) }));
+      }
+    }
+  };
+  
+  const handleCommentPost = async (postId: string) => {
+    // Subscribe to post for real-time comment updates
+    subscribePost(postId);
+    // In a real app, this would open a comment modal
+    console.log('Opening comments for post:', postId);
+  };
+  
+
+  // Use search results when searching, otherwise use filtered posts
+  const displayPosts = useMemo(() => {
+    if (isSearching && search.hasResults) {
+      return search.results;
+    }
+    
+    // Filter is now handled by the API, so we just return posts
+    return posts;
+  }, [posts, search.results, isSearching, search.hasResults]);
+  
+  // Effect for debounced search
+  useEffect(() => {
+    if (debouncedSearchQuery) {
+      setIsSearching(true);
+      performSearch(debouncedSearchQuery);
+    } else {
+      setIsSearching(false);
+      setSearch(prev => ({ ...prev, results: [], hasResults: false }));
+    }
+  }, [debouncedSearchQuery, performSearch]);
+  
+  // Effect for filter/sort changes
+  useEffect(() => {
+    if (!isSearching) {
+      fetchPosts(false, false);
+    }
+  }, [filter, sortBy, sortOrder]);
 
   if (loading) {
     return (
@@ -393,23 +586,102 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
             </button>
             
             <div className="flex items-center space-x-2">
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">All Posts</option>
-                <option value="high-impact">High Impact</option>
-                <option value="recent">Recent</option>
-                <option value="strategic">Strategic</option>
-                <option value="productivity">Productivity</option>
-              </select>
+              <div className="flex items-center space-x-2">
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="all">All Posts</option>
+                  <option value="high-impact">High Impact</option>
+                  <option value="recent">Recent</option>
+                  <option value="strategic">Strategic</option>
+                  <option value="productivity">Productivity</option>
+                </select>
+                
+                <select
+                  value={`${sortBy}-${sortOrder}`}
+                  onChange={(e) => {
+                    const [newSortBy, newSortOrder] = e.target.value.split('-') as ['published_at' | 'title' | 'author', 'ASC' | 'DESC'];
+                    setSortBy(newSortBy);
+                    setSortOrder(newSortOrder);
+                  }}
+                  className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="published_at-DESC">Newest First</option>
+                  <option value="published_at-ASC">Oldest First</option>
+                  <option value="title-ASC">Title A-Z</option>
+                  <option value="title-DESC">Title Z-A</option>
+                  <option value="author-ASC">Author A-Z</option>
+                </select>
+                
+                <button
+                  onClick={() => setShowSearch(!showSearch)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    showSearch ? 'bg-blue-100 text-blue-600' : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                  title="Search posts"
+                >
+                  <Search className="h-4 w-4" />
+                </button>
+              </div>
               
-              <LiveActivityIndicator />
+              <div className="flex items-center space-x-2">
+                <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs ${
+                  connectionStatus.connected 
+                    ? 'bg-green-100 text-green-700'
+                    : connectionStatus.fallback 
+                    ? 'bg-yellow-100 text-yellow-700'
+                    : 'bg-red-100 text-red-700'
+                }`}>
+                  {connectionStatus.connected ? (
+                    <><Database className="h-3 w-3" /> Database</>    
+                  ) : connectionStatus.fallback ? (
+                    <><AlertCircle className="h-3 w-3" /> Fallback</>    
+                  ) : (
+                    <><WifiOff className="h-3 w-3" /> Offline</>
+                  )}
+                </div>
+                <LiveActivityIndicator />
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Search Bar */}
+      {showSearch && (
+        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search posts by title, content, or author..."
+              value={search.query}
+              onChange={(e) => setSearch(prev => ({ ...prev, query: e.target.value }))}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              autoFocus
+            />
+            {search.loading && (
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
+              </div>
+            )}
+          </div>
+          
+          {isSearching && search.query && (
+            <div className="mt-2 text-sm text-gray-600">
+              {search.loading ? (
+                'Searching...'
+              ) : search.hasResults ? (
+                `Found ${search.results.length} posts matching "${search.query}"`
+              ) : (
+                `No posts found matching "${search.query}"`
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* LinkedIn-style Post Creator */}
       <div className="mb-6">
@@ -464,19 +736,35 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Agent Posts Archive</h2>
         
-        {filteredPosts.length === 0 ? (
+        {displayPosts.length === 0 ? (
           <div className="text-center py-8" data-testid="empty-state">
-          <div className="text-gray-400 mb-4">
-            <MessageCircle className="mx-auto h-12 w-12" />
+            <div className="text-gray-400 mb-4">
+              <MessageCircle className="mx-auto h-12 w-12" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {isSearching ? 'No search results' : 'No posts yet'}
+            </h3>
+            <p className="text-gray-500">
+              {isSearching 
+                ? 'Try adjusting your search terms or clear the search to see all posts'
+                : 'Agent activity will appear here when Claude Code agents complete tasks'
+              }
+            </p>
+            {isSearching && (
+              <button
+                onClick={() => {
+                  setSearch(prev => ({ ...prev, query: '' }));
+                  setIsSearching(false);
+                }}
+                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Clear Search
+              </button>
+            )}
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
-          <p className="text-gray-500">
-            Agent activity will appear here when Claude Code agents complete tasks
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {filteredPosts.map((post) => (
+        ) : (
+          <div className="space-y-6">
+            {displayPosts.map((post) => (
             <article
               key={post.id}
               className="bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
@@ -549,13 +837,13 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
                     <div className="flex items-center space-x-6">
                       <button 
                         className={`flex items-center space-x-2 transition-colors ${
-                          isConnected
+                          connectionStatus.connected
                             ? 'text-gray-500 hover:text-red-500'
                             : 'text-gray-400 cursor-not-allowed opacity-50'
                         }`}
-                        onClick={() => isConnected && handleLikePost(post.id, post.likes || 0)}
-                        disabled={!isConnected}
-                        title={!isConnected ? 'Offline - will sync when reconnected' : ''}
+                        onClick={() => connectionStatus.connected && handleLikePost(post.id, post.likes || 0)}
+                        disabled={!connectionStatus.connected}
+                        title={!connectionStatus.connected ? 'Database unavailable - will sync when reconnected' : 'Like this post'}
                       >
                         <Heart className="h-5 w-5" />
                         <span className="text-sm">{post.likes || 0}</span>
@@ -563,40 +851,67 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
                       
                       <button 
                         className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors"
-                        onClick={() => subscribePost(post.id)}
+                        onClick={() => handleCommentPost(post.id)}
+                        title="View comments"
                       >
                         <MessageCircle className="h-5 w-5" />
                         <span className="text-sm">{post.comments || 0}</span>
                       </button>
                       
-                      <button className="flex items-center space-x-2 text-gray-500 hover:text-green-500 transition-colors">
-                        <Share2 className="h-5 w-5" />
-                        <span className="text-sm">{post.shares || 0}</span>
-                      </button>
                     </div>
                     
                     <div className="flex items-center space-x-2 text-xs text-gray-400">
-                      {!isConnected && (
-                        <span className="text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                          Offline
+                      {!connectionStatus.connected && (
+                        <span className={`px-2 py-1 rounded ${
+                          connectionStatus.fallback 
+                            ? 'text-amber-600 bg-amber-50'
+                            : 'text-red-600 bg-red-50'
+                        }`}>
+                          {connectionStatus.fallback ? 'Fallback Mode' : 'Offline'}
                         </span>
                       )}
-                      <span>ID: {post.id}</span>
+                      <span>ID: {post.id.slice(0, 8)}...</span>
                     </div>
                   </div>
                   
                   {/* Connection Status for Individual Posts */}
-                  {!isConnected && (
-                    <div className="mt-2 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                      Real-time features unavailable - interactions will sync when reconnected
+                  {!connectionStatus.connected && (
+                    <div className={`mt-2 text-xs px-2 py-1 rounded ${
+                      connectionStatus.fallback
+                        ? 'text-amber-700 bg-amber-50'
+                        : 'text-red-700 bg-red-50'
+                    }`}>
+                      {connectionStatus.fallback
+                        ? 'Database unavailable - using cached data, interactions will sync when reconnected'
+                        : 'System offline - interactions will sync when reconnected'
+                      }
                     </div>
                   )}
                 </div>
               </div>
             </article>
           ))}
-        </div>
-      )}
+            {/* Load More Button */}
+            {!isSearching && pagination.hasMore && (
+              <div className="text-center pt-6">
+                <button
+                  onClick={loadMorePosts}
+                  disabled={pagination.loading}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {pagination.loading ? (
+                    <>
+                      <RefreshCw className="inline-block h-4 w-4 mr-2 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    'Load More Posts'
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

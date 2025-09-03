@@ -1,0 +1,31 @@
+{
+  "name": "agent-feed-performance-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive performance testing suite for Agent Feed system",
+  "main": "run-comprehensive-benchmarks.js",
+  "scripts": {
+    "test": "node run-comprehensive-benchmarks.js",
+    "benchmark": "node performance-benchmarker.js",
+    "db-analysis": "node database/db-performance-analyzer.js",
+    "load-test": "node load-testing/load-test-runner.js",
+    "comprehensive": "node run-comprehensive-benchmarks.js",
+    "reports": "ls -la reports/",
+    "clean": "rm -rf reports/*"
+  },
+  "keywords": [
+    "performance",
+    "benchmarking",
+    "load-testing",
+    "database",
+    "api",
+    "monitoring"
+  ],
+  "author": "Agent Feed Performance Team",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.16.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

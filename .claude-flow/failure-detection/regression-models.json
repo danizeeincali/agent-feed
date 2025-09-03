@@ -1,0 +1,118 @@
+{
+  "regressionModelId": "share-removal-regression-v1",
+  "modelType": "feature_removal_impact_prediction",
+  "trainingContext": {
+    "feature": "sharing_functionality", 
+    "components": ["SocialMediaFeed", "PostCard", "AgentPostsFeed", "PostInteractionPanel"],
+    "codebase": "social_media_feed_app",
+    "analysis_date": "2025-09-03"
+  },
+  "failurePredictionModels": {
+    "compilation_failure": {
+      "modelWeights": {
+        "typescript_interface_changes": 0.9,
+        "import_removals": 0.7,
+        "type_reference_removal": 0.8,
+        "unused_variable_cleanup": 0.3
+      },
+      "riskThreshold": 0.6,
+      "currentRisk": 0.85,
+      "prediction": "HIGH - shares property in multiple interfaces"
+    },
+    "runtime_failure": {
+      "modelWeights": {
+        "event_handler_orphaning": 0.8,
+        "state_update_inconsistency": 0.7, 
+        "api_call_breaking": 0.6,
+        "conditional_logic_errors": 0.5
+      },
+      "riskThreshold": 0.5,
+      "currentRisk": 0.72,
+      "prediction": "HIGH - handleSharePost could be called post-removal"
+    },
+    "ui_regression": {
+      "modelWeights": {
+        "layout_spacing_changes": 0.9,
+        "icon_import_removal": 0.4,
+        "button_group_structure": 0.6,
+        "responsive_breakage": 0.3
+      },
+      "riskThreshold": 0.4,
+      "currentRisk": 0.65,
+      "prediction": "MEDIUM - button group spacing will change"
+    },
+    "functional_regression": {
+      "modelWeights": {
+        "adjacent_feature_impact": 0.8,
+        "shared_state_corruption": 0.7,
+        "api_side_effects": 0.5,
+        "websocket_event_disruption": 0.4
+      },
+      "riskThreshold": 0.5,
+      "currentRisk": 0.42,
+      "prediction": "LOW - like/comment features isolated"
+    }
+  },
+  "neuralPatterns": {
+    "successful_removals": [
+      {
+        "pattern": "ui_first_removal",
+        "description": "Remove UI elements before backend logic",
+        "success_rate": 0.89,
+        "failure_modes": ["premature backend removal"],
+        "application": "remove Share2 buttons first"
+      },
+      {
+        "pattern": "gradual_type_cleanup",
+        "description": "Remove type definitions in reverse dependency order",
+        "success_rate": 0.94,
+        "failure_modes": ["compilation errors from premature interface changes"],
+        "application": "remove shares from component props, then interfaces"
+      },
+      {
+        "pattern": "parallel_state_updates",
+        "description": "Remove state updates from all parallel paths simultaneously", 
+        "success_rate": 0.87,
+        "failure_modes": ["inconsistent state between main/search results"],
+        "application": "remove share updates from both posts and search.results"
+      }
+    ],
+    "failure_patterns": [
+      {
+        "pattern": "cascade_breaking",
+        "description": "Removing one part breaks dependent functionality",
+        "frequency": 0.23,
+        "trigger": "incomplete dependency analysis",
+        "prevention": "comprehensive dependency mapping first"
+      },
+      {
+        "pattern": "state_desync",
+        "description": "Different parts of app have inconsistent state",
+        "frequency": 0.18,
+        "trigger": "missing parallel state update removal",
+        "prevention": "remove all state update paths together"
+      }
+    ]
+  },
+  "testingRequirements": {
+    "pre_removal_baseline": [
+      "All share buttons functional",
+      "Share counters display correctly", 
+      "API engagement calls work",
+      "Like/comment unaffected by share changes"
+    ],
+    "during_removal_checkpoints": [
+      "After UI removal: layout intact, no runtime errors",
+      "After handler removal: no orphaned click events", 
+      "After state removal: no stale state references",
+      "After type removal: TypeScript compiles cleanly"
+    ],
+    "post_removal_validation": [
+      "No share buttons visible",
+      "Like/comment buttons work normally",
+      "Search results exclude share data",
+      "API calls don't include share parameter",
+      "No console errors or warnings"
+    ]
+  }
+}

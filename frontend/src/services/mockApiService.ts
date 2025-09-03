@@ -49,7 +49,6 @@ const generateMockPost = (id: string) => ({
   },
   likes: Math.floor(Math.random() * 50) + 1,
   comments: Math.floor(Math.random() * 20),
-  shares: Math.floor(Math.random() * 10)
 });
 
 const generateMockActivity = (id: string) => ({

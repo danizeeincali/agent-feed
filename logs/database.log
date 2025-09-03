@@ -1,0 +1,83 @@
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:30:36.095Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T15:30:36.099Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:30:38.107Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T15:30:38.108Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:30:42.117Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T15:30:42.117Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:30:48.123Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T15:30:48.124Z"}
+{"level":"info","message":"SIGTERM received, closing database connections","timestamp":"2025-09-03T15:30:50.377Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"skip","port":5432},"error":"getaddrinfo ENOTFOUND skip","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:30:57.777Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T15:30:57.779Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"skip","port":5432},"error":"getaddrinfo ENOTFOUND skip","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:31:00.051Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T15:31:00.051Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"skip","port":5432},"error":"getaddrinfo ENOTFOUND skip","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:31:04.069Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T15:31:04.070Z"}
+{"level":"info","message":"SIGTERM received, closing database connections","timestamp":"2025-09-03T15:31:07.463Z"}
+{"level":"info","message":"SIGTERM received, closing database connections","timestamp":"2025-09-03T15:31:59.506Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:10.362Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T15:42:10.365Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:12.373Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T15:42:12.374Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:16.383Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T15:42:16.383Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:22.393Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T15:42:22.393Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:25.146Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T15:42:25.151Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:27.161Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T15:42:27.162Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:30.412Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:31.172Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T15:42:31.172Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:37.183Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T15:42:37.183Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:42:45.193Z"}
+{"level":"info","message":"SIGTERM received, closing database connections","timestamp":"2025-09-03T15:44:41.575Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:50:02.539Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T15:50:02.541Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:50:04.548Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T15:50:04.549Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:50:08.558Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T15:50:08.559Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:50:14.572Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T15:50:14.572Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:50:22.587Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:58:02.246Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T15:58:02.263Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:58:04.286Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T15:58:04.290Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:58:08.301Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T15:58:08.302Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:58:14.312Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T15:58:14.312Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T15:58:22.337Z"}
+{"level":"info","message":"SIGTERM received, closing database connections","timestamp":"2025-09-03T16:00:01.261Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T16:13:13.475Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T16:13:13.477Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T16:13:15.487Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T16:13:15.488Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T16:13:19.496Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T16:13:19.496Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T16:13:25.507Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T16:13:25.508Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"password authentication failed for user \"postgres\"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T16:13:33.516Z"}
+{"level":"info","message":"SIGTERM received, closing database connections","timestamp":"2025-09-03T16:21:41.612Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T17:44:37.185Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T17:44:37.188Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T17:44:39.193Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T17:44:39.194Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T17:44:43.200Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T17:44:43.200Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T17:44:49.204Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T17:44:49.204Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T17:44:57.211Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T20:55:09.360Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-03T20:55:09.364Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T20:55:11.366Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-03T20:55:11.367Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T20:55:15.369Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-03T20:55:15.369Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T20:55:21.377Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T20:55:21.377Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T20:55:29.383Z"}
