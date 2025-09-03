@@ -1,0 +1,258 @@
+name: Performance CI/CD Gates
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run performance tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  performance-smoke-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd frontend && npm ci
+
+    - name: Create CI artifacts directory
+      run: mkdir -p ci-artifacts/performance
+
+    - name: Start backend server
+      run: |
+        npm start &
+        sleep 10
+        curl -f http://localhost:3000/health || exit 1
+      timeout-minutes: 2
+
+    - name: Run performance smoke tests
+      run: npm run performance-gates:smoke
+      timeout-minutes: 5
+
+    - name: Upload performance artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: performance-smoke-test-results
+        path: ci-artifacts/performance/
+        retention-days: 7
+
+    - name: Comment PR with performance results
+      uses: actions/github-script@v7
+      if: github.event_name == 'pull_request'
+      with:
+        script: |
+          const fs = require('fs');
+          try {
+            const reportPath = 'ci-artifacts/performance/performance-gates-report.json';
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              const status = report.summary.overall ? '✅ PASSED' : '❌ FAILED';
+              const gatesStatus = `${report.summary.gates.passed}/${report.summary.gates.total} gates passed`;
+              const regressions = report.summary.regressions.length;
+              
+              const body = `## Performance Test Results ${status}
+              
+**Gates:** ${gatesStatus}
+**Test Suites:** ${report.summary.testSuites.passed}/${report.summary.testSuites.total} passed
+**Duration:** ${(report.summary.duration / 1000).toFixed(1)}s
+**Regressions:** ${regressions}
+
+${regressions > 0 ? 
+`### Performance Regressions Detected:
+${report.summary.regressions.map(r => `- **${r.metric}**: +${r.regressionPercent}% regression`).join('\n')}` : 
+'### ✅ No performance regressions detected'}
+
+[View detailed report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }
+          } catch (error) {
+            console.log('Could not post performance results comment:', error);
+          }
+
+  performance-full-test:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+    needs: performance-smoke-test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd frontend && npm ci
+
+    - name: Create CI artifacts directory
+      run: mkdir -p ci-artifacts/performance
+
+    - name: Load baseline from cache
+      uses: actions/cache@v3
+      with:
+        path: ci-artifacts/performance/baseline.json
+        key: performance-baseline-${{ github.ref_name }}
+        restore-keys: |
+          performance-baseline-main
+          performance-baseline-
+
+    - name: Start backend server
+      run: |
+        npm start &
+        sleep 10
+        curl -f http://localhost:3000/health || exit 1
+      timeout-minutes: 2
+
+    - name: Run full performance test suite
+      run: npm run performance-gates:config
+      timeout-minutes: 15
+
+    - name: Run load testing
+      run: npm run load-test:basic
+      continue-on-error: true
+      timeout-minutes: 10
+
+    - name: Upload performance artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: performance-full-test-results
+        path: ci-artifacts/performance/
+        retention-days: 30
+
+    - name: Cache updated baseline
+      uses: actions/cache@v3
+      if: success()
+      with:
+        path: ci-artifacts/performance/baseline.json
+        key: performance-baseline-${{ github.ref_name }}-${{ github.sha }}
+
+    - name: Generate performance dashboard
+      run: |
+        cp monitoring/dashboards/performance-metrics.html ci-artifacts/performance/
+        echo "Performance dashboard available in artifacts"
+
+    - name: Notify on performance degradation
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          try {
+            const reportPath = 'ci-artifacts/performance/performance-gates-report.json';
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              
+              if (!report.summary.overall) {
+                const failedGates = Object.values(report.gates).filter(g => !g.passed);
+                const regressions = report.summary.regressions;
+                
+                const issueTitle = `Performance Degradation Detected - Build ${process.env.GITHUB_RUN_NUMBER}`;
+                const issueBody = `## ⚠️ Performance Test Failure
+
+**Build:** ${{ github.run_number }}
+**Commit:** ${{ github.sha }}
+**Branch:** ${{ github.ref_name }}
+**Timestamp:** ${new Date().toISOString()}
+
+### Failed Gates:
+${failedGates.map(gate => `- **${gate.gate}**: ${gate.failureReason}`).join('\n')}
+
+### Performance Regressions:
+${regressions.map(r => `- **${r.metric}**: +${r.regressionPercent}% regression`).join('\n')}
+
+### Action Required:
+1. Review the performance test results
+2. Identify the root cause of performance degradation
+3. Implement fixes and re-run tests
+4. Update baselines if the changes are intentional
+
+[View CI Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+
+                github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: issueTitle,
+                  body: issueBody,
+                  labels: ['performance', 'ci-failure', 'high-priority']
+                });
+              }
+            }
+          } catch (error) {
+            console.log('Could not create performance issue:', error);
+          }
+
+  performance-monitoring:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: performance-full-test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Download performance results
+      uses: actions/download-artifact@v4
+      with:
+        name: performance-full-test-results
+        path: ci-artifacts/performance/
+
+    - name: Generate performance trends
+      run: |
+        # This would integrate with your performance tracking system
+        # to generate long-term performance trends and analysis
+        echo "Generating performance trends analysis..."
+        
+        # Example: Store performance data in time series database
+        # curl -X POST "your-monitoring-endpoint/api/performance" \
+        #      -H "Content-Type: application/json" \
+        #      -d @ci-artifacts/performance/performance-gates-report.json
+
+    - name: Update performance badges
+      run: |
+        # Generate performance badges for README
+        echo "Updating performance badges..."
+        # This could generate shields.io badges or similar
+
+    - name: Publish performance report
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ci-artifacts/performance
+        destination_dir: performance-reports/${{ github.run_number }}
+        keep_files: true

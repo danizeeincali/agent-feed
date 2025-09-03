@@ -1,0 +1,325 @@
+{
+  "version": "1.0.0",
+  "codeReviewConfig": {
+    "autoTriggers": {
+      "pullRequest": {
+        "types": ["opened", "synchronize", "reopened"],
+        "enabled": true
+      },
+      "filePatterns": [
+        "simple-backend.js",
+        "frontend/src/**/*.{ts,tsx,js,jsx}",
+        "src/**/*.{js,ts}",
+        "tests/**/*.{js,ts}",
+        "scripts/**/*.{js,ts}"
+      ],
+      "excludePatterns": [
+        "**/*.md",
+        "**/*.json",
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/build/**"
+      ]
+    },
+    
+    "agents": {
+      "security": {
+        "enabled": true,
+        "priority": "critical",
+        "timeout": 300,
+        "rules": {
+          "hardcodedSecrets": {
+            "severity": "critical",
+            "autoBlock": true
+          },
+          "sqlInjection": {
+            "severity": "critical", 
+            "autoBlock": true
+          },
+          "commandInjection": {
+            "severity": "critical",
+            "autoBlock": true
+          },
+          "insecureRandom": {
+            "severity": "high",
+            "autoBlock": false
+          },
+          "debugLogging": {
+            "severity": "medium",
+            "autoBlock": false
+          }
+        }
+      },
+      
+      "performance": {
+        "enabled": true,
+        "priority": "high",
+        "timeout": 300,
+        "rules": {
+          "blockingOperations": {
+            "severity": "critical",
+            "autoBlock": true
+          },
+          "infiniteLoops": {
+            "severity": "critical",
+            "autoBlock": true
+          },
+          "memoryLeaks": {
+            "severity": "high",
+            "autoBlock": false
+          },
+          "nPlusOneQueries": {
+            "severity": "high",
+            "autoBlock": false
+          },
+          "complexityThreshold": 15,
+          "performanceRegression": {
+            "threshold": "5%",
+            "severity": "high"
+          }
+        }
+      },
+      
+      "architecture": {
+        "enabled": true,
+        "priority": "medium",
+        "timeout": 300,
+        "rules": {
+          "errorHandling": {
+            "severity": "critical",
+            "autoBlock": true
+          },
+          "circularDependencies": {
+            "severity": "critical",
+            "autoBlock": true
+          },
+          "godObjects": {
+            "severity": "high",
+            "threshold": 20,
+            "autoBlock": false
+          },
+          "couplingThreshold": 8,
+          "cohesionThreshold": 0.5
+        }
+      },
+      
+      "testing": {
+        "enabled": true,
+        "priority": "medium", 
+        "timeout": 300,
+        "rules": {
+          "newCodeCoverage": {
+            "severity": "critical",
+            "threshold": 80,
+            "autoBlock": true
+          },
+          "overallCoverage": {
+            "severity": "high",
+            "threshold": 70,
+            "autoBlock": false
+          },
+          "criticalPathTesting": {
+            "severity": "critical",
+            "autoBlock": true
+          }
+        }
+      }
+    },
+    
+    "claudeSpecific": {
+      "criticalPaths": [
+        {
+          "path": "simple-backend.js",
+          "functions": [
+            "broadcastToConnections",
+            "createInstance", 
+            "deleteInstance",
+            "handleSSEConnection",
+            "handlePTYProcess"
+          ],
+          "requiredTests": [
+            "SSE connection handling",
+            "PTY process management", 
+            "Instance lifecycle",
+            "Error handling",
+            "Connection cleanup"
+          ]
+        },
+        {
+          "path": "frontend/src/managers/ClaudeInstanceManager.ts",
+          "functions": [
+            "createInstance",
+            "deleteInstance",
+            "updateInstanceState",
+            "handleConnectionError"
+          ],
+          "requiredTests": [
+            "Instance creation/deletion",
+            "State management",
+            "Connection handling",
+            "Error recovery"
+          ]
+        },
+        {
+          "path": "frontend/src/components/claude-manager/EnhancedSSEInterface.tsx",
+          "functions": [
+            "handleSSEMessage",
+            "handleConnectionError",
+            "cleanup"
+          ],
+          "requiredTests": [
+            "Component rendering",
+            "Event handling", 
+            "Connection state management",
+            "Error display"
+          ]
+        }
+      ],
+      
+      "performancePatterns": [
+        {
+          "pattern": "broadcastToConnections",
+          "description": "SSE broadcast performance monitoring",
+          "thresholds": {
+            "maxConnections": 100,
+            "maxMessageSize": "1MB",
+            "maxProcessingTime": "100ms"
+          }
+        },
+        {
+          "pattern": "pty.spawn",
+          "description": "PTY process resource monitoring", 
+          "thresholds": {
+            "maxProcesses": 10,
+            "maxMemoryPerProcess": "256MB",
+            "maxExecutionTime": "30s"
+          }
+        }
+      ]
+    },
+    
+    "riskAssessment": {
+      "scoring": {
+        "critical": {
+          "weight": 10,
+          "autoBlock": true
+        },
+        "high": {
+          "weight": 5,
+          "autoBlock": false
+        },
+        "medium": {
+          "weight": 2,
+          "autoBlock": false
+        },
+        "low": {
+          "weight": 1,
+          "autoBlock": false
+        }
+      },
+      
+      "thresholds": {
+        "critical": 10,
+        "high": 15,
+        "medium": 25
+      },
+      
+      "multipliers": {
+        "newCode": 1.5,
+        "criticalPath": 2.0,
+        "securitySensitive": 2.5,
+        "performanceCritical": 1.8
+      }
+    },
+    
+    "notifications": {
+      "github": {
+        "comments": true,
+        "reviews": true,
+        "statusChecks": true,
+        "labels": true
+      },
+      
+      "slack": {
+        "enabled": false,
+        "webhook": "",
+        "channels": {
+          "critical": "#security-alerts",
+          "high": "#code-review",
+          "medium": "#general"
+        }
+      },
+      
+      "email": {
+        "enabled": false,
+        "recipients": [],
+        "onlyForCritical": true
+      }
+    },
+    
+    "autoFix": {
+      "enabled": true,
+      "rules": [
+        {
+          "pattern": "console.log",
+          "replacement": "// TODO: Remove debug log - console.log",
+          "severity": "low"
+        },
+        {
+          "pattern": "var\\s+(\\w+)",
+          "replacement": "const $1",
+          "severity": "low",
+          "conditions": ["not-reassigned"]
+        },
+        {
+          "pattern": "==\\s*null",
+          "replacement": "== null",
+          "severity": "medium"
+        }
+      ],
+      
+      "suggestions": [
+        {
+          "rule": "Missing Error Handling",
+          "template": "try {\n  ${code}\n} catch (error) {\n  console.error('Error:', error);\n  throw error;\n}"
+        },
+        {
+          "rule": "Async Without Await",
+          "template": "await ${functionCall}"
+        }
+      ]
+    },
+    
+    "reporting": {
+      "format": "github-markdown",
+      "includeSummary": true,
+      "includeMetrics": true,
+      "includeRecommendations": true,
+      "collapseMinorIssues": true,
+      "maxCommentLength": 65000
+    },
+    
+    "integration": {
+      "cicd": {
+        "requirePassingChecks": true,
+        "allowOverride": false,
+        "overrideUsers": []
+      },
+      
+      "github": {
+        "statusChecks": [
+          "review-swarm/security",
+          "review-swarm/performance", 
+          "review-swarm/architecture",
+          "review-swarm/testing"
+        ],
+        "protectedBranches": ["main", "develop"],
+        "requiredReviews": {
+          "critical": 2,
+          "high": 1,
+          "medium": 0
+        }
+      }
+    }
+  }
+}

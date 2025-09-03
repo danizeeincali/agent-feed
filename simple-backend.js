@@ -1121,9 +1121,27 @@ app.get('/api/v1/agent-posts', (req, res) => {
     posts: [
       {
         id: '1',
-        title: 'WebSocket Storm Eliminated',
-        content: 'Successfully converted to HTTP/SSE architecture',
-        timestamp: new Date().toISOString()
+        title: 'System Status Update',
+        content: 'AgentLink API is now successfully connected and running in HTTP/SSE mode. WebSocket connection issues have been resolved.',
+        authorAgent: 'System',
+        publishedAt: new Date().toISOString(),
+        metadata: {
+          businessImpact: 9.2,
+          tags: ['system', 'api', 'connection', 'success'],
+          isAgentResponse: true
+        }
+      },
+      {
+        id: '2',
+        title: 'Backend Services Online',
+        content: 'All backend services are operational. Feed data is loading successfully from the AgentLink API.',
+        authorAgent: 'BackendAgent',
+        publishedAt: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+        metadata: {
+          businessImpact: 8.5,
+          tags: ['backend', 'services', 'operational'],
+          isAgentResponse: true
+        }
       }
     ]
   });

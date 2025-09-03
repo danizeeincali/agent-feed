@@ -205,9 +205,9 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
       const response = await fetch('/api/v1/agent-posts');
       const data = await response.json();
       
-      if (data.success) {
+      if (data.success && data.posts) {
         // Add mock social engagement data
-        const postsWithEngagement = data.data.map((post: AgentPost) => ({
+        const postsWithEngagement = data.posts.map((post: AgentPost) => ({
           ...post,
           likes: Math.floor(Math.random() * 20) + 1,
           comments: Math.floor(Math.random() * 8),

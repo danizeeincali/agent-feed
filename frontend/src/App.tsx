@@ -26,25 +26,15 @@ import EnhancedAgentManagerWrapper from '@/components/EnhancedAgentManagerWrappe
 import SimpleAnalytics from '@/components/SimpleAnalytics';
 import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
 import AgentDashboard from '@/components/AgentDashboard';
-import ClaudeInstanceManager from '@/components/ClaudeInstanceManager';
-import SafeClaudeInstanceManager from '@/components/SafeClaudeInstanceManager';
-import { TerminalDebug } from '@/components/TerminalDebug';
-import { SimpleTerminalTest } from '@/components/SimpleTerminalTest';
 import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
 import BulletproofAgentProfile from '@/components/BulletproofAgentProfile';
 import BulletproofActivityPanel from '@/components/BulletproofActivityPanel';
 import SimpleSettings from '@/components/SimpleSettings';
-import DualInstanceDashboardEnhanced from '@/components/DualInstanceDashboardEnhanced';
-import DualInstance from './pages/DualInstance';
-import DualInstancePage from '@/pages/DualInstancePage';
 import DualModeClaudeManager from '@/components/claude-manager/DualModeClaudeManager';
 import { ClaudeInstanceManagerComponentSSE } from '@/components/claude-manager/ClaudeInstanceManagerComponentSSE';
 import EnhancedSSEInterface from '@/components/claude-manager/EnhancedSSEInterface';
 import PerformanceMonitor from '@/components/PerformanceMonitor';
-import { TerminalDebugTest } from '@/components/TerminalDebugTest';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
-// NUCLEAR OPTION: Import HTTP Polling Terminal
-import HTTPPollingTerminal from '@/components/HTTPPollingTerminal';
 import '@/styles/agents.css';
 import { 
   LayoutDashboard, 
@@ -97,20 +87,16 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const location = useLocation();
 
   // Memoized navigation to prevent re-creation on every render
-  // Claude Instances is the primary feature, positioned at the top
+  // Cleaned up navigation - keeping only essential pages
   const navigation = React.useMemo(() => [
-    { name: '🚀 HTTP Terminal', href: '/http-terminal', icon: Code }, // NUCLEAR OPTION: First item
-    { name: 'Claude Instances', href: '/claude-instances', icon: Bot },
-    { name: 'Interactive Control (SSE)', href: '/interactive-control', icon: Bot },
+    { name: 'Interactive Control', href: '/interactive-control', icon: Bot },
     { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
-    { name: 'Dual Instance', href: '/dual-instance', icon: Bot },
     { name: 'Feed', href: '/', icon: Activity },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
     { name: 'Claude Code', href: '/claude-code', icon: Code },
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Terminal Debug', href: '/terminal-debug', icon: Code },
     { name: 'Performance Monitor', href: '/performance-monitor', icon: Zap },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
   ], []);
@@ -248,14 +234,6 @@ const App: React.FC = () => {
               <ErrorBoundary componentName="AppRouter">
                 <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading page..." size="lg" />}>
                   <Routes>
-                  {/* Primary Feature: Claude Instances */}
-                  <Route path="/claude-instances" element={
-                    <RouteErrorBoundary routeName="ClaudeInstances">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Claude Instances..." />}>
-                        <SafeClaudeInstanceManager />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
                   <Route path="/" element={
                     <RouteErrorBoundary routeName="Feed">
                       <Suspense fallback={<FallbackComponents.FeedFallback />}>
@@ -282,43 +260,6 @@ const App: React.FC = () => {
                       <AsyncErrorBoundary componentName="DualModeClaudeManager">
                         <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
                           <DualModeClaudeManager />
-                        </Suspense>
-                      </AsyncErrorBoundary>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/dual-instance" element={
-                    <RouteErrorBoundary routeName="DualInstanceManager" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="DualInstancePage">
-                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
-                          <DualInstancePage />
-                        </Suspense>
-                      </AsyncErrorBoundary>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/dual-instance/:tab" element={
-                    <RouteErrorBoundary routeName="DualInstanceManager" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="DualInstancePage">
-                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
-                          <DualInstancePage />
-                        </Suspense>
-                      </AsyncErrorBoundary>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/dual-instance/:tab/:instanceId" element={
-                    <RouteErrorBoundary routeName="DualInstanceManager" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="DualInstancePage">
-                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
-                          <DualInstancePage />
-                        </Suspense>
-                      </AsyncErrorBoundary>
-                    </RouteErrorBoundary>
-                  } />
-                  {/* Legacy Dual Instance Route */}
-                  <Route path="/dual-instance-legacy" element={
-                    <RouteErrorBoundary routeName="DualInstanceLegacy" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="DualInstanceDashboard">
-                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
-                          <DualInstanceDashboardEnhanced />
                         </Suspense>
                       </AsyncErrorBoundary>
                     </RouteErrorBoundary>
@@ -395,30 +336,7 @@ const App: React.FC = () => {
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
-                  <Route path="/terminal-debug" element={
-                    <RouteErrorBoundary routeName="TerminalDebug">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Terminal Debug..." />}>
-                        <TerminalDebugTest />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
                   
-                  {/* NUCLEAR OPTION: HTTP Polling Terminal Route */}
-                  <Route path="/http-terminal" element={
-                    <RouteErrorBoundary routeName="HTTPTerminal">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading HTTP Terminal..." />}>
-                        <div className="p-6">
-                          <div className="mb-6">
-                            <h1 className="text-2xl font-bold mb-2">🚀 NUCLEAR OPTION: HTTP Polling Terminal</h1>
-                            <p className="text-gray-600">
-                              WebSocket connection storm bypassed! Using HTTP polling and Server-Sent Events for Claude terminal output.
-                            </p>
-                          </div>
-                          <HTTPPollingTerminal pid="2426" instanceId="claude-2426" />
-                        </div>
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
                   
                   <Route path="*" element={<FallbackComponents.NotFoundFallback />} />
                   </Routes>
