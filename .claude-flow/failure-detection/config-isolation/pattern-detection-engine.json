@@ -1,0 +1,157 @@
+{
+  "nld_system": "configuration_isolation_pattern_detection",
+  "version": "1.0.0",
+  "timestamp": "2025-09-03T00:00:00Z",
+  
+  "detection_rules": {
+    "config_discovery_failure": {
+      "pattern": "Claude Code unable to locate configuration files",
+      "triggers": [
+        "config file not found errors",
+        "permission denied on config access", 
+        "malformed JSON in config files",
+        "missing required configuration keys"
+      ],
+      "severity": "high",
+      "auto_remediation": true
+    },
+    
+    "directory_traversal_attempt": {
+      "pattern": "Attempts to access directories outside allowed list",
+      "triggers": [
+        "path contains ../",
+        "absolute path outside workspace",
+        "symlink traversal outside boundaries",
+        "access to forbidden directories"
+      ],
+      "severity": "critical",
+      "auto_remediation": false,
+      "alert": true
+    },
+    
+    "environment_configuration_leak": {
+      "pattern": "Production config accidentally used in development",
+      "triggers": [
+        "production database URLs in dev config",
+        "production API keys in dev environment",
+        "production-only features enabled in dev",
+        "cross-environment configuration inheritance"
+      ],
+      "severity": "high",
+      "auto_remediation": true
+    },
+    
+    "agent_boundary_violation": {
+      "pattern": "Agent attempting operations outside permitted scope",
+      "triggers": [
+        "access to forbidden operations list",
+        "modification of production configurations",
+        "deletion of critical system files",
+        "network access to restricted endpoints"
+      ],
+      "severity": "critical",
+      "auto_remediation": true
+    }
+  },
+  
+  "monitoring_points": {
+    "startup_sequence": {
+      "check_config_discovery": {
+        "description": "Monitor Claude Code startup config discovery",
+        "files_to_watch": [
+          ".claude-dev",
+          ".claude-prod", 
+          "CLAUDE.md",
+          "claude-flow.config.json",
+          "config/claude-*-config.json"
+        ],
+        "success_criteria": "All config files loaded without errors"
+      },
+      
+      "validate_isolation": {
+        "description": "Verify environment isolation is properly configured",
+        "checks": [
+          "workspace boundary enforcement",
+          "directory whitelist validation",
+          "operation blacklist validation",
+          "environment-specific config loading"
+        ]
+      }
+    },
+    
+    "runtime_monitoring": {
+      "file_access_patterns": {
+        "description": "Monitor all file system access attempts",
+        "log_level": "detailed",
+        "alert_on": ["unauthorized access", "permission errors"]
+      },
+      
+      "configuration_changes": {
+        "description": "Monitor configuration file modifications",
+        "watch_files": "all config files",
+        "alert_on": "any modification",
+        "backup_before_change": true
+      },
+      
+      "agent_behavior": {
+        "description": "Monitor agent actions for boundary violations",
+        "track_operations": ["file access", "network requests", "system commands"],
+        "alert_thresholds": {
+          "forbidden_operations": 1,
+          "directory_violations": 3,
+          "permission_errors": 5
+        }
+      }
+    }
+  },
+  
+  "auto_remediation": {
+    "config_file_restoration": {
+      "trigger": "config file corruption detected",
+      "action": "restore from known-good backup",
+      "validation": "verify config syntax and required keys"
+    },
+    
+    "permission_correction": {
+      "trigger": "permission denied on config access",
+      "action": "reset file permissions to secure defaults",
+      "validation": "verify access works for Claude Code"
+    },
+    
+    "environment_reset": {
+      "trigger": "environment configuration leak detected",
+      "action": "reset to environment-specific defaults",
+      "validation": "verify no production data in dev environment"
+    },
+    
+    "agent_containment": {
+      "trigger": "agent boundary violation detected",
+      "action": "restrict agent to minimal permissions",
+      "validation": "verify agent can only access allowed resources"
+    }
+  },
+  
+  "learning_patterns": {
+    "successful_isolations": {
+      "track": [
+        "clean environment separation",
+        "proper config hierarchy usage",
+        "successful directory restriction enforcement",
+        "effective operation blocking"
+      ],
+      "update_frequency": "continuous",
+      "training_data_export": true
+    },
+    
+    "failure_scenarios": {
+      "track": [
+        "config discovery failures and resolutions",
+        "isolation bypass attempts and blocks",
+        "environment leakage incidents and fixes",
+        "agent containment successes and failures"
+      ],
+      "analysis_depth": "root_cause",
+      "pattern_recognition": true
+    }
+  }
+}

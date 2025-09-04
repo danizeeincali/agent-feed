@@ -1,0 +1,37 @@
+{
+  "name": "@prod/claude-config-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive testing suite for Claude Code production configuration",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --config=jest.config.js",
+    "test:watch": "jest --config=jest.config.js --watch",
+    "test:coverage": "jest --config=jest.config.js --coverage",
+    "test:isolation": "jest --config=jest.config.js --testPathPattern=isolation",
+    "test:functionality": "jest --config=jest.config.js --testPathPattern=functionality",
+    "test:configuration": "jest --config=jest.config.js --testPathPattern=configuration",
+    "test:integration": "jest --config=jest.config.js --testPathPattern=integration",
+    "test:regression": "jest --config=jest.config.js --testPathPattern=regression",
+    "test:e2e": "playwright test",
+    "test:security": "node utils/security-boundary-validator.js",
+    "test:all": "npm run test && npm run test:e2e && npm run test:security",
+    "validate-isolation": "node utils/isolation-validator.js",
+    "validate-config": "node utils/config-validator.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-node": "^29.7.0",
+    "@playwright/test": "^1.40.0",
+    "supertest": "^6.3.3",
+    "fs-extra": "^11.1.1",
+    "path": "^0.12.7"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ]
+  }
+}

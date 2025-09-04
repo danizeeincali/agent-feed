@@ -1,0 +1,236 @@
+{
+  "nld_training_data_collector": "claude_code_isolation_patterns",
+  "collector_version": "2.5.0", 
+  "timestamp": "2025-09-03T00:00:00Z",
+  
+  "data_collection_strategy": {
+    "collection_modes": [
+      "passive_observation",
+      "active_probing", 
+      "synthetic_generation",
+      "historical_analysis"
+    ],
+    
+    "data_sources": [
+      "claude_code_startup_logs",
+      "configuration_loading_sequences",
+      "file_access_patterns",
+      "security_boundary_violations",
+      "remediation_attempt_outcomes"
+    ]
+  },
+  
+  "configuration_pattern_data": {
+    "successful_configurations": {
+      "data_schema": {
+        "config_structure": "hierarchical_json",
+        "environment_context": "dev|prod|staging",
+        "isolation_metrics": "numerical_scores",
+        "performance_indicators": "timing_and_success_rates",
+        "security_compliance": "boolean_flags"
+      },
+      
+      "collection_triggers": [
+        "successful_startup_completion",
+        "clean_environment_separation",
+        "effective_boundary_enforcement",
+        "smooth_operation_execution"
+      ],
+      
+      "sample_data_points": {
+        "config_load_time": "milliseconds",
+        "validation_passes": "count",
+        "directory_access_denials": "count",
+        "operation_restrictions_enforced": "count",
+        "environment_isolation_score": "0.0_to_1.0"
+      }
+    },
+    
+    "failure_configurations": {
+      "data_schema": {
+        "failure_type": "classification_label", 
+        "error_messages": "text_sequences",
+        "system_state": "structured_data",
+        "failure_context": "environmental_variables",
+        "recovery_attempts": "action_sequences"
+      },
+      
+      "collection_triggers": [
+        "config_discovery_failures",
+        "permission_denied_errors",
+        "isolation_boundary_breaches", 
+        "environment_leakage_incidents"
+      ],
+      
+      "sample_data_points": {
+        "failure_timestamp": "iso_datetime",
+        "failure_duration": "milliseconds",
+        "recovery_success": "boolean",
+        "user_impact_score": "0_to_10",
+        "security_severity": "low|medium|high|critical"
+      }
+    }
+  },
+  
+  "behavioral_pattern_data": {
+    "agent_interaction_sequences": {
+      "sequence_length": "variable_up_to_1000_steps",
+      "action_vocabulary": "standardized_operation_set",
+      "context_embedding": "environmental_state_vector",
+      "outcome_labeling": "success|failure|partial"
+    },
+    
+    "security_boundary_testing": {
+      "probe_attempts": [
+        "directory_traversal_variations",
+        "permission_escalation_sequences",
+        "config_injection_attempts",
+        "environment_manipulation_tries"
+      ],
+      
+      "response_patterns": [
+        "immediate_blocking",
+        "delayed_detection",
+        "graceful_degradation",
+        "security_alert_generation"
+      ]
+    }
+  },
+  
+  "synthetic_data_generation": {
+    "failure_scenario_synthesis": {
+      "generation_method": "adversarial_neural_network",
+      "scenario_types": [
+        "novel_attack_vectors",
+        "configuration_edge_cases", 
+        "environment_transition_failures",
+        "cascade_failure_simulations"
+      ],
+      
+      "validation_criteria": [
+        "realistic_failure_patterns",
+        "consistent_system_behavior",
+        "valid_environmental_context",
+        "actionable_learning_outcomes"
+      ]
+    },
+    
+    "configuration_variation_generation": {
+      "generation_method": "genetic_algorithm",
+      "mutation_operators": [
+        "config_value_perturbation",
+        "structure_modification",
+        "environment_context_switching",
+        "permission_boundary_adjustment"
+      ],
+      
+      "fitness_evaluation": [
+        "isolation_effectiveness",
+        "performance_impact",
+        "security_compliance", 
+        "operational_stability"
+      ]
+    }
+  },
+  
+  "data_quality_assurance": {
+    "validation_pipeline": [
+      {
+        "stage": "schema_validation",
+        "description": "Ensure data conforms to expected structure",
+        "validation_rules": [
+          "required_fields_present",
+          "data_types_correct",
+          "value_ranges_valid",
+          "referential_integrity_maintained"
+        ]
+      },
+      
+      {
+        "stage": "consistency_checking",
+        "description": "Verify logical consistency across data points",
+        "validation_rules": [
+          "temporal_ordering_correct",
+          "cause_effect_relationships_valid",
+          "environmental_context_consistent",
+          "outcome_labels_justified"
+        ]
+      },
+      
+      {
+        "stage": "bias_detection",
+        "description": "Identify and mitigate collection biases",
+        "validation_rules": [
+          "balanced_success_failure_ratio",
+          "diverse_environmental_coverage",
+          "varied_failure_type_representation",
+          "temporal_distribution_uniformity"
+        ]
+      }
+    ],
+    
+    "data_cleaning": {
+      "outlier_detection": "statistical_and_ml_based",
+      "duplicate_removal": "fuzzy_matching_algorithm",
+      "missing_value_imputation": "context_aware_filling",
+      "noise_reduction": "signal_processing_filters"
+    }
+  },
+  
+  "real_time_collection": {
+    "streaming_data_ingestion": {
+      "data_sources": [
+        "claude_code_event_streams",
+        "system_monitoring_feeds",
+        "security_alert_channels",
+        "user_interaction_logs"
+      ],
+      
+      "processing_pipeline": [
+        "real_time_schema_validation",
+        "immediate_quality_checks",
+        "streaming_feature_extraction",
+        "incremental_model_updates"
+      ]
+    },
+    
+    "adaptive_collection": {
+      "collection_priority_adjustment": "based_on_model_performance",
+      "rare_event_oversampling": "importance_based_weighting",
+      "concept_drift_adaptation": "sliding_window_analysis",
+      "active_learning_integration": "uncertainty_based_querying"
+    }
+  },
+  
+  "privacy_and_security": {
+    "data_anonymization": [
+      "pii_removal_and_masking",
+      "sensitive_path_obfuscation",
+      "user_identifier_hashing",
+      "temporal_jittering"
+    ],
+    
+    "secure_storage": [
+      "encryption_at_rest_and_transit",
+      "access_control_enforcement",
+      "audit_trail_maintenance",
+      "retention_policy_compliance"
+    ]
+  },
+  
+  "export_and_integration": {
+    "claude_flow_neural_export": {
+      "export_format": "neural_training_ready_json",
+      "feature_engineering": "automated_preprocessing",
+      "batch_export_scheduling": "daily_incremental",
+      "version_control": "semantic_versioning"
+    },
+    
+    "external_ml_platform_integration": [
+      "tensorflow_dataset_format",
+      "pytorch_dataloader_compatible",
+      "sklearn_pipeline_ready",
+      "mlflow_tracking_integration"
+    ]
+  }
+}

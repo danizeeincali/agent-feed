@@ -1,0 +1,157 @@
+{
+  "version": "2.0",
+  "environment": "production",
+  "description": "Production Claude Code configuration with maximum security isolation",
+  
+  "permissions": {
+    "mode": "container-isolated",
+    "allowDangerousSkip": true,
+    "containerRequired": true,
+    "interactiveApproval": false
+  },
+  
+  "isolation": {
+    "containerRuntime": "docker",
+    "networkPolicy": "restricted",
+    "fileSystemAccess": "limited",
+    "resourceLimits": {
+      "memory": "2GB",
+      "cpu": "1.0",
+      "processes": 50,
+      "diskSpace": "5GB"
+    }
+  },
+  
+  "monitoring": {
+    "enabled": true,
+    "auditLevel": "comprehensive",
+    "logPath": "/logs/claude-audit.log",
+    "realTimeAlerts": true,
+    "metrics": {
+      "performance": true,
+      "security": true,
+      "usage": true,
+      "errors": true
+    }
+  },
+  
+  "security": {
+    "nonRootUser": true,
+    "readOnlyRootFS": true,
+    "noNewPrivileges": true,
+    "seccompProfile": "runtime/default",
+    "apparmorProfile": "claude-code-restricted",
+    "capabilities": {
+      "drop": ["ALL"],
+      "add": ["NET_BIND_SERVICE"]
+    }
+  },
+  
+  "networking": {
+    "allowedEndpoints": [
+      "api.anthropic.com",
+      "registry.npmjs.org",
+      "github.com"
+    ],
+    "dnsServers": ["8.8.8.8", "8.8.4.4"],
+    "maxConnections": 100
+  },
+  
+  "additionalDirectories": [
+    {
+      "path": "./workspace",
+      "permissions": "read-only",
+      "monitoring": true,
+      "maxSize": "1GB"
+    },
+    {
+      "path": "./output", 
+      "permissions": "read-write",
+      "monitoring": true,
+      "maxSize": "500MB"
+    },
+    {
+      "path": "./logs",
+      "permissions": "write-only", 
+      "monitoring": false,
+      "maxSize": "100MB"
+    }
+  ],
+  
+  "environment": {
+    "NODE_ENV": "production",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "true",
+    "DISABLE_TELEMETRY": "true",
+    "DISABLE_AUTOUPDATER": "true",
+    "DISABLE_ERROR_REPORTING": "false",
+    "VERBOSE_MODE": "false"
+  },
+  
+  "tools": {
+    "allowed": [
+      "Read",
+      "Write", 
+      "Edit",
+      "Grep",
+      "Glob",
+      "Bash"
+    ],
+    "restricted": [
+      "WebFetch",
+      "WebSearch"
+    ],
+    "toolLimits": {
+      "bashTimeoutMs": 30000,
+      "maxFileSize": "50MB",
+      "maxReadFiles": 100
+    }
+  },
+  
+  "commands": {
+    "allowed": [
+      "kubectl get pods",
+      "kubectl describe pod",
+      "docker ps",
+      "docker logs",
+      "npm run test",
+      "npm run build",
+      "git status",
+      "git log --oneline -10"
+    ],
+    "blocked": [
+      "rm -rf",
+      "sudo",
+      "chmod 777",
+      "curl -X POST",
+      "wget",
+      "ssh"
+    ]
+  },
+  
+  "alerts": {
+    "securityViolations": {
+      "enabled": true,
+      "webhookUrl": "${SECURITY_WEBHOOK_URL}",
+      "email": "${SECURITY_EMAIL}"
+    },
+    "resourceThresholds": {
+      "cpu": 85,
+      "memory": 90,
+      "disk": 95
+    },
+    "errorRates": {
+      "warningThreshold": 5,
+      "criticalThreshold": 10
+    }
+  },
+  
+  "backup": {
+    "enabled": true,
+    "schedule": "0 2 * * *",
+    "retentionDays": 30,
+    "locations": [
+      "/backups/claude-configs",
+      "/backups/claude-workspace"
+    ]
+  }
+}
