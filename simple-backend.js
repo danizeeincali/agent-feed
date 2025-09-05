@@ -1234,16 +1234,18 @@ const setupApiRoutes = () => {
         const {
           filter,
           agent,
+          agents, // NEW: Support for multiple agents (comma-separated)
           min_stars,
           user_id = 'anonymous',
           tags,
+          hashtags, // NEW: Support for multiple hashtags (comma-separated)
           limit = 20,
           offset = 0
         } = req.query;
 
         let result;
-        const parsedLimit = parseInt(limit);
-        const parsedOffset = parseInt(offset);
+        const parsedLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+        const parsedOffset = Math.max(parseInt(offset) || 0, 0);
 
         switch (filter) {
           case 'by-agent':
@@ -1254,6 +1256,45 @@ const setupApiRoutes = () => {
               });
             }
             result = await databaseService.db.getPostsByAgent(agent, parsedLimit, parsedOffset, user_id);
+            break;
+
+          // NEW: Support for multiple agents (OR logic)
+          case 'by-agents':
+            const { agents: agentsParam } = req.query;
+            const agentList = agentsParam ? agentsParam.split(',').map(a => a.trim()).filter(a => a) : [];
+            if (agentList.length === 0) {
+              return res.status(400).json({
+                success: false,
+                error: 'At least one agent required for by-agents filter'
+              });
+            }
+            result = await databaseService.getPostsByMultipleAgents(agentList, parsedLimit, parsedOffset, user_id);
+            break;
+
+          // NEW: Support for multiple hashtags (AND logic)
+          case 'by-hashtags':
+            const hashtagList = hashtags ? hashtags.split(',').map(h => h.trim()).filter(h => h) : [];
+            if (hashtagList.length === 0) {
+              return res.status(400).json({
+                success: false,
+                error: 'At least one hashtag required for by-hashtags filter'
+              });
+            }
+            result = await databaseService.getPostsByMultipleTags(hashtagList, parsedLimit, parsedOffset, user_id);
+            break;
+
+          // NEW: Combined agent and hashtag filtering
+          case 'by-agents-and-hashtags':
+            const agentsFilter = agents ? agents.split(',').map(a => a.trim()).filter(a => a) : [];
+            const hashtagsFilter = hashtags ? hashtags.split(',').map(h => h.trim()).filter(h => h) : [];
+            
+            if (agentsFilter.length === 0 && hashtagsFilter.length === 0) {
+              return res.status(400).json({
+                success: false,
+                error: 'At least one agent or hashtag required for combined filter'
+              });
+            }
+            result = await databaseService.getPostsByAgentsAndTags(agentsFilter, hashtagsFilter, parsedLimit, parsedOffset, user_id);
             break;
 
           case 'by-stars':
@@ -1283,15 +1324,37 @@ const setupApiRoutes = () => {
             break;
 
           case 'my-posts':
-            // For demo, filter by ProductionValidator agent - in real app would use authenticated user
-            const currentUserAgent = 'ProductionValidator';
-            result = await databaseService.db.getPostsByAgent(currentUserAgent, parsedLimit, parsedOffset, user_id);
+            // Get posts created by the current user
+            result = await databaseService.getMyPosts(user_id, parsedLimit, parsedOffset);
             break;
 
           case 'saved':
             // Get saved posts for user (defaulting to 'anonymous' for demo)
             const userId = user_id || 'anonymous';
             result = await databaseService.db.getSavedPosts(userId, parsedLimit, parsedOffset);
+            break;
+
+          case 'multi-select':
+            const { agents, hashtags, mode = 'AND' } = req.query;
+            
+            if ((!agents || agents.trim() === '') && (!hashtags || hashtags.trim() === '')) {
+              return res.status(400).json({
+                success: false,
+                error: 'At least one agent or hashtag must be specified for multi-select filter'
+              });
+            }
+            
+            const agentArray = agents ? agents.split(',').map(a => a.trim()).filter(a => a) : [];
+            const hashtagArray = hashtags ? hashtags.split(',').map(h => h.trim()).filter(h => h) : [];
+            
+            result = await databaseService.db.getMultiFilteredPosts(
+              agentArray,
+              hashtagArray,
+              mode,
+              parsedLimit,
+              parsedOffset,
+              user_id
+            );
             break;
 
           default:
@@ -1312,90 +1375,6 @@ const setupApiRoutes = () => {
         res.status(500).json({
           success: false,
           error: 'Internal server error',
-          message: error.message
-        });
-      }
-    });
-
-    // PHASE 2: Like System
-    app.post('/api/v1/agent-posts/:id/like', async (req, res) => {
-      try {
-        const { id } = req.params;
-        const { user_id = 'anonymous' } = req.body;
-
-        const result = await databaseService.db.likePost(id, user_id);
-
-        // Broadcast like update via WebSocket
-        if (wsServer) {
-          broadcastPostUpdate({
-            type: 'post_liked',
-            postId: id,
-            likes: result.likes || 0,
-            timestamp: new Date().toISOString()
-          });
-        }
-
-        res.json({
-          success: true,
-          data: result,
-          message: result.liked ? 'Post liked successfully' : 'Post already liked'
-        });
-      } catch (error) {
-        console.error('Error liking post:', error);
-        res.status(500).json({
-          success: false,
-          error: 'Failed to like post',
-          message: error.message
-        });
-      }
-    });
-
-    app.delete('/api/v1/agent-posts/:id/like', async (req, res) => {
-      try {
-        const { id } = req.params;
-        const { user_id = 'anonymous' } = req.query;
-
-        const result = await databaseService.db.unlikePost(id, user_id);
-
-        // Broadcast unlike update via WebSocket
-        if (wsServer) {
-          broadcastPostUpdate({
-            type: 'post_unliked',
-            postId: id,
-            likes: result.likes || 0,
-            timestamp: new Date().toISOString()
-          });
-        }
-
-        res.json({
-          success: true,
-          data: result,
-          message: !result.liked ? 'Post unliked successfully' : 'Post was not previously liked'
-        });
-      } catch (error) {
-        console.error('Error unliking post:', error);
-        res.status(500).json({
-          success: false,
-          error: 'Failed to unlike post',
-          message: error.message
-        });
-      }
-    });
-
-    app.get('/api/v1/agent-posts/:id/likes', async (req, res) => {
-      try {
-        const { id } = req.params;
-        const likes = await databaseService.db.getPostLikes(id);
-
-        res.json({
-          success: true,
-          data: likes
-        });
-      } catch (error) {
-        console.error('Error fetching post likes:', error);
-        res.status(500).json({
-          success: false,
-          error: 'Failed to fetch post likes',
           message: error.message
         });
       }
@@ -1527,13 +1506,168 @@ const setupApiRoutes = () => {
         });
       }
     });
+
+    // ENHANCED FILTERING API ENDPOINTS
+
+    // POST /api/v1/agent-posts/filter - Advanced multi-filter endpoint
+    app.post('/api/v1/agent-posts/filter', async (req, res) => {
+      try {
+        const {
+          agents = [],
+          hashtags = [],
+          limit = 20,
+          offset = 0,
+          user_id = 'anonymous'
+        } = req.body;
+
+        // Input validation
+        if (!Array.isArray(agents) && !Array.isArray(hashtags)) {
+          return res.status(400).json({
+            success: false,
+            error: 'At least one filter array (agents or hashtags) must be provided'
+          });
+        }
+
+        // Validate arrays contain strings
+        const validAgents = Array.isArray(agents) ? agents.filter(a => typeof a === 'string' && a.trim()) : [];
+        const validHashtags = Array.isArray(hashtags) ? hashtags.filter(h => typeof h === 'string' && h.trim()) : [];
+
+        // Validate pagination parameters
+        const validLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+        const validOffset = Math.max(parseInt(offset) || 0, 0);
+
+        let result;
+        if (validAgents.length > 0 && validHashtags.length > 0) {
+          // Combined filtering
+          result = await databaseService.getPostsByAgentsAndTags(
+            validAgents, 
+            validHashtags, 
+            validLimit, 
+            validOffset, 
+            user_id
+          );
+        } else if (validAgents.length > 0) {
+          // Agent filtering only
+          result = await databaseService.getPostsByMultipleAgents(
+            validAgents, 
+            validLimit, 
+            validOffset, 
+            user_id
+          );
+        } else if (validHashtags.length > 0) {
+          // Hashtag filtering only
+          result = await databaseService.getPostsByMultipleTags(
+            validHashtags, 
+            validLimit, 
+            validOffset, 
+            user_id
+          );
+        } else {
+          // No valid filters, return all posts
+          result = await databaseService.getAgentPosts(validLimit, validOffset, user_id);
+        }
+
+        res.json({
+          success: true,
+          data: result,
+          filters: {
+            agents: validAgents,
+            hashtags: validHashtags,
+            applied: validAgents.length + validHashtags.length
+          },
+          pagination: {
+            limit: validLimit,
+            offset: validOffset,
+            total: result.total,
+            hasMore: (validOffset + validLimit) < result.total
+          }
+        });
+
+      } catch (error) {
+        console.error('Error filtering posts:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to filter posts',
+          message: error.message
+        });
+      }
+    });
+
+    // GET /api/v1/filter-suggestions - Type-ahead filter suggestions
+    app.get('/api/v1/filter-suggestions', async (req, res) => {
+      try {
+        const {
+          type,
+          query = '',
+          limit = 10
+        } = req.query;
+
+        // Input validation
+        if (!type || !['agent', 'hashtag'].includes(type)) {
+          return res.status(400).json({
+            success: false,
+            error: 'Valid type parameter required (agent or hashtag)'
+          });
+        }
+
+        const validLimit = Math.min(Math.max(parseInt(limit) || 10, 1), 50);
+        const searchQuery = (query || '').toString().trim();
+
+        const suggestions = await databaseService.getFilterSuggestions(
+          type, 
+          searchQuery, 
+          validLimit
+        );
+
+        res.json({
+          success: true,
+          data: suggestions,
+          query: {
+            type,
+            search: searchQuery,
+            limit: validLimit,
+            resultsCount: suggestions.length
+          }
+        });
+
+      } catch (error) {
+        console.error('Error getting filter suggestions:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to get filter suggestions',
+          message: error.message
+        });
+      }
+    });
+
+    // GET /api/v1/filter-data - Get available agents and hashtags for filtering
+    app.get('/api/v1/filter-data', async (req, res) => {
+      try {
+        // Get available agents
+        const agents = await databaseService.getFilterSuggestions('agent', '', 100);
+        const hashtags = await databaseService.getFilterSuggestions('hashtag', '', 100);
+
+        res.json({
+          agents: agents.map(agent => agent.value),
+          hashtags: hashtags.map(hashtag => hashtag.value)
+        });
+
+      } catch (error) {
+        console.error('Error getting filter data:', error);
+        res.status(500).json({
+          agents: [],
+          hashtags: [],
+          error: 'Failed to get filter data'
+        });
+      }
+    });
     
     console.log('✅ Phase 2 Interactive API routes registered:');
     console.log('   GET  /api/v1/agent-posts (with filtering)');
     console.log('   POST /api/v1/agent-posts');
-    console.log('   POST /api/v1/agent-posts/:id/like');
-    console.log('   DELETE /api/v1/agent-posts/:id/like');
-    console.log('   GET  /api/v1/agent-posts/:id/likes');
+    console.log('   POST /api/v1/agent-posts/filter (enhanced multi-filter)');
+    console.log('   GET  /api/v1/filter-suggestions (type-ahead)');
+    console.log('   GET  /api/v1/filter-data (available filters)');
     console.log('   DELETE /api/v1/agent-posts/:id');
     console.log('   POST /api/v1/agent-posts/:id/save');
     console.log('   DELETE /api/v1/agent-posts/:id/save');

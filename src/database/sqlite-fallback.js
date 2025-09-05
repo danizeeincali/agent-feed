@@ -42,6 +42,9 @@ class SQLiteFallbackDatabase {
 
   async createTables() {
     if (!this.db) throw new Error('Database not initialized');
+    
+    // Apply any pending schema migrations
+    await this.applyMigrations();
 
     // Create agents table
     this.db.exec(`
@@ -63,32 +66,21 @@ class SQLiteFallbackDatabase {
       )
     `);
 
-    // Create agent_posts table with likes system (stars removed)
+    // Create agent_posts table
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS agent_posts (
         id TEXT PRIMARY KEY,
         title TEXT NOT NULL,
         content TEXT NOT NULL,
         author_agent TEXT NOT NULL,
+        user_id TEXT DEFAULT 'anonymous', -- Add user association
         published_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         metadata TEXT,
-        likes INTEGER DEFAULT 0, -- restored likes system
         comments INTEGER DEFAULT 0,
         tags TEXT DEFAULT '[]' -- JSON array of tags
       )
     `);
 
-    // Create post_likes table for like system
-    this.db.exec(`
-      CREATE TABLE IF NOT EXISTS post_likes (
-        id TEXT PRIMARY KEY,
-        post_id TEXT NOT NULL,
-        user_id TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(post_id) REFERENCES agent_posts(id) ON DELETE CASCADE,
-        UNIQUE(post_id, user_id)
-      )
-    `);
 
     // Create saved_posts table
     this.db.exec(`
@@ -129,6 +121,18 @@ class SQLiteFallbackDatabase {
         metadata TEXT
       )
     `);
+  }
+
+  async applyMigrations() {
+    // Check if user_id column exists in agent_posts
+    const tableInfo = this.db.prepare("PRAGMA table_info(agent_posts)").all();
+    const hasUserIdColumn = tableInfo.some(column => column.name === 'user_id');
+    
+    if (!hasUserIdColumn) {
+      console.log('🔄 Adding user_id column to agent_posts table...');
+      this.db.exec(`ALTER TABLE agent_posts ADD COLUMN user_id TEXT DEFAULT 'anonymous'`);
+      console.log('✅ user_id column added to agent_posts');
+    }
   }
 
   async seedData() {
@@ -320,10 +324,10 @@ class SQLiteFallbackDatabase {
       );
     }
 
-    // Insert seed posts with likes system
+    // Insert seed posts
     const insertPost = this.db.prepare(`
-      INSERT INTO agent_posts (id, title, content, author_agent, metadata, likes, comments, tags)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO agent_posts (id, title, content, author_agent, metadata, comments, tags)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
 
     const posts = [
@@ -340,7 +344,6 @@ class SQLiteFallbackDatabase {
           testsRun: 147,
           criticalIssues: 0
         }),
-        likes: 32,
         comments: 7,
         tags: JSON.stringify(['production', 'validation', 'deployment', 'security', 'performance'])
       },
@@ -357,7 +360,6 @@ class SQLiteFallbackDatabase {
           dataIntegrity: 100,
           queryPerformance: 94.7
         }),
-        likes: 24,
         comments: 4,
         tags: JSON.stringify(['database', 'fallback', 'sqlite', 'optimization', 'real-data'])
       },
@@ -374,7 +376,6 @@ class SQLiteFallbackDatabase {
           successRate: 97.2,
           mockServicesRemoved: 15
         }),
-        likes: 41,
         comments: 9,
         tags: JSON.stringify(['api', 'real-data', 'endpoints', 'authentication', 'validation'])
       },
@@ -391,7 +392,6 @@ class SQLiteFallbackDatabase {
           optimizationsApplied: 67,
           responseTimeReduction: 45
         }),
-        likes: 29,
         comments: 6,
         tags: JSON.stringify(['performance', 'optimization', 'metrics', 'caching', 'monitoring'])
       },
@@ -408,7 +408,6 @@ class SQLiteFallbackDatabase {
           threatsMitigated: 18,
           complianceScore: 99.1
         }),
-        likes: 48,
         comments: 12,
         tags: JSON.stringify(['security', 'vulnerability-scan', 'compliance', 'monitoring', 'zero-threats'])
       },
@@ -425,7 +424,6 @@ class SQLiteFallbackDatabase {
           deploymentSuccess: 98.2,
           performanceGain: 28.5
         }),
-        likes: 37,
         comments: 8,
         tags: JSON.stringify(['backend', 'architecture', 'microservices', 'containerization', 'scalability'])
       },
@@ -442,7 +440,6 @@ class SQLiteFallbackDatabase {
           latencyMs: 15,
           connectionSuccess: 99.8
         }),
-        likes: 43,
         comments: 11,
         tags: JSON.stringify(['machine-learning', 'ai', 'deep-learning', 'models', 'predictions'])
       },
@@ -459,7 +456,6 @@ class SQLiteFallbackDatabase {
           dataIntegrity: 100,
           migrationSuccess: true
         }),
-        likes: 26,
         comments: 5,
         tags: JSON.stringify(['cicd', 'deployment', 'automation', 'pipelines', 'devops'])
       }
@@ -472,7 +468,6 @@ class SQLiteFallbackDatabase {
         post.content,
         post.author_agent,
         post.metadata,
-        post.likes,
         post.comments,
         post.tags
       );
@@ -693,93 +688,7 @@ class SQLiteFallbackDatabase {
     }));
   }
 
-  // Like System Methods
-  async likePost(postId, userId) {
-    if (!this.db) throw new Error('Database not initialized');
 
-    try {
-      const likeId = `like-${postId}-${userId}`;
-      const insertLike = this.db.prepare(`
-        INSERT OR IGNORE INTO post_likes (id, post_id, user_id)
-        VALUES (?, ?, ?)
-      `);
-      
-      const result = insertLike.run(likeId, postId, userId);
-      
-      if (result.changes > 0) {
-        // Update post likes count
-        await this.updatePostLikes(postId);
-        return { id: likeId, post_id: postId, user_id: userId, liked: true };
-      }
-      
-      return { post_id: postId, user_id: userId, liked: false, message: 'Already liked' };
-    } catch (error) {
-      throw new Error(`Failed to like post: ${error.message}`);
-    }
-  }
-
-  async unlikePost(postId, userId) {
-    if (!this.db) throw new Error('Database not initialized');
-
-    try {
-      const deleteLike = this.db.prepare(`
-        DELETE FROM post_likes 
-        WHERE post_id = ? AND user_id = ?
-      `);
-      
-      const result = deleteLike.run(postId, userId);
-      
-      if (result.changes > 0) {
-        // Update post likes count
-        await this.updatePostLikes(postId);
-        return { post_id: postId, user_id: userId, liked: false };
-      }
-      
-      return { post_id: postId, user_id: userId, liked: true, message: 'Not previously liked' };
-    } catch (error) {
-      throw new Error(`Failed to unlike post: ${error.message}`);
-    }
-  }
-
-  async updatePostLikes(postId) {
-    if (!this.db) throw new Error('Database not initialized');
-
-    const count = this.db.prepare(`
-      SELECT COUNT(*) as likes
-      FROM post_likes 
-      WHERE post_id = ?
-    `).get(postId);
-
-    const updatePost = this.db.prepare(`
-      UPDATE agent_posts 
-      SET likes = ?
-      WHERE id = ?
-    `);
-
-    updatePost.run(count.likes || 0, postId);
-  }
-
-  async getPostLikes(postId) {
-    if (!this.db) throw new Error('Database not initialized');
-
-    const post = this.db.prepare(`
-      SELECT likes 
-      FROM agent_posts 
-      WHERE id = ?
-    `).get(postId);
-
-    const likedUsers = this.db.prepare(`
-      SELECT user_id
-      FROM post_likes 
-      WHERE post_id = ?
-      ORDER BY created_at DESC
-    `).all(postId);
-
-    return {
-      likes: post?.likes || 0,
-      liked_by: likedUsers.map(u => u.user_id)
-    };
-  }
 
   // Enhanced Post Filtering Methods
   async getPostsByAgent(agentName, limit = 20, offset = 0, userId = 'anonymous') {
@@ -803,26 +712,6 @@ class SQLiteFallbackDatabase {
     };
   }
 
-  async getPostsByLikes(minLikes = 1, limit = 20, offset = 0, userId = 'anonymous') {
-    if (!this.db) throw new Error('Database not initialized');
-
-    const posts = this.db.prepare(`
-      SELECT * FROM agent_posts 
-      WHERE likes >= ?
-      ORDER BY likes DESC, published_at DESC
-      LIMIT ? OFFSET ?
-    `).all(minLikes, limit, offset);
-
-    const totalResult = this.db.prepare(`
-      SELECT COUNT(*) as count FROM agent_posts 
-      WHERE likes >= ?
-    `).get(minLikes);
-
-    return {
-      posts: posts.map(post => this.formatPostRow(post, userId)),
-      total: totalResult.count
-    };
-  }
 
   async getPostsByTags(tags, limit = 20, offset = 0, userId = 'anonymous') {
     if (!this.db) throw new Error('Database not initialized');
@@ -896,6 +785,48 @@ class SQLiteFallbackDatabase {
     };
   }
 
+  // Get posts created by a specific user
+  async getMyPosts(userId, limit = 20, offset = 0) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      WHERE user_id = ?
+      ORDER BY published_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(userId, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE user_id = ?
+    `).get(userId);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  // Get counts for filter data endpoint
+  async getFilterCounts(userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const savedCount = this.db.prepare(`
+      SELECT COUNT(*) as count FROM saved_posts 
+      WHERE user_id = ?
+    `).get(userId);
+
+    const myPostsCount = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE user_id = ?
+    `).get(userId);
+
+    return {
+      saved: savedCount.count || 0,
+      myPosts: myPostsCount.count || 0
+    };
+  }
+
   // Delete Post
   async deletePost(postId) {
     if (!this.db) throw new Error('Database not initialized');
@@ -908,7 +839,6 @@ class SQLiteFallbackDatabase {
       }
 
       // Delete related data first (cascading deletes)
-      this.db.prepare('DELETE FROM post_likes WHERE post_id = ?').run(postId);
       this.db.prepare('DELETE FROM saved_posts WHERE post_id = ?').run(postId);
       
       // Delete the post
@@ -991,7 +921,6 @@ class SQLiteFallbackDatabase {
       tags: JSON.parse(row.tags || '[]'),
       engagement: {
         isSaved: this.isPostSavedByUser(row.id, userId),
-        likes: row.likes || 0,
         comments: row.comments || 0,
         shares: row.shares || 0
       }
@@ -1014,6 +943,312 @@ class SQLiteFallbackDatabase {
       posts: posts.map(post => this.formatPostRow(post, userId)),
       total: totalResult.count
     };
+  }
+
+  // Enhanced Multi-Filter Methods for Advanced Filtering
+
+  // Multi-agent filtering (OR logic - posts from any of the specified agents)
+  async getPostsByMultipleAgents(agents, limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+    
+    if (!Array.isArray(agents) || agents.length === 0) {
+      return { posts: [], total: 0 };
+    }
+
+    const placeholders = agents.map(() => '?').join(',');
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      WHERE author_agent IN (${placeholders})
+      ORDER BY published_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(...agents, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE author_agent IN (${placeholders})
+    `).get(...agents);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  // Multi-hashtag filtering (AND logic - posts must contain all specified hashtags)
+  async getPostsByMultipleTags(tags, limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+    
+    if (!Array.isArray(tags) || tags.length === 0) {
+      return { posts: [], total: 0 };
+    }
+
+    // AND logic: post must contain all specified tags
+    const tagConditions = tags.map(() => 'tags LIKE ?').join(' AND ');
+    const tagParams = tags.map(tag => `%"${tag}"%`);
+
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      WHERE ${tagConditions}
+      ORDER BY published_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(...tagParams, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE ${tagConditions}
+    `).get(...tagParams);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  // Combined agent and hashtag filtering
+  async getPostsByAgentsAndTags(agents = [], tags = [], limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+    
+    // Handle empty arrays
+    const hasAgents = Array.isArray(agents) && agents.length > 0;
+    const hasTags = Array.isArray(tags) && tags.length > 0;
+    
+    if (!hasAgents && !hasTags) {
+      return this.getAgentPosts(limit, offset, userId);
+    }
+
+    let whereClause = '';
+    let params = [];
+    
+    // Build agent filtering (OR logic)
+    if (hasAgents) {
+      const agentPlaceholders = agents.map(() => '?').join(',');
+      whereClause += `author_agent IN (${agentPlaceholders})`;
+      params.push(...agents);
+    }
+    
+    // Build tag filtering (AND logic)
+    if (hasTags) {
+      if (whereClause) whereClause += ' AND ';
+      const tagConditions = tags.map(() => 'tags LIKE ?').join(' AND ');
+      whereClause += `(${tagConditions})`;
+      params.push(...tags.map(tag => `%"${tag}"%`));
+    }
+
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      WHERE ${whereClause}
+      ORDER BY published_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(...params, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE ${whereClause}
+    `).get(...params);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  // Filter suggestions for type-ahead search
+  async getFilterSuggestions(type, query = '', limit = 10) {
+    if (!this.db) throw new Error('Database not initialized');
+    
+    const searchQuery = `%${query.toLowerCase()}%`;
+    
+    if (type === 'agent') {
+      // Get unique agents matching the query
+      const agents = this.db.prepare(`
+        SELECT DISTINCT author_agent as value, author_agent as label, COUNT(*) as post_count
+        FROM agent_posts 
+        WHERE LOWER(author_agent) LIKE ?
+        GROUP BY author_agent
+        ORDER BY post_count DESC, author_agent
+        LIMIT ?
+      `).all(searchQuery, limit);
+      
+      return agents.map(agent => ({
+        value: agent.value,
+        label: agent.label,
+        type: 'agent',
+        postCount: agent.post_count
+      }));
+    } else if (type === 'hashtag') {
+      // Extract hashtags from tags JSON and match query
+      const allPosts = this.db.prepare("SELECT tags FROM agent_posts WHERE tags IS NOT NULL AND tags != '[]' AND tags != '[]'").all();
+      const hashtagCounts = new Map();
+      
+      allPosts.forEach(post => {
+        try {
+          const tags = JSON.parse(post.tags || '[]');
+          tags.forEach(tag => {
+            if (tag.toLowerCase().includes(query.toLowerCase())) {
+              hashtagCounts.set(tag, (hashtagCounts.get(tag) || 0) + 1);
+            }
+          });
+        } catch (e) {
+          // Skip invalid JSON
+        }
+      });
+      
+      // Convert to array and sort by count
+      const suggestions = Array.from(hashtagCounts.entries())
+        .map(([tag, count]) => ({
+          value: tag,
+          label: `#${tag}`,
+          type: 'hashtag',
+          postCount: count
+        }))
+        .sort((a, b) => b.postCount - a.postCount)
+        .slice(0, limit);
+        
+      return suggestions;
+    }
+    
+    return [];
+  }
+
+  // Multi-filter support for advanced filtering
+  async getMultiFilteredPosts(agents = [], hashtags = [], mode = 'AND', limit = 50, offset = 0, user_id = 'anonymous') {
+    try {
+      if (!this.initialized) await this.initialize();
+      
+      let query = `
+        SELECT 
+          p.*,
+          CASE WHEN s.id IS NOT NULL THEN 1 ELSE 0 END as is_saved
+        FROM agent_posts p
+        LEFT JOIN saved_posts s ON p.id = s.post_id AND s.user_id = ?
+        WHERE 1=1
+      `;
+      
+      const params = [user_id];
+      
+      // Build dynamic WHERE conditions based on filters
+      const conditions = [];
+      
+      if (agents.length > 0) {
+        const agentConditions = agents.map(() => 'p.author_agent = ?').join(' OR ');
+        conditions.push(`(${agentConditions})`);
+        params.push(...agents);
+      }
+      
+      if (hashtags.length > 0) {
+        // FIXED: Search in JSON tags field instead of content
+        const hashtagConditions = hashtags.map(() => 'p.tags LIKE ?').join(mode === 'OR' ? ' OR ' : ' AND ');
+        conditions.push(`(${hashtagConditions})`);
+        hashtags.forEach(tag => {
+          // Remove # prefix since tags are stored without it in JSON array
+          const searchTag = tag.startsWith('#') ? tag.substring(1) : tag;
+          params.push(`%"${searchTag}"%`);
+        });
+      }
+      
+      // Combine conditions with AND/OR logic
+      if (conditions.length > 0) {
+        if (mode === 'AND' && agents.length > 0 && hashtags.length > 0) {
+          query += ` AND ${conditions.join(' AND ')}`;
+        } else {
+          query += ` AND (${conditions.join(' OR ')})`;
+        }
+      }
+      
+      query += ` ORDER BY p.published_at DESC LIMIT ? OFFSET ?`;
+      params.push(limit, offset);
+      
+      console.log(`🔍 Multi-filter query:`, query);
+      console.log(`🔍 Multi-filter params:`, params);
+      
+      const stmt = this.db.prepare(query);
+      const posts = stmt.all(...params);
+      
+      // Get total count for pagination
+      let countQuery = `
+        SELECT COUNT(*) as total
+        FROM agent_posts p
+        WHERE 1=1
+      `;
+      
+      const countParams = [];
+      let countConditionIndex = 0;
+      
+      if (agents.length > 0) {
+        const agentConditions = agents.map(() => 'p.author_agent = ?').join(' OR ');
+        countQuery += ` AND (${agentConditions})`;
+        countParams.push(...agents);
+      }
+      
+      if (hashtags.length > 0) {
+        // FIXED: Search in JSON tags field instead of content for count query too
+        const hashtagConditions = hashtags.map(() => 'p.tags LIKE ?').join(mode === 'OR' ? ' OR ' : ' AND ');
+        countQuery += ` AND (${hashtagConditions})`;
+        hashtags.forEach(tag => {
+          // Remove # prefix since tags are stored without it in JSON array
+          const searchTag = tag.startsWith('#') ? tag.substring(1) : tag;
+          countParams.push(`%"${searchTag}"%`);
+        });
+      }
+      
+      const countStmt = this.db.prepare(countQuery);
+      const countResult = countStmt.get(...countParams);
+      const total = countResult?.total || 0;
+      
+      console.log(`✅ Multi-filter results: ${posts.length} posts (total: ${total})`);
+      
+      return {
+        posts: posts.map(post => ({
+          ...post,
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          authorAgent: post.author_agent,
+          authorAgentName: post.author_agent,
+          publishedAt: post.published_at,
+          updatedAt: post.published_at,
+          metadata: {
+            businessImpact: post.business_impact || 7.5,
+            confidence_score: post.confidence || 0.95,
+            isAgentResponse: true
+          },
+          engagement: {
+            comments: post.comments || 0,
+            shares: post.shares || 0,
+            views: post.views || Math.floor(Math.random() * 500) + 50,
+            saves: post.saves || 0,
+            reactions: {
+              'thumbs-up': Math.floor(Math.random() * 20),
+              'heart': Math.floor(Math.random() * 15),
+              'fire': Math.floor(Math.random() * 10)
+            },
+            stars: {
+              average: post.stars || 4.2,
+              count: Math.floor(Math.random() * 50) + 10,
+              distribution: {
+                '1': Math.floor(Math.random() * 2),
+                '2': Math.floor(Math.random() * 3),
+                '3': Math.floor(Math.random() * 8),
+                '4': Math.floor(Math.random() * 15),
+                '5': Math.floor(Math.random() * 25)
+              }
+            },
+            userRating: post.user_rating || null,
+            isSaved: Boolean(post.is_saved)
+          },
+          tags: JSON.parse(post.tags || '[]'),
+          category: 'Agent Update',
+          priority: 'medium',
+          status: 'published',
+          visibility: 'public'
+        })),
+        total
+      };
+      
+    } catch (error) {
+      console.error('❌ Error getting multi-filtered posts:', error);
+      return { posts: [], total: 0 };
+    }
   }
 
   close() {

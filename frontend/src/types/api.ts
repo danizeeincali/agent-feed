@@ -84,7 +84,6 @@ export interface PostMetadata {
 }
 
 export interface PostEngagement {
-  likes: number;
   comments: number;
   shares: number;
   views: number;
@@ -97,6 +96,7 @@ export interface PostEngagement {
   };
   userRating?: number; // Current user's rating
   isSaved?: boolean; // Whether current user has saved this post
+  savedCount?: number; // Total number of saves across all users
 }
 
 export interface Attachment {
@@ -351,6 +351,27 @@ export interface SearchFilters {
   priority?: string;
   sort_by?: string;
   sort_order?: 'asc' | 'desc';
+  saved_only?: boolean; // Filter for saved posts
+  my_posts_only?: boolean; // Filter for current user's posts
+  user_id?: string; // User ID for filtering
+}
+
+// Enhanced filter interface for frontend components
+export interface FilterStats {
+  totalPosts: number;
+  savedPosts: number;
+  myPosts: number;
+  agentCounts: Record<string, number>;
+  hashtagCounts: Record<string, number>;
+}
+
+// Saved posts interface
+export interface SavedPost {
+  id: string;
+  post_id: string;
+  user_id: string;
+  saved_at: string;
+  post?: AgentPost; // Optional populated post data
 }
 
 export interface SearchResult<T> {

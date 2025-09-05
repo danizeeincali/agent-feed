@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { Heart, MessageCircle, Share2, Bookmark, Flag, MoreHorizontal } from 'lucide-react';
+import { MessageCircle, Share2, Bookmark, Flag, MoreHorizontal } from 'lucide-react';
 import { useWebSocketContext } from '@/context/WebSocketContext';
 import { TypingIndicator } from './TypingIndicator';
 import { cn } from '@/utils/cn';
 
 interface PostInteractionPanelProps {
   postId: string;
-  likes: number;
   comments: number;
   shares: number;
-  isLiked?: boolean;
   isBookmarked?: boolean;
   className?: string;
-  onLike?: (postId: string) => void;
   onComment?: (postId: string) => void;
   onShare?: (postId: string) => void;
   onBookmark?: (postId: string) => void;
@@ -20,25 +17,17 @@ interface PostInteractionPanelProps {
 
 export const PostInteractionPanel: React.FC<PostInteractionPanelProps> = ({
   postId,
-  likes,
   comments,
   shares,
-  isLiked = false,
   isBookmarked = false,
   className,
-  onLike,
   onComment,
   onShare,
   onBookmark,
 }) => {
   const [showMore, setShowMore] = useState(false);
-  const { sendLike, subscribePost, connectionState } = useWebSocketContext();
+  const { subscribePost, connectionState } = useWebSocketContext();
 
-  const handleLike = () => {
-    const action = isLiked ? 'remove' : 'add';
-    sendLike(postId, action);
-    onLike?.(postId);
-  };
 
   const handleComment = () => {
     subscribePost(postId);
@@ -73,21 +62,6 @@ export const PostInteractionPanel: React.FC<PostInteractionPanelProps> = ({
       <div className="px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <button 
-              onClick={handleLike}
-              className={cn(
-                'flex items-center space-x-2 transition-colors',
-                isLiked 
-                  ? 'text-red-500 hover:text-red-600' 
-                  : 'text-gray-500 hover:text-red-500',
-                !connectionState.isConnected && 'opacity-50 cursor-not-allowed'
-              )}
-              disabled={!connectionState.isConnected}
-              title={!connectionState.isConnected ? 'Offline - action will sync when connected' : ''}
-            >
-              <Heart className={cn('h-5 w-5', isLiked && 'fill-current')} />
-              <span className="text-sm font-medium">{likes || 0}</span>
-            </button>
             
             <button 
               onClick={handleComment}

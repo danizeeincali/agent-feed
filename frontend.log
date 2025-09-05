@@ -1,309 +1,75 @@
 
-> agent-feed-frontend@2.0.0 dev
-> vite
+> agent-feed@1.0.0 dev
+> concurrently "npm run dev:frontend" "npm run dev:backend"
 
-error when starting dev server:
-Error: Port 5173 is already in use
-    at Server.onError$1 (file:///workspaces/a🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/dev/agents -> /api/v1/claude-live/dev/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/dev/agents -> /api/v1/claude-live/dev/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-code/sessions? -> /api/v1/claude-code/sessions
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-6:02:07 AM [vite] (client) hmr update /src/components/SocialMediaFeed.tsx, /src/index.css
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy error: 
-6:04:55 AM [vite] http proxy error: /api/v1/claude-live/prod/agents
-AggregateError [ECONNREFUSED]: 
-    at internalConnectMultiple (node:net:1134:18)
-    at afterConnectMultiple (node:net:1715:7)
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy error: 
-6:04:55 AM [vite] http proxy error: /api/v1/claude-live/prod/activities
-AggregateError [ECONNREFUSED]: 
-    at internalConnectMultiple (node:net:1134:18)
-    at afterConnectMultiple (node:net:1715:7)
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts -> /api/v1/agent-posts
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/agents -> /api/v1/claude-live/prod/agents
-🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/claude-live/prod/activities -> /api/v1/claude-live/prod/activities
+[1] 
+[1] > agent-feed@1.0.0 dev:backend
+[1] > node simple-backend.js
+[1] 
+[0] 
+[0] > agent-feed@1.0.0 dev:frontend
+[0] > cd frontend && npm run dev
+[0] 
+[0] 
+[0] > agent-feed-frontend@2.0.0 dev
+[0] > vite
+[0] 
+[0] 
+[0]   VITE v7.1.3  ready in 639 ms
+[0] 
+[0]   ➜  Local:   http://localhost:5173/
+[0]   ➜  Network: http://10.0.2.49:5173/
+[1] ✅ Additional production API routes registered:
+[1]    GET  /api/agents
+[1]    GET  /api/v1/activities
+[1]    GET  /api/v1/metrics/system
+[1]    GET  /api/v1/analytics
+[1]    GET  /api/health
+[1] 🔄 Initializing SPARC unified server...
+[1] 🔄 Initializing unified database service...
+[1] 🔄 Initializing Database Service...
+[1] ⚠️ PostgreSQL connection failed, falling back to SQLite: PostgreSQL not configured for this environment
+[1] ✅ SQLite fallback database initialized at: /workspaces/agent-feed/data/agent-feed.db
+[1] ✅ SQLite fallback database initialized
+[1] ✅ Database Service initialized using SQLite
+[1] ✅ Database service initialized successfully
+[1] 📊 Database: SQLite with real production data
+[1] ✅ Agent API routes registered:
+[1]    GET  /api/agents
+[1]    GET  /api/agents/health
+[1] ✅ Registering real database API endpoints...
+[1] ✅ Phase 2 Interactive API routes registered:
+[1]    GET  /api/v1/agent-posts (with filtering)
+[1]    POST /api/v1/agent-posts
+[1]    POST /api/v1/agent-posts/filter (enhanced multi-filter)
+[1]    GET  /api/v1/filter-suggestions (type-ahead)
+[1]    GET  /api/v1/filter-data (available filters)
+[1]    DELETE /api/v1/agent-posts/:id
+[1]    POST /api/v1/agent-posts/:id/save
+[1]    DELETE /api/v1/agent-posts/:id/save
+[1]    POST /api/v1/link-preview
+[1]    GET  /api/v1/health
+[1] ✅ Real-time data broadcasting initialized
+[1] node:events:496
+[1]       throw er; // Unhandled 'error' event
+[1]       ^
+[1] 
+[1] Error: listen EADDRINUSE: address already in use :::3000
+[1]     at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+[1]     at listenInCluster (node:net:1997:12)
+[1]     at Server.listen (node:net:2102:7)
+[1]     at startServer (file:///workspaces/agent-feed/simple-backend.js:3829:12)
+[1] Emitted 'error' event on WebSocketServer instance at:
+[1]     at Server.emit (node:events:530:35)
+[1]     at emitErrorNT (node:net:1976:8)
+[1]     at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+[1]   code: 'EADDRINUSE',
+[1]   errno: -98,
+[1]   syscall: 'listen',
+[1]   address: '::',
+[1]   port: 3000
+[1] }
+[1] 
+[1] Node.js v22.17.0
+[1] npm run dev:backend exited with code 1
+[0] npm run dev:frontend exited with code 143

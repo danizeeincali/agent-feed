@@ -7,7 +7,6 @@ import {
   Star,
   MoreHorizontal,
   Tag,
-  Heart,
   Plus,
   X,
   Edit3,
@@ -37,7 +36,6 @@ interface AgentPost {
     tags: string[];
     isAgentResponse: boolean;
   };
-  likes?: number;
   comments?: number;
 }
 
@@ -110,7 +108,6 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
     subscribeFeed, 
     unsubscribeFeed, 
     subscribePost, 
-    sendLike,
     addNotification
   } = useWebSocketContext();
   
@@ -190,20 +187,7 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
       setPosts(prev => prev.filter(post => post.id !== data.id));
     };
 
-    // Handle like updates
-    const handleLikeUpdated = (data: any) => {
-      setPosts(prev => prev.map(post => {
-        if (post.id === data.postId) {
-          const currentLikes = post.likes || 0;
-          return {
-            ...post,
-            likes: data.action === 'add' ? currentLikes + 1 : Math.max(0, currentLikes - 1)
-          };
-        }
-        return post;
-      }));
-    };
-
+  
     // Handle comment updates
     const handleCommentCreated = (data: any) => {
       setPosts(prev => prev.map(post => {
@@ -221,14 +205,12 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
     on('post:created', handlePostCreated);
     on('post:updated', handlePostUpdated);
     on('post:deleted', handlePostDeleted);
-    on('like:updated', handleLikeUpdated);
     on('comment:created', handleCommentCreated);
 
     return () => {
       off('post:created', handlePostCreated);
       off('post:updated', handlePostUpdated);
       off('post:deleted', handlePostDeleted);
-      off('like:updated', handleLikeUpdated);
       off('comment:created', handleCommentCreated);
     };
   }, [on, off, addNotification]);
@@ -452,41 +434,6 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
       .join(' ');
   };
 
-  // Enhanced engagement handling
-  const handleLikePost = async (postId: string, currentLikes: number) => {
-    // Optimistically update UI
-    const updatePosts = (posts: AgentPost[]) => 
-      posts.map(post => 
-        post.id === postId 
-          ? { ...post, likes: currentLikes + 1 }
-          : post
-      );
-    
-    setPosts(updatePosts);
-    if (isSearching) {
-      setSearch(prev => ({ ...prev, results: updatePosts(prev.results) }));
-    }
-    
-    try {
-      // Send to database
-      await apiService.updatePostEngagement(postId, 'like');
-      // Send like event via WebSocket for real-time updates
-      sendLike(postId, 'add');
-    } catch (error) {
-      console.error('Failed to update like:', error);
-      // Revert optimistic update on failure
-      const revertPosts = (posts: AgentPost[]) => 
-        posts.map(post => 
-          post.id === postId 
-            ? { ...post, likes: currentLikes }
-            : post
-        );
-      setPosts(revertPosts);
-      if (isSearching) {
-        setSearch(prev => ({ ...prev, results: revertPosts(prev.results) }));
-      }
-    }
-  };
   
   const handleCommentPost = async (postId: string) => {
     // Subscribe to post for real-time comment updates
@@ -840,19 +787,6 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
                 <div className="px-4 py-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-6">
-                      <button 
-                        className={`flex items-center space-x-2 transition-colors ${
-                          connectionStatus.connected
-                            ? 'text-gray-500 hover:text-red-500'
-                            : 'text-gray-400 cursor-not-allowed opacity-50'
-                        }`}
-                        onClick={() => connectionStatus.connected && handleLikePost(post.id, post.likes || 0)}
-                        disabled={!connectionStatus.connected}
-                        title={!connectionStatus.connected ? 'Database unavailable - will sync when reconnected' : 'Like this post'}
-                      >
-                        <Heart className="h-5 w-5" />
-                        <span className="text-sm">{post.likes || 0}</span>
-                      </button>
                       
                       <button 
                         className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors"

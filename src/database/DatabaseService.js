@@ -81,7 +81,6 @@ class DatabaseService {
         author_agent VARCHAR(255) NOT NULL,
         published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         metadata JSONB DEFAULT '{}'::jsonb,
-        likes INTEGER DEFAULT 0,
         comments INTEGER DEFAULT 0
       )
     `;
@@ -307,8 +306,8 @@ class DatabaseService {
     try {
       if (this.dbType === 'SQLite') {
         const insertPost = this.db.db.prepare(`
-          INSERT INTO agent_posts (id, title, content, author_agent, metadata, likes, comments)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO agent_posts (id, title, content, author_agent, metadata, comments)
+          VALUES (?, ?, ?, ?, ?, ?)
         `);
 
         insertPost.run(
@@ -317,20 +316,18 @@ class DatabaseService {
           postData.content,
           postData.author_agent,
           JSON.stringify(postData.metadata || {}),
-          postData.likes || 0,
           postData.comments || 0
         );
       } else {
         await this.db.query(`
-          INSERT INTO agent_posts (id, title, content, author_agent, metadata, likes, comments)
-          VALUES ($1, $2, $3, $4, $5, $6, $7)
+          INSERT INTO agent_posts (id, title, content, author_agent, metadata, comments)
+          VALUES ($1, $2, $3, $4, $5, $6)
         `, [
           id,
           postData.title,
           postData.content,
           postData.author_agent,
           JSON.stringify(postData.metadata || {}),
-          postData.likes || 0,
           postData.comments || 0
         ]);
       }
@@ -438,6 +435,232 @@ class DatabaseService {
     }
   }
 
+  // Enhanced Multi-Filter Methods
+  async getPostsByMultipleAgents(agents, limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getPostsByMultipleAgents(agents, limit, offset, userId);
+      } else {
+        // PostgreSQL implementation would go here
+        if (!Array.isArray(agents) || agents.length === 0) {
+          return { posts: [], total: 0 };
+        }
+
+        const placeholders = agents.map((_, index) => `$${index + 1}`).join(',');
+        const postsResult = await this.db.query(`
+          SELECT id, title, content, author_agent, published_at, metadata, comments
+          FROM agent_posts 
+          WHERE author_agent IN (${placeholders})
+          ORDER BY published_at DESC 
+          LIMIT $${agents.length + 1} OFFSET $${agents.length + 2}
+        `, [...agents, limit, offset]);
+
+        const countResult = await this.db.query(`
+          SELECT COUNT(*) as count FROM agent_posts 
+          WHERE author_agent IN (${placeholders})
+        `, agents);
+
+        return {
+          posts: postsResult.rows.map(row => ({
+            ...row,
+            authorAgent: row.author_agent,
+            publishedAt: row.published_at,
+            metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata
+          })),
+          total: parseInt(countResult.rows[0].count)
+        };
+      }
+    } catch (error) {
+      console.error('Error fetching posts by multiple agents:', error);
+      throw error;
+    }
+  }
+
+  async getPostsByMultipleTags(tags, limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getPostsByMultipleTags(tags, limit, offset, userId);
+      } else {
+        // PostgreSQL implementation would use JSONB operators
+        if (!Array.isArray(tags) || tags.length === 0) {
+          return { posts: [], total: 0 };
+        }
+
+        // For PostgreSQL, we'd use JSONB operators like @> or ?&
+        const tagConditions = tags.map((_, index) => `metadata->>'tags' LIKE $${index + 1}`).join(' AND ');
+        const tagParams = tags.map(tag => `%"${tag}"%`);
+        
+        const postsResult = await this.db.query(`
+          SELECT id, title, content, author_agent, published_at, metadata, comments
+          FROM agent_posts 
+          WHERE ${tagConditions}
+          ORDER BY published_at DESC 
+          LIMIT $${tags.length + 1} OFFSET $${tags.length + 2}
+        `, [...tagParams, limit, offset]);
+
+        const countResult = await this.db.query(`
+          SELECT COUNT(*) as count FROM agent_posts 
+          WHERE ${tagConditions}
+        `, tagParams);
+
+        return {
+          posts: postsResult.rows.map(row => ({
+            ...row,
+            authorAgent: row.author_agent,
+            publishedAt: row.published_at,
+            metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata
+          })),
+          total: parseInt(countResult.rows[0].count)
+        };
+      }
+    } catch (error) {
+      console.error('Error fetching posts by multiple tags:', error);
+      throw error;
+    }
+  }
+
+  async getPostsByAgentsAndTags(agents = [], tags = [], limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getPostsByAgentsAndTags(agents, tags, limit, offset, userId);
+      } else {
+        // PostgreSQL implementation
+        const hasAgents = Array.isArray(agents) && agents.length > 0;
+        const hasTags = Array.isArray(tags) && tags.length > 0;
+        
+        if (!hasAgents && !hasTags) {
+          return this.getAgentPosts(limit, offset, userId);
+        }
+
+        let whereClause = '';
+        let params = [];
+        let paramIndex = 1;
+        
+        if (hasAgents) {
+          const agentPlaceholders = agents.map(() => `$${paramIndex++}`).join(',');
+          whereClause += `author_agent IN (${agentPlaceholders})`;
+          params.push(...agents);
+        }
+        
+        if (hasTags) {
+          if (whereClause) whereClause += ' AND ';
+          const tagConditions = tags.map(() => `metadata->>'tags' LIKE $${paramIndex++}`).join(' AND ');
+          whereClause += `(${tagConditions})`;
+          params.push(...tags.map(tag => `%"${tag}"%`));
+        }
+
+        params.push(limit, offset);
+
+        const postsResult = await this.db.query(`
+          SELECT id, title, content, author_agent, published_at, metadata, comments
+          FROM agent_posts 
+          WHERE ${whereClause}
+          ORDER BY published_at DESC 
+          LIMIT $${paramIndex++} OFFSET $${paramIndex++}
+        `, params);
+
+        const countResult = await this.db.query(`
+          SELECT COUNT(*) as count FROM agent_posts 
+          WHERE ${whereClause}
+        `, params.slice(0, -2)); // Remove limit and offset for count
+
+        return {
+          posts: postsResult.rows.map(row => ({
+            ...row,
+            authorAgent: row.author_agent,
+            publishedAt: row.published_at,
+            metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata
+          })),
+          total: parseInt(countResult.rows[0].count)
+        };
+      }
+    } catch (error) {
+      console.error('Error fetching posts by agents and tags:', error);
+      throw error;
+    }
+  }
+
+  async getMultiFilteredPosts(agents, hashtags, mode = 'AND', limit = 50, offset = 0) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+    
+    if (this.config.type === 'postgresql') {
+      // PostgreSQL implementation would go here
+      throw new Error('PostgreSQL multi-filter not yet implemented');
+    } else {
+      return this.db.getMultiFilteredPosts(agents, hashtags, mode, limit, offset);
+    }
+  }
+
+  async getFilterSuggestions(type, query = '', limit = 10) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getFilterSuggestions(type, query, limit);
+      } else {
+        // PostgreSQL implementation
+        const searchQuery = `%${query.toLowerCase()}%`;
+        
+        if (type === 'agent') {
+          const result = await this.db.query(`
+            SELECT DISTINCT author_agent as value, author_agent as label, COUNT(*) as post_count
+            FROM agent_posts 
+            WHERE LOWER(author_agent) LIKE $1
+            GROUP BY author_agent
+            ORDER BY post_count DESC, author_agent
+            LIMIT $2
+          `, [searchQuery, limit]);
+          
+          return result.rows.map(agent => ({
+            value: agent.value,
+            label: agent.label,
+            type: 'agent',
+            postCount: parseInt(agent.post_count)
+          }));
+        } else if (type === 'hashtag') {
+          // For PostgreSQL, we'd use JSONB operators to extract tags
+          const result = await this.db.query(`
+            SELECT tag.value as tag_name, COUNT(*) as post_count
+            FROM agent_posts, 
+                 jsonb_array_elements_text(metadata->'tags') as tag(value)
+            WHERE LOWER(tag.value) LIKE $1
+            GROUP BY tag.value
+            ORDER BY post_count DESC, tag.value
+            LIMIT $2
+          `, [searchQuery, limit]);
+          
+          return result.rows.map(tag => ({
+            value: tag.tag_name,
+            label: `#${tag.tag_name}`,
+            type: 'hashtag',
+            postCount: parseInt(tag.post_count)
+          }));
+        }
+      }
+      
+      return [];
+    } catch (error) {
+      console.error('Error fetching filter suggestions:', error);
+      throw error;
+    }
+  }
+
   async healthCheck() {
     try {
       const health = {
@@ -477,6 +700,81 @@ class DatabaseService {
 
   getDatabaseType() {
     return this.dbType;
+  }
+
+  // Get posts by specific user (My Posts)
+  async getMyPosts(userId, limit = 20, offset = 0) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getMyPosts(userId, limit, offset);
+      } else {
+        // PostgreSQL implementation would go here
+        const postsResult = await this.db.query(`
+          SELECT id, title, content, author_agent, user_id, published_at, metadata, comments
+          FROM agent_posts 
+          WHERE user_id = $1
+          ORDER BY published_at DESC 
+          LIMIT $2 OFFSET $3
+        `, [userId, limit, offset]);
+
+        const countResult = await this.db.query(`
+          SELECT COUNT(*) as count FROM agent_posts 
+          WHERE user_id = $1
+        `, [userId]);
+
+        return {
+          posts: postsResult.rows.map(row => ({
+            ...row,
+            authorAgent: row.author_agent,
+            publishedAt: row.published_at,
+            metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata
+          })),
+          total: parseInt(countResult.rows[0].count)
+        };
+      }
+    } catch (error) {
+      console.error('Error fetching my posts:', error);
+      throw error;
+    }
+  }
+
+  // Get filter counts for saved and my posts
+  async getFilterCounts(userId = 'anonymous') {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getFilterCounts(userId);
+      } else {
+        // PostgreSQL implementation would go here
+        const savedCountResult = await this.db.query(`
+          SELECT COUNT(*) as count FROM saved_posts 
+          WHERE user_id = $1
+        `, [userId]);
+
+        const myPostsCountResult = await this.db.query(`
+          SELECT COUNT(*) as count FROM agent_posts 
+          WHERE user_id = $1
+        `, [userId]);
+
+        return {
+          saved: parseInt(savedCountResult.rows[0].count) || 0,
+          myPosts: parseInt(myPostsCountResult.rows[0].count) || 0
+        };
+      }
+    } catch (error) {
+      console.error('Error fetching filter counts:', error);
+      return {
+        saved: 0,
+        myPosts: 0
+      };
+    }
   }
 
   close() {

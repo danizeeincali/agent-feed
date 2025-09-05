@@ -7,7 +7,9 @@ import {
   ClaudeInstance,
   ApiResponse,
   SearchFilters,
-  SearchResult
+  SearchResult,
+  FilterStats,
+  SavedPost
 } from '@/types/api';
 import { Task, Workflow, OrchestrationState } from '@/types';
 
@@ -17,7 +19,7 @@ class ApiService {
   private wsConnection: WebSocket | null = null;
   private eventHandlers: Map<string, Set<Function>> = new Map();
 
-  constructor(baseUrl: string = '/api/v1') {
+  constructor(baseUrl: string = 'http://localhost:3000/api/v1') {
     this.baseUrl = baseUrl;
     this.initializeWebSocket();
   }
@@ -267,7 +269,7 @@ class ApiService {
     });
   }
 
-  async updatePostEngagement(postId: string, action: 'like' | 'unlike' | 'comment'): Promise<ApiResponse<AgentPost>> {
+  async updatePostEngagement(postId: string, action: 'comment'): Promise<ApiResponse<AgentPost>> {
     this.clearCache('/agent-posts');
     return this.request<ApiResponse<AgentPost>>(`/agent-posts/${postId}/engagement`, {
       method: 'PUT',
@@ -276,20 +278,60 @@ class ApiService {
   }
 
 
-  // Save/unsave posts
-  async savePost(postId: string, save: boolean): Promise<ApiResponse<void>> {
+  // Save/unsave posts with improved error handling
+  async savePost(postId: string, save: boolean, userId = 'anonymous'): Promise<ApiResponse<void>> {
     this.clearCache('/agent-posts');
+    this.clearCache('/saved-posts');
+    this.clearCache('/filter-stats');
+    
     if (save) {
       // Save post - use POST
       return this.request<ApiResponse<void>>(`/agent-posts/${postId}/save`, {
         method: 'POST',
-        body: JSON.stringify({}),
+        body: JSON.stringify({ user_id: userId }),
       });
     } else {
       // Unsave post - use DELETE with query parameter (no body, no Content-Type header)
-      return this.request<ApiResponse<void>>(`/agent-posts/${postId}/save?user_id=anonymous`, {
+      return this.request<ApiResponse<void>>(`/agent-posts/${postId}/save?user_id=${userId}`, {
         method: 'DELETE'
       });
+    }
+  }
+
+  // Check if post is saved by user
+  async isPostSaved(postId: string, userId = 'anonymous'): Promise<boolean> {
+    try {
+      const response = await this.request<{ isSaved: boolean }>(`/agent-posts/${postId}/saved?user_id=${userId}`);
+      return response.isSaved || false;
+    } catch (error) {
+      console.error('Error checking if post is saved:', error);
+      return false;
+    }
+  }
+
+  // Filter suggestions for multi-select
+  async getFilterSuggestions(type: 'agents' | 'hashtags', query: string, limit: number = 10): Promise<any[]> {
+    try {
+      const params = new URLSearchParams({
+        type: type === 'agents' ? 'agent' : 'hashtag',
+        query: query.trim(),
+        limit: limit.toString()
+      });
+      
+      const response = await this.request<any>(`/filter-suggestions?${params}`, {}, false);
+      
+      if (response.success && response.data) {
+        return response.data.map((item: any) => ({
+          value: item.value,
+          label: item.label || item.value,
+          postCount: item.postCount || 0
+        }));
+      }
+      
+      return [];
+    } catch (error) {
+      console.error('Error fetching filter suggestions:', error);
+      return [];
     }
   }
 
@@ -303,15 +345,18 @@ class ApiService {
     });
   }
 
-  // Get filtered posts
+  // Get filtered posts - Enhanced for multi-select support
   async getFilteredPosts(
     limit = 50, 
     offset = 0, 
     filter: {
-      type: 'all' | 'agent' | 'hashtag' | 'saved' | 'myposts';
+      type: 'all' | 'agent' | 'hashtag' | 'saved' | 'myposts' | 'multi-select';
       value?: string;
       agent?: string;
       hashtag?: string;
+      agents?: string[];
+      hashtags?: string[];
+      combinationMode?: 'AND' | 'OR';
     }
   ): Promise<any> {
     // Use the main agent-posts endpoint with filter parameter (like backend expects)
@@ -338,12 +383,60 @@ class ApiService {
           params.set('tags', filter.hashtag);
         }
         break;
+      case 'multi-select':
+        // CRITICAL FIX: Enhanced multi-select filter handling with proper logic
+        const hasAgents = filter.agents && filter.agents.length > 0;
+        const hasHashtags = filter.hashtags && filter.hashtags.length > 0;
+        const hasSavedPosts = filter.savedPostsEnabled === true;
+        const hasMyPosts = filter.myPostsEnabled === true;
+        
+        // CRITICAL FIX: Multi-select should apply if ANY filter criteria exists
+        // Previous bug: Only worked when saved/my posts were enabled
+        if (hasAgents || hasHashtags || hasSavedPosts || hasMyPosts) {
+          params.set('filter', 'multi-select');
+          
+          // Add agent filters - FIXED: Always set if agents exist
+          if (hasAgents) {
+            params.set('agents', filter.agents!.join(','));
+            console.log('API: Setting agents filter:', filter.agents);
+          }
+          
+          // Add hashtag filters - FIXED: Always set if hashtags exist
+          if (hasHashtags) {
+            params.set('hashtags', filter.hashtags!.join(','));
+            console.log('API: Setting hashtags filter:', filter.hashtags);
+          }
+          
+          // Add saved posts filter (optional)
+          if (hasSavedPosts) {
+            params.set('include_saved', 'true');
+            params.set('user_id', filter.userId || 'anonymous');
+            console.log('API: Setting saved posts filter');
+          }
+          
+          // Add my posts filter (optional)
+          if (hasMyPosts) {
+            params.set('include_my_posts', 'true');
+            params.set('user_id', filter.userId || 'anonymous');
+            console.log('API: Setting my posts filter');
+          }
+          
+          // Set combination mode (default to AND)
+          params.set('mode', filter.combinationMode || 'AND');
+          console.log('API: Multi-select filter applied with mode:', filter.combinationMode || 'AND');
+        } else {
+          // FALLBACK: No valid filters selected, show all posts
+          params.set('filter', 'all');
+          console.log('API: No multi-select criteria, falling back to all posts');
+        }
+        break;
       case 'saved':
         params.set('filter', 'saved');
-        params.set('user_id', 'anonymous'); // Use consistent anonymous user ID
+        params.set('user_id', filter.userId || 'anonymous');
         break;
       case 'myposts':
         params.set('filter', 'my-posts');
+        params.set('user_id', filter.userId || 'anonymous');
         break;
       default:
         params.set('filter', 'all');
@@ -368,17 +461,18 @@ class ApiService {
     }
   }
 
-  // Get available agents and hashtags for filtering
+  // Get available agents and hashtags for filtering with enhanced stats
   async getFilterData(): Promise<{
     agents: string[];
     hashtags: string[];
+    stats?: FilterStats;
   }> {
     const cacheKey = '/filter-data';
-    const cached = this.getCachedData<{ agents: string[]; hashtags: string[] }>(cacheKey);
+    const cached = this.getCachedData<{ agents: string[]; hashtags: string[]; stats?: FilterStats }>(cacheKey);
     if (cached) return cached;
     
     try {
-      const response = await this.request<{ agents: string[]; hashtags: string[] }>('/filter-data', {}, false);
+      const response = await this.request<{ agents: string[]; hashtags: string[]; stats?: FilterStats }>('/filter-data', {}, false);
       this.setCachedData(cacheKey, response, 30000); // 30 second cache
       return response;
     } catch (error) {
@@ -386,6 +480,38 @@ class ApiService {
       return {
         agents: [],
         hashtags: []
+      };
+    }
+  }
+
+  // Get saved posts for current user
+  async getSavedPosts(limit = 20, offset = 0, userId = 'anonymous'): Promise<ApiResponse<SavedPost[]>> {
+    const params = new URLSearchParams({
+      limit: limit.toString(),
+      offset: offset.toString(),
+      user_id: userId
+    });
+    return this.request<ApiResponse<SavedPost[]>>(`/saved-posts?${params}`);
+  }
+
+  // Get filter statistics with counts
+  async getFilterStats(userId = 'anonymous'): Promise<FilterStats> {
+    const cacheKey = `/filter-stats?user_id=${userId}`;
+    const cached = this.getCachedData<FilterStats>(cacheKey);
+    if (cached) return cached;
+    
+    try {
+      const response = await this.request<FilterStats>(`/filter-stats?user_id=${userId}`, {}, false);
+      this.setCachedData(cacheKey, response, 15000); // 15 second cache
+      return response;
+    } catch (error) {
+      console.error('API Error in getFilterStats:', error);
+      return {
+        totalPosts: 0,
+        savedPosts: 0,
+        myPosts: 0,
+        agentCounts: {},
+        hashtagCounts: {}
       };
     }
   }

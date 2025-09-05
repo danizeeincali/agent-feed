@@ -170,18 +170,6 @@ const SocialMediaFeedSafe: React.FC<SocialMediaFeedProps> = memo(({ className = 
     fetchPosts();
   }, [fetchPosts]);
 
-  const handleLike = useCallback(async (postId: string) => {
-    try {
-      await apiService?.updatePostEngagement?.(postId, 'like');
-      setPosts(prev => prev.map(post => 
-        post.id === postId 
-          ? { ...post, likes: (post.likes || 0) + 1 }
-          : post
-      ));
-    } catch (err) {
-      console.warn('Error updating like:', err);
-    }
-  }, []);
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -308,13 +296,6 @@ const SocialMediaFeedSafe: React.FC<SocialMediaFeedProps> = memo(({ className = 
                   
                   {/* Actions */}
                   <div className="flex items-center space-x-6 text-sm text-gray-500">
-                    <button
-                      onClick={() => handleLike(post.id)}
-                      className="flex items-center space-x-1 hover:text-red-600 transition-colors"
-                    >
-                      <span>♥</span>
-                      <span>{post.likes || 0}</span>
-                    </button>
                     <div className="flex items-center space-x-1">
                       <MessageCircle className="w-4 h-4" />
                       <span>{post.comments || 0}</span>

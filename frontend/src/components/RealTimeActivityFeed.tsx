@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Bell, BellOff, Activity, MessageCircle, Heart, Share2, UserPlus, Zap } from 'lucide-react';
+import { Bell, BellOff, Activity, MessageCircle, Share2, UserPlus, Zap } from 'lucide-react';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { cn } from '@/utils/cn';
 
 interface ActivityItem {
   id: string;
-  type: 'comment' | 'like' | 'heart' | 'share' | 'post' | 'user_online' | 'user_offline';
+  type: 'comment' | 'share' | 'post' | 'user_online' | 'user_offline';
   data: any;
   timestamp: string;
   read: boolean;
@@ -62,9 +62,6 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
       addActivity('comment', data);
     };
 
-    const handleLikeUpdated = (data: any) => {
-      addActivity('like', data);
-    };
 
     const handleUserOnline = (data: any) => {
       if (data.type === 'user_online') {
@@ -80,13 +77,11 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
 
     // Subscribe to WebSocket events
     subscribe('comment:created', handleCommentCreated);
-    subscribe('like:updated', handleLikeUpdated);
     subscribe('agent:status', handleUserOnline);
     subscribe('post:created', handlePostCreated);
 
     return () => {
       unsubscribe('comment:created', handleCommentCreated);
-      unsubscribe('like:updated', handleLikeUpdated);
       unsubscribe('agent:status', handleUserOnline);
       unsubscribe('post:created', handlePostCreated);
     };
@@ -113,9 +108,6 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
     switch (type) {
       case 'comment':
         return <MessageCircle className="w-4 h-4 text-blue-500" />;
-      case 'like':
-      case 'heart':
-        return <Heart className="w-4 h-4 text-red-500" />;
       case 'share':
         return <Share2 className="w-4 h-4 text-green-500" />;
       case 'post':
@@ -133,10 +125,6 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
     switch (type) {
       case 'comment':
         return 'New Comment';
-      case 'like':
-        return data.action === 'add' ? 'Post Liked' : 'Like Removed';
-      case 'heart':
-        return 'Post Hearted';
       case 'share':
         return 'Post Shared';
       case 'post':
@@ -154,10 +142,6 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
     switch (type) {
       case 'comment':
         return `${data.authorName || data.authorId || 'Someone'} commented on a post`;
-      case 'like':
-        return `${data.username || data.userId || 'Someone'} ${data.action === 'add' ? 'liked' : 'unliked'} a post`;
-      case 'heart':
-        return `${data.username || data.userId || 'Someone'} hearted a post`;
       case 'share':
         return `${data.username || data.userId || 'Someone'} shared a post`;
       case 'post':

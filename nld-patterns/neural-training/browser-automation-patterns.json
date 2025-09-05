@@ -1,0 +1,163 @@
+{
+  "automation_pattern_id": "BROWSER_AUTO_FILTER_v1.0",
+  "timestamp": "2025-09-05T12:00:00Z",
+  "target_failure": "Multi-select filter zero results and reset failure",
+  "browser_test_patterns": {
+    "critical_user_journeys": [
+      {
+        "journey_id": "MULTI_SELECT_FILTER_WORKFLOW",
+        "steps": [
+          {
+            "action": "Navigate to feed page",
+            "validation": "Page loads with posts visible",
+            "selector": "[data-testid='social-feed']"
+          },
+          {
+            "action": "Click Advanced Filter button",
+            "validation": "Multi-select panel opens",
+            "selector": "[data-testid='advanced-filter-button']"
+          },
+          {
+            "action": "Select agents via type-ahead",
+            "validation": "Agents appear in selected list",
+            "selector": "[data-testid='agent-multiselect']",
+            "input_data": ["test-agent", "claude-agent"]
+          },
+          {
+            "action": "Select hashtags via type-ahead", 
+            "validation": "Hashtags appear in selected list",
+            "selector": "[data-testid='hashtag-multiselect']",
+            "input_data": ["ai", "testing"]
+          },
+          {
+            "action": "Click Apply Filter",
+            "validation": "Posts filter correctly - should show > 0 results",
+            "selector": "[data-testid='apply-filter-button']",
+            "critical_assertion": "expect(posts).toHaveLength.greaterThan(0)"
+          },
+          {
+            "action": "Click Clear Filter",
+            "validation": "All posts return - should show original count",
+            "selector": "[data-testid='clear-filter-button']", 
+            "critical_assertion": "expect(posts).toHaveLength.greaterThanOrEqual(5)"
+          }
+        ],
+        "failure_pattern": {
+          "symptom": "Apply Filter shows 0 results, Clear Filter doesn't reset",
+          "automation_detection": "Assert posts.length > 0 after apply, posts.length >= original_count after clear"
+        }
+      },
+      {
+        "journey_id": "FILTER_STATE_PERSISTENCE",
+        "steps": [
+          {
+            "action": "Apply multi-select filter",
+            "validation": "Filter state persists in UI"
+          },
+          {
+            "action": "Refresh page",
+            "validation": "Filter state resets to 'All Posts'"
+          },
+          {
+            "action": "Apply filter again",
+            "validation": "Same results as before refresh"
+          }
+        ]
+      }
+    ],
+    "api_validation_patterns": [
+      {
+        "pattern_id": "API_PARAMETER_VALIDATION",
+        "approach": "Intercept network requests during browser tests",
+        "validations": [
+          {
+            "endpoint_match": "/api/v1/agent-posts*filter=multi-select*",
+            "parameter_format_check": {
+              "agents": "should be comma-separated string",
+              "hashtags": "should be comma-separated WITHOUT # prefix",
+              "mode": "should be 'AND' or 'OR'"
+            },
+            "response_validation": {
+              "success": true,
+              "data": "array with length > 0 if valid data exists"
+            }
+          }
+        ]
+      }
+    ],
+    "state_flow_validation": [
+      {
+        "pattern_id": "FILTER_STATE_PROPAGATION",
+        "approach": "Track state changes through React DevTools or data-attributes",
+        "validations": [
+          {
+            "trigger": "onFilterChange called",
+            "expected_propagation": [
+              "SocialMediaFeed.filter state updates",
+              "fetchPosts called with new filter",
+              "API request made with correct parameters",
+              "Posts list updates with new data"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "playwright_implementation": {
+    "test_file": "multi-select-filter-validation.spec.ts",
+    "setup": {
+      "beforeEach": [
+        "Start backend server",
+        "Seed database with test data",
+        "Navigate to feed page"
+      ]
+    },
+    "test_pattern": `
+      test('multi-select filter workflow prevents zero-result bug', async ({ page }) => {
+        // Navigate and wait for initial posts
+        await page.goto('/');
+        await page.waitForSelector('[data-testid="post-card"]');
+        const initialCount = await page.locator('[data-testid="post-card"]').count();
+        expect(initialCount).toBeGreaterThan(0);
+
+        // Open advanced filter
+        await page.click('[data-testid="advanced-filter-button"]');
+        await page.waitForSelector('[data-testid="multi-select-panel"]');
+
+        // Select agents
+        await page.fill('[data-testid="agent-search-input"]', 'test');
+        await page.click('[data-testid="agent-option-test"]');
+        
+        // Select hashtags  
+        await page.fill('[data-testid="hashtag-search-input"]', 'ai');
+        await page.click('[data-testid="hashtag-option-ai"]');
+
+        // Intercept API call to validate parameters
+        const apiRequest = page.waitForRequest(req => 
+          req.url().includes('/api/v1/agent-posts') && 
+          req.url().includes('filter=multi-select')
+        );
+        
+        // Apply filter
+        await page.click('[data-testid="apply-filter-button"]');
+        
+        // Validate API parameters
+        const request = await apiRequest;
+        const url = new URL(request.url());
+        expect(url.searchParams.get('agents')).toBe('test');
+        expect(url.searchParams.get('hashtags')).toBe('ai'); // NO # prefix
+        
+        // Critical assertion: Should show results
+        await page.waitForSelector('[data-testid="post-card"]', { timeout: 5000 });
+        const filteredCount = await page.locator('[data-testid="post-card"]').count();
+        expect(filteredCount).toBeGreaterThan(0);
+
+        // Test clear filter
+        await page.click('[data-testid="clear-filter-button"]');
+        await page.waitForSelector('[data-testid="post-card"]');
+        const clearedCount = await page.locator('[data-testid="post-card"]').count();
+        expect(clearedCount).toBeGreaterThanOrEqual(initialCount);
+      });
+    `
+  }
+}

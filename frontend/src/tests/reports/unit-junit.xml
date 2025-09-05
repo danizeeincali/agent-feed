@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="17" failures="2" errors="0" time="4.572349864">
+    <testsuite name="src/tests/unit/FilterPanel.london.test.tsx" timestamp="2025-09-05T21:29:16.827Z" hostname="codespaces-005acc" tests="17" failures="2" errors="0" skipped="0" time="4.572349864">
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Advanced Filter Button Interaction &gt; should render Advanced Filter option in dropdown" time="0.384638413">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Advanced Filter Button Interaction &gt; should open multi-select panel when Advanced Filter is clicked" time="0.213198669">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Advanced Filter Button Interaction &gt; should show Cancel and Apply buttons in multi-select panel" time="0.260517686">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; MultiSelectInput Integration - Contract Verification &gt; should render MultiSelectInput components for agents and hashtags" time="0.109818351">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; MultiSelectInput Integration - Contract Verification &gt; should pass correct props to agent MultiSelectInput" time="0.185740553">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; MultiSelectInput Integration - Contract Verification &gt; should handle typing in agent input and trigger suggestions request" time="0.248440397">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; MultiSelectInput Integration - Contract Verification &gt; should handle typing in hashtag input and trigger suggestions request" time="0.322954914">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Apply Filter Behavior - Mock Verification &gt; should be disabled when no agents or hashtags are selected" time="0.177195481">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Apply Filter Behavior - Mock Verification &gt; should call onFilterChange with correct multi-select filter when applied" time="0.324340781">
+            <system-out>
+FilterPanel: Applying multi-select filter: {
+  type: [32m&apos;multi-select&apos;[39m,
+  multiSelectMode: [33mtrue[39m,
+  agents: [ [32m&apos;Agent1&apos;[39m ],
+  hashtags: [ [32m&apos;hashtag1&apos;[39m ],
+  combinationMode: [32m&apos;AND&apos;[39m,
+  userId: [32m&apos;anonymous&apos;[39m,
+  savedPostsEnabled: [33mfalse[39m,
+  myPostsEnabled: [33mfalse[39m
+}
+FilterPanel: Sending filter to parent: {
+  type: [32m&apos;multi-select&apos;[39m,
+  agents: [ [32m&apos;Agent1&apos;[39m ],
+  hashtags: [ [32m&apos;hashtag1&apos;[39m ],
+  combinationMode: [32m&apos;AND&apos;[39m,
+  savedPostsEnabled: [33mfalse[39m,
+  myPostsEnabled: [33mfalse[39m,
+  userId: [32m&apos;anonymous&apos;[39m
+}
+
+            </system-out>
+            <failure message="expected &quot;spy&quot; to be called with arguments: [ ObjectContaining{…} ][90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m[2m  [[22m
+[32m-   ObjectContaining {[90m
+[32m-     &quot;multiSelectMode&quot;: true,[90m
+[31m+   {[90m
+[31m+     &quot;agents&quot;: [[90m
+[31m+       &quot;Agent1&quot;,[90m
+[31m+     ],[90m
+[31m+     &quot;combinationMode&quot;: &quot;AND&quot;,[90m
+[31m+     &quot;hashtags&quot;: [[90m
+[31m+       &quot;hashtag1&quot;,[90m
+[31m+     ],[90m
+[31m+     &quot;myPostsEnabled&quot;: false,[90m
+[31m+     &quot;savedPostsEnabled&quot;: false,[90m
+[2m      &quot;type&quot;: &quot;multi-select&quot;,[22m
+[31m+     &quot;userId&quot;: &quot;anonymous&quot;,[90m
+[2m    },[22m
+[2m  ][22m
+[39m[90m
+
+Number of calls: [1m1[22m
+[39m" type="AssertionError">
+AssertionError: expected &quot;spy&quot; to be called with arguments: [ ObjectContaining{…} ]
+
+Received: 
+
+  1st spy call:
+
+  [
+-   ObjectContaining {
+-     &quot;multiSelectMode&quot;: true,
++   {
++     &quot;agents&quot;: [
++       &quot;Agent1&quot;,
++     ],
++     &quot;combinationMode&quot;: &quot;AND&quot;,
++     &quot;hashtags&quot;: [
++       &quot;hashtag1&quot;,
++     ],
++     &quot;myPostsEnabled&quot;: false,
++     &quot;savedPostsEnabled&quot;: false,
+      &quot;type&quot;: &quot;multi-select&quot;,
++     &quot;userId&quot;: &quot;anonymous&quot;,
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/tests/unit/FilterPanel.london.test.tsx:170:34
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Combination Mode Selection - Interaction Testing &gt; should render AND/OR mode buttons" time="0.46157922">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Combination Mode Selection - Interaction Testing &gt; should default to AND mode" time="0.317128455">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Combination Mode Selection - Interaction Testing &gt; should switch to OR mode when clicked" time="0.282220475">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Cancel Behavior - State Management Testing &gt; should close multi-select panel when Cancel is clicked" time="0.381393493">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Cancel Behavior - State Management Testing &gt; should close multi-select panel when clicking outside" time="0.284052395">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Loading State Handling - Contract Verification &gt; should pass loading state to MultiSelectInput components" time="0.274255174">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Error Handling - Failure Cases &gt; should handle missing onSuggestionsRequest gracefully" time="0.270189793">
+        </testcase>
+        <testcase classname="src/tests/unit/FilterPanel.london.test.tsx" name="FilterPanel - London School TDD &gt; Integration with Parent Component - Contract Testing &gt; should maintain filter state when switching between modes" time="0.066884059">
+            <failure message="Found multiple elements with the role &quot;button&quot;
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m&lt;button[39m
+  [33mclass[39m=[32m&quot;
+            flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors
+            bg-blue-50 border-blue-200 text-blue-700
+          &quot;[39m
+[36m&gt;[39m
+  [36m&lt;svg[39m
+    [33mclass[39m=[32m&quot;lucide lucide-settings w-4 h-4&quot;[39m
+    [33mfill[39m=[32m&quot;none&quot;[39m
+    [33mheight[39m=[32m&quot;24&quot;[39m
+    [33mstroke[39m=[32m&quot;currentColor&quot;[39m
+    [33mstroke-linecap[39m=[32m&quot;round&quot;[39m
+    [33mstroke-linejoin[39m=[32m&quot;round&quot;[39m
+    [33mstroke-width[39m=[32m&quot;2&quot;[39m
+    [33mviewBox[39m=[32m&quot;0 0 24 24&quot;[39m
+    [33mwidth[39m=[32m&quot;24&quot;[39m
+    [33mxmlns[39m=[32m&quot;http://www.w3.org/2000/svg&quot;[39m
+  [36m&gt;[39m
+    [36m&lt;path[39m
+      [33md[39m=[32m&quot;M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z&quot;[39m
+    [36m/&gt;[39m
+    [36m&lt;circle[39m
+      [33mcx[39m=[32m&quot;12&quot;[39m
+      [33mcy[39m=[32m&quot;12&quot;[39m
+      [33mr[39m=[32m&quot;3&quot;[39m
+    [36m/&gt;[39m
+  [36m&lt;/svg&gt;[39m
+  [36m&lt;span[39m
+    [33mclass[39m=[32m&quot;font-medium&quot;[39m
+    [33mdata-testid[39m=[32m&quot;filter-indicator&quot;[39m
+  [36m&gt;[39m
+    [0m1 agent + 1 tag[0m
+  [36m&lt;/span&gt;[39m
+  [36m&lt;svg[39m
+    [33mclass[39m=[32m&quot;lucide lucide-chevron-down w-4 h-4 transition-transform &quot;[39m
+    [33mfill[39m=[32m&quot;none&quot;[39m
+    [33mheight[39m=[32m&quot;24&quot;[39m
+    [33mstroke[39m=[32m&quot;currentColor&quot;[39m
+    [33mstroke-linecap[39m=[32m&quot;round&quot;[39m
+    [33mstroke-linejoin[39m=[32m&quot;round&quot;[39m
+    [33mstroke-width[39m=[32m&quot;2&quot;[39m
+    [33mviewBox[39m=[32m&quot;0 0 24 24&quot;[39m
+    [33mwidth[39m=[32m&quot;24&quot;[39m
+    [33mxmlns[39m=[32m&quot;http://www.w3.org/2000/svg&quot;[39m
+  [36m&gt;[39m
+    [36m&lt;path[39m
+      [33md[39m=[32m&quot;m6 9 6 6 6-6&quot;[39m
+    [36m/&gt;[39m
+  [36m&lt;/svg&gt;[39m
+[36m&lt;/button&gt;[39m
+
+Ignored nodes: comments, script, style
+[36m&lt;button[39m
+  [33mclass[39m=[32m&quot;flex items-center space-x-1 px-3 py-1 text-sm text-gray-500 hover:text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors&quot;[39m
+  [33mdata-testid[39m=[32m&quot;clear-filter-button&quot;[39m
+[36m&gt;[39m
+  [36m&lt;svg[39m
+    [33mclass[39m=[32m&quot;lucide lucide-x w-3 h-3&quot;[39m
+    [33mfill[39m=[32m&quot;none&quot;[39m
+    [33mheight[39m=[32m&quot;24&quot;[39m
+    [33mstroke[39m=[32m&quot;currentColor&quot;[39m
+    [33mstroke-linecap[39m=[32m&quot;round&quot;[39m
+    [33mstroke-linejoin[39m=[32m&quot;round&quot;[39m
+    [33mstroke-width[39m=[32m&quot;2&quot;[39m
+    [33mviewBox[39m=[32m&quot;0 0 24 24&quot;[39m
+    [33mwidth[39m=[32m&quot;24&quot;[39m
+    [33mxmlns[39m=[32m&quot;http://www.w3.org/2000/svg&quot;[39m
+  [36m&gt;[39m
+    [36m&lt;path[39m
+      [33md[39m=[32m&quot;M18 6 6 18&quot;[39m
+    [36m/&gt;[39m
+    [36m&lt;path[39m
+      [33md[39m=[32m&quot;m6 6 12 12&quot;[39m
+    [36m/&gt;[39m
+  [36m&lt;/svg&gt;[39m
+  [36m&lt;span&gt;[39m
+    [0mClear[0m
+  [36m&lt;/span&gt;[39m
+[36m&lt;/button&gt;[39m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m&lt;body&gt;[39m
+  [36m&lt;div&gt;[39m
+    [36m&lt;div[39m
+      [33mclass[39m=[32m&quot;relative &quot;[39m
+    [36m&gt;[39m
+      [36m&lt;div[39m
+        [33mclass[39m=[32m&quot;flex items-center space-x-3&quot;[39m
+      [36m&gt;[39m
+        [36m&lt;button[39m
+          [33mclass[39m=[32m&quot;
+            flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors
+            bg-blue-50 border-blue-200 text-blue-700
+          &quot;[39m
+        [36m&gt;[39m
+          [36m&lt;svg[39m
+            [33mclass[39m=[32m&quot;lucide lucide-settings w-4 h-4&quot;[39m
+            [33mfill[39m=[32m&quot;none&quot;[39m
+            [33mheight[39m=[32m&quot;24&quot;[39m
+            [33mstroke[39m=[32m&quot;currentColor&quot;[39m
+            [33mstroke-linecap[39m=[32m&quot;round&quot;[39m
+            [33mstroke-linejoin[39m=[32m&quot;round&quot;[39m
+            [33mstroke-width[39m=[32m&quot;2&quot;[39m
+            [33mviewBox[39m=[32m&quot;0 0 24 24&quot;[39m
+            [33mwidth[39m=[32m&quot;24&quot;[39m
+            [33mxmlns[39m=[32m&quot;http://www.w3.org/2000/svg&quot;[39m
+          [36m&gt;[39m
+            [36m&lt;path[39m
+              [33md[39m=[32m&quot;M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z&quot;[39m
+            [36m/&gt;[39m
+            [36m&lt;circle[39m
+              [33mcx[39m=[32m&quot;12&quot;[39m
+              [33mcy[39m=[32m&quot;12&quot;[39m
+              [33mr[39m=[32m&quot;3&quot;[39m
+            [36m/&gt;[39m
+          [36m&lt;/svg&gt;[39m
+          [36m&lt;span[39m
+            [33mclass[39m=[32m&quot;font-medium&quot;[39m
+            [33mdata-testid[39m=[32m&quot;filter-indicator&quot;[39m
+          [36m&gt;[39m
+            [0m1 agent + 1 tag[0m
+          [36m&lt;/span&gt;[39m
+          [36m&lt;svg[39m
+            [33mclass[39m=[32m&quot;lucide lucide-chevron-down w-4 h-4 transition-transform &quot;[39m
+            [33mfill[39m=[32m&quot;none&quot;[39m
+            [33mheight[39m=[32m&quot;24&quot;[39m
+            [33mstroke[39m=[32m&quot;currentColor&quot;[39m
+            [33mstroke-linecap[39m=[32m&quot;round&quot;[39m
+            [33mstroke-linejoin[39m=[32m&quot;round&quot;[39m
+            [33mstroke-width[39m=[32m&quot;2&quot;[39m
+            [33mviewBox[39m=[32m&quot;0 0 24 24&quot;[39m
+            [33mwidth[39m=[32m&quot;24&quot;[39m
+            [33mxmlns[39m=[32m&quot;http://www.w3.org/2000/svg&quot;[39m
+          [36m&gt;[39m
+            [36m&lt;path[39m
+              [33md[39m=[32m&quot;m6 9 6 6 6-6&quot;[39m
+            [36m/&gt;[39m
+          [36m&lt;/svg&gt;[39m
+        [36m&lt;/button&gt;[39m
+        [36m&lt;button[39m
+          [33mclass[39m=[32m&quot;flex items-center space-x-1 px-3 py-1 text-sm text-gray-500 hover:text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors&quot;[39m
+          [33mdata-testid[39m=[32m&quot;clear-filter-button&quot;[39m
+        [36m&gt;[39m
+          [36m&lt;svg[39m
+            [33mclass[39m=[32m&quot;lucide lucide-x w-3 h-3&quot;[39m
+            [33mfill[39m=[32m&quot;none&quot;[39m
+            [33mheight[39m=[32m&quot;24&quot;[39m
+            [33mstroke[39m=[32m&quot;currentColor&quot;[39m
+            [33mstroke-linecap[39m=[32m&quot;round&quot;[39m
+            [33mstroke-linejoin[39m=[32m&quot;round&quot;[39m
+            [33mstroke-width[39m=[32m&quot;2&quot;[39m
+            [33mviewBox[39m=[32m&quot;0 0 24 24&quot;[39m
+            [33mwidth[39m=[32m&quot;24&quot;[39m
+            [33mxmlns[39m=[32m&quot;http://www.w3.org/2000/svg&quot;[39m
+          [36m&gt;[39m
+            [36m&lt;path[39m
+              [33md[39m=[32m&quot;M18 6 6 18&quot;[39m
+            [36m/&gt;[39m
+            [36m&lt;path[39m
+              [33md[39m=[32m&quot;m6 6 12 12&quot;[39m
+            [36m/&gt;[39m
+          [36m&lt;/svg&gt;[39m
+          [36m&lt;span&gt;[39m
+            [0mClear[0m
+          [36m&lt;/span&gt;[39m
+        [36m&lt;/button&gt;[39m
+        [36m&lt;span[39m
+          [33mclass[39m=[32m&quot;text-sm text-gray-500&quot;[39m
+        [36m&gt;[39m
+          [0m42[0m
+          [0m post[0m
+          [0ms[0m
+        [36m&lt;/span&gt;[39m
+      [36m&lt;/div&gt;[39m
+    [36m&lt;/div&gt;[39m
+  [36m&lt;/div&gt;[39m
+[36m&lt;/body&gt;[39m" type="TestingLibraryElementError">
+TestingLibraryElementError: Found multiple elements with the role &quot;button&quot;
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+&lt;button
+  class=&quot;
+            flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors
+            bg-blue-50 border-blue-200 text-blue-700
+          &quot;
+&gt;
+  &lt;svg
+    class=&quot;lucide lucide-settings w-4 h-4&quot;
+    fill=&quot;none&quot;
+    height=&quot;24&quot;
+    stroke=&quot;currentColor&quot;
+    stroke-linecap=&quot;round&quot;
+    stroke-linejoin=&quot;round&quot;
+    stroke-width=&quot;2&quot;
+    viewBox=&quot;0 0 24 24&quot;
+    width=&quot;24&quot;
+    xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  &gt;
+    &lt;path
+      d=&quot;M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z&quot;
+    /&gt;
+    &lt;circle
+      cx=&quot;12&quot;
+      cy=&quot;12&quot;
+      r=&quot;3&quot;
+    /&gt;
+  &lt;/svg&gt;
+  &lt;span
+    class=&quot;font-medium&quot;
+    data-testid=&quot;filter-indicator&quot;
+  &gt;
+    1 agent + 1 tag
+  &lt;/span&gt;
+  &lt;svg
+    class=&quot;lucide lucide-chevron-down w-4 h-4 transition-transform &quot;
+    fill=&quot;none&quot;
+    height=&quot;24&quot;
+    stroke=&quot;currentColor&quot;
+    stroke-linecap=&quot;round&quot;
+    stroke-linejoin=&quot;round&quot;
+    stroke-width=&quot;2&quot;
+    viewBox=&quot;0 0 24 24&quot;
+    width=&quot;24&quot;
+    xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  &gt;
+    &lt;path
+      d=&quot;m6 9 6 6 6-6&quot;
+    /&gt;
+  &lt;/svg&gt;
+&lt;/button&gt;
+
+Ignored nodes: comments, script, style
+&lt;button
+  class=&quot;flex items-center space-x-1 px-3 py-1 text-sm text-gray-500 hover:text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors&quot;
+  data-testid=&quot;clear-filter-button&quot;
+&gt;
+  &lt;svg
+    class=&quot;lucide lucide-x w-3 h-3&quot;
+    fill=&quot;none&quot;
+    height=&quot;24&quot;
+    stroke=&quot;currentColor&quot;
+    stroke-linecap=&quot;round&quot;
+    stroke-linejoin=&quot;round&quot;
+    stroke-width=&quot;2&quot;
+    viewBox=&quot;0 0 24 24&quot;
+    width=&quot;24&quot;
+    xmlns=&quot;http://www.w3.org/2000/svg&quot;
+  &gt;
+    &lt;path
+      d=&quot;M18 6 6 18&quot;
+    /&gt;
+    &lt;path
+      d=&quot;m6 6 12 12&quot;
+    /&gt;
+  &lt;/svg&gt;
+  &lt;span&gt;
+    Clear
+  &lt;/span&gt;
+&lt;/button&gt;
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;relative &quot;
+    &gt;
+      &lt;div
+        class=&quot;flex items-center space-x-3&quot;
+      &gt;
+        &lt;button
+          class=&quot;
+            flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors
+            bg-blue-50 border-blue-200 text-blue-700
+          &quot;
+        &gt;
+          &lt;svg
+            class=&quot;lucide lucide-settings w-4 h-4&quot;
+            fill=&quot;none&quot;
+            height=&quot;24&quot;
+            stroke=&quot;currentColor&quot;
+            stroke-linecap=&quot;round&quot;
+            stroke-linejoin=&quot;round&quot;
+            stroke-width=&quot;2&quot;
+            viewBox=&quot;0 0 24 24&quot;
+            width=&quot;24&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path
+              d=&quot;M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z&quot;
+            /&gt;
+            &lt;circle
+              cx=&quot;12&quot;
+              cy=&quot;12&quot;
+              r=&quot;3&quot;
+            /&gt;
+          &lt;/svg&gt;
+          &lt;span
+            class=&quot;font-medium&quot;
+            data-testid=&quot;filter-indicator&quot;
+          &gt;
+            1 agent + 1 tag
+          &lt;/span&gt;
+          &lt;svg
+            class=&quot;lucide lucide-chevron-down w-4 h-4 transition-transform &quot;
+            fill=&quot;none&quot;
+            height=&quot;24&quot;
+            stroke=&quot;currentColor&quot;
+            stroke-linecap=&quot;round&quot;
+            stroke-linejoin=&quot;round&quot;
+            stroke-width=&quot;2&quot;
+            viewBox=&quot;0 0 24 24&quot;
+            width=&quot;24&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path
+              d=&quot;m6 9 6 6 6-6&quot;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/button&gt;
+        &lt;button
+          class=&quot;flex items-center space-x-1 px-3 py-1 text-sm text-gray-500 hover:text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors&quot;
+          data-testid=&quot;clear-filter-button&quot;
+        &gt;
+          &lt;svg
+            class=&quot;lucide lucide-x w-3 h-3&quot;
+            fill=&quot;none&quot;
+            height=&quot;24&quot;
+            stroke=&quot;currentColor&quot;
+            stroke-linecap=&quot;round&quot;
+            stroke-linejoin=&quot;round&quot;
+            stroke-width=&quot;2&quot;
+            viewBox=&quot;0 0 24 24&quot;
+            width=&quot;24&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path
+              d=&quot;M18 6 6 18&quot;
+            /&gt;
+            &lt;path
+              d=&quot;m6 6 12 12&quot;
+            /&gt;
+          &lt;/svg&gt;
+          &lt;span&gt;
+            Clear
+          &lt;/span&gt;
+        &lt;/button&gt;
+        &lt;span
+          class=&quot;text-sm text-gray-500&quot;
+        &gt;
+          42
+           post
+          s
+        &lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+ ❯ Object.getElementError node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ getElementError node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ❯ getMultipleElementsFoundError node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ❯ node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ❯ node_modules/@testing-library/react/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/tests/unit/FilterPanel.london.test.tsx:306:36
+            </failure>
+        </testcase>
+    </testsuite>
+</testsuites>

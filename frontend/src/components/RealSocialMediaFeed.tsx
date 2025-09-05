@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, MessageCircle, Heart, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2 } from 'lucide-react';
+import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Heart } from 'lucide-react';
 import { apiService } from '../services/api';
-import { AgentPost, ApiResponse } from '../types/api';
+import { AgentPost, ApiResponse, FilterStats } from '../types/api';
 import FilterPanel, { FilterOptions } from './FilterPanel';
 import { renderParsedContent, parseContent, extractHashtags, extractMentions } from '../utils/contentParser';
 
@@ -22,6 +22,7 @@ interface PostMetrics {
 interface FilterData {
   agents: string[];
   hashtags: string[];
+  stats?: FilterStats;
 }
 
 const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '' }) => {
@@ -34,6 +35,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [expandedPosts, setExpandedPosts] = useState<ExpandedPost>({});
   const [currentFilter, setCurrentFilter] = useState<FilterOptions>({ type: 'all' });
   const [filterData, setFilterData] = useState<FilterData>({ agents: [], hashtags: [] });
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
+  const [userId] = useState('anonymous'); // In a real app, this would come from authentication
   const limit = 20;
 
   // Real data loading from production database with filtering
@@ -110,15 +114,19 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     };
   }, [loadPosts, limit, currentFilter]);
 
-  // Load filter data
+  // Load filter data with stats
   const loadFilterData = useCallback(async () => {
     try {
-      const data = await apiService.getFilterData();
-      setFilterData(data);
+      const [data, stats] = await Promise.all([
+        apiService.getFilterData(),
+        apiService.getFilterStats(userId)
+      ]);
+      setFilterData({ ...data, stats });
+      setFilterStats(stats);
     } catch (err) {
       console.error('Failed to load filter data:', err);
     }
-  }, []);
+  }, [userId]);
 
   // Check if post matches current filter
   const postMatchesFilter = useCallback((post: AgentPost, filter: FilterOptions): boolean => {
@@ -127,11 +135,34 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         return filter.agent ? post.authorAgent === filter.agent : false;
       case 'hashtag':
         return filter.hashtag ? post.tags?.includes(filter.hashtag) || extractHashtags(post.content).includes(filter.hashtag) : false;
+      case 'multi-select':
+        // Check if any filters are active
+        const hasAgentFilter = filter.agents?.length;
+        const hasHashtagFilter = filter.hashtags?.length;
+        const hasSavedFilter = filter.savedPostsEnabled;
+        const hasMyPostsFilter = filter.myPostsEnabled;
+        
+        if (!hasAgentFilter && !hasHashtagFilter && !hasSavedFilter && !hasMyPostsFilter) {
+          return false; // No filters active
+        }
+        
+        const matchesAgent = !hasAgentFilter || filter.agents!.includes(post.authorAgent);
+        const matchesHashtag = !hasHashtagFilter || 
+          filter.hashtags!.some(tag => post.tags?.includes(tag) || extractHashtags(post.content).includes(tag));
+        const matchesSaved = !hasSavedFilter || post.engagement.isSaved === true;
+        const matchesMyPosts = !hasMyPostsFilter || post.authorAgent === 'ProductionValidator'; // Demo user
+        
+        // Apply combination mode (AND/OR logic)
+        if (filter.combinationMode === 'OR') {
+          return matchesAgent || matchesHashtag || matchesSaved || matchesMyPosts;
+        } else { // AND logic (default)
+          return matchesAgent && matchesHashtag && matchesSaved && matchesMyPosts;
+        }
       case 'saved':
         return post.engagement.isSaved === true;
       case 'myposts':
         // Filter posts by current user - for demo, filtering by ProductionValidator
-        return post.authorAgent === 'ProductionValidator'
+        return post.authorAgent === 'ProductionValidator';
       default:
         return true;
     }
@@ -144,19 +175,12 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     await loadPosts(0);
   };
 
-  const handleLike = async (postId: string) => {
-    try {
-      await apiService.updatePostEngagement(postId, 'like');
-      // WebSocket will update the UI automatically
-    } catch (err) {
-      console.error('Failed to like post:', err);
-    }
-  };
 
 
   const handleSave = async (postId: string, save: boolean) => {
     try {
-      await apiService.savePost(postId, save);
+      await apiService.savePost(postId, save, userId);
+      // Optimistically update UI
       setPosts(current => 
         current.map(post => 
           post.id === postId 
@@ -164,14 +188,33 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                 ...post, 
                 engagement: { 
                   ...post.engagement, 
-                  isSaved: save
+                  isSaved: save,
+                  saves: save ? (post.engagement.saves || 0) + 1 : Math.max(0, (post.engagement.saves || 0) - 1)
                 } 
               }
             : post
         )
       );
+      
+      // Refresh filter stats to update saved posts count
+      loadFilterData();
     } catch (err) {
       console.error('Failed to save/unsave post:', err);
+      // Revert optimistic update on error
+      setPosts(current => 
+        current.map(post => 
+          post.id === postId 
+            ? { 
+                ...post, 
+                engagement: { 
+                  ...post.engagement, 
+                  isSaved: !save,
+                  saves: !save ? (post.engagement.saves || 0) + 1 : Math.max(0, (post.engagement.saves || 0) - 1)
+                } 
+              }
+            : post
+        )
+      );
     }
   };
 
@@ -202,6 +245,31 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     setCurrentFilter({ type: 'hashtag', hashtag });
     setPage(0);
     setLoading(true);
+  };
+
+  const handleSuggestionsRequest = async (type: 'agents' | 'hashtags', query: string) => {
+    setSuggestionsLoading(true);
+    try {
+      const suggestions = await apiService.getFilterSuggestions(type, query, 10);
+      // Update filter data with new suggestions - extract just the values
+      if (type === 'agents') {
+        const agentNames = suggestions.map(s => s.value);
+        setFilterData(prev => ({
+          ...prev,
+          agents: [...new Set([...prev.agents, ...agentNames])]
+        }));
+      } else {
+        const hashtagNames = suggestions.map(s => s.value);
+        setFilterData(prev => ({
+          ...prev,
+          hashtags: [...new Set([...prev.hashtags, ...hashtagNames])]
+        }));
+      }
+    } catch (error) {
+      console.error(`Failed to get ${type} suggestions:`, error);
+    } finally {
+      setSuggestionsLoading(false);
+    }
   };
 
   // Update posts when filter changes
@@ -274,7 +342,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   }
 
   return (
-    <div className={`max-w-2xl mx-auto ${className}`}>
+    <div className={`max-w-2xl mx-auto ${className}`} data-testid="social-media-feed">
       {/* Header */}
       <div className="space-y-4 mb-6">
         <div className="flex justify-between items-center">
@@ -301,6 +369,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
           availableHashtags={filterData.hashtags}
           onFilterChange={handleFilterChange}
           postCount={total}
+          onSuggestionsRequest={handleSuggestionsRequest}
+          suggestionsLoading={suggestionsLoading}
+          savedPostsCount={filterStats?.savedPosts || 0}
+          myPostsCount={filterStats?.myPosts || 0}
+          userId={userId}
         />
       </div>
 
@@ -322,14 +395,14 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       )}
 
       {/* Posts */}
-      <div className="space-y-6">
+      <div className="space-y-6" data-testid="post-list">
         {(posts || []).map((post) => {
           const isExpanded = expandedPosts[post.id] || false;
           const postMetrics = calculatePostMetrics(post.content || '');
           const { truncated, isTruncated } = truncateContent(post.content || '');
           
           return (
-          <article key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden">
+          <article key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden" data-testid="post-card">
             <div className="p-6">
               {!isExpanded ? (
                 // Collapsed View - Multi-line layout
@@ -512,20 +585,20 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
               <div className="border-t border-gray-100 py-4 mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-6">
-                    {/* Like Button */}
-                    <button
-                      onClick={() => handleLike(post.id)}
-                      className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors group"
-                    >
-                      <Heart className="w-5 h-5 group-hover:fill-current" />
-                      <span className="text-sm font-medium">{post.engagement?.likes || 0}</span>
-                    </button>
                     
                     {/* Comments */}
                     <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
                       <MessageCircle className="w-5 h-5" />
                       <span className="text-sm font-medium">{post.engagement?.comments || 0}</span>
                     </button>
+                    
+                    {/* Saves count display */}
+                    {post.engagement?.saves && post.engagement.saves > 0 && (
+                      <div className="flex items-center space-x-2 text-gray-600">
+                        <Heart className="w-4 h-4 text-red-500" />
+                        <span className="text-sm font-medium">{post.engagement.saves}</span>
+                      </div>
+                    )}
                   </div>
                   
                   {/* Post Actions - Integrated */}
@@ -534,14 +607,29 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       ID: {post.id.slice(0, 8)}...
                     </div>
                     
-                    {/* Save Button */}
+                    {/* Save Button with Animation */}
                     <button
                       onClick={() => handleSave(post.id, !post.engagement?.isSaved)}
-                      className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 transition-colors"
+                      className={`flex items-center space-x-1 transition-colors transform hover:scale-105 ${
+                        post.engagement?.isSaved 
+                          ? 'text-blue-600 hover:text-blue-700' 
+                          : 'text-gray-600 hover:text-blue-600'
+                      }`}
                       title={post.engagement?.isSaved ? 'Unsave Post' : 'Save Post'}
                     >
-                      <Bookmark className={`w-4 h-4 ${post.engagement?.isSaved ? 'fill-blue-500 text-blue-500' : ''}`} />
-                      <span className="text-xs">{post.engagement?.isSaved ? 'Saved' : 'Save'}</span>
+                      <Bookmark 
+                        className={`w-4 h-4 transition-all ${
+                          post.engagement?.isSaved 
+                            ? 'fill-blue-500 text-blue-500 scale-110' 
+                            : 'hover:fill-blue-100'
+                        }`} 
+                      />
+                      <span className="text-xs font-medium">
+                        {post.engagement?.isSaved ? 'Saved' : 'Save'}
+                        {post.engagement?.saves && post.engagement.saves > 0 && (
+                          <span className="ml-1 text-gray-500">({post.engagement.saves})</span>
+                        )}
+                      </span>
                     </button>
                     
                     {/* Delete Button */}
@@ -579,13 +667,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     </div>
                   )}
 
-                  {/* Agent Response Badge */}
-                  {post.metadata.isAgentResponse && (
-                    <div className="inline-flex items-center px-3 py-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 text-sm rounded-lg border border-green-200 font-medium">
-                      <User className="w-4 h-4 mr-2" />
-                      Agent Response
-                    </div>
-                  )}
                 </div>
               )}
             </div>

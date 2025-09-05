@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { 
-  Heart, 
   MessageCircle, 
   Share2, 
   MoreHorizontal, 
@@ -28,8 +27,6 @@ interface PostCardProps {
       hook?: string;
     };
     // Engagement data from AgentLink API
-    likes?: number;
-    hearts?: number;
     bookmarks?: number;
     shares?: number;
     views?: number;
@@ -45,11 +42,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [engagementState, setEngagementState] = useState({
-    liked: false,
-    hearted: false,
     bookmarked: false,
-    likes: post.likes || 0,
-    hearts: post.hearts || 0,
     bookmarks: post.bookmarks || 0,
     shares: post.shares || 0,
     views: post.views || 0,
@@ -156,7 +149,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
     subscribe('comment:created', handleCommentUpdate);
     subscribe('comment:updated', handleCommentUpdate);
     subscribe('comment:deleted', handleCommentUpdate);
-    subscribe('like:updated', handlePostUpdate);
 
     // Subscribe to post-specific room
     socket.emit('subscribe:post', post.id);
@@ -166,12 +158,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
       unsubscribe('comment:created', handleCommentUpdate);
       unsubscribe('comment:updated', handleCommentUpdate);
       unsubscribe('comment:deleted', handleCommentUpdate);
-      unsubscribe('like:updated', handlePostUpdate);
       socket.emit('unsubscribe:post', post.id);
     };
   }, [socket, isConnected, post.id, subscribe, unsubscribe, handleCommentsUpdate]);
 
-  const handleEngagement = useCallback(async (type: 'like' | 'heart' | 'bookmark' | 'share') => {
+  const handleEngagement = useCallback(async (type: 'bookmark' | 'share') => {
     try {
       const response = await fetch(`/api/v1/posts/${post.id}/${type}`, {
         method: 'POST',
@@ -188,8 +179,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
         const data = await response.json();
         setEngagementState(prev => ({
           ...prev,
-          [type === 'like' ? 'liked' : type === 'heart' ? 'hearted' : 'bookmarked']: 
-            data.data[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')] !== undefined ? data.data[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')] : !prev[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : 'ed')],
+          [type === 'bookmark' ? 'bookmarked' : type]: data.data[type + 'ed'] !== undefined ? data.data[type + 'ed'] : !prev[type + 'ed'],
           [type + 's']: data.data[type + 'Count'] || (type === 'share' ? prev[type + 's'] + 1 : prev[type + 's'])
         }));
 
@@ -197,7 +187,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
         if (socket && isConnected) {
           socket.emit(`post:${type}`, {
             postId: post.id,
-            action: data.data[type + (type === 'like' ? 'd' : type === 'heart' ? 'ed' : type === 'bookmark' ? 'ed' : 'Count')] ? 'add' : 'remove'
+            action: data.data[type + (type === 'bookmark' ? 'ed' : 'Count')] ? 'add' : 'remove'
           });
         }
       }
@@ -304,19 +294,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
       <div className="px-4 py-3 border-t border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <button 
-              onClick={() => handleEngagement('like')}
-              className={cn(
-                "flex items-center space-x-2 transition-colors group",
-                engagementState.liked ? "text-red-600" : "text-gray-500 hover:text-red-600"
-              )}
-            >
-              <Heart className={cn("w-4 h-4 group-hover:fill-current", engagementState.liked && "fill-current")} />
-              <span className="text-sm">
-                {engagementState.likes > 0 ? `${engagementState.likes} Likes` : 'Like'}
-              </span>
-            </button>
-            
             <button 
               onClick={handleCommentsToggle}
               className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 transition-colors group"

@@ -78,15 +78,6 @@ io.on('connection', (socket) => {
     });
   });
   
-  // Handle post interactions
-  socket.on('like_post', (data) => {
-    console.log('👍 Post liked:', data);
-    socket.broadcast.emit('post_liked', {
-      postId: data.postId,
-      action: data.action || 'add',
-      timestamp: new Date().toISOString()
-    });
-  });
   
   // Handle comments
   socket.on('new_comment', (data) => {

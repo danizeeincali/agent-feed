@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Heart, ThumbsUp, Smile, Frown, Angry, AlertCircle } from 'lucide-react';
+import { ThumbsUp, Smile, Frown, Angry, AlertCircle } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 interface ReactionCounts {
-  like: number;
-  heart: number;
   laugh: number;
   sad: number;
   angry: number;
@@ -21,8 +19,6 @@ interface CommentReactionsProps {
 }
 
 const reactionIcons = {
-  like: { icon: ThumbsUp, label: 'Like', color: 'text-blue-600' },
-  heart: { icon: Heart, label: 'Heart', color: 'text-red-500' },
   laugh: { icon: Smile, label: 'Laugh', color: 'text-yellow-500' },
   sad: { icon: Frown, label: 'Sad', color: 'text-blue-500' },
   angry: { icon: Angry, label: 'Angry', color: 'text-red-600' },

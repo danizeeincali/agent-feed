@@ -7,7 +7,6 @@ import {
   Star,
   MoreHorizontal,
   Tag,
-  Heart,
   Share2,
   Plus,
   X,
@@ -52,7 +51,6 @@ interface AgentPost {
     tags: string[];
     isAgentResponse: boolean;
   };
-  likes?: number;
   comments?: number;
   shares?: number;
 }
@@ -80,7 +78,6 @@ const transformToSafePost = (post: any): AgentPost | null => {
         tags: safeArray(post.metadata?.tags),
         isAgentResponse: Boolean(post.metadata?.isAgentResponse)
       },
-      likes: safeNumber(post.likes, 0),
       comments: safeNumber(post.comments, 0),
       shares: safeNumber(post.shares, 0)
     };
@@ -161,7 +158,6 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
     subscribeFeed = () => {}, 
     unsubscribeFeed = () => {}, 
     subscribePost = () => {}, 
-    sendLike = () => {},
     addNotification = () => {}
   } = safeObject(webSocketContext);
 
@@ -206,8 +202,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
           .filter((post): post is AgentPost => post !== null)
           .map((post) => ({
             ...post,
-            likes: safeNumber(post.likes, Math.floor(Math.random() * 20) + 1),
-            comments: safeNumber(post.comments, Math.floor(Math.random() * 8)),
+                comments: safeNumber(post.comments, Math.floor(Math.random() * 8)),
             shares: safeNumber(post.shares, Math.floor(Math.random() * 5))
           }));
         
@@ -342,23 +337,6 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
         }
       }),
       
-      handleLikeUpdated: safeHandler((data: any) => {
-        const postId = safeString(data?.postId);
-        const action = safeString(data?.action);
-        
-        if (postId) {
-          setPosts(prev => prev.map(post => {
-            if (post.id === postId) {
-              const currentLikes = safeNumber(post.likes, 0);
-              return {
-                ...post,
-                likes: action === 'add' ? currentLikes + 1 : Math.max(0, currentLikes - 1)
-              };
-            }
-            return post;
-          }));
-        }
-      }),
       
       handleCommentCreated: safeHandler((data: any) => {
         const postId = safeString(data?.postId);
@@ -381,14 +359,12 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
     on('post:created', safeHandlers.handlePostCreated);
     on('post:updated', safeHandlers.handlePostUpdated);
     on('post:deleted', safeHandlers.handlePostDeleted);
-    on('like:updated', safeHandlers.handleLikeUpdated);
     on('comment:created', safeHandlers.handleCommentCreated);
 
     return () => {
       off('post:created', safeHandlers.handlePostCreated);
       off('post:updated', safeHandlers.handlePostUpdated);
       off('post:deleted', safeHandlers.handlePostDeleted);
-      off('like:updated', safeHandlers.handleLikeUpdated);
       off('comment:created', safeHandlers.handleCommentCreated);
     };
   }, [on, off, addNotification]);
@@ -494,26 +470,6 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
     }
   }, []);
 
-  const handleLikePost = useCallback((postId: string, currentLikes: number) => {
-    try {
-      const safePostId = safeString(postId);
-      const safeLikes = safeNumber(currentLikes, 0);
-      
-      if (!safePostId) return;
-      
-      // Optimistically update UI
-      setPosts(prev => prev.map(post => 
-        post.id === safePostId 
-          ? { ...post, likes: safeLikes + 1 }
-          : post
-      ));
-      
-      // Send like event via WebSocket
-      sendLike(safePostId, 'add');
-    } catch (error) {
-      handleError(error instanceof Error ? error : new Error('Failed to like post'), 'like');
-    }
-  }, [sendLike, handleError]);
 
   // Memoized filtered posts
   const filteredPosts = useMemo(() => {
@@ -797,14 +753,6 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                                   ? 'text-gray-500 hover:text-red-500'
                                   : 'text-gray-400 cursor-not-allowed opacity-50'
                               }`}
-                              onClick={() => isConnected && handleLikePost(post.id, post.likes || 0)}
-                              disabled={!isConnected}
-                              title={!isConnected ? 'Offline - will sync when reconnected' : ''}
-                            >
-                              <Heart className="h-5 w-5" />
-                              <span className="text-sm">{safeNumber(post.likes, 0)}</span>
-                            </button>
-                            
                             <button 
                               className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors"
                               onClick={() => subscribePost(post.id)}

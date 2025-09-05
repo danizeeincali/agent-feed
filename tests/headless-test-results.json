@@ -1,0 +1,819 @@
+{
+  "timestamp": "2025-09-05T21:34:27.059Z",
+  "url": "http://localhost:4173",
+  "tests": [
+    {
+      "name": "Navigate to Application",
+      "started": "2025-09-05T21:34:27.259Z",
+      "steps": [
+        {
+          "step": "Page navigation",
+          "success": true,
+          "details": "Status: 200",
+          "timestamp": "2025-09-05T21:34:28.166Z"
+        },
+        {
+          "step": "Page title retrieved",
+          "success": true,
+          "details": "Title: \"Agent Feed - Claude Code Orchestration\"",
+          "timestamp": "2025-09-05T21:34:28.172Z"
+        }
+      ],
+      "completed": "2025-09-05T21:34:28.172Z",
+      "success": true
+    },
+    {
+      "name": "Page Structure Inspection",
+      "started": "2025-09-05T21:34:28.173Z",
+      "steps": [],
+      "error": "page.evaluate: SyntaxError: Failed to execute 'querySelectorAll' on 'Document': '[data-testid*=\"filter\"], [class*=\"filter\"], button:contains(\"filter\")' is not a valid selector.\n    at eval (eval at evaluate (:291:30), <anonymous>:20:57)\n    at UtilityScript.evaluate (<anonymous>:293:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+      "success": false,
+      "completed": "2025-09-05T21:34:28.181Z"
+    },
+    {
+      "name": "Filter Functionality Test",
+      "started": "2025-09-05T21:34:28.182Z",
+      "steps": [
+        {
+          "step": "Filter buttons search",
+          "success": false,
+          "details": "Found 0 potential filter buttons",
+          "data": [],
+          "timestamp": "2025-09-05T21:34:28.191Z"
+        },
+        {
+          "step": "Filter button location",
+          "success": false,
+          "details": "No filter button found with expected text",
+          "timestamp": "2025-09-05T21:34:28.225Z"
+        }
+      ],
+      "completed": "2025-09-05T21:34:28.225Z",
+      "success": false
+    },
+    {
+      "name": "Direct API Access Test",
+      "started": "2025-09-05T21:34:28.225Z",
+      "steps": [
+        {
+          "step": "API posts endpoint test",
+          "success": false,
+          "details": "Status: 0, Data items: 0",
+          "data": {
+            "status": 0,
+            "ok": false,
+            "data": null,
+            "error": "Failed to fetch"
+          },
+          "timestamp": "2025-09-05T21:34:28.232Z"
+        }
+      ],
+      "completed": "2025-09-05T21:34:28.232Z",
+      "success": false
+    }
+  ],
+  "networkCalls": [
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.269Z",
+      "method": "GET",
+      "url": "http://localhost:4173/",
+      "headers": {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Linux\""
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.275Z",
+      "status": 200,
+      "url": "http://localhost:4173/",
+      "headers": {
+        "access-control-allow-origin": "*",
+        "cache-control": "no-cache",
+        "connection": "keep-alive",
+        "content-encoding": "gzip",
+        "content-type": "text/html",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "etag": "W/\"40f-8zuIOZIV4yihRLGroDR8ITOLOPQ\"",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      }
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.306Z",
+      "method": "GET",
+      "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+      "headers": {
+        "origin": "http://localhost:4173",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.306Z",
+      "method": "GET",
+      "url": "http://localhost:4173/assets/vendor-CMtS3IUq.js",
+      "headers": {
+        "origin": "http://localhost:4173",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.306Z",
+      "method": "GET",
+      "url": "http://localhost:4173/assets/router-CaK4inQI.js",
+      "headers": {
+        "origin": "http://localhost:4173",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.318Z",
+      "method": "GET",
+      "url": "http://localhost:4173/assets/query-DX_7x9fC.js",
+      "headers": {
+        "origin": "http://localhost:4173",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.318Z",
+      "method": "GET",
+      "url": "http://localhost:4173/assets/ui-Cy758l-A.js",
+      "headers": {
+        "origin": "http://localhost:4173",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.318Z",
+      "method": "GET",
+      "url": "http://localhost:4173/assets/index-BUnX0UL-.css",
+      "headers": {
+        "origin": "http://localhost:4173",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.318Z",
+      "method": "GET",
+      "url": "http://localhost:4173/network-connectivity-fix.js",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.346Z",
+      "status": 200,
+      "url": "http://localhost:4173/assets/index-BUnX0UL-.css",
+      "headers": {
+        "transfer-encoding": "chunked",
+        "cache-control": "no-cache",
+        "content-encoding": "gzip",
+        "etag": "W/\"137679-1757102792460\"",
+        "connection": "keep-alive",
+        "access-control-allow-origin": "*",
+        "keep-alive": "timeout=5",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/css",
+        "last-modified": "Fri, 05 Sep 2025 20:06:32 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.379Z",
+      "status": 200,
+      "url": "http://localhost:4173/assets/ui-Cy758l-A.js",
+      "headers": {
+        "transfer-encoding": "chunked",
+        "cache-control": "no-cache",
+        "content-encoding": "gzip",
+        "etag": "W/\"30887-1757102792460\"",
+        "connection": "keep-alive",
+        "access-control-allow-origin": "*",
+        "keep-alive": "timeout=5",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/javascript",
+        "last-modified": "Fri, 05 Sep 2025 20:06:32 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.389Z",
+      "status": 200,
+      "url": "http://localhost:4173/assets/router-CaK4inQI.js",
+      "headers": {
+        "transfer-encoding": "chunked",
+        "cache-control": "no-cache",
+        "content-encoding": "gzip",
+        "etag": "W/\"46940-1757102792461\"",
+        "connection": "keep-alive",
+        "access-control-allow-origin": "*",
+        "keep-alive": "timeout=5",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/javascript",
+        "last-modified": "Fri, 05 Sep 2025 20:06:32 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.396Z",
+      "status": 200,
+      "url": "http://localhost:4173/network-connectivity-fix.js",
+      "headers": {
+        "transfer-encoding": "chunked",
+        "cache-control": "no-cache",
+        "content-encoding": "gzip",
+        "etag": "W/\"7189-1757102791281\"",
+        "connection": "keep-alive",
+        "access-control-allow-origin": "*",
+        "keep-alive": "timeout=5",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/javascript",
+        "last-modified": "Fri, 05 Sep 2025 20:06:31 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.402Z",
+      "status": 200,
+      "url": "http://localhost:4173/assets/query-DX_7x9fC.js",
+      "headers": {
+        "transfer-encoding": "chunked",
+        "cache-control": "no-cache",
+        "content-encoding": "gzip",
+        "etag": "W/\"77371-1757102792461\"",
+        "connection": "keep-alive",
+        "access-control-allow-origin": "*",
+        "keep-alive": "timeout=5",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/javascript",
+        "last-modified": "Fri, 05 Sep 2025 20:06:32 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.412Z",
+      "status": 200,
+      "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+      "headers": {
+        "transfer-encoding": "chunked",
+        "cache-control": "no-cache",
+        "content-encoding": "gzip",
+        "etag": "W/\"652250-1757102792462\"",
+        "connection": "keep-alive",
+        "access-control-allow-origin": "*",
+        "keep-alive": "timeout=5",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/javascript",
+        "last-modified": "Fri, 05 Sep 2025 20:06:32 GMT"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.414Z",
+      "status": 200,
+      "url": "http://localhost:4173/assets/vendor-CMtS3IUq.js",
+      "headers": {
+        "transfer-encoding": "chunked",
+        "cache-control": "no-cache",
+        "content-encoding": "gzip",
+        "etag": "W/\"225815-1757102792461\"",
+        "connection": "keep-alive",
+        "access-control-allow-origin": "*",
+        "keep-alive": "timeout=5",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/javascript",
+        "last-modified": "Fri, 05 Sep 2025 20:06:32 GMT"
+      }
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.478Z",
+      "method": "GET",
+      "url": "http://localhost:5173/health",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "cache-control": "no-cache",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "accept": "application/json",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.560Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "content-type": "application/json",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.563Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/filter-data",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "content-type": "application/json",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.563Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/filter-stats?user_id=anonymous",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "content-type": "application/json",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:27.569Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "content-type": "application/json",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.598Z",
+      "status": 200,
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+      "headers": {
+        "etag": "W/\"1803-Du16b4UB3ec3imFn6LyzdvVhXRk\"",
+        "connection": "close",
+        "access-control-allow-credentials": "true",
+        "access-control-allow-origin": "*",
+        "content-length": "6147",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "x-powered-by": "Express",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.598Z",
+      "status": 200,
+      "url": "http://localhost:4173/api/v1/filter-data",
+      "headers": {
+        "etag": "W/\"202-FVUIKg1FOras2numZNBRlRg5N8E\"",
+        "connection": "close",
+        "access-control-allow-credentials": "true",
+        "access-control-allow-origin": "*",
+        "content-length": "514",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "x-powered-by": "Express",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.602Z",
+      "status": 404,
+      "url": "http://localhost:4173/api/v1/filter-stats?user_id=anonymous",
+      "headers": {
+        "content-security-policy": "default-src 'none'",
+        "connection": "close",
+        "access-control-allow-credentials": "true",
+        "x-content-type-options": "nosniff",
+        "access-control-allow-origin": "*",
+        "content-length": "158",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "text/html; charset=utf-8",
+        "x-powered-by": "Express",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "response",
+      "timestamp": "2025-09-05T21:34:27.610Z",
+      "status": 200,
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+      "headers": {
+        "etag": "W/\"1803-Du16b4UB3ec3imFn6LyzdvVhXRk\"",
+        "access-control-allow-credentials": "true",
+        "access-control-allow-origin": "*",
+        "content-length": "6147",
+        "date": "Fri, 05 Sep 2025 21:34:27 GMT",
+        "content-type": "application/json; charset=utf-8",
+        "x-powered-by": "Express",
+        "vary": "Origin"
+      }
+    },
+    {
+      "type": "request",
+      "timestamp": "2025-09-05T21:34:28.231Z",
+      "method": "GET",
+      "url": "http://localhost:3000/api/posts",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:4173/",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.16 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "postData": null
+    }
+  ],
+  "consoleMessages": [
+    {
+      "timestamp": "2025-09-05T21:34:27.470Z",
+      "type": "log",
+      "text": "DEBUG: App.tsx loading...",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14174,
+        "columnNumber": 8
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.471Z",
+      "type": "log",
+      "text": "DEBUG: Loading SocialMediaFeed...",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14176,
+        "columnNumber": 10
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.471Z",
+      "type": "log",
+      "text": "AgentLink: Starting application...",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14327,
+        "columnNumber": 8
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.471Z",
+      "type": "log",
+      "text": "AgentLink: Creating React root...",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14343,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.472Z",
+      "type": "log",
+      "text": "AgentLink: Rendering application with error boundaries...",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14345,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.472Z",
+      "type": "log",
+      "text": "AgentLink: ✅ Application started successfully",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14347,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.473Z",
+      "type": "log",
+      "text": "🔧 Network Fix Initializing...",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 16,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.473Z",
+      "type": "log",
+      "text": "- Environment: Local/Other",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 17,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.476Z",
+      "type": "log",
+      "text": "- Base URL: http://localhost:5173",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 18,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.478Z",
+      "type": "log",
+      "text": "🚀 Initializing network connection fix...",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 132,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.484Z",
+      "type": "log",
+      "text": "DEBUG: App component rendering...",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14301,
+        "columnNumber": 10
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.525Z",
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/health",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.526Z",
+      "type": "error",
+      "text": "❌ Network connection failed:",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 145,
+        "columnNumber": 14
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.526Z",
+      "type": "error",
+      "text": "- URL: http://localhost:5173/health",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 146,
+        "columnNumber": 14
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.526Z",
+      "type": "error",
+      "text": "- Error: Failed to fetch",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 147,
+        "columnNumber": 14
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.526Z",
+      "type": "warning",
+      "text": "⚠️ Network fix could not establish connection",
+      "location": {
+        "url": "http://localhost:4173/network-connectivity-fix.js",
+        "lineNumber": 221,
+        "columnNumber": 14
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.569Z",
+      "type": "log",
+      "text": "🚀 [HTTP/SSE] Mock connect - no WebSocket needed",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 13994,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.569Z",
+      "type": "log",
+      "text": "DEBUG: App component mounted!",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 14303,
+        "columnNumber": 12
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.569Z",
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 784,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.583Z",
+      "type": "error",
+      "text": "❌ WebSocket error: Event",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 802,
+        "columnNumber": 16
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.594Z",
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 798,
+        "columnNumber": 16
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.603Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "location": {
+        "url": "http://localhost:4173/api/v1/filter-stats?user_id=anonymous",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.610Z",
+      "type": "error",
+      "text": "API request failed: /filter-stats?user_id=anonymous Error: HTTP error! status: 404\n    at ApiService.request (http://localhost:4173/assets/index-BXx1NNQY.js:768:15)\n    at async ApiService.getFilterStats (http://localhost:4173/assets/index-BXx1NNQY.js:1070:24)\n    at async Promise.all (index 1)\n    at async http://localhost:4173/assets/index-BXx1NNQY.js:2212:29",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 775,
+        "columnNumber": 14
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:27.610Z",
+      "type": "error",
+      "text": "API Error in getFilterStats: Error: HTTP error! status: 404\n    at ApiService.request (http://localhost:4173/assets/index-BXx1NNQY.js:768:15)\n    at async ApiService.getFilterStats (http://localhost:4173/assets/index-BXx1NNQY.js:1070:24)\n    at async Promise.all (index 1)\n    at async http://localhost:4173/assets/index-BXx1NNQY.js:2212:29",
+      "location": {
+        "url": "http://localhost:4173/assets/index-BXx1NNQY.js",
+        "lineNumber": 1073,
+        "columnNumber": 14
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:28.231Z",
+      "type": "error",
+      "text": "Access to fetch at 'http://localhost:3000/api/posts' from origin 'http://localhost:4173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "location": {
+        "url": "http://localhost:4173/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-05T21:34:28.232Z",
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "location": {
+        "url": "http://localhost:3000/api/posts",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    }
+  ],
+  "apiCalls": [
+    {
+      "type": "API_REQUEST",
+      "timestamp": "2025-09-05T21:34:27.560Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+      "postData": null
+    },
+    {
+      "type": "API_REQUEST",
+      "timestamp": "2025-09-05T21:34:27.563Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/filter-data",
+      "postData": null
+    },
+    {
+      "type": "API_REQUEST",
+      "timestamp": "2025-09-05T21:34:27.563Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/filter-stats?user_id=anonymous",
+      "postData": null
+    },
+    {
+      "type": "API_REQUEST",
+      "timestamp": "2025-09-05T21:34:27.569Z",
+      "method": "GET",
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+      "postData": null
+    },
+    {
+      "type": "API_RESPONSE",
+      "timestamp": "2025-09-05T21:34:27.598Z",
+      "status": 200,
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC"
+    },
+    {
+      "type": "API_RESPONSE",
+      "timestamp": "2025-09-05T21:34:27.598Z",
+      "status": 200,
+      "url": "http://localhost:4173/api/v1/filter-data"
+    },
+    {
+      "type": "API_RESPONSE",
+      "timestamp": "2025-09-05T21:34:27.602Z",
+      "status": 404,
+      "url": "http://localhost:4173/api/v1/filter-stats?user_id=anonymous"
+    },
+    {
+      "type": "API_RESPONSE",
+      "timestamp": "2025-09-05T21:34:27.610Z",
+      "status": 200,
+      "url": "http://localhost:4173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC"
+    },
+    {
+      "type": "API_REQUEST",
+      "timestamp": "2025-09-05T21:34:28.231Z",
+      "method": "GET",
+      "url": "http://localhost:3000/api/posts",
+      "postData": null
+    }
+  ]
+}

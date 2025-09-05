@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { MessageSquare, Clock, Star, Tag, ThumbsUp, Heart, Share2, Bookmark, Code, Eye, Filter, Search, RefreshCw, TrendingUp } from 'lucide-react';
+import { MessageSquare, Clock, Star, Tag, Share2, Bookmark, Code, Eye, Filter, Search, RefreshCw, TrendingUp } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { RealTimeActivityFeed } from './RealTimeActivityFeed';
@@ -22,15 +22,11 @@ interface AgentPost {
   };
   engagement: {
     views: number;
-    likes: number;
-    hearts: number;
     bookmarks: number;
     shares: number;
     comments: number;
   };
   isBookmarked?: boolean;
-  isLiked?: boolean;
-  isHearted?: boolean;
 }
 
 interface AgentPostsFeedProps {
@@ -86,8 +82,6 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
           },
           engagement: post.engagement || {
             views: Math.floor(Math.random() * 500) + 50,
-            likes: Math.floor(Math.random() * 100) + 5,
-            hearts: Math.floor(Math.random() * 50) + 2,
             bookmarks: Math.floor(Math.random() * 30) + 1,
             shares: Math.floor(Math.random() * 20) + 1,
             comments: Math.floor(Math.random() * 15) + 1
@@ -122,7 +116,7 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
     return `${diffDays}d ago`;
   };
 
-  const handleEngagement = useCallback(async (postId: string, type: 'like' | 'heart' | 'bookmark' | 'share') => {
+  const handleEngagement = useCallback(async (postId: string, type: 'bookmark' | 'share') => {
     try {
       const response = await fetch(`/api/v1/agent-posts/${postId}/engage`, {
         method: 'POST',
@@ -137,8 +131,6 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
             ? { 
                 ...post, 
                 engagement: data.engagement,
-                isLiked: type === 'like' ? !post.isLiked : post.isLiked,
-                isHearted: type === 'heart' ? !post.isHearted : post.isHearted,
                 isBookmarked: type === 'bookmark' ? !post.isBookmarked : post.isBookmarked
               }
             : post
@@ -244,7 +236,7 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
     .sort((a, b) => {
       switch (sortBy) {
         case 'popular':
-          return (b.engagement.likes + b.engagement.hearts) - (a.engagement.likes + a.engagement.hearts);
+          return b.engagement.bookmarks - a.engagement.bookmarks;
         case 'impact':
           return b.metadata.businessImpact - a.metadata.businessImpact;
         default:
@@ -451,32 +443,6 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
                 {/* Engagement Bar */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => handleEngagement(post.id, 'like')}
-                      className={cn(
-                        'flex items-center gap-1 text-sm transition-colors',
-                        post.isLiked
-                          ? 'text-blue-600'
-                          : 'text-gray-500 hover:text-blue-600'
-                      )}
-                    >
-                      <ThumbsUp className="w-4 h-4" />
-                      {post.engagement.likes}
-                    </button>
-                    
-                    <button
-                      onClick={() => handleEngagement(post.id, 'heart')}
-                      className={cn(
-                        'flex items-center gap-1 text-sm transition-colors',
-                        post.isHearted
-                          ? 'text-red-600'
-                          : 'text-gray-500 hover:text-red-600'
-                      )}
-                    >
-                      <Heart className="w-4 h-4" />
-                      {post.engagement.hearts}
-                    </button>
-                    
                     <button
                       onClick={() => handleEngagement(post.id, 'share')}
                       className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
