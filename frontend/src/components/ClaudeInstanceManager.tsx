@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './ClaudeInstanceManager.css';
 import { nldCapture } from '../utils/nld-ui-capture';
-import { useHTTPSSE } from '../hooks/useHTTPSSE';
+import { useWebSocketTerminal } from '../hooks/useHTTPSSE';
 import { useNLDClaudeInstanceManager } from '../patterns/nld-integration-hooks';
 import { useClaudeInstanceSync } from '../hooks/useClaudeInstanceSync';
 import { apiService } from '../services/api';
@@ -72,7 +72,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     on, 
     off,
     emit
-  } = useHTTPSSE({ 
+  } = useWebSocketTerminal({ 
     url: apiUrl,
     autoConnect: true
   });
@@ -92,7 +92,7 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
     // Handle connection events
     on('connect', (data) => {
       console.log('Connected via HTTP/SSE:', data);
-      setError(null);
+      // Error is managed by syncError from useClaudeInstanceSync hook
       setCurrentInstanceId(data.instanceId || null);
       setConnectionType(data.connectionType === 'sse' ? `Connected via SSE${data.instanceId ? ` (${data.instanceId.slice(0,8)})` : ''}` : 
                       data.connectionType === 'polling' ? `Connected via Polling${data.instanceId ? ` (${data.instanceId.slice(0,8)})` : ''}` : 
@@ -272,14 +272,14 @@ const ClaudeInstanceManager: React.FC<ClaudeInstanceManagerProps> = ({
         
         if (!instanceId) {
           console.error('❌ Instance creation succeeded but no instance ID found in response:', data);
-          setError('Instance creation failed: No instance ID in response');
+          console.error('Instance creation failed: No instance ID in response');
           return;
         }
         
         // Validate instanceId format
         if (!/^claude-\d+$/.test(instanceId)) {
           console.error('❌ Invalid instance ID format:', instanceId);
-          setError(`Invalid instance ID format: ${instanceId}`);
+          console.error(`Invalid instance ID format: ${instanceId}`);
           return;
         }
         

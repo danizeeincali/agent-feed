@@ -81,3 +81,13 @@
 {"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T20:55:21.377Z"}
 {"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-03T20:55:21.377Z"}
 {"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-03T20:55:29.383Z"}
+{"attempt":1,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-04T18:12:32.852Z"}
+{"level":"info","message":"Retrying connection in 2 seconds...","timestamp":"2025-09-04T18:12:32.858Z"}
+{"attempt":2,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-04T18:12:34.861Z"}
+{"level":"info","message":"Retrying connection in 4 seconds...","timestamp":"2025-09-04T18:12:34.862Z"}
+{"attempt":3,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-04T18:12:38.867Z"}
+{"level":"info","message":"Retrying connection in 6 seconds...","timestamp":"2025-09-04T18:12:38.868Z"}
+{"attempt":4,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-04T18:12:44.870Z"}
+{"level":"info","message":"Retrying connection in 8 seconds...","timestamp":"2025-09-04T18:12:44.871Z"}
+{"attempt":5,"config":{"database":"agent_feed","host":"localhost","port":5432},"error":"","level":"error","message":"Failed to initialize database connection pool","timestamp":"2025-09-04T18:12:52.880Z"}
+{"level":"info","message":"SIGTERM received, closing database connections","timestamp":"2025-09-04T20:44:28.869Z"}

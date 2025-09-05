@@ -1,0 +1,88 @@
+config:
+  target: 'http://localhost:3000'
+  plugins:
+    metrics-by-endpoint: {}
+    publish-metrics:
+      - type: json
+        target: '../reports/stress-test-results.json'
+  phases:
+    - duration: 60
+      arrivalRate: 50
+      name: "Baseline load"
+    - duration: 120
+      arrivalRate: 100
+      rampTo: 300
+      name: "Stress ramp-up"
+    - duration: 300
+      arrivalRate: 300
+      name: "Sustained stress"
+    - duration: 180
+      arrivalRate: 300
+      rampTo: 500
+      name: "Breaking point test"
+    - duration: 120
+      arrivalRate: 500
+      rampTo: 1000
+      name: "Maximum stress"
+    - duration: 60
+      arrivalRate: 1000
+      rampTo: 50
+      name: "Recovery phase"
+  processor: "./utils/artillery-processor.js"
+
+scenarios:
+  - name: "Stress Test - Concurrent Post Creation"
+    weight: 50
+    flow:
+      - loop:
+        - post:
+            url: "/api/posts"
+            headers:
+              Content-Type: "application/json"
+            json:
+              title: "Stress Test {{ $timestamp() }}"
+              content: "{{ $randomString(500) }}"
+              author: "stress-agent-{{ $randomInt(1, 1000) }}"
+              tags: ["stress", "test", "concurrent"]
+              metadata:
+                testId: "{{ $uuid() }}"
+                threadId: "{{ $processId() }}"
+        count: 5
+
+  - name: "Stress Test - Database Intensive Operations"
+    weight: 30
+    flow:
+      - post:
+          url: "/api/posts"
+          json:
+            title: "DB Stress {{ $timestamp() }}"
+            content: "{{ $randomString(1000) }}"
+            author: "db-stress-{{ $randomInt(1, 100) }}"
+            tags: ["{{ $randomString() }}", "{{ $randomString() }}", "{{ $randomString() }}"]
+      - get:
+          url: "/api/posts/search"
+          qs:
+            query: "{{ $randomString(3) }}"
+            limit: 100
+      - get:
+          url: "/api/analytics/posts"
+          qs:
+            from: "{{ $timestamp(new Date(Date.now() - 86400000)) }}"
+            to: "{{ $timestamp() }}"
+
+  - name: "Stress Test - Memory Intensive Operations"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/posts/batch"
+          json:
+            posts: "{{ $generateLargeBatch(50) }}"
+      - get:
+          url: "/api/export/posts"
+          qs:
+            format: "json"
+            limit: 1000
+
+expect:
+  - statusCode: [200, 201, 202]
+  - maxResponseTime: 2000

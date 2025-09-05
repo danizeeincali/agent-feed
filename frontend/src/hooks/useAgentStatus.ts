@@ -69,150 +69,61 @@ export const useAgentStatus = (options: UseAgentStatusOptions = {}): UseAgentSta
 
   const { isConnected, subscribe, emit } = useWebSocket();
 
-  // Mock agent data for demonstration
-  const mockAgents: AgentStatus[] = [
-    {
-      id: 'chief-of-staff',
-      name: 'Chief of Staff Agent',
-      status: 'active',
-      lastActive: new Date().toISOString(),
-      currentTask: 'Coordinating workflow optimization review',
-      workload: {
-        activeTasks: 3,
-        queuedTasks: 7,
-        completedToday: 23
-      },
-      performance: {
-        successRate: 98.7,
-        averageResponseTime: 1.2,
-        tasksCompleted: 1847
-      },
-      capabilities: ['Strategic Planning', 'Task Coordination', 'Priority Assessment'],
-      health: {
-        cpuUsage: 15.3,
-        memoryUsage: 234.5,
-        uptime: 99.8
-      }
-    },
-    {
-      id: 'performance',
-      name: 'Performance Agent',
-      status: 'busy',
-      lastActive: new Date().toISOString(),
-      currentTask: 'Analyzing system performance bottlenecks',
-      workload: {
-        activeTasks: 2,
-        queuedTasks: 4,
-        completedToday: 18
-      },
-      performance: {
-        successRate: 96.9,
-        averageResponseTime: 3.1,
-        tasksCompleted: 743
-      },
-      capabilities: ['Performance Analysis', 'Optimization', 'Bottleneck Detection'],
-      health: {
-        cpuUsage: 45.2,
-        memoryUsage: 512.1,
-        uptime: 98.4
-      }
-    },
-    {
-      id: 'security',
-      name: 'Security Agent',
-      status: 'idle',
-      lastActive: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-      workload: {
-        activeTasks: 0,
-        queuedTasks: 2,
-        completedToday: 8
-      },
-      performance: {
-        successRate: 99.2,
-        averageResponseTime: 5.7,
-        tasksCompleted: 456
-      },
-      capabilities: ['Vulnerability Scanning', 'Security Analysis', 'Threat Detection'],
-      health: {
-        cpuUsage: 8.1,
-        memoryUsage: 187.3,
-        uptime: 99.9
-      }
-    },
-    {
-      id: 'frontend',
-      name: 'Frontend Agent',
-      status: 'active',
-      lastActive: new Date().toISOString(),
-      currentTask: 'Implementing responsive design updates',
-      workload: {
-        activeTasks: 4,
-        queuedTasks: 6,
-        completedToday: 15
-      },
-      performance: {
-        successRate: 95.4,
-        averageResponseTime: 4.6,
-        tasksCompleted: 1287
-      },
-      capabilities: ['UI Development', 'React', 'User Experience'],
-      health: {
-        cpuUsage: 32.7,
-        memoryUsage: 445.8,
-        uptime: 97.2
-      }
-    },
-    {
-      id: 'backend',
-      name: 'Backend Agent',
-      status: 'active',
-      lastActive: new Date().toISOString(),
-      currentTask: 'Optimizing API endpoint performance',
-      workload: {
-        activeTasks: 3,
-        queuedTasks: 5,
-        completedToday: 19
-      },
-      performance: {
-        successRate: 97.3,
-        averageResponseTime: 3.8,
-        tasksCompleted: 1156
-      },
-      capabilities: ['API Development', 'Microservices', 'System Architecture'],
-      health: {
-        cpuUsage: 28.4,
-        memoryUsage: 398.2,
-        uptime: 98.7
-      }
-    }
-  ];
+  // Real API service for agent data
+  const apiService = import('../services/productionApiService');
 
   const fetchAgents = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      // In a real implementation, this would be an API call
-      // const response = await fetch('/api/v1/agents/status');
-      // const data = await response.json();
+      // Real API call to backend service
+      const response = await fetch('/api/v1/agents/status');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Transform backend data to frontend format
+      const transformedAgents: AgentStatus[] = data.data.map((agent: any) => ({
+        id: agent.id,
+        name: agent.display_name || agent.name,
+        status: agent.status === 'active' ? 'active' : 
+               agent.status === 'busy' ? 'busy' :
+               agent.status === 'inactive' ? 'idle' : 'offline',
+        lastActive: agent.updated_at,
+        currentTask: agent.current_task,
+        workload: {
+          activeTasks: agent.workload?.active_tasks || 0,
+          queuedTasks: agent.workload?.queued_tasks || 0,
+          completedToday: agent.workload?.completed_today || 0
+        },
+        performance: {
+          successRate: agent.performance_metrics?.success_rate || 0,
+          averageResponseTime: agent.performance_metrics?.average_response_time || 0,
+          tasksCompleted: agent.performance_metrics?.tasks_completed || 0
+        },
+        capabilities: agent.capabilities || [],
+        health: {
+          cpuUsage: agent.health_status?.cpu_usage || 0,
+          memoryUsage: agent.health_status?.memory_usage || 0,
+          uptime: agent.health_status?.uptime || 0
+        }
+      }));
 
-      // Use mock data for now
-      setAgents(mockAgents);
+      setAgents(transformedAgents);
 
       if (includeMetrics) {
         const metricsData: AgentMetrics = {
-          totalAgents: mockAgents.length,
-          activeAgents: mockAgents.filter(a => a.status === 'active').length,
-          busyAgents: mockAgents.filter(a => a.status === 'busy').length,
-          idleAgents: mockAgents.filter(a => a.status === 'idle').length,
-          offlineAgents: mockAgents.filter(a => a.status === 'offline').length,
-          totalTasks: mockAgents.reduce((sum, a) => sum + a.workload.activeTasks + a.workload.queuedTasks, 0),
-          completedTasks: mockAgents.reduce((sum, a) => sum + a.workload.completedToday, 0),
-          averageResponseTime: mockAgents.reduce((sum, a) => sum + a.performance.averageResponseTime, 0) / mockAgents.length,
-          systemLoad: 67.3
+          totalAgents: transformedAgents.length,
+          activeAgents: transformedAgents.filter(a => a.status === 'active').length,
+          busyAgents: transformedAgents.filter(a => a.status === 'busy').length,
+          idleAgents: transformedAgents.filter(a => a.status === 'idle').length,
+          offlineAgents: transformedAgents.filter(a => a.status === 'offline').length,
+          totalTasks: transformedAgents.reduce((sum, a) => sum + a.workload.activeTasks + a.workload.queuedTasks, 0),
+          completedTasks: transformedAgents.reduce((sum, a) => sum + a.workload.completedToday, 0),
+          averageResponseTime: transformedAgents.reduce((sum, a) => sum + a.performance.averageResponseTime, 0) / (transformedAgents.length || 1),
+          systemLoad: data.systemLoad || 0
         };
         setMetrics(metricsData);
       }

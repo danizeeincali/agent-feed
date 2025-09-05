@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-09-05T02:24:44.671Z",
+  "overall": "FAIL",
+  "violations": [],
+  "passes": [
+    "✅ Application loads with HTTP 200",
+    "✅ React application mounts correctly",
+    "✅ Page has substantial content"
+  ],
+  "criticalFailures": [
+    "❌ Validation script error: page.evaluate: SyntaxError: Illegal return statement\n    at eval (<anonymous>)\n    at UtilityScript.evaluate (<anonymous>:291:30)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+  ],
+  "warnings": []
+}

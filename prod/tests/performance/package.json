@@ -1,0 +1,33 @@
+{
+  "name": "agent-feed-performance-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive performance testing suite for agent feed enhancement system",
+  "type": "module",
+  "scripts": {
+    "test:load": "artillery run load/api-load-test.yml",
+    "test:stress": "artillery run stress/api-stress-test.yml",
+    "test:spike": "artillery run spike/api-spike-test.yml",
+    "test:volume": "node volume/volume-test-runner.js",
+    "test:endurance": "node endurance/endurance-test-runner.js",
+    "test:benchmark": "node benchmarks/performance-benchmark-suite.js",
+    "test:memory": "node utils/memory-profiler.js",
+    "test:cpu": "node utils/cpu-profiler.js",
+    "test:database": "node utils/database-performance.js",
+    "test:regression": "node utils/performance-regression.js",
+    "test:all": "npm run test:load && npm run test:stress && npm run test:spike && npm run test:volume && npm run test:endurance",
+    "generate:report": "node utils/report-generator.js",
+    "clean:reports": "rm -rf reports/*.html reports/*.json",
+    "setup:monitoring": "node utils/monitoring-setup.js"
+  },
+  "dependencies": {
+    "artillery": "^2.0.3",
+    "clinic": "^13.0.0",
+    "0x": "^5.7.0",
+    "autocannon": "^7.15.0",
+    "artillery-plugin-metrics-by-endpoint": "^1.12.0",
+    "artillery-plugin-publish-metrics": "^4.1.2"
+  },
+  "keywords": ["performance", "load-testing", "benchmarking", "agent-feed"],
+  "author": "Agent Feed Team",
+  "license": "MIT"
+}

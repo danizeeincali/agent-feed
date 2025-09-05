@@ -1,0 +1,239 @@
+{
+  "trainingDataId": "RWS-Neural-2025-001",
+  "datasetType": "Claude-Flow Neural Training Export",
+  "version": "2.0.0",
+  "timestamp": "2025-01-15T20:35:00Z",
+  "patternSource": "react-white-screen-pattern.json",
+  
+  "neuralNetworkTargets": {
+    "primaryModel": "failure_prediction_engine",
+    "secondaryModels": [
+      "component_dependency_analyzer",
+      "error_boundary_validator", 
+      "import_cascade_detector"
+    ]
+  },
+
+  "trainingVectors": {
+    "input_features": {
+      "build_status": {
+        "type": "categorical",
+        "values": ["SUCCESS", "FAILED", "WARNING"],
+        "encoding": "one_hot",
+        "weight": 0.85
+      },
+      "runtime_status": {
+        "type": "categorical", 
+        "values": ["SUCCESS", "FAILED", "PARTIAL"],
+        "encoding": "one_hot",
+        "weight": 0.95
+      },
+      "component_complexity": {
+        "type": "numerical",
+        "range": [0, 1],
+        "normalization": "min_max",
+        "weight": 0.78
+      },
+      "import_chain_depth": {
+        "type": "numerical",
+        "range": [1, 20],
+        "normalization": "z_score",
+        "weight": 0.82
+      },
+      "error_boundary_count": {
+        "type": "numerical", 
+        "range": [0, 10],
+        "normalization": "min_max",
+        "weight": 0.88
+      },
+      "missing_component_refs": {
+        "type": "numerical",
+        "range": [0, 50],
+        "normalization": "log_scale",
+        "weight": 0.92
+      },
+      "path_alias_usage": {
+        "type": "boolean",
+        "encoding": "binary",
+        "weight": 0.73
+      },
+      "route_count": {
+        "type": "numerical",
+        "range": [1, 100],
+        "normalization": "sqrt_scale", 
+        "weight": 0.65
+      }
+    },
+    
+    "output_labels": {
+      "failure_probability": {
+        "type": "regression",
+        "range": [0, 1],
+        "target": "continuous"
+      },
+      "failure_type": {
+        "type": "classification",
+        "classes": [
+          "import_cascade_failure",
+          "error_boundary_failure", 
+          "component_mount_failure",
+          "routing_failure",
+          "dependency_failure"
+        ]
+      },
+      "recovery_strategy": {
+        "type": "classification",
+        "classes": [
+          "component_simplification",
+          "error_boundary_fix",
+          "import_repair",
+          "fallback_activation"
+        ]
+      }
+    }
+  },
+
+  "trainingExamples": [
+    {
+      "id": "RWS_001",
+      "inputs": {
+        "build_status": "SUCCESS",
+        "runtime_status": "FAILED", 
+        "component_complexity": 0.88,
+        "import_chain_depth": 12,
+        "error_boundary_count": 3,
+        "missing_component_refs": 3,
+        "path_alias_usage": true,
+        "route_count": 54
+      },
+      "outputs": {
+        "failure_probability": 0.94,
+        "failure_type": "import_cascade_failure",
+        "recovery_strategy": "component_simplification"
+      },
+      "metadata": {
+        "source": "agent-feed-app.tsx",
+        "validation": "manual_testing",
+        "confidence": 0.95
+      }
+    },
+    {
+      "id": "RWS_002", 
+      "inputs": {
+        "build_status": "SUCCESS",
+        "runtime_status": "SUCCESS",
+        "component_complexity": 0.25,
+        "import_chain_depth": 3,
+        "error_boundary_count": 1,
+        "missing_component_refs": 0,
+        "path_alias_usage": false,
+        "route_count": 3
+      },
+      "outputs": {
+        "failure_probability": 0.08,
+        "failure_type": "none",
+        "recovery_strategy": "none"
+      },
+      "metadata": {
+        "source": "app-simple.jsx",
+        "validation": "automated_testing",
+        "confidence": 0.92
+      }
+    }
+  ],
+
+  "patternRecognitionRules": {
+    "critical_indicators": [
+      {
+        "condition": "build_status == 'SUCCESS' AND runtime_status == 'FAILED'",
+        "weight": 0.95,
+        "pattern": "build_runtime_mismatch"
+      },
+      {
+        "condition": "missing_component_refs > 0 AND error_boundary_count > 1", 
+        "weight": 0.90,
+        "pattern": "component_reference_failure"
+      },
+      {
+        "condition": "component_complexity > 0.8 AND import_chain_depth > 10",
+        "weight": 0.85,
+        "pattern": "complexity_cascade_risk"
+      }
+    ],
+    
+    "recovery_patterns": [
+      {
+        "trigger": "failure_type == 'import_cascade_failure'",
+        "action": "component_simplification",
+        "confidence": 0.88
+      },
+      {
+        "trigger": "missing_component_refs > 2",
+        "action": "import_repair", 
+        "confidence": 0.92
+      },
+      {
+        "trigger": "error_boundary_count > 5",
+        "action": "error_boundary_fix",
+        "confidence": 0.78
+      }
+    ]
+  },
+
+  "validationDataset": {
+    "testCases": [
+      {
+        "scenario": "Complex App with Missing ErrorBoundaries",
+        "expected_failure_prob": 0.89,
+        "expected_failure_type": "import_cascade_failure"
+      },
+      {
+        "scenario": "Simple App with Basic Components", 
+        "expected_failure_prob": 0.12,
+        "expected_failure_type": "none"
+      },
+      {
+        "scenario": "Medium Complexity with Proper ErrorBoundaries",
+        "expected_failure_prob": 0.35,
+        "expected_failure_type": "none"
+      }
+    ]
+  },
+
+  "featureImportance": {
+    "missing_component_refs": 0.24,
+    "runtime_status": 0.22,
+    "error_boundary_count": 0.18,
+    "component_complexity": 0.16,
+    "build_status": 0.12,
+    "import_chain_depth": 0.08
+  },
+
+  "modelHyperparameters": {
+    "random_forest": {
+      "n_estimators": 100,
+      "max_depth": 10,
+      "min_samples_split": 5,
+      "random_state": 42
+    },
+    "neural_network": {
+      "hidden_layers": [64, 32, 16],
+      "activation": "relu",
+      "optimizer": "adam",
+      "learning_rate": 0.001,
+      "batch_size": 32,
+      "epochs": 100
+    }
+  },
+
+  "deploymentConfig": {
+    "claude_flow_integration": {
+      "model_endpoint": "/neural/failure-prediction",
+      "confidence_threshold": 0.75,
+      "real_time_scoring": true,
+      "batch_processing": false
+    },
+    "update_frequency": "continuous",
+    "retraining_trigger": "new_failure_patterns > 5"
+  }
+}

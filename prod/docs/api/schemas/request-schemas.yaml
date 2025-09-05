@@ -1,0 +1,812 @@
+# Request Schema Definitions
+# Complete request schema specifications for the Distributed Posting Intelligence API
+
+PostComposeRequest:
+  type: object
+  required:
+    - content_type
+    - platform
+  properties:
+    content_type:
+      type: string
+      enum: [original, enhance, template_based, ai_generated]
+      description: Type of content composition requested
+      example: enhance
+    platform:
+      type: string
+      enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+      description: Target social media platform
+      example: twitter
+    input_content:
+      type: string
+      description: Base content to enhance or compose from
+      maxLength: 10000
+      example: "Just launched our new AI product!"
+    template_id:
+      type: string
+      format: uuid
+      description: Template ID for template-based composition
+      example: "550e8400-e29b-41d4-a716-446655440000"
+    parameters:
+      type: object
+      description: Composition parameters
+      properties:
+        tone:
+          type: string
+          enum: [professional, casual, humorous, inspirational, educational]
+          default: professional
+          example: professional
+        target_audience:
+          type: string
+          enum: [general, business, technical, creative, academic]
+          default: general
+          example: business
+        engagement_goal:
+          type: string
+          enum: [likes, shares, comments, clicks, reach]
+          default: likes
+          example: shares
+        hashtags:
+          type: boolean
+          default: true
+          description: Include relevant hashtags
+          example: true
+        max_length:
+          type: integer
+          minimum: 1
+          maximum: 5000
+          description: Maximum content length
+          example: 280
+        include_cta:
+          type: boolean
+          default: false
+          description: Include call-to-action
+          example: true
+        keywords:
+          type: array
+          items:
+            type: string
+          description: Keywords to emphasize in content
+          example: ["AI", "innovation", "productivity"]
+        brand_voice:
+          type: string
+          enum: [authoritative, friendly, witty, empathetic, bold]
+          description: Brand voice to maintain
+          example: friendly
+    optimization_level:
+      type: string
+      enum: [basic, standard, advanced]
+      default: standard
+      description: Level of AI optimization to apply
+      example: advanced
+    metadata:
+      type: object
+      properties:
+        campaign_id:
+          type: string
+          description: Associated marketing campaign
+        content_series:
+          type: string
+          description: Content series identifier
+        target_metrics:
+          type: object
+          properties:
+            expected_reach:
+              type: integer
+            expected_engagement_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+
+AgentCoordinationRequest:
+  type: object
+  required:
+    - task
+    - strategy
+  properties:
+    task:
+      type: string
+      description: Main task description
+      maxLength: 2000
+      example: "Analyze competitor content strategy and generate 5 optimized posts"
+    strategy:
+      type: string
+      enum: [parallel, sequential, adaptive, hybrid]
+      description: Execution strategy
+      example: parallel
+    subtasks:
+      type: array
+      description: Task breakdown into specific subtasks
+      items:
+        type: object
+        required:
+          - id
+          - description
+          - agent_type
+        properties:
+          id:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            example: "competitor_analysis"
+          description:
+            type: string
+            maxLength: 500
+            example: "Analyze top 10 competitors' posting patterns"
+          agent_type:
+            type: string
+            enum: [researcher, coder, analyst, optimizer, coordinator, content-creator]
+            example: researcher
+          dependencies:
+            type: array
+            items:
+              type: string
+            description: IDs of dependent subtasks
+            example: ["data_collection"]
+          priority:
+            type: string
+            enum: [low, medium, high, critical]
+            default: medium
+            example: high
+          estimated_duration:
+            type: integer
+            description: Estimated duration in seconds
+            minimum: 1
+            maximum: 86400
+            example: 1800
+          resources:
+            type: object
+            description: Required resources
+            properties:
+              cpu_cores:
+                type: integer
+                minimum: 1
+                maximum: 8
+              memory_gb:
+                type: number
+                minimum: 0.5
+                maximum: 32
+              storage_gb:
+                type: number
+                minimum: 0.1
+                maximum: 100
+              external_apis:
+                type: array
+                items:
+                  type: string
+                example: ["twitter_api", "linkedin_api"]
+          output_requirements:
+            type: object
+            properties:
+              format:
+                type: string
+                enum: [json, csv, markdown, html]
+              max_size_mb:
+                type: number
+              fields:
+                type: array
+                items:
+                  type: string
+    constraints:
+      type: object
+      properties:
+        max_agents:
+          type: integer
+          minimum: 1
+          maximum: 10
+          default: 5
+          description: Maximum number of agents to use
+        timeout:
+          type: integer
+          description: Maximum execution time in seconds
+          minimum: 60
+          maximum: 3600
+          default: 1800
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+          default: medium
+          description: Overall task priority
+        budget_limit:
+          type: number
+          minimum: 0
+          description: Maximum cost in credits
+        deadline:
+          type: string
+          format: date-time
+          description: Task completion deadline
+    preferences:
+      type: object
+      properties:
+        preferred_agents:
+          type: array
+          items:
+            type: string
+          description: Preferred agent IDs
+          example: ["agent_001", "agent_007"]
+        avoid_agents:
+          type: array
+          items:
+            type: string
+          description: Agent IDs to avoid
+        quality_threshold:
+          type: number
+          minimum: 0
+          maximum: 1
+          default: 0.8
+          description: Minimum quality threshold for outputs
+        performance_preference:
+          type: string
+          enum: [speed, quality, cost, balanced]
+          default: balanced
+        notification_preferences:
+          type: object
+          properties:
+            on_completion:
+              type: boolean
+              default: true
+            on_error:
+              type: boolean
+              default: true
+            progress_updates:
+              type: boolean
+              default: false
+            webhook_url:
+              type: string
+              format: uri
+
+FeedOptimizationRequest:
+  type: object
+  required:
+    - optimization_goals
+  properties:
+    optimization_goals:
+      type: array
+      items:
+        type: string
+        enum: [engagement, reach, clicks, conversions, brand_awareness, community_growth]
+      minItems: 1
+      maxItems: 3
+      example: ["engagement", "reach"]
+      description: Primary optimization objectives
+    platforms:
+      type: array
+      items:
+        type: string
+        enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+      description: Platforms to optimize for
+      example: ["twitter", "linkedin"]
+    content_types:
+      type: array
+      items:
+        type: string
+        enum: [text, image, video, link, poll, carousel, story]
+      description: Content types to include in optimization
+      example: ["text", "image"]
+    time_horizon:
+      type: string
+      enum: [1week, 2weeks, 1month, 3months, 6months]
+      default: 1month
+      description: Optimization time horizon
+    constraints:
+      type: object
+      properties:
+        max_posts_per_day:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 5
+          description: Maximum posts per day across all platforms
+        budget_limit:
+          type: number
+          minimum: 0
+          description: Budget constraint for optimization
+        posting_hours:
+          type: object
+          properties:
+            start:
+              type: integer
+              minimum: 0
+              maximum: 23
+              default: 8
+              description: Earliest posting hour (24h format)
+            end:
+              type: integer
+              minimum: 0
+              maximum: 23
+              default: 20
+              description: Latest posting hour (24h format)
+        excluded_days:
+          type: array
+          items:
+            type: string
+            enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+          description: Days to exclude from posting schedule
+        content_guidelines:
+          type: object
+          properties:
+            min_quality_score:
+              type: number
+              minimum: 0
+              maximum: 1
+              default: 0.7
+            avoid_topics:
+              type: array
+              items:
+                type: string
+            required_topics:
+              type: array
+              items:
+                type: string
+            brand_keywords:
+              type: array
+              items:
+                type: string
+    target_audience:
+      type: object
+      properties:
+        demographics:
+          type: object
+          properties:
+            age_range:
+              type: object
+              properties:
+                min:
+                  type: integer
+                  minimum: 13
+                  maximum: 100
+                max:
+                  type: integer
+                  minimum: 13
+                  maximum: 100
+              example: { "min": 25, "max": 45 }
+            locations:
+              type: array
+              items:
+                type: string
+              description: Target geographic locations
+              example: ["United States", "Canada", "United Kingdom"]
+            languages:
+              type: array
+              items:
+                type: string
+                pattern: '^[a-z]{2}(-[A-Z]{2})?$'
+              description: Target languages (ISO 639-1)
+              example: ["en", "en-US", "fr"]
+            interests:
+              type: array
+              items:
+                type: string
+              description: Target audience interests
+              example: ["technology", "startups", "AI", "productivity"]
+            job_titles:
+              type: array
+              items:
+                type: string
+              description: Target job titles (for professional platforms)
+              example: ["CEO", "Marketing Manager", "Developer"]
+        behavior:
+          type: object
+          properties:
+            activity_times:
+              type: array
+              items:
+                type: object
+                properties:
+                  day:
+                    type: string
+                    enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+                  hours:
+                    type: array
+                    items:
+                      type: integer
+                      minimum: 0
+                      maximum: 23
+              description: When audience is most active
+            engagement_preferences:
+              type: array
+              items:
+                type: string
+                enum: [likes, shares, comments, saves, clicks]
+              description: Preferred engagement types
+            content_preferences:
+              type: array
+              items:
+                type: string
+                enum: [educational, entertaining, inspirational, promotional, news]
+              description: Preferred content categories
+    historical_data:
+      type: object
+      properties:
+        include_performance:
+          type: boolean
+          default: true
+          description: Include historical performance data
+        time_range:
+          type: string
+          enum: [30d, 90d, 180d, 1y]
+          default: 90d
+          description: Historical data time range
+        exclude_outliers:
+          type: boolean
+          default: true
+          description: Exclude statistical outliers from analysis
+
+QualityAnalysisRequest:
+  type: object
+  required:
+    - content
+    - platform
+  properties:
+    content:
+      type: string
+      minLength: 1
+      maxLength: 10000
+      description: Content to analyze for quality
+      example: "🚀 Excited to share our latest AI breakthrough! This revolutionary technology will transform how businesses operate. #AI #Innovation #TechNews"
+    platform:
+      type: string
+      enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+      description: Target platform for analysis
+      example: twitter
+    content_type:
+      type: string
+      enum: [text, image, video, link, poll, carousel]
+      default: text
+      description: Type of content being analyzed
+    analysis_depth:
+      type: string
+      enum: [basic, standard, comprehensive]
+      default: standard
+      description: Depth of analysis to perform
+    include_suggestions:
+      type: boolean
+      default: true
+      description: Include improvement suggestions
+    comparative_analysis:
+      type: object
+      properties:
+        compare_to:
+          type: string
+          enum: [industry_average, top_performers, historical_performance]
+          description: Baseline for comparison
+        industry:
+          type: string
+          description: Industry category for benchmarking
+          example: "technology"
+        competitor_content:
+          type: array
+          items:
+            type: string
+          description: Competitor content for comparison
+    custom_criteria:
+      type: object
+      properties:
+        brand_voice_keywords:
+          type: array
+          items:
+            type: string
+          description: Keywords that reflect brand voice
+        avoid_terms:
+          type: array
+          items:
+            type: string
+          description: Terms to flag if present
+        required_elements:
+          type: array
+          items:
+            type: string
+            enum: [hashtags, mentions, links, emojis, questions]
+          description: Required content elements
+        target_sentiment:
+          type: string
+          enum: [positive, neutral, mixed]
+          description: Desired content sentiment
+    metadata:
+      type: object
+      properties:
+        campaign_id:
+          type: string
+          description: Associated campaign identifier
+        content_category:
+          type: string
+          enum: [promotional, educational, entertaining, news, personal]
+        target_kpis:
+          type: array
+          items:
+            type: string
+            enum: [engagement_rate, reach, clicks, shares, saves, comments]
+          description: Key performance indicators to optimize for
+
+CreateContentTemplateRequest:
+  type: object
+  required:
+    - name
+    - content
+    - category
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 100
+      pattern: '^[a-zA-Z0-9\s\-_]+$'
+      description: Template name
+      example: "Product Launch Announcement"
+    description:
+      type: string
+      maxLength: 500
+      description: Template description
+      example: "Template for announcing new product launches with engagement optimization"
+    content:
+      type: string
+      minLength: 1
+      maxLength: 5000
+      description: Template content with variable placeholders
+      example: "🚀 Introducing {{product_name}}! {{description}} Get {{discount_percent}}% off with code {{promo_code}}. {{cta}} #{{category}} #NewProduct"
+    category:
+      type: string
+      enum: [tech, business, lifestyle, education, entertainment, marketing, health, finance, travel, food]
+      description: Content category
+      example: tech
+    platforms:
+      type: array
+      items:
+        type: string
+        enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+      minItems: 1
+      description: Compatible platforms
+      example: ["twitter", "linkedin"]
+    variables:
+      type: array
+      items:
+        type: object
+        required:
+          - name
+          - type
+        properties:
+          name:
+            type: string
+            pattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+            maxLength: 50
+            description: Variable name (must be valid identifier)
+            example: product_name
+          type:
+            type: string
+            enum: [text, number, date, boolean, enum, url, email]
+            description: Variable data type
+            example: text
+          required:
+            type: boolean
+            default: false
+            description: Whether variable is required
+            example: true
+          default_value:
+            type: string
+            description: Default value for variable
+            example: "Our Amazing Product"
+          description:
+            type: string
+            maxLength: 200
+            description: Variable description for users
+            example: "Name of the product being launched"
+          validation:
+            type: object
+            properties:
+              min_length:
+                type: integer
+                minimum: 0
+              max_length:
+                type: integer
+                minimum: 1
+              pattern:
+                type: string
+                description: Regex pattern for validation
+              min_value:
+                type: number
+                description: Minimum numeric value
+              max_value:
+                type: number
+                description: Maximum numeric value
+          options:
+            type: array
+            items:
+              type: string
+            maxItems: 20
+            description: Available options for enum type
+            example: ["smartphones", "laptops", "accessories"]
+    tags:
+      type: array
+      items:
+        type: string
+        pattern: '^[a-zA-Z0-9_-]+$'
+        maxLength: 30
+      maxItems: 10
+      description: Template tags for organization
+      example: ["product-launch", "promotional", "tech"]
+    performance_targets:
+      type: object
+      properties:
+        min_engagement_rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Minimum expected engagement rate
+        target_reach:
+          type: integer
+          minimum: 0
+          description: Target reach for content using this template
+        expected_conversions:
+          type: number
+          minimum: 0
+          description: Expected conversion rate
+    usage_guidelines:
+      type: object
+      properties:
+        best_posting_times:
+          type: array
+          items:
+            type: object
+            properties:
+              day:
+                type: string
+                enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+              hours:
+                type: array
+                items:
+                  type: integer
+                  minimum: 0
+                  maximum: 23
+        frequency_limit:
+          type: object
+          properties:
+            max_uses_per_day:
+              type: integer
+              minimum: 1
+            max_uses_per_week:
+              type: integer
+              minimum: 1
+        audience_suitability:
+          type: array
+          items:
+            type: string
+          description: Suitable audience segments
+          example: ["tech-savvy", "early-adopters", "business-professionals"]
+
+CreateQualityRuleRequest:
+  type: object
+  required:
+    - name
+    - rule_type
+    - criteria
+    - weight
+  properties:
+    name:
+      type: string
+      minLength: 1
+      maxLength: 100
+      description: Quality rule name
+      example: "Minimum Character Count"
+    description:
+      type: string
+      maxLength: 500
+      description: Rule description
+      example: "Ensures posts meet minimum character requirements for engagement"
+    rule_type:
+      type: string
+      enum: [content_length, sentiment, readability, hashtag_count, engagement_prediction, spam_detection, brand_compliance, accessibility]
+      description: Type of quality rule
+      example: content_length
+    criteria:
+      type: object
+      required:
+        - conditions
+      properties:
+        conditions:
+          type: array
+          items:
+            type: object
+            required:
+              - field
+              - operator
+              - value
+            properties:
+              field:
+                type: string
+                maxLength: 50
+                description: Field to evaluate
+                example: "character_count"
+              operator:
+                type: string
+                enum: [equals, not_equals, greater_than, less_than, greater_equal, less_equal, contains, not_contains, matches_regex, in_list, not_in_list]
+                description: Comparison operator
+                example: greater_than
+              value:
+                type: string
+                maxLength: 200
+                description: Comparison value
+                example: "10"
+              weight:
+                type: number
+                minimum: 0
+                maximum: 1
+                default: 1.0
+                description: Condition weight within rule
+          minItems: 1
+          maxItems: 10
+        logic_operator:
+          type: string
+          enum: [AND, OR]
+          default: AND
+          description: Logic operator between conditions
+        scoring_method:
+          type: string
+          enum: [binary, linear, exponential, custom]
+          default: binary
+          description: How to calculate score from conditions
+    weight:
+      type: number
+      minimum: 0
+      maximum: 1
+      description: Rule importance weight in overall scoring
+      example: 0.3
+    platforms:
+      type: array
+      items:
+        type: string
+        enum: [twitter, linkedin, instagram, facebook, youtube, tiktok, all]
+      default: ["all"]
+      description: Applicable platforms
+    content_types:
+      type: array
+      items:
+        type: string
+        enum: [text, image, video, link, poll, all]
+      default: ["all"]
+      description: Applicable content types
+    active:
+      type: boolean
+      default: true
+      description: Whether rule is active
+    severity:
+      type: string
+      enum: [low, medium, high, critical]
+      default: medium
+      description: Rule violation severity
+    remediation:
+      type: object
+      properties:
+        auto_fix:
+          type: boolean
+          default: false
+          description: Whether rule violations can be auto-fixed
+        suggestions:
+          type: array
+          items:
+            type: string
+          description: Suggested fixes for violations
+          example: ["Increase character count to at least 10", "Add more descriptive content"]
+        escalation:
+          type: string
+          enum: [none, warn, block, review]
+          default: warn
+          description: Action to take on violation
+    thresholds:
+      type: object
+      properties:
+        pass_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          default: 0.7
+          description: Minimum score to pass rule
+        warning_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          default: 0.5
+          description: Score below which warnings are issued
+        fail_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          default: 0.3
+          description: Score below which content fails rule

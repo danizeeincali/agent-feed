@@ -151,7 +151,7 @@ export const ClaudeCodePanel: React.FC<ClaudeCodePanelProps> = ({ className }) =
       return response.json();
     },
     refetchInterval: autoRefresh ? 15000 : false,
-    initialData: generateMockSessions()
+    initialData: []
   });
 
   // Fetch tool usage stats
@@ -163,7 +163,7 @@ export const ClaudeCodePanel: React.FC<ClaudeCodePanelProps> = ({ className }) =
       return response.json();
     },
     refetchInterval: autoRefresh ? 60000 : false,
-    initialData: generateMockToolStats()
+    initialData: []
   });
 
   // Session control mutations
@@ -745,54 +745,8 @@ export const ClaudeCodePanel: React.FC<ClaudeCodePanelProps> = ({ className }) =
   );
 };
 
-// Mock data generators
-function generateMockSessions(): ClaudeCodeSession[] {
-  const sessions: ClaudeCodeSession[] = [];
-  const statuses: ClaudeCodeSession['status'][] = ['active', 'inactive', 'expired', 'error'];
-  
-  for (let i = 0; i < 10; i++) {
-    const created = new Date(Date.now() - Math.random() * 86400000 * 7);
-    sessions.push({
-      id: `session-${Math.random().toString(36).substr(2, 9)}`,
-      user_id: `user-${Math.random().toString(36).substr(2, 6)}`,
-      status: statuses[Math.floor(Math.random() * statuses.length)],
-      created_at: created.toISOString(),
-      updated_at: new Date(created.getTime() + Math.random() * 3600000).toISOString(),
-      expires_at: new Date(created.getTime() + 86400000).toISOString(),
-      last_activity: new Date(Date.now() - Math.random() * 3600000).toISOString(),
-      tools_used: ['Read', 'Write', 'Bash', 'Edit'].slice(0, Math.floor(Math.random() * 4) + 1),
-      tokens_consumed: Math.floor(Math.random() * 50000) + 1000,
-      api_calls: Math.floor(Math.random() * 200) + 10,
-      success_rate: 0.8 + Math.random() * 0.2,
-      session_duration: Math.floor(Math.random() * 7200) + 300
-    });
-  }
-  
-  return sessions;
-}
-
-function generateMockToolStats(): ToolUsageStats[] {
-  const tools = [
-    { name: 'Read', category: 'file' as const },
-    { name: 'Write', category: 'file' as const },
-    { name: 'Edit', category: 'file' as const },
-    { name: 'MultiEdit', category: 'file' as const },
-    { name: 'Bash', category: 'bash' as const },
-    { name: 'Glob', category: 'search' as const },
-    { name: 'Grep', category: 'search' as const },
-    { name: 'WebFetch', category: 'web' as const },
-    { name: 'TodoWrite', category: 'agent' as const }
-  ];
-  
-  return tools.map(tool => ({
-    tool_name: tool.name,
-    category: tool.category,
-    usage_count: Math.floor(Math.random() * 1000) + 50,
-    success_rate: 0.85 + Math.random() * 0.15,
-    avg_response_time: Math.floor(Math.random() * 2000) + 100,
-    last_used: new Date(Date.now() - Math.random() * 86400000).toISOString(),
-    error_count: Math.floor(Math.random() * 10)
-  }));
-}
+// Real data fetched from backend API endpoints:
+// - /api/v1/claude-code/sessions
+// - /api/v1/claude-code/tools/stats
 
 export default ClaudeCodePanel;

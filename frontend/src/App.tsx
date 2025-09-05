@@ -4,14 +4,12 @@ import React, { useState, memo, Suspense } from 'react';
 console.log('DEBUG: App.tsx loading...');
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { 
-  ErrorBoundary, 
-  RouteErrorBoundary, 
-  GlobalErrorBoundary,
-  AsyncErrorBoundary 
-} from '@/components/ErrorBoundary';
-import FallbackComponents from '@/components/FallbackComponents';
-import { RealTimeNotifications } from '@/components/RealTimeNotifications';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
+import FallbackComponents from './components/FallbackComponents';
+import { RealTimeNotifications } from './components/RealTimeNotifications';
+import GlobalErrorBoundary from './components/GlobalErrorBoundary';
+import RouteErrorBoundary from './components/RouteErrorBoundary';
+import AsyncErrorBoundary from './components/AsyncErrorBoundary';
 
 // Import components directly to fix loading issue - with error handling
 try {
@@ -19,23 +17,26 @@ try {
 } catch (error) {
   console.error('DEBUG: Failed to load SocialMediaFeed:', error);
 }
-import SocialMediaFeed from '@/components/SocialMediaFeed';
-import SimpleAgentManager from '@/components/SimpleAgentManager';
-import EnhancedAgentManagerWrapper from '@/components/EnhancedAgentManagerWrapper';
-// import AgentManagerDebug from '@/components/AgentManagerDebug';
-import SimpleAnalytics from '@/components/SimpleAnalytics';
-import BulletproofClaudeCodePanel from '@/components/BulletproofClaudeCodePanel';
-import AgentDashboard from '@/components/AgentDashboard';
-import WorkflowVisualizationFixed from '@/components/WorkflowVisualizationFixed';
-import BulletproofAgentProfile from '@/components/BulletproofAgentProfile';
-import BulletproofActivityPanel from '@/components/BulletproofActivityPanel';
-import SimpleSettings from '@/components/SimpleSettings';
-import DualModeClaudeManager from '@/components/claude-manager/DualModeClaudeManager';
-import { ClaudeInstanceManagerComponentSSE } from '@/components/claude-manager/ClaudeInstanceManagerComponentSSE';
-import EnhancedSSEInterface from '@/components/claude-manager/EnhancedSSEInterface';
-import PerformanceMonitor from '@/components/PerformanceMonitor';
-import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
-import '@/styles/agents.css';
+import SocialMediaFeed from './components/RealSocialMediaFeed';
+import SafeFeedWrapper from './components/SafeFeedWrapper';
+import RealAgentManager from './components/RealAgentManager';
+import RealActivityFeed from './components/RealActivityFeed';
+import EnhancedAgentManagerWrapper from './components/EnhancedAgentManagerWrapper';
+import Agents from './pages/Agents';
+// import AgentManagerDebug from './components/AgentManagerDebug';
+import RealAnalytics from './components/RealAnalytics';
+import BulletproofClaudeCodePanel from './components/BulletproofClaudeCodePanel';
+import AgentDashboard from './components/AgentDashboard';
+import WorkflowVisualizationFixed from './components/WorkflowVisualizationFixed';
+import BulletproofAgentProfile from './components/BulletproofAgentProfile';
+import BulletproofActivityPanel from './components/BulletproofActivityPanel';
+import SimpleSettings from './components/SimpleSettings';
+import DualModeClaudeManager from './components/claude-manager/DualModeClaudeManager';
+import { ClaudeInstanceManagerComponentSSE } from './components/claude-manager/ClaudeInstanceManagerComponentSSE';
+import EnhancedSSEInterface from './components/claude-manager/EnhancedSSEInterface';
+import PerformanceMonitor from './components/PerformanceMonitor';
+import { WebSocketProvider } from './context/WebSocketSingletonContext';
+import './styles/agents.css';
 import { 
   LayoutDashboard, 
   Activity, 
@@ -50,8 +51,8 @@ import {
   BarChart3,
   Code,
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { ConnectionStatus } from '@/components/ConnectionStatus';
+import { cn } from './utils/cn';
+import { ConnectionStatus } from './components/ConnectionStatus';
 
 // Optimized QueryClient to reduce API calls and improve performance
 const queryClient = new QueryClient({
@@ -236,9 +237,11 @@ const App: React.FC = () => {
                   <Routes>
                   <Route path="/" element={
                     <RouteErrorBoundary routeName="Feed">
-                      <Suspense fallback={<FallbackComponents.FeedFallback />}>
-                        <SocialMediaFeed />
-                      </Suspense>
+                      <SafeFeedWrapper>
+                        <Suspense fallback={<FallbackComponents.FeedFallback />}>
+                          <SocialMediaFeed />
+                        </Suspense>
+                      </SafeFeedWrapper>
                     </RouteErrorBoundary>
                   } />
                   {/* SPARC Phase 5: SSE-based Interactive Control */}
@@ -274,14 +277,14 @@ const App: React.FC = () => {
                   <Route path="/agents" element={
                     <RouteErrorBoundary routeName="Agents">
                       <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
-                        <EnhancedAgentManagerWrapper />
+                        <RealAgentManager />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
                   <Route path="/agents-legacy" element={
                     <RouteErrorBoundary routeName="LegacyAgentManager">
                       <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
-                        <SimpleAgentManager />
+                        <Agents />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
@@ -304,7 +307,7 @@ const App: React.FC = () => {
                   <Route path="/analytics" element={
                     <RouteErrorBoundary routeName="Analytics">
                       <Suspense fallback={<FallbackComponents.AnalyticsFallback />}>
-                        <SimpleAnalytics />
+                        <RealAnalytics />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
@@ -318,7 +321,7 @@ const App: React.FC = () => {
                   <Route path="/activity" element={
                     <RouteErrorBoundary routeName="Activity">
                       <Suspense fallback={<FallbackComponents.ActivityFallback />}>
-                        <BulletproofActivityPanel />
+                        <RealActivityFeed />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

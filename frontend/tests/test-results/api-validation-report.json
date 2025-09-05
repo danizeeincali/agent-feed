@@ -1,0 +1,1761 @@
+{
+  "timestamp": "2025-09-05T02:56:48.384Z",
+  "duration": "30115ms",
+  "summary": {
+    "totalTests": 36,
+    "passed": 35,
+    "failed": 1,
+    "successRate": "97.22%"
+  },
+  "results": [
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 21,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:18.289Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:18.292Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:18.294Z"
+    },
+    {
+      "name": "Agent Posts API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "postCount": 8,
+        "hasRealData": true,
+        "samplePost": {
+          "id": "prod-post-1",
+          "contentPreview": "Completed comprehensive validation of all production endpoints and database connections. System is f..."
+        }
+      },
+      "timestamp": "2025-09-05T02:56:18.296Z"
+    },
+    {
+      "name": "System Metrics Endpoint",
+      "passed": [
+        {
+          "timestamp": "2025-09-04T02:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 60.16671224603988,
+          "memory_usage": 67.22597440061406,
+          "disk_usage": 58.383328902650874,
+          "network_io": {
+            "bytes_in": 426339,
+            "bytes_out": 60143,
+            "packets_in": 292,
+            "packets_out": 388
+          },
+          "response_time": 275.2836891821246,
+          "throughput": 125,
+          "error_rate": 3.7740574579437047,
+          "active_connections": 23,
+          "queue_depth": 9,
+          "cache_hit_rate": 75.89982736891965
+        },
+        {
+          "timestamp": "2025-09-04T03:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 41.35728676206603,
+          "memory_usage": 76.4501904730338,
+          "disk_usage": 59.57116435015403,
+          "network_io": {
+            "bytes_in": 646480,
+            "bytes_out": 21397,
+            "packets_in": 8438,
+            "packets_out": 3532
+          },
+          "response_time": 220.8930500409817,
+          "throughput": 469,
+          "error_rate": 0.5661362595748387,
+          "active_connections": 42,
+          "queue_depth": 9,
+          "cache_hit_rate": 92.1634139650906
+        },
+        {
+          "timestamp": "2025-09-04T04:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 80.25986906566781,
+          "memory_usage": 78.54177477393449,
+          "disk_usage": 47.041171310049194,
+          "network_io": {
+            "bytes_in": 585917,
+            "bytes_out": 477654,
+            "packets_in": 2519,
+            "packets_out": 3644
+          },
+          "response_time": 272.64760775233776,
+          "throughput": 518,
+          "error_rate": 3.266005858538942,
+          "active_connections": 37,
+          "queue_depth": 8,
+          "cache_hit_rate": 76.43950130856629
+        },
+        {
+          "timestamp": "2025-09-04T05:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 46.4502377175511,
+          "memory_usage": 55.23517293389928,
+          "disk_usage": 59.32227088277504,
+          "network_io": {
+            "bytes_in": 130335,
+            "bytes_out": 490666,
+            "packets_in": 2402,
+            "packets_out": 497
+          },
+          "response_time": 486.6000087574975,
+          "throughput": 153,
+          "error_rate": 2.377383461093292,
+          "active_connections": 36,
+          "queue_depth": 5,
+          "cache_hit_rate": 81.00478904197675
+        },
+        {
+          "timestamp": "2025-09-04T06:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 43.7047364036533,
+          "memory_usage": 73.40896835774133,
+          "disk_usage": 57.45120090253661,
+          "network_io": {
+            "bytes_in": 100749,
+            "bytes_out": 185533,
+            "packets_in": 9011,
+            "packets_out": 382
+          },
+          "response_time": 165.89700013955138,
+          "throughput": 186,
+          "error_rate": 1.9934174400747484,
+          "active_connections": 17,
+          "queue_depth": 2,
+          "cache_hit_rate": 75.32009162438555
+        },
+        {
+          "timestamp": "2025-09-04T07:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 62.08400514464695,
+          "memory_usage": 72.91241492880127,
+          "disk_usage": 43.1043508136882,
+          "network_io": {
+            "bytes_in": 948276,
+            "bytes_out": 434493,
+            "packets_in": 2076,
+            "packets_out": 1792
+          },
+          "response_time": 520.9725381737143,
+          "throughput": 1086,
+          "error_rate": 4.53263341305671,
+          "active_connections": 31,
+          "queue_depth": 2,
+          "cache_hit_rate": 71.89216525851522
+        },
+        {
+          "timestamp": "2025-09-04T08:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 83.59052301261389,
+          "memory_usage": 44.921826015278654,
+          "disk_usage": 48.52517752417993,
+          "network_io": {
+            "bytes_in": 284480,
+            "bytes_out": 173696,
+            "packets_in": 6050,
+            "packets_out": 4873
+          },
+          "response_time": 291.63625378883285,
+          "throughput": 683,
+          "error_rate": 4.0219366599366335,
+          "active_connections": 23,
+          "queue_depth": 0,
+          "cache_hit_rate": 71.30742296904101
+        },
+        {
+          "timestamp": "2025-09-04T09:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 84.9923076961797,
+          "memory_usage": 85.4876057988686,
+          "disk_usage": 40.78371291267164,
+          "network_io": {
+            "bytes_in": 146919,
+            "bytes_out": 363359,
+            "packets_in": 9170,
+            "packets_out": 1284
+          },
+          "response_time": 319.14052145497163,
+          "throughput": 205,
+          "error_rate": 3.7276427657958635,
+          "active_connections": 31,
+          "queue_depth": 7,
+          "cache_hit_rate": 78.37463591994154
+        },
+        {
+          "timestamp": "2025-09-04T10:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 58.55747883740287,
+          "memory_usage": 57.09571399868051,
+          "disk_usage": 59.717945581791255,
+          "network_io": {
+            "bytes_in": 21763,
+            "bytes_out": 413010,
+            "packets_in": 8499,
+            "packets_out": 2419
+          },
+          "response_time": 304.0055387900407,
+          "throughput": 107,
+          "error_rate": 4.30801196060289,
+          "active_connections": 17,
+          "queue_depth": 1,
+          "cache_hit_rate": 91.4571859571499
+        },
+        {
+          "timestamp": "2025-09-04T11:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 54.630248341839035,
+          "memory_usage": 90.94943880199772,
+          "disk_usage": 53.05201587175874,
+          "network_io": {
+            "bytes_in": 221512,
+            "bytes_out": 27526,
+            "packets_in": 1420,
+            "packets_out": 2840
+          },
+          "response_time": 317.0020413025276,
+          "throughput": 251,
+          "error_rate": 4.874158312436406,
+          "active_connections": 20,
+          "queue_depth": 4,
+          "cache_hit_rate": 75.55432690395935
+        },
+        {
+          "timestamp": "2025-09-04T12:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 47.93226219130587,
+          "memory_usage": 67.64689567546795,
+          "disk_usage": 40.842333302223885,
+          "network_io": {
+            "bytes_in": 102780,
+            "bytes_out": 168308,
+            "packets_in": 1288,
+            "packets_out": 1509
+          },
+          "response_time": 362.9841088310823,
+          "throughput": 809,
+          "error_rate": 1.128013789103387,
+          "active_connections": 55,
+          "queue_depth": 8,
+          "cache_hit_rate": 81.62568126033817
+        },
+        {
+          "timestamp": "2025-09-04T13:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 62.37064195651132,
+          "memory_usage": 53.21935918166266,
+          "disk_usage": 55.19646259595433,
+          "network_io": {
+            "bytes_in": 811549,
+            "bytes_out": 389756,
+            "packets_in": 1147,
+            "packets_out": 3057
+          },
+          "response_time": 196.8211290494026,
+          "throughput": 482,
+          "error_rate": 0.8514973419519845,
+          "active_connections": 31,
+          "queue_depth": 2,
+          "cache_hit_rate": 90.92961370498779
+        },
+        {
+          "timestamp": "2025-09-04T14:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 36.04719518139986,
+          "memory_usage": 75.61537305947692,
+          "disk_usage": 52.98371828554074,
+          "network_io": {
+            "bytes_in": 391165,
+            "bytes_out": 80957,
+            "packets_in": 5335,
+            "packets_out": 382
+          },
+          "response_time": 178.33103022238865,
+          "throughput": 633,
+          "error_rate": 0.5506311195296043,
+          "active_connections": 52,
+          "queue_depth": 7,
+          "cache_hit_rate": 74.91174863674365
+        },
+        {
+          "timestamp": "2025-09-04T15:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 66.25725667942022,
+          "memory_usage": 92.0845245001343,
+          "disk_usage": 53.37068311897905,
+          "network_io": {
+            "bytes_in": 326067,
+            "bytes_out": 221076,
+            "packets_in": 1233,
+            "packets_out": 4772
+          },
+          "response_time": 276.3227368248675,
+          "throughput": 793,
+          "error_rate": 0.24562644180257331,
+          "active_connections": 25,
+          "queue_depth": 4,
+          "cache_hit_rate": 82.715115276872
+        },
+        {
+          "timestamp": "2025-09-04T16:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 61.6372237323202,
+          "memory_usage": 91.42473046921255,
+          "disk_usage": 57.55390313049588,
+          "network_io": {
+            "bytes_in": 501996,
+            "bytes_out": 272982,
+            "packets_in": 8021,
+            "packets_out": 4716
+          },
+          "response_time": 412.18104663808754,
+          "throughput": 307,
+          "error_rate": 2.6080270943550987,
+          "active_connections": 34,
+          "queue_depth": 2,
+          "cache_hit_rate": 88.11136900816945
+        },
+        {
+          "timestamp": "2025-09-04T17:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 55.033009308510756,
+          "memory_usage": 54.97200035734585,
+          "disk_usage": 54.29405923538743,
+          "network_io": {
+            "bytes_in": 278583,
+            "bytes_out": 421864,
+            "packets_in": 2546,
+            "packets_out": 1259
+          },
+          "response_time": 125.1458480843266,
+          "throughput": 327,
+          "error_rate": 0.9797264124591976,
+          "active_connections": 30,
+          "queue_depth": 2,
+          "cache_hit_rate": 79.73328439315398
+        },
+        {
+          "timestamp": "2025-09-04T18:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 72.76784469264301,
+          "memory_usage": 87.48408560282371,
+          "disk_usage": 47.95921869798789,
+          "network_io": {
+            "bytes_in": 156117,
+            "bytes_out": 250127,
+            "packets_in": 4657,
+            "packets_out": 4233
+          },
+          "response_time": 285.4455088181025,
+          "throughput": 707,
+          "error_rate": 1.966937447948277,
+          "active_connections": 29,
+          "queue_depth": 9,
+          "cache_hit_rate": 90.68999800997446
+        },
+        {
+          "timestamp": "2025-09-04T19:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 45.24324907815748,
+          "memory_usage": 88.51591957241521,
+          "disk_usage": 55.70825455357331,
+          "network_io": {
+            "bytes_in": 441702,
+            "bytes_out": 424004,
+            "packets_in": 9641,
+            "packets_out": 3438
+          },
+          "response_time": 116.74299335314319,
+          "throughput": 298,
+          "error_rate": 4.58064377093282,
+          "active_connections": 53,
+          "queue_depth": 0,
+          "cache_hit_rate": 92.98553653276215
+        },
+        {
+          "timestamp": "2025-09-04T20:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 64.48139227178714,
+          "memory_usage": 57.037444021482514,
+          "disk_usage": 56.122527636722495,
+          "network_io": {
+            "bytes_in": 213128,
+            "bytes_out": 222276,
+            "packets_in": 1964,
+            "packets_out": 4083
+          },
+          "response_time": 75.17615803597906,
+          "throughput": 772,
+          "error_rate": 0.8331176868053702,
+          "active_connections": 45,
+          "queue_depth": 6,
+          "cache_hit_rate": 83.11605730432701
+        },
+        {
+          "timestamp": "2025-09-04T21:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 47.015952454340315,
+          "memory_usage": 86.83738986340121,
+          "disk_usage": 45.341221966797576,
+          "network_io": {
+            "bytes_in": 559700,
+            "bytes_out": 318747,
+            "packets_in": 2834,
+            "packets_out": 3944
+          },
+          "response_time": 127.58351589745072,
+          "throughput": 659,
+          "error_rate": 0.37494249982227945,
+          "active_connections": 57,
+          "queue_depth": 6,
+          "cache_hit_rate": 70.67185259251171
+        },
+        {
+          "timestamp": "2025-09-04T22:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 43.43045091997085,
+          "memory_usage": 56.841328491820285,
+          "disk_usage": 58.45164264787029,
+          "network_io": {
+            "bytes_in": 270856,
+            "bytes_out": 62472,
+            "packets_in": 3110,
+            "packets_out": 2922
+          },
+          "response_time": 132.2187867959732,
+          "throughput": 335,
+          "error_rate": 2.411407502425779,
+          "active_connections": 36,
+          "queue_depth": 3,
+          "cache_hit_rate": 80.13160797221221
+        },
+        {
+          "timestamp": "2025-09-04T23:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 39.40339259024212,
+          "memory_usage": 40.01828416569602,
+          "disk_usage": 58.208061508393826,
+          "network_io": {
+            "bytes_in": 153040,
+            "bytes_out": 147840,
+            "packets_in": 3586,
+            "packets_out": 3696
+          },
+          "response_time": 444.3836199206817,
+          "throughput": 959,
+          "error_rate": 0.02442250645645294,
+          "active_connections": 11,
+          "queue_depth": 0,
+          "cache_hit_rate": 90.64702467829244
+        },
+        {
+          "timestamp": "2025-09-05T00:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 40.150603755618825,
+          "memory_usage": 47.26021676082831,
+          "disk_usage": 57.475730328688044,
+          "network_io": {
+            "bytes_in": 224471,
+            "bytes_out": 47608,
+            "packets_in": 8145,
+            "packets_out": 2352
+          },
+          "response_time": 225.8007602603394,
+          "throughput": 733,
+          "error_rate": 4.761614330972468,
+          "active_connections": 11,
+          "queue_depth": 7,
+          "cache_hit_rate": 76.1551360843384
+        },
+        {
+          "timestamp": "2025-09-05T01:56:18.297Z",
+          "server_id": "main-server",
+          "cpu_usage": 50.02193946419743,
+          "memory_usage": 65.06642449393381,
+          "disk_usage": 58.879339598576536,
+          "network_io": {
+            "bytes_in": 743176,
+            "bytes_out": 290904,
+            "packets_in": 3599,
+            "packets_out": 4975
+          },
+          "response_time": 402.98276892942215,
+          "throughput": 441,
+          "error_rate": 3.9269145118468964,
+          "active_connections": 56,
+          "queue_depth": 5,
+          "cache_hit_rate": 78.70145629306788
+        }
+      ],
+      "duration": 3,
+      "details": {
+        "status": 200,
+        "hasMetrics": true,
+        "metricsType": "object"
+      },
+      "timestamp": "2025-09-05T02:56:18.299Z"
+    },
+    {
+      "name": "WebSocket Connection",
+      "passed": false,
+      "duration": 6,
+      "details": {
+        "connected": false,
+        "messagesReceived": 0,
+        "error": "Unexpected server response: 400"
+      },
+      "timestamp": "2025-09-05T02:56:18.305Z"
+    },
+    {
+      "name": "Backend Server Liveness",
+      "passed": true,
+      "duration": 4,
+      "details": {
+        "totalEndpoints": 3,
+        "successfulEndpoints": 3,
+        "results": [
+          {
+            "endpoint": "http://localhost:3000/health",
+            "status": 200,
+            "ok": true,
+            "responseTime": 1757040978306
+          },
+          {
+            "endpoint": "http://localhost:3000/api/agents",
+            "status": 200,
+            "ok": true,
+            "responseTime": 1757040978307
+          },
+          {
+            "endpoint": "http://localhost:3000/api/v1/agent-posts",
+            "status": 200,
+            "ok": true,
+            "responseTime": 1757040978308
+          }
+        ]
+      },
+      "timestamp": "2025-09-05T02:56:18.309Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:18.309Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:18.310Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:18.312Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 3,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:20.314Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:20.316Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 3,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:20.319Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 4,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:22.321Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:22.323Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 3,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:22.326Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:24.327Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:24.328Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:24.330Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 5,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:26.333Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:26.335Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:26.336Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:28.338Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:28.338Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:28.340Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:30.340Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:30.341Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:30.342Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:32.343Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:32.344Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:32.346Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:34.346Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:34.347Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:34.348Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 3,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:36.349Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:36.352Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 4,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:36.357Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:38.357Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:38.357Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:38.359Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:40.360Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:40.361Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:40.363Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:42.364Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:42.365Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 3,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:42.368Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 2,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:44.369Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:44.370Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:44.371Z"
+    },
+    {
+      "name": "Database Health Check",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "healthStatus": "healthy",
+        "databaseAvailable": true,
+        "databaseService": "healthy",
+        "fullResponse": {
+          "status": "healthy",
+          "timestamp": "2025-09-05T02:56:46.372Z",
+          "server": "SPARC Unified Server",
+          "message": "Claude terminal and API services operational",
+          "services": {
+            "claude_terminal": "healthy",
+            "http_api": "healthy",
+            "sse_streaming": "healthy",
+            "database": "healthy"
+          },
+          "database": {
+            "type": "SQLite",
+            "available": true,
+            "initialized": true
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:46.373Z"
+    },
+    {
+      "name": "Agents API Endpoint",
+      "passed": true,
+      "duration": 1,
+      "details": {
+        "status": 200,
+        "agentCount": 6,
+        "hasRealData": true,
+        "sampleAgent": {
+          "id": "prod-agent-1",
+          "name": "ProductionValidator",
+          "display_name": "Production Validator",
+          "description": "Ensures applications are production-ready with real integrations and comprehensive testing",
+          "system_prompt": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+          "avatar_color": "#10B981",
+          "capabilities": [
+            "production-validation",
+            "real-data-testing",
+            "integration-verification",
+            "deployment-readiness",
+            "system-health-monitoring"
+          ],
+          "status": "active",
+          "created_at": "2025-09-05 02:48:49",
+          "updated_at": "2025-09-05 02:48:49",
+          "last_used": "2025-09-05 02:48:49",
+          "usage_count": 98,
+          "performance_metrics": {
+            "success_rate": 98.5,
+            "average_response_time": 250,
+            "total_tokens_used": 75000,
+            "error_count": 3,
+            "validations_completed": 147,
+            "uptime_percentage": 99.8
+          },
+          "health_status": {
+            "cpu_usage": 45.2,
+            "memory_usage": 62.8,
+            "response_time": 180,
+            "last_heartbeat": "2025-09-05T02:48:49.011Z",
+            "status": "healthy",
+            "active_validations": 12
+          }
+        }
+      },
+      "timestamp": "2025-09-05T02:56:46.374Z"
+    }
+  ],
+  "conclusion": {
+    "databaseOperational": true,
+    "agentsAPIWorking": true,
+    "postsAPIWorking": true,
+    "websocketFunctional": false,
+    "backendLive": true,
+    "allTestsPassed": false,
+    "realFunctionalityConfirmed": true
+  }
+}

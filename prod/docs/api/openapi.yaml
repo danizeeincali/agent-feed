@@ -1,0 +1,2779 @@
+openapi: 3.0.3
+info:
+  title: Distributed Posting Intelligence API
+  version: 1.0.0
+  description: |
+    A comprehensive API for managing distributed posting intelligence, agent coordination, 
+    feed optimization, and content management across multiple social platforms.
+    
+    ## Features
+    - AI-powered content composition and quality analysis
+    - Multi-agent coordination and task orchestration
+    - Real-time feed analytics and optimization
+    - Template and content management system
+    - Performance monitoring and health checks
+    
+  contact:
+    name: API Support
+    url: https://github.com/ruvnet/agent-feed
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.agentfeed.com/v1
+    description: Production server
+  - url: https://staging-api.agentfeed.com/v1
+    description: Staging server
+  - url: http://localhost:3000/v1
+    description: Development server
+
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+
+paths:
+  # Posting Intelligence APIs
+  /api/posts/compose:
+    post:
+      tags:
+        - Posting Intelligence
+      summary: Compose intelligent post content
+      description: |
+        Generate or enhance post content using AI-powered composition algorithms.
+        Supports multiple platforms and content types with quality optimization.
+      operationId: composePosts
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostComposeRequest'
+            examples:
+              basic_compose:
+                $ref: '#/components/examples/BasicComposeRequest'
+              advanced_compose:
+                $ref: '#/components/examples/AdvancedComposeRequest'
+      responses:
+        '200':
+          description: Successfully composed post content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostComposeResponse'
+              examples:
+                success_response:
+                  $ref: '#/components/examples/ComposeSuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/posts/templates:
+    get:
+      tags:
+        - Posting Intelligence
+      summary: Retrieve post templates
+      description: Get available post templates filtered by platform, category, or engagement metrics
+      operationId: getPostTemplates
+      parameters:
+        - name: platform
+          in: query
+          description: Filter templates by social platform
+          schema:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+        - name: category
+          in: query
+          description: Filter by content category
+          schema:
+            type: string
+            enum: [tech, business, lifestyle, education, entertainment]
+        - name: engagement_threshold
+          in: query
+          description: Minimum engagement score (0-1)
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+        - name: limit
+          in: query
+          description: Maximum number of templates to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Number of templates to skip for pagination
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Successfully retrieved templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostTemplatesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Posting Intelligence
+      summary: Create new post template
+      description: Create a new reusable post template with metadata and quality metrics
+      operationId: createPostTemplate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemplateRequest'
+      responses:
+        '201':
+          description: Template created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostTemplate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Template with this name already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/posts/analyze-quality:
+    post:
+      tags:
+        - Posting Intelligence
+      summary: Analyze post content quality
+      description: |
+        Analyze post content for quality metrics including engagement potential,
+        sentiment analysis, readability, and platform-specific optimization scores.
+      operationId: analyzePostQuality
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualityAnalysisRequest'
+      responses:
+        '200':
+          description: Quality analysis completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualityAnalysisResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # Agent Coordination APIs
+  /api/agents/capabilities:
+    get:
+      tags:
+        - Agent Coordination
+      summary: Get agent capabilities
+      description: Retrieve available agent capabilities and their current status
+      operationId: getAgentCapabilities
+      parameters:
+        - name: agent_type
+          in: query
+          description: Filter by agent type
+          schema:
+            type: string
+            enum: [researcher, coder, analyst, optimizer, coordinator, content-creator]
+        - name: status
+          in: query
+          description: Filter by agent status
+          schema:
+            type: string
+            enum: [active, idle, busy, offline]
+      responses:
+        '200':
+          description: Agent capabilities retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentCapabilitiesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/agents/coordinate:
+    post:
+      tags:
+        - Agent Coordination
+      summary: Coordinate multi-agent tasks
+      description: |
+        Orchestrate complex tasks across multiple specialized agents with
+        dependency management and parallel execution capabilities.
+      operationId: coordinateAgents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentCoordinationRequest'
+      responses:
+        '202':
+          description: Task coordination initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCoordinationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '503':
+          description: Insufficient agent capacity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/agents/status:
+    get:
+      tags:
+        - Agent Coordination
+      summary: Get agent status
+      description: Monitor real-time status of all agents including performance metrics
+      operationId: getAgentStatus
+      parameters:
+        - name: agent_id
+          in: query
+          description: Specific agent ID to monitor
+          schema:
+            type: string
+        - name: include_metrics
+          in: query
+          description: Include performance metrics
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Agent status retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentStatusResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # Feed Intelligence APIs
+  /api/feed/analytics:
+    get:
+      tags:
+        - Feed Intelligence
+      summary: Get feed analytics
+      description: Retrieve comprehensive feed performance analytics and insights
+      operationId: getFeedAnalytics
+      parameters:
+        - name: time_range
+          in: query
+          description: Analytics time range
+          schema:
+            type: string
+            enum: [1h, 24h, 7d, 30d, 90d]
+            default: 24h
+        - name: platform
+          in: query
+          description: Filter by platform
+          schema:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+        - name: metrics
+          in: query
+          description: Specific metrics to include
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [engagement, reach, impressions, clicks, shares, comments]
+        - name: granularity
+          in: query
+          description: Data granularity
+          schema:
+            type: string
+            enum: [hourly, daily, weekly]
+            default: daily
+      responses:
+        '200':
+          description: Analytics data retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedAnalyticsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/feed/optimize:
+    post:
+      tags:
+        - Feed Intelligence
+      summary: Optimize feed performance
+      description: |
+        Apply AI-driven optimization strategies to improve feed performance
+        including timing, content mix, and audience targeting.
+      operationId: optimizeFeed
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedOptimizationRequest'
+      responses:
+        '200':
+          description: Optimization recommendations generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedOptimizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/feed/health:
+    get:
+      tags:
+        - Feed Intelligence
+      summary: Get feed health status
+      description: Monitor overall feed health including engagement trends and anomaly detection
+      operationId: getFeedHealth
+      responses:
+        '200':
+          description: Feed health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedHealthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # Content Management APIs
+  /api/content/templates:
+    get:
+      tags:
+        - Content Management
+      summary: List content templates
+      description: Retrieve paginated list of content templates with filtering
+      operationId: listContentTemplates
+      parameters:
+        - $ref: '#/components/parameters/PaginationLimit'
+        - $ref: '#/components/parameters/PaginationOffset'
+        - name: search
+          in: query
+          description: Search templates by name or tags
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum: [name, created_at, updated_at, engagement_score]
+            default: created_at
+        - name: order
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        '200':
+          description: Templates retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Content Management
+      summary: Create content template
+      description: Create a new content template with validation and metadata
+      operationId: createContentTemplate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContentTemplateRequest'
+      responses:
+        '201':
+          description: Template created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTemplate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Template name already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/content/templates/{templateId}:
+    get:
+      tags:
+        - Content Management
+      summary: Get content template by ID
+      description: Retrieve a specific content template with full details
+      operationId: getContentTemplate
+      parameters:
+        - name: templateId
+          in: path
+          required: true
+          description: Template unique identifier
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Template retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTemplate'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Content Management
+      summary: Update content template
+      description: Update an existing content template
+      operationId: updateContentTemplate
+      parameters:
+        - name: templateId
+          in: path
+          required: true
+          description: Template unique identifier
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateContentTemplateRequest'
+      responses:
+        '200':
+          description: Template updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTemplate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Content Management
+      summary: Delete content template
+      description: Delete a content template (soft delete with retention period)
+      operationId: deleteContentTemplate
+      parameters:
+        - name: templateId
+          in: path
+          required: true
+          description: Template unique identifier
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Template deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/content/quality-rules:
+    get:
+      tags:
+        - Content Management
+      summary: Get content quality rules
+      description: Retrieve content quality validation rules and scoring criteria
+      operationId: getQualityRules
+      parameters:
+        - name: platform
+          in: query
+          description: Platform-specific rules
+          schema:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+        - name: content_type
+          in: query
+          description: Content type rules
+          schema:
+            type: string
+            enum: [text, image, video, link, poll]
+      responses:
+        '200':
+          description: Quality rules retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualityRulesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Content Management
+      summary: Create quality rule
+      description: Create new content quality validation rule
+      operationId: createQualityRule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQualityRuleRequest'
+      responses:
+        '201':
+          description: Quality rule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QualityRule'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/content/engagement-patterns:
+    get:
+      tags:
+        - Content Management
+      summary: Get engagement patterns
+      description: Retrieve learned engagement patterns and optimization insights
+      operationId: getEngagementPatterns
+      parameters:
+        - name: time_range
+          in: query
+          description: Pattern analysis time range
+          schema:
+            type: string
+            enum: [7d, 30d, 90d, 6m, 1y]
+            default: 30d
+        - name: confidence_threshold
+          in: query
+          description: Minimum confidence score for patterns
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 0.7
+      responses:
+        '200':
+          description: Engagement patterns retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EngagementPatternsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # Performance Monitoring
+  /api/system/health:
+    get:
+      tags:
+        - System Monitoring
+      summary: System health check
+      description: Comprehensive system health status including all subsystems
+      operationId: getSystemHealth
+      responses:
+        '200':
+          description: System health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealthResponse'
+        '503':
+          description: System unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemHealthResponse'
+
+  /api/system/metrics:
+    get:
+      tags:
+        - System Monitoring
+      summary: Get performance metrics
+      description: Retrieve detailed performance metrics for monitoring and alerting
+      operationId: getSystemMetrics
+      parameters:
+        - name: time_range
+          in: query
+          description: Metrics time range
+          schema:
+            type: string
+            enum: [5m, 15m, 1h, 6h, 24h]
+            default: 1h
+        - name: metrics
+          in: query
+          description: Specific metrics to retrieve
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [cpu, memory, disk, network, api_latency, error_rate, throughput]
+      responses:
+        '200':
+          description: Metrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemMetricsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for API authentication
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for service-to-service authentication
+
+  parameters:
+    PaginationLimit:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    
+    PaginationOffset:
+      name: offset
+      in: query
+      description: Number of items to skip
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters or body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            validation_error:
+              summary: Validation error
+              value:
+                error:
+                  code: VALIDATION_ERROR
+                  message: Invalid request parameters
+                  details:
+                    - field: content
+                      message: Content is required
+                    - field: platform
+                      message: Invalid platform value
+                timestamp: "2024-01-15T10:30:00Z"
+                request_id: "req_123456789"
+
+    Unauthorized:
+      description: Authentication required or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            missing_token:
+              summary: Missing authentication token
+              value:
+                error:
+                  code: UNAUTHORIZED
+                  message: Authentication token required
+                  details: []
+                timestamp: "2024-01-15T10:30:00Z"
+                request_id: "req_123456789"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            template_not_found:
+              summary: Template not found
+              value:
+                error:
+                  code: RESOURCE_NOT_FOUND
+                  message: Template with ID 'template_123' not found
+                  details: []
+                timestamp: "2024-01-15T10:30:00Z"
+                request_id: "req_123456789"
+
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          description: Total rate limit
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          description: Remaining requests
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          description: Rate limit reset time (Unix timestamp)
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            rate_limit_exceeded:
+              summary: Rate limit exceeded
+              value:
+                error:
+                  code: RATE_LIMIT_EXCEEDED
+                  message: API rate limit exceeded. Try again in 60 seconds.
+                  details:
+                    - retry_after: 60
+                timestamp: "2024-01-15T10:30:00Z"
+                request_id: "req_123456789"
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            server_error:
+              summary: Internal server error
+              value:
+                error:
+                  code: INTERNAL_SERVER_ERROR
+                  message: An unexpected error occurred
+                  details: []
+                timestamp: "2024-01-15T10:30:00Z"
+                request_id: "req_123456789"
+
+  schemas:
+    # Common schemas
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - timestamp
+        - request_id
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: Error code for programmatic handling
+              enum:
+                - VALIDATION_ERROR
+                - UNAUTHORIZED
+                - FORBIDDEN
+                - RESOURCE_NOT_FOUND
+                - RATE_LIMIT_EXCEEDED
+                - INTERNAL_SERVER_ERROR
+                - SERVICE_UNAVAILABLE
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: array
+              description: Additional error details
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
+                  code:
+                    type: string
+        timestamp:
+          type: string
+          format: date-time
+          description: Error occurrence timestamp
+        request_id:
+          type: string
+          description: Unique request identifier for debugging
+
+    PaginationMeta:
+      type: object
+      required:
+        - total
+        - limit
+        - offset
+        - has_more
+      properties:
+        total:
+          type: integer
+          minimum: 0
+          description: Total number of items
+        limit:
+          type: integer
+          minimum: 1
+          description: Items per page
+        offset:
+          type: integer
+          minimum: 0
+          description: Items skipped
+        has_more:
+          type: boolean
+          description: Whether more items are available
+
+    # Posting Intelligence Schemas
+    PostComposeRequest:
+      type: object
+      required:
+        - content_type
+        - platform
+      properties:
+        content_type:
+          type: string
+          enum: [original, enhance, template_based, ai_generated]
+          description: Type of content composition
+        platform:
+          type: string
+          enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+          description: Target social media platform
+        input_content:
+          type: string
+          description: Base content to enhance or compose from
+          maxLength: 10000
+        template_id:
+          type: string
+          format: uuid
+          description: Template ID for template-based composition
+        parameters:
+          type: object
+          description: Composition parameters
+          properties:
+            tone:
+              type: string
+              enum: [professional, casual, humorous, inspirational, educational]
+            target_audience:
+              type: string
+              enum: [general, business, technical, creative, academic]
+            engagement_goal:
+              type: string
+              enum: [likes, shares, comments, clicks, reach]
+            hashtags:
+              type: boolean
+              default: true
+              description: Include relevant hashtags
+            max_length:
+              type: integer
+              minimum: 1
+              maximum: 5000
+              description: Maximum content length
+            include_cta:
+              type: boolean
+              default: false
+              description: Include call-to-action
+        optimization_level:
+          type: string
+          enum: [basic, standard, advanced]
+          default: standard
+          description: Level of AI optimization to apply
+
+    PostComposeResponse:
+      type: object
+      required:
+        - content
+        - metadata
+        - quality_score
+      properties:
+        content:
+          type: string
+          description: Generated or enhanced content
+        alternatives:
+          type: array
+          description: Alternative content variations
+          items:
+            type: object
+            properties:
+              content:
+                type: string
+              score:
+                type: number
+                minimum: 0
+                maximum: 1
+              focus:
+                type: string
+        metadata:
+          type: object
+          properties:
+            platform_optimized:
+              type: string
+            character_count:
+              type: integer
+            word_count:
+              type: integer
+            hashtags:
+              type: array
+              items:
+                type: string
+            estimated_reach:
+              type: integer
+            optimal_posting_time:
+              type: string
+              format: date-time
+        quality_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Overall content quality score
+        engagement_prediction:
+          type: object
+          properties:
+            likes:
+              type: number
+            shares:
+              type: number
+            comments:
+              type: number
+            click_through_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+
+    PostTemplatesResponse:
+      type: object
+      required:
+        - templates
+        - pagination
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/PostTemplate'
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    PostTemplate:
+      type: object
+      required:
+        - id
+        - name
+        - content
+        - platform
+        - category
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique template identifier
+        name:
+          type: string
+          description: Template name
+        description:
+          type: string
+          description: Template description
+        content:
+          type: string
+          description: Template content with variables
+        platform:
+          type: string
+          enum: [twitter, linkedin, instagram, facebook, youtube, tiktok, multi]
+        category:
+          type: string
+          enum: [tech, business, lifestyle, education, entertainment, marketing]
+        variables:
+          type: array
+          description: Template variables
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+                enum: [text, number, date, boolean, enum]
+              required:
+                type: boolean
+              default_value:
+                type: string
+              options:
+                type: array
+                items:
+                  type: string
+        engagement_metrics:
+          type: object
+          properties:
+            average_score:
+              type: number
+              minimum: 0
+              maximum: 1
+            usage_count:
+              type: integer
+              minimum: 0
+            success_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+        tags:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+          description: Creator user ID
+
+    CreateTemplateRequest:
+      type: object
+      required:
+        - name
+        - content
+        - platform
+        - category
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        platform:
+          type: string
+          enum: [twitter, linkedin, instagram, facebook, youtube, tiktok, multi]
+        category:
+          type: string
+          enum: [tech, business, lifestyle, education, entertainment, marketing]
+        variables:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - type
+            properties:
+              name:
+                type: string
+                pattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+              type:
+                type: string
+                enum: [text, number, date, boolean, enum]
+              required:
+                type: boolean
+                default: false
+              default_value:
+                type: string
+              options:
+                type: array
+                items:
+                  type: string
+        tags:
+          type: array
+          items:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+          maxItems: 10
+
+    QualityAnalysisRequest:
+      type: object
+      required:
+        - content
+        - platform
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: Content to analyze
+        platform:
+          type: string
+          enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+          description: Target platform for analysis
+        content_type:
+          type: string
+          enum: [text, image, video, link, poll]
+          default: text
+        analysis_depth:
+          type: string
+          enum: [basic, standard, comprehensive]
+          default: standard
+        include_suggestions:
+          type: boolean
+          default: true
+          description: Include improvement suggestions
+
+    QualityAnalysisResponse:
+      type: object
+      required:
+        - overall_score
+        - analysis_results
+      properties:
+        overall_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Overall quality score (0-1)
+        analysis_results:
+          type: object
+          properties:
+            engagement_potential:
+              type: number
+              minimum: 0
+              maximum: 1
+            readability_score:
+              type: number
+              minimum: 0
+              maximum: 1
+            sentiment_analysis:
+              type: object
+              properties:
+                sentiment:
+                  type: string
+                  enum: [positive, neutral, negative]
+                confidence:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                emotions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      emotion:
+                        type: string
+                      intensity:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+            platform_optimization:
+              type: object
+              properties:
+                character_usage:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                hashtag_effectiveness:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                timing_score:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+            content_analysis:
+              type: object
+              properties:
+                clarity_score:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                originality_score:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                value_proposition:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+        suggestions:
+          type: array
+          description: Improvement suggestions
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                enum: [content, structure, timing, hashtags, engagement]
+              priority:
+                type: string
+                enum: [high, medium, low]
+              message:
+                type: string
+              implementation:
+                type: string
+        metrics:
+          type: object
+          properties:
+            processing_time:
+              type: number
+              description: Analysis processing time in milliseconds
+            confidence_level:
+              type: number
+              minimum: 0
+              maximum: 1
+
+    # Agent Coordination Schemas
+    AgentCapabilitiesResponse:
+      type: object
+      required:
+        - agents
+        - summary
+      properties:
+        agents:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentCapability'
+        summary:
+          type: object
+          properties:
+            total_agents:
+              type: integer
+            active_agents:
+              type: integer
+            available_capacity:
+              type: number
+              minimum: 0
+              maximum: 1
+            specializations:
+              type: array
+              items:
+                type: string
+
+    AgentCapability:
+      type: object
+      required:
+        - id
+        - type
+        - status
+        - capabilities
+      properties:
+        id:
+          type: string
+          description: Unique agent identifier
+        type:
+          type: string
+          enum: [researcher, coder, analyst, optimizer, coordinator, content-creator]
+        status:
+          type: string
+          enum: [active, idle, busy, offline]
+        capabilities:
+          type: array
+          items:
+            type: string
+        performance_metrics:
+          type: object
+          properties:
+            success_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+            average_task_time:
+              type: number
+              description: Average task completion time in seconds
+            current_load:
+              type: number
+              minimum: 0
+              maximum: 1
+        specializations:
+          type: array
+          items:
+            type: string
+        last_active:
+          type: string
+          format: date-time
+
+    AgentCoordinationRequest:
+      type: object
+      required:
+        - task
+        - strategy
+      properties:
+        task:
+          type: string
+          description: Main task description
+          maxLength: 2000
+        strategy:
+          type: string
+          enum: [parallel, sequential, adaptive, hybrid]
+          description: Execution strategy
+        subtasks:
+          type: array
+          description: Task breakdown
+          items:
+            type: object
+            required:
+              - id
+              - description
+              - agent_type
+            properties:
+              id:
+                type: string
+              description:
+                type: string
+              agent_type:
+                type: string
+                enum: [researcher, coder, analyst, optimizer, coordinator, content-creator]
+              dependencies:
+                type: array
+                items:
+                  type: string
+                description: IDs of dependent subtasks
+              priority:
+                type: string
+                enum: [low, medium, high, critical]
+                default: medium
+              estimated_duration:
+                type: integer
+                description: Estimated duration in seconds
+              resources:
+                type: object
+                description: Required resources
+        constraints:
+          type: object
+          properties:
+            max_agents:
+              type: integer
+              minimum: 1
+              maximum: 10
+              default: 5
+            timeout:
+              type: integer
+              description: Maximum execution time in seconds
+              minimum: 60
+              maximum: 3600
+            priority:
+              type: string
+              enum: [low, medium, high, critical]
+              default: medium
+        preferences:
+          type: object
+          properties:
+            preferred_agents:
+              type: array
+              items:
+                type: string
+            avoid_agents:
+              type: array
+              items:
+                type: string
+            quality_threshold:
+              type: number
+              minimum: 0
+              maximum: 1
+              default: 0.8
+
+    TaskCoordinationResponse:
+      type: object
+      required:
+        - task_id
+        - status
+        - coordination_plan
+      properties:
+        task_id:
+          type: string
+          format: uuid
+          description: Unique task identifier
+        status:
+          type: string
+          enum: [queued, planning, executing, completed, failed]
+        coordination_plan:
+          type: object
+          properties:
+            strategy:
+              type: string
+            assigned_agents:
+              type: array
+              items:
+                type: object
+                properties:
+                  agent_id:
+                    type: string
+                  subtask_ids:
+                    type: array
+                    items:
+                      type: string
+                  role:
+                    type: string
+            execution_order:
+              type: array
+              items:
+                type: object
+                properties:
+                  phase:
+                    type: integer
+                  parallel_tasks:
+                    type: array
+                    items:
+                      type: string
+            estimated_completion:
+              type: string
+              format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    AgentStatusResponse:
+      type: object
+      required:
+        - agents
+        - system_status
+      properties:
+        agents:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              status:
+                type: string
+                enum: [active, idle, busy, offline]
+              current_task:
+                type: string
+              progress:
+                type: number
+                minimum: 0
+                maximum: 1
+              performance:
+                type: object
+                properties:
+                  cpu_usage:
+                    type: number
+                  memory_usage:
+                    type: number
+                  task_queue_size:
+                    type: integer
+              last_heartbeat:
+                type: string
+                format: date-time
+        system_status:
+          type: object
+          properties:
+            total_agents:
+              type: integer
+            active_tasks:
+              type: integer
+            system_load:
+              type: number
+              minimum: 0
+              maximum: 1
+            health_score:
+              type: number
+              minimum: 0
+              maximum: 1
+
+    # Feed Intelligence Schemas
+    FeedAnalyticsResponse:
+      type: object
+      required:
+        - metrics
+        - time_range
+        - generated_at
+      properties:
+        metrics:
+          type: object
+          properties:
+            engagement:
+              type: object
+              properties:
+                total_interactions:
+                  type: integer
+                engagement_rate:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                likes:
+                  type: integer
+                shares:
+                  type: integer
+                comments:
+                  type: integer
+                clicks:
+                  type: integer
+            reach:
+              type: object
+              properties:
+                total_reach:
+                  type: integer
+                unique_users:
+                  type: integer
+                impressions:
+                  type: integer
+                reach_rate:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+            performance:
+              type: object
+              properties:
+                top_performing_posts:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      content:
+                        type: string
+                      engagement_score:
+                        type: number
+                      platform:
+                        type: string
+                best_posting_times:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                        enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+                      hour:
+                        type: integer
+                        minimum: 0
+                        maximum: 23
+                      engagement_multiplier:
+                        type: number
+                optimal_frequency:
+                  type: object
+                  properties:
+                    posts_per_day:
+                      type: number
+                    posts_per_week:
+                      type: number
+        trends:
+          type: array
+          items:
+            type: object
+            properties:
+              metric:
+                type: string
+              direction:
+                type: string
+                enum: [increasing, decreasing, stable]
+              change_percentage:
+                type: number
+              significance:
+                type: string
+                enum: [high, medium, low]
+        time_series:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              metrics:
+                type: object
+                additionalProperties:
+                  type: number
+        time_range:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+            granularity:
+              type: string
+        generated_at:
+          type: string
+          format: date-time
+
+    FeedOptimizationRequest:
+      type: object
+      required:
+        - optimization_goals
+      properties:
+        optimization_goals:
+          type: array
+          items:
+            type: string
+            enum: [engagement, reach, clicks, conversions, brand_awareness]
+        platforms:
+          type: array
+          items:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+        content_types:
+          type: array
+          items:
+            type: string
+            enum: [text, image, video, link, poll]
+        constraints:
+          type: object
+          properties:
+            max_posts_per_day:
+              type: integer
+              minimum: 1
+              maximum: 50
+            budget_limit:
+              type: number
+              minimum: 0
+            posting_hours:
+              type: object
+              properties:
+                start:
+                  type: integer
+                  minimum: 0
+                  maximum: 23
+                end:
+                  type: integer
+                  minimum: 0
+                  maximum: 23
+            excluded_days:
+              type: array
+              items:
+                type: string
+                enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+        target_audience:
+          type: object
+          properties:
+            demographics:
+              type: object
+              properties:
+                age_range:
+                  type: object
+                  properties:
+                    min:
+                      type: integer
+                    max:
+                      type: integer
+                locations:
+                  type: array
+                  items:
+                    type: string
+                interests:
+                  type: array
+                  items:
+                    type: string
+            behavior:
+              type: object
+              properties:
+                activity_times:
+                  type: array
+                  items:
+                    type: string
+                engagement_preferences:
+                  type: array
+                  items:
+                    type: string
+
+    FeedOptimizationResponse:
+      type: object
+      required:
+        - recommendations
+        - optimization_score
+        - generated_at
+      properties:
+        recommendations:
+          type: object
+          properties:
+            content_strategy:
+              type: object
+              properties:
+                content_mix:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      content_type:
+                        type: string
+                      percentage:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                      rationale:
+                        type: string
+                posting_schedule:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                      time:
+                        type: string
+                      content_type:
+                        type: string
+                      expected_engagement:
+                        type: number
+                hashtag_strategy:
+                  type: object
+                  properties:
+                    recommended_hashtags:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          hashtag:
+                            type: string
+                          platforms:
+                            type: array
+                            items:
+                              type: string
+                          effectiveness_score:
+                            type: number
+                    hashtag_count:
+                      type: object
+                      additionalProperties:
+                        type: integer
+            platform_specific:
+              type: array
+              items:
+                type: object
+                properties:
+                  platform:
+                    type: string
+                  recommendations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        description:
+                          type: string
+                        impact:
+                          type: string
+                          enum: [high, medium, low]
+        predicted_improvements:
+          type: object
+          properties:
+            engagement_increase:
+              type: number
+              description: Predicted engagement increase percentage
+            reach_increase:
+              type: number
+              description: Predicted reach increase percentage
+            efficiency_gain:
+              type: number
+              description: Predicted efficiency improvement percentage
+        optimization_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Current optimization level
+        implementation_priority:
+          type: array
+          items:
+            type: object
+            properties:
+              recommendation:
+                type: string
+              priority:
+                type: string
+                enum: [high, medium, low]
+              effort:
+                type: string
+                enum: [low, medium, high]
+              impact:
+                type: string
+                enum: [low, medium, high]
+        generated_at:
+          type: string
+          format: date-time
+
+    FeedHealthResponse:
+      type: object
+      required:
+        - overall_health
+        - health_indicators
+        - last_updated
+      properties:
+        overall_health:
+          type: string
+          enum: [excellent, good, fair, poor, critical]
+        health_score:
+          type: number
+          minimum: 0
+          maximum: 1
+        health_indicators:
+          type: object
+          properties:
+            engagement_health:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, warning, critical]
+                trend:
+                  type: string
+                  enum: [improving, stable, declining]
+                metrics:
+                  type: object
+                  properties:
+                    engagement_rate:
+                      type: number
+                    trend_percentage:
+                      type: number
+            content_health:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, warning, critical]
+                quality_score:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                diversity_score:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+            posting_consistency:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [consistent, irregular, inactive]
+                frequency_variance:
+                  type: number
+                last_post_age:
+                  type: integer
+                  description: Hours since last post
+            audience_growth:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [growing, stable, declining]
+                growth_rate:
+                  type: number
+                  description: Growth rate percentage
+                retention_rate:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+        anomalies:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [engagement_drop, quality_decline, posting_gap, spam_detection]
+              severity:
+                type: string
+                enum: [low, medium, high, critical]
+              description:
+                type: string
+              detected_at:
+                type: string
+                format: date-time
+              suggested_actions:
+                type: array
+                items:
+                  type: string
+        recommendations:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                enum: [content, timing, engagement, quality]
+              priority:
+                type: string
+                enum: [low, medium, high]
+              action:
+                type: string
+              expected_impact:
+                type: string
+                enum: [low, medium, high]
+        last_updated:
+          type: string
+          format: date-time
+
+    # Content Management Schemas
+    TemplateListResponse:
+      type: object
+      required:
+        - templates
+        - pagination
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentTemplate'
+        pagination:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    ContentTemplate:
+      type: object
+      required:
+        - id
+        - name
+        - content
+        - category
+        - status
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        category:
+          type: string
+          enum: [tech, business, lifestyle, education, entertainment, marketing]
+        platforms:
+          type: array
+          items:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+        variables:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+                enum: [text, number, date, boolean, enum]
+              required:
+                type: boolean
+              default_value:
+                type: string
+              description:
+                type: string
+              options:
+                type: array
+                items:
+                  type: string
+        tags:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [active, inactive, archived]
+        usage_stats:
+          type: object
+          properties:
+            usage_count:
+              type: integer
+            success_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+            average_engagement:
+              type: number
+            last_used:
+              type: string
+              format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        created_by:
+          type: string
+        version:
+          type: integer
+          minimum: 1
+
+    CreateContentTemplateRequest:
+      type: object
+      required:
+        - name
+        - content
+        - category
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        category:
+          type: string
+          enum: [tech, business, lifestyle, education, entertainment, marketing]
+        platforms:
+          type: array
+          items:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+          minItems: 1
+        variables:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - type
+            properties:
+              name:
+                type: string
+                pattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+                maxLength: 50
+              type:
+                type: string
+                enum: [text, number, date, boolean, enum]
+              required:
+                type: boolean
+                default: false
+              default_value:
+                type: string
+              description:
+                type: string
+                maxLength: 200
+              options:
+                type: array
+                items:
+                  type: string
+                maxItems: 20
+        tags:
+          type: array
+          items:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+          maxItems: 10
+
+    UpdateContentTemplateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        category:
+          type: string
+          enum: [tech, business, lifestyle, education, entertainment, marketing]
+        platforms:
+          type: array
+          items:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+          minItems: 1
+        variables:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - type
+            properties:
+              name:
+                type: string
+                pattern: '^[a-zA-Z][a-zA-Z0-9_]*$'
+                maxLength: 50
+              type:
+                type: string
+                enum: [text, number, date, boolean, enum]
+              required:
+                type: boolean
+              default_value:
+                type: string
+              description:
+                type: string
+                maxLength: 200
+              options:
+                type: array
+                items:
+                  type: string
+                maxItems: 20
+        tags:
+          type: array
+          items:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+          maxItems: 10
+        status:
+          type: string
+          enum: [active, inactive]
+
+    QualityRulesResponse:
+      type: object
+      required:
+        - rules
+        - default_thresholds
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/QualityRule'
+        default_thresholds:
+          type: object
+          properties:
+            minimum_quality_score:
+              type: number
+              minimum: 0
+              maximum: 1
+            engagement_threshold:
+              type: number
+              minimum: 0
+              maximum: 1
+            readability_threshold:
+              type: number
+              minimum: 0
+              maximum: 1
+
+    QualityRule:
+      type: object
+      required:
+        - id
+        - name
+        - rule_type
+        - criteria
+        - weight
+        - active
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        rule_type:
+          type: string
+          enum: [content_length, sentiment, readability, hashtag_count, engagement_prediction, spam_detection]
+        criteria:
+          type: object
+          properties:
+            conditions:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  operator:
+                    type: string
+                    enum: [equals, not_equals, greater_than, less_than, contains, not_contains, matches_regex]
+                  value:
+                    type: string
+                  weight:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+        weight:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Rule importance weight in overall scoring
+        platforms:
+          type: array
+          items:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok, all]
+        content_types:
+          type: array
+          items:
+            type: string
+            enum: [text, image, video, link, poll, all]
+        active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateQualityRuleRequest:
+      type: object
+      required:
+        - name
+        - rule_type
+        - criteria
+        - weight
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        rule_type:
+          type: string
+          enum: [content_length, sentiment, readability, hashtag_count, engagement_prediction, spam_detection]
+        criteria:
+          type: object
+          required:
+            - conditions
+          properties:
+            conditions:
+              type: array
+              items:
+                type: object
+                required:
+                  - field
+                  - operator
+                  - value
+                properties:
+                  field:
+                    type: string
+                    maxLength: 50
+                  operator:
+                    type: string
+                    enum: [equals, not_equals, greater_than, less_than, contains, not_contains, matches_regex]
+                  value:
+                    type: string
+                    maxLength: 200
+                  weight:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                    default: 1.0
+              minItems: 1
+              maxItems: 10
+        weight:
+          type: number
+          minimum: 0
+          maximum: 1
+        platforms:
+          type: array
+          items:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok, all]
+          default: ["all"]
+        content_types:
+          type: array
+          items:
+            type: string
+            enum: [text, image, video, link, poll, all]
+          default: ["all"]
+        active:
+          type: boolean
+          default: true
+
+    EngagementPatternsResponse:
+      type: object
+      required:
+        - patterns
+        - analysis_period
+        - confidence_level
+      properties:
+        patterns:
+          type: array
+          items:
+            type: object
+            properties:
+              pattern_id:
+                type: string
+              type:
+                type: string
+                enum: [temporal, content_based, audience_based, platform_specific]
+              description:
+                type: string
+              confidence:
+                type: number
+                minimum: 0
+                maximum: 1
+              impact_score:
+                type: number
+                minimum: 0
+                maximum: 1
+              frequency:
+                type: integer
+                description: Number of times pattern was observed
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    factor:
+                      type: string
+                    value:
+                      type: string
+                    correlation:
+                      type: number
+                      minimum: -1
+                      maximum: 1
+              recommendations:
+                type: array
+                items:
+                  type: string
+        temporal_insights:
+          type: object
+          properties:
+            best_posting_times:
+              type: array
+              items:
+                type: object
+                properties:
+                  day_of_week:
+                    type: string
+                  hour:
+                    type: integer
+                  engagement_multiplier:
+                    type: number
+                  confidence:
+                    type: number
+            posting_frequency:
+              type: object
+              properties:
+                optimal_posts_per_day:
+                  type: number
+                optimal_interval_hours:
+                  type: number
+                weekend_adjustment:
+                  type: number
+        content_insights:
+          type: object
+          properties:
+            high_performing_topics:
+              type: array
+              items:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                  engagement_lift:
+                    type: number
+                  sample_size:
+                    type: integer
+            content_format_preferences:
+              type: array
+              items:
+                type: object
+                properties:
+                  format:
+                    type: string
+                  preference_score:
+                    type: number
+                  platforms:
+                    type: array
+                    items:
+                      type: string
+        analysis_period:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+            end_date:
+              type: string
+              format: date
+            sample_size:
+              type: integer
+        confidence_level:
+          type: number
+          minimum: 0
+          maximum: 1
+        last_updated:
+          type: string
+          format: date-time
+
+    # System Monitoring Schemas
+    SystemHealthResponse:
+      type: object
+      required:
+        - status
+        - components
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        overall_score:
+          type: number
+          minimum: 0
+          maximum: 1
+        components:
+          type: object
+          properties:
+            api_gateway:
+              $ref: '#/components/schemas/ComponentHealth'
+            database:
+              $ref: '#/components/schemas/ComponentHealth'
+            ai_services:
+              $ref: '#/components/schemas/ComponentHealth'
+            agent_coordination:
+              $ref: '#/components/schemas/ComponentHealth'
+            feed_processor:
+              $ref: '#/components/schemas/ComponentHealth'
+            content_analyzer:
+              $ref: '#/components/schemas/ComponentHealth'
+            cache:
+              $ref: '#/components/schemas/ComponentHealth'
+            queue_system:
+              $ref: '#/components/schemas/ComponentHealth'
+        system_metrics:
+          type: object
+          properties:
+            uptime:
+              type: integer
+              description: System uptime in seconds
+            requests_per_second:
+              type: number
+            error_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+            average_response_time:
+              type: number
+              description: Average response time in milliseconds
+        alerts:
+          type: array
+          items:
+            type: object
+            properties:
+              severity:
+                type: string
+                enum: [info, warning, error, critical]
+              component:
+                type: string
+              message:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
+        timestamp:
+          type: string
+          format: date-time
+
+    ComponentHealth:
+      type: object
+      required:
+        - status
+        - response_time
+      properties:
+        status:
+          type: string
+          enum: [up, down, degraded]
+        response_time:
+          type: number
+          description: Response time in milliseconds
+        uptime_percentage:
+          type: number
+          minimum: 0
+          maximum: 100
+        last_check:
+          type: string
+          format: date-time
+        error_count:
+          type: integer
+          minimum: 0
+        details:
+          type: object
+          properties:
+            version:
+              type: string
+            dependencies:
+              type: array
+              items:
+                type: string
+            metrics:
+              type: object
+              additionalProperties:
+                type: number
+
+    SystemMetricsResponse:
+      type: object
+      required:
+        - metrics
+        - time_range
+        - generated_at
+      properties:
+        metrics:
+          type: object
+          properties:
+            system:
+              type: object
+              properties:
+                cpu_usage:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      value:
+                        type: number
+                        minimum: 0
+                        maximum: 100
+                memory_usage:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      value:
+                        type: number
+                        minimum: 0
+                        maximum: 100
+                disk_usage:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      value:
+                        type: number
+                        minimum: 0
+                        maximum: 100
+                network_io:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      bytes_in:
+                        type: integer
+                      bytes_out:
+                        type: integer
+            api:
+              type: object
+              properties:
+                request_rate:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      requests_per_second:
+                        type: number
+                response_time:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      p50:
+                        type: number
+                      p95:
+                        type: number
+                      p99:
+                        type: number
+                error_rate:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      error_percentage:
+                        type: number
+                        minimum: 0
+                        maximum: 100
+            agents:
+              type: object
+              properties:
+                active_agents:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      count:
+                        type: integer
+                task_completion_rate:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      rate:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                average_task_duration:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      duration_seconds:
+                        type: number
+        summary:
+          type: object
+          properties:
+            peak_values:
+              type: object
+              additionalProperties:
+                type: number
+            average_values:
+              type: object
+              additionalProperties:
+                type: number
+            trend_analysis:
+              type: array
+              items:
+                type: object
+                properties:
+                  metric:
+                    type: string
+                  trend:
+                    type: string
+                    enum: [increasing, decreasing, stable]
+                  confidence:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+        time_range:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+        generated_at:
+          type: string
+          format: date-time
+
+  examples:
+    BasicComposeRequest:
+      summary: Basic content composition request
+      value:
+        content_type: "enhance"
+        platform: "twitter"
+        input_content: "Just launched our new product!"
+        parameters:
+          tone: "professional"
+          target_audience: "business"
+          hashtags: true
+          include_cta: true
+
+    AdvancedComposeRequest:
+      summary: Advanced AI-generated content request
+      value:
+        content_type: "ai_generated"
+        platform: "linkedin"
+        parameters:
+          tone: "inspirational"
+          target_audience: "business"
+          engagement_goal: "shares"
+          hashtags: true
+          max_length: 2000
+          include_cta: true
+        optimization_level: "advanced"
+
+    ComposeSuccessResponse:
+      summary: Successful content composition response
+      value:
+        content: "🚀 Excited to announce the launch of our groundbreaking new product! This innovation represents months of dedicated research and development, designed to solve real challenges faced by modern businesses. Join us on this journey of transformation! #ProductLaunch #Innovation #TechStartup #BusinessGrowth"
+        alternatives:
+          - content: "Big news! Our latest product is now live and ready to revolutionize your workflow. Discover what makes it special: [link] #NewProduct #Productivity"
+            score: 0.82
+            focus: "engagement"
+        metadata:
+          platform_optimized: "linkedin"
+          character_count: 285
+          word_count: 45
+          hashtags: ["#ProductLaunch", "#Innovation", "#TechStartup", "#BusinessGrowth"]
+          estimated_reach: 15000
+          optimal_posting_time: "2024-01-16T14:00:00Z"
+        quality_score: 0.89
+        engagement_prediction:
+          likes: 245
+          shares: 67
+          comments: 23
+          click_through_rate: 0.067
+
+tags:
+  - name: Posting Intelligence
+    description: AI-powered content composition, template management, and quality analysis
+  - name: Agent Coordination
+    description: Multi-agent task orchestration and coordination capabilities
+  - name: Feed Intelligence
+    description: Feed analytics, optimization, and health monitoring
+  - name: Content Management
+    description: Template, rule, and pattern management for content optimization
+  - name: System Monitoring
+    description: System health checks and performance monitoring

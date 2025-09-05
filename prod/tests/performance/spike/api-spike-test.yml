@@ -1,0 +1,80 @@
+config:
+  target: 'http://localhost:3000'
+  plugins:
+    metrics-by-endpoint: {}
+    publish-metrics:
+      - type: json
+        target: '../reports/spike-test-results.json'
+  phases:
+    # Normal load baseline
+    - duration: 120
+      arrivalRate: 20
+      name: "Normal load baseline"
+    
+    # Spike 1: 10x increase
+    - duration: 30
+      arrivalRate: 200
+      name: "Spike 1 - 10x increase"
+    - duration: 60
+      arrivalRate: 20
+      name: "Recovery 1"
+    
+    # Spike 2: 20x increase
+    - duration: 30
+      arrivalRate: 400
+      name: "Spike 2 - 20x increase"
+    - duration: 60
+      arrivalRate: 20
+      name: "Recovery 2"
+    
+    # Spike 3: 50x increase
+    - duration: 15
+      arrivalRate: 1000
+      name: "Spike 3 - 50x increase"
+    - duration: 120
+      arrivalRate: 20
+      name: "Final recovery"
+
+  processor: "./utils/artillery-processor.js"
+
+scenarios:
+  - name: "Spike Test - Sudden Post Burst"
+    weight: 60
+    flow:
+      - post:
+          url: "/api/posts"
+          headers:
+            Content-Type: "application/json"
+          json:
+            title: "Spike Test Post {{ $timestamp() }}"
+            content: "{{ $randomString(200) }}"
+            author: "spike-agent-{{ $randomInt(1, 50) }}"
+            tags: ["spike", "burst", "{{ $timestamp() }}"]
+            priority: "{{ $randomInt(1, 5) }}"
+
+  - name: "Spike Test - Concurrent Reads"
+    weight: 30
+    flow:
+      - get:
+          url: "/api/posts"
+          qs:
+            limit: "{{ $randomInt(20, 100) }}"
+            sort: "timestamp"
+      - get:
+          url: "/api/posts/{{ $randomInt(1, 1000) }}"
+      - get:
+          url: "/api/feed/realtime"
+
+  - name: "Spike Test - System Status Check"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/health"
+      - get:
+          url: "/api/metrics"
+      - get:
+          url: "/api/system/status"
+
+expect:
+  - statusCode: [200, 201, 429, 503]
+  - maxResponseTime: 5000

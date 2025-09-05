@@ -1,0 +1,364 @@
+/**
+ * AgentFilters Component Styles
+ * Filter controls for agents with collapsible design
+ */
+
+.agent-filters {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.agent-filters.expanded {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+.filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.filters-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.filters-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.toggle-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.active-filters-badge {
+  background: #3b82f6;
+  color: white;
+  border-radius: 0.75rem;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+.filters-quick-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.clear-filters-btn {
+  background: none;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-filters-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+
+/* Content */
+.filters-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.agent-filters.expanded .filters-content {
+  max-height: 500px;
+}
+
+.filter-group {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-group:last-child {
+  border-bottom: none;
+}
+
+.filter-label {
+  display: block;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.filter-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.filter-select option {
+  background: #1f2937;
+  color: white;
+}
+
+/* Filter Chips */
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-chip {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.filter-chip:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.filter-chip.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+}
+
+.filter-chip.status-active.active {
+  background: #22c55e;
+  border-color: #22c55e;
+}
+
+.filter-chip.status-inactive.active {
+  background: #6b7280;
+  border-color: #6b7280;
+}
+
+.filter-chip.status-error.active {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.chip-count {
+  opacity: 0.7;
+  font-size: 0.75rem;
+}
+
+.more-categories {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  font-style: italic;
+  padding: 0.5rem 0.75rem;
+}
+
+/* Advanced Filters */
+.advanced-filters {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category-chips .filter-chip,
+.sort-chips .filter-chip {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.625rem;
+}
+
+/* Active Filters Summary */
+.active-filters-summary {
+  background: rgba(59, 130, 246, 0.1);
+  border-top: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 1rem;
+}
+
+.active-filters-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.active-filter {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+  padding: 0.375rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.remove-filter {
+  background: none;
+  border: none;
+  color: #93c5fd;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.remove-filter:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .filter-chips {
+    gap: 0.375rem;
+  }
+  
+  .filter-chip {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .active-filters-list {
+    gap: 0.375rem;
+  }
+  
+  .active-filter {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filters-header {
+    padding: 0.75rem;
+  }
+  
+  .filter-group {
+    padding: 0.75rem;
+  }
+  
+  .filter-chips {
+    justify-content: center;
+  }
+  
+  .filter-chip {
+    flex: 1;
+    justify-content: center;
+    min-width: 0;
+  }
+  
+  .chip-count {
+    display: none;
+  }
+}
+
+/* Animation */
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+.agent-filters.expanded .filters-content {
+  animation: slideDown 0.3s ease;
+}
+
+/* Focus Management */
+.filter-select:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.clear-filters-btn:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .filters-content,
+  .toggle-icon,
+  .filter-chip,
+  .filter-select {
+    transition: none;
+  }
+  
+  .agent-filters.expanded .filters-content {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .agent-filters,
+  .filter-select,
+  .filter-chip {
+    border-width: 2px;
+  }
+  
+  .filter-chip.active {
+    outline: 2px solid white;
+    outline-offset: 1px;
+  }
+}

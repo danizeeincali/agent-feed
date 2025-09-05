@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BarChart3, Activity, Cpu, Zap, Users, TrendingUp, RefreshCw, DollarSign } from 'lucide-react';
-import { SimpleErrorBoundary } from './SimpleErrorBoundary';
+import SimpleErrorBoundary from './SimpleErrorBoundary';
 
 // Lazy load TokenCostAnalytics to prevent blocking tab switches
 const TokenCostAnalytics = lazy(() => 

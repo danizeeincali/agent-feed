@@ -1,0 +1,383 @@
+{
+  "conversion_strategies": {
+    "strategy_id": "mock-elimination-strategies-2025-09-05",
+    "version": "1.0.0",
+    "scope": "comprehensive_mock_to_production_conversion",
+    "methodologies": {
+      "incremental_replacement": {
+        "description": "Replace mock implementations incrementally by complexity and risk level",
+        "priority_matrix": [
+          {
+            "order": 1,
+            "pattern": "service_layer_mocks",
+            "rationale": "Highest success rate (98%), lowest risk, immediate production value",
+            "estimated_effort": "2-3 days",
+            "prerequisites": ["API endpoints validated", "Authentication configured"],
+            "success_criteria": ["All API calls use production endpoints", "Error rates < 1%", "Performance benchmarks met"]
+          },
+          {
+            "order": 2,
+            "pattern": "database_fallbacks",
+            "rationale": "Medium risk (94% success), maintains reliability with fallback",
+            "estimated_effort": "3-5 days",
+            "prerequisites": ["PostgreSQL setup", "Migration scripts ready", "Connection pooling configured"],
+            "success_criteria": ["Primary DB connection stable", "Fallback mechanism tested", "Performance improved"]
+          },
+          {
+            "order": 3,
+            "pattern": "fallback_components",
+            "rationale": "Low risk (96% success), improves user experience",
+            "estimated_effort": "2-4 days",
+            "prerequisites": ["Design system ready", "Accessibility guidelines", "Performance benchmarks"],
+            "success_criteria": ["UI consistency maintained", "Loading states reflect operations", "Accessibility compliant"]
+          },
+          {
+            "order": 4,
+            "pattern": "websocket_mocks",
+            "rationale": "Medium risk (92% success), critical for real-time features",
+            "estimated_effort": "4-6 days",
+            "prerequisites": ["WebSocket endpoints ready", "Connection monitoring setup", "Security review"],
+            "success_criteria": ["Real-time communication stable", "Reconnection logic working", "Performance acceptable"]
+          },
+          {
+            "order": 5,
+            "pattern": "sse_mocks",
+            "rationale": "High risk (87% success), most complex conversion",
+            "estimated_effort": "5-8 days",
+            "prerequisites": ["SSE backend endpoints", "CORS configuration", "Browser testing plan"],
+            "success_criteria": ["SSE streams stable", "Cross-browser compatibility", "Error recovery working"]
+          },
+          {
+            "order": 6,
+            "pattern": "test_mocks",
+            "rationale": "Medium risk (89% success), maintain test coverage",
+            "estimated_effort": "6-10 days",
+            "prerequisites": ["Integration test framework", "E2E testing setup", "CI/CD pipeline"],
+            "success_criteria": ["Test coverage maintained", "Integration tests passing", "E2E validation working"]
+          }
+        ],
+        "total_estimated_effort": "22-36 days",
+        "parallel_opportunities": [
+          "Service layer and database conversions can be done in parallel",
+          "Component and testing conversions can overlap",
+          "Backend preparation can happen during early conversions"
+        ]
+      },
+      "feature_flag_controlled": {
+        "description": "Use feature flags to control mock vs production implementation",
+        "implementation": {
+          "flag_structure": {
+            "USE_REAL_WEBSOCKETS": "boolean",
+            "USE_REAL_SSE": "boolean", 
+            "USE_REAL_API": "boolean",
+            "USE_REAL_DATABASE": "boolean",
+            "ENABLE_PRODUCTION_COMPONENTS": "boolean",
+            "ENABLE_INTEGRATION_TESTS": "boolean"
+          },
+          "rollout_strategy": {
+            "development": "All flags false (mocks enabled)",
+            "staging": "Gradual flag enablement per conversion phase",
+            "production": "All flags true (no mocks)"
+          },
+          "monitoring": {
+            "flag_impact_tracking": "Monitor error rates and performance when flags change",
+            "rollback_triggers": "Automatic rollback if error rate > 5% or performance degrades > 50%",
+            "alerting": "Real-time alerts when mock flags are enabled in production"
+          }
+        }
+      },
+      "backward_compatibility": {
+        "description": "Maintain ability to use mocks during transition period",
+        "strategies": [
+          {
+            "approach": "Environment-based configuration",
+            "implementation": "Use environment variables to switch between mock and real implementations",
+            "benefits": ["Easy testing", "Quick rollback", "Development flexibility"]
+          },
+          {
+            "approach": "Interface preservation",
+            "implementation": "Maintain same interfaces between mock and real implementations",
+            "benefits": ["Code compatibility", "Reduced refactoring", "Type safety"]
+          },
+          {
+            "approach": "Graceful degradation",
+            "implementation": "Fall back to mocks if real implementations fail",
+            "benefits": ["System reliability", "Error recovery", "User experience preservation"]
+          }
+        ]
+      }
+    },
+    "conversion_patterns": {
+      "websocket_conversion": {
+        "mock_elimination_steps": [
+          {
+            "step": "Environment Configuration",
+            "details": "Replace hardcoded URLs with environment-based WebSocket endpoints",
+            "code_changes": [
+              "Update WebSocket URL from mock server to real backend",
+              "Add environment variable for WebSocket endpoint",
+              "Configure SSL/TLS for production WebSocket connections"
+            ]
+          },
+          {
+            "step": "Connection Management",
+            "details": "Replace mock connection simulation with real connection handling",
+            "code_changes": [
+              "Remove MockWebSocket class instantiation",
+              "Implement real WebSocket connection with error handling",
+              "Add connection health monitoring and heartbeat"
+            ]
+          },
+          {
+            "step": "Message Handling",
+            "details": "Replace mock message queuing with production message processing",
+            "code_changes": [
+              "Remove mock auto-response mechanisms",
+              "Implement real message validation and parsing",
+              "Add message queuing for offline scenarios"
+            ]
+          },
+          {
+            "step": "Error Recovery",
+            "details": "Replace mock error scenarios with real error handling",
+            "code_changes": [
+              "Remove configurable mock failures",
+              "Implement exponential backoff reconnection",
+              "Add comprehensive error logging and monitoring"
+            ]
+          }
+        ],
+        "testing_strategy": {
+          "integration_tests": "Test with real WebSocket server",
+          "error_scenarios": "Test network failures, server disconnects, message corruption",
+          "performance_tests": "Load test WebSocket connections under high throughput",
+          "browser_compatibility": "Test across Chrome, Firefox, Safari, Edge"
+        }
+      },
+      "sse_conversion": {
+        "mock_elimination_steps": [
+          {
+            "step": "Backend SSE Setup",
+            "details": "Setup real Server-Sent Events endpoint with proper headers",
+            "code_changes": [
+              "Configure SSE endpoint with correct Content-Type headers",
+              "Implement CORS configuration for cross-origin requests",
+              "Setup event stream formatting and message structure"
+            ]
+          },
+          {
+            "step": "EventSource Configuration",
+            "details": "Replace MockEventSource with native EventSource",
+            "code_changes": [
+              "Remove MockEventSource and factory classes",
+              "Implement native EventSource with production URL",
+              "Add credential handling for authenticated streams"
+            ]
+          },
+          {
+            "step": "Message Processing",
+            "details": "Replace mock message handling with real event processing",
+            "code_changes": [
+              "Remove mock message queue and simulation",
+              "Implement real-time event parsing and validation",
+              "Add event type handling and routing"
+            ]
+          },
+          {
+            "step": "Reconnection Logic",
+            "details": "Implement production-grade reconnection handling",
+            "code_changes": [
+              "Remove mock reconnection simulation",
+              "Implement automatic reconnection with exponential backoff",
+              "Add connection state monitoring and health checks"
+            ]
+          }
+        ],
+        "testing_strategy": {
+          "integration_tests": "Test with real SSE backend endpoint",
+          "network_scenarios": "Test network interruptions and recovery",
+          "high_volume_tests": "Test high-frequency event streams",
+          "browser_testing": "Verify EventSource behavior across browsers"
+        }
+      },
+      "service_layer_conversion": {
+        "mock_elimination_steps": [
+          {
+            "step": "API Configuration",
+            "details": "Update API client to use production endpoints",
+            "code_changes": [
+              "Replace mock API URLs with production endpoints",
+              "Configure authentication headers and JWT tokens",
+              "Setup request/response interceptors for production"
+            ]
+          },
+          {
+            "step": "Error Handling",
+            "details": "Implement production-grade error handling",
+            "code_changes": [
+              "Remove mock error simulation",
+              "Add comprehensive HTTP error handling",
+              "Implement retry logic with circuit breaker pattern"
+            ]
+          },
+          {
+            "step": "Caching Strategy",
+            "details": "Optimize caching for production performance",
+            "code_changes": [
+              "Configure cache TTL for production data patterns",
+              "Implement cache invalidation strategies",
+              "Add cache performance monitoring"
+            ]
+          }
+        ],
+        "testing_strategy": {
+          "api_contract_tests": "Validate API contracts with real backend",
+          "performance_tests": "Measure API response times and throughput",
+          "error_handling_tests": "Test various HTTP error scenarios",
+          "authentication_tests": "Verify JWT token handling and refresh"
+        }
+      }
+    },
+    "validation_framework": {
+      "pre_conversion_checklist": [
+        "Backend services fully deployed and accessible",
+        "Database migrations completed and tested",
+        "Authentication system configured and working",
+        "Monitoring and logging systems operational",
+        "Feature flags configured and tested",
+        "Rollback procedures documented and tested"
+      ],
+      "during_conversion_monitoring": [
+        "Error rate tracking with alerts at 1% threshold",
+        "Performance monitoring with 50% degradation alerts",
+        "Connection health monitoring for WebSocket/SSE",
+        "User experience impact assessment",
+        "Business metric tracking (if applicable)"
+      ],
+      "post_conversion_validation": [
+        "Full integration test suite execution",
+        "End-to-end user workflow testing",
+        "Load testing with production-like traffic",
+        "Security testing of real connections",
+        "Accessibility compliance verification",
+        "Performance benchmark validation"
+      ]
+    },
+    "success_measurement": {
+      "technical_kpis": [
+        {
+          "metric": "Mock Dependency Elimination",
+          "target": "100%",
+          "measurement": "Zero mock imports in production build"
+        },
+        {
+          "metric": "API Integration Success",
+          "target": "100%",
+          "measurement": "All API calls use production endpoints"
+        },
+        {
+          "metric": "Real-time Feature Functionality",
+          "target": "100%",
+          "measurement": "WebSocket and SSE connections operational"
+        },
+        {
+          "metric": "Error Rate",
+          "target": "< 1%",
+          "measurement": "Application error rate in production"
+        },
+        {
+          "metric": "Performance Impact",
+          "target": "< 10% regression",
+          "measurement": "Response time and throughput compared to baseline"
+        }
+      ],
+      "business_kpis": [
+        {
+          "metric": "User Experience Consistency",
+          "target": "No degradation",
+          "measurement": "User satisfaction scores and feedback"
+        },
+        {
+          "metric": "Feature Completeness",
+          "target": "100%",
+          "measurement": "All features working as expected"
+        },
+        {
+          "metric": "System Reliability",
+          "target": "99.9% uptime",
+          "measurement": "System availability and stability"
+        }
+      ]
+    },
+    "risk_mitigation_detailed": {
+      "high_risk_scenarios": [
+        {
+          "risk": "SSE connection failures in production",
+          "probability": "medium",
+          "impact": "high",
+          "mitigation": [
+            "Implement robust fallback to polling mechanism",
+            "Add comprehensive connection monitoring",
+            "Test extensively across different network conditions",
+            "Setup automatic alerting for SSE connection issues"
+          ]
+        },
+        {
+          "risk": "WebSocket performance degradation",
+          "probability": "low",
+          "impact": "high",
+          "mitigation": [
+            "Load test WebSocket connections before production",
+            "Implement connection pooling and rate limiting",
+            "Monitor WebSocket performance metrics continuously",
+            "Have WebSocket scaling plan ready"
+          ]
+        },
+        {
+          "risk": "API authentication failures",
+          "probability": "medium",
+          "impact": "medium",
+          "mitigation": [
+            "Thoroughly test JWT token management",
+            "Implement token refresh mechanisms",
+            "Add authentication monitoring and alerting",
+            "Document authentication troubleshooting procedures"
+          ]
+        }
+      ],
+      "medium_risk_scenarios": [
+        {
+          "risk": "Database connection issues",
+          "probability": "low",
+          "impact": "medium",
+          "mitigation": [
+            "Maintain SQLite fallback mechanism",
+            "Implement database health checks",
+            "Setup database connection monitoring",
+            "Test failover scenarios thoroughly"
+          ]
+        }
+      ],
+      "contingency_plans": [
+        {
+          "scenario": "Critical production failure",
+          "response": [
+            "Enable feature flags to revert to mocks immediately",
+            "Notify stakeholders of temporary degradation",
+            "Investigate and fix root cause",
+            "Gradual re-enablement of production features"
+          ]
+        },
+        {
+          "scenario": "Performance degradation beyond acceptable limits",
+          "response": [
+            "Scale backend resources immediately",
+            "Enable caching mechanisms",
+            "Optimize database queries",
+            "Consider temporary feature disabling if needed"
+          ]
+        }
+      ]
+    }
+  }
+}

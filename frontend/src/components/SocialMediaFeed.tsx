@@ -306,19 +306,21 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
         sortOrder
       );
       
-      if (response.success && response.posts) {
-        const newPosts = response.posts;
+      if (response.success || response.data) {
+        // Handle both response formats: {success: true, data: [...]} and {posts: [...]}
+        const newPosts = response.data || response.posts || [];
+        const validPosts = Array.isArray(newPosts) ? newPosts : [];
         
         if (append) {
-          setPosts(prev => [...prev, ...newPosts]);
+          setPosts(prev => [...(prev || []), ...validPosts]);
         } else {
-          setPosts(newPosts);
+          setPosts(validPosts);
         }
         
         setPagination(prev => ({
           ...prev,
-          offset: currentOffset + newPosts.length,
-          hasMore: newPosts.length === pagination.limit,
+          offset: currentOffset + validPosts.length,
+          hasMore: validPosts.length === pagination.limit,
           loading: false
         }));
         
@@ -354,10 +356,13 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
     try {
       const response = await apiService.searchPosts(query.trim());
       
+      const searchResults = response.data || response.posts || [];
+      const validResults = Array.isArray(searchResults) ? searchResults : [];
+      
       setSearch(prev => ({
         ...prev,
-        results: response.success ? response.posts : [],
-        hasResults: response.success && response.posts.length > 0,
+        results: validResults,
+        hasResults: validResults.length > 0,
         loading: false
       }));
     } catch (err) {
@@ -736,7 +741,7 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Agent Posts Archive</h2>
         
-        {displayPosts.length === 0 ? (
+        {(!displayPosts || displayPosts.length === 0) ? (
           <div className="text-center py-8" data-testid="empty-state">
             <div className="text-gray-400 mb-4">
               <MessageCircle className="mx-auto h-12 w-12" />
@@ -764,7 +769,7 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
           </div>
         ) : (
           <div className="space-y-6">
-            {displayPosts.map((post) => (
+            {(displayPosts || []).map((post) => (
             <article
               key={post.id}
               className="bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
@@ -892,7 +897,7 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
             </article>
           ))}
             {/* Load More Button */}
-            {!isSearching && pagination.hasMore && (
+            {!isSearching && pagination.hasMore && (displayPosts || []).length > 0 && (
               <div className="text-center pt-6">
                 <button
                   onClick={loadMorePosts}

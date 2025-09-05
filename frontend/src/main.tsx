@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import SimpleErrorBoundary from './components/SimpleErrorBoundary'
 import './index.css'
 
-// Production version with error handling and fallback
+// SPARC Phase: Completion - Production-ready application entry point
 console.log('AgentLink: Starting application...');
 
 const rootElement = document.getElementById('root');
@@ -26,21 +25,9 @@ if (!rootElement) {
     console.log('AgentLink: Creating React root...');
     const root = ReactDOM.createRoot(rootElement);
     
-    console.log('AgentLink: Rendering application...');
-    // SPARC + NLD SOLUTION: Conditional StrictMode to prevent WebSocket duplication
-    const AppWithErrorBoundary = (
-      <SimpleErrorBoundary>
-        <App />
-      </SimpleErrorBoundary>
-    );
-    
-    root.render(
-      process.env.NODE_ENV === 'production' ? AppWithErrorBoundary : (
-        <React.StrictMode>
-          {AppWithErrorBoundary}
-        </React.StrictMode>
-      )
-    );
+    console.log('AgentLink: Rendering application with error boundaries...');
+    // SPARC SOLUTION: App component includes all necessary error boundaries internally
+    root.render(<App />);
     
     console.log('AgentLink: ✅ Application started successfully');
   } catch (error) {

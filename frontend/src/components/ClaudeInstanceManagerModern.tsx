@@ -430,7 +430,10 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
                   </div>
                   <div className="flex items-center gap-2">
                     <ConnectionButton
-                      connection={connection}
+                      instanceId={selectedInstance}
+                      connectionState={connection.connectionState}
+                      isConnected={connection.isConnected}
+                      isConnecting={connection.isConnecting}
                       url={`ws://localhost:3002/terminal/${selectedInstance}`}
                       size="sm"
                       variant="primary"
@@ -557,7 +560,7 @@ const ClaudeInstanceManagerModern: React.FC<ClaudeInstanceManagerModernProps> = 
                 selectedInstance={selectedInstanceObject || null}
                 output={output}
                 connectionType={connectionType}
-                isConnected={isConnected}
+                isConnected={connection.isConnected}
                 onSendInput={sendInput}
                 onInstanceSelect={handleInstanceSelect}
                 instances={instances}
