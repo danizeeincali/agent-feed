@@ -1,0 +1,1145 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/frontend/playwright.config.js",
+    "rootDir": "/workspaces/agent-feed/frontend/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "./tests/test-results/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "./tests/test-results/e2e-results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/workspaces/agent-feed/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/workspaces/agent-feed/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "phase-1-working.spec.ts",
+      "file": "phase-1-working.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Phase 1 Features - Working Validation Suite",
+          "file": "phase-1-working.spec.ts",
+          "line": 31,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load application successfully without JavaScript errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1649,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:43:34",
+                        "location": {
+                          "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                          "column": 34,
+                          "line": 43
+                        },
+                        "snippet": "  41 |     \n  42 |     // Should have no console errors during load\n> 43 |     expect(consoleErrors.length).toBe(0);\n     |                                  ^\n  44 |   });\n  45 |\n  46 |   test.describe('1. Post Expand/Collapse Functionality', () => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 34,
+                            "line": 43
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  41 |     \n  42 |     // Should have no console errors during load\n> 43 |     expect(consoleErrors.length).toBe(0);\n     |                                  ^\n  44 |   });\n  45 |\n  46 |   test.describe('1. Post Expand/Collapse Functionality', () => {\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:43:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-05T05:12:12.299Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-da91c-y-without-JavaScript-errors-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-da91c-y-without-JavaScript-errors-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-da91c-y-without-JavaScript-errors-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                        "column": 34,
+                        "line": 43
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "6caa57871264201897ae-190b05f18a112af6477b",
+              "file": "phase-1-working.spec.ts",
+              "line": 33,
+              "column": 3
+            }
+          ],
+          "suites": [
+            {
+              "title": "1. Post Expand/Collapse Functionality",
+              "file": "phase-1-working.spec.ts",
+              "line": 46,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should find post creator interface",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 1747,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:80:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 80
+                            },
+                            "snippet": "  78 |       }\n  79 |       \n> 80 |       expect(consoleErrors.length).toBe(0);\n     |                                    ^\n  81 |     });\n  82 |\n  83 |     test('should handle click interactions without errors', async ({ page }) => {"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 80
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  78 |       }\n  79 |       \n> 80 |       expect(consoleErrors.length).toBe(0);\n     |                                    ^\n  81 |     });\n  82 |\n  83 |     test('should handle click interactions without errors', async ({ page }) => {\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:80:36"
+                            }
+                          ],
+                          "stdout": [
+                            {
+                              "text": "Found post creator element: input[placeholder*=\"post\"]\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:12:15.012Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-7d5b9-find-post-creator-interface-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-7d5b9-find-post-creator-interface-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-7d5b9-find-post-creator-interface-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 80
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-5698f78f8ad8177093c5",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 48,
+                  "column": 5
+                },
+                {
+                  "title": "should handle click interactions without errors",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 0,
+                          "status": "timedOut",
+                          "duration": 30330,
+                          "error": {
+                            "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                            "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                          },
+                          "errors": [
+                            {
+                              "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                            },
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 23,
+                                "line": 89
+                              },
+                              "message": "Error: locator.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button').first()\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"p-1 text-gray-400 hover:text-gray-600 lg:hidden\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    53 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  87 |       const buttons = page.locator('button').first();\n  88 |       if (await buttons.count() > 0) {\n> 89 |         await buttons.click();\n     |                       ^\n  90 |         await page.waitForTimeout(500);\n  91 |       }\n  92 |       \n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:89:23"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:12:17.858Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-2af22-interactions-without-errors-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-2af22-interactions-without-errors-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-2af22-interactions-without-errors-chromium/error-context.md"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-a2e4d16f163c578b0b6c",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 83,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "2. Post Hierarchy and Structure",
+              "file": "phase-1-working.spec.ts",
+              "line": 97,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should display structured content",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 1589,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:125:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 125
+                            },
+                            "snippet": "  123 |       expect(await pageStructure.count()).toBeGreaterThan(0);\n  124 |       \n> 125 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  126 |     });\n  127 |   });\n  128 |"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 125
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  123 |       expect(await pageStructure.count()).toBeGreaterThan(0);\n  124 |       \n> 125 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  126 |     });\n  127 |   });\n  128 |\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:125:36"
+                            }
+                          ],
+                          "stdout": [
+                            {
+                              "text": "Found structural element: h1, h2, h3, h4\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:12:49.436Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-b85bc--display-structured-content-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-b85bc--display-structured-content-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-b85bc--display-structured-content-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 125
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-5db6a8b8f9bb9b35866a",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 99,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "3. Character Count Functionality",
+              "file": "phase-1-working.spec.ts",
+              "line": 129,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should find input fields and check for character counting",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 1687,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:172:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 172
+                            },
+                            "snippet": "  170 |       }\n  171 |       \n> 172 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  173 |     });\n  174 |   });\n  175 |"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 172
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  170 |       }\n  171 |       \n> 172 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  173 |     });\n  174 |   });\n  175 |\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:172:36"
+                            }
+                          ],
+                          "stdout": [
+                            {
+                              "text": "Found character count element: div:has-text(\"/\")\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:12:52.102Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-bb5b8-heck-for-character-counting-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-bb5b8-heck-for-character-counting-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-bb5b8-heck-for-character-counting-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 172
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-d25a8adb59f0128d08d6",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 131,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "4. Sharing Buttons Removal",
+              "file": "phase-1-working.spec.ts",
+              "line": 176,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should not contain sharing buttons or links",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 5,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 2097,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:202:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 202
+                            },
+                            "snippet": "  200 |       }\n  201 |       \n> 202 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  203 |     });\n  204 |   });\n  205 |"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 202
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  200 |       }\n  201 |       \n> 202 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  203 |     });\n  204 |   });\n  205 |\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:202:36"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:12:55.050Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-1c734-in-sharing-buttons-or-links-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-1c734-in-sharing-buttons-or-links-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-1c734-in-sharing-buttons-or-links-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 202
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-ed14136c2712283a3796",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 178,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "5. JavaScript Error-Free Operation",
+              "file": "phase-1-working.spec.ts",
+              "line": 206,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should navigate and interact without JavaScript errors",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 6,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 4950,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:238:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 238
+                            },
+                            "snippet": "  236 |       }\n  237 |       \n> 238 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  239 |     });\n  240 |\n  241 |     test('should handle form interactions without errors', async ({ page }) => {"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 238
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  236 |       }\n  237 |       \n> 238 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  239 |     });\n  240 |\n  241 |     test('should handle form interactions without errors', async ({ page }) => {\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:238:36"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:12:58.312Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-0cf14-t-without-JavaScript-errors-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-0cf14-t-without-JavaScript-errors-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-0cf14-t-without-JavaScript-errors-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 238
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-6bd1b706935ac02a4fc5",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 208,
+                  "column": 5
+                },
+                {
+                  "title": "should handle form interactions without errors",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 7,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 2678,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:265:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 265
+                            },
+                            "snippet": "  263 |       }\n  264 |       \n> 265 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  266 |     });\n  267 |\n  268 |     test('should handle responsive design without errors', async ({ page }) => {"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 265
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  263 |       }\n  264 |       \n> 265 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  266 |     });\n  267 |\n  268 |     test('should handle responsive design without errors', async ({ page }) => {\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:265:36"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:13:04.429Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-9e57d-interactions-without-errors-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-9e57d-interactions-without-errors-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-9e57d-interactions-without-errors-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 265
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-1d82496dc29794003ce1",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 241,
+                  "column": 5
+                },
+                {
+                  "title": "should handle responsive design without errors",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 8,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 3160,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:287:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 287
+                            },
+                            "snippet": "  285 |       }\n  286 |       \n> 287 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  288 |     });\n  289 |\n  290 |     test('should handle network conditions gracefully', async ({ page }) => {"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 287
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  285 |       }\n  286 |       \n> 287 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  288 |     });\n  289 |\n  290 |     test('should handle network conditions gracefully', async ({ page }) => {\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:287:36"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:13:08.311Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-42783-nsive-design-without-errors-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-42783-nsive-design-without-errors-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-42783-nsive-design-without-errors-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 287
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-ef4432e85525bee1780c",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 268,
+                  "column": 5
+                },
+                {
+                  "title": "should handle network conditions gracefully",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 9,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 3097,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m16\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m16\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:313:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 313
+                            },
+                            "snippet": "  311 |       \n  312 |       // Network errors are acceptable, JS errors are not\n> 313 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  314 |     });\n  315 |   });\n  316 |"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 313
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m16\u001b[39m\n\n  311 |       \n  312 |       // Network errors are acceptable, JS errors are not\n> 313 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  314 |     });\n  315 |   });\n  316 |\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:313:36"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:13:12.667Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-96ef5-twork-conditions-gracefully-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-96ef5-twork-conditions-gracefully-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-96ef5-twork-conditions-gracefully-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 313
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-d6b80f4dbcc5911dbc98",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 290,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Integration Tests",
+              "file": "phase-1-working.spec.ts",
+              "line": 317,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "should demonstrate complete application functionality",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 10,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 2621,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:342:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 342
+                            },
+                            "snippet": "  340 |       expect(pageContent.toLowerCase()).not.toContain('linkedin.com/sharing');\n  341 |       \n> 342 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  343 |     });\n  344 |\n  345 |     test('should meet accessibility standards', async ({ page }) => {"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 342
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  340 |       expect(pageContent.toLowerCase()).not.toContain('linkedin.com/sharing');\n  341 |       \n> 342 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  343 |     });\n  344 |\n  345 |     test('should meet accessibility standards', async ({ page }) => {\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:342:36"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:13:16.749Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-eb87b-e-application-functionality-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-eb87b-e-application-functionality-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-eb87b-e-application-functionality-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 342
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-ec3417b70ee4eb9e0e75",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 319,
+                  "column": 5
+                },
+                {
+                  "title": "should meet accessibility standards",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 11,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 1698,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:374:36",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 36,
+                              "line": 374
+                            },
+                            "snippet": "  372 |       }\n  373 |       \n> 374 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  375 |     });\n  376 |\n  377 |     test('should handle all Phase 1 requirements successfully', async ({ page }) => {"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 36,
+                                "line": 374
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m8\u001b[39m\n\n  372 |       }\n  373 |       \n> 374 |       expect(consoleErrors.length).toBe(0);\n      |                                    ^\n  375 |     });\n  376 |\n  377 |     test('should handle all Phase 1 requirements successfully', async ({ page }) => {\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:374:36"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:13:20.537Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-3298f-eet-accessibility-standards-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-3298f-eet-accessibility-standards-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-3298f-eet-accessibility-standards-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 36,
+                            "line": 374
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-7d29252c5404ce25c49c",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 345,
+                  "column": 5
+                },
+                {
+                  "title": "should handle all Phase 1 requirements successfully",
+                  "ok": false,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 12,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 1680,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:413:37",
+                            "location": {
+                              "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                              "column": 37,
+                              "line": 413
+                            },
+                            "snippet": "  411 |       expect(validation.pageLoads).toBe(true);\n  412 |       expect(validation.hasStructure).toBe(true);\n> 413 |       expect(validation.noJSErrors).toBe(true);\n      |                                     ^\n  414 |       expect(validation.noSharingButtons).toBe(true);\n  415 |       expect(validation.interactive).toBe(true);\n  416 |       "
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                                "column": 37,
+                                "line": 413
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  411 |       expect(validation.pageLoads).toBe(true);\n  412 |       expect(validation.hasStructure).toBe(true);\n> 413 |       expect(validation.noJSErrors).toBe(true);\n      |                                     ^\n  414 |       expect(validation.noSharingButtons).toBe(true);\n  415 |       expect(validation.interactive).toBe(true);\n  416 |       \n    at /workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts:413:37"
+                            }
+                          ],
+                          "stdout": [
+                            {
+                              "text": "Phase 1 Validation Results: {\n  pageLoads: \u001b[33mtrue\u001b[39m,\n  hasStructure: \u001b[33mtrue\u001b[39m,\n  noJSErrors: \u001b[33mfalse\u001b[39m,\n  noSharingButtons: \u001b[33mtrue\u001b[39m,\n  interactive: \u001b[33mtrue\u001b[39m\n}\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-05T05:13:23.277Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-0654d-1-requirements-successfully-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-0654d-1-requirements-successfully-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/workspaces/agent-feed/frontend/test-results/phase-1-working-Phase-1-Fe-0654d-1-requirements-successfully-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/workspaces/agent-feed/frontend/tests/phase-1-working.spec.ts",
+                            "column": 37,
+                            "line": 413
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "6caa57871264201897ae-01d04635534de3a90392",
+                  "file": "phase-1-working.spec.ts",
+                  "line": 377,
+                  "column": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-05T05:12:09.524Z",
+    "duration": 75627.859,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 13,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,103 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Interactive Control" [ref=e12] [cursor=pointer]:
+        - /url: /interactive-control
+        - img [ref=e13] [cursor=pointer]
+        - text: Interactive Control
+      - link "Claude Manager" [active] [ref=e16] [cursor=pointer]:
+        - /url: /claude-manager
+        - img [ref=e17] [cursor=pointer]
+        - text: Claude Manager
+      - link "Feed" [ref=e22] [cursor=pointer]:
+        - /url: /
+        - img [ref=e23] [cursor=pointer]
+        - text: Feed
+      - link "Agents" [ref=e25] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e26] [cursor=pointer]
+        - text: Agents
+      - link "Workflows" [ref=e29] [cursor=pointer]:
+        - /url: /workflows
+        - img [ref=e30] [cursor=pointer]
+        - text: Workflows
+      - link "Claude Code" [ref=e34] [cursor=pointer]:
+        - /url: /claude-code
+        - img [ref=e35] [cursor=pointer]
+        - text: Claude Code
+      - link "Live Activity" [ref=e38] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e39] [cursor=pointer]
+        - text: Live Activity
+      - link "Analytics" [ref=e43] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e44] [cursor=pointer]
+        - text: Analytics
+      - link "Performance Monitor" [ref=e46] [cursor=pointer]:
+        - /url: /performance-monitor
+        - img [ref=e47] [cursor=pointer]
+        - text: Performance Monitor
+      - link "Settings" [ref=e49] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e50] [cursor=pointer]
+        - text: Settings
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e57]: Connected
+        - img [ref=e58]
+      - generic [ref=e62]:
+        - img [ref=e63]
+        - generic [ref=e68]: "0"
+  - generic [ref=e69]:
+    - banner [ref=e70]:
+      - generic [ref=e71]:
+        - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e73]
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - img [ref=e76]
+            - textbox "Search posts..." [ref=e79]
+          - button "Notifications (3 unread)" [ref=e81] [cursor=pointer]:
+            - img [ref=e82] [cursor=pointer]
+            - generic [ref=e84] [cursor=pointer]: "3"
+    - main [ref=e85]:
+      - generic [ref=e86]:
+        - heading "Claude Management System" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - tablist [ref=e90]:
+            - tab "Global Monitor" [selected] [ref=e91] [cursor=pointer]
+            - tab "Interactive Control" [ref=e92] [cursor=pointer]
+            - tab "Feed Integration" [ref=e93] [cursor=pointer]
+          - tabpanel "Global Monitor" [ref=e94]:
+            - generic [ref=e95]:
+              - heading "Global Claude Instance Monitoring" [level=3] [ref=e96]
+              - paragraph [ref=e97]: API-only monitoring and management of all Claude instances. Create, monitor, and manage always-on worker instances for feed processing.
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - heading "Claude Service Manager" [level=2] [ref=e100]
+                - generic [ref=e101]:
+                  - generic [ref=e102]: "Total: 0"
+                  - generic [ref=e103]: "Running: 0"
+                  - generic [ref=e104]: "Workers: 0"
+                  - generic [ref=e105]: "Memory: 0.0MB"
+              - generic [ref=e106]:
+                - generic [ref=e107]:
+                  - generic [ref=e108]: "Filter:"
+                  - combobox [ref=e109] [cursor=pointer]:
+                    - option "All Instances" [selected]
+                    - option "Worker Instances"
+                    - option "Feed Instances"
+                    - option "Interactive Instances"
+                - generic [ref=e110]:
+                  - button "Create Worker Instance" [ref=e111] [cursor=pointer]
+                  - button "Create Interactive Instance" [ref=e112] [cursor=pointer]
+                  - button "Refresh" [ref=e113] [cursor=pointer]
+              - generic [ref=e114]:
+                - heading "Instances Overview (0)" [level=3] [ref=e115]
+                - generic [ref=e116]: No instances found. Create a worker or interactive instance to get started.
+```

@@ -1,10 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, TrendingUp, MessageCircle, Heart, Share2, MoreHorizontal, AlertCircle } from 'lucide-react';
+import { RefreshCw, TrendingUp, MessageCircle, Heart, MoreHorizontal, AlertCircle, ChevronDown, ChevronUp, User } from 'lucide-react';
 import { apiService } from '../services/api';
 import { AgentPost, ApiResponse } from '../types/api';
 
 interface RealSocialMediaFeedProps {
   className?: string;
+}
+
+interface ExpandedPost {
+  [key: string]: boolean;
+}
+
+interface PostMetrics {
+  characterCount: number;
+  wordCount: number;
+  readingTime: number;
 }
 
 const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '' }) => {
@@ -14,6 +24,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [refreshing, setRefreshing] = useState(false);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
+  const [expandedPosts, setExpandedPosts] = useState<ExpandedPost>({});
   const limit = 20;
 
   // Real data loading from production database
@@ -90,6 +101,34 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     }
   };
 
+  const togglePostExpansion = (postId: string) => {
+    setExpandedPosts(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
+  const calculatePostMetrics = (content: string): PostMetrics => {
+    const characterCount = content.length;
+    const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+    const readingTime = Math.max(1, Math.ceil(wordCount / 200)); // 200 WPM average
+    
+    return { characterCount, wordCount, readingTime };
+  };
+
+  const truncateContent = (content: string, maxLength: number = 300): { truncated: string; isTruncated: boolean } => {
+    if (content.length <= maxLength) {
+      return { truncated: content, isTruncated: false };
+    }
+    
+    // Find the last complete word before the limit
+    const truncated = content.substring(0, maxLength);
+    const lastSpaceIndex = truncated.lastIndexOf(' ');
+    const finalTruncated = lastSpaceIndex > 0 ? truncated.substring(0, lastSpaceIndex) : truncated;
+    
+    return { truncated: finalTruncated + '...', isTruncated: true };
+  };
+
   const handleLoadMore = async () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -163,94 +202,240 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
       {/* Posts */}
       <div className="space-y-6">
-        {(posts || []).map((post) => (
-          <article key={post.id} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-            {/* Post Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium mr-3">
-                  {(post.authorAgent || post.author_agent || 'A').charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">{post.authorAgent || post.author_agent}</h3>
-                  <p className="text-gray-500 text-sm">{formatTimeAgo(post.publishedAt || post.published_at)}</p>
-                </div>
-              </div>
-              <button className="text-gray-400 hover:text-gray-600">
-                <MoreHorizontal className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Post Title */}
-            <h2 className="text-xl font-semibold text-gray-900 mb-3">{post.title}</h2>
-
-            {/* Post Content */}
-            <div className="prose prose-sm max-w-none mb-4">
-              <p className="text-gray-700 whitespace-pre-wrap">{post.content}</p>
-            </div>
-
-            {/* Metadata */}
-            {post.metadata && (
-              <div className="mb-4">
-                {/* Business Impact */}
-                {post.metadata.businessImpact && (
-                  <div className="flex items-center mb-2">
-                    <TrendingUp className="w-4 h-4 mr-2 text-gray-500" />
-                    <span className="text-sm text-gray-600 mr-2">Business Impact:</span>
-                    <span className={`text-sm font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
-                      {post.metadata.businessImpact}%
-                    </span>
-                  </div>
-                )}
-
-                {/* Tags */}
-                {post.metadata.tags && post.metadata.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    {post.metadata.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+        {(posts || []).map((post) => {
+          const isExpanded = expandedPosts[post.id] || false;
+          const postMetrics = calculatePostMetrics(post.content || '');
+          const { truncated, isTruncated } = truncateContent(post.content || '');
+          
+          return (
+          <article key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden">
+            <div className="p-6">
+              {!isExpanded ? (
+                // Collapsed View - Multi-line layout
+                <div className="space-y-3">
+                  {/* Line 1: Avatar and Title */}
+                  <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md flex-shrink-0">
+                      {(post.authorAgent || 'A').charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex-grow min-w-0">
+                      <h2 className="text-lg font-bold text-gray-900 leading-tight">{post.title}</h2>
+                    </div>
+                    {/* Expand Button */}
+                    {isTruncated && (
+                      <button 
+                        onClick={() => togglePostExpansion(post.id)}
+                        className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors flex-shrink-0"
+                        aria-label="Expand post"
                       >
-                        #{tag}
-                      </span>
-                    ))}
+                        <ChevronDown className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
-                )}
-
-                {/* Agent Response Badge */}
-                {post.metadata.isAgentResponse && (
-                  <div className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                    🤖 Agent Response
+                  
+                  {/* Line 2: Full Hook */}
+                  <div className="pl-14">
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {post.content.split('.')[0] + '.'}
+                    </p>
                   </div>
-                )}
-              </div>
-            )}
+                  
+                  {/* Line 3: Metrics */}
+                  <div className="pl-14 flex items-center space-x-6">
+                    {/* Reading Time */}
+                    <div className="flex items-center space-x-1 text-xs text-gray-500">
+                      <svg className="w-3 h-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{postMetrics.readingTime} min read</span>
+                    </div>
+                    
+                    {/* Business Impact */}
+                    {post.metadata?.businessImpact && (
+                      <div className="flex items-center space-x-1 text-xs text-gray-500">
+                        <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                        <span className={`font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
+                          {post.metadata.businessImpact}% impact
+                        </span>
+                      </div>
+                    )}
+                    
+                    {/* Agent */}
+                    <div className="flex items-center space-x-1 text-xs text-gray-500">
+                      <svg className="w-3 h-3 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span>by {post.authorAgent}</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                // Expanded View - Full post layout
+                <>
+                  {/* Post Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md">
+                        {(post.authorAgent || 'A').charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900 text-lg">{post.authorAgent}</h3>
+                        <div className="flex items-center text-gray-500 text-sm space-x-2">
+                          <span>{formatTimeAgo(post.publishedAt)}</span>
+                          <span>•</span>
+                          <span>{postMetrics.readingTime} min read</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => togglePostExpansion(post.id)}
+                      className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                      aria-label="Collapse post"
+                    >
+                      <ChevronUp className="w-5 h-5" />
+                    </button>
+                  </div>
 
-            {/* Post Actions */}
-            <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => handleLike(post.id)}
-                  className="flex items-center space-x-1 text-gray-600 hover:text-red-500 transition-colors"
-                >
-                  <Heart className="w-5 h-5" />
-                  <span className="text-sm">{post.likes || 0}</span>
-                </button>
-                <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-500 transition-colors">
-                  <MessageCircle className="w-5 h-5" />
-                  <span className="text-sm">{post.comments || 0}</span>
-                </button>
-                <button className="flex items-center space-x-1 text-gray-600 hover:text-green-500 transition-colors">
-                  <Share2 className="w-5 h-5" />
-                  <span className="text-sm">Share</span>
-                </button>
+                  {/* Post Title */}
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">{post.title}</h2>
+
+                  {/* Post Content */}
+                  <div className="prose prose-sm max-w-none mb-4">
+                    <div className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                      {post.content}
+                    </div>
+                  </div>
+
+                  {/* Full Metrics Container */}
+                  <div className="mb-4 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                      {/* Characters */}
+                      <div className="flex items-center space-x-2 text-gray-700">
+                        <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span className="font-medium">{postMetrics.characterCount}</span>
+                        <span className="text-gray-500">chars</span>
+                      </div>
+                      
+                      {/* Words */}
+                      <div className="flex items-center space-x-2 text-gray-700">
+                        <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                        </svg>
+                        <span className="font-medium">{postMetrics.wordCount}</span>
+                        <span className="text-gray-500">words</span>
+                      </div>
+                      
+                      {/* Reading Time */}
+                      <div className="flex items-center space-x-2 text-gray-700">
+                        <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="font-medium">{postMetrics.readingTime}</span>
+                        <span className="text-gray-500">min read</span>
+                      </div>
+                      
+                      {/* Length */}
+                      <div className="flex items-center space-x-2 text-gray-700">
+                        <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          postMetrics.characterCount > 1000 
+                            ? 'bg-red-100 text-red-700' 
+                            : postMetrics.characterCount > 500 
+                              ? 'bg-yellow-100 text-yellow-700'
+                              : 'bg-green-100 text-green-700'
+                        }`}>
+                          {postMetrics.characterCount > 1000 ? 'Long' : postMetrics.characterCount > 500 ? 'Medium' : 'Short'}
+                        </span>
+                      </div>
+                      
+                      {/* Business Impact */}
+                      {post.metadata?.businessImpact && (
+                        <div className="flex items-center space-x-2 text-gray-700">
+                          <svg className="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                          </svg>
+                          <span className={`font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
+                            {post.metadata.businessImpact}%
+                          </span>
+                          <span className="text-gray-500">impact</span>
+                        </div>
+                      )}
+                      
+                      {/* Who Responded */}
+                      <div className="flex items-center space-x-2 text-gray-700">
+                        <svg className="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span className="font-medium">{post.authorAgent}</span>
+                        <span className="text-gray-500">agent</span>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Post Actions */}
+              <div className="flex items-center justify-between py-4 border-t border-b border-gray-100 mb-4">
+                <div className="flex space-x-6">
+                  <button
+                    onClick={() => handleLike(post.id)}
+                    className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors group"
+                  >
+                    <Heart className="w-5 h-5 group-hover:fill-current" />
+                    <span className="text-sm font-medium">{post.engagement?.likes || 0} likes</span>
+                  </button>
+                  <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="text-sm font-medium">{post.engagement?.comments || 0} comments</span>
+                  </button>
+                </div>
+                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  ID: {post.id.slice(0, 8)}...
+                </div>
               </div>
-              <div className="text-xs text-gray-500">
-                ID: {post.id.slice(0, 8)}...
-              </div>
+
+              {/* Additional Metadata */}
+              {post.metadata && (isTruncated ? isExpanded : true) && (
+                <div className={`transition-all duration-300 ease-in-out ${
+                  isExpanded || !isTruncated ? 'opacity-100 max-h-screen' : 'opacity-75 max-h-32 overflow-hidden'
+                }`}>
+                  {/* Tags */}
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="mb-3">
+                      <div className="text-sm font-medium text-gray-700 mb-2">Tags</div>
+                      <div className="flex flex-wrap gap-2">
+                        {post.tags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm rounded-full font-medium hover:from-blue-200 hover:to-purple-200 transition-colors cursor-pointer"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Agent Response Badge */}
+                  {post.metadata.isAgentResponse && (
+                    <div className="inline-flex items-center px-3 py-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 text-sm rounded-lg border border-green-200 font-medium">
+                      <User className="w-4 h-4 mr-2" />
+                      Agent Response
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
+
           </article>
-        ))}
+          );
+        })}
       </div>
 
       {/* Load More */}
