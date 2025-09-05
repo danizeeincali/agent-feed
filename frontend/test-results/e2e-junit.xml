@@ -1,0 +1,129 @@
+<testsuites id="" name="" tests="3" failures="1" skipped="0" errors="0" time="36.667864">
+<testsuite name="e2e/saved-posts-validation.spec.ts" timestamp="2025-09-05T16:25:58.286Z" hostname="chromium" tests="3" failures="1" skipped="0" time="30.398" errors="0">
+<testcase name="Saved Posts Functionality - Real E2E Validation › Complete save/unsave/filter workflow" classname="e2e/saved-posts-validation.spec.ts" time="26.496">
+<failure message="saved-posts-validation.spec.ts:9:3 Complete save/unsave/filter workflow" type="FAILURE">
+<![CDATA[  [chromium] › e2e/saved-posts-validation.spec.ts:9:3 › Saved Posts Functionality - Real E2E Validation › Complete save/unsave/filter workflow 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('[data-testid="post-card"]').first()
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid="post-card"]').first()
+
+
+      12 |     // Step 1: Find a post to save
+      13 |     const firstPost = page.locator('[data-testid="post-card"]').first();
+    > 14 |     await expect(firstPost).toBeVisible({ timeout: 10000 });
+         |                             ^
+      15 |     
+      16 |     const postId = await firstPost.getAttribute('data-post-id');
+      17 |     console.log(`📌 Testing with post ID: ${postId}`);
+        at /workspaces/agent-feed/frontend/tests/e2e/saved-posts-validation.spec.ts:14:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('[data-testid="post-card"]').first()
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-testid="post-card"]').first()
+
+
+      12 |     // Step 1: Find a post to save
+      13 |     const firstPost = page.locator('[data-testid="post-card"]').first();
+    > 14 |     await expect(firstPost).toBeVisible({ timeout: 10000 });
+         |                             ^
+      15 |     
+      16 |     const postId = await firstPost.getAttribute('data-post-id');
+      17 |     console.log(`📌 Testing with post ID: ${postId}`);
+        at /workspaces/agent-feed/frontend/tests/e2e/saved-posts-validation.spec.ts:14:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[🎯 Starting comprehensive saved posts validation
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/video.webm]]
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/error-context.md]]
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium/trace.zip]]
+🎯 Starting comprehensive saved posts validation
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|e2e-saved-posts-validation-b595f-save-unsave-filter-workflow-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Saved Posts Functionality - Real E2E Validation › API endpoints validation" classname="e2e/saved-posts-validation.spec.ts" time="1.908">
+<system-out>
+<![CDATA[🌐 Testing API endpoints directly
+✅ Save API endpoint working
+✅ Filter API endpoint working - found 2 saved posts
+✅ Unsave API endpoint working
+🎉 All API endpoints validated successfully!
+]]>
+</system-out>
+</testcase>
+<testcase name="Saved Posts Functionality - Real E2E Validation › Engagement data validation" classname="e2e/saved-posts-validation.spec.ts" time="1.994">
+<system-out>
+<![CDATA[📊 Testing engagement data inclusion
+✅ Engagement data present - isSaved: false
+🎉 Engagement data validation successful!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

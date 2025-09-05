@@ -36,6 +36,7 @@ let wsServer = null;
 
 // Import unified database service with PostgreSQL + SQLite fallback
 import { databaseService } from './src/database/DatabaseService.js';
+import { linkPreviewService } from './src/services/LinkPreviewService.js';
 
 // Initialize real-time broadcasting for production data
 const initializeAgentWebSocketEvents = () => {
@@ -1106,7 +1107,10 @@ app.use(express.json({
   limit: '10mb',
   verify: (req, res, buf, encoding) => {
     try {
-      JSON.parse(buf);
+      // Only validate if there's actually content to parse
+      if (buf && buf.length > 0) {
+        JSON.parse(buf);
+      }
     } catch (error) {
       error.status = 400;
       throw error;
@@ -1119,6 +1123,12 @@ app.use((error, req, res, next) => {
   console.error('❌ Middleware Error Handler:', error.message);
   
   if (error instanceof SyntaxError && error.status === 400 && 'body' in error) {
+    // Handle empty body gracefully - this is normal for DELETE requests
+    if (error.message.includes('Unexpected end of JSON input')) {
+      console.log('📝 Empty body in request (normal for DELETE/GET) - continuing...');
+      return next(); // Continue processing, this is not an error
+    }
+    
     console.error('❌ JSON Parse Error:', error.message);
     return res.status(400).json({
       success: false,
@@ -1192,38 +1202,14 @@ const setupApiRoutes = () => {
     // Always register real database API routes
     console.log('✅ Registering real database API endpoints...');
     
-    app.get('/api/v1/agent-posts', async (req, res) => {
-      try {
-        const limit = parseInt(req.query.limit) || 20;
-        const offset = parseInt(req.query.offset) || 0;
-        
-        const result = await databaseService.getAgentPosts(limit, offset);
-        
-        res.json({
-          success: true,
-          data: result.posts,
-          total: result.total,
-          page: Math.floor(offset / limit) + 1,
-          limit: limit,
-          database_type: databaseService.getDatabaseType()
-        });
-      } catch (error) {
-        console.error('Error fetching agent posts:', error);
-        res.status(500).json({
-          success: false,
-          error: 'Internal server error',
-          message: error.message
-        });
-      }
-    });
-
     app.post('/api/v1/agent-posts', async (req, res) => {
       try {
         const postData = {
           title: req.body.title,
           content: req.body.content,
           author_agent: req.body.author_agent,
-          metadata: req.body.metadata || {}
+          metadata: req.body.metadata || {},
+          tags: req.body.tags || []
         };
         
         const newPost = await databaseService.createPost(postData);
@@ -1242,6 +1228,285 @@ const setupApiRoutes = () => {
         });
       }
     });
+    // PHASE 2: Enhanced Post Filtering APIs
+    app.get('/api/v1/agent-posts', async (req, res) => {
+      try {
+        const {
+          filter,
+          agent,
+          min_stars,
+          user_id = 'anonymous',
+          tags,
+          limit = 20,
+          offset = 0
+        } = req.query;
+
+        let result;
+        const parsedLimit = parseInt(limit);
+        const parsedOffset = parseInt(offset);
+
+        switch (filter) {
+          case 'by-agent':
+            if (!agent) {
+              return res.status(400).json({
+                success: false,
+                error: 'Agent parameter required for by-agent filter'
+              });
+            }
+            result = await databaseService.db.getPostsByAgent(agent, parsedLimit, parsedOffset, user_id);
+            break;
+
+          case 'by-stars':
+            const minStars = parseFloat(min_stars) || 4.0;
+            result = await databaseService.db.getPostsByStars(minStars, parsedLimit, parsedOffset, user_id);
+            break;
+
+          case 'by-user':
+            if (!user_id) {
+              return res.status(400).json({
+                success: false,
+                error: 'User ID parameter required for by-user filter'
+              });
+            }
+            result = await databaseService.db.getSavedPosts(user_id, parsedLimit, parsedOffset);
+            break;
+
+          case 'by-tags':
+            if (!tags) {
+              return res.status(400).json({
+                success: false,
+                error: 'Tags parameter required for by-tags filter'
+              });
+            }
+            const tagArray = tags.split(',').map(tag => tag.trim());
+            result = await databaseService.db.getPostsByTags(tagArray, parsedLimit, parsedOffset, user_id);
+            break;
+
+          case 'my-posts':
+            // For demo, filter by ProductionValidator agent - in real app would use authenticated user
+            const currentUserAgent = 'ProductionValidator';
+            result = await databaseService.db.getPostsByAgent(currentUserAgent, parsedLimit, parsedOffset, user_id);
+            break;
+
+          case 'saved':
+            // Get saved posts for user (defaulting to 'anonymous' for demo)
+            const userId = user_id || 'anonymous';
+            result = await databaseService.db.getSavedPosts(userId, parsedLimit, parsedOffset);
+            break;
+
+          default:
+            result = await databaseService.getAgentPosts(parsedLimit, parsedOffset, user_id);
+        }
+
+        res.json({
+          success: true,
+          data: result.posts,
+          total: result.total,
+          page: Math.floor(parsedOffset / parsedLimit) + 1,
+          limit: parsedLimit,
+          filter: filter || 'all',
+          database_type: databaseService.getDatabaseType()
+        });
+      } catch (error) {
+        console.error('Error fetching agent posts:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Internal server error',
+          message: error.message
+        });
+      }
+    });
+
+    // PHASE 2: Like System
+    app.post('/api/v1/agent-posts/:id/like', async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { user_id = 'anonymous' } = req.body;
+
+        const result = await databaseService.db.likePost(id, user_id);
+
+        // Broadcast like update via WebSocket
+        if (wsServer) {
+          broadcastPostUpdate({
+            type: 'post_liked',
+            postId: id,
+            likes: result.likes || 0,
+            timestamp: new Date().toISOString()
+          });
+        }
+
+        res.json({
+          success: true,
+          data: result,
+          message: result.liked ? 'Post liked successfully' : 'Post already liked'
+        });
+      } catch (error) {
+        console.error('Error liking post:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to like post',
+          message: error.message
+        });
+      }
+    });
+
+    app.delete('/api/v1/agent-posts/:id/like', async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { user_id = 'anonymous' } = req.query;
+
+        const result = await databaseService.db.unlikePost(id, user_id);
+
+        // Broadcast unlike update via WebSocket
+        if (wsServer) {
+          broadcastPostUpdate({
+            type: 'post_unliked',
+            postId: id,
+            likes: result.likes || 0,
+            timestamp: new Date().toISOString()
+          });
+        }
+
+        res.json({
+          success: true,
+          data: result,
+          message: !result.liked ? 'Post unliked successfully' : 'Post was not previously liked'
+        });
+      } catch (error) {
+        console.error('Error unliking post:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to unlike post',
+          message: error.message
+        });
+      }
+    });
+
+    app.get('/api/v1/agent-posts/:id/likes', async (req, res) => {
+      try {
+        const { id } = req.params;
+        const likes = await databaseService.db.getPostLikes(id);
+
+        res.json({
+          success: true,
+          data: likes
+        });
+      } catch (error) {
+        console.error('Error fetching post likes:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to fetch post likes',
+          message: error.message
+        });
+      }
+    });
+
+    // PHASE 2: Save/Unsave Posts
+    app.post('/api/v1/agent-posts/:id/save', async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { user_id = 'anonymous' } = req.body;
+
+        const result = await databaseService.db.savePost(id, user_id);
+
+        res.json({
+          success: true,
+          data: result,
+          message: 'Post saved successfully'
+        });
+      } catch (error) {
+        console.error('Error saving post:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to save post',
+          message: error.message
+        });
+      }
+    });
+
+    app.delete('/api/v1/agent-posts/:id/save', async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { user_id = 'anonymous' } = req.query;
+
+        const success = await databaseService.db.unsavePost(id, user_id);
+
+        res.json({
+          success,
+          message: success ? 'Post unsaved successfully' : 'Post was not saved'
+        });
+      } catch (error) {
+        console.error('Error unsaving post:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to unsave post',
+          message: error.message
+        });
+      }
+    });
+
+    // PHASE 2: Report Posts
+    // DELETE endpoint for posts
+    app.delete('/api/v1/agent-posts/:id', async (req, res) => {
+      try {
+        const { id } = req.params;
+        const { user_id = 'admin' } = req.query;
+
+        // In a real app, you'd check authorization here
+        const result = await databaseService.db.deletePost(id);
+
+        // Broadcast delete update via WebSocket
+        if (wsServer) {
+          broadcastPostUpdate({
+            type: 'post_deleted',
+            postId: id,
+            timestamp: new Date().toISOString()
+          });
+        }
+
+        res.json({
+          success: true,
+          data: result,
+          message: 'Post deleted successfully'
+        });
+      } catch (error) {
+        console.error('Error deleting post:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to delete post',
+          message: error.message
+        });
+      }
+    });
+
+    // PHASE 2: Link Preview API
+    app.post('/api/v1/link-preview', async (req, res) => {
+      try {
+        const { url } = req.body;
+
+        if (!url) {
+          return res.status(400).json({
+            success: false,
+            error: 'URL is required'
+          });
+        }
+
+        const preview = await linkPreviewService.getLinkPreview(url);
+
+        res.json({
+          success: true,
+          data: preview
+        });
+      } catch (error) {
+        console.error('Error generating link preview:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to generate link preview',
+          message: error.message
+        });
+      }
+    });
+
     app.get('/api/v1/health', async (req, res) => {
       try {
         const health = await databaseService.healthCheck();
@@ -1263,9 +1528,16 @@ const setupApiRoutes = () => {
       }
     });
     
-    console.log('✅ Real database API routes registered:');
-    console.log('   GET  /api/v1/agent-posts');
+    console.log('✅ Phase 2 Interactive API routes registered:');
+    console.log('   GET  /api/v1/agent-posts (with filtering)');
     console.log('   POST /api/v1/agent-posts');
+    console.log('   POST /api/v1/agent-posts/:id/like');
+    console.log('   DELETE /api/v1/agent-posts/:id/like');
+    console.log('   GET  /api/v1/agent-posts/:id/likes');
+    console.log('   DELETE /api/v1/agent-posts/:id');
+    console.log('   POST /api/v1/agent-posts/:id/save');
+    console.log('   DELETE /api/v1/agent-posts/:id/save');
+    console.log('   POST /api/v1/link-preview');
     console.log('   GET  /api/v1/health');
   } catch (error) {
     console.error('❌ Failed to register API routes:', error.message);
@@ -2738,6 +3010,49 @@ const broadcastAgentsUpdate = (agents) => {
       agentStatusWSConnections.delete(ws);
     }
   });
+};
+
+// PHASE 2: WebSocket broadcast for post updates
+const broadcastPostUpdate = (updateData) => {
+  const message = JSON.stringify({
+    type: 'post-update',
+    data: {
+      ...updateData,
+      timestamp: updateData.timestamp || new Date().toISOString()
+    }
+  });
+  
+  // Broadcast to all WebSocket connections
+  wsConnections.forEach((connections, instanceId) => {
+    connections.forEach(ws => {
+      if (ws.readyState === ws.OPEN) {
+        try {
+          ws.send(message);
+        } catch (error) {
+          console.error('Error broadcasting post update:', error);
+          connections.delete(ws);
+        }
+      } else {
+        connections.delete(ws);
+      }
+    });
+  });
+
+  // Also broadcast to agent status connections
+  agentStatusWSConnections.forEach(ws => {
+    if (ws.readyState === ws.OPEN) {
+      try {
+        ws.send(message);
+      } catch (error) {
+        console.error('Error broadcasting post update to agent status:', error);
+        agentStatusWSConnections.delete(ws);
+      }
+    } else {
+      agentStatusWSConnections.delete(ws);
+    }
+  });
+  
+  console.log(`📡 Broadcasted post update: ${updateData.type} for post ${updateData.postId}`);
 };
 
 // WebSocket connection handler

@@ -63,7 +63,7 @@ class SQLiteFallbackDatabase {
       )
     `);
 
-    // Create agent_posts table
+    // Create agent_posts table with likes system (stars removed)
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS agent_posts (
         id TEXT PRIMARY KEY,
@@ -72,10 +72,50 @@ class SQLiteFallbackDatabase {
         author_agent TEXT NOT NULL,
         published_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         metadata TEXT,
-        likes INTEGER DEFAULT 0,
-        comments INTEGER DEFAULT 0
+        likes INTEGER DEFAULT 0, -- restored likes system
+        comments INTEGER DEFAULT 0,
+        tags TEXT DEFAULT '[]' -- JSON array of tags
       )
     `);
+
+    // Create post_likes table for like system
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS post_likes (
+        id TEXT PRIMARY KEY,
+        post_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(post_id) REFERENCES agent_posts(id) ON DELETE CASCADE,
+        UNIQUE(post_id, user_id)
+      )
+    `);
+
+    // Create saved_posts table
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS saved_posts (
+        id TEXT PRIMARY KEY,
+        post_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(post_id) REFERENCES agent_posts(id),
+        UNIQUE(post_id, user_id)
+      )
+    `);
+
+    // Create link_preview_cache table
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS link_preview_cache (
+        url TEXT PRIMARY KEY,
+        title TEXT,
+        description TEXT,
+        image_url TEXT,
+        video_url TEXT,
+        type TEXT DEFAULT 'website',
+        cached_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Reported posts table removed - functionality no longer needed
 
     // Create activities table
     this.db.exec(`
@@ -280,10 +320,10 @@ class SQLiteFallbackDatabase {
       );
     }
 
-    // Insert seed posts
+    // Insert seed posts with likes system
     const insertPost = this.db.prepare(`
-      INSERT INTO agent_posts (id, title, content, author_agent, metadata, likes, comments)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO agent_posts (id, title, content, author_agent, metadata, likes, comments, tags)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const posts = [
@@ -300,8 +340,9 @@ class SQLiteFallbackDatabase {
           testsRun: 147,
           criticalIssues: 0
         }),
-        likes: 28,
-        comments: 7
+        likes: 32,
+        comments: 7,
+        tags: JSON.stringify(['production', 'validation', 'deployment', 'security', 'performance'])
       },
       {
         id: 'prod-post-2',
@@ -316,8 +357,9 @@ class SQLiteFallbackDatabase {
           dataIntegrity: 100,
           queryPerformance: 94.7
         }),
-        likes: 19,
-        comments: 4
+        likes: 24,
+        comments: 4,
+        tags: JSON.stringify(['database', 'fallback', 'sqlite', 'optimization', 'real-data'])
       },
       {
         id: 'prod-post-3',
@@ -332,8 +374,9 @@ class SQLiteFallbackDatabase {
           successRate: 97.2,
           mockServicesRemoved: 15
         }),
-        likes: 34,
-        comments: 9
+        likes: 41,
+        comments: 9,
+        tags: JSON.stringify(['api', 'real-data', 'endpoints', 'authentication', 'validation'])
       },
       {
         id: 'prod-post-4',
@@ -348,8 +391,9 @@ class SQLiteFallbackDatabase {
           optimizationsApplied: 67,
           responseTimeReduction: 45
         }),
-        likes: 25,
-        comments: 6
+        likes: 29,
+        comments: 6,
+        tags: JSON.stringify(['performance', 'optimization', 'metrics', 'caching', 'monitoring'])
       },
       {
         id: 'prod-post-5',
@@ -364,8 +408,9 @@ class SQLiteFallbackDatabase {
           threatsMitigated: 18,
           complianceScore: 99.1
         }),
-        likes: 41,
-        comments: 12
+        likes: 48,
+        comments: 12,
+        tags: JSON.stringify(['security', 'vulnerability-scan', 'compliance', 'monitoring', 'zero-threats'])
       },
       {
         id: 'prod-post-6',
@@ -380,8 +425,9 @@ class SQLiteFallbackDatabase {
           deploymentSuccess: 98.2,
           performanceGain: 28.5
         }),
-        likes: 32,
-        comments: 8
+        likes: 37,
+        comments: 8,
+        tags: JSON.stringify(['backend', 'architecture', 'microservices', 'containerization', 'scalability'])
       },
       {
         id: 'prod-post-7',
@@ -396,8 +442,9 @@ class SQLiteFallbackDatabase {
           latencyMs: 15,
           connectionSuccess: 99.8
         }),
-        likes: 37,
-        comments: 11
+        likes: 43,
+        comments: 11,
+        tags: JSON.stringify(['machine-learning', 'ai', 'deep-learning', 'models', 'predictions'])
       },
       {
         id: 'prod-post-8',
@@ -412,8 +459,9 @@ class SQLiteFallbackDatabase {
           dataIntegrity: 100,
           migrationSuccess: true
         }),
-        likes: 22,
-        comments: 5
+        likes: 26,
+        comments: 5,
+        tags: JSON.stringify(['cicd', 'deployment', 'automation', 'pipelines', 'devops'])
       }
     ];
 
@@ -425,7 +473,8 @@ class SQLiteFallbackDatabase {
         post.author_agent,
         post.metadata,
         post.likes,
-        post.comments
+        post.comments,
+        post.tags
       );
     }
 
@@ -642,6 +691,329 @@ class SQLiteFallbackDatabase {
       ...row,
       metadata: JSON.parse(row.metadata || '{}')
     }));
+  }
+
+  // Like System Methods
+  async likePost(postId, userId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      const likeId = `like-${postId}-${userId}`;
+      const insertLike = this.db.prepare(`
+        INSERT OR IGNORE INTO post_likes (id, post_id, user_id)
+        VALUES (?, ?, ?)
+      `);
+      
+      const result = insertLike.run(likeId, postId, userId);
+      
+      if (result.changes > 0) {
+        // Update post likes count
+        await this.updatePostLikes(postId);
+        return { id: likeId, post_id: postId, user_id: userId, liked: true };
+      }
+      
+      return { post_id: postId, user_id: userId, liked: false, message: 'Already liked' };
+    } catch (error) {
+      throw new Error(`Failed to like post: ${error.message}`);
+    }
+  }
+
+  async unlikePost(postId, userId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      const deleteLike = this.db.prepare(`
+        DELETE FROM post_likes 
+        WHERE post_id = ? AND user_id = ?
+      `);
+      
+      const result = deleteLike.run(postId, userId);
+      
+      if (result.changes > 0) {
+        // Update post likes count
+        await this.updatePostLikes(postId);
+        return { post_id: postId, user_id: userId, liked: false };
+      }
+      
+      return { post_id: postId, user_id: userId, liked: true, message: 'Not previously liked' };
+    } catch (error) {
+      throw new Error(`Failed to unlike post: ${error.message}`);
+    }
+  }
+
+  async updatePostLikes(postId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const count = this.db.prepare(`
+      SELECT COUNT(*) as likes
+      FROM post_likes 
+      WHERE post_id = ?
+    `).get(postId);
+
+    const updatePost = this.db.prepare(`
+      UPDATE agent_posts 
+      SET likes = ?
+      WHERE id = ?
+    `);
+
+    updatePost.run(count.likes || 0, postId);
+  }
+
+  async getPostLikes(postId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const post = this.db.prepare(`
+      SELECT likes 
+      FROM agent_posts 
+      WHERE id = ?
+    `).get(postId);
+
+    const likedUsers = this.db.prepare(`
+      SELECT user_id
+      FROM post_likes 
+      WHERE post_id = ?
+      ORDER BY created_at DESC
+    `).all(postId);
+
+    return {
+      likes: post?.likes || 0,
+      liked_by: likedUsers.map(u => u.user_id)
+    };
+  }
+
+  // Enhanced Post Filtering Methods
+  async getPostsByAgent(agentName, limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      WHERE author_agent = ?
+      ORDER BY published_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(agentName, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE author_agent = ?
+    `).get(agentName);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  async getPostsByLikes(minLikes = 1, limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      WHERE likes >= ?
+      ORDER BY likes DESC, published_at DESC
+      LIMIT ? OFFSET ?
+    `).all(minLikes, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE likes >= ?
+    `).get(minLikes);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  async getPostsByTags(tags, limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+    
+    const tagArray = Array.isArray(tags) ? tags : [tags];
+    const tagConditions = tagArray.map(() => 'tags LIKE ?').join(' OR ');
+    const tagParams = tagArray.map(tag => `%"${tag}"%`);
+
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      WHERE ${tagConditions}
+      ORDER BY published_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(...tagParams, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM agent_posts 
+      WHERE ${tagConditions}
+    `).get(...tagParams);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  // Save/Unsave Posts
+  async savePost(postId, userId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const saveId = `save-${postId}-${userId}`;
+    const insertSave = this.db.prepare(`
+      INSERT OR IGNORE INTO saved_posts (id, post_id, user_id)
+      VALUES (?, ?, ?)
+    `);
+
+    insertSave.run(saveId, postId, userId);
+    return { id: saveId, post_id: postId, user_id: userId };
+  }
+
+  async unsavePost(postId, userId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const deleteSave = this.db.prepare(`
+      DELETE FROM saved_posts 
+      WHERE post_id = ? AND user_id = ?
+    `);
+
+    return deleteSave.run(postId, userId).changes > 0;
+  }
+
+  async getSavedPosts(userId, limit = 20, offset = 0) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const posts = this.db.prepare(`
+      SELECT ap.* FROM agent_posts ap
+      JOIN saved_posts sp ON ap.id = sp.post_id
+      WHERE sp.user_id = ?
+      ORDER BY sp.created_at DESC
+      LIMIT ? OFFSET ?
+    `).all(userId, limit, offset);
+
+    const totalResult = this.db.prepare(`
+      SELECT COUNT(*) as count FROM saved_posts 
+      WHERE user_id = ?
+    `).get(userId);
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
+  }
+
+  // Delete Post
+  async deletePost(postId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    try {
+      // Check if post exists
+      const post = this.db.prepare('SELECT * FROM agent_posts WHERE id = ?').get(postId);
+      if (!post) {
+        throw new Error('Post not found');
+      }
+
+      // Delete related data first (cascading deletes)
+      this.db.prepare('DELETE FROM post_likes WHERE post_id = ?').run(postId);
+      this.db.prepare('DELETE FROM saved_posts WHERE post_id = ?').run(postId);
+      
+      // Delete the post
+      const result = this.db.prepare('DELETE FROM agent_posts WHERE id = ?').run(postId);
+      
+      return {
+        success: result.changes > 0,
+        post_id: postId,
+        deleted_at: new Date().toISOString()
+      };
+    } catch (error) {
+      throw new Error(`Failed to delete post: ${error.message}`);
+    }
+  }
+
+  // Link Preview Cache
+  async cacheLinkPreview(url, preview) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const insertPreview = this.db.prepare(`
+      INSERT OR REPLACE INTO link_preview_cache 
+      (url, title, description, image_url, video_url, type)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `);
+
+    insertPreview.run(
+      url,
+      preview.title || null,
+      preview.description || null,
+      preview.image || null,
+      preview.video || null,
+      preview.type || 'website'
+    );
+
+    return preview;
+  }
+
+  async getCachedLinkPreview(url) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const preview = this.db.prepare(`
+      SELECT * FROM link_preview_cache 
+      WHERE url = ? AND 
+      datetime(cached_at) > datetime('now', '-24 hours')
+    `).get(url);
+
+    if (preview) {
+      return {
+        title: preview.title,
+        description: preview.description,
+        image: preview.image_url,
+        video: preview.video_url,
+        type: preview.type
+      };
+    }
+
+    return null;
+  }
+
+  // Helper method to format post rows
+  // Helper method to check if a post is saved by a user
+  isPostSavedByUser(postId, userId = 'anonymous') {
+    if (!this.db) return false;
+    
+    const saved = this.db.prepare(`
+      SELECT 1 FROM saved_posts 
+      WHERE post_id = ? AND user_id = ?
+      LIMIT 1
+    `).get(postId, userId);
+    
+    return !!saved;
+  }
+
+  formatPostRow(row, userId = 'anonymous') {
+    return {
+      ...row,
+      authorAgent: row.author_agent,
+      publishedAt: row.published_at,
+      metadata: JSON.parse(row.metadata || '{}'),
+      tags: JSON.parse(row.tags || '[]'),
+      engagement: {
+        isSaved: this.isPostSavedByUser(row.id, userId),
+        likes: row.likes || 0,
+        comments: row.comments || 0,
+        shares: row.shares || 0
+      }
+    };
+  }
+
+  // Update getAgentPosts to include new fields
+  async getAgentPosts(limit = 20, offset = 0, userId = 'anonymous') {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const posts = this.db.prepare(`
+      SELECT * FROM agent_posts 
+      ORDER BY published_at DESC 
+      LIMIT ? OFFSET ?
+    `).all(limit, offset);
+
+    const totalResult = this.db.prepare('SELECT COUNT(*) as count FROM agent_posts').get();
+
+    return {
+      posts: posts.map(post => this.formatPostRow(post, userId)),
+      total: totalResult.count
+    };
   }
 
   close() {

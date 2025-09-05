@@ -74,12 +74,18 @@ class ApiService {
     }
     
     const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
       ...options,
     };
+
+    // Only set Content-Type header for requests with body content
+    if (options.body || (!options.method || ['POST', 'PUT', 'PATCH'].includes(options.method))) {
+      config.headers = {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      };
+    } else if (options.headers) {
+      config.headers = options.headers;
+    }
 
     try {
       const response = await fetch(url, config);
@@ -267,6 +273,121 @@ class ApiService {
       method: 'PUT',
       body: JSON.stringify({ action }),
     });
+  }
+
+
+  // Save/unsave posts
+  async savePost(postId: string, save: boolean): Promise<ApiResponse<void>> {
+    this.clearCache('/agent-posts');
+    if (save) {
+      // Save post - use POST
+      return this.request<ApiResponse<void>>(`/agent-posts/${postId}/save`, {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+    } else {
+      // Unsave post - use DELETE with query parameter (no body, no Content-Type header)
+      return this.request<ApiResponse<void>>(`/agent-posts/${postId}/save?user_id=anonymous`, {
+        method: 'DELETE'
+      });
+    }
+  }
+
+  // Report posts - REMOVED per user feedback
+
+  // Delete posts
+  async deletePost(postId: string): Promise<ApiResponse<void>> {
+    this.clearCache('/agent-posts');
+    return this.request<ApiResponse<void>>(`/agent-posts/${postId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Get filtered posts
+  async getFilteredPosts(
+    limit = 50, 
+    offset = 0, 
+    filter: {
+      type: 'all' | 'agent' | 'hashtag' | 'saved' | 'myposts';
+      value?: string;
+      agent?: string;
+      hashtag?: string;
+    }
+  ): Promise<any> {
+    // Use the main agent-posts endpoint with filter parameter (like backend expects)
+    const params = new URLSearchParams({
+      limit: limit.toString(),
+      offset: offset.toString(),
+      filter: 'all', // default
+      search: '',
+      sortBy: 'published_at',
+      sortOrder: 'DESC'
+    });
+    
+    // Map frontend filter types to backend filter types
+    switch (filter.type) {
+      case 'agent':
+        if (filter.agent) {
+          params.set('filter', 'by-agent');
+          params.set('agent', filter.agent);
+        }
+        break;
+      case 'hashtag':
+        if (filter.hashtag) {
+          params.set('filter', 'by-tags');
+          params.set('tags', filter.hashtag);
+        }
+        break;
+      case 'saved':
+        params.set('filter', 'saved');
+        params.set('user_id', 'anonymous'); // Use consistent anonymous user ID
+        break;
+      case 'myposts':
+        params.set('filter', 'my-posts');
+        break;
+      default:
+        params.set('filter', 'all');
+    }
+    
+    const cacheKey = `/agent-posts?${params}`;
+    const cached = this.getCachedData<any>(cacheKey);
+    if (cached) return cached;
+    
+    try {
+      const response = await this.request<any>(`/agent-posts?${params}`, {}, false);
+      this.setCachedData(cacheKey, response, 5000); // 5 second cache for filtered results
+      return response;
+    } catch (error) {
+      console.error('API Error in getFilteredPosts:', error);
+      return {
+        success: false,
+        data: [],
+        total: 0,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  // Get available agents and hashtags for filtering
+  async getFilterData(): Promise<{
+    agents: string[];
+    hashtags: string[];
+  }> {
+    const cacheKey = '/filter-data';
+    const cached = this.getCachedData<{ agents: string[]; hashtags: string[] }>(cacheKey);
+    if (cached) return cached;
+    
+    try {
+      const response = await this.request<{ agents: string[]; hashtags: string[] }>('/filter-data', {}, false);
+      this.setCachedData(cacheKey, response, 30000); // 30 second cache
+      return response;
+    } catch (error) {
+      console.error('API Error in getFilterData:', error);
+      return {
+        agents: [],
+        hashtags: []
+      };
+    }
   }
 
   async searchPosts(query: string, limit = 20, offset = 0): Promise<ApiResponse<SearchResult<AgentPost>>> {

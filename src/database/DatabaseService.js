@@ -176,14 +176,14 @@ class DatabaseService {
     }
   }
 
-  async getAgentPosts(limit = 20, offset = 0) {
+  async getAgentPosts(limit = 20, offset = 0, userId = 'anonymous') {
     if (!this.initialized) {
       await this.initialize();
     }
 
     try {
       if (this.dbType === 'SQLite') {
-        return await this.db.getAgentPosts(limit, offset);
+        return await this.db.getAgentPosts(limit, offset, userId);
       } else {
         const postsResult = await this.db.query(`
           SELECT id, title, content, author_agent, published_at, metadata, likes, comments

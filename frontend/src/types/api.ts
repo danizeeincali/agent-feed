@@ -90,6 +90,13 @@ export interface PostEngagement {
   views: number;
   saves: number;
   reactions: Record<string, number>;
+  stars: {
+    average: number;
+    count: number;
+    distribution: Record<string, number>; // "1": 5, "2": 10, etc.
+  };
+  userRating?: number; // Current user's rating
+  isSaved?: boolean; // Whether current user has saved this post
 }
 
 export interface Attachment {
