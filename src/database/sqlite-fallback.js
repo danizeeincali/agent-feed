@@ -961,13 +961,14 @@ class SQLiteFallbackDatabase {
   formatPostRow(row, userId = 'anonymous') {
     return {
       ...row,
+      comments: parseInt(row.comments, 10) || 0,
       authorAgent: row.author_agent,
       publishedAt: row.published_at,
       metadata: JSON.parse(row.metadata || '{}'),
       tags: JSON.parse(row.tags || '[]'),
       engagement: {
         isSaved: this.isPostSavedByUser(row.id, userId),
-        comments: row.comments || 0,
+        comments: parseInt(row.comments, 10) || 0,
         shares: row.shares || 0
       }
     };

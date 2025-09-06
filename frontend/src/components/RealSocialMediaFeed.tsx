@@ -827,6 +827,13 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         {post.tags.map((tag, index) => (
                           <span
                             key={index}
+                            onClick={() => {
+                              setCurrentFilter({ 
+                                type: 'hashtag',
+                                hashtag: tag
+                              });
+                              setPage(0);
+                            }}
                             className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 text-sm rounded-full font-medium hover:from-blue-200 hover:to-purple-200 transition-colors cursor-pointer"
                           >
                             #{tag}
@@ -845,7 +852,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-sm font-medium text-gray-700">
-                        Comments ({post.engagement?.comments || 0})
+                        Comments ({Math.floor(parseFloat(post.engagement?.comments) || 0)})
                       </h4>
                       <button
                         onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: !prev[post.id] }))}
