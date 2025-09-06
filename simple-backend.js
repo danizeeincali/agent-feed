@@ -29,14 +29,15 @@ const toolCallStatusManager = { trackCall: () => {}, updateStatus: () => {} };
 
 const app = express();
 const server = http.createServer(app);
-const PORT = 3000;
+const PORT = process.argv.includes('--port') ? parseInt(process.argv[process.argv.indexOf('--port') + 1]) : 3000;
 
 // Store server references for health checks
 let wsServer = null;
 
 // Import unified database service with PostgreSQL + SQLite fallback
 import { databaseService } from './src/database/DatabaseService.js';
-import { linkPreviewService } from './src/services/LinkPreviewService.js';
+import { enhancedLinkPreviewService } from './src/services/EnhancedLinkPreviewService.js';
+import threadedCommentsRouter from './src/routes/threadedComments.js';
 
 // Initialize real-time broadcasting for production data
 const initializeAgentWebSocketEvents = () => {
@@ -1458,10 +1459,11 @@ const setupApiRoutes = () => {
       }
     });
 
-    // PHASE 2: Link Preview API
-    app.post('/api/v1/link-preview', async (req, res) => {
+    // PHASE 2: Link Preview API - Support both GET and POST methods
+    const handleLinkPreview = async (req, res) => {
       try {
-        const { url } = req.body;
+        // Support both query param (GET) and body (POST)
+        const url = req.query.url || req.body?.url;
 
         if (!url) {
           return res.status(400).json({
@@ -1470,21 +1472,26 @@ const setupApiRoutes = () => {
           });
         }
 
-        const preview = await linkPreviewService.getLinkPreview(url);
+        console.log('🔗 Processing link preview for:', url);
+        const preview = await enhancedLinkPreviewService.getLinkPreview(url);
 
         res.json({
           success: true,
           data: preview
         });
       } catch (error) {
-        console.error('Error generating link preview:', error);
+        console.error('❌ Link preview error:', error);
         res.status(500).json({
           success: false,
           error: 'Failed to generate link preview',
           message: error.message
         });
       }
-    });
+    };
+
+    // Support both GET and POST for link preview
+    app.get('/api/v1/link-preview', handleLinkPreview);
+    app.post('/api/v1/link-preview', handleLinkPreview);
 
     app.get('/api/v1/health', async (req, res) => {
       try {
@@ -1661,6 +1668,244 @@ const setupApiRoutes = () => {
         });
       }
     });
+
+    // ==================== THREADED COMMENTS API ENDPOINTS ====================
+
+    // Get threaded comments for a post (full tree structure)
+    app.get('/api/v1/agent-posts/:postId/comments/thread', async (req, res) => {
+      try {
+        const { postId } = req.params;
+        
+        console.log(`📝 Getting threaded comments for post: ${postId}`);
+        
+        // Get threaded comments from database
+        const threadedComments = await databaseService.getThreadedComments(postId);
+        
+        res.json({
+          success: true,
+          data: threadedComments,
+          total: threadedComments.length,
+          postId,
+          type: 'threaded'
+        });
+      } catch (error) {
+        console.error('Error getting threaded comments:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to get threaded comments',
+          message: error.message
+        });
+      }
+    });
+
+    // Legacy comments endpoint (flat structure for backward compatibility)
+    app.get('/api/v1/agent-posts/:postId/comments', async (req, res) => {
+      try {
+        const { postId } = req.params;
+        
+        console.log(`📝 Getting flat comments for post: ${postId}`);
+        
+        // Get threaded comments and flatten them for backward compatibility
+        const threadedComments = await databaseService.getThreadedComments(postId);
+        
+        // Flatten the threaded structure for legacy API compatibility
+        function flattenComments(comments, depth = 0) {
+          let flattened = [];
+          for (const comment of comments) {
+            flattened.push({
+              ...comment,
+              depth,
+              replies: undefined, // Remove replies for flat structure
+              isReply: depth > 0
+            });
+            if (comment.replies && comment.replies.length > 0) {
+              flattened = flattened.concat(flattenComments(comment.replies, depth + 1));
+            }
+          }
+          return flattened;
+        }
+        
+        const flatComments = flattenComments(threadedComments);
+        
+        res.json({
+          success: true,
+          data: flatComments,
+          total: flatComments.length,
+          postId,
+          type: 'flat'
+        });
+      } catch (error) {
+        console.error('Error getting comments:', error);
+        
+        // Fallback to template comments if database fails
+        const fallbackComments = [
+          {
+            id: `comment-${postId}-1`,
+            postId,
+            author: 'TechReviewer',
+            content: 'Excellent analysis! This provides valuable insights into the implementation.',
+            createdAt: new Date(Date.now() - (2 * 60 * 60 * 1000)).toISOString(),
+            avatar: 'T',
+            depth: 0
+          },
+          {
+            id: `comment-${postId}-2`,
+            postId,
+            author: 'SystemValidator',
+            content: 'Great work on the validation process. The metrics look solid.',
+            createdAt: new Date(Date.now() - (3 * 60 * 60 * 1000)).toISOString(),
+            avatar: 'S',
+            depth: 0
+          }
+        ];
+        
+        res.json({
+          success: true,
+          data: fallbackComments,
+          total: fallbackComments.length,
+          postId,
+          type: 'fallback',
+          error: 'Database unavailable, using fallback comments'
+        });
+      }
+    });
+
+    // Create a new comment or reply
+    app.post('/api/v1/comments/:commentId/reply', async (req, res) => {
+      try {
+        const { commentId } = req.params;
+        const { content, authorAgent, postId } = req.body;
+        
+        if (!content || !authorAgent || !postId) {
+          return res.status(400).json({
+            success: false,
+            error: 'Missing required fields: content, authorAgent, postId'
+          });
+        }
+        
+        console.log(`💬 Creating reply to comment ${commentId} by ${authorAgent}`);
+        
+        // Create the reply comment
+        const newComment = await databaseService.createComment(postId, content, authorAgent, commentId);
+        
+        res.status(201).json({
+          success: true,
+          data: newComment,
+          message: 'Reply created successfully'
+        });
+      } catch (error) {
+        console.error('Error creating reply:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to create reply',
+          message: error.message
+        });
+      }
+    });
+
+    // Create a new root comment
+    app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
+      try {
+        const { postId } = req.params;
+        const { content, authorAgent } = req.body;
+        
+        if (!content || !authorAgent) {
+          return res.status(400).json({
+            success: false,
+            error: 'Missing required fields: content, authorAgent'
+          });
+        }
+        
+        console.log(`💬 Creating root comment on post ${postId} by ${authorAgent}`);
+        
+        // Create the root comment (no parentId)
+        const newComment = await databaseService.createComment(postId, content, authorAgent, null);
+        
+        res.status(201).json({
+          success: true,
+          data: newComment,
+          message: 'Comment created successfully'
+        });
+      } catch (error) {
+        console.error('Error creating comment:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to create comment',
+          message: error.message
+        });
+      }
+    });
+
+    // Get direct replies to a specific comment (paginated)
+    app.get('/api/v1/comments/:commentId/replies', async (req, res) => {
+      try {
+        const { commentId } = req.params;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = parseInt(req.query.offset) || 0;
+        
+        console.log(`🔗 Getting replies for comment ${commentId} (limit: ${limit}, offset: ${offset})`);
+        
+        const result = await databaseService.getCommentReplies(commentId, limit, offset);
+        
+        res.json({
+          success: true,
+          data: result.replies,
+          total: result.total,
+          commentId,
+          pagination: {
+            limit,
+            offset,
+            hasMore: offset + limit < result.total
+          }
+        });
+      } catch (error) {
+        console.error('Error getting comment replies:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to get comment replies',
+          message: error.message
+        });
+      }
+    });
+
+    // Generate an agent response to a comment (for testing/demo purposes)
+    app.post('/api/v1/comments/:commentId/generate-response', async (req, res) => {
+      try {
+        const { commentId } = req.params;
+        
+        console.log(`🤖 Generating agent response for comment ${commentId}`);
+        
+        // Get the original comment to extract context
+        const parentComment = await databaseService.getCommentById(commentId);
+        if (!parentComment) {
+          return res.status(404).json({
+            success: false,
+            error: 'Parent comment not found'
+          });
+        }
+        
+        // Generate an agent response
+        const responseComment = await databaseService.generateAgentResponse(
+          parentComment.postId,
+          commentId,
+          parentComment.author,
+          parentComment.content
+        );
+        
+        res.status(201).json({
+          success: true,
+          data: responseComment,
+          message: 'Agent response generated successfully'
+        });
+      } catch (error) {
+        console.error('Error generating agent response:', error);
+        res.status(500).json({
+          success: false,
+          error: 'Failed to generate agent response',
+          message: error.message
+        });
+      }
+    });
     
     console.log('✅ Phase 2 Interactive API routes registered:');
     console.log('   GET  /api/v1/agent-posts (with filtering)');
@@ -1678,6 +1923,9 @@ const setupApiRoutes = () => {
     console.log('⚠️ Continuing without API routes - Claude terminal still available');
   }
 };
+
+// Threading API routes
+app.use('/api/v1', threadedCommentsRouter);
 
 // Health check endpoint with database status
 app.get('/health', async (req, res) => {

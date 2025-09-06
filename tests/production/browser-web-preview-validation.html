@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Preview Validation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .validation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .test-section.pass { border-color: #4CAF50; background-color: #f8fff8; }
+        .test-section.fail { border-color: #f44336; background-color: #fff8f8; }
+        .test-section.warning { border-color: #ff9800; background-color: #fff8f0; }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .test-description {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        .test-results {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .iframe-container {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .instructions {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .checklist {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .checklist li {
+            margin: 8px 0;
+            padding: 5px;
+            border-left: 4px solid #ddd;
+            padding-left: 15px;
+        }
+        .checklist li.checking {
+            border-color: #ff9800;
+            background-color: #fff8f0;
+        }
+        .checklist li.pass {
+            border-color: #4CAF50;
+            background-color: #f8fff8;
+        }
+        .checklist li.fail {
+            border-color: #f44336;
+            background-color: #fff8f8;
+        }
+        .screenshot-area {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px dashed #ccc;
+            text-align: center;
+            background-color: #fafafa;
+        }
+        .test-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status-pass { background-color: #4CAF50; color: white; }
+        .status-fail { background-color: #f44336; color: white; }
+        .status-warning { background-color: #ff9800; color: white; }
+        .status-testing { background-color: #2196F3; color: white; }
+    </style>
+</head>
+<body>
+    <div class="validation-container">
+        <h1>🚀 Web Preview Functionality Production Validation</h1>
+        <p><strong>Test Date:</strong> <span id="test-date"></span></p>
+        <p><strong>Application URL:</strong> <a href="http://localhost:5173" target="_blank">http://localhost:5173</a></p>
+        
+        <div class="instructions">
+            <h3>📋 Manual Validation Instructions</h3>
+            <p>This test validates the complete web preview functionality implementation. Follow each step carefully and document results.</p>
+            <ol>
+                <li>Navigate to the Agent Feed application in the embedded iframe below</li>
+                <li>Look for existing posts with URLs (YouTube, articles, GitHub, images)</li>
+                <li>Test each feature listed in the validation checklist</li>
+                <li>Document screenshots and findings for the final report</li>
+            </ol>
+        </div>
+
+        <!-- Embedded Application -->
+        <div class="test-section" id="app-display">
+            <div class="test-title">🖥️ Agent Feed Application Display</div>
+            <div class="test-description">Interactive application iframe for hands-on testing</div>
+            <div class="iframe-container">
+                <iframe src="http://localhost:5173" title="Agent Feed Application"></iframe>
+            </div>
+        </div>
+
+        <!-- Validation Checklist -->
+        <div class="test-section" id="validation-checklist">
+            <div class="test-title">✅ Comprehensive Validation Checklist</div>
+            <div class="test-description">Check off each item as you validate the functionality</div>
+            
+            <h4>1. YouTube Video Preview Testing</h4>
+            <ul class="checklist" id="youtube-tests">
+                <li id="youtube-thumbnail" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'youtube-thumbnail')">
+                    <strong>Thumbnail Display:</strong> YouTube videos show proper thumbnails in collapsed posts
+                </li>
+                <li id="youtube-play" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'youtube-play')">
+                    <strong>Click-to-Play:</strong> Clicking thumbnail expands to show embedded video player
+                </li>
+                <li id="youtube-controls" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'youtube-controls')">
+                    <strong>Video Controls:</strong> Embedded player has working play/pause, volume, fullscreen
+                </li>
+                <li id="youtube-responsive" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'youtube-responsive')">
+                    <strong>Responsive Design:</strong> Video player adapts to different screen sizes
+                </li>
+                <li id="youtube-metadata" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'youtube-metadata')">
+                    <strong>Video Metadata:</strong> Shows title, YouTube branding, open in YouTube link
+                </li>
+            </ul>
+
+            <h4>2. Article Preview Testing</h4>
+            <ul class="checklist" id="article-tests">
+                <li id="article-preview" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'article-preview')">
+                    <strong>Rich Previews:</strong> Articles show title, description, image, and metadata
+                </li>
+                <li id="article-images" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'article-images')">
+                    <strong>Image Extraction:</strong> Article images are properly extracted and displayed
+                </li>
+                <li id="article-metadata" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'article-metadata')">
+                    <strong>Metadata Display:</strong> Shows site name, author, reading time, favicon
+                </li>
+                <li id="article-click" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'article-click')">
+                    <strong>Click Behavior:</strong> Clicking preview opens article in new tab
+                </li>
+            </ul>
+
+            <h4>3. Feed Display Testing</h4>
+            <ul class="checklist" id="feed-tests">
+                <li id="feed-thumbnails" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'feed-thumbnails')">
+                    <strong>Thumbnail Mode:</strong> Collapsed posts show thumbnails only
+                </li>
+                <li id="feed-expansion" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'feed-expansion')">
+                    <strong>Expand/Collapse:</strong> Posts can be expanded to show full previews
+                </li>
+                <li id="feed-multiple-urls" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'feed-multiple-urls')">
+                    <strong>Multiple URLs:</strong> Posts with multiple URLs show all previews
+                </li>
+                <li id="feed-loading" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'feed-loading')">
+                    <strong>Loading States:</strong> Preview loading shows appropriate spinners/placeholders
+                </li>
+            </ul>
+
+            <h4>4. Responsive Design Testing</h4>
+            <ul class="checklist" id="responsive-tests">
+                <li id="responsive-mobile" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'responsive-mobile')">
+                    <strong>Mobile View:</strong> Previews work correctly on mobile screens (< 768px)
+                </li>
+                <li id="responsive-tablet" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'responsive-tablet')">
+                    <strong>Tablet View:</strong> Previews adapt properly to tablet screens (768px-1024px)
+                </li>
+                <li id="responsive-desktop" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'responsive-desktop')">
+                    <strong>Desktop View:</strong> Full preview functionality on desktop screens (> 1024px)
+                </li>
+                <li id="responsive-images" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'responsive-images')">
+                    <strong>Image Scaling:</strong> Preview images scale properly across screen sizes
+                </li>
+            </ul>
+
+            <h4>5. Accessibility Testing</h4>
+            <ul class="checklist" id="accessibility-tests">
+                <li id="a11y-aria" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'a11y-aria')">
+                    <strong>ARIA Labels:</strong> Preview elements have proper ARIA labels and roles
+                </li>
+                <li id="a11y-keyboard" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'a11y-keyboard')">
+                    <strong>Keyboard Navigation:</strong> All preview controls accessible via keyboard
+                </li>
+                <li id="a11y-focus" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'a11y-focus')">
+                    <strong>Focus Management:</strong> Focus indicators visible and logical
+                </li>
+                <li id="a11y-alt" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'a11y-alt')">
+                    <strong>Alt Text:</strong> Images have descriptive alt text
+                </li>
+            </ul>
+
+            <h4>6. Performance Testing</h4>
+            <ul class="checklist" id="performance-tests">
+                <li id="perf-loading" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'perf-loading')">
+                    <strong>Feed Loading:</strong> Feed loads in < 2 seconds with preview images
+                </li>
+                <li id="perf-previews" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'perf-previews')">
+                    <strong>Preview Generation:</strong> Individual previews load in < 5 seconds
+                </li>
+                <li id="perf-memory" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'perf-memory')">
+                    <strong>Memory Usage:</strong> No significant memory leaks with multiple previews
+                </li>
+                <li id="perf-caching" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'perf-caching')">
+                    <strong>Caching:</strong> Previously loaded previews use cached data
+                </li>
+            </ul>
+
+            <h4>7. Error Handling Testing</h4>
+            <ul class="checklist" id="error-tests">
+                <li id="error-invalid-urls" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'error-invalid-urls')">
+                    <strong>Invalid URLs:</strong> Graceful fallback for broken/invalid URLs
+                </li>
+                <li id="error-failed-images" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'error-failed-images')">
+                    <strong>Failed Images:</strong> Placeholder/fallback for failed image loads
+                </li>
+                <li id="error-network" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'error-network')">
+                    <strong>Network Errors:</strong> Appropriate error messages for network failures
+                </li>
+                <li id="error-recovery" class="checking">
+                    <input type="checkbox" onchange="updateTestStatus(this, 'error-recovery')">
+                    <strong>Error Recovery:</strong> Users can retry failed preview loads
+                </li>
+            </ul>
+        </div>
+
+        <!-- Screenshots Section -->
+        <div class="test-section" id="screenshots">
+            <div class="test-title">📸 Test Evidence Screenshots</div>
+            <div class="test-description">Document key functionality with screenshots</div>
+            
+            <div class="screenshot-area" id="youtube-screenshot">
+                <h4>YouTube Video Preview</h4>
+                <p>Screenshot showing YouTube video with thumbnail and embedded player</p>
+                <button onclick="captureScreenshot('youtube')">Capture YouTube Preview</button>
+            </div>
+            
+            <div class="screenshot-area" id="article-screenshot">
+                <h4>Article Preview</h4>
+                <p>Screenshot showing article preview with rich metadata</p>
+                <button onclick="captureScreenshot('article')">Capture Article Preview</button>
+            </div>
+            
+            <div class="screenshot-area" id="mobile-screenshot">
+                <h4>Mobile Responsive View</h4>
+                <p>Screenshot showing mobile responsive behavior</p>
+                <button onclick="captureScreenshot('mobile')">Capture Mobile View</button>
+            </div>
+            
+            <div class="screenshot-area" id="error-screenshot">
+                <h4>Error Handling</h4>
+                <p>Screenshot showing error handling for failed previews</p>
+                <button onclick="captureScreenshot('error')">Capture Error State</button>
+            </div>
+        </div>
+
+        <!-- Test Results Summary -->
+        <div class="test-section" id="results-summary">
+            <div class="test-title">📊 Validation Results Summary</div>
+            <div class="test-description">Live summary of test completion status</div>
+            <div class="test-results">
+                <div id="summary-stats">
+                    <p><strong>Total Tests:</strong> <span id="total-tests">28</span></p>
+                    <p><strong>Completed:</strong> <span id="completed-tests">0</span></p>
+                    <p><strong>Passed:</strong> <span id="passed-tests">0</span></p>
+                    <p><strong>Failed:</strong> <span id="failed-tests">0</span></p>
+                    <p><strong>Success Rate:</strong> <span id="success-rate">0%</span></p>
+                </div>
+                <div id="detailed-results" style="margin-top: 15px;">
+                    <h4>Detailed Results:</h4>
+                    <ul id="results-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="test-section" id="actions">
+            <div class="test-title">🎯 Test Actions</div>
+            <button onclick="generateReport()" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; margin: 5px;">
+                Generate Final Report
+            </button>
+            <button onclick="resetTests()" style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 4px; margin: 5px;">
+                Reset All Tests
+            </button>
+            <button onclick="exportResults()" style="background-color: #2196F3; color: white; padding: 10px 20px; border: none; border-radius: 4px; margin: 5px;">
+                Export Results
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize test date
+        document.getElementById('test-date').textContent = new Date().toLocaleString();
+
+        // Test result tracking
+        let testResults = {};
+        let testCategories = {
+            'youtube-tests': 'YouTube Video Preview',
+            'article-tests': 'Article Preview', 
+            'feed-tests': 'Feed Display',
+            'responsive-tests': 'Responsive Design',
+            'accessibility-tests': 'Accessibility',
+            'performance-tests': 'Performance',
+            'error-tests': 'Error Handling'
+        };
+
+        function updateTestStatus(checkbox, testId) {
+            const listItem = document.getElementById(testId);
+            const isChecked = checkbox.checked;
+            
+            // Update visual status
+            listItem.className = isChecked ? 'pass' : 'checking';
+            
+            // Store result
+            testResults[testId] = {
+                passed: isChecked,
+                timestamp: new Date().toISOString(),
+                description: listItem.textContent.trim()
+            };
+            
+            // Update summary
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const totalTests = Object.keys(testResults).length;
+            const completedTests = Object.values(testResults).filter(r => r.passed !== undefined).length;
+            const passedTests = Object.values(testResults).filter(r => r.passed === true).length;
+            const failedTests = Object.values(testResults).filter(r => r.passed === false).length;
+            const successRate = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
+            
+            document.getElementById('completed-tests').textContent = completedTests;
+            document.getElementById('passed-tests').textContent = passedTests;
+            document.getElementById('failed-tests').textContent = failedTests;
+            document.getElementById('success-rate').textContent = successRate + '%';
+        }
+
+        function captureScreenshot(type) {
+            // In a real implementation, this would capture screenshots
+            // For now, just log the action
+            console.log(`Screenshot captured for: ${type}`);
+            alert(`Screenshot captured for: ${type}\n\nIn production, this would save a screenshot of the current view for documentation.`);
+        }
+
+        function generateReport() {
+            const report = {
+                testInfo: {
+                    title: 'Web Preview Functionality Production Validation',
+                    timestamp: new Date().toISOString(),
+                    tester: prompt('Enter tester name:') || 'Anonymous',
+                    applicationUrl: 'http://localhost:5173',
+                    testVersion: '1.0.0'
+                },
+                summary: {
+                    totalTests: 28,
+                    completedTests: Object.values(testResults).filter(r => r.passed !== undefined).length,
+                    passedTests: Object.values(testResults).filter(r => r.passed === true).length,
+                    failedTests: Object.values(testResults).filter(r => r.passed === false).length,
+                    successRate: Object.keys(testResults).length > 0 ? 
+                        Math.round((Object.values(testResults).filter(r => r.passed === true).length / Object.keys(testResults).length) * 100) : 0
+                },
+                detailedResults: testResults,
+                categories: testCategories,
+                recommendations: generateRecommendations()
+            };
+
+            // Display report
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(`
+                <html>
+                    <head><title>Web Preview Validation Report</title></head>
+                    <body style="font-family: Arial, sans-serif; padding: 20px;">
+                        <h1>Web Preview Functionality Validation Report</h1>
+                        <pre>${JSON.stringify(report, null, 2)}</pre>
+                    </body>
+                </html>
+            `);
+        }
+
+        function generateRecommendations() {
+            const failedTests = Object.entries(testResults)
+                .filter(([id, result]) => result.passed === false)
+                .map(([id, result]) => id);
+            
+            if (failedTests.length === 0) {
+                return ['All tests passed! Web preview functionality is working correctly.'];
+            }
+            
+            const recommendations = [];
+            
+            if (failedTests.some(id => id.includes('youtube'))) {
+                recommendations.push('Review YouTube embedding implementation - check API keys and embed parameters');
+            }
+            
+            if (failedTests.some(id => id.includes('article'))) {
+                recommendations.push('Improve article preview metadata extraction - verify Open Graph parsing');
+            }
+            
+            if (failedTests.some(id => id.includes('responsive'))) {
+                recommendations.push('Fix responsive design issues - test CSS media queries and breakpoints');
+            }
+            
+            if (failedTests.some(id => id.includes('a11y'))) {
+                recommendations.push('Address accessibility concerns - add missing ARIA labels and keyboard support');
+            }
+            
+            if (failedTests.some(id => id.includes('perf'))) {
+                recommendations.push('Optimize performance - implement lazy loading and caching strategies');
+            }
+            
+            if (failedTests.some(id => id.includes('error'))) {
+                recommendations.push('Improve error handling - add better fallbacks and user feedback');
+            }
+            
+            return recommendations;
+        }
+
+        function resetTests() {
+            if (confirm('Are you sure you want to reset all test results?')) {
+                testResults = {};
+                document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => cb.checked = false);
+                document.querySelectorAll('.checklist li').forEach(li => li.className = 'checking');
+                updateSummary();
+            }
+        }
+
+        function exportResults() {
+            const data = JSON.stringify(testResults, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `web-preview-validation-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize summary on page load
+        updateSummary();
+
+        // Auto-refresh iframe periodically to ensure connectivity
+        setInterval(() => {
+            const iframe = document.querySelector('iframe');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.location.reload();
+                } catch (e) {
+                    console.log('Iframe refresh attempted');
+                }
+            }
+        }, 30000); // Refresh every 30 seconds
+    </script>
+</body>
+</html>

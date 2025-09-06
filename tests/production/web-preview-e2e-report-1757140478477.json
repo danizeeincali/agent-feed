@@ -1,0 +1,55 @@
+{
+  "testStartTime": "2025-09-06T06:34:34.079Z",
+  "tests": [
+    {
+      "name": "error_handling_console",
+      "passed": false,
+      "details": {
+        "errorCount": 20,
+        "errors": [
+          "WebSocket connection to 'ws://localhost:443/?token=2WZZQjOHYNID' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "❌ Network connection failed:",
+          "- URL: http://localhost:5173/health"
+        ]
+      },
+      "timestamp": "2025-09-06T06:34:38.229Z"
+    }
+  ],
+  "issues": [
+    {
+      "type": "console_errors_found",
+      "description": "Console errors detected",
+      "details": {
+        "errors": [
+          "WebSocket connection to 'ws://localhost:443/?token=2WZZQjOHYNID' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "❌ Network connection failed:",
+          "- URL: http://localhost:5173/health",
+          "- Error: undefined",
+          "WebSocket connection to 'ws://localhost:3001/ws' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "❌ WebSocket error: Event",
+          "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+          "API request failed: /agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts?t=1757134867389:61:30)\n    at ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts?t=1757134867389:173:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx?t=1757138824313:50:37\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx?t=1757138824313:79:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=6f9376cd:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=6f9376cd:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=6f9376cd:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=6f9376cd:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=6f9376cd:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=6f9376cd:19543:11)"
+        ]
+      },
+      "timestamp": "2025-09-06T06:34:38.229Z"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "error-handling",
+      "description": "Error handling validation",
+      "path": "/workspaces/agent-feed/tests/production/screenshots/error-handling-1757140478229.png",
+      "timestamp": "2025-09-06T06:34:38.472Z"
+    }
+  ],
+  "summary": {
+    "totalTests": 1,
+    "passed": 0,
+    "failed": 1,
+    "warnings": 1
+  }
+}

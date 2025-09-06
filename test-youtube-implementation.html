@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Metadata Implementation Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+        .results {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .success { border-left: 4px solid #28a745; }
+        .warning { border-left: 4px solid #ffc107; }
+        .error { border-left: 4px solid #dc3545; }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .old, .new {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .old { background: #ffe6e6; }
+        .new { background: #e6ffe6; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🎬 YouTube Metadata Implementation Test</h1>
+    <p>Testing the replacement of generic "YouTube Video" placeholders with real video metadata.</p>
+
+    <div class="test-container">
+        <h2>1. Direct oEmbed API Test</h2>
+        <p>Testing YouTube's oEmbed API directly to verify it works:</p>
+        <button onclick="testOEmbedAPI()">Test oEmbed API</button>
+        <div id="oembed-results" class="results"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>2. Backend API Test</h2>
+        <p>Testing our backend's link preview service:</p>
+        <input type="text" id="youtube-url" placeholder="Enter YouTube URL" style="width: 60%; padding: 8px;">
+        <button onclick="testBackendAPI()">Test Backend</button>
+        <div id="backend-results" class="results"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>3. Before vs After Comparison</h2>
+        <div class="comparison">
+            <div class="old">
+                <h3>🔴 OLD (Generic)</h3>
+                <div>Title: "YouTube Video"</div>
+                <div>Description: "Click to play video"</div>
+                <div>Site: "youtube.com"</div>
+            </div>
+            <div class="new">
+                <h3>🟢 NEW (Real Metadata)</h3>
+                <div id="comparison-new">Click "Test Backend" to see results</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>4. Test Multiple URLs</h2>
+        <div id="bulk-test">
+            <button onclick="testMultipleURLs()">Test Popular YouTube Videos</button>
+            <div id="bulk-results"></div>
+        </div>
+    </div>
+
+    <script>
+        const testYouTubeURLs = [
+            'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Rick Roll
+            'https://youtu.be/9bZkp7q19f0', // Gangnam Style
+            'https://www.youtube.com/watch?v=LDU_Txk06tM', // My Heart Will Go On
+            'https://www.youtube.com/watch?v=fJ9rUzIMcZQ', // Queen - Bohemian Rhapsody
+        ];
+
+        async function testOEmbedAPI() {
+            const resultsDiv = document.getElementById('oembed-results');
+            resultsDiv.innerHTML = '<p>⏳ Testing YouTube oEmbed API...</p>';
+
+            try {
+                const testUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+                const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(testUrl)}&format=json`;
+                
+                // Note: This will fail due to CORS in browser, but shows the concept
+                const response = await fetch(oembedUrl);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultsDiv.innerHTML = `
+                        <div class="success">
+                            <h4>✅ oEmbed API Success!</h4>
+                            <strong>Title:</strong> ${data.title}<br>
+                            <strong>Author:</strong> ${data.author_name}<br>
+                            <strong>Channel:</strong> <a href="${data.author_url}" target="_blank">${data.author_url}</a><br>
+                            <strong>Provider:</strong> ${data.provider_name}<br>
+                            <strong>Thumbnail:</strong> <img src="${data.thumbnail_url}" alt="thumbnail" style="max-width: 200px; margin-top: 10px;">
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="warning">
+                        <h4>⚠️ CORS Error (Expected)</h4>
+                        <p>Browser CORS prevents direct oEmbed API access, but this confirms the API endpoint exists.</p>
+                        <p>Our backend service bypasses this limitation.</p>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testBackendAPI() {
+            const url = document.getElementById('youtube-url').value || 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+            const resultsDiv = document.getElementById('backend-results');
+            const comparisonDiv = document.getElementById('comparison-new');
+
+            resultsDiv.innerHTML = '<p>⏳ Testing backend API...</p>';
+
+            try {
+                const response = await fetch(`/api/v1/link-preview?url=${encodeURIComponent(url)}`);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    const data = result.data;
+
+                    // Check if we got real metadata or generic
+                    const isRealMetadata = data.title !== 'YouTube Video' && 
+                                         data.description !== 'Click to play video';
+
+                    const statusClass = isRealMetadata ? 'success' : 'warning';
+                    const statusIcon = isRealMetadata ? '🎉' : '⚠️';
+                    const statusText = isRealMetadata ? 'SUCCESS: Real metadata extracted!' : 'WARNING: Still using generic placeholders';
+
+                    resultsDiv.innerHTML = `
+                        <div class="${statusClass}">
+                            <h4>${statusIcon} ${statusText}</h4>
+                            <strong>Title:</strong> "${data.title}"<br>
+                            <strong>Description:</strong> "${data.description}"<br>
+                            <strong>Author/Channel:</strong> "${data.author || data.site_name}"<br>
+                            <strong>Type:</strong> ${data.type}<br>
+                            <strong>Image:</strong> ${data.image ? '✅ Available' : '❌ Missing'}<br>
+                            <strong>Video ID:</strong> ${data.videoId || 'Not extracted'}<br>
+                            ${data.fallback ? '<strong>⚠️ Fallback Used:</strong> YES' : ''}
+                        </div>
+                        <details>
+                            <summary>Raw JSON Response</summary>
+                            <pre>${JSON.stringify(result, null, 2)}</pre>
+                        </details>
+                    `;
+
+                    // Update comparison
+                    comparisonDiv.innerHTML = `
+                        <div>Title: "${data.title}"</div>
+                        <div>Description: "${data.description}"</div>
+                        <div>Channel: "${data.author || data.site_name}"</div>
+                        <div>Status: ${isRealMetadata ? '✅ Real Data' : '❌ Generic Data'}</div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Backend Error</h4>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testMultipleURLs() {
+            const resultsDiv = document.getElementById('bulk-results');
+            resultsDiv.innerHTML = '<p>⏳ Testing multiple YouTube URLs...</p>';
+
+            let results = [];
+            let realMetadataCount = 0;
+
+            for (const url of testYouTubeURLs) {
+                try {
+                    const response = await fetch(`/api/v1/link-preview?url=${encodeURIComponent(url)}`);
+                    const result = await response.json();
+                    const data = result.data;
+
+                    const isRealMetadata = data.title !== 'YouTube Video' && 
+                                         data.description !== 'Click to play video';
+                    
+                    if (isRealMetadata) realMetadataCount++;
+
+                    results.push({
+                        url,
+                        title: data.title,
+                        author: data.author || data.site_name,
+                        isReal: isRealMetadata
+                    });
+
+                    // Add a small delay to avoid overwhelming the server
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                } catch (error) {
+                    results.push({
+                        url,
+                        error: error.message,
+                        isReal: false
+                    });
+                }
+            }
+
+            const successRate = ((realMetadataCount / testYouTubeURLs.length) * 100).toFixed(1);
+            
+            resultsDiv.innerHTML = `
+                <div class="results ${realMetadataCount > 0 ? 'success' : 'warning'}">
+                    <h4>📊 Bulk Test Results</h4>
+                    <p><strong>Success Rate:</strong> ${realMetadataCount}/${testYouTubeURLs.length} (${successRate}%)</p>
+                    ${results.map(result => `
+                        <div style="margin: 10px 0; padding: 10px; background: ${result.isReal ? '#e6ffe6' : '#fff6e6'}; border-radius: 4px;">
+                            <strong>${result.isReal ? '✅' : '⚠️'} ${result.title || 'Error'}</strong><br>
+                            <small>URL: ${result.url}</small><br>
+                            ${result.author ? `<small>Channel: ${result.author}</small>` : ''}
+                            ${result.error ? `<small style="color: red;">Error: ${result.error}</small>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Auto-populate test URL
+        document.getElementById('youtube-url').value = testYouTubeURLs[0];
+
+        // Show implementation status
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'test-container';
+            statusDiv.innerHTML = `
+                <h2>🔧 Implementation Status</h2>
+                <ul>
+                    <li>✅ YouTube oEmbed API integration implemented</li>
+                    <li>✅ YouTube-specific metadata service created</li>
+                    <li>✅ Backend LinkPreviewService updated</li>
+                    <li>✅ Frontend components updated to use real metadata</li>
+                    <li>✅ Caching system for API responses</li>
+                    <li>✅ Error handling and fallback chains</li>
+                </ul>
+                <p><em>Use the tests above to verify the implementation is working correctly.</em></p>
+            `;
+            document.body.appendChild(statusDiv);
+        });
+    </script>
+</body>
+</html>

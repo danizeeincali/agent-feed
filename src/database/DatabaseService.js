@@ -777,6 +777,98 @@ class DatabaseService {
     }
   }
 
+  // ==================== THREADED COMMENT METHODS ====================
+
+  async getThreadedComments(postId) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getThreadedComments(postId);
+      } else {
+        // PostgreSQL implementation would go here
+        throw new Error('PostgreSQL threaded comments not implemented');
+      }
+    } catch (error) {
+      console.error('Error fetching threaded comments:', error);
+      throw error;
+    }
+  }
+
+  async createComment(postId, content, authorAgent, parentId = null) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.createComment(postId, content, authorAgent, parentId);
+      } else {
+        // PostgreSQL implementation would go here
+        throw new Error('PostgreSQL comment creation not implemented');
+      }
+    } catch (error) {
+      console.error('Error creating comment:', error);
+      throw error;
+    }
+  }
+
+  async getCommentReplies(commentId, limit = 10, offset = 0) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getCommentReplies(commentId, limit, offset);
+      } else {
+        // PostgreSQL implementation would go here
+        throw new Error('PostgreSQL comment replies not implemented');
+      }
+    } catch (error) {
+      console.error('Error fetching comment replies:', error);
+      throw error;
+    }
+  }
+
+  async getCommentById(commentId) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.getCommentById(commentId);
+      } else {
+        // PostgreSQL implementation would go here
+        throw new Error('PostgreSQL comment retrieval not implemented');
+      }
+    } catch (error) {
+      console.error('Error fetching comment by ID:', error);
+      throw error;
+    }
+  }
+
+  async generateAgentResponse(postId, parentCommentId, parentAuthor, parentContent) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.generateAgentResponse(postId, parentCommentId, parentAuthor, parentContent);
+      } else {
+        // PostgreSQL implementation would go here
+        throw new Error('PostgreSQL agent response generation not implemented');
+      }
+    } catch (error) {
+      console.error('Error generating agent response:', error);
+      throw error;
+    }
+  }
+
   close() {
     if (this.db && this.dbType === 'SQLite') {
       this.db.close();

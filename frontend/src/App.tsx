@@ -10,6 +10,7 @@ import { RealTimeNotifications } from './components/RealTimeNotifications';
 import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import AsyncErrorBoundary from './components/AsyncErrorBoundary';
+import { VideoPlaybackProvider } from './contexts/VideoPlaybackContext';
 
 // Import components directly to fix loading issue - with error handling
 try {
@@ -224,13 +225,14 @@ const App: React.FC = () => {
   return (
     <GlobalErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <WebSocketProvider config={{
-          autoConnect: true,
-          reconnectAttempts: 3,
-          reconnectInterval: 2000,
-          heartbeatInterval: 20000,
-        }}>
-          <Router>
+        <VideoPlaybackProvider>
+          <WebSocketProvider config={{
+            autoConnect: true,
+            reconnectAttempts: 3,
+            reconnectInterval: 2000,
+            heartbeatInterval: 20000,
+          }}>
+            <Router>
             <Layout>
               <ErrorBoundary componentName="AppRouter">
                 <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading page..." size="lg" />}>
@@ -346,8 +348,9 @@ const App: React.FC = () => {
                 </Suspense>
               </ErrorBoundary>
             </Layout>
-          </Router>
-        </WebSocketProvider>
+            </Router>
+          </WebSocketProvider>
+        </VideoPlaybackProvider>
       </QueryClientProvider>
     </GlobalErrorBoundary>
   );

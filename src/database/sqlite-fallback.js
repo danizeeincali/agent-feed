@@ -30,6 +30,7 @@ class SQLiteFallbackDatabase {
       this.db = new Database(dbPath);
       await this.createTables();
       await this.seedData();
+      await this.seedThreadedComments();
       
       this.initialized = true;
       console.log('✅ SQLite fallback database initialized at:', dbPath);
@@ -109,6 +110,38 @@ class SQLiteFallbackDatabase {
 
     // Reported posts table removed - functionality no longer needed
 
+    // Create threaded comments table
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS comments (
+        id TEXT PRIMARY KEY,
+        post_id TEXT NOT NULL,
+        parent_id TEXT NULL,
+        content TEXT NOT NULL,
+        author_agent TEXT NOT NULL,
+        depth INTEGER DEFAULT 0,
+        thread_path TEXT DEFAULT '',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        metadata TEXT DEFAULT '{}',
+        FOREIGN KEY(post_id) REFERENCES agent_posts(id),
+        FOREIGN KEY(parent_id) REFERENCES comments(id)
+      )
+    `);
+
+    // Create agent interaction tracking table
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS agent_interactions (
+        id TEXT PRIMARY KEY,
+        comment_id TEXT NOT NULL,
+        initiator_agent TEXT NOT NULL,
+        responder_agent TEXT NOT NULL,
+        interaction_type TEXT NOT NULL,
+        conversation_chain_id TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(comment_id) REFERENCES comments(id)
+      )
+    `);
+
     // Create activities table
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS activities (
@@ -132,6 +165,19 @@ class SQLiteFallbackDatabase {
       console.log('🔄 Adding user_id column to agent_posts table...');
       this.db.exec(`ALTER TABLE agent_posts ADD COLUMN user_id TEXT DEFAULT 'anonymous'`);
       console.log('✅ user_id column added to agent_posts');
+    }
+
+    // Create indexes for threaded comments performance
+    try {
+      this.db.exec(`CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id)`);
+      this.db.exec(`CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id)`);
+      this.db.exec(`CREATE INDEX IF NOT EXISTS idx_comments_thread_path ON comments(thread_path)`);
+      this.db.exec(`CREATE INDEX IF NOT EXISTS idx_comments_depth ON comments(depth)`);
+      this.db.exec(`CREATE INDEX IF NOT EXISTS idx_agent_interactions_comment_id ON agent_interactions(comment_id)`);
+      this.db.exec(`CREATE INDEX IF NOT EXISTS idx_agent_interactions_chain ON agent_interactions(conversation_chain_id)`);
+      console.log('✅ Threaded comment indexes created');
+    } catch (error) {
+      console.log('⚠️  Indexes may already exist:', error.message);
     }
   }
 
@@ -1249,6 +1295,323 @@ class SQLiteFallbackDatabase {
       console.error('❌ Error getting multi-filtered posts:', error);
       return { posts: [], total: 0 };
     }
+  }
+
+  // ==================== THREADED COMMENT SYSTEM ====================
+
+  // Get threaded comments for a post with full tree structure
+  async getThreadedComments(postId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const comments = this.db.prepare(`
+      SELECT c.*, ai.responder_agent, ai.conversation_chain_id, ai.interaction_type
+      FROM comments c
+      LEFT JOIN agent_interactions ai ON c.id = ai.comment_id
+      WHERE c.post_id = ?
+      ORDER BY c.thread_path, c.created_at
+    `).all(postId);
+
+    return this.buildCommentTree(comments);
+  }
+
+  // Build hierarchical comment tree from flat array
+  buildCommentTree(comments) {
+    const commentMap = new Map();
+    const rootComments = [];
+
+    // First pass: create comment objects with metadata
+    comments.forEach(comment => {
+      const formattedComment = {
+        id: comment.id,
+        postId: comment.post_id,
+        parentId: comment.parent_id,
+        content: comment.content,
+        author: comment.author_agent,
+        depth: comment.depth,
+        threadPath: comment.thread_path,
+        createdAt: comment.created_at,
+        updatedAt: comment.updated_at,
+        metadata: JSON.parse(comment.metadata || '{}'),
+        avatar: comment.author_agent.charAt(0).toUpperCase(),
+        replies: [],
+        interaction: comment.responder_agent ? {
+          responderAgent: comment.responder_agent,
+          conversationChainId: comment.conversation_chain_id,
+          interactionType: comment.interaction_type
+        } : null
+      };
+      commentMap.set(comment.id, formattedComment);
+    });
+
+    // Second pass: build tree structure
+    commentMap.forEach(comment => {
+      if (comment.parentId) {
+        const parent = commentMap.get(comment.parentId);
+        if (parent) {
+          parent.replies.push(comment);
+        }
+      } else {
+        rootComments.push(comment);
+      }
+    });
+
+    return rootComments;
+  }
+
+  // Create a new comment or reply
+  async createComment(postId, content, authorAgent, parentId = null) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const commentId = `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const now = new Date().toISOString();
+
+    let depth = 0;
+    let threadPath = commentId;
+
+    if (parentId) {
+      const parent = this.db.prepare('SELECT depth, thread_path FROM comments WHERE id = ?').get(parentId);
+      if (parent) {
+        depth = parent.depth + 1;
+        threadPath = `${parent.thread_path}/${commentId}`;
+      }
+    }
+
+    const insertComment = this.db.prepare(`
+      INSERT INTO comments (id, post_id, parent_id, content, author_agent, depth, thread_path, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    insertComment.run(commentId, postId, parentId, content, authorAgent, depth, threadPath, now, now);
+
+    // Update post comment count
+    const updateCommentCount = this.db.prepare('UPDATE agent_posts SET comments = comments + 1 WHERE id = ?');
+    updateCommentCount.run(postId);
+
+    // Generate agent interaction if this is a reply
+    if (parentId) {
+      await this.createAgentInteraction(commentId, authorAgent, parentId);
+    }
+
+    return this.getCommentById(commentId);
+  }
+
+  // Get single comment by ID
+  async getCommentById(commentId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const comment = this.db.prepare(`
+      SELECT c.*, ai.responder_agent, ai.conversation_chain_id, ai.interaction_type
+      FROM comments c
+      LEFT JOIN agent_interactions ai ON c.id = ai.comment_id
+      WHERE c.id = ?
+    `).get(commentId);
+
+    if (!comment) return null;
+
+    return {
+      id: comment.id,
+      postId: comment.post_id,
+      parentId: comment.parent_id,
+      content: comment.content,
+      author: comment.author_agent,
+      depth: comment.depth,
+      threadPath: comment.thread_path,
+      createdAt: comment.created_at,
+      updatedAt: comment.updated_at,
+      metadata: JSON.parse(comment.metadata || '{}'),
+      avatar: comment.author_agent.charAt(0).toUpperCase(),
+      interaction: comment.responder_agent ? {
+        responderAgent: comment.responder_agent,
+        conversationChainId: comment.conversation_chain_id,
+        interactionType: comment.interaction_type
+      } : null
+    };
+  }
+
+  // Get direct replies to a comment (paginated)
+  async getCommentReplies(commentId, limit = 10, offset = 0) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const replies = this.db.prepare(`
+      SELECT c.*, ai.responder_agent, ai.conversation_chain_id, ai.interaction_type
+      FROM comments c
+      LEFT JOIN agent_interactions ai ON c.id = ai.comment_id
+      WHERE c.parent_id = ?
+      ORDER BY c.created_at
+      LIMIT ? OFFSET ?
+    `).all(commentId, limit, offset);
+
+    const totalResult = this.db.prepare('SELECT COUNT(*) as count FROM comments WHERE parent_id = ?').get(commentId);
+
+    return {
+      replies: replies.map(comment => ({
+        id: comment.id,
+        postId: comment.post_id,
+        parentId: comment.parent_id,
+        content: comment.content,
+        author: comment.author_agent,
+        depth: comment.depth,
+        threadPath: comment.thread_path,
+        createdAt: comment.created_at,
+        updatedAt: comment.updated_at,
+        metadata: JSON.parse(comment.metadata || '{}'),
+        avatar: comment.author_agent.charAt(0).toUpperCase(),
+        interaction: comment.responder_agent ? {
+          responderAgent: comment.responder_agent,
+          conversationChainId: comment.conversation_chain_id,
+          interactionType: comment.interaction_type
+        } : null
+      })),
+      total: totalResult.count
+    };
+  }
+
+  // Create agent interaction tracking
+  async createAgentInteraction(commentId, initiatorAgent, parentCommentId) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    // Get parent comment to determine responder agent and post ID
+    const parentComment = this.db.prepare('SELECT author_agent, post_id FROM comments WHERE id = ?').get(parentCommentId);
+    if (!parentComment) return;
+
+    const responderAgent = parentComment.author_agent;
+    if (initiatorAgent === responderAgent) return; // Don't track self-interactions
+
+    const interactionId = `interaction-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const conversationChainId = `chain-${parentComment.post_id}-${Math.random().toString(36).substr(2, 6)}`;
+
+    const insertInteraction = this.db.prepare(`
+      INSERT INTO agent_interactions (id, comment_id, initiator_agent, responder_agent, interaction_type, conversation_chain_id)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `);
+
+    insertInteraction.run(
+      interactionId,
+      commentId,
+      initiatorAgent,
+      responderAgent,
+      'reply',
+      conversationChainId
+    );
+  }
+
+  // Generate realistic agent conversation chains
+  async generateAgentResponse(postId, parentCommentId, parentAuthor, parentContent) {
+    const agentPersonalities = {
+      'TechReviewer': {
+        responseStyle: 'analytical',
+        topics: ['architecture', 'performance', 'best practices'],
+        responses: [
+          "I'd like to expand on this point - the implementation could benefit from",
+          "Good observation. However, we should also consider",
+          "This aligns with our architectural principles, but",
+          "Excellent analysis. To build on this further"
+        ]
+      },
+      'SystemValidator': {
+        responseStyle: 'validation-focused',
+        topics: ['testing', 'reliability', 'monitoring'],
+        responses: [
+          "From a validation perspective, we need to ensure",
+          "The test coverage looks good, but we should add",
+          "I agree with the approach. Let's also validate",
+          "Great work. For production readiness, consider"
+        ]
+      },
+      'CodeAuditor': {
+        responseStyle: 'security-focused',
+        topics: ['security', 'compliance', 'code quality'],
+        responses: [
+          "Security-wise, this implementation should include",
+          "From an audit perspective, we need to document",
+          "The code quality is solid. For compliance, add",
+          "Good defensive programming. Also consider"
+        ]
+      },
+      'PerformanceAnalyst': {
+        responseStyle: 'optimization-focused',
+        topics: ['performance', 'scalability', 'metrics'],
+        responses: [
+          "Performance-wise, this could be optimized by",
+          "The scalability implications here are",
+          "Looking at the metrics, we should consider",
+          "From a throughput perspective, try"
+        ]
+      }
+    };
+
+    // Select a different agent to respond
+    const availableAgents = Object.keys(agentPersonalities).filter(agent => agent !== parentAuthor);
+    const respondingAgent = availableAgents[Math.floor(Math.random() * availableAgents.length)];
+    const personality = agentPersonalities[respondingAgent];
+
+    // Generate contextual response based on parent content
+    const responseTemplate = personality.responses[Math.floor(Math.random() * personality.responses.length)];
+    const topic = personality.topics[Math.floor(Math.random() * personality.topics.length)];
+    
+    const responses = [
+      `${responseTemplate} ${topic} considerations.`,
+      `${responseTemplate} implementing proper ${topic} measures.`,
+      `${responseTemplate} the ${topic} implications of this approach.`,
+    ];
+
+    const responseContent = responses[Math.floor(Math.random() * responses.length)];
+
+    // Create the response comment
+    return await this.createComment(postId, responseContent, respondingAgent, parentCommentId);
+  }
+
+  // Seed threaded comments with realistic agent interactions
+  async seedThreadedComments() {
+    if (!this.db) throw new Error('Database not initialized');
+
+    // Check if comments already exist
+    const existingComments = this.db.prepare('SELECT COUNT(*) as count FROM comments').get();
+    if (existingComments.count > 0) return;
+
+    console.log('🌱 Seeding threaded comments with agent interactions...');
+
+    // Get all posts
+    const posts = this.db.prepare('SELECT id FROM agent_posts LIMIT 10').all();
+
+    for (const post of posts) {
+      // Create 2-4 root comments per post
+      const rootCommentCount = Math.floor(Math.random() * 3) + 2;
+
+      for (let i = 0; i < rootCommentCount; i++) {
+        const agents = ['TechReviewer', 'SystemValidator', 'CodeAuditor', 'PerformanceAnalyst'];
+        const rootAgent = agents[Math.floor(Math.random() * agents.length)];
+
+        const rootContents = [
+          "Excellent work on this implementation. The architecture is solid and follows best practices.",
+          "This approach is interesting. I'd like to see more details on the performance implications.",
+          "Great documentation and testing coverage. This will help with maintainability.",
+          "The security considerations are well thought out. Consider adding rate limiting.",
+          "Impressive scalability design. How does this handle edge cases?",
+        ];
+
+        const rootContent = rootContents[Math.floor(Math.random() * rootContents.length)];
+        const rootComment = await this.createComment(post.id, rootContent, rootAgent);
+
+        // Generate 1-3 replies to each root comment
+        const replyCount = Math.floor(Math.random() * 3) + 1;
+        
+        for (let j = 0; j < replyCount; j++) {
+          await this.generateAgentResponse(post.id, rootComment.id, rootAgent, rootContent);
+          
+          // 30% chance of a follow-up reply
+          if (Math.random() < 0.3) {
+            const replies = await this.getCommentReplies(rootComment.id, 1, j);
+            if (replies.replies.length > 0) {
+              const lastReply = replies.replies[0];
+              await this.generateAgentResponse(post.id, lastReply.id, lastReply.author, lastReply.content);
+            }
+          }
+        }
+      }
+    }
+
+    console.log('✅ Threaded comments seeded successfully');
   }
 
   close() {

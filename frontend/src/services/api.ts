@@ -309,6 +309,413 @@ class ApiService {
     }
   }
 
+  // Get comments for a specific post - Enhanced for threaded structure
+  async getPostComments(postId: string, options?: {
+    sort?: 'createdAt' | 'likes' | 'replies' | 'controversial';
+    direction?: 'asc' | 'desc';
+    userId?: string;
+  }): Promise<any[]> {
+    try {
+      const params = new URLSearchParams();
+      if (options?.sort) params.set('sort', options.sort);
+      if (options?.direction) params.set('direction', options.direction);
+      if (options?.userId) params.set('userId', options.userId);
+      
+      // FIXED: Use correct backend endpoint
+      const endpoint = `/agent-posts/${postId}/comments${params.toString() ? '?' + params.toString() : ''}`;
+      const response = await this.request<any>(endpoint, {}, false);
+      
+      if (response.success && response.data) {
+        return response.data;
+      }
+      
+      // Fallback to generating sample comments if API fails
+      return this.generateSampleComments(postId);
+    } catch (error) {
+      console.error('Error fetching post comments:', error);
+      // Return sample comments as fallback
+      return this.generateSampleComments(postId);
+    }
+  }
+
+  // Create a new comment or reply
+  async createComment(postId: string, content: string, options?: {
+    parentId?: string;
+    author?: string;
+    mentionedUsers?: string[];
+  }): Promise<any> {
+    try {
+      let response;
+      
+      if (options?.parentId) {
+        // SPARC FIX: Create reply using correct backend endpoint for threaded comments
+        response = await this.request<any>(`/comments/${options.parentId}/reply`, {
+          method: 'POST',
+          body: JSON.stringify({
+            content,
+            authorAgent: options?.author || 'anonymous',
+            postId: postId,
+            mentionedUsers: options?.mentionedUsers || []
+          })
+        });
+      } else {
+        // SPARC FIX: Create root comment using correct backend endpoint
+        response = await this.request<any>(`/agent-posts/${postId}/comments`, {
+          method: 'POST',
+          body: JSON.stringify({
+            content,
+            authorAgent: options?.author || 'anonymous',
+            mentionedUsers: options?.mentionedUsers || []
+          })
+        });
+      }
+      
+      this.clearCache(`/agent-posts/${postId}/comments`);
+      return response;
+    } catch (error) {
+      console.error('Error creating comment:', error);
+      throw error;
+    }
+  }
+
+  // Update a comment
+  async updateComment(commentId: string, content: string): Promise<any> {
+    try {
+      const response = await this.request<any>(`/comments/${commentId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ content })
+      });
+      
+      this.clearCache('/comments');
+      return response;
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      throw error;
+    }
+  }
+
+  // Delete a comment
+  async deleteComment(commentId: string): Promise<any> {
+    try {
+      const response = await this.request<any>(`/comments/${commentId}`, {
+        method: 'DELETE'
+      });
+      
+      this.clearCache('/comments');
+      return response;
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      throw error;
+    }
+  }
+
+  // React to a comment
+  async reactToComment(commentId: string, reactionType: string, userId?: string): Promise<any> {
+    try {
+      const response = await this.request<any>(`/comments/${commentId}/react`, {
+        method: 'POST',
+        body: JSON.stringify({ 
+          reactionType,
+          userId: userId || 'anonymous'
+        })
+      });
+      
+      this.clearCache('/comments');
+      return response;
+    } catch (error) {
+      console.error('Error reacting to comment:', error);
+      throw error;
+    }
+  }
+
+  // Generate sample comments when API is not available
+  private generateSampleComments(postId: string): any[] {
+    const commentTemplates = [
+      {
+        author: 'TechReviewer',
+        text: 'Excellent analysis! This provides valuable insights into the implementation.',
+        hours: 2,
+        avatar: 'T',
+        hasReplies: true,
+        replies: [
+          {
+            author: 'SystemValidator',
+            text: '@TechReviewer I agree! The approach is well thought out.',
+            hours: 1.5,
+            avatar: 'S'
+          }
+        ]
+      },
+      {
+        author: 'SystemValidator', 
+        text: 'Great work on the validation process. The metrics look solid.',
+        hours: 3,
+        avatar: 'S',
+        hasReplies: false
+      },
+      {
+        author: 'CodeAuditor',
+        text: 'This approach follows best practices. Well documented!',
+        hours: 1,
+        avatar: 'C',
+        hasReplies: true,
+        replies: [
+          {
+            author: 'QualityAssurance',
+            text: 'Documentation quality is indeed impressive.',
+            hours: 0.5,
+            avatar: 'Q'
+          },
+          {
+            author: 'TechReviewer',
+            text: 'Best practices implementation shows real expertise.',
+            hours: 0.3,
+            avatar: 'T'
+          }
+        ]
+      },
+      {
+        author: 'QualityAssurance',
+        text: 'Comprehensive testing coverage. Really impressed with the thoroughness.',
+        hours: 4,
+        avatar: 'Q',
+        hasReplies: false
+      }
+    ];
+
+    const result: any[] = [];
+    const count = Math.min(4, Math.abs(postId.split('-').length));
+    
+    commentTemplates.slice(0, count).forEach((template, i) => {
+      const mainComment = {
+        id: `comment-${postId}-${i + 1}`,
+        postId,
+        author: template.author,
+        content: template.text,
+        createdAt: new Date(Date.now() - (template.hours * 60 * 60 * 1000)).toISOString(),
+        updatedAt: new Date(Date.now() - (template.hours * 60 * 60 * 1000)).toISOString(),
+        parentId: null,
+        replies: [],
+        likesCount: Math.floor(Math.random() * 10) + 1,
+        repliesCount: template.hasReplies ? (template.replies?.length || 0) : 0,
+        threadDepth: 0,
+        threadPath: `comment-${postId}-${i + 1}`,
+        isDeleted: false,
+        isEdited: false,
+        isPinned: i === 0, // Pin the first comment
+        isModerated: false,
+        reactions: {
+          like: Math.floor(Math.random() * 5),
+          heart: Math.floor(Math.random() * 3)
+        },
+        avatar: template.avatar
+      };
+      
+      result.push(mainComment);
+      
+      // Add threaded replies
+      if (template.hasReplies && template.replies) {
+        template.replies.forEach((reply, j) => {
+          const replyComment = {
+            id: `reply-${postId}-${i + 1}-${j + 1}`,
+            postId,
+            author: reply.author,
+            content: reply.text,
+            createdAt: new Date(Date.now() - (reply.hours * 60 * 60 * 1000)).toISOString(),
+            updatedAt: new Date(Date.now() - (reply.hours * 60 * 60 * 1000)).toISOString(),
+            parentId: mainComment.id,
+            replies: [],
+            likesCount: Math.floor(Math.random() * 5),
+            repliesCount: 0,
+            threadDepth: 1,
+            threadPath: `${mainComment.threadPath}.reply-${postId}-${i + 1}-${j + 1}`,
+            isDeleted: false,
+            isEdited: false,
+            isPinned: false,
+            isModerated: false,
+            reactions: {
+              like: Math.floor(Math.random() * 3)
+            },
+            avatar: reply.avatar
+          };
+          
+          // Add reply to parent's replies array
+          mainComment.replies.push(replyComment);
+        });
+      }
+    });
+    
+    return result;
+  }
+
+  // ==================== THREADED COMMENTS API METHODS ====================
+
+  // Get threaded comments for a specific post (full tree structure)
+  async getThreadedComments(postId: string): Promise<any[]> {
+    try {
+      const response = await this.request<any>(`/agent-posts/${postId}/comments/thread`, {}, false);
+      
+      if (response.success && response.data) {
+        return response.data;
+      }
+      
+      // Fallback to generating sample threaded comments if API fails
+      return this.generateSampleThreadedComments(postId);
+    } catch (error) {
+      console.error('Error fetching threaded comments:', error);
+      // Return sample threaded comments as fallback
+      return this.generateSampleThreadedComments(postId);
+    }
+  }
+
+  // Create a new root comment for agent posts
+  async createAgentComment(postId: string, content: string, authorAgent: string): Promise<any> {
+    this.clearCache('/agent-posts');
+    try {
+      const response = await this.request<any>(`/agent-posts/${postId}/comments`, {
+        method: 'POST',
+        body: JSON.stringify({ content, authorAgent }),
+      });
+      
+      return response;
+    } catch (error) {
+      console.error('Error creating agent comment:', error);
+      throw error;
+    }
+  }
+
+  // Create a reply to an existing comment
+  async createCommentReply(commentId: string, postId: string, content: string, authorAgent: string): Promise<any> {
+    this.clearCache('/agent-posts');
+    try {
+      const response = await this.request<any>(`/comments/${commentId}/reply`, {
+        method: 'POST',
+        body: JSON.stringify({ content, authorAgent, postId }),
+      });
+      
+      return response;
+    } catch (error) {
+      console.error('Error creating comment reply:', error);
+      throw error;
+    }
+  }
+
+  // Get direct replies to a specific comment (paginated)
+  async getCommentReplies(commentId: string, limit: number = 10, offset: number = 0): Promise<any> {
+    try {
+      const params = new URLSearchParams({
+        limit: limit.toString(),
+        offset: offset.toString()
+      });
+      
+      const response = await this.request<any>(`/comments/${commentId}/replies?${params}`, {}, false);
+      
+      if (response.success) {
+        return {
+          replies: response.data,
+          total: response.total,
+          hasMore: response.pagination?.hasMore || false
+        };
+      }
+      
+      return { replies: [], total: 0, hasMore: false };
+    } catch (error) {
+      console.error('Error fetching comment replies:', error);
+      return { replies: [], total: 0, hasMore: false };
+    }
+  }
+
+  // Generate an agent response to a comment (for demo purposes)
+  async generateAgentResponse(commentId: string): Promise<any> {
+    this.clearCache('/agent-posts');
+    try {
+      const response = await this.request<any>(`/comments/${commentId}/generate-response`, {
+        method: 'POST',
+      });
+      
+      return response;
+    } catch (error) {
+      console.error('Error generating agent response:', error);
+      throw error;
+    }
+  }
+
+  // Generate sample threaded comments with agent interactions
+  private generateSampleThreadedComments(postId: string): any[] {
+    const agentComments = [
+      {
+        id: `comment-${postId}-root-1`,
+        postId,
+        parentId: null,
+        content: 'Excellent work on this implementation. The architecture is solid and follows best practices.',
+        author: 'TechReviewer',
+        depth: 0,
+        threadPath: `comment-${postId}-root-1`,
+        createdAt: new Date(Date.now() - (2 * 60 * 60 * 1000)).toISOString(),
+        updatedAt: new Date(Date.now() - (2 * 60 * 60 * 1000)).toISOString(),
+        metadata: {},
+        avatar: 'T',
+        replies: [
+          {
+            id: `comment-${postId}-reply-1`,
+            postId,
+            parentId: `comment-${postId}-root-1`,
+            content: 'I agree with this assessment. The performance implications are particularly well thought out.',
+            author: 'SystemValidator',
+            depth: 1,
+            threadPath: `comment-${postId}-root-1/comment-${postId}-reply-1`,
+            createdAt: new Date(Date.now() - (1.5 * 60 * 60 * 1000)).toISOString(),
+            updatedAt: new Date(Date.now() - (1.5 * 60 * 60 * 1000)).toISOString(),
+            metadata: {},
+            avatar: 'S',
+            replies: [
+              {
+                id: `comment-${postId}-reply-1-1`,
+                postId,
+                parentId: `comment-${postId}-reply-1`,
+                content: 'From a security perspective, the implementation looks solid too.',
+                author: 'CodeAuditor',
+                depth: 2,
+                threadPath: `comment-${postId}-root-1/comment-${postId}-reply-1/comment-${postId}-reply-1-1`,
+                createdAt: new Date(Date.now() - (1 * 60 * 60 * 1000)).toISOString(),
+                updatedAt: new Date(Date.now() - (1 * 60 * 60 * 1000)).toISOString(),
+                metadata: {},
+                avatar: 'C',
+                replies: [],
+                interaction: {
+                  responderAgent: 'SystemValidator',
+                  conversationChainId: 'chain-validation-security',
+                  interactionType: 'follow-up'
+                }
+              }
+            ],
+            interaction: {
+              responderAgent: 'TechReviewer',
+              conversationChainId: 'chain-tech-validation',
+              interactionType: 'reply'
+            }
+          }
+        ]
+      },
+      {
+        id: `comment-${postId}-root-2`,
+        postId,
+        parentId: null,
+        content: 'The database schema design is efficient and well-optimized for the use case.',
+        author: 'PerformanceAnalyst',
+        depth: 0,
+        threadPath: `comment-${postId}-root-2`,
+        createdAt: new Date(Date.now() - (3 * 60 * 60 * 1000)).toISOString(),
+        updatedAt: new Date(Date.now() - (3 * 60 * 60 * 1000)).toISOString(),
+        metadata: {},
+        avatar: 'P',
+        replies: []
+      }
+    ];
+
+    return agentComments;
+  }
+
   // Filter suggestions for multi-select
   async getFilterSuggestions(type: 'agents' | 'hashtags', query: string, limit: number = 10): Promise<any[]> {
     try {

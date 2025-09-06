@@ -1,9 +1,8 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { MessageCircle, Reply, Edit2, Trash2, ChevronDown, ChevronRight, Flag, Pin, Link, MoreHorizontal, Search, ArrowUp, Filter } from 'lucide-react';
+import { MessageCircle, Reply, Edit2, Trash2, ChevronDown, ChevronRight, Flag, Pin, Link, MoreHorizontal, Search, ArrowUp, Filter, User, Bot } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { CommentReactions } from './CommentReactions';
 import { CommentModerationPanel } from './CommentModerationPanel';
-import { buildCommentTree } from '@/utils/commentUtils';
+import { buildCommentTree, CommentTreeNode } from '@/utils/commentUtils';
 
 export interface Comment {
   id: string;
@@ -13,8 +12,6 @@ export interface Comment {
   updatedAt?: string;
   parentId?: string;
   replies?: Comment[];
-  likes?: number;
-  likesCount: number;
   repliesCount: number;
   threadDepth: number;
   threadPath: string;
@@ -26,14 +23,13 @@ export interface Comment {
   isModerated?: boolean;
   editHistory?: Array<{ content: string; editedAt: string }>;
   mentionedUsers?: string[];
-  reactions?: { [key: string]: number };
-  userReaction?: string;
   reportedCount?: number;
   moderatorNotes?: string;
+  authorType?: 'agent' | 'user' | 'system';
 }
 
 export interface CommentSort {
-  field: 'createdAt' | 'likes' | 'replies' | 'controversial';
+  field: 'createdAt' | 'replies' | 'controversial';
   direction: 'asc' | 'desc';
 }
 
@@ -42,7 +38,7 @@ export interface CommentFilter {
   hasReplies?: boolean;
   isEdited?: boolean;
   isPinned?: boolean;
-  minLikes?: number;
+  authorType?: 'agent' | 'user' | 'system';
 }
 
 export interface ThreadState {
@@ -61,7 +57,7 @@ interface CommentItemProps {
   onReply: (parentId: string, content: string) => Promise<void>;
   onEdit: (commentId: string, content: string) => Promise<void>;
   onDelete: (commentId: string) => Promise<void>;
-  onReact: (commentId: string, reactionType: string) => Promise<void>;
+  onReact?: (commentId: string, reaction: string) => Promise<void>;
   onReport: (commentId: string, reason: string, description?: string) => Promise<void>;
   onPin: (commentId: string) => Promise<void>;
   onNavigate: (commentId: string, direction: 'parent' | 'next' | 'prev') => void;
@@ -125,9 +121,24 @@ const CommentItem: React.FC<CommentItemProps> = ({
   };
   
   const handlePermalinkClick = () => {
-    const permalink = `${window.location.origin}${window.location.pathname}#comment-${comment.id}`;
-    navigator.clipboard.writeText(permalink);
-    // You could show a toast notification here
+    // CRITICAL FIX: Remove double-prefix bug - comment.id already contains "comment-" prefix
+    const permalink = `${window.location.origin}${window.location.pathname}#${comment.id}`;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(permalink).then(() => {
+      console.log('Permalink copied:', permalink);
+    }).catch(err => {
+      console.warn('Failed to copy permalink:', err);
+    });
+    
+    // Update URL hash without page reload - this triggers hashchange event
+    window.history.pushState(null, '', `#comment-${comment.id}`);
+    
+    // Trigger hash navigation manually since pushState doesn't fire hashchange
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    
+    // Highlight the comment
+    onHighlight(comment.id);
   };
 
   const handleReplySubmit = async () => {
@@ -222,8 +233,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
   return (
     <div 
-      ref={commentRef}
       id={`comment-${comment.id}`}
+      ref={commentRef}
       className={cn(
         'relative transition-all duration-200',
         shouldIndent && depth > 0 && 'ml-6 border-l border-gray-200',
@@ -324,35 +335,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
                   </>
                 )}
                 
-                <button
-                  onClick={() => setShowMoreOptions(!showMoreOptions)}
-                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-                  title="More options"
-                >
-                  <MoreHorizontal className="w-3 h-3" />
-                </button>
-                
-                {showMoreOptions && (
-                  <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10">
-                    <button
-                      onClick={() => {
-                        setShowModerationPanel(true);
-                        setShowMoreOptions(false);
-                      }}
-                      className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Flag className="w-3 h-3" />
-                      <span>Report</span>
-                    </button>
-                    <button
-                      onClick={() => onHighlight(comment.id)}
-                      className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    >
-                      <Search className="w-3 h-3" />
-                      <span>Highlight</span>
-                    </button>
-                  </div>
-                )}
               </div>
             )}
           </div>
@@ -413,25 +395,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </div>
         )}
         
-        {/* Reactions */}
-        {!comment.isDeleted && (
-          <div className="mb-3">
-            <CommentReactions
-              commentId={comment.id}
-              reactions={{
-                like: comment.reactions?.like || 0,
-                heart: comment.reactions?.heart || 0,
-                laugh: comment.reactions?.laugh || 0,
-                sad: comment.reactions?.sad || 0,
-                angry: comment.reactions?.angry || 0,
-                wow: comment.reactions?.wow || 0
-              }}
-              userReaction={comment.userReaction}
-              onReact={onReact}
-              compact={depth > 2}
-            />
-          </div>
-        )}
 
         {/* Actions */}
         {!comment.isDeleted && !isEditing && (
@@ -487,8 +450,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
             
             {/* Comment metadata */}
             <div className="flex items-center space-x-2 text-xs text-gray-400">
-              {comment.likesCount > 0 && (
-                <span>{comment.likesCount} likes</span>
+              {comment.authorType === 'agent' && (
+                <div className="flex items-center space-x-1">
+                  <Bot className="w-3 h-3" />
+                  <span>Agent</span>
+                </div>
               )}
               {comment.repliesCount > 0 && (
                 <span>{comment.repliesCount} replies</span>
@@ -560,44 +526,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
         </div>
       )}
       
-      {/* Replies */}
-      {hasReplies && isExpanded && (
-        <div className={cn(
-          'mt-2 transition-all duration-300',
-          isCollapsed ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100'
-        )}>
-          {/* Load more indicator for deep threads */}
-          {replyCount > 5 && depth > 3 && (
-            <div className="mb-2 pl-4">
-              <button className="text-xs text-blue-600 hover:text-blue-800 transition-colors">
-                Show {Math.min(replyCount - (comment.replies?.length || 0), 5)} more replies
-              </button>
-            </div>
-          )}
-          
-          {comment.replies?.map((reply) => (
-            <CommentItem
-              key={reply.id}
-              comment={reply}
-              depth={depth + 1}
-              maxDepth={maxDepth}
-              currentUser={currentUser}
-              threadState={threadState}
-              onReply={onReply}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              onReact={onReact}
-              onReport={onReport}
-              onPin={onPin}
-              onNavigate={onNavigate}
-              onToggleExpand={onToggleExpand}
-              onHighlight={onHighlight}
-              showModeration={showModeration}
-              isHighlighted={threadState.highlighted === reply.id}
-            />
-          ))}
-        </div>
-      )}
+      {/* Replies - REMOVED: This was creating duplicate flat rendering that broke threading.
+           The proper nested rendering is handled by the buildCommentTree logic in the main CommentThread component */}
     </div>
   );
 };
@@ -638,11 +568,125 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [threadState, setThreadState] = useState<ThreadState>({
     expanded: new Set<string>(),
-    collapsed: new Set<string>()
+    collapsed: new Set<string>(),
+    highlighted: undefined
   });
   const [showControls, setShowControls] = useState(false);
   
   const wsRef = useRef<WebSocket | null>(null);
+
+  // Handle URL hash fragment navigation on mount and when comments change
+  useEffect(() => {
+    const handleHashNavigation = () => {
+      const hash = window.location.hash;
+      console.log('🔗 Hash navigation triggered:', hash);
+      
+      if (hash.startsWith('#comment-')) {
+        const commentId = hash.replace('#comment-', '');
+        const comment = comments.find(c => c.id === commentId);
+        console.log('🎯 Target comment found:', comment?.id, comment?.author);
+        
+        if (comment) {
+          // Expand parent comments to ensure visibility - Enhanced logic
+          setThreadState(prev => {
+            const newExpanded = new Set(prev.expanded);
+            const newCollapsed = new Set(prev.collapsed);
+            
+            // Find and expand all parents in the chain
+            const expandParentChain = (targetComment: Comment) => {
+              let currentComment = targetComment;
+              const parentsToExpand = [];
+              
+              // Collect all parent IDs in the chain
+              while (currentComment?.parentId) {
+                parentsToExpand.push(currentComment.parentId);
+                currentComment = comments.find(c => c.id === currentComment?.parentId);
+              }
+              
+              console.log('📂 Expanding parent chain:', parentsToExpand);
+              
+              // Expand all parents
+              parentsToExpand.forEach(parentId => {
+                newExpanded.add(parentId);
+                newCollapsed.delete(parentId);
+              });
+            };
+            
+            expandParentChain(comment);
+            
+            return {
+              ...prev,
+              expanded: newExpanded,
+              collapsed: newCollapsed,
+              highlighted: commentId
+            };
+          });
+          
+          // Scroll to comment after state update and DOM render - Enhanced timing
+          setTimeout(() => {
+            const element = document.getElementById(`comment-${commentId}`);
+            console.log('📍 Scrolling to element:', element ? 'found' : 'not found');
+            
+            if (element) {
+              // Ensure element is visible first
+              element.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center',
+                inline: 'nearest'
+              });
+              
+              // Add highlight effect with better visibility
+              element.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+              element.style.border = '2px solid rgba(59, 130, 246, 0.5)';
+              element.style.borderRadius = '8px';
+              element.style.transition = 'all 0.3s ease';
+              
+              // Remove highlight after delay
+              setTimeout(() => {
+                element.style.backgroundColor = '';
+                element.style.border = '';
+                element.style.borderRadius = '';
+              }, 3000);
+            } else {
+              console.warn(`❌ Element comment-${commentId} not found in DOM`);
+              
+              // Retry after longer delay for complex renders
+              setTimeout(() => {
+                const retryElement = document.getElementById(`comment-${commentId}`);
+                if (retryElement) {
+                  console.log('✅ Retry successful, scrolling to element');
+                  retryElement.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center'
+                  });
+                }
+              }, 500);
+            }
+          }, 300); // Increased timeout for React state update and re-render
+        } else {
+          console.warn(`❌ Comment ${commentId} not found in comments array of ${comments.length} items`);
+        }
+      }
+    };
+
+    // Only run if comments array is populated
+    if (comments.length > 0) {
+      console.log('🚀 Setting up hash navigation with', comments.length, 'comments');
+      
+      // Handle initial load
+      handleHashNavigation();
+    }
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashNavigation);
+    // SPARC FIX: Also listen for popstate for better browser navigation
+    window.addEventListener('popstate', handleHashNavigation);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashNavigation);
+      window.removeEventListener('popstate', handleHashNavigation);
+    };
+  }, [comments]); // Dependency on comments ensures navigation works after data loads
 
   // WebSocket connection for real-time updates
   useEffect(() => {
@@ -672,18 +716,15 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   const handleReply = useCallback(async (parentId: string, content: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/v1/posts/${postId}/comments`, {
+      const response = await fetch(`/api/v1/comments/${parentId}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           content,
-          authorAgent: currentUser, // Using AgentLink API format
-          parentId,
-          metadata: {
-            isAgentResponse: false
-          }
+          authorAgent: currentUser,
+          postId: postId
         })
       });
 
@@ -735,30 +776,6 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     }
   }, [onCommentsUpdate]);
   
-  const handleReact = useCallback(async (commentId: string, reactionType: string) => {
-    try {
-      // Use AgentLink comment like API (currently only supports likes)
-      const response = await fetch(`/api/v1/comments/${commentId}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: currentUser,
-          anonymous: false
-        })
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to add reaction');
-      }
-      
-      onCommentsUpdate?.();
-    } catch (error) {
-      console.error('Failed to react to comment:', error);
-      throw error;
-    }
-  }, [currentUser, onCommentsUpdate]);
   
   const handleReport = useCallback(async (commentId: string, reason: string, description?: string) => {
     try {
@@ -846,11 +863,28 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
       const newCollapsed = new Set(prev.collapsed);
       
       if (newCollapsed.has(commentId)) {
+        // Expand the comment and its children
         newCollapsed.delete(commentId);
         newExpanded.add(commentId);
       } else {
+        // Collapse the comment and its children
         newExpanded.delete(commentId);
         newCollapsed.add(commentId);
+        
+        // Also collapse all child comments
+        const comment = comments.find(c => c.id === commentId);
+        if (comment?.replies) {
+          const collapseChildren = (replies: Comment[]) => {
+            replies.forEach(reply => {
+              newCollapsed.add(reply.id);
+              newExpanded.delete(reply.id);
+              if (reply.replies) {
+                collapseChildren(reply.replies);
+              }
+            });
+          };
+          collapseChildren(comment.replies);
+        }
       }
       
       return {
@@ -859,7 +893,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
         collapsed: newCollapsed
       };
     });
-  }, []);
+  }, [comments]);
   
   const handleHighlight = useCallback((commentId: string) => {
     setThreadState(prev => ({
@@ -913,7 +947,13 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
       }
     }
     
-    return result;
+    // CRITICAL FIX: Transform flat comments to nested structure with replies array
+    const commentsWithReplies = result.map(comment => ({
+      ...comment,
+      replies: result.filter(c => c.parentId === comment.id)
+    }));
+
+    return commentsWithReplies;
   }, [comments, searchQuery, filter]);
 
   if (processedComments.length === 0) {
@@ -1011,38 +1051,77 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
           threadStats={{
             totalComments: comments.length,
             totalReplies: comments.filter(c => c.parentId).length,
-            totalLikes: comments.reduce((sum, c) => sum + c.likesCount, 0),
+            totalEngagement: comments.reduce((sum, c) => sum + c.repliesCount, 0),
             maxDepth: Math.max(...comments.map(c => c.threadDepth), 0),
             topContributors: []
           }}
         />
       )}
       
-      {/* Comments */}
-      <div className="space-y-3">
-        {processedComments
-          .filter(comment => !comment.parentId) // Only root comments
-          .map((comment) => (
-            <CommentItem
-              key={comment.id}
-              comment={comment}
-              depth={0}
-              maxDepth={maxDepth}
-              currentUser={currentUser}
-              threadState={threadState}
-              onReply={handleReply}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onReact={handleReact}
-              onReport={handleReport}
-              onPin={handlePin}
-              onNavigate={handleNavigate}
-              onToggleExpand={handleToggleExpand}
-              onHighlight={handleHighlight}
-              showModeration={showModeration}
-              isHighlighted={threadState.highlighted === comment.id}
-            />
-          ))}
+      {/* Comments - Enhanced with threading visibility */}
+      <div className="space-y-3" data-testid="comment-thread-container">
+        {(() => {
+          // Build comment tree structure for proper threading
+          const commentTree = buildCommentTree(processedComments);
+          
+          // Render tree nodes recursively - Fixed expansion logic
+          const renderCommentTree = (nodes: CommentTreeNode[], depth = 0): React.ReactNode[] => {
+            return nodes.map((node: CommentTreeNode) => {
+              const comment = node.comment;
+              
+              // Enhanced expansion logic: 
+              // - Comments with children start expanded by default
+              // - Can be explicitly collapsed via threadState.collapsed
+              // - Can be explicitly expanded via threadState.expanded (overrides collapsed)
+              const hasChildren = node.children && node.children.length > 0;
+              const isExplicitlyCollapsed = threadState.collapsed.has(comment.id);
+              const isExplicitlyExpanded = threadState.expanded.has(comment.id);
+              
+              // Final expansion state
+              const isExpanded = hasChildren && (
+                isExplicitlyExpanded || // Explicitly expanded always wins
+                (!isExplicitlyCollapsed) // Default to expanded if not explicitly collapsed
+              );
+              
+              console.log(`🌳 Comment ${comment.id} (depth ${depth}): hasChildren=${hasChildren}, expanded=${isExpanded}, explicitly collapsed=${isExplicitlyCollapsed}`);
+              
+              return (
+                <div key={comment.id} className="comment-tree-node" data-comment-id={comment.id} data-depth={depth}>
+                  <CommentItem
+                    comment={comment}
+                    depth={depth}
+                    maxDepth={maxDepth}
+                    currentUser={currentUser}
+                    threadState={threadState}
+                    onReply={handleReply}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onReact={undefined}
+                    onReport={handleReport}
+                    onPin={handlePin}
+                    onNavigate={handleNavigate}
+                    onToggleExpand={handleToggleExpand}
+                    onHighlight={handleHighlight}
+                    showModeration={showModeration}
+                    isHighlighted={threadState.highlighted === comment.id}
+                  />
+                  {/* Render children with proper threading indentation */}
+                  {isExpanded && hasChildren && (
+                    <div className={`ml-6 border-l-2 ${
+                      threadState.highlighted && node.children.some(child => 
+                        child.comment.id === threadState.highlighted
+                      ) ? 'border-blue-300' : 'border-gray-200'
+                    } pl-4 mt-2 transition-colors duration-200`}>
+                      {renderCommentTree(node.children, depth + 1)}
+                    </div>
+                  )}
+                </div>
+              );
+            });
+          };
+          
+          return renderCommentTree(commentTree);
+        })()}
       </div>
       
       {isLoading && (
@@ -1063,9 +1142,9 @@ interface ThreadControlsProps {
   threadStats: {
     totalComments: number;
     totalReplies: number;
-    totalLikes: number;
+    totalEngagement: number;
     maxDepth: number;
-    topContributors: Array<{ author: string; count: number; likes: number }>;
+    topContributors: Array<{ author: string; count: number; engagement: number }>;
   };
   onSortChange?: (sort: CommentSort) => void;
   onFilterChange?: (filter: CommentFilter) => void;
@@ -1126,7 +1205,6 @@ const ThreadControls: React.FC<ThreadControlsProps> = ({
             >
               <option value="createdAt-asc">Oldest first</option>
               <option value="createdAt-desc">Newest first</option>
-              <option value="likes-desc">Most liked</option>
               <option value="replies-desc">Most replies</option>
               <option value="controversial-desc">Most controversial</option>
             </select>
@@ -1155,8 +1233,8 @@ const ThreadControls: React.FC<ThreadControlsProps> = ({
               <div className="font-semibold">{threadStats.totalReplies}</div>
             </div>
             <div>
-              <div className="text-gray-500">Total Likes</div>
-              <div className="font-semibold">{threadStats.totalLikes}</div>
+              <div className="text-gray-500">Total Engagement</div>
+              <div className="font-semibold">{threadStats.totalEngagement}</div>
             </div>
             <div>
               <div className="text-gray-500">Max Depth</div>

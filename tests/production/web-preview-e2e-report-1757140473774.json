@@ -1,0 +1,31 @@
+{
+  "testStartTime": "2025-09-06T06:34:31.754Z",
+  "tests": [
+    {
+      "name": "performance_load_time",
+      "passed": true,
+      "details": {
+        "loadTime": "1052ms",
+        "threshold": "5000ms"
+      },
+      "timestamp": "2025-09-06T06:34:33.756Z"
+    },
+    {
+      "name": "performance_memory",
+      "passed": true,
+      "details": {
+        "memoryUsage": "20.69MB",
+        "threshold": "50MB"
+      },
+      "timestamp": "2025-09-06T06:34:33.773Z"
+    }
+  ],
+  "issues": [],
+  "screenshots": [],
+  "summary": {
+    "totalTests": 2,
+    "passed": 2,
+    "failed": 0,
+    "warnings": 0
+  }
+}

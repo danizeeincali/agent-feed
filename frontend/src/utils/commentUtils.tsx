@@ -10,6 +10,8 @@ export interface CommentTreeNode {
   children: CommentTreeNode[];
   parent?: CommentTreeNode;
   level: number;
+  isVisible?: boolean;
+  isExpanded?: boolean;
 }
 
 /**

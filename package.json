@@ -67,7 +67,6 @@
     "precommit": "npm run lint && npm run test:unit && npm run performance-gates:smoke"
   },
   "dependencies": {
-    "axios": "^1.6.0",
     "better-sqlite3": "^12.2.0",
     "chart.js": "^4.4.0",
     "concurrently": "^8.2.0",
@@ -99,6 +98,7 @@
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
     "artillery": "^2.0.3",
+    "axios": "^1.11.0",
     "chai": "^6.0.1",
     "clinic": "^13.0.0",
     "eslint": "^8.47.0",

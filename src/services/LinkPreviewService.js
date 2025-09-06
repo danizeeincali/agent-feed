@@ -7,9 +7,205 @@ import fetch from 'node-fetch';
 import { JSDOM } from 'jsdom';
 import { databaseService } from '../database/DatabaseService.js';
 
+/**
+ * YouTube metadata service for extracting real video information
+ */
+class YouTubeMetadataService {
+  constructor() {
+    this.oembedEndpoint = 'https://www.youtube.com/oembed';
+    this.cache = new Map();
+    this.maxCacheSize = 100;
+    this.cacheExpiry = 30 * 60 * 1000; // 30 minutes
+    this.userAgent = 'Mozilla/5.0 (compatible; AgentFeed LinkPreview/1.0)';
+  }
+
+  /**
+   * Extract YouTube video ID from URL
+   */
+  extractVideoId(url) {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/
+    ];
+    
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Get YouTube metadata using oEmbed API (Enhanced)
+   */
+  async getYouTubeMetadata(url) {
+    const videoId = this.extractVideoId(url);
+    if (!videoId) {
+      throw new Error('Invalid YouTube URL');
+    }
+
+    // Check cache first
+    const cacheKey = videoId;
+    const cached = this.cache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < this.cacheExpiry) {
+      console.log(`📺 Using cached YouTube metadata for: ${videoId}`);
+      return cached.data;
+    }
+
+    try {
+      // Use YouTube oEmbed API with better parameters
+      const oembedUrl = `${this.oembedEndpoint}?url=${encodeURIComponent(url)}&format=json&maxwidth=1280&maxheight=720`;
+      
+      const response = await fetch(oembedUrl, {
+        method: 'GET',
+        headers: {
+          'User-Agent': this.userAgent,
+          'Accept': 'application/json'
+        },
+        timeout: 10000
+      });
+
+      if (!response.ok) {
+        throw new Error(`YouTube oEmbed API error: ${response.status}`);
+      }
+
+      const oembedData = await response.json();
+      
+      // Extract metadata from oEmbed response
+      const metadata = {
+        title: oembedData.title || `YouTube Video ${videoId}`,
+        description: this.generateVideoDescription(oembedData),
+        author: oembedData.author_name || 'YouTube Creator',
+        channelUrl: oembedData.author_url,
+        thumbnail: oembedData.thumbnail_url,
+        thumbnailWidth: oembedData.thumbnail_width,
+        thumbnailHeight: oembedData.thumbnail_height,
+        duration: this.parseDuration(oembedData.duration),
+        videoId,
+        site_name: oembedData.provider_name || 'YouTube',
+        type: 'video',
+        html: oembedData.html
+      };
+
+      // Cache the result
+      this.cacheMetadata(cacheKey, metadata);
+      
+      console.log(`📺 Fetched YouTube metadata for: ${metadata.title}`);
+      return metadata;
+      
+    } catch (error) {
+      console.warn('YouTube oEmbed API failed, using fallback:', error.message);
+      
+      // Fallback to enhanced scraping
+      return this.getYouTubeFallbackMetadata(url, videoId);
+    }
+  }
+
+  /**
+   * Generate meaningful video description from oEmbed data
+   */
+  generateVideoDescription(oembedData) {
+    const parts = [];
+    
+    if (oembedData.author_name) {
+      parts.push(`Video by ${oembedData.author_name}`);
+    }
+    
+    if (oembedData.width && oembedData.height) {
+      parts.push(`${oembedData.width}x${oembedData.height}`);
+    }
+    
+    return parts.length > 0 
+      ? parts.join(' • ') 
+      : 'Watch this video on YouTube';
+  }
+
+  /**
+   * Parse duration from various formats
+   */
+  parseDuration(duration) {
+    if (!duration) return null;
+    
+    // Handle ISO 8601 format (PT1H2M3S)
+    if (typeof duration === 'string' && duration.startsWith('PT')) {
+      const matches = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+      if (matches) {
+        const hours = parseInt(matches[1] || '0');
+        const minutes = parseInt(matches[2] || '0');
+        const seconds = parseInt(matches[3] || '0');
+        return hours * 3600 + minutes * 60 + seconds;
+      }
+    }
+    
+    // Handle numeric seconds
+    if (typeof duration === 'number') {
+      return duration;
+    }
+    
+    return null;
+  }
+
+  /**
+   * Fallback metadata extraction when oEmbed fails
+   */
+  async getYouTubeFallbackMetadata(url, videoId) {
+    return {
+      title: `YouTube Video`,
+      description: 'Video content from YouTube',
+      author: 'YouTube Creator',
+      thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
+      videoId,
+      site_name: 'YouTube',
+      type: 'video',
+      fallback: true
+    };
+  }
+
+  /**
+   * Cache metadata with size limit
+   */
+  cacheMetadata(key, data) {
+    // Remove oldest entries if cache is full
+    if (this.cache.size >= this.maxCacheSize) {
+      const firstKey = this.cache.keys().next().value;
+      this.cache.delete(firstKey);
+    }
+    
+    this.cache.set(key, {
+      data,
+      timestamp: Date.now()
+    });
+  }
+
+  /**
+   * Clear expired cache entries
+   */
+  clearExpiredCache() {
+    const now = Date.now();
+    let cleared = 0;
+    
+    for (const [key, value] of this.cache.entries()) {
+      if (now - value.timestamp > this.cacheExpiry) {
+        this.cache.delete(key);
+        cleared++;
+      }
+    }
+    
+    if (cleared > 0) {
+      console.log(`🗑️ Cleared ${cleared} expired YouTube metadata cache entries`);
+    }
+    
+    return cleared;
+  }
+}
+
 class LinkPreviewService {
   constructor() {
     this.userAgent = 'Mozilla/5.0 (compatible; AgentFeed LinkPreview/1.0)';
+    this.youtubeService = new YouTubeMetadataService();
   }
 
   /**
@@ -23,7 +219,12 @@ class LinkPreviewService {
         throw new Error('Invalid URL provided');
       }
 
-      // Check cache first
+      // Handle YouTube URLs specially
+      if (this.isYouTubeUrl(validUrl)) {
+        return await this.getYouTubePreview(validUrl);
+      }
+
+      // Check cache first for non-YouTube URLs
       const cached = await databaseService.db.getCachedLinkPreview(validUrl);
       if (cached) {
         console.log(`📋 Using cached preview for: ${validUrl}`);
@@ -52,6 +253,115 @@ class LinkPreviewService {
   }
 
   /**
+   * Check if URL is a YouTube URL
+   */
+  isYouTubeUrl(url) {
+    return /(?:youtube\.com|youtu\.be)/.test(url);
+  }
+
+  /**
+   * Get YouTube-specific preview with real metadata
+   */
+  async getYouTubePreview(url) {
+    try {
+      // Check cache first
+      const cached = await databaseService.db.getCachedLinkPreview(url);
+      if (cached && !cached.fallback) {
+        console.log(`📺 Using cached YouTube preview for: ${url}`);
+        return cached;
+      }
+
+      // Direct oEmbed API call (bypassing the failing youtubeService)
+      const videoId = this.extractYouTubeVideoId(url);
+      if (!videoId) {
+        throw new Error('Invalid YouTube URL');
+      }
+
+      const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json&maxwidth=1280&maxheight=720`;
+      
+      const response = await fetch(oembedUrl, {
+        method: 'GET',
+        headers: {
+          'User-Agent': this.userAgent,
+          'Accept': 'application/json'
+        },
+        timeout: 10000
+      });
+
+      if (!response.ok) {
+        throw new Error(`YouTube oEmbed API error: ${response.status}`);
+      }
+
+      const oembedData = await response.json();
+      
+      const metadata = {
+        title: oembedData.title || 'YouTube Video',
+        description: `Video by ${oembedData.author_name || 'Unknown'} on YouTube`,
+        thumbnail: oembedData.thumbnail_url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+        author: oembedData.author_name,
+        videoId: videoId,
+        channelUrl: oembedData.author_url,
+        fallback: false
+      };
+      
+      const preview = {
+        title: metadata.title,
+        description: metadata.description,
+        image: metadata.thumbnail,
+        video: url,
+        site_name: metadata.author, // Use channel name as site_name
+        type: 'video',
+        author: metadata.author,
+        videoId: metadata.videoId,
+        duration: metadata.duration,
+        channelUrl: metadata.channelUrl,
+        fallback: metadata.fallback || false
+      };
+
+      // Cache the result
+      await databaseService.db.cacheLinkPreview(url, preview);
+      
+      console.log(`📺 Successfully fetched YouTube preview: ${preview.title}`);
+      return preview;
+      
+    } catch (error) {
+      console.error('Error getting YouTube preview:', error);
+      
+      // Return enhanced fallback for YouTube
+      const videoId = this.extractYouTubeVideoId(url);
+      return {
+        title: 'YouTube Video',
+        description: 'Unable to fetch video details',
+        image: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : null,
+        video: url,
+        site_name: 'YouTube',
+        type: 'video',
+        videoId,
+        error: error.message,
+        fallback: true
+      };
+    }
+  }
+
+  /**
+   * Extract YouTube video ID from URL
+   */
+  extractYouTubeVideoId(url) {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/,
+      /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+    ];
+    
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+    return null;
+  }
+
+  /**
    * Fetch link preview from URL
    */
   async fetchLinkPreview(url) {
@@ -65,9 +375,9 @@ class LinkPreviewService {
         'Connection': 'keep-alive',
         'Upgrade-Insecure-Requests': '1'
       },
-      timeout: 10000,
-      follow: 3,
-      size: 1024 * 1024 // 1MB limit
+      timeout: 15000,
+      follow: 5,
+      size: 5 * 1024 * 1024 // 5MB limit for large websites
     });
 
     if (!response.ok) {
@@ -210,6 +520,68 @@ class LinkPreviewService {
   }
 
   /**
+   * Enhanced YouTube metadata extraction
+   */
+  async extractYouTubeMetadata(url) {
+    const videoId = this.extractYouTubeId(url);
+    if (!videoId) return null;
+
+    try {
+      // Try YouTube oEmbed API (no API key required)
+      const oEmbedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+      const response = await fetch(oEmbedUrl, {
+        headers: { 'User-Agent': this.userAgent },
+        timeout: 5000
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          title: data.title || 'YouTube Video',
+          description: `By ${data.author_name || 'YouTube'}`,
+          image: data.thumbnail_url || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+          video: `https://www.youtube.com/watch?v=${videoId}`,
+          type: 'video'
+        };
+      }
+    } catch (error) {
+      console.warn('YouTube oEmbed API failed:', error);
+    }
+
+    // Fallback to basic YouTube data
+    return {
+      title: `YouTube Video ${videoId}`,
+      description: 'Video hosted on YouTube',
+      image: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+      video: `https://www.youtube.com/watch?v=${videoId}`,
+      type: 'video'
+    };
+  }
+
+  /**
+   * Extract YouTube video ID from URL
+   */
+  extractYouTubeId(url) {
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/)([^&\n?#]+)/,
+      /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
+      /youtube\.com\/shorts\/([^&\n?#]+)/
+    ];
+    
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        const videoId = match[1];
+        if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+          return videoId;
+        }
+      }
+    }
+    
+    return null;
+  }
+
+  /**
    * Determine content type based on page analysis
    */
   determineContentType(document, url) {
@@ -338,13 +710,17 @@ class LinkPreviewService {
    */
   async clearExpiredCache() {
     try {
+      // Clear database cache
       const result = await databaseService.db.db.prepare(`
         DELETE FROM link_preview_cache 
         WHERE datetime(cached_at) < datetime('now', '-7 days')
       `).run();
       
-      console.log(`🗑️ Cleared ${result.changes} expired link preview cache entries`);
-      return result.changes;
+      // Clear YouTube service in-memory cache
+      const youtubeCacheCleared = this.youtubeService.clearExpiredCache();
+      
+      console.log(`🗑️ Cleared ${result.changes} expired link preview cache entries and ${youtubeCacheCleared} YouTube cache entries`);
+      return result.changes + youtubeCacheCleared;
     } catch (error) {
       console.error('Error clearing expired cache:', error);
       return 0;

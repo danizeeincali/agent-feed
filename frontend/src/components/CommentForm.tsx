@@ -1,8 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { Send, MessageCircle, AtSign, Hash, Bold, Italic, Code, Link2 } from 'lucide-react';
+import { Send, MessageCircle, AtSign, Hash, Bold, Italic, Code, Link2, Bot, User, Reply } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { useWebSocket } from '@/hooks/useWebSocket';
 import { extractMentions } from '@/utils/commentUtils';
+import { apiService } from '../services/api';
 
 interface CommentFormProps {
   postId: string;
@@ -23,7 +23,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   parentId,
   currentUser = 'current-user',
   onCommentAdded,
-  placeholder = 'Write a comment...',
+  placeholder = 'Provide technical analysis or feedback...',
   className,
   autoFocus = false,
   maxLength = 2000,
@@ -42,7 +42,6 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const mentionsRef = useRef<HTMLDivElement>(null);
 
-  const { socket, isConnected } = useWebSocket();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,42 +60,26 @@ export const CommentForm: React.FC<CommentFormProps> = ({
     setError('');
 
     try {
-      const response = await fetch(`/api/v1/posts/${postId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: content.trim(),
-          authorAgent: currentUser, // Using AgentLink API format
-          parentId: parentId || null,
-          metadata: {
-            mentionedUsers: extractMentions(content),
-            isAgentResponse: false
-          }
-        })
+      console.log('Submitting comment via API service:', {
+        postId,
+        content: content.trim(),
+        parentId,
+        author: currentUser
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to post comment');
-      }
-
-      const result = await response.json();
       
-      // Emit WebSocket event for real-time updates
-      if (socket && isConnected && result.data) {
-        socket.emit('comment:create', {
-          postId,
-          content: content.trim(),
-          commentId: result.data.id
-        });
-      }
-
+      const result = await apiService.createComment(postId, content.trim(), {
+        parentId: parentId || undefined,
+        author: currentUser,
+        mentionedUsers: extractMentions(content)
+      });
+      
+      console.log('Comment submitted successfully:', result);
+      
       setContent('');
       onCommentAdded?.();
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to post comment');
+      console.error('Comment submission failed:', error);
+      setError(error instanceof Error ? error.message : 'Failed to post technical analysis');
     } finally {
       setIsSubmitting(false);
     }
@@ -215,8 +198,11 @@ ${selectedText}
   return (
     <div className={cn('space-y-3', className)}>
       {parentId && (
-        <div className="text-xs text-gray-500 border-l-2 border-blue-200 pl-2">
-          Replying to comment...
+        <div className="text-xs text-gray-600 border-l-2 border-blue-200 pl-3 py-1 bg-blue-50 rounded">
+          <div className="flex items-center space-x-1">
+            <Reply className="w-3 h-3" />
+            <span>Replying with technical analysis...</span>
+          </div>
         </div>
       )}
       
@@ -345,9 +331,13 @@ ${selectedText}
       )}
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2 text-xs text-gray-500">
-          <MessageCircle className="w-4 h-4" />
-          <span>Posting as {currentUser}</span>
+        <div className="flex items-center space-x-2 text-xs text-gray-600">
+          <div className="flex items-center space-x-1">
+            <Bot className="w-4 h-4 text-blue-500" />
+            <span>Agent Analysis</span>
+          </div>
+          <span className="text-gray-400">•</span>
+          <span>by {currentUser}</span>
         </div>
         
         <div className="flex space-x-2">
@@ -375,10 +365,10 @@ ${selectedText}
             <Send className="w-4 h-4" />
             <span>
               {isSubmitting 
-                ? 'Posting...' 
+                ? 'Analyzing...' 
                 : parentId 
-                  ? 'Post Reply' 
-                  : 'Post Comment'
+                  ? 'Submit Analysis' 
+                  : 'Post Analysis'
               }
             </span>
           </button>

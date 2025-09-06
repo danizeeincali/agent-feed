@@ -1,0 +1,76 @@
+{
+  "timestamp": "2025-09-06T04:12:49.276Z",
+  "threading": {
+    "playwright": false
+  },
+  "navigation": {
+    "api": true
+  },
+  "performance": {
+    "dom": true
+  },
+  "visual": {
+    "behavior": true,
+    "screenshots": [
+      {
+        "name": "api-error-state.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/api-error-state.png",
+        "size": 35359
+      },
+      {
+        "name": "error-boundary.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/error-boundary.png",
+        "size": 85478
+      },
+      {
+        "name": "final-success.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/final-success.png",
+        "size": 85822
+      },
+      {
+        "name": "frontend-debug.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/frontend-debug.png",
+        "size": 85889
+      },
+      {
+        "name": "initial-load.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/initial-load.png",
+        "size": 85348
+      },
+      {
+        "name": "loaded-state.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/loaded-state.png",
+        "size": 31672
+      },
+      {
+        "name": "posts-loaded.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/posts-loaded.png",
+        "size": 85750
+      },
+      {
+        "name": "responsive-1920x1080.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/responsive-1920x1080.png",
+        "size": 125796
+      },
+      {
+        "name": "responsive-375x667.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/responsive-375x667.png",
+        "size": 51236
+      },
+      {
+        "name": "responsive-768x1024.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/responsive-768x1024.png",
+        "size": 100018
+      },
+      {
+        "name": "white-screen-debug.png",
+        "path": "/workspaces/agent-feed/tests/screenshots/white-screen-debug.png",
+        "size": 49351
+      }
+    ]
+  },
+  "overall": {
+    "success": true,
+    "score": 75
+  }
+}

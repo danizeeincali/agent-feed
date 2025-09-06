@@ -1,0 +1,59 @@
+{
+  "testStartTime": "2025-09-06T06:34:24.817Z",
+  "tests": [
+    {
+      "name": "responsive_mobile",
+      "passed": true,
+      "details": {
+        "viewport": "mobile",
+        "dimensions": "375x667"
+      },
+      "timestamp": "2025-09-06T06:34:27.069Z"
+    },
+    {
+      "name": "responsive_tablet",
+      "passed": true,
+      "details": {
+        "viewport": "tablet",
+        "dimensions": "768x1024"
+      },
+      "timestamp": "2025-09-06T06:34:28.251Z"
+    },
+    {
+      "name": "responsive_desktop",
+      "passed": true,
+      "details": {
+        "viewport": "desktop",
+        "dimensions": "1920x1080"
+      },
+      "timestamp": "2025-09-06T06:34:29.398Z"
+    }
+  ],
+  "issues": [],
+  "screenshots": [
+    {
+      "name": "responsive-mobile",
+      "description": "Responsive design at mobile viewport",
+      "path": "/workspaces/agent-feed/tests/production/screenshots/responsive-mobile-1757140467069.png",
+      "timestamp": "2025-09-06T06:34:27.166Z"
+    },
+    {
+      "name": "responsive-tablet",
+      "description": "Responsive design at tablet viewport",
+      "path": "/workspaces/agent-feed/tests/production/screenshots/responsive-tablet-1757140468251.png",
+      "timestamp": "2025-09-06T06:34:28.369Z"
+    },
+    {
+      "name": "responsive-desktop",
+      "description": "Responsive design at desktop viewport",
+      "path": "/workspaces/agent-feed/tests/production/screenshots/responsive-desktop-1757140469398.png",
+      "timestamp": "2025-09-06T06:34:29.692Z"
+    }
+  ],
+  "summary": {
+    "totalTests": 3,
+    "passed": 3,
+    "failed": 0,
+    "warnings": 0
+  }
+}

@@ -1,15 +1,31 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Heart } from 'lucide-react';
+import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2 } from 'lucide-react';
 import { apiService } from '../services/api';
 import { AgentPost, ApiResponse, FilterStats } from '../types/api';
 import FilterPanel, { FilterOptions } from './FilterPanel';
 import { renderParsedContent, parseContent, extractHashtags, extractMentions } from '../utils/contentParser';
+import ThreadedCommentSystem from './ThreadedCommentSystem';
+import { CommentThread } from './CommentThread';
+import { CommentForm } from './CommentForm';
+import '../styles/comments.css';
 
 interface RealSocialMediaFeedProps {
   className?: string;
 }
 
 interface ExpandedPost {
+  [key: string]: boolean;
+}
+
+interface PostComments {
+  [key: string]: boolean;
+}
+
+interface PostCommentsData {
+  [key: string]: any[];
+}
+
+interface CommentFormVisibility {
   [key: string]: boolean;
 }
 
@@ -33,6 +49,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [expandedPosts, setExpandedPosts] = useState<ExpandedPost>({});
+  const [showComments, setShowComments] = useState<PostComments>({});
+  const [postComments, setPostComments] = useState<PostCommentsData>({});
+  const [loadingComments, setLoadingComments] = useState<{[key: string]: boolean}>({});
+  const [showCommentForm, setShowCommentForm] = useState<CommentFormVisibility>({});
+  const [commentSort, setCommentSort] = useState<{[key: string]: {field: 'createdAt' | 'likes' | 'replies' | 'controversial', direction: 'asc' | 'desc'}}>({});
   const [currentFilter, setCurrentFilter] = useState<FilterOptions>({ type: 'all' });
   const [filterData, setFilterData] = useState<FilterData>({ agents: [], hashtags: [] });
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
@@ -286,12 +307,150 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     }));
   };
 
+  const toggleComments = async (postId: string) => {
+    const isCurrentlyShown = showComments[postId];
+    
+    if (!isCurrentlyShown) {
+      // Load comments when opening
+      if (!postComments[postId]) {
+        await loadComments(postId);
+      }
+    }
+    
+    setShowComments(prev => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
+  const loadComments = async (postId: string, refresh = false) => {
+    if (loadingComments[postId] && !refresh) return;
+    
+    setLoadingComments(prev => ({ ...prev, [postId]: true }));
+    try {
+      const sortOptions = commentSort[postId] || { field: 'createdAt', direction: 'asc' };
+      const comments = await apiService.getPostComments(postId, {
+        sort: sortOptions.field,
+        direction: sortOptions.direction,
+        userId: userId
+      });
+      setPostComments(prev => ({ ...prev, [postId]: comments }));
+    } catch (error) {
+      console.error('Failed to load comments:', error);
+    } finally {
+      setLoadingComments(prev => ({ ...prev, [postId]: false }));
+    }
+  };
+
+  const handleNewComment = async (postId: string, content: string, parentId?: string) => {
+    try {
+      console.log('Creating comment:', { postId, content, parentId });
+      
+      const result = await apiService.createComment(postId, content, {
+        parentId,
+        author: 'ProductionValidator', // Use consistent agent name
+        mentionedUsers: extractMentions(content)
+      });
+      
+      console.log('Comment created successfully:', result);
+      
+      // Refresh comments after adding new one
+      await loadComments(postId, true);
+      
+      // Update engagement count optimistically
+      setPosts(current => 
+        current.map(post => 
+          post.id === postId 
+            ? { 
+                ...post, 
+                engagement: { 
+                  ...post.engagement, 
+                  comments: (post.engagement.comments || 0) + 1
+                } 
+              }
+            : post
+        )
+      );
+      
+      // Hide comment form after successful submission
+      setShowCommentForm(prev => ({ ...prev, [postId]: false }));
+    } catch (error) {
+      console.error('Failed to create comment:', error);
+      alert('Failed to post analysis. Please try again.');
+      throw error;
+    }
+  };
+
+  const handleCommentSort = (postId: string, sort: {field: 'createdAt' | 'likes' | 'replies' | 'controversial', direction: 'asc' | 'desc'}) => {
+    setCommentSort(prev => ({ ...prev, [postId]: sort }));
+    loadComments(postId, true);
+  };
+
   const calculatePostMetrics = (content: string): PostMetrics => {
     const characterCount = content.length;
     const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
     const readingTime = Math.max(1, Math.ceil(wordCount / 200)); // 200 WPM average
     
     return { characterCount, wordCount, readingTime };
+  };
+
+  const getHookContent = (content: string): string => {
+    // Smart extraction that preserves URLs - use simple splitting first
+    const sentences = content.split(/(?<=[.!?])\s+/);
+    
+    if (sentences.length === 0) return content;
+    
+    let hookContent = sentences[0];
+    
+    // Create fresh regex to avoid state issues
+    const urlRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)', 'i');
+    const hasUrl = urlRegex.test(hookContent);
+    
+    if (hasUrl) {
+      // If there's a URL in the first sentence, include it fully
+      return hookContent;
+    } else {
+      // Try to find a sentence with URL in the first few sentences
+      for (let i = 1; i < Math.min(3, sentences.length); i++) {
+        const sentence = sentences[i];
+        // Create fresh regex for each test
+        const testRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)', 'i');
+        if (testRegex.test(sentence)) {
+          hookContent += ' ' + sentence;
+          break;
+        }
+      }
+    }
+    
+    // If still too long, truncate but keep URLs intact
+    if (hookContent.length > 300) {
+      const globalUrlRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)', 'g');
+      const urls = hookContent.match(globalUrlRegex) || [];
+      
+      if (urls.length > 0) {
+        // Try to keep the first URL and some surrounding context
+        const firstUrlIndex = hookContent.indexOf(urls[0]);
+        const beforeUrl = hookContent.substring(0, firstUrlIndex).trim();
+        const afterUrl = hookContent.substring(firstUrlIndex + urls[0].length).trim();
+        
+        // Keep reasonable context around the URL
+        const maxBeforeLength = 100;
+        const maxAfterLength = 100;
+        
+        let finalBefore = beforeUrl.length > maxBeforeLength 
+          ? '...' + beforeUrl.substring(beforeUrl.length - maxBeforeLength) 
+          : beforeUrl;
+          
+        let finalAfter = afterUrl.length > maxAfterLength 
+          ? afterUrl.substring(0, maxAfterLength) + '...' 
+          : afterUrl;
+        
+        const result = `${finalBefore} ${urls[0]} ${finalAfter}`.trim();
+        return result;
+      }
+    }
+    
+    return hookContent;
   };
 
   const truncateContent = (content: string, maxLength: number = 300): { truncated: string; isTruncated: boolean } => {
@@ -428,10 +587,13 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Line 2: Full Hook with Parsing */}
                   <div className="pl-14">
                     <div className="text-sm text-gray-600 leading-relaxed">
-                      {renderParsedContent(parseContent(post.content.split('.')[0] + '.'), {
+                      {renderParsedContent(parseContent(getHookContent(post.content)), {
                         onMentionClick: handleMentionClick,
                         onHashtagClick: handleHashtagClick,
-                        enableLinkPreviews: false
+                        enableLinkPreviews: true,
+                        useEnhancedPreviews: true,
+                        previewDisplayMode: 'thumbnail-summary',
+                        showThumbnailsOnly: false
                       })}
                     </div>
                   </div>
@@ -504,6 +666,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         onMentionClick: handleMentionClick,
                         onHashtagClick: handleHashtagClick,
                         enableLinkPreviews: true,
+                        useEnhancedPreviews: true,
+                        previewDisplayMode: 'card',
+                        showThumbnailsOnly: false,
                         className: 'space-y-2'
                       })}
                     </div>
@@ -587,7 +752,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   <div className="flex items-center space-x-6">
                     
                     {/* Comments */}
-                    <button className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors">
+                    <button 
+                      onClick={() => toggleComments(post.id)}
+                      className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+                      title="View Comments"
+                    >
                       <MessageCircle className="w-5 h-5" />
                       <span className="text-sm font-medium">{post.engagement?.comments || 0}</span>
                     </button>
@@ -595,8 +764,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     {/* Saves count display */}
                     {post.engagement?.saves && post.engagement.saves > 0 && (
                       <div className="flex items-center space-x-2 text-gray-600">
-                        <Heart className="w-4 h-4 text-red-500" />
-                        <span className="text-sm font-medium">{post.engagement.saves}</span>
+                        <Bookmark className="w-4 h-4 text-blue-500" />
+                        <span className="text-sm font-medium">{post.engagement.saves} saved</span>
                       </div>
                     )}
                   </div>
@@ -667,6 +836,112 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     </div>
                   )}
 
+                </div>
+              )}
+
+              {/* Comments Section */}
+              {showComments[post.id] && (
+                <div className="border-t border-gray-100 pt-4">
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-sm font-medium text-gray-700">
+                        Technical Analysis ({post.engagement?.comments || 0})
+                      </h4>
+                      <button
+                        onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: !prev[post.id] }))}
+                        className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                      >
+                        {showCommentForm[post.id] ? 'Cancel' : 'Add Analysis'}
+                      </button>
+                    </div>
+                    
+                    {/* Agent Comment Form */}
+                    {showCommentForm[post.id] && (
+                      <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <User className="w-4 h-4 text-gray-500" />
+                            <span className="text-sm text-gray-600">Agent Response</span>
+                          </div>
+                          <textarea
+                            placeholder="Provide technical analysis or feedback..."
+                            className="w-full p-3 text-sm border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+                            rows={4}
+                            maxLength={2000}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                                const content = (e.target as HTMLTextAreaElement).value;
+                                if (content.trim()) {
+                                  handleNewComment(post.id, content.trim());
+                                  (e.target as HTMLTextAreaElement).value = '';
+                                }
+                              }
+                            }}
+                          />
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500">Professional technical discussion • Ctrl+Enter to post</span>
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: false }))}
+                                className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  const textarea = (e.target as HTMLElement).closest('.space-y-3')?.querySelector('textarea') as HTMLTextAreaElement;
+                                  const content = textarea?.value.trim();
+                                  if (content) {
+                                    handleNewComment(post.id, content);
+                                    textarea.value = '';
+                                  }
+                                }}
+                                className="px-4 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                              >
+                                Post Analysis
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {loadingComments[post.id] ? (
+                      <div className="text-center py-4">
+                        <div className="inline-flex items-center space-x-2">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                          <span className="text-sm text-gray-500">Loading comments...</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {postComments[post.id] && postComments[post.id].length > 0 ? (
+                          <CommentThread
+                            postId={post.id}
+                            comments={postComments[post.id]}
+                            currentUser={userId}
+                            maxDepth={6}
+                            sort={commentSort[post.id] || { field: 'createdAt', direction: 'asc' }}
+                            onCommentsUpdate={() => loadComments(post.id, true)}
+                            onSortChange={(sort) => handleCommentSort(post.id, sort)}
+                            enableRealTime={true}
+                            className="bg-white rounded-lg"
+                          />
+                        ) : (
+                          <div className="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">
+                            <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                            <p>No technical analysis yet.</p>
+                            <button
+                              onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: true }))}
+                              className="text-blue-600 hover:text-blue-700 font-medium mt-2 transition-colors"
+                            >
+                              Provide technical analysis
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview Test</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .preview { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        .preview img { max-width: 100px; max-height: 100px; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Preview Debug Test</h1>
+    
+    <div class="debug">
+        <h3>URL Pattern Test</h3>
+        <div id="url-test"></div>
+    </div>
+    
+    <div class="debug">
+        <h3>Domain Extraction Test</h3>
+        <div id="domain-test"></div>
+    </div>
+
+    <script>
+        // Test URL pattern matching
+        const urlPattern = /(https?:\/\/[^\s]+)/g;
+        const testContent = "Check out https://www.example.com for more info and https://github.com/user/repo";
+        const matches = [...testContent.matchAll(urlPattern)];
+        
+        document.getElementById('url-test').innerHTML = `
+            <p>Content: ${testContent}</p>
+            <p>Matches: ${matches.length}</p>
+            <ul>${matches.map(m => `<li>${m[0]}</li>`).join('')}</ul>
+        `;
+        
+        // Test domain extraction
+        function extractDomain(url) {
+            try {
+                const urlObj = new URL(url);
+                return urlObj.hostname.replace('www.', '');
+            } catch (e) {
+                return 'Invalid URL';
+            }
+        }
+        
+        const testUrls = [
+            'https://www.example.com',
+            'https://github.com/user/repo',
+            'https://www.youtube.com/watch?v=abc123'
+        ];
+        
+        document.getElementById('domain-test').innerHTML = `
+            <ul>
+            ${testUrls.map(url => `
+                <li>
+                    <strong>URL:</strong> ${url}<br>
+                    <strong>Domain:</strong> ${extractDomain(url)}
+                </li>
+            `).join('')}
+            </ul>
+        `;
+    </script>
+</body>
+</html>

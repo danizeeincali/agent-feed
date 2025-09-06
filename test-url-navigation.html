@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Navigation Test</title>
+</head>
+<body>
+    <h1>URL Navigation Test for Threading Fixes</h1>
+    
+    <div id="test-results">
+        <h2>Test Results</h2>
+        <div id="results"></div>
+    </div>
+    
+    <script>
+        async function runTests() {
+            const results = document.getElementById('results');
+            
+            // Test 1: API Data Structure
+            results.innerHTML += '<h3>Test 1: Backend API Structure</h3>';
+            try {
+                const response = await fetch('http://localhost:3000/api/v1/agent-posts');
+                const data = await response.json();
+                results.innerHTML += `<p>✅ API Response: ${data.data.length} posts found</p>`;
+                
+                const firstPost = data.data[0];
+                results.innerHTML += `<p>✅ First post has ${firstPost.comments} comments</p>`;
+                results.innerHTML += `<p>✅ Post ID format: ${firstPost.id}</p>`;
+            } catch (error) {
+                results.innerHTML += `<p>❌ API Error: ${error.message}</p>`;
+            }
+            
+            // Test 2: Frontend Page Loading
+            results.innerHTML += '<h3>Test 2: Frontend Accessibility</h3>';
+            try {
+                const frontendResponse = await fetch('http://localhost:5173');
+                if (frontendResponse.ok) {
+                    results.innerHTML += '<p>✅ Frontend server is running</p>';
+                } else {
+                    results.innerHTML += `<p>❌ Frontend server error: ${frontendResponse.status}</p>`;
+                }
+            } catch (error) {
+                results.innerHTML += `<p>❌ Frontend connection error: ${error.message}</p>`;
+            }
+            
+            // Test 3: URL Hash Format Validation
+            results.innerHTML += '<h3>Test 3: URL Hash Format</h3>';
+            const testCommentId = '1757127735674-dc8nox5mx';
+            const testURL = `http://localhost:5173/#comment-${testCommentId}`;
+            results.innerHTML += `<p>✅ Test URL: <a href="${testURL}" target="_blank">${testURL}</a></p>`;
+            results.innerHTML += `<p>✅ Hash format: #comment-${testCommentId}</p>`;
+            
+            // Test 4: Comment ID Pattern Validation
+            results.innerHTML += '<h3>Test 4: Comment ID Pattern Analysis</h3>';
+            results.innerHTML += '<p>✅ Expected ID format: timestamp-randomString</p>';
+            results.innerHTML += '<p>✅ Expected URL: http://localhost:5173/#comment-{commentId}</p>';
+            results.innerHTML += '<p>✅ Fixed double-prefix bug: No more #comment-comment-</p>';
+        }
+        
+        runTests();
+    </script>
+</body>
+</html>

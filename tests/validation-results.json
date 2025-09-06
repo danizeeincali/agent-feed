@@ -1,0 +1,216 @@
+{
+  "timestamp": "2025-09-05T23:37:17.513Z",
+  "tests": [
+    {
+      "name": "Page loads successfully",
+      "status": "passed",
+      "duration": 136,
+      "details": {
+        "pageLength": 188368,
+        "title": "Agent Feed - Claude Code Orchestration",
+        "consoleErrors": 11,
+        "consoleMessages": 19
+      },
+      "screenshots": []
+    },
+    {
+      "name": "Locate posts with comment counts and MessageCircle icons",
+      "status": "passed",
+      "duration": 3321,
+      "details": {
+        "foundPosts": 7,
+        "foundCommentButtons": 20,
+        "commentButtonDetails": [
+          {
+            "postIndex": 0,
+            "text": "",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 0,
+            "text": "7",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 0,
+            "text": "Saved",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 0,
+            "text": "Delete",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 1,
+            "text": "",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 1,
+            "text": "4",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 1,
+            "text": "Save",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 1,
+            "text": "Delete",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 2,
+            "text": "",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 2,
+            "text": "9",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 2,
+            "text": "Save",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 2,
+            "text": "Delete",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 3,
+            "text": "",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 3,
+            "text": "6",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 3,
+            "text": "Save",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 3,
+            "text": "Delete",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 4,
+            "text": "",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 4,
+            "text": "12",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 4,
+            "text": "Save",
+            "hasSVG": true
+          },
+          {
+            "postIndex": 4,
+            "text": "Delete",
+            "hasSVG": true
+          }
+        ]
+      },
+      "screenshots": []
+    },
+    {
+      "name": "Click comment buttons and verify section opens/closes",
+      "status": "passed",
+      "duration": 13519,
+      "details": {
+        "totalButtons": 33,
+        "successfulClicks": 3,
+        "clickResults": [
+          {
+            "buttonIndex": 2,
+            "buttonText": "3",
+            "contentChanged": true,
+            "toggleWorked": true,
+            "beforeLength": 188368,
+            "afterLength": 190381,
+            "finalLength": 188368
+          },
+          {
+            "buttonIndex": 3,
+            "buttonText": "Refresh",
+            "contentChanged": false,
+            "toggleWorked": false,
+            "beforeLength": 188368,
+            "afterLength": 188368,
+            "finalLength": 188368
+          },
+          {
+            "buttonIndex": 4,
+            "buttonText": "All Posts",
+            "contentChanged": true,
+            "toggleWorked": true,
+            "beforeLength": 188368,
+            "afterLength": 192730,
+            "finalLength": 188368
+          }
+        ]
+      },
+      "screenshots": []
+    },
+    {
+      "name": "Verify comments display with proper formatting",
+      "status": "passed",
+      "duration": 3199,
+      "details": {
+        "foundCommentSections": 0,
+        "foundComments": 0,
+        "foundAvatars": 0
+      },
+      "screenshots": []
+    },
+    {
+      "name": "Monitor browser console for errors",
+      "status": "passed",
+      "duration": 8775,
+      "details": {
+        "totalConsoleMessages": 31,
+        "totalConsoleErrors": 23,
+        "recentErrors": [
+          "[ERROR] ❌ WebSocket error: JSHandle@object",
+          "[ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+          "[ERROR] ❌ WebSocket error: JSHandle@object",
+          "[ERROR] WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+          "[ERROR] ❌ WebSocket error: JSHandle@object"
+        ],
+        "recentLogs": [
+          "[LOG] 🔄 Attempting WebSocket reconnection...",
+          "[LOG] 🔌 WebSocket connection closed",
+          "[LOG] 🔄 Attempting WebSocket reconnection...",
+          "[LOG] 🔌 WebSocket connection closed",
+          "[LOG] 🔄 Attempting WebSocket reconnection...",
+          "[LOG] 🔌 WebSocket connection closed",
+          "[LOG] 🔄 Attempting WebSocket reconnection...",
+          "[LOG] 🔌 WebSocket connection closed",
+          "[LOG] 🔄 Attempting WebSocket reconnection...",
+          "[LOG] 🔌 WebSocket connection closed"
+        ]
+      },
+      "screenshots": []
+    }
+  ],
+  "summary": {
+    "totalTests": 5,
+    "passedTests": 5,
+    "failedTests": 0,
+    "totalDuration": 28950,
+    "consoleErrors": 23,
+    "consoleMessages": 31
+  }
+}

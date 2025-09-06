@@ -1,5 +1,6 @@
 import React from 'react';
 import LinkPreview from '../components/LinkPreview';
+import EnhancedLinkPreview from '../components/EnhancedLinkPreview';
 
 export interface ParsedContent {
   type: 'text' | 'mention' | 'hashtag' | 'url' | 'link-preview';
@@ -15,25 +16,44 @@ export interface ContentParserOptions {
   onMentionClick?: (agent: string) => void;
   onHashtagClick?: (tag: string) => void;
   enableLinkPreviews?: boolean;
+  useEnhancedPreviews?: boolean;
+  previewDisplayMode?: 'card' | 'thumbnail' | 'inline' | 'embedded' | 'thumbnail-summary';
+  showThumbnailsOnly?: boolean;
   className?: string;
 }
 
 export const parseContent = (content: string): ParsedContent[] => {
   const parts: ParsedContent[] = [];
-  const patterns = {
+  
+  // Clean parsing of content with URLs
+  
+  // Create fresh regex instances for each parse to avoid global state issues
+  const createPatterns = () => ({
     mention: /@([a-zA-Z0-9_-]+)/g,
     hashtag: /#([a-zA-Z0-9_-]+)/g,
-    url: /(https?:\/\/[^\s]+)/g
-  };
+    // Fixed URL regex to properly capture complete URLs including query params and fragments
+    url: /(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g
+  });
 
   let lastIndex = 0;
   const matches: Array<{ type: string; match: RegExpExecArray; index: number }> = [];
 
-  // Find all matches
+  // Find all matches with fresh regex instances
+  const patterns = createPatterns();
   for (const [type, regex] of Object.entries(patterns)) {
     let match;
     while ((match = regex.exec(content)) !== null) {
       matches.push({ type, match, index: match.index });
+      
+      // Track URL matches for debugging if needed
+      if (type === 'url' && process.env.NODE_ENV === 'development') {
+        console.log('🔗 URL match found:', match[0], 'at index:', match.index);
+      }
+      
+      // Prevent infinite loop for zero-width matches
+      if (match.index === regex.lastIndex) {
+        regex.lastIndex++;
+      }
     }
   }
 
@@ -102,6 +122,9 @@ export const renderParsedContent = (
     onMentionClick,
     onHashtagClick,
     enableLinkPreviews = true,
+    useEnhancedPreviews = true,
+    previewDisplayMode = 'card',
+    showThumbnailsOnly = false,
     className = ''
   } = options;
 
@@ -135,6 +158,12 @@ export const renderParsedContent = (
 
       case 'url':
         const url = part.data?.url || part.content;
+        
+        // Track URL processing for debugging if needed
+        if (process.env.NODE_ENV === 'development' && (url.includes('youtube.com') || url.includes('wired.com'))) {
+          console.log('🔗 Processing URL for preview:', url);
+        }
+        
         if (enableLinkPreviews && !linkPreviews.includes(url)) {
           linkPreviews.push(url);
         }
@@ -165,9 +194,23 @@ export const renderParsedContent = (
       
       {enableLinkPreviews && linkPreviews.length > 0 && (
         <div className="space-y-3">
-          {linkPreviews.map((url, index) => (
-            <LinkPreview key={index} url={url} />
-          ))}
+          {linkPreviews.map((url, index) => {
+            // Track link preview rendering for debugging if needed
+            if (process.env.NODE_ENV === 'development') {
+              console.log('🎬 Rendering link preview for URL:', url, 'Mode:', previewDisplayMode);
+            }
+            
+            return useEnhancedPreviews ? (
+              <EnhancedLinkPreview 
+                key={index} 
+                url={url} 
+                displayMode={previewDisplayMode}
+                showThumbnailOnly={showThumbnailsOnly}
+              />
+            ) : (
+              <LinkPreview key={index} url={url} />
+            );
+          })}
         </div>
       )}
     </div>
@@ -204,12 +247,20 @@ export const extractHashtags = (content: string): string[] => {
 
 export const extractUrls = (content: string): string[] => {
   const urls: string[] = [];
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  // Create fresh URL regex instance to avoid global state issues
+  const urlRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)', 'g');
   let match;
   
   while ((match = urlRegex.exec(content)) !== null) {
-    if (!urls.includes(match[0])) {
-      urls.push(match[0]);
+    const url = match[0];
+    // Clean up common trailing punctuation
+    const cleanUrl = url.replace(/[.,;!?]+$/, '');
+    if (!urls.includes(cleanUrl)) {
+      urls.push(cleanUrl);
+    }
+    // Prevent infinite loop for zero-width matches
+    if (match.index === urlRegex.lastIndex) {
+      urlRegex.lastIndex++;
     }
   }
   
@@ -217,9 +268,10 @@ export const extractUrls = (content: string): string[] => {
 };
 
 export const hasSpecialContent = (content: string): boolean => {
-  const mentionRegex = /@([a-zA-Z0-9_-]+)/;
-  const hashtagRegex = /#([a-zA-Z0-9_-]+)/;
-  const urlRegex = /(https?:\/\/[^\s]+)/;
+  // Create fresh regex instances to avoid global state issues
+  const mentionRegex = new RegExp('@([a-zA-Z0-9_-]+)');
+  const hashtagRegex = new RegExp('#([a-zA-Z0-9_-]+)');
+  const urlRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)');
   
   return mentionRegex.test(content) || hashtagRegex.test(content) || urlRegex.test(content);
 };
