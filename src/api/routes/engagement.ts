@@ -3,6 +3,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from '@/database/connection';
 import { logger } from '@/utils/logger';
 
+// Utility function to safely parse integers from database values
+const safeParseInt = (value: any, defaultValue: number = 0): number => {
+  try {
+    if (value === null || value === undefined) return defaultValue;
+    const parsed = parseInt(value);
+    return isNaN(parsed) ? defaultValue : parsed;
+  } catch (error) {
+    logger.warn('Failed to parse integer value', { value, error });
+    return defaultValue;
+  }
+};
+
 const router = express.Router();
 
 interface EngagementRequest {
@@ -63,7 +75,7 @@ router.post('/posts/:id/like', async (req: Request, res: Response) => {
     
     // Get updated count
     const countResult = await db.query('SELECT like_count FROM posts WHERE id = $1', [id]);
-    const likeCount = countResult.rows[0]?.like_count || 0;
+    const likeCount = safeParseInt(countResult.rows[0]?.like_count);
     
     res.json({
       success: true,
@@ -134,7 +146,7 @@ router.post('/posts/:id/heart', async (req: Request, res: Response) => {
     
     // Get updated count
     const countResult = await db.query('SELECT heart_count FROM posts WHERE id = $1', [id]);
-    const heartCount = countResult.rows[0]?.heart_count || 0;
+    const heartCount = safeParseInt(countResult.rows[0]?.heart_count);
     
     res.json({
       success: true,
@@ -203,7 +215,7 @@ router.post('/posts/:id/bookmark', async (req: Request, res: Response) => {
     
     // Get updated count
     const countResult = await db.query('SELECT bookmark_count FROM posts WHERE id = $1', [id]);
-    const bookmarkCount = countResult.rows[0]?.bookmark_count || 0;
+    const bookmarkCount = safeParseInt(countResult.rows[0]?.bookmark_count);
     
     res.json({
       success: true,
@@ -268,7 +280,7 @@ router.post('/posts/:id/share', async (req: Request, res: Response) => {
     
     // Get updated count
     const countResult = await db.query('SELECT share_count FROM posts WHERE id = $1', [id]);
-    const shareCount = countResult.rows[0]?.share_count || 0;
+    const shareCount = safeParseInt(countResult.rows[0]?.share_count);
     
     res.json({
       success: true,
@@ -336,7 +348,7 @@ router.post('/posts/:id/view', async (req: Request, res: Response) => {
     
     // Get updated count
     const countResult = await db.query('SELECT view_count FROM posts WHERE id = $1', [id]);
-    const viewCount = countResult.rows[0]?.view_count || 0;
+    const viewCount = safeParseInt(countResult.rows[0]?.view_count);
     
     res.json({
       success: true,
@@ -391,22 +403,22 @@ router.get('/posts/:id/engagement', async (req: Request, res: Response) => {
     
     const metrics = metricsResult.rows[0];
     
-    const totalEngagement = metrics.like_count + metrics.heart_count + 
-                           metrics.bookmark_count + metrics.share_count + 
-                           metrics.comment_count;
+    const totalEngagement = safeParseInt(metrics.like_count) + safeParseInt(metrics.heart_count) + 
+                           safeParseInt(metrics.bookmark_count) + safeParseInt(metrics.share_count) + 
+                           safeParseInt(metrics.comment_count);
     
-    const engagementRate = metrics.view_count > 0 
-      ? (totalEngagement / metrics.view_count) * 100 
+    const engagementRate = safeParseInt(metrics.view_count) > 0 
+      ? (totalEngagement / safeParseInt(metrics.view_count)) * 100 
       : 0;
     
     const responseData = {
       postId: id,
-      likes: metrics.like_count,
-      hearts: metrics.heart_count,
-      bookmarks: metrics.bookmark_count,
-      shares: metrics.share_count,
-      views: metrics.view_count,
-      comments: metrics.comment_count,
+      likes: safeParseInt(metrics.like_count) || 0,
+      hearts: safeParseInt(metrics.heart_count) || 0,
+      bookmarks: safeParseInt(metrics.bookmark_count) || 0,
+      shares: safeParseInt(metrics.share_count) || 0,
+      views: safeParseInt(metrics.view_count) || 0,
+      comments: safeParseInt(metrics.comment_count) || 0,
       totalEngagement,
       engagementRate: parseFloat(engagementRate.toFixed(2))
     };

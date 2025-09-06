@@ -1,0 +1,158 @@
+{
+  "model_version": "1.0.0",
+  "model_type": "comment_system_failure_prediction",
+  "creation_timestamp": "2025-09-06T00:00:00Z",
+  
+  "neural_architecture": {
+    "input_layer": {
+      "features": [
+        {
+          "name": "api_response_type_consistency",
+          "type": "float",
+          "range": [0, 1],
+          "description": "Consistency score of API response data types"
+        },
+        {
+          "name": "comment_count_accuracy", 
+          "type": "float",
+          "range": [0, 1],
+          "description": "Accuracy of displayed vs actual comment counts"
+        },
+        {
+          "name": "ui_label_comprehension_score",
+          "type": "float", 
+          "range": [0, 1],
+          "description": "User comprehension score for UI labels"
+        },
+        {
+          "name": "threading_depth_complexity",
+          "type": "integer",
+          "range": [0, 10],
+          "description": "Maximum threading depth in comment structure"
+        },
+        {
+          "name": "database_query_performance_ms",
+          "type": "float",
+          "range": [0, 10000],
+          "description": "Average comment query performance in milliseconds"
+        },
+        {
+          "name": "user_interaction_success_rate",
+          "type": "float",
+          "range": [0, 1], 
+          "description": "Success rate of user comment interactions"
+        },
+        {
+          "name": "error_frequency_per_hour",
+          "type": "float",
+          "range": [0, 1000],
+          "description": "Comment-related error frequency per hour"
+        }
+      ]
+    },
+    
+    "hidden_layers": [
+      {
+        "layer_id": 1,
+        "neurons": 64,
+        "activation": "relu",
+        "dropout_rate": 0.2
+      },
+      {
+        "layer_id": 2,
+        "neurons": 32,
+        "activation": "relu", 
+        "dropout_rate": 0.3
+      },
+      {
+        "layer_id": 3,
+        "neurons": 16,
+        "activation": "relu",
+        "dropout_rate": 0.1
+      }
+    ],
+    
+    "output_layer": {
+      "neurons": 4,
+      "activation": "softmax",
+      "output_classes": [
+        "no_failure_predicted",
+        "minor_ui_issue_predicted",
+        "moderate_functionality_failure_predicted", 
+        "critical_system_failure_predicted"
+      ]
+    }
+  },
+  
+  "training_configuration": {
+    "optimizer": "adam",
+    "learning_rate": 0.001,
+    "loss_function": "categorical_crossentropy",
+    "batch_size": 32,
+    "epochs": 100,
+    "validation_split": 0.2,
+    "early_stopping": {
+      "monitor": "val_accuracy",
+      "patience": 10,
+      "restore_best_weights": true
+    }
+  },
+  
+  "feature_importance_weights": {
+    "api_response_type_consistency": 0.25,
+    "comment_count_accuracy": 0.20,
+    "ui_label_comprehension_score": 0.15,
+    "threading_depth_complexity": 0.10,
+    "database_query_performance_ms": 0.12,
+    "user_interaction_success_rate": 0.13,
+    "error_frequency_per_hour": 0.05
+  },
+  
+  "prediction_thresholds": {
+    "no_failure": [0.8, 1.0],
+    "minor_issue": [0.6, 0.8],
+    "moderate_failure": [0.3, 0.6],
+    "critical_failure": [0.0, 0.3]
+  },
+  
+  "model_performance_metrics": {
+    "training_accuracy": null,
+    "validation_accuracy": null,
+    "precision": null,
+    "recall": null,
+    "f1_score": null,
+    "confusion_matrix": null,
+    "model_trained": false,
+    "last_training_timestamp": null
+  },
+  
+  "real_time_prediction_api": {
+    "endpoint": "/api/neural/comment-failure-prediction",
+    "input_format": {
+      "api_response_type_consistency": "required_float",
+      "comment_count_accuracy": "required_float",
+      "ui_label_comprehension_score": "required_float",
+      "threading_depth_complexity": "required_integer",
+      "database_query_performance_ms": "required_float",
+      "user_interaction_success_rate": "required_float",
+      "error_frequency_per_hour": "required_float"
+    },
+    "output_format": {
+      "failure_probability": "float",
+      "predicted_class": "string",
+      "confidence_score": "float",
+      "recommended_actions": "array"
+    }
+  },
+  
+  "continuous_learning": {
+    "retraining_triggers": [
+      "new_failure_patterns_detected",
+      "model_accuracy_below_threshold",
+      "significant_system_changes"
+    ],
+    "minimum_new_samples_for_retrain": 100,
+    "retraining_frequency": "weekly",
+    "auto_model_update": true
+  }
+}

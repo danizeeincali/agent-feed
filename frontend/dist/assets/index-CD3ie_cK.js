@@ -703,6 +703,31 @@ class AsyncErrorBoundary extends reactExports.Component {
     return this.props.children;
   }
 }
+const VideoPlaybackContext = reactExports.createContext(void 0);
+function VideoPlaybackProvider({ children }) {
+  const [currentlyPlayingVideo, setCurrentlyPlayingVideo] = reactExports.useState(null);
+  const stopAllVideos = () => {
+    setCurrentlyPlayingVideo(null);
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    VideoPlaybackContext.Provider,
+    {
+      value: {
+        currentlyPlayingVideo,
+        setCurrentlyPlayingVideo,
+        stopAllVideos
+      },
+      children
+    }
+  );
+}
+function useVideoPlayback() {
+  const context = reactExports.useContext(VideoPlaybackContext);
+  if (context === void 0) {
+    throw new Error("useVideoPlayback must be used within a VideoPlaybackProvider");
+  }
+  return context;
+}
 class ApiService {
   baseUrl;
   cache = /* @__PURE__ */ new Map();
@@ -781,7 +806,7 @@ class ApiService {
   initializeWebSocket() {
     if (typeof window === "undefined") return;
     try {
-      const wsUrl = "ws://localhost:3001/ws";
+      const wsUrl = "ws://localhost:3000/ws";
       this.wsConnection = new WebSocket(wsUrl);
       this.wsConnection.onopen = () => {
         console.log("✅ Real-time WebSocket connected");
@@ -2443,6 +2468,7 @@ const YouTubeEmbed = ({
   startMuted = false,
   expandedMode = false
 }) => {
+  const { currentlyPlayingVideo, setCurrentlyPlayingVideo } = useVideoPlayback();
   const [isPlaying, setIsPlaying] = reactExports.useState(expandedMode && autoplay);
   const [isMuted, setIsMuted] = reactExports.useState(startMuted || expandedMode);
   const [thumbnailError, setThumbnailError] = reactExports.useState(false);
@@ -2452,6 +2478,11 @@ const YouTubeEmbed = ({
   const [currentThumbnailIndex, setCurrentThumbnailIndex] = reactExports.useState(0);
   const [userInteracted, setUserInteracted] = reactExports.useState(expandedMode);
   const [embedUrl, setEmbedUrl] = reactExports.useState("");
+  reactExports.useEffect(() => {
+    if (currentlyPlayingVideo && currentlyPlayingVideo !== videoId) {
+      setIsPlaying(false);
+    }
+  }, [currentlyPlayingVideo, videoId]);
   const domain2 = privacyMode ? "youtube-nocookie.com" : "youtube.com";
   const thumbnailUrl = thumbnailUrls[currentThumbnailIndex] || getYouTubeThumbnail(videoId, thumbnail);
   reactExports.useEffect(() => {
@@ -2491,9 +2522,10 @@ const YouTubeEmbed = ({
     setEmbedUrl(newUrl);
   }, [buildEmbedUrl, autoplay, expandedMode, userInteracted, isPlaying]);
   reactExports.useCallback(() => {
+    setCurrentlyPlayingVideo(videoId);
     setIsPlaying(true);
     onPlay?.();
-  }, [onPlay]);
+  }, [onPlay, videoId, setCurrentlyPlayingVideo]);
   reactExports.useEffect(() => {
     if (expandedMode) {
       setIsPlaying(true);
@@ -2515,6 +2547,7 @@ const YouTubeEmbed = ({
     }
   };
   const handlePlayWithInteraction = reactExports.useCallback(() => {
+    setCurrentlyPlayingVideo(videoId);
     setUserInteracted(true);
     setIsPlaying(true);
     onPlay?.();
@@ -2533,7 +2566,7 @@ const YouTubeEmbed = ({
         setTimeout(() => setPlayerReady(true), 50);
       }, 50);
     }
-  }, [onPlay, buildEmbedUrl, expandedMode, autoplay]);
+  }, [onPlay, buildEmbedUrl, expandedMode, autoplay, videoId, setCurrentlyPlayingVideo]);
   const toggleMute = (e) => {
     e.stopPropagation();
     setIsMuted(!isMuted);
@@ -2651,8 +2684,7 @@ const YouTubeEmbed = ({
           children: /* @__PURE__ */ jsxRuntimeExports.jsx(ExternalLink, { className: "w-4 h-4" })
         }
       )
-    ] }),
-    expandedMode && (enableLoop || expandedMode) && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-3 left-3 opacity-75", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "bg-black bg-opacity-60 text-white px-2 py-1 rounded text-xs font-medium", children: "🔁 Auto-looping" }) })
+    ] })
   ] });
 };
 const ThumbnailSummaryContainer = ({
@@ -5398,7 +5430,7 @@ const RealSocialMediaFeed = ({ className = "" }) => {
         showComments[post.id] && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "border-t border-gray-100 pt-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-4", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-4", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { className: "text-sm font-medium text-gray-700", children: [
-              "Technical Analysis (",
+              "Comments (",
               post.engagement?.comments || 0,
               ")"
             ] }),
@@ -5407,7 +5439,7 @@ const RealSocialMediaFeed = ({ className = "" }) => {
               {
                 onClick: () => setShowCommentForm((prev) => ({ ...prev, [post.id]: !prev[post.id] })),
                 className: "text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors",
-                children: showCommentForm[post.id] ? "Cancel" : "Add Analysis"
+                children: showCommentForm[post.id] ? "Cancel" : "Add Comment"
               }
             )
           ] }),
@@ -17152,7 +17184,7 @@ const App = () => {
   React.useEffect(() => {
     console.log("DEBUG: App component mounted!");
   }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(GlobalErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(WebSocketSingletonProvider, { config: {
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(GlobalErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsx(VideoPlaybackProvider, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(WebSocketSingletonProvider, { config: {
     autoConnect: true,
     reconnectAttempts: 3,
     reconnectInterval: 2e3,
@@ -17172,7 +17204,7 @@ const App = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/settings", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "Settings", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.SettingsFallback, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(SimpleSettings, {}) }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "/performance-monitor", element: /* @__PURE__ */ jsxRuntimeExports.jsx(RouteErrorBoundary, { routeName: "PerformanceMonitor", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.LoadingFallback, { message: "Loading Performance Monitor..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsx(PerformanceMonitor, {}) }) }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(Route, { path: "*", element: /* @__PURE__ */ jsxRuntimeExports.jsx(FallbackComponents.NotFoundFallback, {}) })
-  ] }) }) }) }) }) }) }) });
+  ] }) }) }) }) }) }) }) }) });
 };
 console.log("AgentLink: Starting application...");
 const rootElement = document.getElementById("root");
@@ -17218,4 +17250,4 @@ ${error instanceof Error ? error.message : String(error)}
     `;
   }
 }
-//# sourceMappingURL=index-Jal1bsCZ.js.map
+//# sourceMappingURL=index-CD3ie_cK.js.map

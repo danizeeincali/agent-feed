@@ -3,6 +3,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from '@/database/connection';
 import { logger } from '@/utils/logger';
 
+// Utility function to safely parse integers from database values
+const safeParseInt = (value: any, defaultValue: number = 0): number => {
+  try {
+    if (value === null || value === undefined) return defaultValue;
+    const parsed = parseInt(value);
+    return isNaN(parsed) ? defaultValue : parsed;
+  } catch (error) {
+    logger.warn('Failed to parse integer value', { value, error });
+    return defaultValue;
+  }
+};
+
 const router = express.Router();
 
 interface CreatePostRequest {
@@ -127,12 +139,12 @@ router.post('/', validatePostData, async (req: Request, res: Response) => {
       createdAt: post.created_at,
       updatedAt: post.updated_at,
       engagement: {
-        likes: post.like_count,
-        hearts: post.heart_count,
-        bookmarks: post.bookmark_count,
-        shares: post.share_count,
-        views: post.view_count,
-        comments: post.comment_count
+        likes: safeParseInt(post.like_count),
+        hearts: safeParseInt(post.heart_count),
+        bookmarks: safeParseInt(post.bookmark_count),
+        shares: safeParseInt(post.share_count),
+        views: safeParseInt(post.view_count),
+        comments: safeParseInt(post.comment_count)
       }
     };
     
@@ -266,12 +278,12 @@ router.get('/', async (req: Request, res: Response) => {
       createdAt: post.created_at,
       updatedAt: post.updated_at,
       engagement: {
-        likes: post.like_count,
-        hearts: post.heart_count,
-        bookmarks: post.bookmark_count,
-        shares: post.share_count,
-        views: post.view_count,
-        comments: post.comment_count
+        likes: safeParseInt(post.like_count),
+        hearts: safeParseInt(post.heart_count),
+        bookmarks: safeParseInt(post.bookmark_count),
+        shares: safeParseInt(post.share_count),
+        views: safeParseInt(post.view_count),
+        comments: safeParseInt(post.comment_count)
       }
     }));
     
@@ -417,12 +429,12 @@ router.put('/:id', validatePostData, async (req: Request, res: Response) => {
       createdAt: post.created_at,
       updatedAt: post.updated_at,
       engagement: {
-        likes: post.like_count,
-        hearts: post.heart_count,
-        bookmarks: post.bookmark_count,
-        shares: post.share_count,
-        views: post.view_count,
-        comments: post.comment_count
+        likes: safeParseInt(post.like_count),
+        hearts: safeParseInt(post.heart_count),
+        bookmarks: safeParseInt(post.bookmark_count),
+        shares: safeParseInt(post.share_count),
+        views: safeParseInt(post.view_count),
+        comments: safeParseInt(post.comment_count)
       }
     };
     

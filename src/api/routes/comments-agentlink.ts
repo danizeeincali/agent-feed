@@ -3,6 +3,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from '@/database/connection';
 import { logger } from '@/utils/logger';
 
+// Utility function to safely parse integers from database values
+const safeParseInt = (value: any, defaultValue: number = 0): number => {
+  try {
+    if (value === null || value === undefined) return defaultValue;
+    const parsed = parseInt(value);
+    return isNaN(parsed) ? defaultValue : parsed;
+  } catch (error) {
+    logger.warn('Failed to parse integer value', { value, error });
+    return defaultValue;
+  }
+};
+
 const router = express.Router();
 
 interface CreateCommentRequest {
@@ -146,15 +158,15 @@ router.post('/posts/:postId/comments', validateCommentData, async (req: Request,
       createdAt: comment.created_at,
       updatedAt: comment.updated_at,
       engagement: {
-        likes: comment.like_count,
-        hearts: comment.heart_count,
-        replies: comment.reply_count
+        likes: safeParseInt(comment.like_count),
+        hearts: safeParseInt(comment.heart_count),
+        replies: safeParseInt(comment.reply_count)
       },
       thread: {
-        depth: comment.thread_depth,
+        depth: safeParseInt(comment.thread_depth),
         path: comment.thread_path,
-        hasReplies: comment.reply_count > 0,
-        replyCount: comment.reply_count
+        hasReplies: (safeParseInt(comment.reply_count)) > 0,
+        replyCount: safeParseInt(comment.reply_count)
       }
     };
     
@@ -281,15 +293,15 @@ router.get('/posts/:postId/comments', async (req: Request, res: Response) => {
       createdAt: comment.created_at,
       updatedAt: comment.updated_at,
       engagement: {
-        likes: comment.like_count,
-        hearts: comment.heart_count,
-        replies: comment.reply_count
+        likes: safeParseInt(comment.like_count),
+        hearts: safeParseInt(comment.heart_count),
+        replies: safeParseInt(comment.reply_count)
       },
       thread: {
-        depth: comment.thread_depth || 0,
+        depth: safeParseInt(comment.thread_depth),
         path: comment.thread_path,
-        hasReplies: (comment.reply_count || 0) > 0,
-        replyCount: comment.reply_count || 0
+        hasReplies: (safeParseInt(comment.reply_count)) > 0,
+        replyCount: safeParseInt(comment.reply_count)
       }
     }));
     
@@ -368,7 +380,7 @@ router.post('/comments/:id/like', async (req: Request, res: Response) => {
     
     // Get updated count
     const countResult = await db.query('SELECT like_count FROM comments WHERE id = $1', [id]);
-    const likeCount = countResult.rows[0]?.like_count || 0;
+    const likeCount = safeParseInt(countResult.rows[0]?.like_count);
     
     res.json({
       success: true,

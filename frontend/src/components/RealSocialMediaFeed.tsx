@@ -845,13 +845,13 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-sm font-medium text-gray-700">
-                        Technical Analysis ({post.engagement?.comments || 0})
+                        Comments ({post.engagement?.comments || 0})
                       </h4>
                       <button
                         onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: !prev[post.id] }))}
                         className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
                       >
-                        {showCommentForm[post.id] ? 'Cancel' : 'Add Analysis'}
+                        {showCommentForm[post.id] ? 'Cancel' : 'Add Comment'}
                       </button>
                     </div>
                     
