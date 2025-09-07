@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2 } from 'lucide-react';
+import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Plus, Edit3 } from 'lucide-react';
 import { apiService } from '../services/api';
 import { AgentPost, ApiResponse, FilterStats } from '../types/api';
 import FilterPanel, { FilterOptions } from './FilterPanel';
@@ -7,6 +7,7 @@ import { renderParsedContent, parseContent, extractHashtags, extractMentions } f
 import ThreadedCommentSystem from './ThreadedCommentSystem';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
+import { PostCreator } from './PostCreator';
 import '../styles/comments.css';
 
 interface RealSocialMediaFeedProps {
@@ -59,37 +60,65 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
   const [userId] = useState('anonymous'); // In a real app, this would come from authentication
+  const [showPostCreator, setShowPostCreator] = useState(false);
   const limit = 20;
 
   // Real data loading from production database with filtering
   const loadPosts = useCallback(async (pageNum: number = 0, append: boolean = false) => {
+    console.log('🔄 RealSocialMediaFeed: loadPosts called', { pageNum, append, filterType: currentFilter.type });
+    
     try {
       setError(null);
       
+      // Get current filter at time of execution
+      const filterToUse = currentFilter || { type: 'all' };
+      
       let response;
-      if (currentFilter.type === 'all') {
+      if (filterToUse.type === 'all') {
+        console.log('🔄 Calling apiService.getAgentPosts...');
         response = await apiService.getAgentPosts(
           limit,
           pageNum * limit
         );
       } else {
+        console.log('🔄 Calling apiService.getFilteredPosts...');
         response = await apiService.getFilteredPosts(
           limit,
           pageNum * limit,
-          currentFilter
+          filterToUse
         );
       }
+      
+      console.log('📦 Raw API response:', response);
       
       // Fix: Handle the actual API response structure {success: true, data: [...], total: ...}
       const postsData = response.data || response || [];
       const totalCount = response.total || postsData.length || 0;
       
+      console.log('📊 Processed data:', { 
+        postsDataType: typeof postsData,
+        postsDataIsArray: Array.isArray(postsData), 
+        postsDataLength: postsData?.length,
+        totalCount 
+      });
+      
       // Add null/undefined safety checks
       const validPosts = Array.isArray(postsData) ? postsData : [];
       
+      console.log('✅ Valid posts array:', { 
+        validPostsLength: validPosts.length,
+        firstPostId: validPosts[0]?.id,
+        firstPostTitle: validPosts[0]?.title 
+      });
+      
       if (append) {
-        setPosts(current => [...(current || []), ...validPosts]);
+        setPosts(current => {
+          const newPosts = [...(current || []), ...validPosts];
+          console.log('📝 Appending posts - new total:', newPosts.length);
+          return newPosts;
+        });
       } else {
+        console.log('📝 Setting posts array with', validPosts.length, 'posts');
         setPosts(validPosts);
       }
       setTotal(totalCount);
@@ -99,11 +128,24 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     } finally {
       setLoading(false);
       setRefreshing(false);
+      console.log('🏁 loadPosts finished - loading set to false');
     }
-  }, [limit, currentFilter]);
+  }, [limit]);
+
+  // Handle post creation
+  const handlePostCreated = useCallback((newPost: any) => {
+    // Add the new post to the top of the list
+    setPosts(current => [newPost, ...current]);
+    setShowPostCreator(false);
+    // Refresh the posts to get the latest data
+    setTimeout(() => {
+      loadPosts();
+    }, 1000);
+  }, [loadPosts]);
 
   // Real-time updates via WebSocket and filter data loading
   useEffect(() => {
+    console.log('🔄 RealSocialMediaFeed: Initial useEffect triggered');
     loadPosts(0);
     loadFilterData();
 
@@ -133,7 +175,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     return () => {
       apiService.off('posts_updated', handlePostsUpdate);
     };
-  }, [loadPosts, limit, currentFilter]);
+  }, []);
 
   // Load filter data with stats
   const loadFilterData = useCallback(async () => {
@@ -295,9 +337,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
   // Update posts when filter changes
   useEffect(() => {
-    if (currentFilter) {
-      loadPosts(0);
-    }
+    console.log('🔄 RealSocialMediaFeed: Filter changed, reloading posts', currentFilter);
+    setLoading(true);
+    loadPosts(0);
   }, [currentFilter, loadPosts]);
 
   const togglePostExpansion = (postId: string) => {
@@ -489,7 +531,17 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     return 'text-red-600';
   };
 
+  console.log('🎨 RealSocialMediaFeed RENDER:', { 
+    loading, 
+    error, 
+    postsLength: posts?.length,
+    postsType: typeof posts,
+    postsIsArray: Array.isArray(posts),
+    firstPostId: posts?.[0]?.id 
+  });
+
   if (loading) {
+    console.log('🎨 Rendering loading state');
     return (
       <div className={`p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
@@ -534,6 +586,51 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
           myPostsCount={filterStats?.myPosts || 0}
           userId={userId}
         />
+
+        {/* Post Creator Section */}
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 mt-4">
+          {!showPostCreator ? (
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-medium">
+                AI
+              </div>
+              <button
+                data-testid="start-post-button"
+                onClick={() => setShowPostCreator(true)}
+                className="flex-1 text-left px-4 py-3 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                Start a post...
+              </button>
+              <button
+                onClick={() => setShowPostCreator(true)}
+                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                title="Create post"
+              >
+                <Edit3 className="w-5 h-5" />
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <Edit3 className="w-5 h-5 mr-2 text-blue-600" />
+                  Create New Post
+                </h3>
+                <button
+                  onClick={() => setShowPostCreator(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  title="Close"
+                >
+                  ×
+                </button>
+              </div>
+              <PostCreator 
+                onPostCreated={handlePostCreated}
+                className="border-0 shadow-none"
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Error Display */}
@@ -555,12 +652,24 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
       {/* Posts */}
       <div className="space-y-6" data-testid="post-list">
-        {(posts || []).map((post) => {
-          const isExpanded = expandedPosts[post.id] || false;
-          const postMetrics = calculatePostMetrics(post.content || '');
-          const { truncated, isTruncated } = truncateContent(post.content || '');
-          
-          return (
+        {(() => {
+          console.log('🎨 About to render posts:', { 
+            postsExists: !!posts,
+            postsLength: posts?.length,
+            postsType: typeof posts,
+            isArray: Array.isArray(posts)
+          });
+          return (posts || []).map((post, index) => {
+            console.log('🎨 Rendering post', index, ':', { 
+              id: post?.id, 
+              title: post?.title?.substring(0, 50) 
+            });
+            
+            const isExpanded = expandedPosts[post.id] || false;
+            const postMetrics = calculatePostMetrics(post.content || '');
+            const { truncated, isTruncated } = truncateContent(post.content || '');
+            
+            return (
           <article key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden" data-testid="post-card">
             <div className="p-6">
               {!isExpanded ? (
@@ -954,8 +1063,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
             </div>
 
           </article>
-          );
-        })}
+            );
+          });
+        })()}
       </div>
 
       {/* Load More */}

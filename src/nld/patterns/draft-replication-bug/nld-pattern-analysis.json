@@ -1,0 +1,62 @@
+{
+  "patternId": "draft-replication-modal-create-bug",
+  "version": "1.0.0",
+  "timestamp": "2025-09-07T12:00:00Z",
+  "triggerDetected": "Modal component calling createDraft instead of updateDraft during edit operations",
+  "classification": {
+    "category": "state-management-antipattern",
+    "severity": "high",
+    "impact": "data-duplication",
+    "domain": "ui-components",
+    "commonality": "frequent"
+  },
+  "bugPattern": {
+    "title": "Modal Edit Mode Using Create Instead of Update",
+    "description": "PostCreatorModal passes editDraft but PostCreator always calls createDraft, causing draft duplication during edit operations",
+    "rootCause": "Modal component does not distinguish between create and edit modes in its data flow",
+    "symptoms": [
+      "New draft created when editing existing draft",
+      "Original draft remains unchanged",
+      "User confusion about which draft is current",
+      "Database/storage bloat with duplicate drafts"
+    ]
+  },
+  "codeAnalysis": {
+    "problematicPattern": {
+      "file": "/frontend/src/components/PostCreator.tsx",
+      "lines": "216-234",
+      "code": "const saveDraft = useCallback(async () => {\n  // Always calls createDraft - PROBLEM!\n  await createDraft(draftTitle, draftContent, tags);\n}, [title, hook, content, tags, createDraft]);"
+    },
+    "modalFlow": {
+      "file": "/frontend/src/components/PostCreatorModal.tsx",
+      "lines": "174-177", 
+      "code": "<PostCreator\n  onPostCreated={onPostCreated}\n  initialContent={content}\n  mode={editDraft ? 'reply' : 'create'} // Mode set but not used properly\n/>"
+    },
+    "hookBehavior": {
+      "file": "/frontend/src/hooks/useDraftManager.ts",
+      "lines": "79-96",
+      "note": "createDraft always creates new draft, updateDraft exists but is never called from PostCreator"
+    }
+  },
+  "failureMechanisms": [
+    {
+      "trigger": "User clicks 'Edit Draft' button in DraftManager",
+      "action": "Modal opens with editDraft prop populated",
+      "expected": "Form loads draft data and updates existing draft on save",
+      "actual": "Form loads data but creates new draft on save",
+      "reason": "PostCreator.saveDraft always calls createDraft regardless of mode"
+    }
+  ],
+  "stateManagementIssues": [
+    "Mode prop not utilized in save logic",
+    "No draft ID tracking for update operations", 
+    "Initial content populated but no edit context maintained",
+    "Modal re-render key forces PostCreator reinitialization"
+  ],
+  "relatedPatterns": [
+    "form-mode-confusion",
+    "prop-not-consumed", 
+    "state-initialization-mismatch",
+    "component-responsibility-blur"
+  ]
+}

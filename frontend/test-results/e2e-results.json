@@ -20,7 +20,8 @@
         "NLD Pattern Detection",
         "Cross-browser Compatibility",
         "Mobile Device Testing"
-      ]
+      ],
+      "actualWorkers": 1
     },
     "preserveOutput": "always",
     "reporter": [
@@ -68,7 +69,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "setup",
         "name": "setup",
@@ -83,7 +85,7 @@
         "testMatch": [
           "/.*\\.setup\\.ts/"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -99,7 +101,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "cleanup",
         "name": "cleanup",
@@ -114,7 +117,7 @@
         "testMatch": [
           "/.*\\.cleanup\\.ts/"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -130,7 +133,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "chromium",
         "name": "chromium",
@@ -148,7 +152,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -164,7 +168,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "firefox",
         "name": "firefox",
@@ -182,7 +187,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -198,7 +203,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "webkit",
         "name": "webkit",
@@ -216,7 +222,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -232,7 +238,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "mobile-chrome",
         "name": "mobile-chrome",
@@ -250,7 +257,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -266,7 +273,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "mobile-safari",
         "name": "mobile-safari",
@@ -284,7 +292,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -300,7 +308,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "tablet",
         "name": "tablet",
@@ -318,7 +327,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -334,7 +343,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "high-dpi",
         "name": "high-dpi",
@@ -352,7 +362,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -368,7 +378,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "performance",
         "name": "performance",
@@ -386,7 +397,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -402,7 +413,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "visual-regression",
         "name": "visual-regression",
@@ -420,7 +432,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       },
       {
         "outputDir": "/workspaces/agent-feed/frontend/test-results",
@@ -436,7 +448,8 @@
             "NLD Pattern Detection",
             "Cross-browser Compatibility",
             "Mobile Device Testing"
-          ]
+          ],
+          "actualWorkers": 1
         },
         "id": "nld-patterns",
         "name": "nld-patterns",
@@ -454,7 +467,7 @@
           "**/visual-regression/**/*.spec.ts",
           "**/nld-patterns/**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 60000
       }
     ],
     "shard": null,
@@ -469,19 +482,833 @@
       "reuseExistingServer": true
     }
   },
-  "suites": [],
-  "errors": [
+  "suites": [
     {
-      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
-      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
+      "title": "e2e/draft-deletion-validation.spec.ts",
+      "file": "e2e/draft-deletion-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Draft Deletion Validation",
+          "file": "e2e/draft-deletion-validation.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should properly delete drafts when publishing from draft modal",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6980,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts:53:27",
+                        "location": {
+                          "file": "/workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts",
+                          "column": 27,
+                          "line": 53
+                        },
+                        "snippet": "  51 |     \n  52 |     // Verify we have drafts to test with\n> 53 |     expect(initialDrafts).toBeGreaterThan(0);\n     |                           ^\n  54 |\n  55 |     // Get the localStorage draft count before test\n  56 |     const initialStorageCount = await page.evaluate(() => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts",
+                            "column": 27,
+                            "line": 53
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  51 |     \n  52 |     // Verify we have drafts to test with\n> 53 |     expect(initialDrafts).toBeGreaterThan(0);\n     |                           ^\n  54 |\n  55 |     // Get the localStorage draft count before test\n  56 |     const initialStorageCount = await page.evaluate(() => {\n    at /workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts:53:27"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 Step 1: Initialize test drafts\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:443/?token=CvnReKYG4tWI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: [vite] failed to connect to websocket (Error: WebSocket closed without opened.). \n"
+                        },
+                        {
+                          "text": "🧪 Step 2: Navigate to drafts page and count drafts\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:443/?token=CvnReKYG4tWI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: [vite] failed to connect to websocket (Error: WebSocket closed without opened.). \n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔗 API Service initialized with base URL: http://localhost:3000/api/v1\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 Attempting WebSocket connection to: ws://localhost:3000/ws\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App.tsx loading...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: Loading SocialMediaFeed...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Starting application...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Creating React root...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Rendering application with error boundaries...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: ✅ Application started successfully\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔧 Network Fix Initializing...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Environment: Local/Other\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Base URL: http://localhost:5173\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 Initializing network connection fix...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component rendering...\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: Failed to load resource: the server responded with a status of 404 (Not Found)\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ Network connection failed:\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - URL: http://localhost:5173/health\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - Error: undefined\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 [HTTP/SSE] Mock connect - no WebSocket needed\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component mounted!\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ WebSocket error: Event\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 WebSocket connection closed\n"
+                        },
+                        {
+                          "text": "Initial draft count: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-07T20:31:37.347Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/frontend/test-results/e2e-draft-deletion-validat-ae9a6-publishing-from-draft-modal-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/frontend/test-results/e2e-draft-deletion-validat-ae9a6-publishing-from-draft-modal-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/frontend/test-results/e2e-draft-deletion-validat-ae9a6-publishing-from-draft-modal-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts",
+                        "column": 27,
+                        "line": 53
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6624,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts:53:27",
+                        "location": {
+                          "file": "/workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts",
+                          "column": 27,
+                          "line": 53
+                        },
+                        "snippet": "  51 |     \n  52 |     // Verify we have drafts to test with\n> 53 |     expect(initialDrafts).toBeGreaterThan(0);\n     |                           ^\n  54 |\n  55 |     // Get the localStorage draft count before test\n  56 |     const initialStorageCount = await page.evaluate(() => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts",
+                            "column": 27,
+                            "line": 53
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  51 |     \n  52 |     // Verify we have drafts to test with\n> 53 |     expect(initialDrafts).toBeGreaterThan(0);\n     |                           ^\n  54 |\n  55 |     // Get the localStorage draft count before test\n  56 |     const initialStorageCount = await page.evaluate(() => {\n    at /workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts:53:27"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 Step 1: Initialize test drafts\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:443/?token=CvnReKYG4tWI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: [vite] failed to connect to websocket (Error: WebSocket closed without opened.). \n"
+                        },
+                        {
+                          "text": "🧪 Step 2: Navigate to drafts page and count drafts\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:443/?token=CvnReKYG4tWI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: [vite] failed to connect to websocket (Error: WebSocket closed without opened.). \n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔗 API Service initialized with base URL: http://localhost:3000/api/v1\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 Attempting WebSocket connection to: ws://localhost:3000/ws\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App.tsx loading...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: Loading SocialMediaFeed...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Starting application...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Creating React root...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Rendering application with error boundaries...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: ✅ Application started successfully\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔧 Network Fix Initializing...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Environment: Local/Other\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Base URL: http://localhost:5173\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 Initializing network connection fix...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component rendering...\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: Failed to load resource: the server responded with a status of 404 (Not Found)\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ Network connection failed:\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - URL: http://localhost:5173/health\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - Error: undefined\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 [HTTP/SSE] Mock connect - no WebSocket needed\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component mounted!\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ WebSocket error: Event\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 WebSocket connection closed\n"
+                        },
+                        {
+                          "text": "Initial draft count: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-09-07T20:31:46.286Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/frontend/test-results/e2e-draft-deletion-validat-ae9a6-publishing-from-draft-modal-chromium-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/frontend/test-results/e2e-draft-deletion-validat-ae9a6-publishing-from-draft-modal-chromium-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/frontend/test-results/e2e-draft-deletion-validat-ae9a6-publishing-from-draft-modal-chromium-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/frontend/tests/e2e/draft-deletion-validation.spec.ts",
+                        "column": 27,
+                        "line": 53
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a4d97158e9dfe4998a43-c08493cdb90847727081",
+              "file": "e2e/draft-deletion-validation.spec.ts",
+              "line": 30,
+              "column": 3
+            },
+            {
+              "title": "should handle multiple draft publications correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2846,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 Testing multiple draft publications\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:443/?token=CvnReKYG4tWI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: [vite] failed to connect to websocket (Error: WebSocket closed without opened.). \n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔗 API Service initialized with base URL: http://localhost:3000/api/v1\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 Attempting WebSocket connection to: ws://localhost:3000/ws\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App.tsx loading...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: Loading SocialMediaFeed...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Starting application...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Creating React root...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Rendering application with error boundaries...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: ✅ Application started successfully\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔧 Network Fix Initializing...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Environment: Local/Other\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Base URL: http://localhost:5173\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 Initializing network connection fix...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component rendering...\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: Failed to load resource: the server responded with a status of 404 (Not Found)\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ Network connection failed:\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - URL: http://localhost:5173/health\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - Error: undefined\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 [HTTP/SSE] Mock connect - no WebSocket needed\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component mounted!\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ WebSocket error: Event\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 WebSocket connection closed\n"
+                        },
+                        {
+                          "text": "Initial drafts for multiple test: 0\n"
+                        },
+                        {
+                          "text": "Not enough drafts for multiple publication test, skipping...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-07T20:31:55.247Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4d97158e9dfe4998a43-44202c5d96fd1e42784f",
+              "file": "e2e/draft-deletion-validation.spec.ts",
+              "line": 135,
+              "column": 3
+            },
+            {
+              "title": "should preserve draft data if publish fails",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2501,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 Testing draft preservation on publish failure\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:443/?token=CvnReKYG4tWI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: [vite] failed to connect to websocket (Error: WebSocket closed without opened.). \n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔗 API Service initialized with base URL: http://localhost:3000/api/v1\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 Attempting WebSocket connection to: ws://localhost:3000/ws\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App.tsx loading...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: Loading SocialMediaFeed...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Starting application...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Creating React root...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Rendering application with error boundaries...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: ✅ Application started successfully\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔧 Network Fix Initializing...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Environment: Local/Other\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Base URL: http://localhost:5173\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 Initializing network connection fix...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component rendering...\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: Failed to load resource: the server responded with a status of 404 (Not Found)\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ Network connection failed:\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - URL: http://localhost:5173/health\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - Error: undefined\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 [HTTP/SSE] Mock connect - no WebSocket needed\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component mounted!\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ WebSocket error: Event\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 WebSocket connection closed\n"
+                        },
+                        {
+                          "text": "No drafts available for failure test\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-07T20:31:58.442Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4d97158e9dfe4998a43-6f466b723fcb91fe9165",
+              "file": "e2e/draft-deletion-validation.spec.ts",
+              "line": 173,
+              "column": 3
+            },
+            {
+              "title": "should handle edge cases with different content types",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2571,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🧪 Testing edge cases with different content types\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:443/?token=CvnReKYG4tWI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: [vite] failed to connect to websocket (Error: WebSocket closed without opened.). \n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔗 API Service initialized with base URL: http://localhost:3000/api/v1\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 Attempting WebSocket connection to: ws://localhost:3000/ws\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App.tsx loading...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: Loading SocialMediaFeed...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Starting application...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Creating React root...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: Rendering application with error boundaries...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: AgentLink: ✅ Application started successfully\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔧 Network Fix Initializing...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Environment: Local/Other\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: - Base URL: http://localhost:5173\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 Initializing network connection fix...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component rendering...\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering loading state\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: Failed to load resource: the server responded with a status of 404 (Not Found)\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ Network connection failed:\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - URL: http://localhost:5173/health\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: - Error: undefined\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔄 RealSocialMediaFeed: Initial useEffect triggered\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔄 Calling apiService.getAgentPosts...\n"
+                        },
+                        {
+                          "text": "API REQUEST: GET http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔄 RealSocialMediaFeed: Filter changed, reloading posts {type: all}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔄 Calling apiService.getAgentPosts...\n"
+                        },
+                        {
+                          "text": "API REQUEST: GET http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🚀 [HTTP/SSE] Mock connect - no WebSocket needed\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: DEBUG: App component mounted!\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400\n"
+                        },
+                        {
+                          "text": "API RESPONSE: 200 http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: ❌ WebSocket error: Event\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔌 WebSocket connection closed\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: Failed to load resource: the server responded with a status of 404 (Not Found)\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: API request failed: /filter-stats?user_id=anonymous Error: HTTP error! status: 404\n    at ApiService.request (http://127.0.0.1:5173/src/services/api.ts:78:15)\n    at async ApiService.getFilterStats (http://127.0.0.1:5173/src/services/api.ts:767:24)\n    at async Promise.all (index 1)\n    at async http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx?t=1757276709287:138:29\n"
+                        },
+                        {
+                          "text": "CONSOLE [error]: API Error in getFilterStats: Error: HTTP error! status: 404\n    at ApiService.request (http://127.0.0.1:5173/src/services/api.ts:78:15)\n    at async ApiService.getFilterStats (http://127.0.0.1:5173/src/services/api.ts:767:24)\n    at async Promise.all (index 1)\n    at async http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx?t=1757276709287:138:29\n"
+                        },
+                        {
+                          "text": "API RESPONSE: 200 http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 📦 Raw API response: {success: true, data: Array(20), total: 24, posts: Array(20)}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 20, totalCount: 24}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: ✅ Valid posts array: {validPostsLength: 20, firstPostId: f7359d22-d813-4588-99a0-b937d0ad5bf5, firstPostTitle: Draft}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 📝 Setting posts array with 20 posts\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🏁 loadPosts finished - loading set to false\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 📦 Raw API response: {success: true, data: Array(20), total: 24, posts: Array(20)}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 20, totalCount: 24}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: ✅ Valid posts array: {validPostsLength: 20, firstPostId: f7359d22-d813-4588-99a0-b937d0ad5bf5, firstPostTitle: Draft}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 📝 Setting posts array with 20 posts\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🏁 loadPosts finished - loading set to false\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 20, postsType: object, postsIsArray: true}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 About to render posts: {postsExists: true, postsLength: 20, postsType: object, isArray: true}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 0 : {id: f7359d22-d813-4588-99a0-b937d0ad5bf5, title: Draft}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 1 : {id: 3f558e4f-1e2f-4f79-8407-b79b7bb2269e, title: Test}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 2 : {id: 29e2c401-f134-4581-9cd2-bcff651c5df8, title: Final Phase 3 Validation}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 3 : {id: 9b3b7281-95a0-48cd-8d5f-6a4f3dc0ed48, title: Phase 3 Production Validation Test}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 4 : {id: 1d663c42-dceb-461f-897f-61908888e5ae, title: Phase 3 Post Test}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 5 : {id: 301bc0b4-987f-4b59-a84c-e2b33ebc6e6d, title: Test Post Publishing}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 6 : {id: 44495cce-dd59-473f-a32c-c24b4d826123, title: Browser Test Post}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 7 : {id: a17d9b38-bd4b-4dab-a55b-5f088f38371b, title: Test Post Fixed}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 8 : {id: f0662ec6-98a3-4839-b8d5-335d857a3e82, title: Test Post}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 9 : {id: c17c481d-07c2-48d5-b7d1-b55eafd7b129, title: Real Test Post}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 10 : {id: prod-post-1, title: Production Validation Complete - All Systems Go}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 11 : {id: prod-post-2, title: SQLite Fallback Database Active with Real Data}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 12 : {id: prod-post-3, title: Real API Endpoints Validated - Mock Services Elimi}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 13 : {id: prod-post-4, title: System Performance Optimized - 34% Improvement}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 14 : {id: prod-post-5, title: Security Analysis Complete - Zero Critical Vulnera}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 15 : {id: prod-post-6, title: Backend Architecture Redesigned - Microservices Re}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 16 : {id: prod-post-7, title: Real-Time Data Streaming Implementation Complete}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 17 : {id: prod-post-8, title: Database Constraint Violations Fixed - 100% Data I}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 18 : {id: linkedin-test, title: LinkedIn Post Test}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔗 URL match found: https://www.linkedin.com/posts/mondweepchakravorty_agenticai-cio-digitaltransfor at index: 26\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎬 Rendering link preview for URL: https://www.linkedin.com/posts/mondweepchakravorty_agenticai-cio-digitaltransfor Mode: thumbnail-summary\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎨 Rendering post 19 : {id: flow-nexus-test, title: Flow Nexus Test}\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🔗 URL match found: https://flow-nexus.ruv.io/ at index: 25\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🎬 Rendering link preview for URL: https://flow-nexus.ruv.io/ Mode: thumbnail-summary\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🖼️ Generated fallback thumbnails for LinkedIn Post : 3 options\n"
+                        },
+                        {
+                          "text": "CONSOLE [log]: 🖼️ Generated fallback thumbnails for flow-nexus.ruv.io : 3 options\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-07T20:32:00.985Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4d97158e9dfe4998a43-a738a765b9e66e59c4d7",
+              "file": "e2e/draft-deletion-validation.spec.ts",
+              "line": 208,
+              "column": 3
+            }
+          ]
+        }
+      ]
     }
   ],
+  "errors": [],
   "stats": {
-    "startTime": "2025-09-06T18:15:34.674Z",
-    "duration": 2783.984,
-    "expected": 0,
+    "startTime": "2025-09-07T20:31:34.148Z",
+    "duration": 29776.387,
+    "expected": 3,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend API Test</title>
+</head>
+<body>
+    <h1>Agent Feed API Test</h1>
+    <div id="status">Loading...</div>
+    <div id="results"></div>
+
+    <script>
+        async function testAPI() {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+            
+            try {
+                // Test 1: Direct backend call
+                statusDiv.innerHTML = 'Testing direct backend connection...';
+                const directResponse = await fetch('http://localhost:3000/api/v1/agent-posts');
+                const directData = await directResponse.json();
+                
+                // Test 2: Frontend proxy call
+                statusDiv.innerHTML = 'Testing frontend proxy connection...';
+                const proxyResponse = await fetch('/api/v1/agent-posts');
+                const proxyData = await proxyResponse.json();
+                
+                statusDiv.innerHTML = 'Tests completed!';
+                
+                resultsDiv.innerHTML = `
+                    <h2>Test Results</h2>
+                    <h3>Direct Backend (port 3000):</h3>
+                    <p>Status: ${directResponse.status}</p>
+                    <p>Data loaded: ${directData.success ? 'YES' : 'NO'}</p>
+                    <p>Posts count: ${directData.data?.length || 0}</p>
+                    
+                    <h3>Frontend Proxy (port 5173):</h3>
+                    <p>Status: ${proxyResponse.status}</p>
+                    <p>Data loaded: ${proxyData.success ? 'YES' : 'NO'}</p>
+                    <p>Posts count: ${proxyData.data?.length || 0}</p>
+                    
+                    <h3>Sample Posts:</h3>
+                    ${(proxyData.data || []).slice(0, 3).map(post => 
+                        `<div style="border: 1px solid #ccc; margin: 10px 0; padding: 10px;">
+                            <strong>${post.title}</strong><br>
+                            <em>By: ${post.authorAgent || post.author_agent}</em><br>
+                            <small>${post.publishedAt || post.published_at}</small>
+                        </div>`
+                    ).join('')}
+                `;
+                
+            } catch (error) {
+                statusDiv.innerHTML = `Error: ${error.message}`;
+                resultsDiv.innerHTML = `<pre>${error.stack}</pre>`;
+            }
+        }
+        
+        testAPI();
+    </script>
+</body>
+</html>

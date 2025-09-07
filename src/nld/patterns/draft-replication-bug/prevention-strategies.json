@@ -1,0 +1,111 @@
+{
+  "preventionStrategies": [
+    {
+      "name": "Mode-Aware Save Logic",
+      "description": "Implement conditional save logic that uses updateDraft when editing existing drafts",
+      "implementation": {
+        "pattern": "if (editDraft?.id && mode === 'edit') { await updateDraft(editDraft.id, changes) } else { await createDraft(data) }",
+        "location": "PostCreator.saveDraft callback",
+        "priority": "critical"
+      },
+      "preventsBugs": ["draft-duplication", "data-inconsistency"]
+    },
+    {
+      "name": "Draft ID State Tracking",
+      "description": "Maintain current draft ID in component state for proper update operations",
+      "implementation": {
+        "pattern": "const [currentDraftId, setCurrentDraftId] = useState(editDraft?.id || null)",
+        "location": "PostCreator state management",
+        "priority": "high"
+      },
+      "preventsBugs": ["lost-edit-context", "state-confusion"]
+    },
+    {
+      "name": "Explicit Mode Prop Consumption",
+      "description": "Ensure mode prop is actually used in component logic, not just passed",
+      "implementation": {
+        "pattern": "Use mode prop in save handlers, form validation, and UI rendering",
+        "location": "All form components with create/edit modes",
+        "priority": "medium"
+      },
+      "preventsBugs": ["ignored-props", "mode-confusion"]
+    },
+    {
+      "name": "TDD Edit Flow Validation",
+      "description": "Write tests that verify edit operations update existing records instead of creating new ones",
+      "implementation": {
+        "pattern": "Test that editDraft.id remains same after save operation",
+        "location": "Component test suites",
+        "priority": "high"
+      },
+      "preventsBugs": ["regression", "mode-confusion"]
+    },
+    {
+      "name": "Modal State Isolation",
+      "description": "Prevent modal re-initialization from breaking edit context",
+      "implementation": {
+        "pattern": "Use stable keys and prevent unnecessary re-renders during edit mode",
+        "location": "Modal wrapper components", 
+        "priority": "medium"
+      },
+      "preventsBugs": ["state-loss", "form-reset"]
+    }
+  ],
+  "debuggingApproaches": [
+    {
+      "name": "Edit Mode Verification",
+      "description": "Add console logs to verify mode and draft ID throughout save flow",
+      "debugCommands": [
+        "console.log('Mode:', mode, 'EditDraft ID:', editDraft?.id)",
+        "console.log('Save operation:', currentDraftId ? 'UPDATE' : 'CREATE')"
+      ]
+    },
+    {
+      "name": "State Transition Tracking", 
+      "description": "Monitor component state changes during edit initialization",
+      "debugCommands": [
+        "useEffect(() => console.log('Draft state:', currentDraft), [currentDraft])",
+        "useEffect(() => console.log('Mode changed:', mode), [mode])"
+      ]
+    },
+    {
+      "name": "Network Request Monitoring",
+      "description": "Verify correct API endpoints are called (POST for create, PUT/PATCH for update)",
+      "debugCommands": [
+        "Monitor network tab for POST /drafts vs PUT /drafts/:id",
+        "Add interceptors to log draft service method calls"
+      ]
+    }
+  ],
+  "testingPatterns": [
+    {
+      "name": "Edit Flow Integration Test",
+      "description": "End-to-end test that verifies edit operations don't create duplicates",
+      "testCase": "Load draft → Edit content → Save → Verify same ID and no duplicates"
+    },
+    {
+      "name": "Mode Prop Validation Test", 
+      "description": "Unit test that verifies mode prop affects save behavior",
+      "testCase": "Component with mode='edit' → Save → Should call updateDraft, not createDraft"
+    },
+    {
+      "name": "State Persistence Test",
+      "description": "Test that edit context survives modal re-renders and state changes", 
+      "testCase": "Open edit modal → Trigger re-render → Verify draft ID maintained"
+    }
+  ],
+  "regressionPrevention": [
+    {
+      "check": "Draft count remains same after edit operations",
+      "frequency": "Every save operation test"
+    },
+    {
+      "check": "EditDraft ID matches returned draft ID after save",
+      "frequency": "Edit flow tests"  
+    },
+    {
+      "check": "Mode prop is consumed in component logic",
+      "frequency": "Static analysis / code reviews"
+    }
+  ]
+}

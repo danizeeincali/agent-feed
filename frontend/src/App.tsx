@@ -37,6 +37,8 @@ import { ClaudeInstanceManagerComponentSSE } from './components/claude-manager/C
 import EnhancedSSEInterface from './components/claude-manager/EnhancedSSEInterface';
 import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
+import { DraftManager } from './components/DraftManager';
+import DebugPostsDisplay from './components/DebugPostsDisplay';
 import './styles/agents.css';
 import { 
   LayoutDashboard, 
@@ -51,6 +53,7 @@ import {
   Workflow,
   BarChart3,
   Code,
+  FileText,
 } from 'lucide-react';
 import { cn } from './utils/cn';
 import { ConnectionStatus } from './components/ConnectionStatus';
@@ -94,6 +97,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     { name: 'Interactive Control', href: '/interactive-control', icon: Bot },
     { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
     { name: 'Feed', href: '/', icon: Activity },
+    { name: 'Drafts', href: '/drafts', icon: FileText },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
     { name: 'Claude Code', href: '/claude-code', icon: Code },
@@ -104,7 +108,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   ], []);
 
   return (
-    <div className="h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex" data-testid="app-root">
       {/* Mobile sidebar overlay */}
       {isSidebarOpen && (
         <div
@@ -163,7 +167,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden" data-testid="main-content">
         {/* Header */}
         <header className="bg-white shadow-sm border-b border-gray-200" data-testid="header">
           <div className="flex items-center justify-between h-16 px-4 lg:px-6">
@@ -200,7 +204,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6" data-testid="agent-feed">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6" data-testid="app-container">
           <ErrorBoundary>
             {children}
           </ErrorBoundary>
@@ -338,6 +342,20 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="PerformanceMonitor">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Performance Monitor..." />}>
                         <PerformanceMonitor />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/drafts" element={
+                    <RouteErrorBoundary routeName="DraftManager">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Draft Manager..." />}>
+                        <DraftManager />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/debug-posts" element={
+                    <RouteErrorBoundary routeName="DebugPosts">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Debug Posts..." />}>
+                        <DebugPostsDisplay />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

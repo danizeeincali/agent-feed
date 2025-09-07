@@ -1,29 +1,39 @@
 {
-  "name": "Agent Feed",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {}
-  },
-  "forwardPorts": [5173, 3000],
+  "name": "Agent Feed Development",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  
+  "forwardPorts": [3000, 5173],
+  
   "portsAttributes": {
-    "5173": {
-      "label": "Frontend",
-      "onAutoForward": "notify",
-      "visibility": "public"
-    },
     "3000": {
-      "label": "Backend",
-      "onAutoForward": "notify",
-      "visibility": "public"
+      "label": "Agent Feed API",
+      "visibility": "public",
+      "protocol": "http",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Agent Feed Frontend", 
+      "visibility": "public",
+      "protocol": "http",
+      "onAutoForward": "openBrowser"
     }
   },
-  "postCreateCommand": "npm install",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  
   "customizations": {
     "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
-      ]
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
     }
-  }
+  },
+  
+  "postCreateCommand": "npm install",
+  "shutdownAction": "none"
 }

@@ -16,7 +16,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    host: true, // Allow external connections
+    host: "0.0.0.0", // SPARC FIX: Bind to all interfaces for Codespaces
     cors: true,
     strictPort: true, // Exit if port is already in use
     // SPARC DEBUG FIX: Codespaces HMR configuration

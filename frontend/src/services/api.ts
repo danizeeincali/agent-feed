@@ -10,8 +10,8 @@ import {
   SearchResult,
   FilterStats,
   SavedPost
-} from '@/types/api';
-import { Task, Workflow, OrchestrationState } from '@/types';
+} from '../types/api';
+import { Task, Workflow, OrchestrationState } from '../types';
 
 class ApiService {
   private baseUrl: string;
@@ -19,8 +19,28 @@ class ApiService {
   private wsConnection: WebSocket | null = null;
   private eventHandlers: Map<string, Set<Function>> = new Map();
 
-  constructor(baseUrl: string = 'http://localhost:3000/api/v1') {
-    this.baseUrl = baseUrl;
+  constructor(baseUrl?: string) {
+    // Auto-detect the correct base URL for Codespaces
+    if (!baseUrl) {
+      if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        if (hostname.includes('.app.github.dev')) {
+          // Codespaces environment - use the backend Codespaces URL
+          const codespaceName = hostname.split('-5173.app.github.dev')[0];
+          this.baseUrl = `https://${codespaceName}-3000.app.github.dev/api/v1`;
+        } else {
+          // Local development
+          this.baseUrl = 'http://localhost:3000/api/v1';
+        }
+      } else {
+        // Server-side rendering fallback
+        this.baseUrl = 'http://localhost:3000/api/v1';
+      }
+    } else {
+      this.baseUrl = baseUrl;
+    }
+    
+    console.log('🔗 API Service initialized with base URL:', this.baseUrl);
     this.initializeWebSocket();
   }
 
@@ -115,7 +135,23 @@ class ApiService {
     if (typeof window === 'undefined') return;
     
     try {
-      const wsUrl = 'ws://localhost:3000/ws';
+      // Auto-detect WebSocket URL for Codespaces
+      let wsUrl: string;
+      if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        if (hostname.includes('.app.github.dev')) {
+          // Codespaces environment - use secure WebSocket
+          const codespaceName = hostname.split('-5173.app.github.dev')[0];
+          wsUrl = `wss://${codespaceName}-3000.app.github.dev/ws`;
+        } else {
+          // Local development
+          wsUrl = 'ws://localhost:3000/ws';
+        }
+      } else {
+        wsUrl = 'ws://localhost:3000/ws';
+      }
+      
+      console.log('🔌 Attempting WebSocket connection to:', wsUrl);
       this.wsConnection = new WebSocket(wsUrl);
       
       this.wsConnection.onopen = () => {

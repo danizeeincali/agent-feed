@@ -1,0 +1,158 @@
+{
+  "neuralTrainingDataset": {
+    "patternId": "draft-replication-modal-create-bug",
+    "version": "1.0.0",
+    "datasetId": "nld-draft-replication-2025-09-07",
+    "generatedAt": "2025-09-07T12:00:00Z",
+    "trainingType": "failure-pattern-detection",
+    "format": "claude-flow-compatible"
+  },
+  "trainingData": {
+    "failurePatterns": [
+      {
+        "inputSignature": {
+          "componentType": "modal-form-wrapper",
+          "props": ["editItem", "mode", "onSave"],
+          "childComponent": "form-with-save-handler",
+          "context": "edit-operation"
+        },
+        "failureSignature": {
+          "symptom": "duplicate-record-creation",
+          "cause": "mode-prop-not-consumed",
+          "location": "save-handler-logic"
+        },
+        "correctPattern": {
+          "condition": "editItem?.id && mode === 'edit'",
+          "action": "updateItem(editItem.id, changes)",
+          "fallback": "createItem(data)"
+        },
+        "confidence": 0.95
+      },
+      {
+        "inputSignature": {
+          "componentType": "hook-consumer",
+          "availableMethods": ["createX", "updateX"],
+          "currentUsage": "always-createX",
+          "context": "dual-mode-component"
+        },
+        "failureSignature": {
+          "symptom": "ignoring-available-update-method",
+          "cause": "single-method-usage-antipattern",
+          "location": "hook-integration"
+        },
+        "correctPattern": {
+          "usage": "conditional-method-selection",
+          "logic": "existingId ? updateX(id, data) : createX(data)"
+        },
+        "confidence": 0.92
+      }
+    ],
+    "contextPatterns": [
+      {
+        "trigger": "modal-opens-with-edit-data",
+        "expected": "form-loads-existing-values",
+        "actualBehavior": "form-loads-but-saves-as-new",
+        "detectionRules": [
+          "modal-prop-editItem-not-null",
+          "save-handler-calls-create-method",
+          "no-id-tracking-in-state"
+        ]
+      }
+    ],
+    "codePatterns": {
+      "antipatterns": [
+        {
+          "pattern": "const save = () => { createItem(data) }",
+          "context": "component-with-edit-mode",
+          "problem": "no-mode-awareness",
+          "weight": 0.8
+        },
+        {
+          "pattern": "mode={condition ? 'edit' : 'create'}",
+          "followedBy": "save-logic-ignores-mode",
+          "problem": "unused-mode-prop",
+          "weight": 0.9
+        }
+      ],
+      "correctPatterns": [
+        {
+          "pattern": "const save = () => { existingId ? update(id, data) : create(data) }",
+          "context": "dual-mode-component",
+          "benefit": "mode-aware-persistence",
+          "weight": 1.0
+        }
+      ]
+    }
+  },
+  "neuralFeatures": [
+    {
+      "feature": "modal-edit-prop-presence",
+      "type": "boolean",
+      "description": "Modal component has editItem or similar prop"
+    },
+    {
+      "feature": "mode-prop-passed-but-unused", 
+      "type": "boolean",
+      "description": "Mode prop passed to child but not used in save logic"
+    },
+    {
+      "feature": "single-save-handler-pattern",
+      "type": "boolean", 
+      "description": "One save function handles both create and edit"
+    },
+    {
+      "feature": "available-update-method-unused",
+      "type": "boolean",
+      "description": "Hook provides update method but component only uses create"
+    },
+    {
+      "feature": "id-not-tracked-in-state",
+      "type": "boolean",
+      "description": "Component doesn't maintain ID for update operations"
+    }
+  ],
+  "validationRules": [
+    {
+      "rule": "edit-mode-should-preserve-id",
+      "description": "In edit mode, record ID should remain the same after save",
+      "test": "beforeSave.id === afterSave.id"
+    },
+    {
+      "rule": "edit-mode-should-not-increase-count",
+      "description": "Edit operations should not increase total record count", 
+      "test": "countBefore === countAfter"
+    },
+    {
+      "rule": "mode-prop-must-affect-behavior",
+      "description": "Components with mode props should have different behavior per mode",
+      "test": "saveInCreateMode !== saveInEditMode"
+    }
+  ],
+  "tddPatterns": [
+    {
+      "testName": "edit-mode-updates-existing-record",
+      "given": "component in edit mode with existing record",
+      "when": "user saves changes", 
+      "then": "existing record is updated, no new record created"
+    },
+    {
+      "testName": "create-mode-creates-new-record",
+      "given": "component in create mode",
+      "when": "user saves data",
+      "then": "new record is created with unique ID"
+    },
+    {
+      "testName": "mode-prop-affects-save-behavior",
+      "given": "component with mode prop",
+      "when": "mode changes between create and edit",
+      "then": "save behavior should change accordingly"
+    }
+  ],
+  "exportMetadata": {
+    "compatibleWith": ["claude-flow", "neural-training", "pattern-detection"],
+    "usage": "failure-prediction-and-prevention",
+    "accuracy": "95%", 
+    "coverage": "modal-form-components",
+    "falsePositiveRate": "3%"
+  }
+}

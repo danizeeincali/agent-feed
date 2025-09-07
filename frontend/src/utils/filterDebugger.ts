@@ -464,8 +464,8 @@ export class FilterDebugger {
     console.group(`🧪 Test Scenario: ${name}`);
     filters.forEach((filter, index) => {
       console.log(`Step ${index + 1}:`, filter);
-      const debugger = new FilterDebugger('TestScenario');
-      const validation = debugger.validateFilter(filter);
+      const filterDebugger = new FilterDebugger('TestScenario');
+      const validation = filterDebugger.validateFilter(filter);
       if (!validation.isValid) {
         console.error('❌ Validation failed:', validation.errors);
       } else {
@@ -480,17 +480,17 @@ export class FilterDebugger {
 export const createFilterDebugger = (component: string) => new FilterDebugger(component);
 
 export const debugFilter = (filter: FilterOptions, component: string = 'Unknown') => {
-  const debugger = new FilterDebugger(component);
-  debugger.logFilterCreation(filter);
-  const validation = debugger.validateFilter(filter);
-  debugger.logFilterValidation(filter, validation);
+  const filterDebugger = new FilterDebugger(component);
+  filterDebugger.logFilterCreation(filter);
+  const validation = filterDebugger.validateFilter(filter);
+  filterDebugger.logFilterValidation(filter, validation);
   return validation;
 };
 
 export const traceFilterChain = (operations: Array<{ name: string; data: any }>) => {
-  const debugger = new FilterDebugger('FilterChainTracer');
+  const filterDebugger = new FilterDebugger('FilterChainTracer');
   operations.forEach((op, index) => {
-    debugger.log(`CHAIN_STEP_${index + 1}_${op.name}`, op.data);
+    filterDebugger.log(`CHAIN_STEP_${index + 1}_${op.name}`, op.data);
   });
-  return debugger.generateDebugReport();
+  return filterDebugger.generateDebugReport();
 };

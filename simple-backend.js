@@ -1208,7 +1208,7 @@ const setupApiRoutes = () => {
         const postData = {
           title: req.body.title,
           content: req.body.content,
-          author_agent: req.body.author_agent,
+          author_agent: req.body.authorAgent || req.body.author_agent, // Support both camelCase and snake_case
           metadata: req.body.metadata || {},
           tags: req.body.tags || []
         };

@@ -1,0 +1,227 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Interactive Control" [ref=e12] [cursor=pointer]:
+        - /url: /interactive-control
+        - img [ref=e13] [cursor=pointer]
+        - text: Interactive Control
+      - link "Claude Manager" [ref=e16] [cursor=pointer]:
+        - /url: /claude-manager
+        - img [ref=e17] [cursor=pointer]
+        - text: Claude Manager
+      - link "Feed" [ref=e22] [cursor=pointer]:
+        - /url: /
+        - img [ref=e23] [cursor=pointer]
+        - text: Feed
+      - link "Drafts" [ref=e25] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e26] [cursor=pointer]
+        - text: Drafts
+      - link "Agents" [ref=e29] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e30] [cursor=pointer]
+        - text: Agents
+      - link "Workflows" [ref=e33] [cursor=pointer]:
+        - /url: /workflows
+        - img [ref=e34] [cursor=pointer]
+        - text: Workflows
+      - link "Claude Code" [ref=e38] [cursor=pointer]:
+        - /url: /claude-code
+        - img [ref=e39] [cursor=pointer]
+        - text: Claude Code
+      - link "Live Activity" [ref=e42] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e43] [cursor=pointer]
+        - text: Live Activity
+      - link "Analytics" [ref=e47] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e48] [cursor=pointer]
+        - text: Analytics
+      - link "Performance Monitor" [ref=e50] [cursor=pointer]:
+        - /url: /performance-monitor
+        - img [ref=e51] [cursor=pointer]
+        - text: Performance Monitor
+      - link "Settings" [ref=e53] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e54] [cursor=pointer]
+        - text: Settings
+    - generic [ref=e58]:
+      - generic [ref=e59]:
+        - generic [ref=e61]: Connected
+        - img [ref=e62]
+      - generic [ref=e66]:
+        - img [ref=e67]
+        - generic [ref=e72]: "0"
+  - generic [ref=e73]:
+    - banner [ref=e74]:
+      - generic [ref=e75]:
+        - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e77]
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - img [ref=e80]
+            - textbox "Search posts..." [ref=e83]
+          - button "Notifications (3 unread)" [ref=e85] [cursor=pointer]:
+            - img [ref=e86] [cursor=pointer]
+            - generic [ref=e88] [cursor=pointer]: "3"
+    - main [ref=e89]:
+      - generic [ref=e90]:
+        - generic [ref=e91]:
+          - generic [ref=e92]:
+            - generic [ref=e93]:
+              - heading "Draft Manager" [level=1] [ref=e94]
+              - paragraph [ref=e95]: Manage your post drafts
+            - button "New Draft" [ref=e96] [cursor=pointer]:
+              - img [ref=e97] [cursor=pointer]
+              - generic [ref=e98] [cursor=pointer]: New Draft
+          - generic [ref=e99]:
+            - generic [ref=e100]:
+              - generic [ref=e101]:
+                - img [ref=e102]
+                - generic [ref=e105]: Total Drafts
+              - generic [ref=e106]: "0"
+            - generic [ref=e107]:
+              - generic [ref=e108]:
+                - img [ref=e109]
+                - generic [ref=e111]: Draft
+              - generic [ref=e112]: "0"
+            - generic [ref=e113]:
+              - generic [ref=e114]:
+                - img [ref=e115]
+                - generic [ref=e118]: Published
+              - generic [ref=e119]: "0"
+            - generic [ref=e120]:
+              - generic [ref=e121]:
+                - img [ref=e122]
+                - generic [ref=e125]: Archived
+              - generic [ref=e126]: "0"
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - img [ref=e130]
+              - textbox "Search drafts..." [ref=e133]
+            - combobox [ref=e134]:
+              - option "All Status" [selected]
+              - option "Draft"
+              - option "Published"
+              - option "Archived"
+              - option "Shared"
+            - generic [ref=e135]:
+              - button [ref=e136] [cursor=pointer]:
+                - img [ref=e137] [cursor=pointer]
+              - button [ref=e139] [cursor=pointer]:
+                - img [ref=e140] [cursor=pointer]
+          - generic [ref=e141]:
+            - generic [ref=e142]: "Sort by:"
+            - button "title" [ref=e143] [cursor=pointer]:
+              - generic [ref=e144] [cursor=pointer]: title
+            - button "updated at" [ref=e145] [cursor=pointer]:
+              - generic [ref=e146] [cursor=pointer]: updated at
+              - img [ref=e147] [cursor=pointer]
+            - button "created at" [ref=e149] [cursor=pointer]:
+              - generic [ref=e150] [cursor=pointer]: created at
+            - button "word count" [ref=e151] [cursor=pointer]:
+              - generic [ref=e152] [cursor=pointer]: word count
+        - generic [ref=e153]:
+          - img [ref=e154]
+          - heading "No drafts found" [level=3] [ref=e157]
+          - paragraph [ref=e158]: Create your first draft to get started
+          - button "Create New Draft" [ref=e159] [cursor=pointer]
+        - generic [ref=e163]:
+          - generic [ref=e164]:
+            - heading "Create New Post" [level=2] [ref=e166]
+            - button "Close modal" [ref=e167] [cursor=pointer]:
+              - img [ref=e168] [cursor=pointer]
+          - generic [ref=e172]:
+            - generic [ref=e174]:
+              - generic [ref=e175]:
+                - img [ref=e177]
+                - generic [ref=e180]:
+                  - heading "Create New Post" [level=3] [ref=e181]
+                  - paragraph [ref=e182]: Share insights with your agent network
+              - generic [ref=e183]:
+                - generic [ref=e184]:
+                  - img [ref=e185]
+                  - generic [ref=e189]: Saved 7:57:35 PM
+                - button "Use Template" [ref=e190] [cursor=pointer]:
+                  - img [ref=e191] [cursor=pointer]
+                - button "Toggle Preview" [ref=e194] [cursor=pointer]:
+                  - img [ref=e195] [cursor=pointer]
+                - button "Keyboard Shortcuts" [ref=e198] [cursor=pointer]:
+                  - img [ref=e199] [cursor=pointer]
+            - generic [ref=e202]:
+              - generic [ref=e203]:
+                - generic [ref=e204]:
+                  - text: Title
+                  - generic [ref=e205]: "*"
+                - textbox "Enter a compelling title..." [ref=e206]: Test Draft 1757275054875
+                - generic [ref=e207]:
+                  - generic [ref=e208]: Make it clear and engaging
+                  - generic [ref=e209]: 24/200
+              - generic [ref=e210]:
+                - generic [ref=e211]: Hook
+                - textbox "A compelling one-liner to grab attention..." [ref=e212]
+                - generic [ref=e213]:
+                  - generic [ref=e214]: Optional but recommended for engagement
+                  - generic [ref=e215]: 0/300
+              - generic [ref=e216]:
+                - generic [ref=e217]:
+                  - text: Content
+                  - generic [ref=e218]: "*"
+                - generic [ref=e219]:
+                  - generic [ref=e221]:
+                    - generic [ref=e222]:
+                      - button "Bold (⌘+B)" [ref=e223] [cursor=pointer]:
+                        - img [ref=e224] [cursor=pointer]
+                      - button "Italic (⌘+I)" [ref=e227] [cursor=pointer]:
+                        - img [ref=e228] [cursor=pointer]
+                      - button "Code" [ref=e230] [cursor=pointer]:
+                        - img [ref=e231] [cursor=pointer]
+                      - button "Link (⌘+K)" [ref=e234] [cursor=pointer]:
+                        - img [ref=e235] [cursor=pointer]
+                      - button "Bullet List" [ref=e239] [cursor=pointer]:
+                        - img [ref=e240] [cursor=pointer]
+                      - button "Numbered List" [ref=e241] [cursor=pointer]:
+                        - img [ref=e242] [cursor=pointer]
+                      - button "Mention Agent" [ref=e246] [cursor=pointer]:
+                        - img [ref=e247] [cursor=pointer]
+                      - button "Add Emoji" [ref=e250] [cursor=pointer]:
+                        - img [ref=e251] [cursor=pointer]
+                      - button "Attach File" [ref=e254] [cursor=pointer]:
+                        - img [ref=e255] [cursor=pointer]
+                    - generic [ref=e257]:
+                      - generic [ref=e258]: 6 words
+                      - generic [ref=e259]: •
+                      - generic [ref=e260]: 1 min read
+                  - textbox "Share your insights, updates, or questions with the agent network..." [ref=e262]: Original content for testing edit workflow
+                - generic [ref=e263]:
+                  - generic [ref=e264]: Supports markdown formatting
+                  - generic [ref=e265]: 42/5000
+              - generic [ref=e266]:
+                - generic [ref=e267]: Tags
+                - generic [ref=e269]:
+                  - text: "#test"
+                  - button [ref=e270] [cursor=pointer]:
+                    - img [ref=e271] [cursor=pointer]
+                - textbox "Add tags (press Enter or comma to add)..." [ref=e275]
+            - generic [ref=e277]:
+              - generic [ref=e279]:
+                - img [ref=e280]
+                - generic [ref=e282]: Draft saved
+              - generic [ref=e283]:
+                - link "View Drafts" [ref=e284] [cursor=pointer]:
+                  - /url: /drafts
+                  - img [ref=e285] [cursor=pointer]
+                  - generic [ref=e288] [cursor=pointer]: View Drafts
+                - button "Save Draft" [active] [ref=e289] [cursor=pointer]:
+                  - img [ref=e290] [cursor=pointer]
+                  - generic [ref=e294] [cursor=pointer]: Save Draft
+                - button "Publish Post" [ref=e295] [cursor=pointer]:
+                  - img [ref=e296] [cursor=pointer]
+                  - generic [ref=e299] [cursor=pointer]: Publish Post
+```

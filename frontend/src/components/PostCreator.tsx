@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   Bold,
   Italic,
-  Link,
+  Link as LinkIcon,
   List,
   ListOrdered,
   Code,
@@ -27,21 +27,20 @@ import {
   AlertCircle,
   Check,
   HelpCircle,
-  Smartphone
+  Smartphone,
+  Heart
 } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { EmojiPicker } from './EmojiPicker';
 import { useKeyboardShortcuts, useShortcutsHelp } from '@/hooks/useKeyboardShortcuts';
+import { TemplateLibrary } from './post-creation/TemplateLibrary';
+import { useTemplates } from '../hooks/useTemplates';
+import { useDraftManager } from '../hooks/useDraftManager';
+import { Template } from '../types/templates';
+import { Draft } from '../types/drafts';
 
-interface PostTemplate {
-  id: string;
-  name: string;
-  title: string;
-  hook: string;
-  content: string;
-  tags: string[];
-  category: 'update' | 'insight' | 'question' | 'announcement';
-}
+// PostTemplate now imported from types
 
 interface AgentMention {
   id: string;
@@ -59,22 +58,15 @@ interface LinkPreview {
   domain: string;
 }
 
-interface PostDraft {
-  id: string;
-  title: string;
-  hook: string;
-  content: string;
-  tags: string[];
-  agentMentions: string[];
-  savedAt: Date;
-}
+// PostDraft interface removed - now using proper Draft type from DraftService
 
 interface PostCreatorProps {
   className?: string;
   onPostCreated?: (post: any) => void;
   replyToPostId?: string;
   initialContent?: string;
-  mode?: 'create' | 'reply';
+  mode?: 'create' | 'reply' | 'edit';
+  editDraft?: Draft | null;
 }
 
 // Mock data for development
@@ -137,7 +129,8 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
   onPostCreated,
   replyToPostId,
   initialContent = '',
-  mode = 'create'
+  mode = 'create',
+  editDraft = null
 }) => {
   // Form state
   const [title, setTitle] = useState('');
@@ -175,6 +168,12 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
 
   // Get shortcuts help data
   const shortcutsHelp = useShortcutsHelp();
+  
+  // Draft management
+  const { createDraft, updateDraft, deleteDraft } = useDraftManager();
+  
+  // Navigation and location state
+  const location = useLocation();
 
   // Mobile detection
   useEffect(() => {
@@ -187,29 +186,74 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Define saveDraft first before using it in hooks
+  // Handle draft editing from both navigation state and editDraft prop
+  useEffect(() => {
+    let draftToEdit: Draft | null = null;
+    
+    // Check for editDraft prop first (from modal)
+    if (editDraft) {
+      draftToEdit = editDraft;
+    } else {
+      // Fallback to navigation state (from direct navigation)
+      const navState = location.state as any;
+      if (navState?.editDraft && navState?.mode === 'edit') {
+        draftToEdit = navState.editDraft as Draft;
+        // Clear the navigation state to prevent re-loading on re-renders
+        window.history.replaceState({}, document.title);
+      }
+    }
+    
+    if (draftToEdit) {
+      // Parse the draft content - it was combined as title + hook + content
+      const contentLines = draftToEdit.content.split('\n\n');
+      const draftTitle = draftToEdit.title;
+      
+      // Set form fields from draft
+      setTitle(draftTitle);
+      if (contentLines.length > 1) {
+        setHook(contentLines[1] || '');
+        setContent(contentLines.slice(2).join('\n\n') || contentLines[0] || '');
+      } else {
+        setContent(draftToEdit.content);
+      }
+      setTags(draftToEdit.tags || []);
+      setIsDraft(true);
+      
+      console.log('Draft loaded for editing:', draftToEdit.title);
+    }
+  }, [location, editDraft]);
+
+  // Define saveDraft with proper edit mode handling
   const saveDraft = useCallback(async () => {
     if (!title && !hook && !content) return;
 
     try {
-      const draft: PostDraft = {
-        id: `draft-${Date.now()}`,
-        title,
-        hook,
-        content,
-        tags,
-        agentMentions,
-        savedAt: new Date()
-      };
-
-      // In a real app, save to localStorage or backend
-      localStorage.setItem('agentlink-draft', JSON.stringify(draft));
+      // Create draft content combining title, hook, and content
+      const draftContent = [title, hook, content].filter(Boolean).join('\n\n');
+      const draftTitle = title || 'Untitled Draft';
+      
+      // CRITICAL FIX: Check if we're editing an existing draft
+      if ((mode === 'edit' || editDraft) && editDraft?.id) {
+        // Update existing draft
+        await updateDraft(editDraft.id, {
+          title: draftTitle,
+          content: draftContent,
+          tags
+        });
+        console.log('Draft updated successfully:', editDraft.id);
+      } else {
+        // Create new draft
+        await createDraft(draftTitle, draftContent, tags);
+        console.log('New draft created successfully');
+      }
+      
       setLastSaved(new Date());
       setIsDraft(true);
+      
     } catch (error) {
       console.error('Failed to save draft:', error);
     }
-  }, [title, hook, content, tags, agentMentions]);
+  }, [title, hook, content, tags, mode, editDraft, createDraft, updateDraft]);
 
   // Define handleSubmit after saveDraft
   const handleSubmit = useCallback(async () => {
@@ -220,7 +264,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
       const postData = {
         title: title.trim(),
         content: content.trim(),
-        authorAgent: 'user-agent', // In a real app, get from current user context
+        author_agent: 'user-agent', // Fixed: Use snake_case for backend compatibility
         metadata: {
           businessImpact: 5, // Default impact
           tags,
@@ -249,6 +293,18 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
       }
 
       const result = await response.json();
+      
+      // CRITICAL: Delete draft if we published from an existing draft
+      if ((mode === 'edit' || editDraft) && editDraft?.id) {
+        try {
+          await deleteDraft(editDraft.id);
+          console.log('Draft deleted after publishing:', editDraft.id);
+        } catch (deleteError) {
+          console.error('Failed to delete draft after publishing:', deleteError);
+          // Don't fail the entire operation if draft deletion fails
+        }
+      }
+      
       onPostCreated?.(result.data);
       
       // Reset form
@@ -265,7 +321,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [title, hook, content, tags, agentMentions, replyToPostId, onPostCreated]);
+  }, [title, hook, content, tags, agentMentions, replyToPostId, onPostCreated, mode, editDraft, deleteDraft]);
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
@@ -324,28 +380,24 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
     }
   };
 
+  // Note: Draft loading/management now handled by DraftManager component
+  // Individual drafts should be managed through the /drafts page
   const loadDraft = useCallback(() => {
-    try {
-      const draftData = localStorage.getItem('agentlink-draft');
-      if (draftData) {
-        const draft: PostDraft = JSON.parse(draftData);
-        setTitle(draft.title);
-        setHook(draft.hook);
-        setContent(draft.content);
-        setTags(draft.tags);
-        setAgentMentions(draft.agentMentions);
-        setIsDraft(true);
-        setLastSaved(draft.savedAt);
-      }
-    } catch (error) {
-      console.error('Failed to load draft:', error);
-    }
+    // Draft loading is now handled by the DraftManager component
+    // This maintains the existing interface but doesn't conflict with DraftService
+    console.log('Draft loading now handled by DraftManager - visit /drafts page');
   }, []);
 
   const clearDraft = () => {
-    localStorage.removeItem('agentlink-draft');
+    // Clear form state instead of conflicting with DraftService
+    setTitle('');
+    setHook('');  
+    setContent('');
+    setTags([]);
+    setAgentMentions([]);
     setIsDraft(false);
     setLastSaved(null);
+    console.log('Form cleared - drafts are managed via DraftService');
   };
 
   const applyTemplate = (template: PostTemplate) => {
@@ -494,6 +546,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
             )}
             
             <button
+              data-testid="toggle-template-library"
               onClick={() => setShowTemplates(!showTemplates)}
               className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
               title="Use Template"
@@ -530,7 +583,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
 
       {/* Templates Dropdown */}
       {showTemplates && (
-        <div className="p-4 border-b border-gray-100 bg-gray-50">
+        <div data-testid="template-library-container" className="p-4 border-b border-gray-100 bg-gray-50">
           <h4 className="font-medium text-gray-900 mb-3">Choose a Template</h4>
           <div className={cn(
             "grid gap-3",
@@ -647,7 +700,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
                     className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded transition-colors flex-shrink-0"
                     title="Link (⌘+K)"
                   >
-                    <Link className="w-4 h-4" />
+                    <LinkIcon className="w-4 h-4" />
                   </button>
                   
                   {!isMobile && <div className="w-px h-6 bg-gray-300 mx-1" />}
@@ -938,6 +991,14 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
           </div>
           
           <div className="flex items-center space-x-3">
+            <Link
+              to="/drafts"
+              className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors flex items-center space-x-2"
+            >
+              <FileText className="w-4 h-4" />
+              <span>View Drafts</span>
+            </Link>
+            
             <button
               onClick={saveDraft}
               className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors flex items-center space-x-2"
@@ -947,6 +1008,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
             </button>
             
             <button
+              data-testid="submit-post"
               onClick={handleSubmit}
               disabled={!isValid || isSubmitting}
               className={cn(

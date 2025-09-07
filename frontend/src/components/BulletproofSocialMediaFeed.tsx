@@ -608,6 +608,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                   AI
                 </div>
                 <button
+                  data-testid="start-post-button"
                   onClick={() => setShowPostCreator(true)}
                   className="flex-1 text-left px-4 py-3 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
@@ -753,6 +754,11 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                                   ? 'text-gray-500 hover:text-red-500'
                                   : 'text-gray-400 cursor-not-allowed opacity-50'
                               }`}
+                            >
+                              <Heart className="h-5 w-5" />
+                              <span className="text-sm">{safeNumber(post.likes, 0)}</span>
+                            </button>
+                            
                             <button 
                               className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors"
                               onClick={() => subscribePost(post.id)}
