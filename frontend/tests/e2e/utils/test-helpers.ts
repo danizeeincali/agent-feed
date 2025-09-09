@@ -1,507 +1,328 @@
-/**
- * Test Helpers and Utilities for Claude Instance Management E2E Tests
- * Production Readiness Validation Support
- */
+import { Page, Locator, expect } from '@playwright/test';
 
-import { Page, expect, Locator } from '@playwright/test';
-import { ClaudeInstance, ClaudeInstanceType } from '../../../src/types/claude-instances';
-
-// Test configuration constants
-export const TEST_CONFIG = {
-  TIMEOUTS: {
-    SHORT: 5000,
-    MEDIUM: 15000,
-    LONG: 30000,
-    EXTRA_LONG: 60000,
-  },
-  RETRY_ATTEMPTS: 3,
-  POLLING_INTERVAL: 500,
-  API_BASE_URL: 'http://localhost:3000',
-  WS_BASE_URL: 'ws://localhost:3000',
-  FRONTEND_URL: 'http://localhost:5173',
-};
-
-// Mock data generators
-export class MockDataGenerator {
-  static generateInstance(overrides: Partial<ClaudeInstance> = {}): ClaudeInstance {
-    const defaultInstance: ClaudeInstance = {
-      id: `test-instance-${Date.now()}`,
-      type: this.generateInstanceType(),
-      status: 'ready',
-      connectionState: 'connected',
-      createdAt: new Date(),
-      processInfo: {
-        pid: Math.floor(Math.random() * 65536),
-        memoryUsage: Math.floor(Math.random() * 1024),
-        cpuUsage: Math.random() * 100,
-        uptime: Math.floor(Math.random() * 3600),
-        lastHealthCheck: new Date()
-      },
-      ...overrides
-    };
-    return defaultInstance;
-  }
-
-  static generateInstanceType(overrides: Partial<ClaudeInstanceType> = {}): ClaudeInstanceType {
-    const types = ['claude-default', 'claude-prod', 'claude-continue', 'claude-resume'];
-    const randomType = types[Math.floor(Math.random() * types.length)];
-    
-    return {
-      id: randomType,
-      name: `Claude ${randomType.split('-')[1] || 'Default'}`,
-      command: `claude ${randomType === 'claude-prod' ? '--prod' : ''}`.trim(),
-      description: `Test instance of type ${randomType}`,
-      available: true,
-      configured: true,
-      enabled: true,
-      models: [{
-        id: 'claude-sonnet-4',
-        name: 'Claude Sonnet 4',
-        capabilities: ['text', 'image', 'code']
-      }],
-      ...overrides
-    };
-  }
-
-  static generateChatMessage(type: 'user' | 'assistant' = 'assistant', content?: string) {
-    return {
-      id: `msg-${Date.now()}`,
-      type,
-      content: content || (type === 'user' ? 'Test user message' : 'Test assistant response'),
-      timestamp: new Date(),
-      metadata: type === 'assistant' ? {
-        model: 'claude-sonnet-4',
-        tokens: { input: 10, output: 20 },
-        processingTime: Math.random() * 1000
-      } : undefined
-    };
-  }
-}
-
-// Page interaction helpers
-export class PageHelpers {
+export class TestHelpers {
   constructor(private page: Page) {}
 
-  // Wait for element with custom timeout and retry logic
-  async waitForElementWithRetry(
-    selector: string, 
-    options: { timeout?: number; state?: 'visible' | 'hidden' | 'attached' | 'detached' } = {}
-  ): Promise<Locator> {
-    const { timeout = TEST_CONFIG.TIMEOUTS.MEDIUM, state = 'visible' } = options;
+  /**
+   * Wait for the application to be fully loaded and ready
+   */
+  async waitForAppReady() {
+    await this.page.waitForSelector('[data-testid="app-root"]', { timeout: 30000 });
+    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForTimeout(500); // Additional buffer for React hydration
+  }
+
+  /**
+   * Clear all browser state for clean test starts
+   */
+  async clearBrowserState() {
+    await this.page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+      // Clear any cached data
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          names.forEach(name => caches.delete(name));
+        });
+      }
+    });
+  }
+
+  /**
+   * Navigate to a route with proper waiting
+   */
+  async navigateTo(path: string) {
+    await this.page.goto(path);
+    await this.waitForAppReady();
+  }
+
+  /**
+   * Type text with realistic human-like delays
+   */
+  async typeRealistic(selector: string, text: string, delay: number = 50) {
+    const element = this.page.locator(selector);
+    await element.click();
+    for (const char of text) {
+      await element.type(char, { delay });
+    }
+  }
+
+  /**
+   * Wait for mention dropdown to appear and be populated
+   */
+  async waitForMentionDropdown() {
+    const dropdown = this.page.locator('.mention-dropdown, [data-testid="mention-dropdown"]');
+    await dropdown.waitFor({ state: 'visible', timeout: 10000 });
     
-    for (let attempt = 1; attempt <= TEST_CONFIG.RETRY_ATTEMPTS; attempt++) {
+    // Wait for dropdown to be populated with items
+    const items = dropdown.locator('.mention-item, [data-testid="mention-item"]');
+    await expect(items.first()).toBeVisible({ timeout: 5000 });
+    
+    return dropdown;
+  }
+
+  /**
+   * Test @ mention functionality in any input field
+   */
+  async testMentionFunctionality(inputSelector: string, context: string) {
+    const input = this.page.locator(inputSelector);
+    
+    // Clear and focus input
+    await input.clear();
+    await input.click();
+    
+    // Type @ symbol to trigger mention dropdown
+    await input.type('@');
+    
+    // Wait for dropdown
+    const dropdown = await this.waitForMentionDropdown();
+    await expect(dropdown).toBeVisible();
+    
+    // Verify dropdown has mention options
+    const mentionItems = dropdown.locator('.mention-item, [data-testid="mention-item"]');
+    await expect(mentionItems.first()).toBeVisible();
+    
+    // Select first mention item
+    await mentionItems.first().click();
+    
+    // Verify mention was inserted
+    const inputValue = await input.inputValue();
+    expect(inputValue).toMatch(/@\w+/);
+    
+    console.log(`✅ @ mention functionality verified in ${context}`);
+    return inputValue;
+  }
+
+  /**
+   * Take a screenshot with timestamp for debugging
+   */
+  async debugScreenshot(name: string) {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const path = `test-results/debug-screenshots/${name}-${timestamp}.png`;
+    await this.page.screenshot({ path, fullPage: true });
+    console.log(`📸 Debug screenshot saved: ${path}`);
+    return path;
+  }
+
+  /**
+   * Wait for element with retry logic
+   */
+  async waitForElementWithRetry(selector: string, retries: number = 3) {
+    for (let i = 0; i < retries; i++) {
       try {
-        await this.page.waitForSelector(selector, { timeout, state });
+        await this.page.waitForSelector(selector, { timeout: 5000 });
         return this.page.locator(selector);
       } catch (error) {
-        if (attempt === TEST_CONFIG.RETRY_ATTEMPTS) {
-          throw new Error(`Failed to find element '${selector}' after ${TEST_CONFIG.RETRY_ATTEMPTS} attempts: ${error}`);
-        }
-        await this.page.waitForTimeout(TEST_CONFIG.POLLING_INTERVAL);
+        if (i === retries - 1) throw error;
+        await this.page.waitForTimeout(1000);
       }
     }
+  }
+
+  /**
+   * Check for React/JS errors in console
+   */
+  async checkForConsoleErrors() {
+    const errors: string[] = [];
     
-    throw new Error(`Unreachable code in waitForElementWithRetry`);
-  }
-
-  // Wait for multiple elements to be present
-  async waitForElements(selectors: string[], timeout = TEST_CONFIG.TIMEOUTS.MEDIUM): Promise<Locator[]> {
-    const promises = selectors.map(selector => this.waitForElementWithRetry(selector, { timeout }));
-    return Promise.all(promises);
-  }
-
-  // Check if element exists without throwing
-  async elementExists(selector: string): Promise<boolean> {
-    try {
-      await this.page.waitForSelector(selector, { timeout: 1000, state: 'attached' });
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  // Get element text with fallback
-  async getTextContent(selector: string, fallback = ''): Promise<string> {
-    try {
-      const element = await this.waitForElementWithRetry(selector, { timeout: TEST_CONFIG.TIMEOUTS.SHORT });
-      return await element.textContent() || fallback;
-    } catch {
-      return fallback;
-    }
-  }
-
-  // Click with retry logic
-  async clickWithRetry(selector: string, attempts = TEST_CONFIG.RETRY_ATTEMPTS): Promise<void> {
-    for (let attempt = 1; attempt <= attempts; attempt++) {
-      try {
-        const element = await this.waitForElementWithRetry(selector);
-        await element.click();
-        return;
-      } catch (error) {
-        if (attempt === attempts) {
-          throw new Error(`Failed to click '${selector}' after ${attempts} attempts: ${error}`);
-        }
-        await this.page.waitForTimeout(TEST_CONFIG.POLLING_INTERVAL);
+    this.page.on('console', msg => {
+      if (msg.type() === 'error') {
+        errors.push(msg.text());
       }
-    }
-  }
-
-  // Type with retry logic
-  async typeWithRetry(selector: string, text: string, attempts = TEST_CONFIG.RETRY_ATTEMPTS): Promise<void> {
-    for (let attempt = 1; attempt <= attempts; attempt++) {
-      try {
-        const element = await this.waitForElementWithRetry(selector);
-        await element.clear();
-        await element.type(text);
-        return;
-      } catch (error) {
-        if (attempt === attempts) {
-          throw new Error(`Failed to type in '${selector}' after ${attempts} attempts: ${error}`);
-        }
-        await this.page.waitForTimeout(TEST_CONFIG.POLLING_INTERVAL);
-      }
-    }
-  }
-
-  // Wait for condition with polling
-  async waitForCondition(
-    condition: () => Promise<boolean>, 
-    timeout = TEST_CONFIG.TIMEOUTS.MEDIUM
-  ): Promise<void> {
-    const startTime = Date.now();
+    });
     
-    while (Date.now() - startTime < timeout) {
-      try {
-        if (await condition()) {
-          return;
-        }
-      } catch {
-        // Ignore errors in condition checking
-      }
-      
-      await this.page.waitForTimeout(TEST_CONFIG.POLLING_INTERVAL);
-    }
+    this.page.on('pageerror', error => {
+      errors.push(`Page Error: ${error.message}`);
+    });
     
-    throw new Error(`Condition not met within ${timeout}ms`);
-  }
-}
-
-// API mocking utilities
-export class APIMockingHelpers {
-  constructor(private page: Page) {}
-
-  async mockInstancesAPI(instances: ClaudeInstance[] = []) {
-    await this.page.route('**/api/claude/instances', async (route) => {
-      if (route.request().method() === 'GET') {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            success: true,
-            instances
-          })
-        });
-      }
-    });
-  }
-
-  async mockInstanceCreation(response: { success: boolean; instanceId?: string; error?: string }) {
-    await this.page.route('**/api/claude/instances', async (route) => {
-      if (route.request().method() === 'POST') {
-        await route.fulfill({
-          status: response.success ? 200 : 500,
-          contentType: 'application/json',
-          body: JSON.stringify(response)
-        });
-      }
-    });
-  }
-
-  async mockChatAPI(responses: Array<{ success: boolean; response?: string; error?: string }>) {
-    let responseIndex = 0;
+    // Wait a moment for any delayed errors
+    await this.page.waitForTimeout(1000);
     
-    await this.page.route('**/api/claude/instances/*/chat', async (route) => {
-      const response = responses[responseIndex % responses.length];
-      responseIndex++;
-      
-      await route.fulfill({
-        status: response.success ? 200 : 500,
-        contentType: 'application/json',
-        body: JSON.stringify(response)
-      });
-    });
+    return errors;
   }
 
-  async mockFileUpload(response: { success: boolean; fileId?: string; fileName?: string; url?: string; error?: string }) {
-    await this.page.route('**/api/claude/instances/*/upload', async (route) => {
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      await route.fulfill({
-        status: response.success ? 200 : 500,
-        contentType: 'application/json',
-        body: JSON.stringify(response)
-      });
-    });
-  }
-
-  async mockWebSocketEndpoints() {
-    // Mock Socket.IO handshake
-    await this.page.route('**/socket.io/**', async (route) => {
-      if (route.request().url().includes('transport=polling')) {
-        await route.fulfill({
-          status: 200,
-          contentType: 'text/plain',
-          body: '97:0{"sid":"test-session-id","upgrades":["websocket"],"pingInterval":25000,"pingTimeout":20000}'
-        });
-      }
-    });
-  }
-}
-
-// WebSocket testing utilities
-export class WebSocketTestHelpers {
-  constructor(private page: Page) {}
-
-  async setupWebSocketMocking() {
-    await this.page.addInitScript(() => {
-      // Store original WebSocket
-      (window as any).OriginalWebSocket = window.WebSocket;
-      
-      // Mock WebSocket implementation
-      class MockWebSocket extends EventTarget {
-        public readyState = WebSocket.CONNECTING;
-        public url: string;
-        public protocol = '';
-        public binaryType: BinaryType = 'blob';
-        
-        private mockId = Math.random().toString(36).substr(2, 9);
-        
-        constructor(url: string, protocols?: string | string[]) {
-          super();
-          this.url = url;
-          
-          // Store for testing
-          (window as any).mockWebSockets = (window as any).mockWebSockets || [];
-          (window as any).mockWebSockets.push(this);
-          
-          // Simulate async connection
-          setTimeout(() => {
-            this.readyState = WebSocket.OPEN;
-            this.dispatchEvent(new Event('open'));
-          }, 100);
-        }
-        
-        send(data: string | ArrayBufferLike | Blob | ArrayBufferView) {
-          if (this.readyState !== WebSocket.OPEN) {
-            throw new Error('WebSocket is not open');
-          }
-          
-          (window as any).sentWebSocketMessages = (window as any).sentWebSocketMessages || [];
-          (window as any).sentWebSocketMessages.push(data);
-        }
-        
-        close(code?: number, reason?: string) {
-          this.readyState = WebSocket.CLOSED;
-          this.dispatchEvent(new CloseEvent('close', { code, reason }));
-        }
-        
-        // Test helper methods
-        simulateMessage(data: any) {
-          this.dispatchEvent(new MessageEvent('message', { data: JSON.stringify(data) }));
-        }
-        
-        simulateError(error: string) {
-          this.dispatchEvent(new ErrorEvent('error', { error: new Error(error), message: error }));
-        }
-      }
-      
-      // Replace WebSocket
-      window.WebSocket = MockWebSocket as any;
-    });
-  }
-
-  async sendWebSocketMessage(message: any) {
-    await this.page.evaluate((msg) => {
-      const sockets = (window as any).mockWebSockets || [];
-      sockets.forEach((ws: any) => {
-        if (ws.readyState === 1) { // OPEN
-          ws.simulateMessage(msg);
-        }
-      });
-    }, message);
-  }
-
-  async simulateWebSocketError(error: string) {
-    await this.page.evaluate((err) => {
-      const sockets = (window as any).mockWebSockets || [];
-      sockets.forEach((ws: any) => ws.simulateError(err));
-    }, error);
-  }
-
-  async getSentMessages(): Promise<string[]> {
-    return await this.page.evaluate(() => (window as any).sentWebSocketMessages || []);
-  }
-}
-
-// Performance monitoring utilities
-export class PerformanceHelpers {
-  constructor(private page: Page) {}
-
-  async measurePageLoadTime(): Promise<number> {
-    const startTime = Date.now();
-    await this.page.waitForLoadState('networkidle');
-    return Date.now() - startTime;
-  }
-
-  async measureActionTime(action: () => Promise<void>): Promise<number> {
-    const startTime = Date.now();
-    await action();
-    return Date.now() - startTime;
-  }
-
-  async getMemoryUsage(): Promise<{ used: number; total: number } | null> {
-    return await this.page.evaluate(() => {
-      const memory = (performance as any).memory;
-      if (memory) {
-        return {
-          used: memory.usedJSHeapSize,
-          total: memory.totalJSHeapSize
-        };
-      }
-      return null;
-    });
-  }
-
-  async waitForNoNetworkActivity(timeout = 2000): Promise<void> {
-    await this.page.waitForLoadState('networkidle', { timeout });
-  }
-
-  async monitorNetworkRequests(): Promise<{ url: string; method: string; status: number }[]> {
-    const requests: { url: string; method: string; status: number }[] = [];
+  /**
+   * Monitor network requests for API calls
+   */
+  async monitorNetworkRequests() {
+    const requests: any[] = [];
     
-    this.page.on('response', (response) => {
+    this.page.on('request', request => {
       requests.push({
-        url: response.url(),
-        method: response.request().method(),
-        status: response.status()
+        url: request.url(),
+        method: request.method(),
+        headers: request.headers(),
+        timestamp: Date.now()
       });
+    });
+    
+    this.page.on('response', response => {
+      const matchingRequest = requests.find(req => 
+        req.url === response.url() && 
+        Math.abs(req.timestamp - Date.now()) < 5000
+      );
+      
+      if (matchingRequest) {
+        matchingRequest.status = response.status();
+        matchingRequest.responseHeaders = response.headers();
+      }
     });
     
     return requests;
   }
+
+  /**
+   * Simulate realistic user interactions
+   */
+  async simulateUserBehavior() {
+    // Scroll a bit like a real user
+    await this.page.mouse.wheel(0, 100);
+    await this.page.waitForTimeout(500);
+    
+    // Move mouse around
+    await this.page.mouse.move(200, 200);
+    await this.page.waitForTimeout(200);
+    await this.page.mouse.move(300, 300);
+    await this.page.waitForTimeout(200);
+  }
+
+  /**
+   * Verify component is properly mounted and functional
+   */
+  async verifyComponentMount(componentSelector: string, componentName: string) {
+    const component = this.page.locator(componentSelector);
+    
+    // Check if component exists
+    await expect(component).toBeVisible();
+    
+    // Check if component is interactive (not just a static render)
+    const boundingBox = await component.boundingBox();
+    expect(boundingBox).not.toBeNull();
+    expect(boundingBox!.width).toBeGreaterThan(0);
+    expect(boundingBox!.height).toBeGreaterThan(0);
+    
+    console.log(`✅ ${componentName} component properly mounted and visible`);
+  }
+
+  /**
+   * Wait for real-time updates (WebSocket/SSE connections)
+   */
+  async waitForRealtimeConnection() {
+    // Wait for WebSocket connection to be established
+    await this.page.waitForFunction(() => {
+      return window.WebSocket && 
+             Array.from(document.querySelectorAll('[data-connection-status]')).some(
+               el => el.getAttribute('data-connection-status') === 'connected'
+             );
+    }, { timeout: 10000 });
+  }
 }
 
-// File testing utilities
-export class FileTestHelpers {
-  static createTestImageBuffer(width = 1, height = 1): Buffer {
-    // Create minimal PNG buffer
-    const png = Buffer.from([
-      0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, // PNG signature
-      0x00, 0x00, 0x00, 0x0D, // IHDR chunk size
-      0x49, 0x48, 0x44, 0x52, // IHDR
-      0x00, 0x00, 0x00, width, 0x00, 0x00, 0x00, height, // width, height
-      0x08, 0x02, 0x00, 0x00, 0x00, // bit depth, color type, compression, filter, interlace
-      0x90, 0x77, 0x53, 0xDE, // CRC
-      0x00, 0x00, 0x00, 0x00, // IEND chunk size
-      0x49, 0x45, 0x4E, 0x44, // IEND
-      0xAE, 0x42, 0x60, 0x82  // CRC
-    ]);
-    return png;
-  }
+export class MentionTestHelpers extends TestHelpers {
+  /**
+   * Comprehensive @ mention system validation
+   */
+  async validateMentionSystemAcrossComponents() {
+    console.log('🔍 Starting comprehensive @ mention system validation...');
+    
+    const mentionContexts = [
+      {
+        name: 'PostCreator',
+        selector: '[data-testid="post-creator"] textarea, .post-creator textarea, .main-post-input',
+        route: '/'
+      },
+      {
+        name: 'QuickPost',
+        selector: '[data-testid="quick-post-input"], .quick-post-input, .quick-post textarea',
+        route: '/posting'
+      },
+      {
+        name: 'CommentInput',
+        selector: '[data-testid="comment-input"], .comment-input, .comment-textarea',
+        route: '/'
+      }
+    ];
 
-  static createTestSVG(width = 100, height = 100, color = 'red'): string {
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-      <rect width="${width}" height="${height}" fill="${color}"/>
-    </svg>`;
-  }
+    const results = [];
 
-  static generateLargeFile(sizeInBytes: number): Buffer {
-    return Buffer.alloc(sizeInBytes, 0);
+    for (const context of mentionContexts) {
+      try {
+        console.log(`🧪 Testing @ mentions in ${context.name}...`);
+        
+        // Navigate to the appropriate route
+        await this.navigateTo(context.route);
+        
+        // If this is a comment input, we might need to click a reply button first
+        if (context.name === 'CommentInput') {
+          const replyButtons = this.page.locator('[data-testid="reply-button"], .reply-button, button:has-text("Reply")');
+          if (await replyButtons.count() > 0) {
+            await replyButtons.first().click();
+            await this.page.waitForTimeout(500);
+          }
+        }
+        
+        // Test mention functionality
+        const mentionValue = await this.testMentionFunctionality(context.selector, context.name);
+        
+        results.push({
+          context: context.name,
+          success: true,
+          mentionValue,
+          route: context.route
+        });
+        
+        console.log(`✅ ${context.name} @ mention test passed`);
+        
+      } catch (error) {
+        console.error(`❌ ${context.name} @ mention test failed:`, error);
+        results.push({
+          context: context.name,
+          success: false,
+          error: error.message,
+          route: context.route
+        });
+        
+        // Take debug screenshot on failure
+        await this.debugScreenshot(`mention-failure-${context.name.toLowerCase()}`);
+      }
+    }
+
+    return results;
   }
 }
 
-// Accessibility testing helpers
-export class AccessibilityHelpers {
-  constructor(private page: Page) {}
-
-  async checkKeyboardNavigation(elements: string[]): Promise<void> {
-    for (const selector of elements) {
-      const element = this.page.locator(selector);
-      
-      // Tab to element
-      await this.page.keyboard.press('Tab');
-      
-      // Verify element is focused
-      await expect(element).toBeFocused();
-      
-      // Verify element is accessible via keyboard
-      await this.page.keyboard.press('Enter');
-      
-      // Add small delay for any animations
-      await this.page.waitForTimeout(100);
-    }
+export class PerformanceHelpers extends TestHelpers {
+  /**
+   * Measure page load performance
+   */
+  async measurePageLoadPerformance() {
+    const startTime = Date.now();
+    await this.page.reload();
+    await this.waitForAppReady();
+    const endTime = Date.now();
+    
+    const loadTime = endTime - startTime;
+    console.log(`📊 Page load time: ${loadTime}ms`);
+    
+    return {
+      loadTime,
+      timestamp: new Date().toISOString()
+    };
   }
 
-  async checkAriaAttributes(selector: string, expectedAttributes: Record<string, string>): Promise<void> {
-    const element = this.page.locator(selector);
-    
-    for (const [attribute, expectedValue] of Object.entries(expectedAttributes)) {
-      const actualValue = await element.getAttribute(`aria-${attribute}`);
-      expect(actualValue).toBe(expectedValue);
-    }
-  }
-
-  async checkColorContrast(selector: string): Promise<void> {
-    const element = this.page.locator(selector);
-    
-    const styles = await element.evaluate((el) => {
-      const computed = window.getComputedStyle(el);
-      return {
-        color: computed.color,
-        backgroundColor: computed.backgroundColor
-      };
+  /**
+   * Monitor memory usage during test execution
+   */
+  async monitorMemoryUsage() {
+    const metrics = await this.page.evaluate(() => {
+      if ('memory' in performance) {
+        return (performance as any).memory;
+      }
+      return null;
     });
     
-    // Basic color contrast check (simplified)
-    expect(styles.color).not.toBe(styles.backgroundColor);
+    return metrics;
   }
 }
 
-// Custom assertions
-export class CustomAssertions {
-  static async toHaveInstanceStatus(locator: Locator, expectedStatus: string) {
-    const element = locator.getByTestId('instance-status');
-    await expect(element).toContainText(expectedStatus);
-  }
-
-  static async toBeConnectedToWebSocket(page: Page) {
-    const statusElement = page.getByTestId('websocket-status');
-    await expect(statusElement).toContainText('Connected');
-  }
-
-  static async toHaveUploadedFiles(page: Page, expectedCount: number) {
-    const fileElements = page.locator('[data-testid^="uploaded-file-"]');
-    await expect(fileElements).toHaveCount(expectedCount);
-  }
-
-  static async toHandleErrorGracefully(page: Page, errorMessage: string) {
-    const errorElement = page.getByTestId('error-message');
-    await expect(errorElement).toContainText(errorMessage);
-    
-    // Should have dismiss option
-    const dismissButton = page.getByTestId('dismiss-error');
-    await expect(dismissButton).toBeVisible();
-  }
-}
-
-// Export all utilities
-export {
-  PageHelpers,
-  APIMockingHelpers,
-  WebSocketTestHelpers,
-  PerformanceHelpers,
-  FileTestHelpers,
-  AccessibilityHelpers,
-  CustomAssertions,
-};
+export default TestHelpers;

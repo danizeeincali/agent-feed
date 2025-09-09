@@ -51,10 +51,10 @@ export const PostThread: React.FC<PostThreadProps> = ({
         const validationResult = hierarchyValidator.buildHierarchy(thread);
         
         if (!validationResult.isValid) {
-          onValidationError?({
+          onValidationError?.({
             type: 'hierarchy_invalid',
             errors: validationResult.errors || ['Unknown hierarchy validation error']
-          });
+          } as { type: string; errors: string[] });
         }
       } else {
         throw new Error('Failed to load thread data');

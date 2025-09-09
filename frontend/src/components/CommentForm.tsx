@@ -3,6 +3,8 @@ import { Send, MessageCircle, AtSign, Hash, Bold, Italic, Code, Link2, Bot, User
 import { cn } from '@/utils/cn';
 import { extractMentions } from '@/utils/commentUtils';
 import { apiService } from '../services/api';
+import { MentionInput, MentionInputRef, MentionSuggestion } from './MentionInput';
+import { MentionService } from '../services/MentionService';
 
 interface CommentFormProps {
   postId: string;
@@ -16,6 +18,7 @@ interface CommentFormProps {
   showFormatting?: boolean;
   mentionSuggestions?: string[];
   onCancel?: () => void;
+  useMentionInput?: boolean;
 }
 
 export const CommentForm: React.FC<CommentFormProps> = ({
@@ -29,7 +32,8 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   maxLength = 2000,
   showFormatting = true,
   mentionSuggestions = [],
-  onCancel
+  onCancel,
+  useMentionInput = true
 }) => {
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,10 +41,16 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   const [showMentions, setShowMentions] = useState(false);
   const [mentionQuery, setMentionQuery] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
-  const [preview, setPreview] = useState(false);
+  // Removed preview state to simplify layout like PostCreator
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const mentionInputRef = useRef<MentionInputRef>(null);
   const mentionsRef = useRef<HTMLDivElement>(null);
+
+  // CRITICAL DEBUG: Log component mounting
+  useEffect(() => {
+    console.log('🔥 COMMENT FORM: Component mounted/updated', { postId, parentId, hasContent: !!content });
+  }, [postId, parentId, content]);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,7 +80,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       const result = await apiService.createComment(postId, content.trim(), {
         parentId: parentId || undefined,
         author: currentUser,
-        mentionedUsers: extractMentions(content)
+        mentionedUsers: useMentionInput ? MentionService.extractMentions(content) : extractMentions(content)
       });
       
       console.log('Comment submitted successfully:', result);
@@ -85,60 +95,16 @@ export const CommentForm: React.FC<CommentFormProps> = ({
     }
   };
   
-  const handleContentChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newContent = e.target.value;
-    const cursor = e.target.selectionStart;
-    
-    setContent(newContent);
-    setCursorPosition(cursor);
-    setError('');
-    
-    // Check for mentions (@username)
-    const textBeforeCursor = newContent.substring(0, cursor);
-    const mentionMatch = textBeforeCursor.match(/@(\w*)$/);
-    
-    if (mentionMatch) {
-      setMentionQuery(mentionMatch[1]);
-      setShowMentions(true);
-    } else {
-      setShowMentions(false);
-      setMentionQuery('');
-    }
-  }, []);
+  // CRITICAL FIX: Remove manual content change handler - MentionInput handles this
   
-  const insertMention = useCallback((username: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-    
-    const beforeCursor = content.substring(0, cursorPosition);
-    const afterCursor = content.substring(cursorPosition);
-    
-    // Find the @ symbol to replace
-    const mentionStart = beforeCursor.lastIndexOf('@');
-    const newContent = 
-      content.substring(0, mentionStart) + 
-      `@${username} ` + 
-      afterCursor;
-    
-    setContent(newContent);
-    setShowMentions(false);
-    setMentionQuery('');
-    
-    // Focus and position cursor after the mention
-    setTimeout(() => {
-      const newCursorPosition = mentionStart + username.length + 2;
-      textarea.focus();
-      textarea.setSelectionRange(newCursorPosition, newCursorPosition);
-      setCursorPosition(newCursorPosition);
-    }, 0);
-  }, [content, cursorPosition]);
+  // CRITICAL FIX: Remove manual mention insertion - MentionInput handles this
   
+  // CRITICAL FIX: Simplified formatting for MentionInput compatibility
   const insertFormatting = useCallback((format: string) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
+    if (!mentionInputRef.current) return;
     
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
+    const start = mentionInputRef.current.selectionStart;
+    const end = mentionInputRef.current.selectionEnd;
     const selectedText = content.substring(start, end);
     
     let replacement = '';
@@ -152,9 +118,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
         break;
       case 'code':
         replacement = selectedText.includes('\n') 
-          ? `\`\`\`
-${selectedText}
-\`\`\``
+          ? `\`\`\`\n${selectedText}\n\`\`\``
           : `\`${selectedText}\``;
         break;
       case 'link':
@@ -170,30 +134,20 @@ ${selectedText}
       content.substring(end);
     
     setContent(newContent);
-    
-    // Focus and select the replacement
-    setTimeout(() => {
-      textarea.focus();
-      const newStart = start + (format === 'link' ? replacement.length - 4 : replacement.length);
-      textarea.setSelectionRange(newStart, newStart);
-    }, 0);
   }, [content]);
   
+  // Handle mention selection for MentionInput - CRITICAL FIX: Follow QuickPost pattern
+  const handleMentionSelect = useCallback((mention: MentionSuggestion) => {
+    console.log('🎯 CommentForm: Mention selected', mention);
+    // Note: MentionInput handles text insertion automatically
+    // Just track for form submission if needed
+  }, []);
+
   const filteredMentions = mentionSuggestions.filter(username => 
     username.toLowerCase().includes(mentionQuery.toLowerCase())
   ).slice(0, 5);
   
-  const renderPreview = useCallback(() => {
-    // Simple markdown-like preview rendering
-    let html = content
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/@(\w+)/g, '<span class="text-blue-600 font-medium">@$1</span>')
-      .replace(/\n/g, '<br>');
-    
-    return { __html: html };
-  }, [content]);
+  // Removed preview functionality to match PostCreator simplicity
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -208,121 +162,42 @@ ${selectedText}
       
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="space-y-2">
-          {/* Formatting toolbar */}
-          {showFormatting && (
-            <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded-t-lg border-b">
-              <div className="flex items-center space-x-1">
-                <button
-                  type="button"
-                  onClick={() => insertFormatting('bold')}
-                  className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded transition-colors"
-                  title="Bold"
-                >
-                  <Bold className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => insertFormatting('italic')}
-                  className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded transition-colors"
-                  title="Italic"
-                >
-                  <Italic className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => insertFormatting('code')}
-                  className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded transition-colors"
-                  title="Code"
-                >
-                  <Code className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => insertFormatting('link')}
-                  className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded transition-colors"
-                  title="Link"
-                >
-                  <Link2 className="w-4 h-4" />
-                </button>
-              </div>
-              
-              <div className="h-4 w-px bg-gray-300" />
-              
-              <div className="flex items-center space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setPreview(!preview)}
-                  className={cn(
-                    'px-2 py-1 text-xs rounded transition-colors',
-                    preview 
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-200'
-                  )}
-                >
-                  {preview ? 'Edit' : 'Preview'}
-                </button>
-              </div>
-            </div>
-          )}
+          {/* CRITICAL FIX: Remove formatting toolbar to prevent dropdown interference */}
           
+          {/* CRITICAL MESH FIX: Match PostCreator layout pattern exactly */}
           <div className="relative">
-            {preview ? (
-              <div 
-                className="min-h-[80px] p-3 text-sm border rounded-b-lg bg-gray-50 prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={renderPreview()}
-              />
-            ) : (
-              <>
-                <textarea
-                  ref={textareaRef}
-                  value={content}
-                  onChange={handleContentChange}
-                  placeholder={placeholder}
-                  autoFocus={autoFocus}
-                  className={cn(
-                    'w-full p-3 text-sm border rounded-b-lg resize-none',
-                    'focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                    'placeholder-gray-400',
-                    error ? 'border-red-300' : showFormatting ? 'border-t-0 border-gray-300' : 'border-gray-300 rounded-lg'
-                  )}
-                  rows={parentId ? 2 : 3}
-                  maxLength={maxLength}
-                  disabled={isSubmitting}
-                />
-                
-                {/* Mention suggestions */}
-                {showMentions && filteredMentions.length > 0 && (
-                  <div 
-                    ref={mentionsRef}
-                    className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-32 overflow-y-auto"
-                    style={{ top: '100%' }}
-                  >
-                    {filteredMentions.map((username) => (
-                      <button
-                        key={username}
-                        type="button"
-                        onClick={() => insertMention(username)}
-                        className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors flex items-center space-x-2"
-                      >
-                        <AtSign className="w-3 h-3" />
-                        <span>{username}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-            
-            {!preview && (
-              <div className="absolute bottom-2 right-2 flex items-center space-x-2">
-                <span className={cn(
-                  'text-xs px-2 py-1 rounded bg-white/80',
-                  content.length > maxLength * 0.9 ? 'text-red-500 bg-red-50' : 'text-gray-400'
-                )}>
-                  {content.length}/{maxLength}
-                </span>
-              </div>
-            )}
+            {/* CRITICAL FIX: Direct MentionInput usage like PostCreator - NO WRAPPER DIVS */}
+            <MentionInput
+              key={`comment-mention-${postId}-${parentId || 'root'}`}
+              ref={mentionInputRef}
+              value={content}
+              onChange={(newValue) => {
+                console.log('🔥 COMMENT FORM: MentionInput onChange called', { newValue: newValue.substring(Math.max(0, newValue.length - 10)), hasAt: newValue.includes('@') });
+                setContent(newValue);
+              }}
+              onMentionSelect={handleMentionSelect}
+              placeholder={placeholder}
+              className={cn(
+                'w-full p-3 text-sm border border-gray-300 rounded-lg resize-none',
+                'focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                'placeholder-gray-400',
+                error && 'border-red-300'
+              )}
+              rows={parentId ? 2 : 3}
+              maxLength={maxLength}
+              autoFocus={autoFocus}
+              mentionContext="post"
+            />
+          </div>
+          
+          {/* CRITICAL FIX: Character counter below input to avoid dropdown interference */}
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>Supports markdown formatting and @mentions</span>
+            <span className={cn(
+              content.length > maxLength * 0.9 ? 'text-red-500' : 'text-gray-400'
+            )}>
+              {content.length}/{maxLength}
+            </span>
           </div>
         </div>
 
@@ -353,11 +228,11 @@ ${selectedText}
           
           <button
             type="submit"
-            disabled={isSubmitting || !content.trim() || preview}
+            disabled={isSubmitting || !content.trim()}
             className={cn(
               'flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-lg',
               'transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500',
-              isSubmitting || !content.trim() || preview
+              isSubmitting || !content.trim()
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : 'bg-blue-600 text-white hover:bg-blue-700'
             )}

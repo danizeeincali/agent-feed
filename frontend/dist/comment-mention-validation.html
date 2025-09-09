@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comment @ Mention Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-card {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .success { border-left: 4px solid #10b981; }
+    .error { border-left: 4px solid #ef4444; }
+    .test-title { font-weight: bold; margin-bottom: 10px; }
+    .test-status { font-size: 14px; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>🚨 Comment @ Mention Validation Test</h1>
+  <p><strong>Test URL:</strong> <a href="http://localhost:5173/" target="_blank">http://localhost:5173/</a></p>
+  
+  <div class="test-card success">
+    <div class="test-title">✅ BASELINE: PostCreator @ Mentions (Working)</div>
+    <div class="test-status">
+      1. Go to main page<br>
+      2. Click "Start a post..." button<br>
+      3. Type @ in text area<br>
+      4. ✅ Should see: "🚨 EMERGENCY DEBUG: Dropdown Open"
+    </div>
+  </div>
+
+  <div class="test-card success">
+    <div class="test-title">✅ BASELINE: QuickPost @ Mentions (Working)</div>
+    <div class="test-status">
+      1. Go to /posting page<br>
+      2. Type @ in quick post field<br>
+      3. ✅ Should see: "🚨 EMERGENCY DEBUG: Dropdown Open"
+    </div>
+  </div>
+
+  <div class="test-card error">
+    <div class="test-title">🔄 TARGET: Comment @ Mentions (SHOULD NOW WORK)</div>
+    <div class="test-status">
+      1. Go to any post with comments<br>
+      2. Click "Reply" button<br>
+      3. Type @ in comment text area<br>
+      4. 🎯 Should NOW see: "🚨 EMERGENCY DEBUG: Dropdown Open"<br>
+      <strong>Critical Fix Applied:</strong> Changed mentionContext="comment" → mentionContext="post"
+    </div>
+  </div>
+
+  <div class="test-card error">
+    <div class="test-title">🔄 TARGET: Comment Replies @ Mentions (SHOULD NOW WORK)</div>
+    <div class="test-status">
+      1. Find existing comment and click "Reply"<br>
+      2. Type @ in reply text area<br>
+      3. 🎯 Should NOW see: "🚨 EMERGENCY DEBUG: Dropdown Open"<br>
+      <strong>Same Fix Applied</strong>
+    </div>
+  </div>
+
+  <div class="test-card">
+    <div class="test-title">🔬 SWARM ANALYSIS RESULTS</div>
+    <div class="test-status">
+      <strong>Root Cause:</strong> mentionContext="comment" vs mentionContext="post"<br>
+      <strong>Agents Deployed:</strong> SPARC, TDD, NLD, Mesh Coordinator, Playwright<br>
+      <strong>Fix Applied:</strong> Unified all contexts to use mentionContext="post"<br>
+      <strong>Files Modified:</strong> /src/components/CommentForm.tsx line 180
+    </div>
+  </div>
+
+  <hr>
+  <p><strong>Success Criteria:</strong> All @ mentions should show identical debug dropdown behavior across PostCreator, QuickPost, Comments, and Comment Replies.</p>
+</body>
+</html>

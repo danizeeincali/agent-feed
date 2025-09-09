@@ -33,6 +33,7 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
 import { EmojiPicker } from './EmojiPicker';
+import { MentionInput, MentionInputRef, MentionSuggestion } from './MentionInput';
 import { useKeyboardShortcuts, useShortcutsHelp } from '@/hooks/useKeyboardShortcuts';
 import { TemplateLibrary } from './post-creation/TemplateLibrary';
 import { useTemplates } from '../hooks/useTemplates';
@@ -157,7 +158,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
   const [isMobile, setIsMobile] = useState(false);
 
   // Refs
-  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const contentRef = useRef<MentionInputRef>(null);
   const tagInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -408,54 +409,38 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
     setShowTemplates(false);
   };
 
+  // CRITICAL FIX: Simplified formatting for MentionInput compatibility
   const insertFormatting = (format: string) => {
-    const textarea = contentRef.current;
-    if (!textarea) return;
+    if (!contentRef.current) return;
 
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
+    const start = contentRef.current.selectionStart;
+    const end = contentRef.current.selectionEnd;
     const selectedText = content.substring(start, end);
 
     let newText = '';
-    let cursorOffset = 0;
-
     switch (format) {
       case 'bold':
         newText = `**${selectedText || 'bold text'}**`;
-        cursorOffset = selectedText ? 2 : 2;
         break;
       case 'italic':
         newText = `*${selectedText || 'italic text'}*`;
-        cursorOffset = selectedText ? 1 : 1;
         break;
       case 'code':
         newText = `\`${selectedText || 'code'}\``;
-        cursorOffset = selectedText ? 1 : 1;
         break;
       case 'link':
         newText = `[${selectedText || 'link text'}](url)`;
-        cursorOffset = selectedText ? selectedText.length + 3 : 9;
         break;
       case 'list':
-        newText = `
-- ${selectedText || 'list item'}`;
-        cursorOffset = selectedText ? newText.length : 11;
+        newText = `\n- ${selectedText || 'list item'}`;
         break;
       case 'numbered-list':
-        newText = `
-1. ${selectedText || 'list item'}`;
-        cursorOffset = selectedText ? newText.length : 12;
+        newText = `\n1. ${selectedText || 'list item'}`;
         break;
     }
 
     const newContent = content.substring(0, start) + newText + content.substring(end);
     setContent(newContent);
-
-    // Restore cursor position
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start + cursorOffset, start + cursorOffset);
-    }, 0);
   };
 
   const addTag = (tag: string) => {
@@ -471,33 +456,36 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
+  const handleMentionSelect = useCallback((mention: MentionSuggestion) => {
+    console.log('🎯 PostCreator: Mention selected', mention);
+    // Track mentioned agents for form submission (avoid duplicates)
+    setAgentMentions(prev => {
+      if (!prev.includes(mention.name)) {
+        return [...prev, mention.name];
+      }
+      return prev;
+    });
+    // Note: MentionInput handles text insertion automatically
+    setShowAgentPicker(false);
+    setAgentSearchQuery('');
+  }, []);
+
   const addAgentMention = (agentId: string) => {
     if (!agentMentions.includes(agentId)) {
       setAgentMentions([...agentMentions, agentId]);
-      const agent = mockAgents.find(a => a.id === agentId);
-      if (agent) {
-        const mention = `@${agent.name} `;
-        const cursorPos = contentRef.current?.selectionStart || content.length;
-        const newContent = content.substring(0, cursorPos) + mention + content.substring(cursorPos);
-        setContent(newContent);
-      }
     }
     setShowAgentPicker(false);
     setAgentSearchQuery('');
   };
 
   const addEmoji = (emoji: string) => {
-    const cursorPos = contentRef.current?.selectionStart || content.length;
-    const newContent = content.substring(0, cursorPos) + emoji + content.substring(cursorPos);
+    const newContent = content + emoji;
     setContent(newContent);
     setShowEmojiPicker(false);
     
-    // Restore focus to textarea
+    // Restore focus to mention input
     setTimeout(() => {
-      if (contentRef.current) {
-        contentRef.current.focus();
-        contentRef.current.setSelectionRange(cursorPos + emoji.length, cursorPos + emoji.length);
-      }
+      contentRef.current?.focus();
     }, 0);
   };
 
@@ -661,10 +649,46 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
             Content <span className="text-red-500">*</span>
           </label>
           
-          <div className="border border-gray-300 rounded-lg overflow-hidden">
-            {/* Toolbar */}
-            <div className="bg-gray-50 px-3 py-2 border-b border-gray-200">
-              <div className="flex items-center justify-between">
+          {/* CRITICAL FIX: Flatten layout hierarchy to match QuickPost success pattern */}
+          <div className="space-y-3">
+            {/* CRITICAL FIX: Move toolbar to separate section to avoid dropdown interference */}
+            {showPreview ? (
+              <div className="p-4 min-h-[200px] bg-gray-50 border border-gray-300 rounded-lg">
+                <div className="prose max-w-none">
+                  {hook && (
+                    <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r">
+                      <p className="text-blue-700 font-medium">{hook}</p>
+                    </div>
+                  )}
+                  <h2 className="text-xl font-semibold mb-3">{title || 'Post Title'}</h2>
+                  <div className="whitespace-pre-wrap">
+                    {content || 'Content will appear here...'}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="relative">
+                {/* CRITICAL FIX: Direct MentionInput usage like QuickPost - no complex wrappers */}
+                <MentionInput
+                  ref={contentRef}
+                  value={content}
+                  onChange={setContent}
+                  onMentionSelect={handleMentionSelect}
+                  placeholder="Share your insights, updates, or questions with the agent network..."
+                  className="w-full p-4 min-h-[200px] border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  maxLength={CONTENT_LIMIT}
+                  rows={8}
+                  autoFocus={false}
+                  mentionContext="post"
+                />
+                
+                {/* CRITICAL FIX: Remove overlapping overlays that interfere with mention dropdown */}
+              </div>
+            )}
+            
+            {/* CRITICAL FIX: Move formatting toolbar below input to prevent z-index conflicts */}
+            {!showPreview && (
+              <div className="flex items-center justify-between p-2 bg-gray-50 rounded border">
                 <div className={cn(
                   "flex items-center",
                   isMobile ? "space-x-1 overflow-x-auto" : "space-x-1"
@@ -726,14 +750,6 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
                   {!isMobile && <div className="w-px h-6 bg-gray-300 mx-1" />}
                   
                   <button
-                    onClick={() => setShowAgentPicker(!showAgentPicker)}
-                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded transition-colors flex-shrink-0"
-                    title="Mention Agent"
-                  >
-                    <AtSign className="w-4 h-4" />
-                  </button>
-                  
-                  <button
                     onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                     className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded transition-colors flex-shrink-0"
                     title="Add Emoji"
@@ -758,96 +774,18 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
                   </div>
                 )}
               </div>
-              
-              {isMobile && (
-                <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
-                  <span>{wordCount} words • {readingTime} min read</span>
-                  {isDraft && lastSaved && (
-                    <span>Saved {lastSaved.toLocaleTimeString()}</span>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Content Area */}
-            <div className="relative">
-              {showPreview ? (
-                <div className="p-4 min-h-[200px] bg-white">
-                  <div className="prose max-w-none">
-                    {hook && (
-                      <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r">
-                        <p className="text-blue-700 font-medium">{hook}</p>
-                      </div>
-                    )}
-                    <h2 className="text-xl font-semibold mb-3">{title || 'Post Title'}</h2>
-                    <div className="whitespace-pre-wrap">
-                      {content || 'Content will appear here...'}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <textarea
-                  ref={contentRef}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Share your insights, updates, or questions with the agent network..."
-                  className="w-full p-4 min-h-[200px] border-0 focus:ring-0 resize-none"
-                  maxLength={CONTENT_LIMIT}
+            )}
+            
+            {/* CRITICAL FIX: Move emoji picker to avoid dropdown conflicts */}
+            {showEmojiPicker && (
+              <div className="mt-2">
+                <EmojiPicker
+                  onEmojiSelect={addEmoji}
+                  onClose={() => setShowEmojiPicker(false)}
+                  className={isMobile ? "w-full" : ""}
                 />
-              )}
-              
-              {/* Agent Picker Overlay */}
-              {showAgentPicker && (
-                <div className={cn(
-                  "absolute top-4 left-4 z-10 bg-white border border-gray-200 rounded-lg shadow-lg",
-                  isMobile ? "w-full mx-4 right-4" : "w-80"
-                )}>
-                  <div className="p-3 border-b border-gray-100">
-                    <input
-                      type="text"
-                      value={agentSearchQuery}
-                      onChange={(e) => setAgentSearchQuery(e.target.value)}
-                      placeholder="Search agents..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                    />
-                  </div>
-                  <div className="max-h-64 overflow-y-auto">
-                    {filteredAgents.map(agent => (
-                      <button
-                        key={agent.id}
-                        onClick={() => addAgentMention(agent.id)}
-                        className="w-full p-3 text-left hover:bg-gray-50 flex items-center space-x-3"
-                      >
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                          <Bot className="w-4 h-4 text-white" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900">{agent.displayName}</div>
-                          <div className={cn(
-                            "text-sm text-gray-500",
-                            isMobile && "line-clamp-1"
-                          )}>{agent.description}</div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Emoji Picker Overlay */}
-              {showEmojiPicker && (
-                <div className={cn(
-                  "absolute top-4 z-10",
-                  isMobile ? "left-4 right-4" : "left-4"
-                )}>
-                  <EmojiPicker
-                    onEmojiSelect={addEmoji}
-                    onClose={() => setShowEmojiPicker(false)}
-                    className={isMobile ? "w-full" : ""}
-                  />
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           
           <div className="flex justify-between text-xs text-gray-500 mt-1">

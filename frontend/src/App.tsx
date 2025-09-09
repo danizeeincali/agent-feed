@@ -4,7 +4,7 @@ import React, { useState, memo, Suspense } from 'react';
 console.log('DEBUG: App.tsx loading...');
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ErrorBoundary from './components/ErrorBoundary.jsx';
+import { ErrorBoundary } from 'react-error-boundary';
 import FallbackComponents from './components/FallbackComponents';
 import { RealTimeNotifications } from './components/RealTimeNotifications';
 import GlobalErrorBoundary from './components/GlobalErrorBoundary';
@@ -39,6 +39,9 @@ import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
+import { PostingInterface } from './components/posting-interface';
+import MentionInputDemo from './components/MentionInputDemo';
+import { MentionDebugTest } from './components/MentionDebugTest';
 import './styles/agents.css';
 import { 
   LayoutDashboard, 
@@ -54,6 +57,7 @@ import {
   BarChart3,
   Code,
   FileText,
+  AtSign,
 } from 'lucide-react';
 import { cn } from './utils/cn';
 import { ConnectionStatus } from './components/ConnectionStatus';
@@ -97,6 +101,8 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     { name: 'Interactive Control', href: '/interactive-control', icon: Bot },
     { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
     { name: 'Feed', href: '/', icon: Activity },
+    { name: 'Create', href: '/posting', icon: FileText },
+    { name: 'Mention Demo', href: '/mention-demo', icon: AtSign },
     { name: 'Drafts', href: '/drafts', icon: FileText },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
@@ -356,6 +362,27 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="DebugPosts">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Debug Posts..." />}>
                         <DebugPostsDisplay />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/posting" element={
+                    <RouteErrorBoundary routeName="PostingInterface">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Posting Interface..." />}>
+                        <PostingInterface />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/mention-demo" element={
+                    <RouteErrorBoundary routeName="MentionInputDemo">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Mention Demo..." />}>
+                        <MentionInputDemo />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/mention-debug" element={
+                    <RouteErrorBoundary routeName="MentionDebugTest">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Mention Debug Test..." />}>
+                        <MentionDebugTest />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

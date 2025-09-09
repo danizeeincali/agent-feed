@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Mention Regression Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .status-working {
+            color: #16a34a;
+            font-weight: bold;
+        }
+        
+        .status-broken {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        
+        .test-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+        
+        .test-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .instructions {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .test-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            min-height: 60px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            white-space: pre-wrap;
+        }
+        
+        .dropdown-visible {
+            background: #dcfce7 !important;
+            border-color: #16a34a !important;
+        }
+        
+        .dropdown-hidden {
+            background: #fef2f2 !important;
+            border-color: #dc2626 !important;
+        }
+        
+        .component-source {
+            font-family: monospace;
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: #1f2937;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 Comment Mention Regression Prevention Test</h1>
+    
+    <div class="instructions">
+        <strong>TEST INSTRUCTIONS:</strong>
+        <ol>
+            <li>Type <code>@</code> in each textarea below</li>
+            <li>Look for the yellow "EMERGENCY DEBUG" dropdown to appear</li>
+            <li>Working contexts should show the dropdown immediately</li>
+            <li>Broken contexts will not show any dropdown</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <div class="test-header">
+            <h2>✅ BASELINE WORKING: PostCreator Pattern</h2>
+            <span class="status-working">(Expected: WORKING)</span>
+        </div>
+        <div class="component-source">Pattern: Direct MentionInput with clean layout hierarchy</div>
+        <div id="postcreator-test" style="position: relative;">
+            <textarea 
+                class="test-input" 
+                placeholder="Share your insights, updates, or questions with the agent network... (Type @)"
+                data-context="postcreator"
+                data-mention-context="post"
+            ></textarea>
+            <div class="test-result" id="postcreator-result">Waiting for @ input...</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-header">
+            <h2>✅ BASELINE WORKING: QuickPost Pattern</h2>
+            <span class="status-working">(Expected: WORKING)</span>
+        </div>
+        <div class="component-source">Pattern: Direct MentionInput with minimal wrapper</div>
+        <div id="quickpost-test" style="position: relative;">
+            <textarea 
+                class="test-input" 
+                placeholder="What's your quick update? Use #tags and @mentions for organization... (Type @)"
+                data-context="quickpost"
+                data-mention-context="quick-post"
+            ></textarea>
+            <div class="test-result" id="quickpost-result">Waiting for @ input...</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-header">
+            <h2>❌ REGRESSION TARGET: CommentForm Pattern</h2>
+            <span class="status-broken">(Currently: BROKEN - Must Fix)</span>
+        </div>
+        <div class="component-source">Pattern: MentionInput in CommentForm with complex form layout</div>
+        <div id="commentform-test" style="position: relative;">
+            <textarea 
+                class="test-input" 
+                placeholder="Provide technical analysis or feedback... (Type @)"
+                data-context="commentform"
+                data-mention-context="comment"
+            ></textarea>
+            <div class="test-result" id="commentform-result">Waiting for @ input...</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <div class="test-header">
+            <h2>❌ REGRESSION TARGET: Reply Form Pattern</h2>
+            <span class="status-broken">(Currently: BROKEN - Must Fix)</span>
+        </div>
+        <div class="component-source">Pattern: MentionInput in reply form context</div>
+        <div id="replyform-test" style="position: relative;">
+            <textarea 
+                class="test-input" 
+                placeholder="Reply with technical analysis... (Type @)"
+                data-context="replyform"
+                data-mention-context="comment"
+            ></textarea>
+            <div class="test-result" id="replyform-result">Waiting for @ input...</div>
+        </div>
+    </div>
+
+    <script>
+        // Mock MentionService for testing
+        window.MentionService = {
+            getSuggestions: function(query, context) {
+                console.log('🎯 MentionService.getSuggestions called:', { query, context });
+                return Promise.resolve([
+                    {
+                        id: 'test-agent-1',
+                        name: 'chief-of-staff-agent',
+                        displayName: 'Chief of Staff',
+                        description: 'Test agent for regression testing'
+                    },
+                    {
+                        id: 'test-agent-2', 
+                        name: 'personal-todos-agent',
+                        displayName: 'Personal Todos',
+                        description: 'Task management test agent'
+                    }
+                ]);
+            },
+            extractMentions: function(text) {
+                const mentions = text.match(/@[\w-]+/g) || [];
+                return mentions.map(m => m.substring(1));
+            }
+        };
+
+        // Simulate MentionInput behavior for each textarea
+        function setupMentionTest(textareaElement, context) {
+            const resultElement = document.getElementById(`${context}-result`);
+            const parentContainer = textareaElement.parentElement;
+            
+            textareaElement.addEventListener('input', function(e) {
+                const value = e.target.value;
+                const cursorPosition = e.target.selectionStart;
+                
+                console.log(`🔍 ${context}: Input event`, { value, cursorPosition });
+                resultElement.textContent = `Input: "${value}" | Cursor: ${cursorPosition}`;
+                
+                // Check for @ mention trigger
+                if (value.includes('@')) {
+                    const lastAtIndex = value.lastIndexOf('@');
+                    const query = value.substring(lastAtIndex + 1, cursorPosition);
+                    
+                    console.log(`🎯 ${context}: @ detected`, { lastAtIndex, query });
+                    resultElement.textContent += `\\n@ detected | Query: "${query}"`;
+                    
+                    // Simulate dropdown creation
+                    createMockDropdown(parentContainer, context, query);
+                    
+                    // Update test result styling
+                    resultElement.classList.add('dropdown-visible');
+                    resultElement.classList.remove('dropdown-hidden');
+                } else {
+                    // Remove any existing dropdowns
+                    const existingDropdown = parentContainer.querySelector('.mock-mention-dropdown');
+                    if (existingDropdown) {
+                        existingDropdown.remove();
+                    }
+                    
+                    resultElement.classList.remove('dropdown-visible');
+                    if (value !== '') {
+                        resultElement.classList.add('dropdown-hidden');
+                    }
+                }
+            });
+            
+            // Handle cursor position changes
+            textareaElement.addEventListener('selectionchange', function(e) {
+                const cursorPosition = e.target.selectionStart;
+                console.log(`📍 ${context}: Cursor moved to ${cursorPosition}`);
+            });
+        }
+        
+        function createMockDropdown(container, context, query) {
+            // Remove existing dropdown
+            const existingDropdown = container.querySelector('.mock-mention-dropdown');
+            if (existingDropdown) {
+                existingDropdown.remove();
+            }
+            
+            // Create new dropdown with same style as MentionInput
+            const dropdown = document.createElement('div');
+            dropdown.className = 'mock-mention-dropdown';
+            dropdown.setAttribute('data-testid', 'mention-debug-dropdown');
+            dropdown.style.cssText = \`
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                z-index: 99999;
+                background: white;
+                border: 3px solid #007bff;
+                border-radius: 8px;
+                box-shadow: 0 20px 50px -3px rgba(0, 0, 0, 0.3);
+                max-height: 300px;
+                overflow-y: auto;
+                display: block;
+                visibility: visible;
+            \`;
+            
+            // Add debug header
+            const debugHeader = document.createElement('div');
+            debugHeader.style.cssText = 'padding: 8px 12px; background: #fefce8; border-bottom: 1px solid #eab308; font-size: 12px; color: #a16207;';
+            debugHeader.textContent = \`🚨 EMERGENCY DEBUG: Dropdown Open | Query: "\${query}" | Context: \${context}\`;
+            dropdown.appendChild(debugHeader);
+            
+            // Add mock agent suggestions
+            const agentList = document.createElement('ul');
+            agentList.style.cssText = 'padding: 8px 0; margin: 0; list-style: none;';
+            
+            const mockAgents = [
+                { name: 'chief-of-staff-agent', displayName: 'Chief of Staff', description: 'Strategic coordination and planning' },
+                { name: 'personal-todos-agent', displayName: 'Personal Todos', description: 'Task and project management' }
+            ];
+            
+            mockAgents.forEach((agent, index) => {
+                const agentItem = document.createElement('li');
+                agentItem.setAttribute('data-testid', \`agent-debug-info-\${agent.name}\`);
+                agentItem.style.cssText = \`
+                    padding: 12px 16px;
+                    cursor: pointer;
+                    border-bottom: 1px solid #f3f4f6;
+                    transition: background-color 0.15s;
+                \`;
+                agentItem.innerHTML = \`
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 14px;">🤖</span>
+                        </div>
+                        <div>
+                            <div style="font-weight: 500; font-size: 14px; color: #111827;">\${agent.displayName}</div>
+                            <div style="font-size: 12px; color: #6b7280;">@\${agent.name}</div>
+                            <div style="font-size: 11px; color: #9ca3af; margin-top: 2px;">\${agent.description}</div>
+                        </div>
+                    </div>
+                \`;
+                
+                agentItem.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f3f4f6';
+                });
+                
+                agentItem.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = 'transparent';
+                });
+                
+                agentItem.addEventListener('click', function() {
+                    console.log(\`🎯 \${context}: Agent selected -\`, agent.displayName);
+                    dropdown.remove();
+                });
+                
+                agentList.appendChild(agentItem);
+            });
+            
+            dropdown.appendChild(agentList);
+            
+            // Add footer
+            const footer = document.createElement('div');
+            footer.style.cssText = 'padding: 8px 12px; background: #f9fafb; border-top: 1px solid #f3f4f6; font-size: 11px; color: #6b7280; display: flex; justify-content: space-between; align-items: center;';
+            footer.innerHTML = \`
+                <span>Type @ to mention agents</span>
+                <span>↑↓ Navigate • ↵ Select</span>
+            \`;
+            dropdown.appendChild(footer);
+            
+            container.appendChild(dropdown);
+            
+            console.log(\`✅ \${context}: Mock dropdown created successfully\`);
+            
+            // Auto-remove after 10 seconds for demo purposes
+            setTimeout(() => {
+                if (dropdown.parentElement) {
+                    dropdown.remove();
+                    console.log(\`🧹 \${context}: Dropdown auto-removed after 10 seconds\`);
+                }
+            }, 10000);
+        }
+
+        // Initialize all test inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initializing comment mention regression tests...');
+            
+            const contexts = ['postcreator', 'quickpost', 'commentform', 'replyform'];
+            contexts.forEach(context => {
+                const textarea = document.querySelector(\`textarea[data-context="\${context}"]\`);
+                if (textarea) {
+                    setupMentionTest(textarea, context);
+                    console.log(\`✅ \${context} test setup complete\`);
+                } else {
+                    console.error(\`❌ \${context} textarea not found\`);
+                }
+            });
+            
+            console.log('🎯 All tests initialized. Type @ in any textarea to test mention functionality.');
+        });
+        
+        // Global test status tracking
+        window.testResults = {
+            postcreator: { status: 'pending', dropdownShown: false },
+            quickpost: { status: 'pending', dropdownShown: false },
+            commentform: { status: 'pending', dropdownShown: false },
+            replyform: { status: 'pending', dropdownShown: false }
+        };
+        
+        // Add keyboard shortcuts for testing
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 't') {
+                e.preventDefault();
+                
+                // Auto-test all inputs
+                const contexts = ['postcreator', 'quickpost', 'commentform', 'replyform'];
+                let delay = 0;
+                
+                contexts.forEach(context => {
+                    setTimeout(() => {
+                        const textarea = document.querySelector(\`textarea[data-context="\${context}"]\`);
+                        if (textarea) {
+                            textarea.focus();
+                            textarea.value = '@test';
+                            textarea.dispatchEvent(new Event('input'));
+                            console.log(\`🤖 Auto-testing \${context}\`);
+                        }
+                    }, delay);
+                    delay += 1500;
+                });
+            }
+            
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                
+                // Reset all tests
+                const contexts = ['postcreator', 'quickpost', 'commentform', 'replyform'];
+                contexts.forEach(context => {
+                    const textarea = document.querySelector(\`textarea[data-context="\${context}"]\`);
+                    const result = document.getElementById(\`\${context}-result\`);
+                    const container = textarea.parentElement;
+                    
+                    textarea.value = '';
+                    result.textContent = 'Waiting for @ input...';
+                    result.classList.remove('dropdown-visible', 'dropdown-hidden');
+                    
+                    const dropdown = container.querySelector('.mock-mention-dropdown');
+                    if (dropdown) {
+                        dropdown.remove();
+                    }
+                });
+                
+                console.log('🔄 All tests reset');
+            }
+        });
+    </script>
+    
+    <div style="margin-top: 40px; padding: 20px; background: #f3f4f6; border-radius: 8px; font-size: 14px;">
+        <strong>Keyboard Shortcuts:</strong>
+        <ul>
+            <li><kbd>Ctrl+T</kbd> - Auto-test all inputs with @test</li>
+            <li><kbd>Ctrl+R</kbd> - Reset all tests</li>
+        </ul>
+        
+        <strong>Expected Results:</strong>
+        <ul>
+            <li>✅ PostCreator and QuickPost should show dropdowns (currently working)</li>
+            <li>❌ CommentForm and Reply should show dropdowns but currently don't (regression)</li>
+            <li>All dropdowns should have identical debug format and agent suggestions</li>
+        </ul>
+    </div>
+</body>
+</html>

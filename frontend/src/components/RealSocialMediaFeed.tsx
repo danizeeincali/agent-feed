@@ -7,7 +7,9 @@ import { renderParsedContent, parseContent, extractHashtags, extractMentions } f
 import ThreadedCommentSystem from './ThreadedCommentSystem';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
+import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
+import { EnhancedPostingInterface } from './EnhancedPostingInterface';
 import '../styles/comments.css';
 
 interface RealSocialMediaFeedProps {
@@ -28,6 +30,10 @@ interface PostCommentsData {
 
 interface CommentFormVisibility {
   [key: string]: boolean;
+}
+
+interface CommentFormContent {
+  [key: string]: string;
 }
 
 interface PostMetrics {
@@ -54,13 +60,13 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [postComments, setPostComments] = useState<PostCommentsData>({});
   const [loadingComments, setLoadingComments] = useState<{[key: string]: boolean}>({});
   const [showCommentForm, setShowCommentForm] = useState<CommentFormVisibility>({});
+  const [commentFormContent, setCommentFormContent] = useState<CommentFormContent>({});
   const [commentSort, setCommentSort] = useState<{[key: string]: {field: 'createdAt' | 'likes' | 'replies' | 'controversial', direction: 'asc' | 'desc'}}>({});
   const [currentFilter, setCurrentFilter] = useState<FilterOptions>({ type: 'all' });
   const [filterData, setFilterData] = useState<FilterData>({ agents: [], hashtags: [] });
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
   const [userId] = useState('anonymous'); // In a real app, this would come from authentication
-  const [showPostCreator, setShowPostCreator] = useState(false);
   const limit = 20;
 
   // Real data loading from production database with filtering
@@ -136,7 +142,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const handlePostCreated = useCallback((newPost: any) => {
     // Add the new post to the top of the list
     setPosts(current => [newPost, ...current]);
-    setShowPostCreator(false);
     // Refresh the posts to get the latest data
     setTimeout(() => {
       loadPosts();
@@ -587,50 +592,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
           userId={userId}
         />
 
-        {/* Post Creator Section */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 mt-4">
-          {!showPostCreator ? (
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-medium">
-                AI
-              </div>
-              <button
-                data-testid="start-post-button"
-                onClick={() => setShowPostCreator(true)}
-                className="flex-1 text-left px-4 py-3 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                Start a post...
-              </button>
-              <button
-                onClick={() => setShowPostCreator(true)}
-                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
-                title="Create post"
-              >
-                <Edit3 className="w-5 h-5" />
-              </button>
-            </div>
-          ) : (
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                  <Edit3 className="w-5 h-5 mr-2 text-blue-600" />
-                  Create New Post
-                </h3>
-                <button
-                  onClick={() => setShowPostCreator(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                  title="Close"
-                >
-                  ×
-                </button>
-              </div>
-              <PostCreator 
-                onPostCreated={handlePostCreated}
-                className="border-0 shadow-none"
-              />
-            </div>
-          )}
-        </div>
+        {/* Enhanced Posting Interface - 3 Sections: Post, Quick Post, Avi DM */}
+        <EnhancedPostingInterface 
+          onPostCreated={handlePostCreated}
+          className="mt-4"
+        />
       </div>
 
       {/* Error Display */}
@@ -964,7 +930,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         Comments ({Math.floor(parseFloat(post.engagement?.comments) || 0)})
                       </h4>
                       <button
-                        onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: !prev[post.id] }))}
+                        onClick={() => {
+                          console.log('🔥 REAL SOCIAL FEED: Add Comment button clicked for post', post.id);
+                          setShowCommentForm(prev => ({ ...prev, [post.id]: !prev[post.id] }));
+                        }}
                         className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
                       >
                         {showCommentForm[post.id] ? 'Cancel' : 'Add Comment'}
@@ -973,23 +942,33 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     
                     {/* Agent Comment Form */}
                     {showCommentForm[post.id] && (
+                      console.log('🔥 REAL SOCIAL FEED: Comment form rendering for post', post.id),
                       <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                         <div className="space-y-3">
                           <div className="flex items-center space-x-2 mb-2">
                             <User className="w-4 h-4 text-gray-500" />
                             <span className="text-sm text-gray-600">Agent Response</span>
                           </div>
-                          <textarea
-                            placeholder="Provide technical analysis or feedback..."
+                          <MentionInput
+                            value={commentFormContent[post.id] || ''}
+                            onChange={(content) => {
+                              console.log('🎯 REAL SOCIAL FEED: Comment content changed:', content);
+                              setCommentFormContent(prev => ({ ...prev, [post.id]: content }));
+                            }}
+                            onMentionSelect={(mention) => {
+                              console.log('🎯 REAL SOCIAL FEED: Mention selected in comment:', mention);
+                            }}
+                            placeholder="Provide technical analysis or feedback... Use @ to mention agents or users"
                             className="w-full p-3 text-sm border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
                             rows={4}
                             maxLength={2000}
+                            mentionContext="comment"
                             onKeyDown={(e) => {
                               if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-                                const content = (e.target as HTMLTextAreaElement).value;
-                                if (content.trim()) {
+                                const content = commentFormContent[post.id];
+                                if (content?.trim()) {
                                   handleNewComment(post.id, content.trim());
-                                  (e.target as HTMLTextAreaElement).value = '';
+                                  setCommentFormContent(prev => ({ ...prev, [post.id]: '' }));
                                 }
                               }
                             }}
@@ -1005,11 +984,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                               </button>
                               <button
                                 onClick={(e) => {
-                                  const textarea = (e.target as HTMLElement).closest('.space-y-3')?.querySelector('textarea') as HTMLTextAreaElement;
-                                  const content = textarea?.value.trim();
+                                  const content = commentFormContent[post.id]?.trim();
                                   if (content) {
                                     handleNewComment(post.id, content);
-                                    textarea.value = '';
+                                    setCommentFormContent(prev => ({ ...prev, [post.id]: '' }));
                                   }
                                 }}
                                 className="px-4 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"

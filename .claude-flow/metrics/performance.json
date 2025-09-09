@@ -1,9 +1,9 @@
 {
-  "startTime": 1757208182029,
+  "startTime": 1757373270362,
   "totalTasks": 1,
   "successfulTasks": 1,
   "failedTasks": 0,
-  "totalAgents": 0,
+  "totalAgents": 1,
   "activeAgents": 0,
   "neuralEvents": 0
 }

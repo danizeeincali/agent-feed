@@ -1,0 +1,256 @@
+{
+  "dataset_info": {
+    "name": "Circular Fix Prevention Training Dataset",
+    "version": "1.0",
+    "created": "2025-09-08T19:45:00Z",
+    "record_id": "NLD-2025-09-08-CIRCULAR-FIX-001",
+    "pattern_type": "false_fix_confirmation_anti_pattern",
+    "training_objective": "Prevent agents from claiming success without user validation"
+  },
+  "features": {
+    "input_dimensions": [
+      "component_lines_of_code",
+      "state_hooks_count", 
+      "event_handlers_count",
+      "conditional_rendering_depth",
+      "wrapper_elements_count",
+      "competing_refs_count",
+      "keyboard_shortcuts_count",
+      "auto_update_effects_count",
+      "integration_complexity_score",
+      "user_frustration_level"
+    ],
+    "output_classifications": [
+      "integration_failure_probability",
+      "circular_fix_risk_score", 
+      "user_experience_disconnect_level",
+      "event_propagation_blocking_risk",
+      "component_isolation_success_rate"
+    ]
+  },
+  "training_examples": [
+    {
+      "example_id": "working_simple_demo",
+      "component": "MentionInputDemo",
+      "inputs": [230, 4, 3, 0, 1, 1, 0, 0, 2, 0],
+      "outputs": [0.0, 0.0, 0.0, 0.0, 1.0],
+      "user_feedback": "Works perfectly, dropdown appears immediately",
+      "success_metrics": {
+        "mention_detection_rate": 1.0,
+        "dropdown_response_time_ms": 50,
+        "user_satisfaction": 1.0,
+        "fix_attempts_needed": 0
+      }
+    },
+    {
+      "example_id": "broken_complex_postcreator",
+      "component": "PostCreator", 
+      "inputs": [1110, 20, 25, 3, 8, 3, 10, 5, 9, 5],
+      "outputs": [0.95, 0.9, 0.95, 0.9, 0.0],
+      "user_feedback": "We are going in circles. You keep saying you fixed it but nothing really changes on the frontend",
+      "success_metrics": {
+        "mention_detection_rate": 0.0,
+        "dropdown_response_time_ms": null,
+        "user_satisfaction": 0.0,
+        "fix_attempts_needed": 6
+      }
+    },
+    {
+      "example_id": "broken_medium_commentform",
+      "component": "CommentForm",
+      "inputs": [422, 12, 15, 2, 5, 2, 0, 2, 7, 4],
+      "outputs": [0.8, 0.75, 0.8, 0.7, 0.1],
+      "user_feedback": "Mention input doesn't work in comments either",
+      "success_metrics": {
+        "mention_detection_rate": 0.0,
+        "dropdown_response_time_ms": null, 
+        "user_satisfaction": 0.1,
+        "fix_attempts_needed": 3
+      }
+    },
+    {
+      "example_id": "medium_risk_component",
+      "component": "HypotheticalQuickPost",
+      "inputs": [350, 8, 10, 1, 3, 1, 2, 1, 5, 1],
+      "outputs": [0.4, 0.3, 0.35, 0.4, 0.6],
+      "user_feedback": "Sometimes works, sometimes doesn't",
+      "success_metrics": {
+        "mention_detection_rate": 0.6,
+        "dropdown_response_time_ms": 200,
+        "user_satisfaction": 0.6,
+        "fix_attempts_needed": 1
+      }
+    }
+  ],
+  "anti_patterns": [
+    {
+      "pattern_name": "conditional_rendering_component_loss",
+      "description": "Component unmounts/remounts during user interaction",
+      "code_signatures": [
+        "{condition ? <Component /> : <AlternativeComponent />}",
+        "{showPreview ? <Preview /> : <Input />}"
+      ],
+      "failure_probability": 0.9,
+      "detection_regex": "\\{\\s*\\w+\\s*\\?\\s*<\\w+Component\\s*/?>\\s*:\\s*<MentionInput"
+    },
+    {
+      "pattern_name": "competing_event_handlers",
+      "description": "Multiple event handlers intercept user keystrokes",
+      "code_signatures": [
+        "useKeyboardShortcuts({ shortcuts: { ... } })",
+        "onClick handlers competing with onChange"
+      ],
+      "failure_probability": 0.8,
+      "detection_regex": "useKeyboardShortcuts.*shortcuts.*cmd\\+\\w+"
+    },
+    {
+      "pattern_name": "state_update_cascade",
+      "description": "Auto-save or other effects trigger on every keystroke",
+      "code_signatures": [
+        "useEffect(() => { ... saveDraft() ... }, [content])",
+        "setTimeout(() => { saveState() }, ms)"
+      ],
+      "failure_probability": 0.7,
+      "detection_regex": "useEffect.*setTimeout.*save.*\\[.*content.*\\]"
+    },
+    {
+      "pattern_name": "deep_wrapper_nesting",
+      "description": "Component buried in complex wrapper hierarchy",
+      "code_signatures": [
+        "<div><div><div><MentionInput /></div></div></div>",
+        "Multiple className and conditional wrappers"
+      ],
+      "failure_probability": 0.6,
+      "detection_regex": "<div[^>]*>\\s*<div[^>]*>.*<MentionInput"
+    }
+  ],
+  "circular_fix_indicators": [
+    {
+      "indicator": "multiple_code_changes_no_user_improvement",
+      "description": "Agent makes multiple code modifications without user-visible results",
+      "detection_patterns": [
+        "User reports same issue after 3+ fix attempts",
+        "Code changes without runtime behavior validation",
+        "Agent claims success but user reports failure"
+      ],
+      "risk_score": 0.95
+    },
+    {
+      "indicator": "working_demo_broken_production_disconnect",
+      "description": "Simple demo works but production integration fails",
+      "detection_patterns": [
+        "Component works in isolation tests",
+        "Same component fails in complex integration",
+        "Demo complexity << Production complexity"
+      ],
+      "risk_score": 0.9
+    },
+    {
+      "indicator": "static_vs_runtime_validation_gap",
+      "description": "Code analysis shows 'working' but user experience broken",
+      "detection_patterns": [
+        "No runtime testing of user-facing functionality",
+        "Focus on code correctness vs user experience",
+        "Missing browser-based validation"
+      ],
+      "risk_score": 0.85
+    }
+  ],
+  "prevention_rules": [
+    {
+      "rule": "complexity_threshold_limits",
+      "parameters": {
+        "max_component_lines": 500,
+        "max_state_hooks": 10,
+        "max_event_handlers": 8,
+        "max_wrapper_depth": 3,
+        "max_conditional_rendering": 1
+      },
+      "enforcement": "mandatory_warning_above_thresholds"
+    },
+    {
+      "rule": "integration_testing_mandatory",
+      "parameters": {
+        "require_browser_testing": true,
+        "require_user_feedback_validation": true,
+        "max_fix_attempts_without_user_validation": 2,
+        "mandatory_demo_vs_production_parity_check": true
+      },
+      "enforcement": "block_deployment_without_validation"
+    },
+    {
+      "rule": "event_handler_isolation",
+      "parameters": {
+        "prohibit_keyboard_shortcut_overlap": true,
+        "require_single_onChange_handler": true,
+        "mandate_event_path_simplicity": true,
+        "limit_competing_refs": 2
+      },
+      "enforcement": "automatic_refactoring_suggestions"
+    }
+  ],
+  "neural_network_architecture": {
+    "input_layer": {
+      "neurons": 10,
+      "activation": "relu",
+      "description": "Component complexity metrics"
+    },
+    "hidden_layers": [
+      {
+        "neurons": 20,
+        "activation": "relu", 
+        "description": "Anti-pattern detection"
+      },
+      {
+        "neurons": 15,
+        "activation": "relu",
+        "description": "Integration risk assessment"  
+      }
+    ],
+    "output_layer": {
+      "neurons": 5,
+      "activation": "sigmoid",
+      "description": "Failure probability predictions"
+    },
+    "loss_function": "binary_crossentropy",
+    "optimizer": "adam",
+    "metrics": ["accuracy", "precision", "recall", "f1_score"]
+  },
+  "validation_protocols": {
+    "pre_fix_validation": [
+      "Analyze component complexity metrics",
+      "Check for known anti-patterns", 
+      "Estimate integration failure probability",
+      "Require architectural simplification if risk > 0.7"
+    ],
+    "post_fix_validation": [
+      "Mandatory browser testing",
+      "User experience validation required",
+      "Runtime behavior verification",
+      "Compare demo vs production parity"
+    ],
+    "circular_fix_prevention": [
+      "Stop after 2 failed attempts without user validation",
+      "Require architectural analysis for repeated failures",
+      "Mandate user feedback incorporation",
+      "Implement timeout for complex integration attempts"
+    ]
+  },
+  "success_metrics": {
+    "target_accuracy": 0.95,
+    "target_precision": 0.92,
+    "target_recall": 0.90,
+    "false_positive_rate": 0.05,
+    "false_negative_rate": 0.10,
+    "user_satisfaction_improvement": 0.80
+  },
+  "metadata": {
+    "training_data_size": 4,
+    "validation_split": 0.2,
+    "test_split": 0.2,
+    "cross_validation_folds": 5,
+    "expected_training_time": "2-4 hours",
+    "model_update_frequency": "weekly",
+    "production_deployment_date": "2025-09-15"
+  }
+}

@@ -12,7 +12,8 @@ import {
   X,
   Edit3,
   AlertTriangle,
-  Loader2
+  Loader2,
+  Heart
 } from 'lucide-react';
 import { PostCreator } from './PostCreator';
 import LoadingSpinner from './LoadingSpinner';
@@ -168,15 +169,17 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
     onError?.(err);
   }, [onError]);
 
-  // Safe data fetcher with comprehensive error handling
+  // Safe data fetcher with comprehensive error handling - REAL API CALLS
   const fetchPosts = useCallback(async (showRefreshing = false) => {
     try {
       if (showRefreshing) setRefreshing(true);
       
+      console.log('🔄 Fetching real posts from backend API...');
+      
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
       
-      const response = await fetch('/api/v1/agent-posts', {
+      const response = await fetch('http://localhost:3000/api/v1/agent-posts', {
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json'
@@ -190,6 +193,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
       }
       
       const data = await response.json();
+      console.log('📊 Raw API response:', data);
       
       if (!data || typeof data !== 'object') {
         throw new Error('Invalid response format');
@@ -202,13 +206,14 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
           .filter((post): post is AgentPost => post !== null)
           .map((post) => ({
             ...post,
-                comments: safeNumber(post.comments, Math.floor(Math.random() * 8)),
+            comments: safeNumber(post.comments, Math.floor(Math.random() * 8)),
             shares: safeNumber(post.shares, Math.floor(Math.random() * 5))
           }));
         
         setPosts(validPosts);
         setError(null);
         setRetryCount(0);
+        console.log('✅ Real posts loaded successfully:', validPosts.length, 'posts');
       } else {
         throw new Error(safeString(data.message, 'Failed to fetch agent posts'));
       }

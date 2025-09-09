@@ -1,0 +1,465 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "SPARC Regression Test Scenarios",
+    "lastUpdated": "2025-01-09T00:00:00Z",
+    "featuresCovered": [
+      "mention-system",
+      "post-creation", 
+      "comment-threading",
+      "realtime-data",
+      "filtering",
+      "posting-interface"
+    ]
+  },
+  
+  "mentionSystem": {
+    "validMentions": [
+      {
+        "id": "mention-001",
+        "trigger": "@",
+        "query": "",
+        "expectedSuggestions": 8,
+        "description": "Empty query should show all agents"
+      },
+      {
+        "id": "mention-002", 
+        "trigger": "@test",
+        "query": "test",
+        "expectedSuggestions": 3,
+        "description": "Partial query filters suggestions"
+      },
+      {
+        "id": "mention-003",
+        "trigger": "@chief",
+        "query": "chief",
+        "expectedSuggestions": 1,
+        "description": "Specific query matches agent"
+      }
+    ],
+    
+    "invalidMentions": [
+      {
+        "id": "mention-invalid-001",
+        "trigger": "@nonexistent",
+        "query": "nonexistent",
+        "expectedSuggestions": 0,
+        "description": "No matches for non-existent agent"
+      }
+    ],
+    
+    "edgeCases": [
+      {
+        "id": "mention-edge-001",
+        "content": "Multiple @agent1 and @agent2 mentions",
+        "description": "Multiple mentions in single content"
+      },
+      {
+        "id": "mention-edge-002",
+        "content": "Email@domain.com should not trigger @domain",
+        "description": "Email addresses don't trigger mentions"
+      },
+      {
+        "id": "mention-edge-003",
+        "content": "@ at start of line",
+        "description": "Mention at beginning of content"
+      },
+      {
+        "id": "mention-edge-004",
+        "content": "Text with @ in middle",
+        "description": "Mention in middle of sentence"
+      }
+    ]
+  },
+
+  "postCreation": {
+    "validPosts": [
+      {
+        "id": "post-001",
+        "title": "Weekly Status Update", 
+        "hook": "Key achievements this week",
+        "content": "Completed user authentication and began work on @agent-dashboard integration.",
+        "tags": ["status", "update"],
+        "businessImpact": 7,
+        "expectedOutcome": "success"
+      },
+      {
+        "id": "post-002",
+        "title": "Performance Improvement Analysis",
+        "hook": "Database optimization results", 
+        "content": "Reduced query time by 40% through index optimization. Working with @database-agent for further improvements.",
+        "tags": ["performance", "database"],
+        "businessImpact": 9,
+        "expectedOutcome": "success"
+      }
+    ],
+    
+    "invalidPosts": [
+      {
+        "id": "post-invalid-001",
+        "title": "",
+        "content": "",
+        "expectedError": "Title and content are required",
+        "description": "Empty required fields"
+      },
+      {
+        "id": "post-invalid-002",
+        "title": "a".repeat(201),
+        "content": "Valid content",
+        "expectedError": "Title must be under 200 characters",
+        "description": "Title too long"
+      }
+    ],
+    
+    "templates": [
+      {
+        "id": "template-001",
+        "name": "Status Update",
+        "title": "Weekly Progress Report",
+        "hook": "Key achievements and upcoming priorities",
+        "content": "## Completed This Week\n- \n\n## In Progress\n- \n\n## Next Week\n- "
+      },
+      {
+        "id": "template-002", 
+        "name": "Bug Report",
+        "title": "Issue: [Brief Description]",
+        "hook": "Bug found in [component]",
+        "content": "## Issue Description\n\n## Steps to Reproduce\n1. \n2. \n3. \n\n## Expected vs Actual\n**Expected:** \n**Actual:** \n\n## Impact\n"
+      }
+    ]
+  },
+
+  "commentThreading": {
+    "scenarios": [
+      {
+        "id": "thread-001",
+        "description": "Simple comment thread",
+        "structure": {
+          "rootComment": {
+            "id": "comment-1",
+            "content": "Great post! I have a question about the implementation.",
+            "author": "user1",
+            "replies": [
+              {
+                "id": "comment-2",
+                "content": "Thanks @user1! What specifically would you like to know?",
+                "author": "post-author",
+                "parentId": "comment-1",
+                "replies": [
+                  {
+                    "id": "comment-3",
+                    "content": "How did you handle the edge cases in validation?",
+                    "author": "user1", 
+                    "parentId": "comment-2"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      
+      {
+        "id": "thread-002",
+        "description": "Deep thread with multiple branches",
+        "structure": {
+          "maxDepth": 6,
+          "branchingFactor": 3,
+          "totalComments": 18
+        }
+      },
+      
+      {
+        "id": "thread-003",
+        "description": "Thread with mentions and links",
+        "rootComment": {
+          "content": "Hey @agent1, check out this solution: #comment-123. What do you think about @agent2's approach?",
+          "mentions": ["agent1", "agent2"],
+          "links": ["#comment-123"]
+        }
+      }
+    ],
+    
+    "navigation": [
+      {
+        "id": "nav-001",
+        "action": "expand-thread",
+        "targetDepth": 3,
+        "expectedVisible": 7
+      },
+      {
+        "id": "nav-002",
+        "action": "collapse-thread", 
+        "targetId": "comment-1",
+        "expectedHidden": 6
+      },
+      {
+        "id": "nav-003",
+        "action": "hash-navigation",
+        "targetHash": "#comment-5",
+        "expectedScroll": true,
+        "expectedHighlight": true
+      }
+    ]
+  },
+
+  "realtimeUpdates": {
+    "websocketEvents": [
+      {
+        "id": "ws-001",
+        "type": "new_post",
+        "data": {
+          "postId": "post-123",
+          "title": "New Real-time Post",
+          "author": "agent1"
+        },
+        "expectedAction": "prepend_to_feed"
+      },
+      {
+        "id": "ws-002",
+        "type": "comment_added",
+        "data": {
+          "commentId": "comment-456", 
+          "postId": "post-123",
+          "content": "New comment via WebSocket"
+        },
+        "expectedAction": "update_comment_count"
+      },
+      {
+        "id": "ws-003",
+        "type": "post_updated",
+        "data": {
+          "postId": "post-123",
+          "field": "title",
+          "value": "Updated Post Title"
+        },
+        "expectedAction": "update_existing_post"
+      }
+    ],
+    
+    "connectionStates": [
+      {
+        "id": "conn-001",
+        "state": "connected",
+        "indicator": "green-dot",
+        "message": "Live updates active"
+      },
+      {
+        "id": "conn-002", 
+        "state": "disconnected",
+        "indicator": "red-dot",
+        "message": "Connection lost - retrying..."
+      },
+      {
+        "id": "conn-003",
+        "state": "reconnecting",
+        "indicator": "yellow-dot", 
+        "message": "Reconnecting..."
+      }
+    ]
+  },
+
+  "filtering": {
+    "filterTypes": [
+      {
+        "id": "filter-001",
+        "type": "agent",
+        "value": "chief-of-staff-agent",
+        "expectedResults": {
+          "postsShown": 5,
+          "postsHidden": 15
+        }
+      },
+      {
+        "id": "filter-002",
+        "type": "hashtag",
+        "value": "#status",
+        "expectedResults": {
+          "postsShown": 3,
+          "postsHidden": 17
+        }
+      },
+      {
+        "id": "filter-003",
+        "type": "business-impact",
+        "value": "high",
+        "expectedResults": {
+          "postsShown": 8,
+          "postsHidden": 12
+        }
+      }
+    ],
+    
+    "combinations": [
+      {
+        "id": "combo-001",
+        "filters": [
+          {"type": "agent", "value": "chief-of-staff-agent"},
+          {"type": "hashtag", "value": "#urgent"}
+        ],
+        "expectedResults": {
+          "postsShown": 2,
+          "description": "Intersection of agent and hashtag filters"
+        }
+      }
+    ]
+  },
+
+  "performance": {
+    "benchmarks": [
+      {
+        "id": "perf-001",
+        "metric": "feed-initial-load",
+        "scenario": "50 posts with images",
+        "target": 2000,
+        "unit": "milliseconds"
+      },
+      {
+        "id": "perf-002", 
+        "metric": "mention-dropdown-open",
+        "scenario": "100 agent suggestions",
+        "target": 100,
+        "unit": "milliseconds"
+      },
+      {
+        "id": "perf-003",
+        "metric": "comment-thread-expand",
+        "scenario": "3-level deep thread with 10 comments",
+        "target": 50,
+        "unit": "milliseconds"
+      },
+      {
+        "id": "perf-004",
+        "metric": "filter-application",
+        "scenario": "Filter 100 posts by agent",
+        "target": 200,
+        "unit": "milliseconds" 
+      }
+    ],
+    
+    "loadTesting": [
+      {
+        "id": "load-001",
+        "scenario": "concurrent-users",
+        "users": 10,
+        "duration": "30s",
+        "actions": ["browse_feed", "create_post", "add_comment"]
+      },
+      {
+        "id": "load-002",
+        "scenario": "mention-stress-test",
+        "actions": "rapid-mention-typing",
+        "iterations": 50,
+        "expectedStability": true
+      }
+    ]
+  },
+
+  "regressionScenarios": [
+    {
+      "id": "regression-001",
+      "name": "Mention dropdown z-index conflict",
+      "description": "Dropdown appears behind modal or header",
+      "steps": [
+        "Open post creator",
+        "Type @ to show dropdown",
+        "Open template library modal",
+        "Verify dropdown is still visible and clickable"
+      ],
+      "expectedBehavior": "Dropdown has highest z-index and remains interactive"
+    },
+    
+    {
+      "id": "regression-002",
+      "name": "Comment thread infinite expansion",
+      "description": "Clicking expand causes infinite loop",
+      "steps": [
+        "Navigate to post with nested comments",
+        "Click expand on root comment",
+        "Rapidly click expand/collapse multiple times"
+      ],
+      "expectedBehavior": "Thread expands/collapses correctly without infinite loops"
+    },
+    
+    {
+      "id": "regression-003",
+      "name": "WebSocket connection leak",
+      "description": "Multiple connections created without cleanup",
+      "steps": [
+        "Navigate between pages multiple times",
+        "Monitor network connections",
+        "Check WebSocket connection count"
+      ],
+      "expectedBehavior": "Only one WebSocket connection active at a time"
+    },
+    
+    {
+      "id": "regression-004",
+      "name": "API race condition on rapid posting",
+      "description": "Rapid form submission causes duplicate posts",
+      "steps": [
+        "Fill post creation form",
+        "Click submit multiple times rapidly",
+        "Check if multiple posts created"
+      ],
+      "expectedBehavior": "Only one post created regardless of rapid clicking"
+    },
+    
+    {
+      "id": "regression-005", 
+      "name": "State sync bug between feed and creator",
+      "description": "New posts don't appear in feed after creation",
+      "steps": [
+        "Create new post",
+        "Verify post appears in creator success state", 
+        "Check if post appears in main feed",
+        "Refresh page and verify persistence"
+      ],
+      "expectedBehavior": "New posts immediately appear in feed and persist after refresh"
+    }
+  ],
+
+  "crossBrowser": {
+    "browsers": [
+      {
+        "name": "Chrome",
+        "version": "latest",
+        "platform": "desktop",
+        "criticalFeatures": ["mention-system", "post-creation", "comment-threading"]
+      },
+      {
+        "name": "Firefox", 
+        "version": "latest",
+        "platform": "desktop",
+        "criticalFeatures": ["mention-system", "post-creation", "comment-threading"]
+      },
+      {
+        "name": "Safari",
+        "version": "latest", 
+        "platform": "desktop",
+        "criticalFeatures": ["mention-system", "post-creation", "comment-threading"]
+      },
+      {
+        "name": "Chrome",
+        "version": "latest",
+        "platform": "mobile",
+        "criticalFeatures": ["mention-system", "post-creation"]
+      },
+      {
+        "name": "Safari",
+        "version": "latest",
+        "platform": "mobile", 
+        "criticalFeatures": ["mention-system", "post-creation"]
+      }
+    ],
+    
+    "knownIssues": [
+      {
+        "browser": "Safari",
+        "issue": "Mention dropdown positioning",
+        "workaround": "Use transform instead of position fixed",
+        "testId": "safari-dropdown-position"
+      }
+    ]
+  }
+}

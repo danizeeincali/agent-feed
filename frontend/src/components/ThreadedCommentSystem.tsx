@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { MessageCircle, ChevronDown, ChevronUp, Reply, User, Bot, Clock, ArrowRight } from 'lucide-react';
 import { apiService } from '../services/api';
+import { MentionInput, MentionSuggestion } from './MentionInput';
 
 interface ThreadedComment {
   id: string;
@@ -90,14 +91,18 @@ const ReplyForm: React.FC<ReplyFormProps> = ({
   return (
     <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
       <form onSubmit={handleSubmit}>
-        <textarea
+        <MentionInput
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={setContent}
+          onMentionSelect={(mention) => {
+            console.log('🎯 THREADED COMMENT: Mention selected', mention);
+          }}
           placeholder={placeholder}
           className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           rows={3}
           disabled={submitting}
-          autoFocus
+          autoFocus={true}
+          mentionContext="post"
         />
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center space-x-2 text-sm text-gray-500">

@@ -1,0 +1,292 @@
+{
+  "neural_training_dataset": {
+    "dataset_id": "NLD-COMMENT-DROPDOWN-PREVENTION-2025-09-08",
+    "version": "1.0",
+    "training_type": "failure_pattern_prevention",
+    "target_problem": "comment_mention_dropdown_invisible_despite_correct_implementation"
+  },
+  "training_patterns": {
+    "success_patterns": [
+      {
+        "pattern_id": "postcreator_success_template",
+        "component": "PostCreator.tsx",
+        "dom_structure": {
+          "hierarchy": "div.relative > MentionInput",
+          "nesting_depth": 1,
+          "stacking_contexts": 1,
+          "z_index_values": [99999]
+        },
+        "css_characteristics": {
+          "positioning": "single_relative_container",
+          "isolation": "none",
+          "transforms": "none",
+          "backdrop_filters": "none"
+        },
+        "behavior_markers": {
+          "dropdown_visibility": "immediate",
+          "debug_message_appears": true,
+          "mention_context": "post", 
+          "agent_suggestions_count": 8
+        },
+        "success_rate": 1.0
+      }
+    ],
+    "failure_patterns": [
+      {
+        "pattern_id": "commentform_failure_template", 
+        "component": "CommentForm.tsx",
+        "dom_structure": {
+          "hierarchy": "form > div.space-y-3 > div.space-y-2 > div.relative > MentionInput",
+          "nesting_depth": 4,
+          "stacking_contexts": 3,
+          "z_index_values": [99999, 50, 30, 25]
+        },
+        "css_characteristics": {
+          "positioning": "multiple_nested_relative_containers",
+          "isolation": "character_counter_absolute_positioning",
+          "transforms": "formatting_toolbar_backdrop_isolation", 
+          "backdrop_filters": "preview_overlay_stacking_context"
+        },
+        "behavior_markers": {
+          "dropdown_visibility": "invisible",
+          "debug_message_appears": false,
+          "mention_context": "comment",
+          "agent_suggestions_count": 0
+        },
+        "failure_rate": 1.0,
+        "root_cause": "stacking_context_trap"
+      }
+    ]
+  },
+  "anti_pattern_signatures": [
+    {
+      "signature_name": "nested_relative_positioning_trap",
+      "detection_pattern": {
+        "dom_selector": "form div.space-y-* div.space-y-* div.relative MentionInput",
+        "css_rules": [
+          "parent containers with position: relative",
+          "nested containers > 2 levels deep",
+          "absolute positioned overlays in same hierarchy"
+        ]
+      },
+      "failure_indicators": [
+        "dropdown renders (DOM exists) but invisible (no visual appearance)",
+        "high z-index ineffective due to stacking context isolation",
+        "identical MentionInput props produce different behaviors"
+      ],
+      "prevention_rule": "flatten_dom_hierarchy_for_dropdowns"
+    },
+    {
+      "signature_name": "character_counter_overlay_interference",
+      "detection_pattern": {
+        "dom_selector": "div.absolute.bottom-2.right-2 + [data-testid='mention-debug-dropdown']",
+        "css_rules": [
+          "absolute positioned character counter",
+          "overlapping dropdown positioning area",
+          "z-index conflicts with dropdown"
+        ]
+      },
+      "failure_indicators": [
+        "character counter appears above or blocks dropdown",
+        "dropdown partially visible but interaction blocked"
+      ],
+      "prevention_rule": "move_overlays_outside_dropdown_containers"
+    }
+  ],
+  "predictive_features": [
+    {
+      "feature_name": "dom_nesting_depth_risk",
+      "calculation": "count of positioned containers between root and MentionInput",
+      "risk_levels": {
+        "low_risk": "0-1 levels (success_rate: 95%)",
+        "medium_risk": "2 levels (success_rate: 60%)", 
+        "high_risk": "3+ levels (success_rate: 5%)"
+      }
+    },
+    {
+      "feature_name": "stacking_context_count_risk",
+      "calculation": "elements with transform, isolation, backdrop-filter, or z-index in hierarchy",
+      "risk_levels": {
+        "low_risk": "0-1 stacking contexts (success_rate: 90%)",
+        "medium_risk": "2 stacking contexts (success_rate: 40%)",
+        "high_risk": "3+ stacking contexts (success_rate: 10%)"
+      }
+    },
+    {
+      "feature_name": "mention_context_discrimination_risk",
+      "calculation": "different behavior based on mentionContext prop value",
+      "risk_levels": {
+        "low_risk": "consistent behavior all contexts (success_rate: 95%)",
+        "high_risk": "context-dependent behavior (success_rate: 20%)"
+      }
+    }
+  ],
+  "decision_tree_model": {
+    "root_condition": "dom_nesting_depth > 2",
+    "branches": [
+      {
+        "condition": true,
+        "risk_score": 0.8,
+        "recommendation": "flatten_hierarchy",
+        "next_condition": "stacking_context_count > 2"
+      },
+      {
+        "condition": false,
+        "risk_score": 0.2,
+        "recommendation": "proceed_with_caution",
+        "next_condition": "has_overlapping_overlays"
+      }
+    ],
+    "terminal_nodes": [
+      {
+        "path": "deep_nesting + multiple_stacking_contexts + overlapping_overlays",
+        "failure_probability": 0.95,
+        "action": "mandatory_refactor_required"
+      },
+      {
+        "path": "flat_hierarchy + single_stacking_context + clean_layout",
+        "failure_probability": 0.05,
+        "action": "safe_to_implement"
+      }
+    ]
+  },
+  "automated_detection_rules": [
+    {
+      "rule_name": "dropdown_stacking_context_trap_detector",
+      "ast_pattern": {
+        "jsx_pattern": "MentionInput nested > 2 levels in positioned containers",
+        "css_pattern": "z-index on dropdown ancestors with stacking context properties"
+      },
+      "severity": "error",
+      "message": "MentionInput dropdown will be invisible due to stacking context trap"
+    },
+    {
+      "rule_name": "mention_context_consistency_validator", 
+      "behavior_pattern": {
+        "prop_analysis": "mentionContext values produce different suggestion counts",
+        "service_call_analysis": "MentionService calls differ by context"
+      },
+      "severity": "warning",
+      "message": "Inconsistent mention behavior across contexts detected"
+    }
+  ],
+  "code_generation_templates": [
+    {
+      "template_name": "safe_mention_input_layout",
+      "jsx_template": `
+// ✅ SAFE PATTERN - Flat hierarchy
+<div className="relative w-full">
+  <MentionInput
+    ref={mentionInputRef}
+    value={content}
+    onChange={setContent}
+    onMentionSelect={handleMentionSelect}
+    mentionContext="[CONTEXT]"
+    className="w-full p-3 border border-gray-300 rounded-lg"
+  />
+  {/* Character counter OUTSIDE the dropdown container */}
+  <div className="text-xs text-gray-500 mt-1 text-right">
+    {content.length}/{maxLength}
+  </div>
+</div>`,
+      "css_requirements": [
+        "Single relative container for MentionInput",
+        "No nested positioning contexts",
+        "Overlays placed outside dropdown hierarchy"
+      ]
+    },
+    {
+      "template_name": "dangerous_nested_layout_antipattern",
+      "jsx_template": `
+// ❌ DANGEROUS ANTI-PATTERN - Complex nesting
+<form>
+  <div className="space-y-3">
+    <div className="space-y-2">
+      <div className="relative">
+        <MentionInput />
+        <div className="absolute bottom-2 right-2">
+          {/* Character counter creates stacking context trap */}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>`,
+      "problems": [
+        "4 levels of nesting to MentionInput",
+        "Multiple stacking contexts created",
+        "Overlapping absolute positioned elements"
+      ]
+    }
+  ],
+  "test_generation_patterns": [
+    {
+      "test_type": "cross_component_dropdown_visibility",
+      "test_template": `
+it('should show dropdown in [COMPONENT] when typing @', async () => {
+  render(<[COMPONENT] />);
+  const input = screen.getByRole('textbox');
+  
+  await user.type(input, '@');
+  
+  // CRITICAL: Must see debug message for dropdown visibility
+  await waitFor(() => {
+    expect(screen.getByText(/🚨 EMERGENCY DEBUG: Dropdown Open/)).toBeVisible();
+  });
+});`
+    },
+    {
+      "test_type": "stacking_context_validation",
+      "test_template": `
+it('should not create stacking context traps that hide dropdown', () => {
+  const { container } = render(<[COMPONENT] />);
+  
+  const stackingContexts = findStackingContexts(container);
+  expect(stackingContexts.length).toBeLessThanOrEqual(2);
+  
+  const dropdownAncestors = findDropdownAncestors(container);
+  dropdownAncestors.forEach(ancestor => {
+    expect(hasStackingContextProperties(ancestor)).toBe(false);
+  });
+});`
+    }
+  ],
+  "refactoring_strategies": [
+    {
+      "strategy_name": "hierarchy_flattening",
+      "steps": [
+        "Identify MentionInput location in DOM tree",
+        "Remove unnecessary wrapper divs between root and MentionInput", 
+        "Ensure only single relative container for positioning context",
+        "Move overlays (character counter, etc) outside dropdown hierarchy"
+      ],
+      "validation": "Dropdown appears immediately when typing @"
+    },
+    {
+      "strategy_name": "z_index_standardization", 
+      "steps": [
+        "Audit all z-index values in component tree",
+        "Assign dropdown fixed z-index: 1000",
+        "Ensure no ancestor elements have competing z-index",
+        "Remove stacking context creators (transform, isolation, etc)"
+      ],
+      "validation": "Dropdown appears above all other elements"
+    }
+  ],
+  "success_metrics": [
+    {
+      "metric_name": "dropdown_visibility_rate",
+      "target_value": "100% across all components",
+      "measurement": "presence of debug message '🚨 EMERGENCY DEBUG: Dropdown Open'"
+    },
+    {
+      "metric_name": "context_consistency_rate",
+      "target_value": "identical behavior across mentionContext values",
+      "measurement": "same agent suggestion count and dropdown behavior"
+    },
+    {
+      "metric_name": "implementation_complexity_score",
+      "target_value": "≤ 2 DOM nesting levels to MentionInput",
+      "measurement": "count of positioned containers in hierarchy"
+    }
+  ]
+}

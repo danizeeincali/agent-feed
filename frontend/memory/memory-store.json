@@ -23,6 +23,12 @@
       "value": "FIX STRATEGY: 1) Memoize parseTerminalOutput with useMemo 2) Only reparse when output changes 3) Track last processed length to avoid full reparse 4) Add React.memo for MessageBubble components",
       "namespace": "default",
       "timestamp": 1756496697471
+    },
+    {
+      "key": "architect_analysis",
+      "value": "Found critical MentionInput.tsx issues: findMentionQuery function at line 59-119 with @ symbol detection logic, state management with isDropdownOpen/mentionQuery state, async suggestion loading with complex fallback chains, over-complex debugging and error handling",
+      "namespace": "default",
+      "timestamp": 1757349223048
     }
   ]
 }

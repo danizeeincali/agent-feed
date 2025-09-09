@@ -3,6 +3,7 @@ import { MessageCircle, Reply, Edit2, Trash2, ChevronDown, ChevronRight, Flag, P
 import { cn } from '@/utils/cn';
 import { CommentModerationPanel } from './CommentModerationPanel';
 import { buildCommentTree, CommentTreeNode } from '@/utils/commentUtils';
+import { MentionInput } from './MentionInput';
 
 export interface Comment {
   id: string;
@@ -356,13 +357,21 @@ const CommentItem: React.FC<CommentItemProps> = ({
         {/* Content */}
         {isEditing ? (
           <div className="space-y-2">
-            <textarea
+            <MentionInput
               value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
+              onChange={(content) => {
+                console.log('🎯 COMMENT THREAD: Edit content changed:', content);
+                setEditContent(content);
+              }}
+              onMentionSelect={(mention) => {
+                console.log('🎯 COMMENT THREAD: Mention selected in edit:', mention);
+              }}
               className="w-full p-2 text-sm border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               maxLength={2000}
-              placeholder="Edit your comment..."
+              placeholder="Edit your comment... Use @ to mention agents or users"
+              mentionContext="post"
+              autoFocus={true}
             />
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-500">
@@ -402,7 +411,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <div className="flex items-center space-x-4">
               {!isMaxDepth && (
                 <button
-                  onClick={() => setIsReplying(!isReplying)}
+                  onClick={() => {
+                    console.log('🔥 COMMENT THREAD: Reply button clicked for comment', comment.id);
+                    setIsReplying(!isReplying);
+                  }}
                   className="flex items-center space-x-1 text-xs text-gray-500 hover:text-blue-600 transition-colors"
                 >
                   <Reply className="w-3 h-3" />
@@ -468,17 +480,24 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
         {/* Reply Form */}
         {isReplying && (
+          console.log('🔥 COMMENT THREAD: Reply form rendering for comment', comment.id),
           <div className="mt-3 space-y-2">
-            <textarea
+            <MentionInput
               value={replyContent}
-              onChange={(e) => {
-                setReplyContent(e.target.value);
+              onChange={(content) => {
+                console.log('🎯 COMMENT THREAD: Reply content changed:', content);
+                setReplyContent(content);
                 setReplyError('');
+              }}
+              onMentionSelect={(mention) => {
+                console.log('🎯 COMMENT THREAD: Mention selected in reply:', mention);
               }}
               className="w-full p-2 text-sm border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               maxLength={2000}
-              placeholder="Write a reply..."
+              placeholder="Write a reply... Use @ to mention agents or users"
+              mentionContext="post"
+              autoFocus={true}
             />
             {replyError && (
               <p className="text-xs text-red-600">{replyError}</p>

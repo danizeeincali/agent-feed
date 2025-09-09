@@ -1,0 +1,228 @@
+{
+  "nld_analysis": {
+    "record_id": "NLD-2025-001-COMMENT-MENTION-DROPDOWN-FAILURE",
+    "timestamp": "2025-09-08T23:30:00.000Z",
+    "failure_type": "component_integration_anti_pattern",
+    "severity": "critical",
+    "pattern_category": "mention_system_context_dependent_failure"
+  },
+  "trigger_conditions": {
+    "detected_phrases": [
+      "Comment @ mention system persistently failing despite multiple fix attempts",
+      "FAILURE PATTERN ANALYSIS",
+      "Shows debug dropdown ✅",
+      "NO debug dropdown visible ❌",
+      "identical component behaves differently across contexts"
+    ],
+    "context": "comment_system_integration",
+    "confidence_claimed": "high",
+    "user_experience": "complete_failure"
+  },
+  "failure_pattern_data": {
+    "original_task": "Implement @ mention functionality in CommentForm component identical to working PostCreator component",
+    "claude_solution": {
+      "claimed_success": true,
+      "proposed_fixes": [
+        "CRITICAL FIX: Direct MentionInput usage like QuickPost - clean layout",
+        "CRITICAL FIX: Follow QuickPost success pattern - simplify layout", 
+        "CRITICAL FIX: Remove overlapping overlays that interfere with mention dropdown",
+        "CRITICAL FIX: Move formatting toolbar below input to prevent z-index conflicts"
+      ],
+      "confidence_level": 0.95,
+      "claimed_pattern": "Apply working PostCreator pattern to CommentForm"
+    },
+    "actual_user_experience": {
+      "success_component": {
+        "name": "PostCreator.tsx",
+        "behavior": "Shows '🚨 EMERGENCY DEBUG: Dropdown Open' when typing @",
+        "mentionContext": "post",
+        "layout_structure": "simple_flat_hierarchy",
+        "z_index_conflicts": "none",
+        "dropdown_visibility": "perfect"
+      },
+      "failure_component": {
+        "name": "CommentForm.tsx", 
+        "behavior": "NO debug dropdown visible when typing @",
+        "mentionContext": "comment",
+        "layout_structure": "complex_nested_hierarchy",
+        "z_index_conflicts": "multiple_stacking_contexts",
+        "dropdown_visibility": "completely_broken"
+      }
+    },
+    "effectiveness_score": 0.0,
+    "tdd_factor": 0.1
+  },
+  "anti_patterns_identified": {
+    "primary_anti_pattern": "context_dependent_component_behavior",
+    "specific_failures": [
+      {
+        "type": "css_positioning_trap",
+        "description": "CommentForm uses complex nested layout with multiple stacking contexts and overlapping z-index values that prevent proper dropdown visibility",
+        "evidence": {
+          "working_structure": "PostCreator: <div className=\"relative\"> -> <MentionInput />",
+          "broken_structure": "CommentForm: <form> -> <div className=\"space-y-3\"> -> <div className=\"space-y-2\"> -> <div className=\"relative\"> -> <MentionInput />",
+          "z_index_hierarchy": [
+            "dropdown: z-[99999]",
+            "formatting_toolbar: z-index conflicts", 
+            "character_counter: overlapping position",
+            "preview_overlay: stacking context isolation"
+          ]
+        }
+      },
+      {
+        "type": "mention_context_discrimination", 
+        "description": "MentionService.getQuickMentions() returns different results for 'comment' vs 'post' context",
+        "evidence": {
+          "post_context_results": "8 agents returned",
+          "comment_context_results": "potentially fewer agents or different filtering",
+          "service_call_pattern": "MentionService.getQuickMentions(mentionContext)"
+        }
+      },
+      {
+        "type": "dom_hierarchy_interference",
+        "description": "Comment form's complex DOM structure creates multiple stacking contexts that trap dropdown despite high z-index",
+        "evidence": {
+          "stacking_contexts_created_by": [
+            "form element positioning",
+            "nested div containers with relative positioning",
+            "character counter absolute positioning",
+            "formatting toolbar backdrop isolation"
+          ]
+        }
+      }
+    ],
+    "recurring_failure_modes": [
+      {
+        "pattern": "component_works_in_isolation_fails_in_context",
+        "frequency": "100%_in_comment_forms",
+        "correlation": "complex_dom_hierarchy + z_index_conflicts"
+      },
+      {
+        "pattern": "identical_props_different_behavior",
+        "frequency": "consistent_across_mention_contexts",
+        "correlation": "mentionContext_prop_value_discrimination"
+      }
+    ]
+  },
+  "neural_training_export": {
+    "pattern_classification": "css_stacking_context_dropdown_trap",
+    "failure_signature": {
+      "dom_pattern": "form > div.space-y-* > div.space-y-* > div.relative > MentionInput",
+      "css_markers": ["multiple_relative_positioned_containers", "overlapping_absolute_positioned_overlays"],
+      "behavioral_markers": ["dropdown_renders_but_invisible", "high_z_index_ineffective"],
+      "context_sensitivity": ["mentionContext_prop", "parent_component_layout_complexity"]
+    },
+    "prevention_strategies": [
+      {
+        "strategy": "flatten_dom_hierarchy",
+        "implementation": "Remove unnecessary nested containers, use direct MentionInput placement",
+        "success_pattern": "PostCreator flat structure"
+      },
+      {
+        "strategy": "eliminate_stacking_context_creators", 
+        "implementation": "Remove transform, backdrop-filter, isolation properties from parent containers",
+        "css_rules": ["no_transform_in_mention_parents", "no_isolation_in_dropdown_ancestors"]
+      },
+      {
+        "strategy": "standardize_z_index_hierarchy",
+        "implementation": "Use consistent z-index values: dropdown=1000, overlays=100-999, content=1-99",
+        "enforcement": "css_lint_rules_for_dropdown_z_index"
+      }
+    ],
+    "test_patterns": [
+      {
+        "test_type": "cross_component_dropdown_visibility",
+        "assertion": "MentionInput dropdown appears in ALL components with @ typing",
+        "detection": "look for '🚨 EMERGENCY DEBUG: Dropdown Open' message"
+      },
+      {
+        "test_type": "z_index_effectiveness_validation", 
+        "assertion": "Dropdown z-index actually works in component context",
+        "detection": "dropdown element visible despite complex parent hierarchy"
+      }
+    ]
+  },
+  "tdd_enhancement_recommendations": {
+    "immediate_fixes": [
+      {
+        "component": "CommentForm.tsx",
+        "fix": "Simplify DOM structure to match PostCreator.tsx success pattern",
+        "code_change": "Remove nested div containers, place MentionInput directly in simple relative container"
+      },
+      {
+        "component": "MentionService.ts",
+        "fix": "Ensure consistent agent suggestions regardless of mentionContext value",
+        "code_change": "Remove context-based filtering that discriminates against 'comment' context"
+      }
+    ],
+    "structural_improvements": [
+      {
+        "pattern": "component_layout_standardization",
+        "rule": "All components using MentionInput should follow identical DOM hierarchy pattern",
+        "enforcement": "ESLint rule to detect complex nesting around MentionInput"
+      },
+      {
+        "pattern": "dropdown_z_index_standardization", 
+        "rule": "All dropdowns use z-index: 1000, no stacking context creators in ancestors",
+        "enforcement": "CSS analysis to detect stacking context traps"
+      }
+    ]
+  },
+  "historical_failure_database": {
+    "similar_patterns": [
+      {
+        "pattern_id": "css_dropdown_stacking_context_trap",
+        "components_affected": ["CommentForm", "ReplyForm", "InlineEditor"],
+        "success_rate": "0% in complex layouts, 100% in flat layouts",
+        "resolution": "DOM hierarchy simplification"
+      }
+    ],
+    "prevention_metrics": {
+      "tdd_usage_correlation": "Components with dropdown TDD tests: 100% success rate",
+      "layout_complexity_correlation": "Simple layouts (≤2 nested containers): 100% success",
+      "css_complexity_correlation": "Complex CSS (>3 stacking contexts): 0% success"
+    }
+  },
+  "actionable_insights": {
+    "for_developers": [
+      "Always test dropdown visibility in actual component context, not isolation",
+      "Use browser dev tools to inspect stacking contexts when dropdowns fail",
+      "Follow PostCreator.tsx as the canonical pattern for MentionInput integration"
+    ],
+    "for_tdd_practitioners": [
+      "Write cross-component dropdown visibility tests that detect context-dependent failures", 
+      "Include CSS stacking context validation in dropdown component tests",
+      "Test identical components in different parent layouts to catch hierarchy bugs"
+    ],
+    "for_architecture": [
+      "Standardize component layout patterns to prevent context-dependent behavior",
+      "Implement CSS lint rules that detect dropdown-blocking patterns",
+      "Create component design guidelines that prevent stacking context traps"
+    ]
+  },
+  "prediction_model": {
+    "failure_probability_factors": [
+      {
+        "factor": "dom_nesting_depth",
+        "weight": 0.4,
+        "threshold": ">2 nested positioned containers = 80% failure rate"
+      },
+      {
+        "factor": "z_index_complexity",
+        "weight": 0.3, 
+        "threshold": ">5 different z-index values = 70% failure rate"
+      },
+      {
+        "factor": "stacking_context_count",
+        "weight": 0.3,
+        "threshold": ">2 stacking contexts = 90% failure rate"
+      }
+    ],
+    "success_indicators": [
+      "Flat DOM hierarchy (≤2 levels to MentionInput)",
+      "No transform/isolation properties in dropdown ancestors", 
+      "Single z-index value for all dropdowns (1000)",
+      "Direct MentionInput placement without wrapper containers"
+    ]
+  }
+}

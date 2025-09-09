@@ -1,289 +1,194 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Playwright Configuration for Claude Instance Management E2E Tests
- * 
- * Advanced E2E testing framework with visual regression, performance monitoring,
- * NLD pattern detection, and comprehensive cross-browser testing.
+ * @see https://playwright.dev/docs/test-configuration
  */
-
 export default defineConfig({
-  testDir: './tests',
-  
-  // Run tests in files in parallel
+  testDir: './tests/e2e',
+  /* Run tests in files in parallel */
   fullyParallel: true,
-  
-  // Fail the build on CI if you accidentally left test.only in the source code
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  
-  // Retry on CI only
+  /* Retry on CI only */
   retries: process.env.CI ? 3 : 1,
-  
-  // Opt out of parallel tests on CI
-  workers: process.env.CI ? 2 : undefined,
-  
-  // Reporter configuration with enhanced reporting
+  /* Opt out of parallel tests on CI. */
+  workers: process.env.CI ? 2 : 4,
+  /* Maximum test timeout */
+  timeout: 60000,
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['html', { 
-      outputFolder: 'playwright-report',
-      open: 'never'
-    }],
+    ['html'],
     ['json', { outputFile: 'test-results/e2e-results.json' }],
     ['junit', { outputFile: 'test-results/e2e-junit.xml' }],
-    ['line']
   ],
   
-  // Shared settings for all the projects below
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    // Base URL for tests
+    /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:5173',
     
-    // Collect trace when retrying the failed test
-    trace: 'retain-on-failure',
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: 'on-first-retry',
     
-    // Capture screenshot on failure and success for visual regression
+    /* Take screenshot on failure */
     screenshot: 'only-on-failure',
     
-    // Record video on failure
+    /* Record video on failure */
     video: 'retain-on-failure',
     
-    // Navigation timeout
-    navigationTimeout: 45000,
+    /* Global timeout for each action */
+    actionTimeout: 30000,
     
-    // Action timeout
-    actionTimeout: 15000,
-    
-    // Test timeout per test
-    testTimeout: 120000,
-    
-    // Expect timeout for assertions
-    expect: {
-      timeout: 15000,
-      toHaveScreenshot: {
-        threshold: 0.2,
-        mode: 'strict'
-      },
-      toMatchScreenshot: {
-        threshold: 0.2,
-        mode: 'strict'
-      }
-    },
-
-    // Extra HTTP headers
-    extraHTTPHeaders: {
-      'X-Test-Environment': 'playwright'
-    },
-
-    // Ignore HTTPS errors
-    ignoreHTTPSErrors: true,
-
-    // Locale and timezone
-    locale: 'en-US',
-    timezoneId: 'America/New_York'
+    /* Global timeout for navigation */
+    navigationTimeout: 30000,
   },
 
-  // Configure projects for comprehensive browser testing
+  /* Configure projects for major browsers */
   projects: [
-    // Setup project for authentication and initial state
+    /* Core features - all browsers */
     {
-      name: 'setup',
-      testMatch: /.*\.setup\.ts/,
-      teardown: 'cleanup'
-    },
-
-    // Cleanup project
-    {
-      name: 'cleanup',
-      testMatch: /.*\.cleanup\.ts/
-    },
-
-    // Desktop Chrome - Primary testing browser
-    {
-      name: 'chromium',
+      name: 'core-features-chrome',
       use: { 
         ...devices['Desktop Chrome'],
-        launchOptions: {
-          args: [
-            '--disable-web-security',
-            '--disable-features=VizDisplayCompositor',
-            '--allow-running-insecure-content',
-            '--disable-dev-shm-usage',
-            '--no-sandbox',
-            '--disable-setuid-sandbox'
-          ]
-        }
+        channel: 'chrome'
       },
-      dependencies: ['setup']
+      testDir: './tests/e2e/core-features',
     },
-
-    // Desktop Firefox
+    
     {
-      name: 'firefox',
-      use: { 
-        ...devices['Desktop Firefox'],
-        launchOptions: {
-          firefoxUserPrefs: {
-            'dom.webnotifications.enabled': false,
-            'media.navigator.streams.fake': true
-          }
-        }
-      },
-      dependencies: ['setup']
+      name: 'core-features-firefox',
+      use: { ...devices['Desktop Firefox'] },
+      testDir: './tests/e2e/core-features',
     },
 
-    // Desktop Safari (WebKit)
     {
-      name: 'webkit',
-      use: { 
-        ...devices['Desktop Safari'],
-        launchOptions: {
-          slowMo: 100 // Slower for WebKit stability
-        }
-      },
-      dependencies: ['setup']
+      name: 'core-features-webkit',
+      use: { ...devices['Desktop Safari'] },
+      testDir: './tests/e2e/core-features',
     },
 
-    // Mobile Chrome Testing
+    /* Regression tests - cross-browser */
+    {
+      name: 'regression-chrome',
+      use: { 
+        ...devices['Desktop Chrome'],
+        channel: 'chrome'
+      },
+      testDir: './tests/e2e/regression',
+    },
+    
+    {
+      name: 'regression-firefox',
+      use: { ...devices['Desktop Firefox'] },
+      testDir: './tests/e2e/regression',
+    },
+
+    {
+      name: 'regression-webkit',
+      use: { ...devices['Desktop Safari'] },
+      testDir: './tests/e2e/regression',
+    },
+
+    /* Mobile testing */
     {
       name: 'mobile-chrome',
       use: { 
         ...devices['Pixel 5'],
-        viewport: { width: 393, height: 851 },
         hasTouch: true,
-        isMobile: true
       },
-      dependencies: ['setup']
+      testDir: './tests/e2e/core-features',
     },
-
-    // Mobile Safari Testing
+    
     {
       name: 'mobile-safari',
       use: { 
-        ...devices['iPhone 13'],
-        viewport: { width: 390, height: 844 },
+        ...devices['iPhone 12'],
         hasTouch: true,
-        isMobile: true
       },
-      dependencies: ['setup']
+      testDir: './tests/e2e/core-features',
     },
 
-    // Tablet Testing
+    /* Integration tests - Chrome only for speed */
     {
-      name: 'tablet',
+      name: 'integration',
       use: { 
-        ...devices['iPad Pro'],
-        viewport: { width: 1024, height: 1366 },
-        hasTouch: true
-      },
-      dependencies: ['setup']
-    },
-
-    // High DPI Testing
-    {
-      name: 'high-dpi',
-      use: {
         ...devices['Desktop Chrome'],
-        viewport: { width: 1920, height: 1080 },
-        deviceScaleFactor: 2
+        channel: 'chrome'
       },
-      dependencies: ['setup']
+      testDir: './tests/e2e/integration',
     },
 
-    // Performance Testing Project
+    /* Visual regression tests */
+    {
+      name: 'visual',
+      use: { 
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 720 },
+        channel: 'chrome',
+        // Disable animations for consistent screenshots
+        actionTimeout: 5000,
+      },
+      testDir: './tests/e2e/visual',
+    },
+
+    /* Performance tests */
     {
       name: 'performance',
-      testDir: './tests/performance',
-      use: {
-        ...devices['Desktop Chrome']
-      },
-      dependencies: ['setup']
-    },
-
-    // Visual Regression Testing
-    {
-      name: 'visual-regression',
-      testDir: './tests/visual-regression',
-      use: {
+      use: { 
         ...devices['Desktop Chrome'],
-        viewport: { width: 1280, height: 720 }
+        channel: 'chrome'
       },
-      dependencies: ['setup']
+      testDir: './tests/e2e/performance',
     },
 
-    // NLD Pattern Detection Tests
+    /* Accessibility tests */
     {
-      name: 'nld-patterns',
-      testDir: './tests/nld-patterns',
-      use: {
-        ...devices['Desktop Chrome']
+      name: 'accessibility',
+      use: { 
+        ...devices['Desktop Chrome'],
+        channel: 'chrome'
       },
-      dependencies: ['setup']
-    }
+      testDir: './tests/e2e/accessibility',
+    },
   ],
 
-  // Global setup and teardown
-  globalSetup: './tests/e2e/utils/global-setup.ts',
-
-  // Test directory patterns
-  testMatch: [
-    '**/e2e/**/*.spec.ts',
-    '**/performance/**/*.spec.ts',
-    '**/visual-regression/**/*.spec.ts',
-    '**/nld-patterns/**/*.spec.ts'
-  ],
-
-  // Files to ignore
-  testIgnore: [
-    '**/node_modules/**',
-    '**/dist/**',
-    '**/build/**',
-    '**/coverage/**',
-    '**/*.backup.*'
-  ],
-
-  // Web server configuration
+  /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:5173',
+    reuseExistingServer: !process.env.CI,
     timeout: 120000,
-    reuseExistingServer: !process.env.CI
   },
 
-  // Output directory for test artifacts
-  outputDir: 'test-results/',
-  
-  // Maximum time the whole test suite can run
-  globalTimeout: 900000, // 15 minutes
-  
-  // Timeout for expect assertions
-  timeout: 60000,
-  
-  // Whether to update snapshots
-  updateSnapshots: 'missing',
-  
-  // Metadata
-  metadata: {
-    'test-suite': 'Claude Instance Management E2E Tests',
-    'environment': process.env.NODE_ENV || 'test',
-    'browser-versions': 'Latest stable versions',
-    'features': [
-      'Visual Regression Testing',
-      'Performance Monitoring', 
-      'NLD Pattern Detection',
-      'Cross-browser Compatibility',
-      'Mobile Device Testing'
-    ]
-  }
-});
+  /* Global setup and teardown */
+  globalSetup: require.resolve('./tests/e2e/global-setup.ts'),
+  globalTeardown: require.resolve('./tests/e2e/global-teardown.ts'),
 
-// Environment-specific configuration for CI
-// if (process.env.NODE_ENV === 'ci') {
-//   // CI-specific overrides
-//   config.retries = 3;
-//   config.workers = 2;
-//   config.timeout = 45000;
-//   
-//   // Disable video recording on CI to save space
-//   config.use.video = 'off';
-//   config.use.screenshot = 'only-on-failure';
-// }
+  /* Expect configuration */
+  expect: {
+    /* Timeout for expect assertions */
+    timeout: 10000,
+    /* Threshold for visual comparisons */
+    threshold: 0.3,
+    /* Animation handling */
+    toHaveScreenshot: { 
+      threshold: 0.2, 
+      maxDiffPixels: 100,
+      animations: 'disabled',
+    },
+    toMatchSnapshot: { 
+      threshold: 0.2, 
+      maxDiffPixels: 100 
+    },
+  },
+
+  /* Output directory */
+  outputDir: 'test-results/',
+
+  /* Metadata */
+  metadata: {
+    'test-type': 'e2e-regression-prevention',
+    'project': 'agent-feed',
+    'environment': process.env.NODE_ENV || 'development',
+  },
+});
