@@ -1,0 +1,521 @@
+{
+  "timestamp": "2025-09-09T21:17:17.052Z",
+  "environment": {
+    "nodeVersion": "v22.17.0",
+    "platform": "linux",
+    "baseUrl": "http://localhost:5173"
+  },
+  "tests": [
+    {
+      "name": "CRITICAL: Direct /agents access",
+      "status": "PASS",
+      "duration": 876,
+      "result": {
+        "status": 200,
+        "url": "http://localhost:5173/agents"
+      }
+    },
+    {
+      "name": "Navigation to /agents",
+      "status": "PASS",
+      "duration": 786,
+      "result": {
+        "navigated": true,
+        "url": "http://localhost:5173/agents"
+      }
+    },
+    {
+      "name": "Browser refresh on /agents",
+      "status": "PASS",
+      "duration": 696,
+      "result": {
+        "refreshStatus": 200,
+        "url": "http://localhost:5173/agents"
+      }
+    },
+    {
+      "name": "Route transitions",
+      "status": "PASS",
+      "duration": 1216,
+      "result": {
+        "transitions": [
+          {
+            "route": "/",
+            "url": "http://localhost:5173/",
+            "status": "success"
+          },
+          {
+            "route": "/agents",
+            "url": "http://localhost:5173/agents",
+            "status": "success"
+          },
+          {
+            "route": "/",
+            "url": "http://localhost:5173/",
+            "status": "success"
+          },
+          {
+            "route": "/agents",
+            "url": "http://localhost:5173/agents",
+            "status": "success"
+          }
+        ]
+      }
+    },
+    {
+      "name": "API connectivity",
+      "status": "PASS",
+      "duration": 866,
+      "result": {
+        "apiCalls": 4,
+        "calls": [
+          {
+            "url": "http://localhost:5173/src/services/api.ts",
+            "method": "GET"
+          },
+          {
+            "url": "http://localhost:5173/src/services/apiServiceIsolated.ts",
+            "method": "GET"
+          },
+          {
+            "url": "http://localhost:5173/api/v1/agents",
+            "method": "GET"
+          },
+          {
+            "url": "http://localhost:5173/api/v1/posts",
+            "method": "GET"
+          },
+          {
+            "url": "http://localhost:5173/src/services/api.ts",
+            "method": "GET"
+          },
+          {
+            "url": "http://localhost:5173/src/services/apiServiceIsolated.ts",
+            "method": "GET"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Error handling",
+      "status": "PASS",
+      "duration": 709,
+      "result": {
+        "statusWithApiFailure": 200
+      }
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "critical": 0
+  },
+  "issues": [
+    {
+      "type": "JavaScript Errors",
+      "count": 78,
+      "details": [
+        {
+          "type": "console",
+          "message": "WebSocket connection to 'ws://localhost:443/?token=i9up9FQP7zZJ' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "timestamp": "2025-09-09T21:17:17.606Z"
+        },
+        {
+          "type": "console",
+          "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "timestamp": "2025-09-09T21:17:17.608Z"
+        },
+        {
+          "type": "page",
+          "message": "WebSocket closed without opened.",
+          "stack": "Error: WebSocket closed without opened.\n    at WebSocket.<anonymous> (http://localhost:5173/@vite/client:424:30)",
+          "timestamp": "2025-09-09T21:17:17.626Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:18.250Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:18.250Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:18.251Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: undefined",
+          "timestamp": "2025-09-09T21:17:18.251Z"
+        },
+        {
+          "type": "console",
+          "message": "WebSocket connection to 'ws://localhost:443/?token=i9up9FQP7zZJ' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "timestamp": "2025-09-09T21:17:18.311Z"
+        },
+        {
+          "type": "console",
+          "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "timestamp": "2025-09-09T21:17:18.311Z"
+        },
+        {
+          "type": "page",
+          "message": "WebSocket closed without opened.",
+          "stack": "Error: WebSocket closed without opened.\n    at WebSocket.<anonymous> (http://localhost:5173/@vite/client:424:30)",
+          "timestamp": "2025-09-09T21:17:18.311Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:18.612Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:18.612Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:18.612Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: undefined",
+          "timestamp": "2025-09-09T21:17:18.612Z"
+        },
+        {
+          "type": "console",
+          "message": "WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+          "timestamp": "2025-09-09T21:17:18.745Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:18.751Z"
+        },
+        {
+          "type": "console",
+          "message": "API request failed: /filter-stats?user_id=anonymous Error: HTTP error! status: 404\n    at ApiService.request (http://localhost:5173/src/services/api.ts:78:15)\n    at async ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:767:24)\n    at async Promise.all (index 1)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+          "timestamp": "2025-09-09T21:17:18.751Z"
+        },
+        {
+          "type": "console",
+          "message": "API Error in getFilterStats: Error: HTTP error! status: 404\n    at ApiService.request (http://localhost:5173/src/services/api.ts:78:15)\n    at async ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:767:24)\n    at async Promise.all (index 1)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+          "timestamp": "2025-09-09T21:17:18.751Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:18.751Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ API connection failed: Error: API check failed: 404\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:82:15",
+          "timestamp": "2025-09-09T21:17:18.752Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ WebSocket error: Event",
+          "timestamp": "2025-09-09T21:17:18.752Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:18.961Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Request failed for agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+          "timestamp": "2025-09-09T21:17:18.961Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Error loading agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+          "timestamp": "2025-09-09T21:17:18.968Z"
+        },
+        {
+          "type": "page",
+          "message": "HTTP 404: Not Found",
+          "stack": "Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+          "timestamp": "2025-09-09T21:17:18.973Z"
+        },
+        {
+          "type": "console",
+          "message": "WebSocket connection to 'ws://localhost:443/?token=i9up9FQP7zZJ' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "timestamp": "2025-09-09T21:17:19.044Z"
+        },
+        {
+          "type": "console",
+          "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "timestamp": "2025-09-09T21:17:19.044Z"
+        },
+        {
+          "type": "page",
+          "message": "WebSocket closed without opened.",
+          "stack": "Error: WebSocket closed without opened.\n    at WebSocket.<anonymous> (http://localhost:5173/@vite/client:424:30)",
+          "timestamp": "2025-09-09T21:17:19.044Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:19.419Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:19.424Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: Failed to fetch",
+          "timestamp": "2025-09-09T21:17:19.425Z"
+        },
+        {
+          "type": "console",
+          "message": "WebSocket connection to 'ws://localhost:443/?token=i9up9FQP7zZJ' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "timestamp": "2025-09-09T21:17:19.492Z"
+        },
+        {
+          "type": "console",
+          "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "timestamp": "2025-09-09T21:17:19.492Z"
+        },
+        {
+          "type": "page",
+          "message": "WebSocket closed without opened.",
+          "stack": "Error: WebSocket closed without opened.\n    at WebSocket.<anonymous> (http://localhost:5173/@vite/client:424:30)",
+          "timestamp": "2025-09-09T21:17:19.492Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:19.708Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:19.708Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:19.708Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: undefined",
+          "timestamp": "2025-09-09T21:17:19.708Z"
+        },
+        {
+          "type": "console",
+          "message": "WebSocket connection to 'ws://localhost:443/?token=i9up9FQP7zZJ' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "timestamp": "2025-09-09T21:17:19.774Z"
+        },
+        {
+          "type": "console",
+          "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "timestamp": "2025-09-09T21:17:19.774Z"
+        },
+        {
+          "type": "page",
+          "message": "WebSocket closed without opened.",
+          "stack": "Error: WebSocket closed without opened.\n    at WebSocket.<anonymous> (http://localhost:5173/@vite/client:424:30)",
+          "timestamp": "2025-09-09T21:17:19.775Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:19.948Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:19.948Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:19.948Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: undefined",
+          "timestamp": "2025-09-09T21:17:19.948Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ API connection failed: TypeError: Failed to fetch\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:75:30\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:146:7\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)\n    at flushPassiveEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19500:22)\n    at http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19381:17",
+          "timestamp": "2025-09-09T21:17:19.986Z"
+        },
+        {
+          "type": "console",
+          "message": "API request failed: /agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:200:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:37\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:111:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.990Z"
+        },
+        {
+          "type": "console",
+          "message": "API request failed: /filter-data TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getFilterData (http://localhost:5173/src/services/api.ts:741:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:140:22\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:112:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.990Z"
+        },
+        {
+          "type": "console",
+          "message": "API request failed: /agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:200:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:37\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:268:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.990Z"
+        },
+        {
+          "type": "console",
+          "message": "API request failed: /filter-stats?user_id=anonymous TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:767:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:141:22\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:112:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.990Z"
+        },
+        {
+          "type": "console",
+          "message": "API Error in getAgentPosts: TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:200:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:37\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:111:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.990Z"
+        },
+        {
+          "type": "console",
+          "message": "API Error in getFilterData: TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getFilterData (http://localhost:5173/src/services/api.ts:741:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:140:22\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:112:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.990Z"
+        },
+        {
+          "type": "console",
+          "message": "API Error in getAgentPosts: TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:200:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:37\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:268:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.991Z"
+        },
+        {
+          "type": "console",
+          "message": "API Error in getFilterStats: TypeError: Failed to fetch\n    at ApiService.request (http://localhost:5173/src/services/api.ts:76:30)\n    at ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:767:35)\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:141:22\n    at http://localhost:5173/src/components/RealSocialMediaFeed.tsx:112:5\n    at commitHookEffectListMount (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:16963:34)\n    at commitPassiveMountOnFiber (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18206:19)\n    at commitPassiveMountEffects_complete (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18179:17)\n    at commitPassiveMountEffects_begin (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18169:15)\n    at commitPassiveMountEffects (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:18159:11)\n    at flushPassiveEffectsImpl (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21:19543:11)",
+          "timestamp": "2025-09-09T21:17:19.991Z"
+        },
+        {
+          "type": "console",
+          "message": "WebSocket connection to 'ws://localhost:443/?token=i9up9FQP7zZJ' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+          "timestamp": "2025-09-09T21:17:20.192Z"
+        },
+        {
+          "type": "console",
+          "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+          "timestamp": "2025-09-09T21:17:20.192Z"
+        },
+        {
+          "type": "page",
+          "message": "WebSocket closed without opened.",
+          "stack": "Error: WebSocket closed without opened.\n    at WebSocket.<anonymous> (http://localhost:5173/@vite/client:424:30)",
+          "timestamp": "2025-09-09T21:17:20.192Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:20.279Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:20.279Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:20.279Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: undefined",
+          "timestamp": "2025-09-09T21:17:20.279Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:20.571Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:20.571Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:20.571Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: undefined",
+          "timestamp": "2025-09-09T21:17:20.571Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:20.932Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:20.932Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: Failed to fetch",
+          "timestamp": "2025-09-09T21:17:20.932Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:21.176Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Network connection failed:",
+          "timestamp": "2025-09-09T21:17:21.179Z"
+        },
+        {
+          "type": "console",
+          "message": "- URL: http://localhost:5173/health",
+          "timestamp": "2025-09-09T21:17:21.179Z"
+        },
+        {
+          "type": "console",
+          "message": "- Error: undefined",
+          "timestamp": "2025-09-09T21:17:21.179Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:21.210Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Request failed for agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+          "timestamp": "2025-09-09T21:17:21.212Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ Error loading agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+          "timestamp": "2025-09-09T21:17:21.212Z"
+        },
+        {
+          "type": "console",
+          "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+          "timestamp": "2025-09-09T21:17:21.212Z"
+        },
+        {
+          "type": "console",
+          "message": "❌ API connection failed: Error: API check failed: 404\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:82:15",
+          "timestamp": "2025-09-09T21:17:21.213Z"
+        },
+        {
+          "type": "page",
+          "message": "HTTP 404: Not Found",
+          "stack": "Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+          "timestamp": "2025-09-09T21:17:21.215Z"
+        }
+      ]
+    }
+  ],
+  "recommendations": []
+}

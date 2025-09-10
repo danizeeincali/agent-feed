@@ -1,108 +1,108 @@
 {
-  "timestamp": "2025-09-05T02:05:35.941Z",
+  "timestamp": "2025-09-09T22:31:54.211Z",
   "tests": [
     {
       "name": "Database Operations",
       "status": "PASS",
       "details": {
-        "healthCheck": false,
-        "dataRetrieval": false,
-        "recordCount": 0,
+        "healthCheck": true,
+        "dataRetrieval": true,
+        "recordCount": 20,
         "databaseFile": {
           "exists": true,
-          "size": 28672,
-          "lastModified": "2025-09-05T02:04:39.941Z"
+          "size": 188416,
+          "lastModified": "2025-09-09T05:02:50.767Z"
         },
         "performanceMetrics": {
-          "healthResponseTime": 61,
-          "dataRetrievalTime": 16
+          "healthResponseTime": 13,
+          "dataRetrievalTime": 3
         }
       }
     },
     {
       "name": "API Endpoint Stability",
-      "status": "FAIL",
+      "status": "PASS",
       "details": {
-        "overallStability": 0,
+        "overallStability": 100,
         "endpoints": [
           {
             "endpoint": "/health",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 3,
+            "successCount": 5,
             "iterations": 5
           },
           {
             "endpoint": "/api/health",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 4,
+            "successCount": 5,
             "iterations": 5
           },
           {
             "endpoint": "/api/agents",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 5,
+            "successCount": 5,
             "iterations": 5
           },
           {
             "endpoint": "/api/v1/agent-posts",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 6,
+            "successCount": 5,
             "iterations": 5
           },
           {
             "endpoint": "/api/v1/activities",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 3,
+            "successCount": 5,
             "iterations": 5
           },
           {
             "endpoint": "/api/v1/metrics/system",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 1,
+            "successCount": 5,
             "iterations": 5
           },
           {
             "endpoint": "/api/v1/analytics",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 2,
+            "successCount": 5,
             "iterations": 5
           },
           {
             "endpoint": "/api/claude/instances",
-            "stability": 0,
-            "avgResponseTime": 0,
-            "successCount": 0,
+            "stability": 100,
+            "avgResponseTime": 1,
+            "successCount": 5,
             "iterations": 5
           }
         ],
-        "avgResponseTime": 0
+        "avgResponseTime": 3
       }
     },
     {
       "name": "Real Data Flow",
       "status": "WARN",
       "details": {
-        "realPosts": false,
-        "realActivities": false,
-        "realMetrics": false,
-        "mockDataDetected": false,
+        "realPosts": true,
+        "realActivities": true,
+        "realMetrics": true,
+        "mockDataDetected": true,
         "dataVolume": {
-          "posts": 0,
-          "activities": 0,
-          "metrics": 0
+          "posts": 20,
+          "activities": 24,
+          "metrics": 24
         }
       }
     },
     {
       "name": "Error Handling",
-      "status": "FAIL",
+      "status": "PASS",
       "details": {
         "tests": [
           {
@@ -111,8 +111,8 @@
               404,
               405
             ],
-            "actualStatus": 0,
-            "handled": false,
+            "actualStatus": 404,
+            "handled": true,
             "responseTime": 1
           },
           {
@@ -121,9 +121,9 @@
               404,
               405
             ],
-            "actualStatus": 0,
-            "handled": false,
-            "responseTime": 0
+            "actualStatus": 404,
+            "handled": true,
+            "responseTime": 1
           },
           {
             "path": "/api/agents/invalid-id",
@@ -131,12 +131,12 @@
               404,
               400
             ],
-            "actualStatus": 0,
-            "handled": false,
-            "responseTime": 1
+            "actualStatus": 404,
+            "handled": true,
+            "responseTime": 0
           }
         ],
-        "successRate": 0
+        "successRate": 100
       }
     },
     {
@@ -152,16 +152,16 @@
             "minResponseTime": 1,
             "threshold": 50,
             "withinThreshold": true,
-            "samples": 5
+            "samples": 6
           },
           {
             "endpoint": "/api/v1/agent-posts",
-            "avgResponseTime": 1,
-            "maxResponseTime": 1,
+            "avgResponseTime": 2,
+            "maxResponseTime": 3,
             "minResponseTime": 1,
             "threshold": 100,
             "withinThreshold": true,
-            "samples": 4
+            "samples": 10
           },
           {
             "endpoint": "/api/v1/activities",
@@ -170,7 +170,7 @@
             "minResponseTime": 1,
             "threshold": 100,
             "withinThreshold": true,
-            "samples": 6
+            "samples": 9
           },
           {
             "endpoint": "/api/v1/metrics/system",
@@ -179,7 +179,7 @@
             "minResponseTime": 1,
             "threshold": 200,
             "withinThreshold": true,
-            "samples": 4
+            "samples": 7
           }
         ],
         "withinThresholdCount": 4,
@@ -191,12 +191,12 @@
       "status": "FAIL",
       "details": {
         "agents": {
-          "total": 0,
-          "valid": 0,
-          "integrity": 0
+          "total": 10,
+          "valid": 10,
+          "integrity": 100
         },
         "posts": {
-          "total": 0,
+          "total": 20,
           "valid": 0,
           "integrity": 0
         }
@@ -206,48 +206,42 @@
       "name": "Backend Stability",
       "status": "WARN",
       "details": {
-        "processCount": 0,
+        "processCount": 3,
         "stabilityTest": {
-          "success": false,
-          "successRate": 37,
+          "success": true,
+          "successRate": 100,
           "totalRequests": 30,
-          "successCount": 11,
-          "duration": 30140
+          "successCount": 30,
+          "duration": 30081
         },
         "memoryCheck": {
           "available": true,
-          "totalMemoryPercent": 1,
-          "processCount": 1
+          "totalMemoryPercent": 2.2,
+          "processCount": 3
         },
-        "uptime": "Unknown"
+        "uptime": "Available"
       }
     }
   ],
   "criticalIssues": [],
   "warnings": [
-    "No data records found in database",
-    "Endpoint /health stability: 0%",
-    "Endpoint /api/health stability: 0%",
-    "Endpoint /api/agents stability: 0%",
-    "Endpoint /api/v1/agent-posts stability: 0%",
-    "Endpoint /api/v1/activities stability: 0%",
-    "Endpoint /api/v1/metrics/system stability: 0%",
-    "Endpoint /api/v1/analytics stability: 0%",
-    "Endpoint /api/claude/instances stability: 0%"
+    "Mock data patterns detected in production data",
+    "Multiple backend processes detected: 3"
   ],
   "productionMetrics": {},
   "summary": {
     "totalTests": 7,
-    "passedTests": 2,
-    "failedTests": 3,
+    "passedTests": 4,
+    "failedTests": 1,
     "warningTests": 2,
-    "successRate": 29,
+    "successRate": 57,
     "criticalIssues": 0,
-    "warnings": 9,
+    "warnings": 2,
     "productionReady": false
   },
   "recommendations": [
     "📈 Improve system reliability to achieve 95%+ success rate",
-    "⚡ Improve API endpoint stability and response consistency"
+    "🔧 Implement proper process management to prevent multiple instances",
+    "🗄️ Remove all mock data patterns from production environment"
   ]
 }

@@ -21,11 +21,14 @@ try {
 import SocialMediaFeed from './components/RealSocialMediaFeed';
 import SafeFeedWrapper from './components/SafeFeedWrapper';
 import RealAgentManager from './components/RealAgentManager';
+import IsolatedRealAgentManager from './components/IsolatedRealAgentManager';
 import RealActivityFeed from './components/RealActivityFeed';
 import EnhancedAgentManagerWrapper from './components/EnhancedAgentManagerWrapper';
 import Agents from './pages/Agents';
+import AgentDetail from './components/AgentDetail';
 // import AgentManagerDebug from './components/AgentManagerDebug';
 import RealAnalytics from './components/RealAnalytics';
+import RouteWrapper from './components/RouteWrapper';
 import BulletproofClaudeCodePanel from './components/BulletproofClaudeCodePanel';
 import AgentDashboard from './components/AgentDashboard';
 import WorkflowVisualizationFixed from './components/WorkflowVisualizationFixed';
@@ -248,13 +251,15 @@ const App: React.FC = () => {
                 <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading page..." size="lg" />}>
                   <Routes>
                   <Route path="/" element={
-                    <RouteErrorBoundary routeName="Feed">
-                      <SafeFeedWrapper>
-                        <Suspense fallback={<FallbackComponents.FeedFallback />}>
-                          <SocialMediaFeed />
-                        </Suspense>
-                      </SafeFeedWrapper>
-                    </RouteErrorBoundary>
+                    <RouteWrapper routeKey="feed">
+                      <RouteErrorBoundary routeName="Feed" key="feed-route">
+                        <SafeFeedWrapper>
+                          <Suspense fallback={<FallbackComponents.FeedFallback />}>
+                            <SocialMediaFeed key="social-feed" />
+                          </Suspense>
+                        </SafeFeedWrapper>
+                      </RouteErrorBoundary>
+                    </RouteWrapper>
                   } />
                   {/* SPARC Phase 5: SSE-based Interactive Control */}
                   <Route path="/interactive-control" element={
@@ -287,10 +292,21 @@ const App: React.FC = () => {
                     </RouteErrorBoundary>
                   } />
                   <Route path="/agents" element={
-                    <RouteErrorBoundary routeName="Agents">
-                      <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
-                        <RealAgentManager />
-                      </Suspense>
+                    <RouteWrapper routeKey="agents">
+                      <RouteErrorBoundary routeName="Agents" key="agents-route">
+                        <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
+                          <IsolatedRealAgentManager key="agents-manager" />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    </RouteWrapper>
+                  } />
+                  <Route path="/agents/:agentId" element={
+                    <RouteErrorBoundary routeName="AgentDetail" fallback={<FallbackComponents.AgentProfileFallback />}>
+                      <AsyncErrorBoundary componentName="AgentDetail">
+                        <Suspense fallback={<FallbackComponents.AgentProfileFallback />}>
+                          <AgentDetail />
+                        </Suspense>
+                      </AsyncErrorBoundary>
                     </RouteErrorBoundary>
                   } />
                   <Route path="/agents-legacy" element={

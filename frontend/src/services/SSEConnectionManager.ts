@@ -87,7 +87,7 @@ export class SSEConnectionManager {
       // Clean up existing connection
       this.cleanup();
 
-      const sseUrl = `${this.config.baseUrl}/api/v1/claude/instances/${this.config.instanceId}/terminal/stream`;
+      const sseUrl = `${this.config.baseUrl}/api/claude/instances/${this.config.instanceId}/terminal/stream`;
       console.log(`[SSEConnectionManager] Connecting to: ${sseUrl}`);
 
       this.eventSource = new EventSource(sseUrl, {
@@ -127,7 +127,7 @@ export class SSEConnectionManager {
     }
 
     try {
-      const inputEndpoint = `${this.config.baseUrl}/api/v1/claude/instances/${this.config.instanceId}/terminal/input`;
+      const inputEndpoint = `${this.config.baseUrl}/api/claude/instances/${this.config.instanceId}/terminal/input`;
       
       const response = await fetch(inputEndpoint, {
         method: 'POST',

@@ -91,15 +91,15 @@ export const useWebSocketTerminal = (options: UseWebSocketOptions = {}): UseWebS
             throw new Error(`Invalid instance ID format for terminal input: ${inputInstanceId}`);
           }
           
-          endpoint = `/api/v1/claude/instances/${inputInstanceId}/terminal/input`;
+          endpoint = `/api/claude/instances/${inputInstanceId}/terminal/input`;
           payload = { input: data.input };
           console.log(`🔧 Terminal input sending to: ${url}${endpoint} with payload:`, payload);
           break;
         case 'instance:create':
-          endpoint = '/api/v1/claude/instances';
+          endpoint = '/api/claude/instances';
           break;
         case 'instance:delete':
-          endpoint = `/api/v1/claude/instances/${data.instanceId}`;
+          endpoint = `/api/claude/instances/${data.instanceId}`;
           break;
         default:
           console.warn(`Unsupported event type: ${event}`);
@@ -282,7 +282,7 @@ export const useWebSocketTerminal = (options: UseWebSocketOptions = {}): UseWebS
 
     try {
       const eventSource = new EventSource(
-        `${url}/api/v1/claude/instances/${instanceId}/terminal/stream`,
+        `${url}/api/claude/instances/${instanceId}/terminal/stream`,
         { withCredentials: false }
       );
       
@@ -505,7 +505,7 @@ export const useWebSocketTerminal = (options: UseWebSocketOptions = {}): UseWebS
     
     pollingIntervalRef.current = setInterval(async () => {
       try {
-        const response = await fetch(`${url}/api/v1/claude/terminal/output/${instanceId}`, {
+        const response = await fetch(`${url}/api/claude/terminal/output/${instanceId}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });

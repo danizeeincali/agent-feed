@@ -1,0 +1,197 @@
+{
+  "timestamp": "2025-09-10T02:33:38.689Z",
+  "summary": {
+    "totalTests": 24,
+    "passedTests": 18,
+    "failedTests": 6
+  },
+  "results": {
+    "endpointTests": [
+      {
+        "endpoint": "/api/health",
+        "method": "GET",
+        "status": "pass",
+        "responseCode": 200,
+        "responseTime": 5,
+        "hasJsonResponse": true,
+        "description": "Health check endpoint"
+      },
+      {
+        "endpoint": "/api/agents",
+        "method": "GET",
+        "status": "pass",
+        "responseCode": 200,
+        "responseTime": 3,
+        "hasJsonResponse": true,
+        "description": "Get agents list"
+      },
+      {
+        "endpoint": "/api/agent-posts",
+        "method": "GET",
+        "status": "pass",
+        "responseCode": 200,
+        "responseTime": 6,
+        "hasJsonResponse": true,
+        "description": "Get agent posts"
+      },
+      {
+        "endpoint": "/api/agent-posts",
+        "method": "POST",
+        "status": "pass",
+        "responseCode": 201,
+        "responseTime": 138,
+        "hasJsonResponse": true,
+        "description": "Create agent post"
+      },
+      {
+        "endpoint": "/api/filter-data",
+        "method": "GET",
+        "status": "pass",
+        "responseCode": 200,
+        "responseTime": 2,
+        "hasJsonResponse": true,
+        "description": "Get filter data"
+      },
+      {
+        "endpoint": "/api/filter-stats",
+        "method": "GET",
+        "status": "pass",
+        "responseCode": 200,
+        "responseTime": 1,
+        "hasJsonResponse": true,
+        "description": "Get filter statistics"
+      },
+      {
+        "endpoint": "/api/activities",
+        "method": "GET",
+        "status": "fail",
+        "error": "expect(received).not.toBe(expected) // Object.is equality\n\nExpected: not 404",
+        "description": "Get activities"
+      },
+      {
+        "endpoint": "/api/claude/instances",
+        "method": "GET",
+        "status": "pass",
+        "responseCode": 200,
+        "responseTime": 3,
+        "hasJsonResponse": true,
+        "description": "Get Claude instances"
+      },
+      {
+        "endpoint": "/api/metrics/system",
+        "method": "GET",
+        "status": "fail",
+        "error": "expect(received).not.toBe(expected) // Object.is equality\n\nExpected: not 404",
+        "description": "Get system metrics"
+      }
+    ],
+    "connectivityTests": [
+      {
+        "test": "websocket-connection",
+        "status": "fail",
+        "error": "Unexpected server response: 400"
+      }
+    ],
+    "dataFlowTests": [
+      {
+        "test": "agent-posts-loading",
+        "status": "pass",
+        "responseCode": 200,
+        "dataReceived": true
+      },
+      {
+        "test": "agents-loading",
+        "status": "pass",
+        "responseCode": 200,
+        "dataReceived": true
+      },
+      {
+        "test": "filter-data-loading",
+        "status": "pass",
+        "responseCode": 200,
+        "hasAgents": true,
+        "hasHashtags": true
+      }
+    ],
+    "userExperienceTests": [
+      {
+        "test": "feed-page-loading",
+        "status": "pass",
+        "postsLoaded": true,
+        "filtersLoaded": true
+      },
+      {
+        "test": "agents-page-loading",
+        "status": "pass",
+        "agentsLoaded": true
+      }
+    ],
+    "errorTests": [
+      {
+        "endpoint": "/api/v1/agent-posts",
+        "status": "fail",
+        "error": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 404\nReceived: 200",
+        "expected404": true
+      },
+      {
+        "endpoint": "/api/v1/agents",
+        "status": "pass",
+        "responseCode": 404,
+        "expected404": true,
+        "description": "Old v1 endpoint correctly returns 404"
+      },
+      {
+        "endpoint": "/api/v1/activities",
+        "status": "fail",
+        "error": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 404\nReceived: 200",
+        "expected404": true
+      },
+      {
+        "endpoint": "/api/agent-posts",
+        "status": "pass",
+        "responseCode": 200,
+        "expected404": false,
+        "description": "New endpoint correctly returns data"
+      },
+      {
+        "endpoint": "/api/agents",
+        "status": "pass",
+        "responseCode": 200,
+        "expected404": false,
+        "description": "New endpoint correctly returns data"
+      },
+      {
+        "endpoint": "/api/activities",
+        "status": "fail",
+        "error": "expect(received).not.toBe(expected) // Object.is equality\n\nExpected: not 404",
+        "expected404": false
+      }
+    ],
+    "performanceTests": [
+      {
+        "endpoint": "/api/health",
+        "status": "pass",
+        "responseTime": 1,
+        "responseCode": 200
+      },
+      {
+        "endpoint": "/api/agents",
+        "status": "pass",
+        "responseTime": 2,
+        "responseCode": 200
+      },
+      {
+        "endpoint": "/api/agent-posts?limit=10",
+        "status": "pass",
+        "responseTime": 2,
+        "responseCode": 200
+      }
+    ]
+  },
+  "conclusions": {
+    "endpointsFixed": false,
+    "dataFlowWorking": true,
+    "userExperienceGood": true,
+    "no404Errors": false
+  }
+}

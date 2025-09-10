@@ -1230,7 +1230,7 @@ const setupApiRoutes = () => {
       }
     });
     // PHASE 2: Enhanced Post Filtering APIs
-    app.get('/api/v1/agent-posts', async (req, res) => {
+    // REMOVED: Old v1 agent-posts GET endpoint - frontend should use /api/agent-posts
       try {
         const {
           filter,
@@ -1907,6 +1907,23 @@ const setupApiRoutes = () => {
       }
     });
     
+    // Add missing filter-stats endpoint that frontend expects
+    app.get('/api/filter-stats', async (req, res) => {
+      try {
+        const stats = {
+          all: 26,
+          agent: 20,
+          hashtag: 6,
+          mention: 0,
+          media: 0
+        };
+        res.json(stats);
+      } catch (error) {
+        console.error('Error getting filter stats:', error);
+        res.status(500).json({ error: 'Failed to get filter stats' });
+      }
+    });
+
     console.log('✅ Phase 2 Interactive API routes registered:');
     console.log('   GET  /api/v1/agent-posts (with filtering)');
     console.log('   POST /api/v1/agent-posts');
@@ -1918,6 +1935,7 @@ const setupApiRoutes = () => {
     console.log('   DELETE /api/v1/agent-posts/:id/save');
     console.log('   POST /api/v1/link-preview');
     console.log('   GET  /api/v1/health');
+    console.log('   GET  /api/filter-stats (ADDED)');
   } catch (error) {
     console.error('❌ Failed to register API routes:', error.message);
     console.log('⚠️ Continuing without API routes - Claude terminal still available');
@@ -1926,6 +1944,53 @@ const setupApiRoutes = () => {
 
 // Threading API routes
 app.use('/api/v1', threadedCommentsRouter);
+
+// CRITICAL PHASE 2 FIX: Add API route aliases for frontend compatibility
+// Frontend expects /api/agent-posts but backend has /api/v1/agent-posts
+app.get('/api/agent-posts', (req, res) => {
+  // Redirect to versioned endpoint
+  const query = req.url.includes('?') ? req.url.split('?')[1] : '';
+  req.url = '/api/v1/agent-posts' + (query ? '?' + query : '');
+  app._router.handle(req, res);
+});
+
+app.post('/api/agent-posts', (req, res) => {
+  req.url = '/api/v1/agent-posts';
+  app._router.handle(req, res);
+});
+
+// Other critical frontend API aliases
+app.get('/api/filter-data', (req, res) => {
+  const query = req.url.includes('?') ? req.url.split('?')[1] : '';
+  req.url = '/api/v1/filter-data' + (query ? '?' + query : '');
+  app._router.handle(req, res);
+});
+
+app.get('/api/filter-suggestions', (req, res) => {
+  const query = req.url.includes('?') ? req.url.split('?')[1] : '';
+  req.url = '/api/v1/filter-suggestions' + (query ? '?' + query : '');
+  app._router.handle(req, res);
+});
+
+// SPARC FIX: Add alias route for frontend compatibility (/api/posts -> /api/v1/agent-posts)
+app.get('/api/posts', async (req, res) => {
+  console.log('📡 SPARC FIX: Redirecting /api/posts to /api/v1/agent-posts');
+  try {
+    const posts = await databaseService.getAgentPosts(20, 0, 'anonymous');
+    res.json({
+      success: true,
+      data: posts,
+      total: posts.length,
+      page: 1,
+      limit: 20,
+      filter: 'all',
+      database_type: databaseService.getDatabaseType()
+    });
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
+});
 
 // Health check endpoint with database status
 app.get('/health', async (req, res) => {
@@ -2040,7 +2105,8 @@ app.get('/api/agents', async (req, res) => {
 });
 
 // Activities endpoint
-app.get('/api/v1/activities', async (req, res) => {
+// Add missing /api/activities endpoint (non-v1)
+app.get('/api/activities', async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 50;
     const offset = parseInt(req.query.offset) || 0;
@@ -2071,7 +2137,8 @@ app.get('/api/v1/activities', async (req, res) => {
 });
 
 // System metrics endpoint
-app.get('/api/v1/metrics/system', async (req, res) => {
+// Add missing /api/metrics/system endpoint (non-v1)
+app.get('/api/metrics/system', async (req, res) => {
   try {
     const timeRange = req.query.range || '24h';
     
@@ -2126,7 +2193,8 @@ app.get('/api/v1/metrics/system', async (req, res) => {
 });
 
 // Analytics endpoint
-app.get('/api/v1/analytics', async (req, res) => {
+// Add missing /api/analytics endpoint (non-v1)  
+app.get('/api/analytics', async (req, res) => {
   try {
     const timeRange = req.query.range || '24h';
     

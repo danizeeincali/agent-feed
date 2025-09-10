@@ -1,0 +1,390 @@
+{
+  "timestamp": "2025-09-09T21:30:35.773Z",
+  "userIssues": {
+    "disconnected": true,
+    "http404": true,
+    "apiConnectionFailed": true
+  },
+  "routes": {
+    "home": {
+      "status": 200,
+      "accessible": true,
+      "title": "Agent Feed - Claude Code Orchestration",
+      "finalUrl": "http://localhost:5173/",
+      "hasContent": true,
+      "errors": {
+        "disconnected": true,
+        "http404": false,
+        "apiConnectionFailed": true
+      }
+    },
+    "agents": {
+      "status": 200,
+      "accessible": true,
+      "title": "Agent Feed - Claude Code Orchestration",
+      "finalUrl": "http://localhost:5173/agents",
+      "hasContent": true,
+      "errors": {
+        "disconnected": true,
+        "http404": true,
+        "apiConnectionFailed": true
+      }
+    },
+    "agentsSpecific": {
+      "agentElements": 3,
+      "hasAgentsList": true,
+      "hasLoadingState": false,
+      "hasErrorState": true,
+      "userReportedErrors": {
+        "disconnected": true,
+        "http404": true,
+        "apiConnectionFailed": true
+      }
+    }
+  },
+  "api": {
+    "backend": {
+      "status": "connected",
+      "statusCode": 200,
+      "dataType": "object",
+      "recordCount": 0,
+      "isMock": false
+    },
+    "frontend": {
+      "status": "connected",
+      "statusCode": 200,
+      "containsVite": true,
+      "containsReact": true
+    },
+    "/api/agents": {
+      "status": "success",
+      "statusCode": 200,
+      "dataType": "object",
+      "hasData": true,
+      "isMock": false
+    },
+    "/api/posts": {
+      "status": "failed",
+      "statusCode": 404,
+      "error": "Request failed with status code 404"
+    },
+    "/api/health": {
+      "status": "success",
+      "statusCode": 200,
+      "dataType": "object",
+      "hasData": true,
+      "isMock": false
+    }
+  },
+  "connections": {
+    "websocketSupport": "websocket_available",
+    "networkRequests": [
+      {
+        "url": "http://localhost:5173/api/v1/agents",
+        "method": "GET",
+        "timestamp": 1757453443071
+      },
+      {
+        "url": "http://localhost:5173/api/v1/posts",
+        "method": "GET",
+        "timestamp": 1757453443079
+      }
+    ],
+    "totalRequests": 2
+  },
+  "mockData": [],
+  "errors": [
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=YyRnbU4t9CpG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "timestamp": "2025-09-09T21:30:36.442Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+      "timestamp": "2025-09-09T21:30:36.443Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:36.939Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Network connection failed:",
+      "timestamp": "2025-09-09T21:30:36.940Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- URL: http://localhost:5173/health",
+      "timestamp": "2025-09-09T21:30:36.940Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- Error: undefined",
+      "timestamp": "2025-09-09T21:30:36.941Z"
+    },
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+      "timestamp": "2025-09-09T21:30:37.010Z"
+    },
+    {
+      "type": "request_failed",
+      "url": "http://localhost:5173/health",
+      "error": "net::ERR_ABORTED",
+      "timestamp": "2025-09-09T21:30:37.032Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:37.032Z"
+    },
+    {
+      "type": "console_error",
+      "message": "API request failed: /filter-stats?user_id=anonymous Error: HTTP error! status: 404\n    at ApiService.request (http://localhost:5173/src/services/api.ts:78:15)\n    at async ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:767:24)\n    at async Promise.all (index 1)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+      "timestamp": "2025-09-09T21:30:37.032Z"
+    },
+    {
+      "type": "console_error",
+      "message": "API Error in getFilterStats: Error: HTTP error! status: 404\n    at ApiService.request (http://localhost:5173/src/services/api.ts:78:15)\n    at async ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:767:24)\n    at async Promise.all (index 1)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+      "timestamp": "2025-09-09T21:30:37.032Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:37.044Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ API connection failed: Error: API check failed: 404\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:82:15",
+      "timestamp": "2025-09-09T21:30:37.044Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ WebSocket error: Event",
+      "timestamp": "2025-09-09T21:30:37.044Z"
+    },
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=YyRnbU4t9CpG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "timestamp": "2025-09-09T21:30:39.821Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+      "timestamp": "2025-09-09T21:30:39.830Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:40.048Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Network connection failed:",
+      "timestamp": "2025-09-09T21:30:40.049Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- URL: http://localhost:5173/health",
+      "timestamp": "2025-09-09T21:30:40.050Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- Error: undefined",
+      "timestamp": "2025-09-09T21:30:40.051Z"
+    },
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+      "timestamp": "2025-09-09T21:30:40.061Z"
+    },
+    {
+      "type": "request_failed",
+      "url": "http://localhost:5173/health",
+      "error": "net::ERR_ABORTED",
+      "timestamp": "2025-09-09T21:30:40.063Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:40.063Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Request failed for agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+      "timestamp": "2025-09-09T21:30:40.064Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Error loading agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+      "timestamp": "2025-09-09T21:30:40.065Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:40.067Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ API connection failed: Error: API check failed: 404\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:82:15",
+      "timestamp": "2025-09-09T21:30:40.068Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ WebSocket error: Event",
+      "timestamp": "2025-09-09T21:30:40.071Z"
+    },
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=YyRnbU4t9CpG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "timestamp": "2025-09-09T21:30:42.709Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+      "timestamp": "2025-09-09T21:30:42.709Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:43.059Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Network connection failed:",
+      "timestamp": "2025-09-09T21:30:43.060Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- URL: http://localhost:5173/health",
+      "timestamp": "2025-09-09T21:30:43.060Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- Error: undefined",
+      "timestamp": "2025-09-09T21:30:43.060Z"
+    },
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+      "timestamp": "2025-09-09T21:30:43.090Z"
+    },
+    {
+      "type": "request_failed",
+      "url": "http://localhost:5173/health",
+      "error": "net::ERR_ABORTED",
+      "timestamp": "2025-09-09T21:30:43.092Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:43.092Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Request failed for agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+      "timestamp": "2025-09-09T21:30:43.092Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Error loading agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+      "timestamp": "2025-09-09T21:30:43.092Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:43.094Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ API connection failed: Error: API check failed: 404\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:82:15",
+      "timestamp": "2025-09-09T21:30:43.095Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ WebSocket error: Event",
+      "timestamp": "2025-09-09T21:30:43.095Z"
+    },
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=YyRnbU4t9CpG' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "timestamp": "2025-09-09T21:30:48.105Z"
+    },
+    {
+      "type": "console_error",
+      "message": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+      "timestamp": "2025-09-09T21:30:48.105Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:48.300Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Network connection failed:",
+      "timestamp": "2025-09-09T21:30:48.300Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- URL: http://localhost:5173/health",
+      "timestamp": "2025-09-09T21:30:48.300Z"
+    },
+    {
+      "type": "console_error",
+      "message": "- Error: undefined",
+      "timestamp": "2025-09-09T21:30:48.301Z"
+    },
+    {
+      "type": "request_failed",
+      "url": "http://localhost:5173/health",
+      "error": "net::ERR_ABORTED",
+      "timestamp": "2025-09-09T21:30:48.320Z"
+    },
+    {
+      "type": "console_error",
+      "message": "WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+      "timestamp": "2025-09-09T21:30:48.328Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ WebSocket error: Event",
+      "timestamp": "2025-09-09T21:30:48.329Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:48.333Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Request failed for agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+      "timestamp": "2025-09-09T21:30:48.334Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ Error loading agents: Error: HTTP 404: Not Found\n    at http://localhost:5173/src/services/apiServiceIsolated.ts:34:15",
+      "timestamp": "2025-09-09T21:30:48.339Z"
+    },
+    {
+      "type": "console_error",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "timestamp": "2025-09-09T21:30:48.339Z"
+    },
+    {
+      "type": "console_error",
+      "message": "❌ API connection failed: Error: API check failed: 404\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:82:15",
+      "timestamp": "2025-09-09T21:30:48.339Z"
+    }
+  ],
+  "summary": {
+    "userIssuesFound": true,
+    "routesAccessible": true,
+    "apiEndpointsWorking": false,
+    "totalErrors": 56,
+    "recommendation": "NEEDS_INVESTIGATION",
+    "status": "USER_ISSUES_CONFIRMED"
+  }
+}

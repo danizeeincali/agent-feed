@@ -396,14 +396,14 @@ export const useSSEConnectionSingleton = (
       ...connectionState,
       ...stats,
       uptime: connectionState.lastConnectionTime > 0 ? Date.now() - connectionState.lastConnectionTime : 0,
-      apiEndpoint: `${baseUrl}/api/v1/claude/instances`
+      apiEndpoint: `${baseUrl}/api/claude/instances`
     };
   }, [baseUrl, connectionState]);
 
   // Test connection to specific instance
   const testConnection = useCallback(async (instanceId: string) => {
     try {
-      const endpoint = `${baseUrl}/api/v1/claude/instances/${instanceId}/sse/status`;
+      const endpoint = `${baseUrl}/api/claude/instances/${instanceId}/sse/status`;
       const response = await fetch(endpoint);
       
       if (response.ok) {

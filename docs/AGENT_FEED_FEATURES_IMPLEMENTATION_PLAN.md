@@ -85,7 +85,7 @@
 - ✅ Tags are clickable and filter posts by category
 - ✅ Like/comment actions persist to database
 - ✅ Action menu appears on hover/click
-
+/
 ### **Phase 3: Post Creation & Management**
 **Objective**: Enable users to create and manage posts
 

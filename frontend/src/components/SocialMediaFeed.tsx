@@ -241,8 +241,8 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
     try {
       // Fetch production agents and activities from live Claude Code instance
       const [agentsRes, activitiesRes] = await Promise.all([
-        fetch('/api/v1/claude-live/prod/agents'),
-        fetch('/api/v1/claude-live/prod/activities')
+        fetch('/api/claude-live/prod/agents'),
+        fetch('/api/claude-live/prod/activities')
       ]);
 
       if (agentsRes.ok) {

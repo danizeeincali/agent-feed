@@ -1,0 +1,125 @@
+{
+  "apiTests": [
+    {
+      "name": "Agents",
+      "url": "/api/agents",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 19,
+      "hasData": true,
+      "dataStructure": "API Response (3 fields)"
+    },
+    {
+      "name": "Activities",
+      "url": "/api/v1/activities",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 6,
+      "hasData": true,
+      "dataStructure": "API Response (4 fields)"
+    },
+    {
+      "name": "System Metrics",
+      "url": "/api/v1/metrics/system",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 5,
+      "hasData": true,
+      "dataStructure": "API Response (4 fields)"
+    },
+    {
+      "name": "Analytics",
+      "url": "/api/v1/analytics",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 12,
+      "hasData": true,
+      "dataStructure": "API Response (3 fields)"
+    },
+    {
+      "name": "Health Check",
+      "url": "/api/health",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 5,
+      "hasData": true,
+      "dataStructure": "API Response (3 fields)"
+    }
+  ],
+  "frontendTests": [
+    {
+      "name": "Page Load",
+      "status": "PASS",
+      "details": "Title: Agent Feed - Claude Code Orchestration"
+    },
+    {
+      "name": "Navigation Elements",
+      "status": "PASS",
+      "details": "Found 13 navigation elements"
+    },
+    {
+      "name": "Frontend Component Loading",
+      "status": "FAIL",
+      "error": "Waiting for selector `[data-testid=\"agent-list\"], .agent-card, .agent-item` failed"
+    },
+    {
+      "name": "Mobile Responsiveness",
+      "status": "PASS",
+      "details": "375x667 - Content visible: true"
+    },
+    {
+      "name": "Tablet Responsiveness",
+      "status": "PASS",
+      "details": "768x1024 - Content visible: true"
+    },
+    {
+      "name": "Desktop Responsiveness",
+      "status": "PASS",
+      "details": "1920x1080 - Content visible: true"
+    },
+    {
+      "name": "WebSocket Connection",
+      "status": "FAIL",
+      "details": "Status: failed"
+    }
+  ],
+  "e2eTests": [],
+  "performanceTests": [
+    {
+      "name": "Page Load Time",
+      "value": 935,
+      "unit": "ms",
+      "status": "PASS",
+      "benchmark": "< 5000ms"
+    },
+    {
+      "name": "JS Heap Used",
+      "value": 24,
+      "unit": "MB",
+      "status": "PASS",
+      "benchmark": "< 50MB"
+    }
+  ],
+  "issues": [
+    {
+      "type": "FRONTEND",
+      "severity": "HIGH",
+      "message": "Frontend components failed to load: Waiting for selector `[data-testid=\"agent-list\"], .agent-card, .agent-item` failed"
+    },
+    {
+      "type": "UX",
+      "severity": "MEDIUM",
+      "message": "No clickable agent elements found for navigation testing"
+    }
+  ],
+  "summary": {
+    "totalTests": 14,
+    "passed": 12,
+    "failed": 2,
+    "passRate": 86,
+    "totalTime": 18,
+    "criticalIssues": 1,
+    "mediumIssues": 1,
+    "productionReady": false
+  }
+}

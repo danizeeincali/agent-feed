@@ -27,14 +27,14 @@ class ApiService {
         if (hostname.includes('.app.github.dev')) {
           // Codespaces environment - use the backend Codespaces URL
           const codespaceName = hostname.split('-5173.app.github.dev')[0];
-          this.baseUrl = `https://${codespaceName}-3000.app.github.dev/api/v1`;
+          this.baseUrl = `https://${codespaceName}-3000.app.github.dev/api`;
         } else {
-          // Local development
-          this.baseUrl = 'http://localhost:3000/api/v1';
+          // Local development - Fixed: Remove /v1 as backend doesn't use versioned routes
+          this.baseUrl = 'http://localhost:3000/api';
         }
       } else {
-        // Server-side rendering fallback
-        this.baseUrl = 'http://localhost:3000/api/v1';
+        // Server-side rendering fallback - Fixed: Remove /v1 as backend doesn't use versioned routes
+        this.baseUrl = 'http://localhost:3000/api';
       }
     } else {
       this.baseUrl = baseUrl;
@@ -1115,7 +1115,7 @@ class ApiService {
 
   async createClaudeInstance(config: any): Promise<ApiResponse<ClaudeInstance>> {
     this.clearCache('/claude/instances');
-    return this.request<ApiResponse<ClaudeInstance>>('/v1/claude/instances', {
+    return this.request<ApiResponse<ClaudeInstance>>('/claude/instances', {
       method: 'POST',
       body: JSON.stringify(config),
     });
@@ -1123,7 +1123,7 @@ class ApiService {
 
   async terminateClaudeInstance(instanceId: string): Promise<ApiResponse<void>> {
     this.clearCache('/claude/instances');
-    return this.request<ApiResponse<void>>(`/v1/claude/instances/${instanceId}`, {
+    return this.request<ApiResponse<void>>(`/claude/instances/${instanceId}`, {
       method: 'DELETE',
     });
   }

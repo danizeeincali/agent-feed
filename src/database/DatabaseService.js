@@ -4,6 +4,7 @@
  */
 
 import { sqliteFallback } from './sqlite-fallback.js';
+import { agentFileService } from '../services/AgentFileService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 class DatabaseService {
@@ -146,11 +147,22 @@ class DatabaseService {
 
   // Unified API methods that work with both database types
   async getAgents() {
-    if (!this.initialized) {
-      await this.initialize();
-    }
-
     try {
+      // CRITICAL FIX: Use real agent files instead of mock database data
+      console.log('📂 Reading agents from real markdown files...');
+      const agents = await agentFileService.getAgentsFromFiles();
+      
+      if (agents && agents.length > 0) {
+        console.log(`✅ Successfully loaded ${agents.length} real agents from files`);
+        return agents;
+      }
+      
+      // Fallback to database only if no files found
+      console.log('⚠️ No agent files found, falling back to database...');
+      if (!this.initialized) {
+        await this.initialize();
+      }
+
       if (this.dbType === 'SQLite') {
         return await this.db.getAgents();
       } else {

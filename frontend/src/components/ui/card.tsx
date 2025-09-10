@@ -21,6 +21,11 @@ interface CardContentProps {
   children: React.ReactNode;
 }
 
+interface CardDescriptionProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
 export const Card: React.FC<CardProps> = ({ className, children }) => {
   return (
     <div className={cn(
@@ -56,5 +61,13 @@ export const CardContent: React.FC<CardContentProps> = ({ className, children })
     <div className={cn('p-6 pt-0', className)}>
       {children}
     </div>
+  );
+};
+
+export const CardDescription: React.FC<CardDescriptionProps> = ({ className, children }) => {
+  return (
+    <p className={cn('text-sm text-slate-500', className)}>
+      {children}
+    </p>
   );
 };

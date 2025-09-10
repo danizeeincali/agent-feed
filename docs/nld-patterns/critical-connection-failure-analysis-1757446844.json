@@ -1,0 +1,145 @@
+{
+  "nlt_record_id": "NLT-CONN-FAIL-20250909-1757446844",
+  "timestamp": "2025-09-09T15:52:44.000Z",
+  "pattern_type": "connection_failure_with_api_route_mismatch",
+  "
+_title": "Critical Connection Failure: API Route Mismatch Causing Missing Posts",
+  "failure_analysis": {
+    "trigger_conditions": [
+      "User reports 'Disconnected' and 'Connection failed' errors",
+      "Posts missing from frontend display", 
+      "Backend running but API endpoints returning 404",
+      "WebSocket/SSE connection attempts failing"
+    ],
+    "root_cause_identified": {
+      "primary_cause": "API Route Mismatch",
+      "technical_details": {
+        "frontend_expects": "/api/v1/posts",
+        "backend_mounts_at": "/api/v1/ with posts route",
+        "actual_issue": "Posts router not properly mounted at expected path",
+        "database_status": "Functional (SQLite fallback working)", 
+        "websocket_status": "Disabled in favor of HTTP/SSE",
+        "sse_endpoints": "Available but not connected properly"
+      },
+      "configuration_mismatch": {
+        "frontend_api_base": "http://localhost:3000/api (without /v1)",
+        "backend_router_mount": "/api/v1 with posts subrouter",
+        "websocket_expectations": "Frontend expects ws://localhost:3000/ws but server disabled WebSocket",
+        "sse_expectations": "Frontend expects /api/events/stream but server provides different endpoints"
+      }
+    }
+  },
+  "claude_success_failure_analysis": {
+    "original_task": "Implement Agent Feed with real-time connections and posts display",
+    "claude_claimed_success": true,
+    "claude_confidence_level": "high", 
+    "actual_user_experience": {
+      "success": false,
+      "symptoms": [
+        "Posts not displaying in frontend",
+        "'Disconnected' status showing",
+        "'Connection failed' errors",
+        "404 errors on API calls"
+      ]
+    },
+    "effectiveness_score": 0.15,
+    "calculation": "(User Success Rate: 0 / Claude Confidence: 1.0) * TDD Factor: 0.3 = 0.15"
+  },
+  "failure_pattern_classification": {
+    "category": "integration_mismatch",
+    "subcategory": "api_routing_configuration",
+    "complexity_level": "medium",
+    "frequency": "high_likelihood_recurring",
+    "domains_affected": [
+      "full_stack_integration",
+      "api_routing", 
+      "real_time_connections",
+      "frontend_backend_communication"
+    ],
+    "error_types": [
+      "route_not_found_404",
+      "websocket_connection_refused",
+      "sse_endpoint_missing",
+      "api_base_url_mismatch"
+    ]
+  },
+  "corrected_solution": {
+    "identified_fixes": [
+      {
+        "component": "API Router Configuration",
+        "issue": "Posts router not accessible at expected path",
+        "fix": "Verify posts router is properly mounted at /api/v1/posts"
+      },
+      {
+        "component": "Frontend API Service",
+        "issue": "Base URL mismatch between frontend expectations and backend reality",
+        "fix": "Update frontend API service to use correct endpoint paths"
+      },
+      {
+        "component": "WebSocket/SSE Connection",
+        "issue": "Frontend trying to connect to disabled/non-existent WebSocket endpoints",
+        "fix": "Update connection logic to use available SSE endpoints or disable real-time features"
+      },
+      {
+        "component": "Database Connection",
+        "issue": "Database imports failing causing route handlers to crash",
+        "fix": "Fix database connection imports in route handlers"
+      }
+    ]
+  },
+  "tdd_analysis": {
+    "tdd_used_in_original": false,
+    "tdd_would_have_prevented": true,
+    "missing_test_coverage": [
+      "API endpoint integration tests",
+      "Frontend-backend communication tests", 
+      "WebSocket/SSE connection tests",
+      "Database fallback mechanism tests"
+    ],
+    "recommended_test_patterns": [
+      "API contract testing between frontend and backend",
+      "Connection state management testing",
+      "Database fallback integration testing",
+      "End-to-end user flow testing"
+    ]
+  },
+  "neural_training_data": {
+    "pattern_signature": "frontend_api_base_url_backend_router_mount_mismatch",
+    "decision_tree_path": [
+      "user_reports_connection_failure",
+      "backend_running_200_health",
+      "api_endpoints_404_not_found",
+      "route_mounting_configuration_error"
+    ],
+    "feature_vector": {
+      "has_database_connection": true,
+      "has_backend_running": true,
+      "has_404_api_errors": true,
+      "has_websocket_disabled": true,
+      "has_route_mounting_issue": true,
+      "has_import_path_errors": true
+    }
+  },
+  "prevention_strategies": [
+    {
+      "strategy": "Contract-First API Development",
+      "description": "Define API contracts before implementation to prevent endpoint mismatches"
+    },
+    {
+      "strategy": "Integration Testing Pipeline", 
+      "description": "Automated tests that verify frontend-backend communication paths"
+    },
+    {
+      "strategy": "Connection State Testing",
+      "description": "Comprehensive testing of real-time connection scenarios"
+    },
+    {
+      "strategy": "Configuration Validation",
+      "description": "Validate API base URLs and route mounting configuration at startup"
+    }
+  ],
+  "resolution_status": "identified_pending_fix",
+  "estimated_fix_complexity": "medium",
+  "estimated_fix_time_minutes": 15,
+  "business_impact": "high_user_experience_degradation"
+}

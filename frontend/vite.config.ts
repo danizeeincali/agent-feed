@@ -19,6 +19,8 @@ export default defineConfig({
     host: "0.0.0.0", // SPARC FIX: Bind to all interfaces for Codespaces
     cors: true,
     strictPort: true, // Exit if port is already in use
+    // CRITICAL FIX: Enable SPA routing support
+    historyApiFallback: true,
     // SPARC DEBUG FIX: Codespaces HMR configuration
     hmr: {
       clientPort: process.env.CODESPACES ? 443 : 5173,
@@ -73,6 +75,12 @@ export default defineConfig({
         }
       },
     },
+  },
+  preview: {
+    port: 4173,
+    host: "0.0.0.0",
+    // ARCHITECTURE FIX: Explicit SPA routing configuration
+    historyApiFallback: true,
   },
   build: {
     outDir: 'dist',

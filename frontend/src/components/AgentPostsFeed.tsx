@@ -69,7 +69,7 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/v1/agent-posts');
+      const response = await fetch('/api/agent-posts');
       const data = await response.json();
       
       if (data.success) {

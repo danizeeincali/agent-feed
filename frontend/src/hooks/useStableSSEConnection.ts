@@ -18,7 +18,13 @@ interface ConnectionState {
   connectionAttempts: number;
 }
 
-export function useStableSSE(url: string = 'http://localhost:3000') {
+export function useStableSSE(url?: string) {
+  // Auto-detect production URL
+  const baseUrl = url || (
+    typeof window !== 'undefined' && window.location.hostname.includes('.app.github.dev')
+      ? `https://${window.location.hostname.split('-5173.app.github.dev')[0]}-3000.app.github.dev`
+      : 'http://localhost:3000'
+  );
   const connectionState = useRef<ConnectionState>({
     instanceId: null,
     connectionType: 'none',
@@ -312,7 +318,7 @@ export function useStableSSE(url: string = 'http://localhost:3000') {
       console.log('🛑 Stop polling - no-op in SSE mode');
     }, []),
     
-    // Mock socket object for compatibility
+    // Real socket object for production use
     socket: {
       connected: isConnected,
       emit,

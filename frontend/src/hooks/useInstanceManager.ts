@@ -57,94 +57,106 @@ export const useInstanceManager = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  // HTTP/SSE only - Socket.IO completely eliminated
+  // Production HTTP/SSE connection
   useEffect(() => {
-    console.log('🚀 [HTTP/SSE Instance Manager] Mock connection - no Socket.IO needed');
-    
-    // Create mock socket for backward compatibility
-    const mockSocket = {
-      connected: true,
-      emit: (event: string, data?: any) => {
-        console.log(`📡 [HTTP/SSE Mock Instance] Emit ${event}:`, data);
-      },
-      on: (event: string, handler: Function) => {
-        console.log(`👂 [HTTP/SSE Mock Instance] Listen ${event}`);
-      },
-      off: (event: string, handler?: Function) => {
-        console.log(`🔇 [HTTP/SSE Mock Instance] Unlisten ${event}`);
-      },
-      disconnect: () => {
-        console.log('📴 [HTTP/SSE Mock Instance] Disconnect - no Socket.IO needed');
+    const establishConnection = async () => {
+      try {
+        // Real SSE connection for instance management
+        const eventSource = new EventSource('/api/instances/stream');
+        eventSource.onopen = () => {
+          setIsConnected(true);
+          setError(null);
+        };
+        eventSource.onerror = (error) => {
+          setError('Instance manager connection failed');
+          setIsConnected(false);
+        };
+        return eventSource;
+      } catch (error) {
+        setError('Failed to establish instance connection');
+        setIsConnected(false);
+        return null;
       }
     };
-
-    // HTTP/SSE Mock - immediate connection simulation
-    console.log('🌐 [HTTP/SSE Instance Manager] Mock connection established');
-    setIsConnected(true);
     
-    // Mock process info with immediate response
-    setTimeout(() => {
-      const mockInfo = {
-        pid: 54321,
-        name: 'Claude Instance Manager (Mock)',
-        status: 'running' as const,
-        startTime: new Date(),
-        autoRestartEnabled: true,
-        autoRestartHours: 6
-      };
-      setProcessInfo(mockInfo);
-      console.log('📊 [HTTP/SSE Mock Instance] Process info loaded');
-    }, 100);
-
-    setSocket(mockSocket as any);
+    const eventSource = establishConnection();
+    
+    // Fetch real process info
+    const fetchProcessInfo = async () => {
+      try {
+        const response = await fetch('/api/instances/process-info');
+        const realInfo = await response.json();
+        setProcessInfo(realInfo);
+      } catch (error) {
+        console.error('Failed to fetch process info:', error);
+        setError('Failed to load process information');
+      }
+    };
+    
+    fetchProcessInfo();
 
     return () => {
-      console.log('🧹 [HTTP/SSE Mock Instance] Cleanup - no Socket.IO disconnection needed');
+      // Real cleanup - close SSE connection
+      if (eventSource) {
+        eventSource.close();
+      }
     };
   }, []);
 
   const launchInstance = useCallback(async (config?: LaunchConfig): Promise<void> => {
-    if (!socket) return;
-
-    return new Promise((resolve, reject) => {
-      console.log('🚀 [HTTP/SSE Mock Instance] Launch process:', config || {});
+    try {
+      setIsLoading(true);
+      setError(null);
       
-      // Mock successful launch
-      setTimeout(() => {
-        const mockInfo = {
-          pid: Math.floor(Math.random() * 90000) + 10000,
-          name: 'Claude Instance (Mock Launch)',
-          status: 'running' as const,
-          startTime: new Date(),
-          autoRestartEnabled: true,
-          autoRestartHours: 6
-        };
-        setProcessInfo(mockInfo);
-        console.log('✓ [HTTP/SSE Mock Instance] Process launched successfully');
-        resolve();
-      }, 1000);
-    });
-  }, [socket]);
+      // Real API call to launch instance
+      const response = await fetch('/api/instances/launch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config || {})
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to launch instance');
+      }
+      
+      const launchedInfo = await response.json();
+      setProcessInfo(launchedInfo);
+    } catch (error) {
+      setError('Failed to launch Claude instance');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const killInstance = useCallback(async (): Promise<void> => {
-    if (!socket) return;
-
-    return new Promise((resolve) => {
-      console.log('🛑 [HTTP/SSE Mock Instance] Kill process');
+    try {
+      setIsLoading(true);
+      setError(null);
       
-      // Mock successful kill
-      setTimeout(() => {
-        setProcessInfo(prev => ({
-          ...prev,
-          pid: null,
-          status: 'stopped',
-          startTime: null
-        }));
-        console.log('✓ [HTTP/SSE Mock Instance] Process killed successfully');
-        resolve();
-      }, 500);
-    });
-  }, [socket]);
+      // Real API call to kill instance
+      const response = await fetch('/api/instances/kill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to kill instance');
+      }
+      
+      setProcessInfo(prev => ({
+        ...prev,
+        pid: null,
+        status: 'stopped',
+        startTime: null
+      }));
+    } catch (error) {
+      setError('Failed to kill Claude instance');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const restartInstance = useCallback(async (): Promise<void> => {
     if (!socket) return;

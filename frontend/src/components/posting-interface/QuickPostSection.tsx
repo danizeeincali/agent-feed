@@ -109,7 +109,7 @@ export const QuickPostSection: React.FC<QuickPostSectionProps> = ({
       };
       
       // Submit to API
-      const response = await fetch('/api/v1/agent-posts', {
+      const response = await fetch('/api/agent-posts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

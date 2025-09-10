@@ -13,12 +13,12 @@ const Agents = () => {
     const fetchAgents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/v1/claude-live/prod/agents');
+        const response = await fetch('/api/agents');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setAgents(Array.isArray(data) ? data : []);
+        setAgents(Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Failed to fetch agents:', err);
         setError(err.message);
@@ -105,7 +105,7 @@ const Agents = () => {
                 <p>Make sure agents are configured in /prod/.claude/agents/</p>
               </div>
             ) : (
-              <div className="agents-grid" style={{
+              <div className="agents-grid" data-testid="agent-list" style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                 gap: '1.5rem'
@@ -144,7 +144,7 @@ const AgentCard = ({ agent }) => {
   };
 
   return (
-    <div className="agent-card" style={{
+    <div className="agent-card" data-testid="agent-card" style={{
       background: 'rgba(255, 255, 255, 0.9)',
       borderRadius: '12px',
       padding: '1.5rem',

@@ -42,20 +42,20 @@ export const defaultAPIConfig: APIConfig = {
   version: 'v1',
   endpoints: {
     claude: {
-      instances: '/api/v1/claude/instances',
-      instanceDetail: (id: string) => `/api/v1/claude/instances/${id}`,
-      terminalStream: (id: string) => `/api/v1/claude/instances/${id}/terminal/stream`,
-      terminalInput: (id: string) => `/api/v1/claude/instances/${id}/terminal/input`,
-      sseStatus: (id: string) => `/api/v1/claude/instances/${id}/sse/status`,
+      instances: '/api/claude/instances',
+      instanceDetail: (id: string) => `/api/claude/instances/${id}`,
+      terminalStream: (id: string) => `/api/claude/instances/${id}/terminal/stream`,
+      terminalInput: (id: string) => `/api/claude/instances/${id}/terminal/input`,
+      sseStatus: (id: string) => `/api/claude/instances/${id}/sse/status`,
     },
     auth: {
-      login: '/api/v1/auth/login',
-      register: '/api/v1/auth/register',
-      profile: '/api/v1/auth/profile',
+      login: '/api/auth/login',
+      register: '/api/auth/register',
+      profile: '/api/auth/profile',
     },
     feeds: {
-      list: '/api/v1/feeds',
-      detail: (id: string) => `/api/v1/feeds/${id}`,
+      list: '/api/feeds',
+      detail: (id: string) => `/api/feeds/${id}`,
     },
   },
   // Backward compatibility fallback endpoints

@@ -78,7 +78,7 @@ export const useAgentStatus = (options: UseAgentStatusOptions = {}): UseAgentSta
       setError(null);
 
       // Real API call to backend service
-      const response = await fetch('/api/v1/agents/status');
+      const response = await fetch('/api/agents/status');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

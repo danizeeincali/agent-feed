@@ -1,0 +1,103 @@
+{
+  "timestamp": "2025-09-09T22:35:09.880Z",
+  "totalTests": 13,
+  "passed": 13,
+  "failed": 0,
+  "errors": [],
+  "details": {
+    "Frontend_Root": {
+      "url": "http://localhost:5173/",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "response": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$Refres"
+    },
+    "Frontend_Agents": {
+      "url": "http://localhost:5173/agents",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "response": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$Refres"
+    },
+    "Backend_Health": {
+      "url": "http://localhost:3000/health",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "response": "{\"status\":\"healthy\",\"timestamp\":\"2025-09-09T22:35:09.924Z\",\"server\":\"SPARC Unified Server\",\"message\":\"Claude terminal and API services operational\",\"services\":{\"claude_terminal\":\"healthy\",\"http_api\":\""
+    },
+    "Agents_API": {
+      "url": "http://localhost:3000/api/agents",
+      "passed": true,
+      "dataValid": true,
+      "sampleData": "{\"success\":true,\"data\":[{\"id\":\"agent-feedback-agent\",\"name\":\"agent-feedback-agent\",\"display_name\":\"agent-feedback-agent\",\"description\":\"Capture and track feedback on all agents for continuous improvem"
+    },
+    "Health_API": {
+      "url": "http://localhost:3000/api/health",
+      "passed": true,
+      "dataValid": true,
+      "sampleData": "{\"success\":true,\"data\":{\"status\":\"healthy\",\"timestamp\":\"2025-09-09T22:35:09.932Z\",\"database\":true,\"services\":{\"api\":true,\"websocket\":true,\"database\":true}},\"timestamp\":\"2025-09-09T22:35:09.932Z\"}"
+    },
+    "CORS_Headers": {
+      "url": "http://localhost:5173/",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "response": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$Refres"
+    },
+    "Frontend_API_Access": {
+      "url": "http://localhost:3000/api/agents",
+      "passed": true,
+      "dataValid": true,
+      "sampleData": "{\"success\":true,\"data\":[{\"id\":\"agent-feedback-agent\",\"name\":\"agent-feedback-agent\",\"display_name\":\"agent-feedback-agent\",\"description\":\"Capture and track feedback on all agents for continuous improvem"
+    },
+    "WebSocket_Health": {
+      "url": "http://localhost:3000/health",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "response": "{\"status\":\"healthy\",\"timestamp\":\"2025-09-09T22:35:09.942Z\",\"server\":\"SPARC Unified Server\",\"message\":\"Claude terminal and API services operational\",\"services\":{\"claude_terminal\":\"healthy\",\"http_api\":\""
+    },
+    "No_Mock_Agents": {
+      "url": "http://localhost:3000/api/agents",
+      "passed": true,
+      "dataValid": true,
+      "sampleData": "{\"success\":true,\"data\":[{\"id\":\"agent-feedback-agent\",\"name\":\"agent-feedback-agent\",\"display_name\":\"agent-feedback-agent\",\"description\":\"Capture and track feedback on all agents for continuous improvem"
+    },
+    "404_Handler": {
+      "url": "http://localhost:3000/api/nonexistent",
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "passed": true,
+      "response": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/nonexistent</pre>\n</body>\n</html>\n"
+    },
+    "Invalid_Agent": {
+      "url": "http://localhost:3000/api/agents/invalid-id",
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "passed": true,
+      "response": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/agents/invalid-id</pre>\n</body>\n</html>\n"
+    },
+    "Malformed_Request": {
+      "passed": true,
+      "statusCode": 400
+    },
+    "Performance_Test": {
+      "url": "http://localhost:3000/api/agents",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "response": "{\"success\":true,\"data\":[{\"id\":\"agent-feedback-agent\",\"name\":\"agent-feedback-agent\",\"display_name\":\"agent-feedback-agent\",\"description\":\"Capture and track feedback on all agents for continuous improvem"
+    },
+    "Response_Time": {
+      "passed": true,
+      "responseTime": "3ms",
+      "threshold": "2000ms"
+    }
+  },
+  "successRate": "100.00%",
+  "summary": {
+    "status": "PASS",
+    "message": "All tests passed - System ready for production"
+  }
+}
