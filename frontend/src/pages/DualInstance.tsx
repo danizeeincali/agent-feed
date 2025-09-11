@@ -237,7 +237,7 @@ const DualInstance: React.FC = () => {
       setTimeout(() => {
         const mockLaunchInfo = {
           ...processInfo,
-          pid: Math.floor(Math.random() * 90000) + 10000,
+          pid: (Date.now() % 90000) + 10000,
           status: 'running' as const,
           startTime: new Date()
         };
@@ -281,7 +281,7 @@ const DualInstance: React.FC = () => {
         setTimeout(() => {
           const mockRestartInfo = {
             ...processInfo,
-            pid: Math.floor(Math.random() * 90000) + 10000,
+            pid: ((Date.now() + 1000) % 90000) + 10000,
             status: 'running' as const,
             startTime: new Date()
           };

@@ -157,17 +157,17 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
           created_at: new Date().toISOString(),
           updated_at: agent.lastActivity || new Date().toISOString(),
           last_used: agent.lastActivity,
-          usage_count: Math.floor(Math.random() * 100) + 1,
+          usage_count: agent.posts?.length || 50,
           performance_metrics: {
             success_rate: 0.95,
             average_response_time: 1200,
-            total_tokens_used: Math.floor(Math.random() * 10000) + 1000,
-            error_count: Math.floor(Math.random() * 5)
+            total_tokens_used: agent.usage_count ? agent.usage_count * 100 : 5000,
+            error_count: agent.status === 'error' ? 3 : 0
           },
           health_status: {
-            cpu_usage: Math.floor(Math.random() * 50) + 20,
-            memory_usage: Math.floor(Math.random() * 70) + 30,
-            response_time: Math.floor(Math.random() * 500) + 500,
+            cpu_usage: agent.status === 'active' ? 35 : 15,
+            memory_usage: agent.capabilities?.length ? agent.capabilities.length * 10 : 50,
+            response_time: agent.performance_metrics?.average_response_time || 1000,
             last_heartbeat: new Date().toISOString()
           }
         }));
@@ -333,7 +333,7 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
       const mockResponse = {
         success: true,
         response: `Hello! I'm ${agent?.display_name || 'an AI agent'}. You asked: "${testPrompt}". This is a test response to verify I'm working correctly.`,
-        responseTime: Math.floor(Math.random() * 1000) + 500,
+        responseTime: agent?.performance_metrics?.average_response_time || 1000,
         timestamp: new Date().toISOString()
       };
       

@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 3 Dynamic Agent Pages Validation Report</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 30px; }
+        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .metric { background: #f8fafc; padding: 20px; border-radius: 6px; text-align: center; }
+        .metric-value { font-size: 2em; font-weight: bold; color: #2563eb; }
+        .metric-label { color: #64748b; margin-top: 5px; }
+        .test-result { margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; }
+        .test-header { padding: 15px; font-weight: bold; cursor: pointer; display: flex; justify-content: between; align-items: center; }
+        .test-passed { background: #dcfce7; color: #166534; }
+        .test-failed { background: #fef2f2; color: #dc2626; }
+        .test-details { padding: 15px; border-top: 1px solid #e2e8f0; background: #fafafa; display: none; }
+        .test-details.active { display: block; }
+        .error-message { background: #fef2f2; border: 1px solid #fecaca; padding: 10px; border-radius: 4px; margin-top: 10px; }
+        .screenshot { margin-top: 15px; }
+        .screenshot img { max-width: 100%; border-radius: 4px; border: 1px solid #e2e8f0; }
+        .recommendations { background: #fef3c7; border: 1px solid #f59e0b; padding: 20px; border-radius: 6px; margin-top: 30px; }
+        .toggle { float: right; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Phase 3 Dynamic Agent Pages Validation Report</h1>
+            <p><strong>Generated:</strong> 2025-09-10T05:26:14.856Z</p>
+            <p><strong>Duration:</strong> 58s</p>
+        </div>
+
+        <div class="summary">
+            <div class="metric">
+                <div class="metric-value">7</div>
+                <div class="metric-label">Total Tests</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">1</div>
+                <div class="metric-label">Passed</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">6</div>
+                <div class="metric-label">Failed</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">14.3%</div>
+                <div class="metric-label">Success Rate</div>
+            </div>
+        </div>
+
+        <h2>Test Results</h2>
+        
+            <div class="test-result">
+                <div class="test-header test-failed" onclick="toggleDetails('Agents-Page-Loads-with-Real-Agent-Data')">
+                    <span>❌ Agents Page Loads with Real Agent Data</span>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="test-details" id="Agents-Page-Loads-with-Real-Agent-Data-details">
+                    <p><strong>Duration:</strong> 215ms</p>
+                    
+                        <div class="error-message">
+                            <strong>Error:</strong> Backend API not returning real agent data
+                        </div>
+                    
+                    
+                        <h4>Test Details:</h4>
+                        <pre>{}</pre>
+                    
+                    
+                </div>
+            </div>
+        
+            <div class="test-result">
+                <div class="test-header test-failed" onclick="toggleDetails('Agent-Card-Navigation-Buttons-Work')">
+                    <span>❌ Agent Card Navigation Buttons Work</span>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="test-details" id="Agent-Card-Navigation-Buttons-Work-details">
+                    <p><strong>Duration:</strong> 2442ms</p>
+                    
+                        <div class="error-message">
+                            <strong>Error:</strong> Home button/link not found on agent card
+                        </div>
+                    
+                    
+                        <h4>Test Details:</h4>
+                        <pre>{}</pre>
+                    
+                    
+                </div>
+            </div>
+        
+            <div class="test-result">
+                <div class="test-header test-failed" onclick="toggleDetails('Agent-Home-Page-Components-Display-Correctly')">
+                    <span>❌ Agent Home Page Components Display Correctly</span>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="test-details" id="Agent-Home-Page-Components-Display-Correctly-details">
+                    <p><strong>Duration:</strong> 31ms</p>
+                    
+                        <div class="error-message">
+                            <strong>Error:</strong> Cannot read properties of undefined (reading 'id')
+                        </div>
+                    
+                    
+                        <h4>Test Details:</h4>
+                        <pre>{}</pre>
+                    
+                    
+                </div>
+            </div>
+        
+            <div class="test-result">
+                <div class="test-header test-failed" onclick="toggleDetails('Agent-Customization-Features-Work')">
+                    <span>❌ Agent Customization Features Work</span>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="test-details" id="Agent-Customization-Features-Work-details">
+                    <p><strong>Duration:</strong> 12ms</p>
+                    
+                        <div class="error-message">
+                            <strong>Error:</strong> Cannot read properties of undefined (reading 'id')
+                        </div>
+                    
+                    
+                        <h4>Test Details:</h4>
+                        <pre>{}</pre>
+                    
+                    
+                </div>
+            </div>
+        
+            <div class="test-result">
+                <div class="test-header test-failed" onclick="toggleDetails('Feed-Displays-Real-Posts-from-Database')">
+                    <span>❌ Feed Displays Real Posts from Database</span>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="test-details" id="Feed-Displays-Real-Posts-from-Database-details">
+                    <p><strong>Duration:</strong> 31545ms</p>
+                    
+                        <div class="error-message">
+                            <strong>Error:</strong> Feed posts failed to load within timeout
+                        </div>
+                    
+                    
+                        <h4>Test Details:</h4>
+                        <pre>{
+  "apiPostsCount": 0,
+  "firstPost": null
+}</pre>
+                    
+                    
+                </div>
+            </div>
+        
+            <div class="test-result">
+                <div class="test-header test-failed" onclick="toggleDetails('Responsive-Design-Works-on-Different-Screen-Sizes')">
+                    <span>❌ Responsive Design Works on Different Screen Sizes</span>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="test-details" id="Responsive-Design-Works-on-Different-Screen-Sizes-details">
+                    <p><strong>Duration:</strong> 1101ms</p>
+                    
+                        <div class="error-message">
+                            <strong>Error:</strong> Cannot read properties of undefined (reading 'id')
+                        </div>
+                    
+                    
+                        <h4>Test Details:</h4>
+                        <pre>{}</pre>
+                    
+                    
+                </div>
+            </div>
+        
+            <div class="test-result">
+                <div class="test-header test-passed" onclick="toggleDetails('Error-Handling-and-Loading-States-Work')">
+                    <span>✅ Error Handling and Loading States Work</span>
+                    <span class="toggle">▼</span>
+                </div>
+                <div class="test-details" id="Error-Handling-and-Loading-States-Work-details">
+                    <p><strong>Duration:</strong> 8135ms</p>
+                    
+                    
+                        <h4>Test Details:</h4>
+                        <pre>{
+  "errorTests": {
+    "invalidAgentId": {
+      "showsError": false,
+      "errorMessage": "",
+      "url": "http://localhost:5173/agents/invalid-agent-id/home"
+    },
+    "networkFailure": {
+      "showsError": false,
+      "errorMessage": ""
+    },
+    "loadingStates": {
+      "hasLoadingIndicator": true,
+      "loadingDisappearsAfterLoad": true
+    }
+  },
+  "errorHandlingWorking": false,
+  "loadingStatesWorking": true
+}</pre>
+                    
+                    
+                </div>
+            </div>
+        
+
+        
+            <div class="recommendations">
+                <h3>Recommendations</h3>
+                <ul>
+                    <li>Fix agent page loading - API integration may be broken</li><li>Fix agent card navigation buttons - routing may be incorrect</li><li>Implement or fix agent customization features</li>
+                </ul>
+            </div>
+        
+    </div>
+
+    <script>
+        function toggleDetails(testId) {
+            const details = document.getElementById(testId + '-details');
+            const toggle = details.previousElementSibling.querySelector('.toggle');
+            
+            if (details.classList.contains('active')) {
+                details.classList.remove('active');
+                toggle.textContent = '▼';
+            } else {
+                details.classList.add('active');
+                toggle.textContent = '▲';
+            }
+        }
+    </script>
+</body>
+</html>

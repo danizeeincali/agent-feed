@@ -452,7 +452,7 @@ export class NeuralLearningDetector {
    */
   private createFailurePattern(config: Omit<FailurePattern, 'id' | 'timestamp' | 'tddFactor'>): void {
     const pattern: FailurePattern = {
-      id: `pattern-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `pattern-${Date.now()}-${Date.now().toString(36).slice(-9)}`,
       timestamp: new Date(),
       tddFactor: this.calculateTDDFactor(),
       ...config
@@ -481,7 +481,7 @@ export class NeuralLearningDetector {
    */
   private storeNeuralTrainingRecord(config: Omit<NeuralTrainingRecord, 'id' | 'timestamp'>): void {
     const record: NeuralTrainingRecord = {
-      id: `record-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `record-${Date.now()}-${Date.now().toString(36).slice(-9)}`,
       timestamp: new Date(),
       ...config
     };

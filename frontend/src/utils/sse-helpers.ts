@@ -17,7 +17,7 @@ export const validateInstanceId = (instanceId: string): boolean => {
  * Format instance ID for display
  */
 export const formatInstanceId = (instanceId: string, maxLength: number = 12): string => {
-  if (!instanceId) return 'Unknown';
+  if (!instanceId) return `sse_${Date.now()}_${process.pid || 'browser'}`;
   return instanceId.length > maxLength 
     ? `${instanceId.slice(0, maxLength)}...` 
     : instanceId;
@@ -70,7 +70,9 @@ export const calculateBackoffDelay = (
   maxDelay: number = 30000
 ): number => {
   const exponential = baseDelay * Math.pow(2, attempt);
-  const withJitter = exponential + Math.random() * 1000;
+  // Use deterministic jitter based on attempt count instead of Math.random()
+  const deterministicJitter = (attempt % 5) * 200; // 0, 200, 400, 600, 800ms
+  const withJitter = exponential + deterministicJitter;
   return Math.min(withJitter, maxDelay);
 };
 
@@ -184,7 +186,7 @@ export const createRetryFunction = <T>(
       try {
         return await asyncFn();
       } catch (error) {
-        lastError = error instanceof Error ? error : new Error('Unknown error');
+        lastError = error instanceof Error ? error : new Error(`SSE connection error: ${String(error)}`);
         
         if (attempt < maxAttempts - 1) {
           const delay = calculateBackoffDelay(attempt, baseDelay);

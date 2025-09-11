@@ -4,9 +4,11 @@
  */
 
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AgentCard.css';
 
 const AgentCard = ({ agent, status, onClick, viewMode = 'grid' }) => {
+  const navigate = useNavigate();
   /**
    * Format file size for display
    */
@@ -105,6 +107,22 @@ const AgentCard = ({ agent, status, onClick, viewMode = 'grid' }) => {
     }
   };
 
+  /**
+   * Navigate to agent home page
+   */
+  const handleNavigateToHome = (e) => {
+    e.stopPropagation();
+    navigate(`/agents/${agent.id}/home`);
+  };
+
+  /**
+   * Navigate to agent detail page  
+   */
+  const handleNavigateToDetails = (e) => {
+    e.stopPropagation();
+    navigate(`/agents/${agent.id}`);
+  };
+
   const cardClassName = `agent-card ${viewMode} ${statusInfo.status} ${agent.isActive ? 'active' : 'inactive'}`;
 
   if (viewMode === 'list') {
@@ -142,7 +160,22 @@ const AgentCard = ({ agent, status, onClick, viewMode = 'grid' }) => {
         </div>
 
         <div className="agent-card-actions">
-          <button className="btn btn-sm btn-primary">View Details</button>
+          <div className="agent-card-actions-list">
+            <button 
+              className="btn btn-sm btn-primary"
+              onClick={handleNavigateToHome}
+              title="Go to Agent Home"
+            >
+              Home
+            </button>
+            <button 
+              className="btn btn-sm btn-outline"
+              onClick={handleNavigateToDetails}
+              title="View Detailed Information"
+            >
+              Details
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -248,11 +281,26 @@ const AgentCard = ({ agent, status, onClick, viewMode = 'grid' }) => {
 
       {/* Hover Actions */}
       <div className="agent-card-actions">
-        <button className="action-btn" title="View Details">
-          <svg viewBox="0 0 24 24" width="16" height="16">
-            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
-          </svg>
-        </button>
+        <div className="flex gap-2">
+          <button 
+            className="action-btn" 
+            onClick={handleNavigateToHome}
+            title="Go to Agent Home"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" fill="currentColor"/>
+            </svg>
+          </button>
+          <button 
+            className="action-btn" 
+            onClick={handleNavigateToDetails}
+            title="View Details"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Active Indicator */}

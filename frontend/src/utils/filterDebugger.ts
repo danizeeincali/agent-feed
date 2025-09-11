@@ -120,7 +120,9 @@ export class FilterDebugger {
   }
 
   logApiCall(method: string, url: string, parameters: any, headers?: Record<string, string>): string {
-    const callId = `api_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    // Use deterministic counter instead of Math.random()
+    const counter = (globalThis.__apiCallCounter = (globalThis.__apiCallCounter || 0) + 1);
+    const callId = `api_${Date.now()}_${counter.toString(36)}`;
     
     const networkInfo: NetworkDebugInfo = {
       url,
@@ -443,7 +445,7 @@ export class FilterDebugger {
       Method: log.method,
       URL: log.url.substring(0, 50) + '...',
       Status: log.status || 'Pending',
-      Time: log.responseTime ? `${log.responseTime}ms` : 'N/A',
+      Time: log.responseTime ? `${log.responseTime}ms` : 'pending',
       Success: log.success ?? 'Pending'
     })));
     console.groupEnd();

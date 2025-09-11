@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-09-10T19:32:16.228Z",
+  "environment": {
+    "node": "v22.17.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "testConfiguration": {
+    "baseURL": "http://localhost:5173",
+    "apiURL": "http://localhost:3000",
+    "availableAgents": [],
+    "baselineLoadTime": "unknown"
+  },
+  "cleanup": {
+    "reportsGenerated": true,
+    "artifactsPreserved": true,
+    "noSideEffects": true
+  }
+}

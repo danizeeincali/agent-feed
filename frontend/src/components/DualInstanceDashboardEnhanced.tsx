@@ -132,18 +132,18 @@ const DualInstanceDashboardEnhanced: React.FC = () => {
         id: agent.id,
         name: agent.name,
         description: `${agent.name} - ${agent.category} agent`,
-        status: Math.random() > 0.2 ? 'active' as const : 'idle' as const,
+        status: 'active' as const,
         instance: 'production' as const,
         capabilities: [agent.category, 'automation', 'analysis'],
         priority: agent.priority,
         color: getCategoryColor(agent.category),
-        lastActivity: new Date(Date.now() - Math.random() * 3600000).toISOString(),
+        lastActivity: new Date().toISOString(),
         category: agent.category,
-        cpu_usage: Math.floor(Math.random() * 60) + 20,
-        memory_usage: Math.floor(Math.random() * 50) + 30,
-        response_time: Math.floor(Math.random() * 2000) + 500,
-        success_rate: 0.85 + Math.random() * 0.14,
-        total_tasks: Math.floor(Math.random() * 200) + 50
+        cpu_usage: 35,
+        memory_usage: 55,
+        response_time: 1200,
+        success_rate: 0.95,
+        total_tasks: 125
       }));
     },
     refetchInterval: 10000

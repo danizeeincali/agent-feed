@@ -1,0 +1,40 @@
+{
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "successRate": "100.0%",
+    "duration": "50ms",
+    "timestamp": "2025-09-10T06:03:23.259Z"
+  },
+  "tests": [
+    {
+      "name": "Agents API returns valid data",
+      "status": "PASSED",
+      "duration": 36,
+      "error": null
+    },
+    {
+      "name": "Agent Posts API accessible",
+      "status": "PASSED",
+      "duration": 5,
+      "error": null
+    },
+    {
+      "name": "Health API responds correctly",
+      "status": "PASSED",
+      "duration": 5,
+      "error": null
+    },
+    {
+      "name": "CORS headers are configured",
+      "status": "PASSED",
+      "duration": 3,
+      "error": null
+    }
+  ],
+  "errors": [],
+  "environment": {
+    "apiUrl": "http://localhost:3000"
+  }
+}

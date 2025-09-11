@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, RefreshCw, Bot, Play, Pause, Trash2, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Search, RefreshCw, Bot, Play, Pause, Trash2, AlertCircle, CheckCircle, Clock, Home, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
 import { Agent, ApiResponse } from '../types/api';
 
@@ -8,6 +9,7 @@ interface RealAgentManagerProps {
 }
 
 const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) => {
+  const navigate = useNavigate();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +82,15 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to terminate agent');
     }
+  };
+
+  // Navigation handlers
+  const handleNavigateToHome = (agentId: string) => {
+    navigate(`/agents/${agentId}/home`);
+  };
+
+  const handleNavigateToDetails = (agentId: string) => {
+    navigate(`/agents/${agentId}`);
   };
 
   // Filter agents based on search
@@ -249,7 +260,25 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
               </div>
             )}
 
-            {/* Actions */}
+            {/* Navigation Actions */}
+            <div className="flex space-x-2 mb-3">
+              <button
+                onClick={() => handleNavigateToHome(agent.id)}
+                className="flex-1 flex items-center justify-center px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Home className="w-4 h-4 mr-2" />
+                Home
+              </button>
+              <button
+                onClick={() => handleNavigateToDetails(agent.id)}
+                className="flex-1 flex items-center justify-center px-3 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Details
+              </button>
+            </div>
+
+            {/* Management Actions */}
             <div className="flex space-x-2">
               <button
                 onClick={() => handleSpawnAgent(agent.name)}

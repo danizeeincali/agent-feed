@@ -1,87 +1,73 @@
 {
-  "timestamp": "2025-09-10T02:33:38.689Z",
+  "timestamp": "2025-09-10T03:43:54.973Z",
   "summary": {
-    "totalTests": 24,
-    "passedTests": 18,
-    "failedTests": 6
+    "totalTests": 22,
+    "passedTests": 0,
+    "failedTests": 22
   },
   "results": {
     "endpointTests": [
       {
         "endpoint": "/api/health",
         "method": "GET",
-        "status": "pass",
-        "responseCode": 200,
-        "responseTime": 5,
-        "hasJsonResponse": true,
+        "status": "fail",
+        "error": "fetch failed",
         "description": "Health check endpoint"
       },
       {
         "endpoint": "/api/agents",
         "method": "GET",
-        "status": "pass",
-        "responseCode": 200,
-        "responseTime": 3,
-        "hasJsonResponse": true,
+        "status": "fail",
+        "error": "fetch failed",
         "description": "Get agents list"
       },
       {
         "endpoint": "/api/agent-posts",
         "method": "GET",
-        "status": "pass",
-        "responseCode": 200,
-        "responseTime": 6,
-        "hasJsonResponse": true,
+        "status": "fail",
+        "error": "fetch failed",
         "description": "Get agent posts"
       },
       {
         "endpoint": "/api/agent-posts",
         "method": "POST",
-        "status": "pass",
-        "responseCode": 201,
-        "responseTime": 138,
-        "hasJsonResponse": true,
+        "status": "fail",
+        "error": "fetch failed",
         "description": "Create agent post"
       },
       {
         "endpoint": "/api/filter-data",
         "method": "GET",
-        "status": "pass",
-        "responseCode": 200,
-        "responseTime": 2,
-        "hasJsonResponse": true,
+        "status": "fail",
+        "error": "fetch failed",
         "description": "Get filter data"
       },
       {
         "endpoint": "/api/filter-stats",
         "method": "GET",
-        "status": "pass",
-        "responseCode": 200,
-        "responseTime": 1,
-        "hasJsonResponse": true,
+        "status": "fail",
+        "error": "fetch failed",
         "description": "Get filter statistics"
       },
       {
         "endpoint": "/api/activities",
         "method": "GET",
         "status": "fail",
-        "error": "expect(received).not.toBe(expected) // Object.is equality\n\nExpected: not 404",
+        "error": "fetch failed",
         "description": "Get activities"
       },
       {
         "endpoint": "/api/claude/instances",
         "method": "GET",
-        "status": "pass",
-        "responseCode": 200,
-        "responseTime": 3,
-        "hasJsonResponse": true,
+        "status": "fail",
+        "error": "fetch failed",
         "description": "Get Claude instances"
       },
       {
         "endpoint": "/api/metrics/system",
         "method": "GET",
         "status": "fail",
-        "error": "expect(received).not.toBe(expected) // Object.is equality\n\nExpected: not 404",
+        "error": "fetch failed",
         "description": "Get system metrics"
       }
     ],
@@ -89,109 +75,88 @@
       {
         "test": "websocket-connection",
         "status": "fail",
-        "error": "Unexpected server response: 400"
+        "error": ""
       }
     ],
     "dataFlowTests": [
       {
         "test": "agent-posts-loading",
-        "status": "pass",
-        "responseCode": 200,
-        "dataReceived": true
+        "status": "fail",
+        "error": "fetch failed"
       },
       {
         "test": "agents-loading",
-        "status": "pass",
-        "responseCode": 200,
-        "dataReceived": true
+        "status": "fail",
+        "error": "fetch failed"
       },
       {
         "test": "filter-data-loading",
-        "status": "pass",
-        "responseCode": 200,
-        "hasAgents": true,
-        "hasHashtags": true
+        "status": "fail",
+        "error": "fetch failed"
       }
     ],
     "userExperienceTests": [
       {
         "test": "feed-page-loading",
-        "status": "pass",
-        "postsLoaded": true,
-        "filtersLoaded": true
+        "status": "fail",
+        "error": "fetch failed"
       },
       {
         "test": "agents-page-loading",
-        "status": "pass",
-        "agentsLoaded": true
+        "status": "fail",
+        "error": "fetch failed"
       }
     ],
     "errorTests": [
       {
         "endpoint": "/api/v1/agent-posts",
         "status": "fail",
-        "error": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 404\nReceived: 200",
+        "error": "fetch failed",
         "expected404": true
       },
       {
         "endpoint": "/api/v1/agents",
-        "status": "pass",
-        "responseCode": 404,
-        "expected404": true,
-        "description": "Old v1 endpoint correctly returns 404"
+        "status": "fail",
+        "error": "fetch failed",
+        "expected404": true
       },
       {
         "endpoint": "/api/v1/activities",
         "status": "fail",
-        "error": "expect(received).toBe(expected) // Object.is equality\n\nExpected: 404\nReceived: 200",
+        "error": "fetch failed",
         "expected404": true
       },
       {
         "endpoint": "/api/agent-posts",
-        "status": "pass",
-        "responseCode": 200,
-        "expected404": false,
-        "description": "New endpoint correctly returns data"
+        "status": "fail",
+        "error": "fetch failed",
+        "expected404": false
       },
       {
         "endpoint": "/api/agents",
-        "status": "pass",
-        "responseCode": 200,
-        "expected404": false,
-        "description": "New endpoint correctly returns data"
+        "status": "fail",
+        "error": "fetch failed",
+        "expected404": false
       },
       {
         "endpoint": "/api/activities",
         "status": "fail",
-        "error": "expect(received).not.toBe(expected) // Object.is equality\n\nExpected: not 404",
+        "error": "fetch failed",
         "expected404": false
       }
     ],
     "performanceTests": [
       {
         "endpoint": "/api/health",
-        "status": "pass",
-        "responseTime": 1,
-        "responseCode": 200
-      },
-      {
-        "endpoint": "/api/agents",
-        "status": "pass",
-        "responseTime": 2,
-        "responseCode": 200
-      },
-      {
-        "endpoint": "/api/agent-posts?limit=10",
-        "status": "pass",
-        "responseTime": 2,
-        "responseCode": 200
+        "status": "fail",
+        "error": "fetch failed"
       }
     ]
   },
   "conclusions": {
     "endpointsFixed": false,
-    "dataFlowWorking": true,
-    "userExperienceGood": true,
+    "dataFlowWorking": false,
+    "userExperienceGood": false,
     "no404Errors": false
   }
 }

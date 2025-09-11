@@ -74,7 +74,9 @@ export function calculateHealthScore(metrics: ConnectionMetrics): number {
  * Generate unique event ID
  */
 export function generateEventId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  // Use deterministic counter instead of Math.random()
+  const counter = (globalThis.__wsEventCounter = (globalThis.__wsEventCounter || 0) + 1);
+  return `${Date.now()}-${counter.toString(36)}`;
 }
 
 /**

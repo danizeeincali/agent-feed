@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, RefreshCw, Bot, Play, Pause, Trash2, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Search, RefreshCw, Bot, Play, Pause, Trash2, AlertCircle, CheckCircle, Clock, Home, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Agent, ApiResponse } from '../types/api';
 import { useRoute } from './RouteWrapper';
 import { createApiService } from '../services/apiServiceIsolated';
@@ -19,6 +20,7 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const { routeKey, registerCleanup } = useRoute();
+  const navigate = useNavigate();
   
   // Create isolated API service for this route
   const [apiService] = useState(() => createApiService(routeKey));
@@ -116,6 +118,15 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
         setError(err instanceof Error ? err.message : 'Failed to terminate agent');
       }
     }
+  };
+
+  // Phase 3: Navigation handlers for dynamic agent pages
+  const handleNavigateToHome = (agentId: string) => {
+    navigate(`/agents/${agentId}/home`);
+  };
+
+  const handleNavigateToDetails = (agentId: string) => {
+    navigate(`/agents/${agentId}`);
   };
 
   // Check if service is destroyed
@@ -261,7 +272,27 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
 
             <p className="text-gray-600 text-sm mb-4">{agent.description}</p>
 
-            {/* Actions */}
+            {/* Phase 3: Navigation Actions */}
+            <div className="flex space-x-2 mb-3">
+              <button
+                onClick={() => handleNavigateToHome(agent.id)}
+                className="flex-1 flex items-center justify-center px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                title="Go to Agent Home Page"
+              >
+                <Home className="w-4 h-4 mr-1" />
+                Home
+              </button>
+              <button
+                onClick={() => handleNavigateToDetails(agent.id)}
+                className="flex-1 flex items-center justify-center px-3 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors"
+                title="Go to Agent Details"
+              >
+                <Eye className="w-4 h-4 mr-1" />
+                Details
+              </button>
+            </div>
+
+            {/* Management Actions */}
             <div className="flex space-x-2">
               <button
                 onClick={() => handleSpawnAgent(agent.name)}

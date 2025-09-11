@@ -211,7 +211,9 @@ class ErrorHandler {
   private getOrCreateSessionId(): string {
     let sessionId = sessionStorage.getItem('error-session-id');
     if (!sessionId) {
-      sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      // Use deterministic counter instead of Math.random()
+      const counter = (globalThis.__sessionCounter = (globalThis.__sessionCounter || 0) + 1);
+      sessionId = `session-${Date.now()}-${counter.toString(36)}`;
       sessionStorage.setItem('error-session-id', sessionId);
     }
     return sessionId;

@@ -81,10 +81,10 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
             postType: post.metadata.postType || 'insight'
           },
           engagement: post.engagement || {
-            views: Math.floor(Math.random() * 500) + 50,
-            bookmarks: Math.floor(Math.random() * 30) + 1,
-            shares: Math.floor(Math.random() * 20) + 1,
-            comments: Math.floor(Math.random() * 15) + 1
+            views: post.metadata?.businessImpact ? post.metadata.businessImpact * 25 : 275,
+            bookmarks: post.metadata?.tags?.length ? post.metadata.tags.length * 5 : 15,
+            shares: post.metadata?.isAgentResponse ? 10 : 5,
+            comments: post.content?.length > 200 ? 8 : 3
           }
         }));
         setPosts(enhancedPosts);

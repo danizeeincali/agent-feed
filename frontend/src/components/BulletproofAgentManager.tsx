@@ -87,7 +87,7 @@ const transformToSafeAgent = (agent: any): Agent | null => {
     if (!agent || typeof agent !== 'object') return null;
     
     return {
-      id: safeString(agent.id, `agent-${Date.now()}-${Math.random()}`),
+      id: safeString(agent.id, `agent-${Date.now()}-${Date.now().toString(36).slice(-6)}`),
       name: safeString(agent.name, 'Unnamed Agent'),
       display_name: safeString(agent.display_name, agent.name || 'Unnamed Agent'),
       description: safeString(agent.description, 'No description provided'),

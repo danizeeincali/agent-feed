@@ -24,16 +24,14 @@ import RealAgentManager from './components/RealAgentManager';
 import IsolatedRealAgentManager from './components/IsolatedRealAgentManager';
 import RealActivityFeed from './components/RealActivityFeed';
 import EnhancedAgentManagerWrapper from './components/EnhancedAgentManagerWrapper';
-import Agents from './pages/Agents';
-import AgentDetail from './components/AgentDetail';
 // import AgentManagerDebug from './components/AgentManagerDebug';
 import RealAnalytics from './components/RealAnalytics';
 import RouteWrapper from './components/RouteWrapper';
 import BulletproofClaudeCodePanel from './components/BulletproofClaudeCodePanel';
 import AgentDashboard from './components/AgentDashboard';
 import WorkflowVisualizationFixed from './components/WorkflowVisualizationFixed';
-import BulletproofAgentProfile from './components/BulletproofAgentProfile';
 import BulletproofActivityPanel from './components/BulletproofActivityPanel';
+import UnifiedAgentPage from './components/UnifiedAgentPage';
 import SimpleSettings from './components/SimpleSettings';
 import DualModeClaudeManager from './components/claude-manager/DualModeClaudeManager';
 import { ClaudeInstanceManagerComponentSSE } from './components/claude-manager/ClaudeInstanceManagerComponentSSE';
@@ -301,26 +299,10 @@ const App: React.FC = () => {
                     </RouteWrapper>
                   } />
                   <Route path="/agents/:agentId" element={
-                    <RouteErrorBoundary routeName="AgentDetail" fallback={<FallbackComponents.AgentProfileFallback />}>
-                      <AsyncErrorBoundary componentName="AgentDetail">
+                    <RouteErrorBoundary routeName="UnifiedAgentPage" fallback={<FallbackComponents.AgentProfileFallback />}>
+                      <AsyncErrorBoundary componentName="UnifiedAgentPage">
                         <Suspense fallback={<FallbackComponents.AgentProfileFallback />}>
-                          <AgentDetail />
-                        </Suspense>
-                      </AsyncErrorBoundary>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/agents-legacy" element={
-                    <RouteErrorBoundary routeName="LegacyAgentManager">
-                      <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
-                        <Agents />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/agent/:agentId" element={
-                    <RouteErrorBoundary routeName="AgentProfile" fallback={<FallbackComponents.AgentProfileFallback />}>
-                      <AsyncErrorBoundary componentName="AgentProfile">
-                        <Suspense fallback={<FallbackComponents.AgentProfileFallback />}>
-                          <BulletproofAgentProfile />
+                          <UnifiedAgentPage />
                         </Suspense>
                       </AsyncErrorBoundary>
                     </RouteErrorBoundary>
