@@ -67,6 +67,71 @@ class SQLiteFallbackDatabase {
       )
     `);
 
+    // Create agent_pages and agent_workspaces tables for dynamic pages
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS agent_pages (
+        id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+        agent_id TEXT NOT NULL,
+        title TEXT NOT NULL,
+        page_type TEXT NOT NULL DEFAULT 'dynamic' CHECK (page_type IN ('persistent', 'dynamic', 'template')),
+        content_type TEXT NOT NULL DEFAULT 'text' CHECK (content_type IN ('text', 'markdown', 'json', 'component')),
+        content_value TEXT NOT NULL,
+        content_metadata TEXT,
+        status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived')),
+        tags TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        version INTEGER DEFAULT 1
+      )
+    `);
+
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS agent_workspaces (
+        id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+        agent_id TEXT NOT NULL UNIQUE,
+        workspace_path TEXT NOT NULL,
+        structure TEXT,
+        metadata TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS agent_page_components (
+        id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+        name TEXT NOT NULL UNIQUE,
+        component_schema TEXT NOT NULL,
+        render_template TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create indexes and triggers for agent pages
+    this.db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_agent_pages_agent_id ON agent_pages(agent_id);
+      CREATE INDEX IF NOT EXISTS idx_agent_pages_status ON agent_pages(status);
+      CREATE INDEX IF NOT EXISTS idx_agent_pages_created_at ON agent_pages(created_at);
+      CREATE INDEX IF NOT EXISTS idx_agent_workspaces_agent_id ON agent_workspaces(agent_id);
+    `);
+
+    this.db.exec(`
+      CREATE TRIGGER IF NOT EXISTS trigger_agent_pages_updated_at
+        AFTER UPDATE ON agent_pages
+        BEGIN
+          UPDATE agent_pages SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END
+    `);
+
+    this.db.exec(`
+      CREATE TRIGGER IF NOT EXISTS trigger_agent_workspaces_updated_at
+        AFTER UPDATE ON agent_workspaces
+        BEGIN
+          UPDATE agent_workspaces SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        END
+    `);
+
     // Create agent_posts table
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS agent_posts (
@@ -157,14 +222,21 @@ class SQLiteFallbackDatabase {
   }
 
   async applyMigrations() {
-    // Check if user_id column exists in agent_posts
-    const tableInfo = this.db.prepare("PRAGMA table_info(agent_posts)").all();
-    const hasUserIdColumn = tableInfo.some(column => column.name === 'user_id');
+    // Check if agent_posts table exists first
+    const tablesResult = this.db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='agent_posts'").all();
     
-    if (!hasUserIdColumn) {
-      console.log('🔄 Adding user_id column to agent_posts table...');
-      this.db.exec(`ALTER TABLE agent_posts ADD COLUMN user_id TEXT DEFAULT 'anonymous'`);
-      console.log('✅ user_id column added to agent_posts');
+    if (tablesResult.length > 0) {
+      // Check if user_id column exists in agent_posts
+      const tableInfo = this.db.prepare("PRAGMA table_info(agent_posts)").all();
+      const hasUserIdColumn = tableInfo.some(column => column.name === 'user_id');
+      
+      if (!hasUserIdColumn) {
+        console.log('🔄 Adding user_id column to agent_posts table...');
+        this.db.exec(`ALTER TABLE agent_posts ADD COLUMN user_id TEXT DEFAULT 'anonymous'`);
+        console.log('✅ user_id column added to agent_posts');
+      }
+    } else {
+      console.log('⚠️ agent_posts table does not exist yet, skipping migration');
     }
 
     // Create indexes for threaded comments performance

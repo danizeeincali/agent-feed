@@ -1,0 +1,14 @@
+{
+  "detections": 0,
+  "preventions": 0,
+  "autoFixes": 0,
+  "failures": 0,
+  "patterns": {
+    "PAGE_NOT_FOUND_PREVENTION": {
+      "detections": 0,
+      "preventions": 0,
+      "autoFixes": 0,
+      "failures": 0
+    }
+  }
+}

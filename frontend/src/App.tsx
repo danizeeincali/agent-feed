@@ -31,7 +31,11 @@ import BulletproofClaudeCodePanel from './components/BulletproofClaudeCodePanel'
 import AgentDashboard from './components/AgentDashboard';
 import WorkflowVisualizationFixed from './components/WorkflowVisualizationFixed';
 import BulletproofActivityPanel from './components/BulletproofActivityPanel';
-import UnifiedAgentPage from './components/UnifiedAgentPage';
+// Removed UnifiedAgentPage import - component deleted during cleanup
+// Removed AgentDynamicPage import - component deleted during cleanup
+// Removed AgentDynamicPageV2 import - component deleted during cleanup
+import WorkingAgentProfile from './components/WorkingAgentProfile';
+import DynamicPageRenderer from './components/DynamicPageRenderer';
 import SimpleSettings from './components/SimpleSettings';
 import DualModeClaudeManager from './components/claude-manager/DualModeClaudeManager';
 import { ClaudeInstanceManagerComponentSSE } from './components/claude-manager/ClaudeInstanceManagerComponentSSE';
@@ -212,7 +216,12 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6" data-testid="app-container">
-          <ErrorBoundary>
+          <ErrorBoundary fallbackRender={({ error }) => (
+            <div className="p-4 border border-red-200 bg-red-50 text-red-700 rounded-md">
+              <h2>Something went wrong</h2>
+              <p>{error?.message}</p>
+            </div>
+          )}>
             {children}
           </ErrorBoundary>
         </main>
@@ -245,7 +254,12 @@ const App: React.FC = () => {
           }}>
             <Router>
             <Layout>
-              <ErrorBoundary componentName="AppRouter">
+              <ErrorBoundary fallbackRender={({ error }) => (
+                <div className="p-4 border border-red-200 bg-red-50 text-red-700 rounded-md">
+                  <h2>Error in AppRouter</h2>
+                  <p>{error?.message}</p>
+                </div>
+              )}>
                 <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading page..." size="lg" />}>
                   <Routes>
                   <Route path="/" element={
@@ -299,12 +313,17 @@ const App: React.FC = () => {
                     </RouteWrapper>
                   } />
                   <Route path="/agents/:agentId" element={
-                    <RouteErrorBoundary routeName="UnifiedAgentPage" fallback={<FallbackComponents.AgentProfileFallback />}>
-                      <AsyncErrorBoundary componentName="UnifiedAgentPage">
-                        <Suspense fallback={<FallbackComponents.AgentProfileFallback />}>
-                          <UnifiedAgentPage />
-                        </Suspense>
-                      </AsyncErrorBoundary>
+                    <RouteErrorBoundary routeName="AgentProfile">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading agent profile..." />}>
+                        <WorkingAgentProfile />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/agents/:agentId/pages/:pageId" element={
+                    <RouteErrorBoundary routeName="DynamicAgentPage">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading dynamic page..." />}>
+                        <DynamicPageRenderer />
+                      </Suspense>
                     </RouteErrorBoundary>
                   } />
                   <Route path="/workflows" element={

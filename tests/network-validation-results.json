@@ -1,0 +1,1834 @@
+{
+  "timestamp": "2025-09-11T19:56:36.625Z",
+  "target_url": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723",
+  "network_requests": [
+    {
+      "timestamp": "2025-09-11T19:56:46.261Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723",
+      "resourceType": "document",
+      "headers": {
+        "accept-language": "en-US,en;q=0.9",
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:46.456Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@vite/client",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:46.464Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/network-connectivity-fix.js",
+      "resourceType": "script",
+      "headers": {
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "referer": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:46.464Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/main.tsx?t=1757620590337",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:46.485Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@react-refresh",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:46.776Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/vite/dist/client/env.mjs",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/@vite/client",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.070Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/main.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.070Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/main.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.071Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/main.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.076Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/index.css?t=1757620590337",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/main.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.479Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-DRWLMN53.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=c1763d21",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.479Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=c1763d21",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.480Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/node_modules/.vite/deps/react-dom_client.js?v=c1763d21",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.498Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.500Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-router-dom.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.500Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.500Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/react-error-boundary.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.500Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/FallbackComponents.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.500Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/RealTimeNotifications.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.501Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/GlobalErrorBoundary.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.501Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/RouteErrorBoundary.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.501Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AsyncErrorBoundary.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.501Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/contexts/VideoPlaybackContext.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.501Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.501Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/SafeFeedWrapper.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.509Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/IsolatedRealAgentManager.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.509Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/RealActivityFeed.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.509Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/RealAnalytics.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.510Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/RouteWrapper.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.514Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/BulletproofClaudeCodePanel.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.515Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AgentDashboard.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.515Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/WorkflowVisualizationFixed.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.515Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/UnifiedAgentPage.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.516Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AgentDynamicPageWrapper.tsx?t=1757620590337",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.516Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/SimpleSettings.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.521Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/claude-manager/DualModeClaudeManager.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.522Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.524Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/PerformanceMonitor.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.524Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/context/WebSocketSingletonContext.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.529Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/DraftManager.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.532Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/DebugPostsDisplay.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.533Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/posting-interface/index.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.535Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/MentionInputDemo.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.536Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/MentionDebugTest.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.536Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/agents.css",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.536Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/lucide-react.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.536Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/utils/cn.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.536Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ConnectionStatus.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/App.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.597Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-6PXSGDAH.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=c1763d21",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.765Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/apiServiceIsolated.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/IsolatedRealAgentManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.765Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/api.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/RealActivityFeed.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.767Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/FilterPanel.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.767Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/utils/contentParser.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.768Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/CommentThread.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.768Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/MentionInput.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.768Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/EnhancedPostingInterface.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.768Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/comments.css",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/RealSocialMediaFeed.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.823Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/hooks/useWebSocket.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/AgentDashboard.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.839Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/utils/safetyUtils.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/BulletproofClaudeCodePanel.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.883Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AgentDynamicPage.tsx?t=1757620590337",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/AgentDynamicPageWrapper.tsx?t=1757620590337",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.944Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/WebSocketDebugPanel.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/PerformanceMonitor.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.944Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ErrorTesting.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/PerformanceMonitor.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.944Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/DualInstanceMonitor.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/PerformanceMonitor.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.945Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/DualModeClaudeManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.948Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/claude-manager/ClaudeServiceManagerComponent.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/DualModeClaudeManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.948Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/claude-manager/ClaudeInstanceManagerComponent.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/DualModeClaudeManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.948Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/FeedIntegrationService.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/DualModeClaudeManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.949Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/claude-manager/claude-manager.css",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/DualModeClaudeManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.954Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/hooks/useSSEClaudeInstance.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.958Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/hooks/useTerminalCommandHistory.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.958Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/hooks/useCopyExportOutput.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.958Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ui/tabs.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.966Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ui/card.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.967Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ui/badge.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.970Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ui/button.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.970Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ui/alert.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.970Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/lib/utils.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.970Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/claude-manager/instance-table.css",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/EnhancedSSEInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.970Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/utils/real-data-transformers.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/UnifiedAgentPage.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.971Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AgentDefinitionTab.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/UnifiedAgentPage.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.971Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AgentProfileTab.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/UnifiedAgentPage.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.975Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AgentPagesTab.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/UnifiedAgentPage.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.976Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/AgentFileSystemTab.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/UnifiedAgentPage.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.976Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/hooks/useDraftManager.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/DraftManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.977Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/PostCreatorModal.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/DraftManager.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.982Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/posting-interface/PostingInterface.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/posting-interface/index.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.983Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/posting-interface/QuickPostSection.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/posting-interface/index.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.984Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/posting-interface/AviDMSection.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/posting-interface/index.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.058Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/events.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/services/apiServiceIsolated.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.094Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/api/workspaceApi.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/services/api.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.101Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/MultiSelectInput.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/FilterPanel.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.119Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/LinkPreview.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/utils/contentParser.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.119Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/EnhancedLinkPreview.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/utils/contentParser.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.174Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/MentionService.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/MentionInput.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.174Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/CommentModerationPanel.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/CommentThread.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.174Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/utils/commentUtils.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/CommentThread.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.176Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/PostCreator.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/EnhancedPostingInterface.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.206Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ErrorBoundary.jsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/ErrorTesting.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.224Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/ClaudeServiceManager.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/ClaudeServiceManagerComponent.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.233Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/managers/ClaudeInstanceManager.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/hooks/useSSEClaudeInstance.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.234Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/SingleConnectionManager.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/claude-manager/ClaudeInstanceManagerComponent.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.303Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/clsx.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/lib/utils.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.320Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/tailwind-merge.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/lib/utils.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.324Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/class-variance-authority.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/ui/alert.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.358Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/types/drafts.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/hooks/useDraftManager.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.358Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/DraftService.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/hooks/useDraftManager.ts",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.376Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/hooks/useDebounced.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/AgentPagesTab.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.423Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/YouTubeEmbed.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/EnhancedLinkPreview.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.424Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ThumbnailSummaryContainer.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/EnhancedLinkPreview.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.425Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/YouTubeService.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/EnhancedLinkPreview.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.425Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/ErrorBoundary.css",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/ErrorBoundary.jsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.447Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-U7P2NEEE.js?v=c1763d21",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/node_modules/.vite/deps/clsx.js?v=c1763d21",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.452Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/EmojiPicker.tsx",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/PostCreator.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.452Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/hooks/useKeyboardShortcuts.ts",
+      "resourceType": "script",
+      "headers": {
+        "origin": "http://127.0.0.1:5173",
+        "referer": "http://127.0.0.1:5173/src/components/PostCreator.tsx",
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.880Z",
+      "method": "GET",
+      "url": "http://localhost:5173/health",
+      "resourceType": "fetch",
+      "headers": {
+        "cache-control": "no-cache",
+        "referer": "http://127.0.0.1:5173/",
+        "accept-language": "en-US,en;q=0.9",
+        "accept": "application/json",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.884Z",
+      "method": "OPTIONS",
+      "url": "http://localhost:5173/health",
+      "resourceType": "other",
+      "headers": {
+        "accept": "*/*",
+        "access-control-request-headers": "cache-control",
+        "access-control-request-method": "GET",
+        "origin": "http://127.0.0.1:5173",
+        "sec-fetch-mode": "cors",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.296Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/agent-posts",
+      "resourceType": "fetch",
+      "headers": {
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "referer": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.353Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/vite.svg",
+      "resourceType": "other",
+      "headers": {
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "referer": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723"
+      }
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.353Z",
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/agents/personal-todos-agent",
+      "resourceType": "fetch",
+      "headers": {
+        "accept-language": "en-US,en;q=0.9",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "referer": "http://127.0.0.1:5173/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723"
+      }
+    }
+  ],
+  "console_logs": [
+    {
+      "timestamp": "2025-09-11T19:56:47.092Z",
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "args": [
+        "JSHandle:[vite] connecting..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.232Z",
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:443/?token=EHfweM7zLxTf' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "args": []
+    },
+    {
+      "timestamp": "2025-09-11T19:56:47.243Z",
+      "type": "error",
+      "text": "[vite] failed to connect to websocket (Error: WebSocket closed without opened.). ",
+      "args": [
+        "JSHandle:[vite] failed to connect to websocket (Error: WebSocket closed without opened.). "
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.606Z",
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "args": [
+        "JSHandle:%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools",
+        "JSHandle:font-weight:bold"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.717Z",
+      "type": "log",
+      "text": "🔗 API Service initialized with base URL: http://localhost:3000/api",
+      "args": [
+        "JSHandle:🔗 API Service initialized with base URL:",
+        "JSHandle:http://localhost:3000/api"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.718Z",
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:3000/ws",
+      "args": [
+        "JSHandle:🔌 Attempting WebSocket connection to:",
+        "JSHandle:ws://localhost:3000/ws"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.723Z",
+      "type": "log",
+      "text": "🔄 Creating new MentionService instance",
+      "args": [
+        "JSHandle:🔄 Creating new MentionService instance"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.731Z",
+      "type": "log",
+      "text": "🔄 MentionServiceImpl constructor called",
+      "args": [
+        "JSHandle:🔄 MentionServiceImpl constructor called"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.731Z",
+      "type": "log",
+      "text": "🔍 Constructor: agents array initialized: JSHandle@object",
+      "args": [
+        "JSHandle:🔍 Constructor: agents array initialized:",
+        "JSHandle@object"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.731Z",
+      "type": "log",
+      "text": "✅ MentionService instance created, agents length: 13",
+      "args": [
+        "JSHandle:✅ MentionService instance created, agents length:",
+        "JSHandle:13"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.807Z",
+      "type": "log",
+      "text": "DEBUG: App.tsx loading...",
+      "args": [
+        "JSHandle:DEBUG: App.tsx loading..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.809Z",
+      "type": "log",
+      "text": "DEBUG: Loading SocialMediaFeed...",
+      "args": [
+        "JSHandle:DEBUG: Loading SocialMediaFeed..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.832Z",
+      "type": "log",
+      "text": "AgentLink: Starting application...",
+      "args": [
+        "JSHandle:AgentLink: Starting application..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.832Z",
+      "type": "log",
+      "text": "AgentLink: Creating React root...",
+      "args": [
+        "JSHandle:AgentLink: Creating React root..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.837Z",
+      "type": "log",
+      "text": "AgentLink: Rendering application with error boundaries...",
+      "args": [
+        "JSHandle:AgentLink: Rendering application with error boundaries..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.857Z",
+      "type": "log",
+      "text": "AgentLink: ✅ Application started successfully",
+      "args": [
+        "JSHandle:AgentLink: ✅ Application started successfully"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.872Z",
+      "type": "log",
+      "text": "🔧 Network Fix Initializing...",
+      "args": [
+        "JSHandle:🔧 Network Fix Initializing..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.873Z",
+      "type": "log",
+      "text": "- Environment: Local/Other",
+      "args": [
+        "JSHandle:- Environment:",
+        "JSHandle:Local/Other"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.873Z",
+      "type": "log",
+      "text": "- Base URL: http://localhost:5173",
+      "args": [
+        "JSHandle:- Base URL:",
+        "JSHandle:http://localhost:5173"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.873Z",
+      "type": "log",
+      "text": "🚀 Initializing network connection fix...",
+      "args": [
+        "JSHandle:🚀 Initializing network connection fix..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:48.921Z",
+      "type": "log",
+      "text": "DEBUG: App component rendering...",
+      "args": [
+        "JSHandle:DEBUG: App component rendering..."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.205Z",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "args": []
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.259Z",
+      "type": "error",
+      "text": "❌ Network connection failed:",
+      "args": [
+        "JSHandle:❌ Network connection failed:"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.259Z",
+      "type": "error",
+      "text": "- URL: http://localhost:5173/health",
+      "args": [
+        "JSHandle:- URL: http://localhost:5173/health"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.259Z",
+      "type": "error",
+      "text": "- Error: undefined",
+      "args": [
+        "JSHandle:- Error: undefined"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.259Z",
+      "type": "warn",
+      "text": "⚠️ Network fix could not establish connection",
+      "args": [
+        "JSHandle:⚠️ Network fix could not establish connection"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.296Z",
+      "type": "warn",
+      "text": "⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+      "args": [
+        "JSHandle:⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.296Z",
+      "type": "warn",
+      "text": "⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.",
+      "args": [
+        "JSHandle:⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath."
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.297Z",
+      "type": "log",
+      "text": "DEBUG: App component mounted!",
+      "args": [
+        "JSHandle:DEBUG: App component mounted!"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.301Z",
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:3000/ws' failed: Error during WebSocket handshake: Unexpected response code: 400",
+      "args": []
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.339Z",
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "args": [
+        "JSHandle:❌ WebSocket error:",
+        "JSHandle@object"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.340Z",
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "args": [
+        "JSHandle:🔌 WebSocket connection closed"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.466Z",
+      "type": "log",
+      "text": "✅ HTTP API connection established",
+      "args": [
+        "JSHandle:✅ HTTP API connection established"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.634Z",
+      "type": "log",
+      "text": "🔍 DEBUGGING: AgentDynamicPageWrapper rendering AgentDynamicPage JSHandle@object",
+      "args": [
+        "JSHandle:🔍 DEBUGGING: AgentDynamicPageWrapper rendering AgentDynamicPage",
+        "JSHandle@object"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.634Z",
+      "type": "log",
+      "text": "🔍 SPARC ULTRA DEBUG: Loading state evaluation JSHandle@object",
+      "args": [
+        "JSHandle:🔍 SPARC ULTRA DEBUG: Loading state evaluation",
+        "JSHandle@object"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.635Z",
+      "type": "log",
+      "text": "🔍 SPARC PHASE 2 DEBUG: Component mount useEffect triggered",
+      "args": [
+        "JSHandle:🔍 SPARC PHASE 2 DEBUG: Component mount useEffect triggered"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.635Z",
+      "type": "log",
+      "text": "🔍 SPARC PHASE 2 DEBUG: Pages state changed: JSHandle@object",
+      "args": [
+        "JSHandle:🔍 SPARC PHASE 2 DEBUG: Pages state changed:",
+        "JSHandle@object"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.636Z",
+      "type": "log",
+      "text": "🔍 DEBUGGING: initialPageId useEffect triggered JSHandle@object",
+      "args": [
+        "JSHandle:🔍 DEBUGGING: initialPageId useEffect triggered",
+        "JSHandle@object"
+      ]
+    },
+    {
+      "timestamp": "2025-09-11T19:56:49.636Z",
+      "type": "log",
+      "text": "🔍 DEBUGGING: Branch 3 - No action taken JSHandle@object",
+      "args": [
+        "JSHandle:🔍 DEBUGGING: Branch 3 - No action taken",
+        "JSHandle@object"
+      ]
+    }
+  ],
+  "api_responses": {
+    "http://127.0.0.1:5173/api/agents/personal-todos-agent": {
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "access-control-allow-credentials": "true",
+        "connection": "close",
+        "content-length": "1320",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Thu, 11 Sep 2025 19:56:49 GMT",
+        "etag": "W/\"528-66yppyOV6ljFJIoDb1Temld6Itw\"",
+        "vary": "Origin",
+        "x-powered-by": "Express"
+      },
+      "body": {
+        "success": true,
+        "data": {
+          "id": "personal-todos-agent",
+          "name": "personal-todos-agent",
+          "display_name": "personal-todos-agent",
+          "description": "Task management with Fibonacci priority system (P0-P7). User-facing agent that posts its own work to agent feed.",
+          "system_prompt": "Advanced task management agent using Fibonacci priority system (P0-P7) for optimal productivity. Manages personal task lists with impact scoring, dependency tracking, and automated prioritization within the production environment.",
+          "avatar_color": "#059669",
+          "capabilities": [
+            "read",
+            "write",
+            "edit",
+            "multiedit",
+            "glob",
+            "grep",
+            "todowrite",
+            "bash",
+            "webfetch"
+          ],
+          "status": "active",
+          "model": "sonnet",
+          "priority": "P0",
+          "proactive": true,
+          "usage": "PROACTIVE for managing personal task lists and productivity optimization",
+          "created_at": "2025-09-04T05:19:01.715Z",
+          "updated_at": "2025-09-04T05:19:01.715Z",
+          "last_used": "2025-09-11T19:56:42.410Z",
+          "usage_count": 15,
+          "performance_metrics": {
+            "success_rate": 80.18102887631842,
+            "average_response_time": 387,
+            "total_tokens_used": 38745,
+            "error_count": 6,
+            "validations_completed": 105,
+            "uptime_percentage": 98.70428736940147
+          },
+          "health_status": {
+            "cpu_usage": 22.138297174178135,
+            "memory_usage": 52.17756857451582,
+            "response_time": 410,
+            "last_heartbeat": "2025-09-11T19:56:42.410Z",
+            "status": "healthy",
+            "active_tasks": 2
+          }
+        },
+        "timestamp": "2025-09-11T19:56:49.424Z"
+      },
+      "timestamp": "2025-09-11T19:56:49.466Z"
+    }
+  },
+  "validation_checklist": {
+    "backend_accessible": false,
+    "frontend_proxy_working": true,
+    "api_calls_made": true,
+    "data_received": true,
+    "no_network_errors": false,
+    "timing_acceptable": false
+  },
+  "performance_metrics": {
+    "total_requests": 119,
+    "api_requests": 1,
+    "failed_requests": 2,
+    "page_load_time": 3811,
+    "first_api_response_time": 3231
+  },
+  "error": "page.waitForTimeout is not a function"
+}

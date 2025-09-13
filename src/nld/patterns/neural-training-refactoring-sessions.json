@@ -14,7 +14,7 @@
         "SSEConnectionManager",
         "ClaudeInstanceSelector"
       ],
-      "status": "active",
+      "status": "completed",
       "metrics": {
         "errorsDetected": 22,
         "patternsFound": 0,

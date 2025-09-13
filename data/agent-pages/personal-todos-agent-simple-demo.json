@@ -1,0 +1,9 @@
+{
+  "id": "simple-demo",
+  "agent_id": "personal-todos-agent",
+  "title": "Simple Demo Page",
+  "specification": "{\"id\":\"simple-demo\",\"version\":1,\"title\":\"Simple Demo Page\",\"layout\":\"single\",\"components\":[{\"type\":\"Card\",\"props\":{\"title\":\"Welcome to Agent Dynamic Pages!\",\"description\":\"This page was created by an AI agent using JSON specifications.\"},\"children\":[{\"type\":\"Container\",\"children\":[{\"type\":\"Badge\",\"props\":{\"children\":\"AI Generated\",\"variant\":\"secondary\"}}]}]},{\"type\":\"Grid\",\"props\":{\"cols\":2,\"gap\":4},\"children\":[{\"type\":\"Button\",\"props\":{\"children\":\"Primary Action\",\"variant\":\"default\"}},{\"type\":\"Button\",\"props\":{\"children\":\"Secondary Action\",\"variant\":\"outline\"}}]},{\"type\":\"Card\",\"props\":{\"title\":\"User Input Example\",\"description\":\"Agents can create interactive forms\"},\"children\":[{\"type\":\"Input\",\"props\":{\"placeholder\":\"Type something...\",\"type\":\"text\"}},{\"type\":\"Textarea\",\"props\":{\"placeholder\":\"Enter your feedback...\",\"rows\":3}},{\"type\":\"Checkbox\",\"props\":{\"checked\":false}}]}]}",
+  "version": 1,
+  "created_at": "2025-09-12T15:02:29.639Z",
+  "updated_at": "2025-09-12T15:02:29.639Z"
+}

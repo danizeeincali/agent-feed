@@ -1,0 +1,33 @@
+{
+  "resolution_id": "WSF-001-FIX-2025091101",
+  "original_failure_id": "WSF-001-2025091101", 
+  "resolution_strategy": "export_aggregation_fix",
+  "problem_analysis": {
+    "issue": "workspaceApi not exported from main api.ts barrel file",
+    "affected_files": [
+      "src/components/AgentPageBuilder.tsx",
+      "src/components/AgentPagesTab.tsx" 
+    ],
+    "import_patterns": [
+      "import { workspaceApi } from '../services/api'",
+      "import { workspaceApi } from '../services/api/workspaceApi'"
+    ]
+  },
+  "resolution_steps": [
+    "Updated AgentPageBuilder to direct import from workspaceApi",
+    "Added workspaceApi re-export to main api.ts for compatibility",
+    "Verified build pipeline success"
+  ],
+  "neural_learning_data": {
+    "pattern_type": "barrel_export_missing",
+    "resolution_effectiveness": "high",
+    "time_to_resolution": "immediate",
+    "prevention_difficulty": "easy",
+    "tdd_could_prevent": true
+  },
+  "tdd_lessons": {
+    "test_that_would_catch": "import contract validation test",
+    "test_example": "expect(() => import('../services/api')).resolves.toHaveProperty('workspaceApi')",
+    "integration_test": "build pipeline validation in CI/CD"
+  }
+}

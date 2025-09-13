@@ -1,0 +1,46 @@
+{
+  "patternType": "PAGE_NOT_FOUND_PREVENTION",
+  "version": "1.0.0",
+  "generatedAt": "2025-09-13T02:56:59.900Z",
+  "patterns": [
+    {
+      "input": {
+        "errorType": "page_not_found",
+        "context": "React component with API call",
+        "timing": "after_api_success",
+        "userImpact": "high"
+      },
+      "output": {
+        "preventionAction": "validate_file_exists_before_render",
+        "autoFix": "create_missing_file",
+        "priority": "critical"
+      },
+      "confidence": 0.95
+    },
+    {
+      "input": {
+        "errorType": "database_record_missing",
+        "context": "API endpoint querying database",
+        "timing": "during_request_processing",
+        "userImpact": "high"
+      },
+      "output": {
+        "preventionAction": "validate_database_record_exists",
+        "autoFix": "create_missing_database_record",
+        "priority": "critical"
+      },
+      "confidence": 0.9
+    }
+  ],
+  "preventionRules": [
+    "Always validate file existence before serving pages",
+    "Create missing database records automatically",
+    "Implement proactive validation hooks",
+    "Monitor file system changes for consistency"
+  ],
+  "successMetrics": {
+    "falsePositiveRate": 0.02,
+    "autoFixSuccessRate": 0.98,
+    "preventionEffectiveness": 0.95
+  }
+}

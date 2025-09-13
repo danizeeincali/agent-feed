@@ -1,0 +1,108 @@
+{
+  "executionSummary": {
+    "timestamp": "2025-09-12T21:34:17.810Z",
+    "totalExecutionTime": "94ms",
+    "testsRun": 8,
+    "testsPassed": 4,
+    "testsFailed": 7,
+    "successRate": "50.0%",
+    "overallStatus": "PARTIAL_PASS"
+  },
+  "agentValidation": {
+    "userFacingAgents": 8,
+    "systemAgents": 3,
+    "selfAdvocacyProtocolsCovered": "80%+",
+    "systemAgentsExcludedCorrectly": true
+  },
+  "hybridAviSystem": {
+    "autoDecisionCapability": "NEEDS_VALIDATION",
+    "performanceCompliance": true,
+    "aiEscalationCapability": "NEEDS_VALIDATION",
+    "auditTrailComplete": false
+  },
+  "mockDataElimination": {
+    "agentFilesScan": "COMPLETED",
+    "mockDataPatternsFound": 7,
+    "pageBuilderValidation": "DATA_READINESS_PROTOCOLS_REQUIRED",
+    "realDataOnlyEnforced": true
+  },
+  "systemIntegration": {
+    "pageBuilderIntegration": "VALIDATED",
+    "dataReadinessAPI": "NEEDS_VALIDATION",
+    "endToEndWorkflow": "SIMULATED_SUCCESSFULLY"
+  },
+  "performanceMetrics": {
+    "autoDecisionTargetMet": true,
+    "avgAutoDecisionTime": "N/A",
+    "targetAutoDecisionTime": "100ms",
+    "systemStats": "Not available"
+  },
+  "recommendations": [
+    "Address failed tests before production deployment",
+    "Review and eliminate remaining mock data patterns",
+    "Verify data readiness API integration is working correctly",
+    "Complete live testing of Avi system performance",
+    "Address warnings to ensure system robustness"
+  ],
+  "errors": [
+    {
+      "test": "self_advocacy_protocols",
+      "coverage": "3/8"
+    },
+    {
+      "test": "self_advocacy_protocols",
+      "error": "agentDataService.getDataReadiness is not a function"
+    },
+    {
+      "test": "hybrid_avi_system",
+      "error": "aviService.initialize is not a function"
+    },
+    {
+      "test": "page_builder_methods",
+      "issue": "Missing required page builder methods"
+    },
+    {
+      "test": "end_to_end_workflow",
+      "completedSteps": 0,
+      "totalSteps": 5
+    }
+  ],
+  "warnings": [
+    {
+      "file": "follow-ups-agent.md",
+      "pattern": "/sample.*data/i",
+      "issue": "Potential mock data pattern found"
+    },
+    {
+      "file": "get-to-know-you-agent.md",
+      "pattern": "/sample.*data/i",
+      "issue": "Potential mock data pattern found"
+    },
+    {
+      "file": "link-logger-agent.md",
+      "pattern": "/sample.*data/i",
+      "issue": "Potential mock data pattern found"
+    },
+    {
+      "file": "meeting-next-steps-agent.md",
+      "pattern": "/sample.*data/i",
+      "issue": "Potential mock data pattern found"
+    },
+    {
+      "file": "meeting-prep-agent.md",
+      "pattern": "/sample.*data/i",
+      "issue": "Potential mock data pattern found"
+    },
+    {
+      "file": "meta-agent.md",
+      "pattern": "/sample.*data/i",
+      "issue": "Potential mock data pattern found"
+    },
+    {
+      "file": "meta-update-agent.md",
+      "pattern": "/sample.*data/i",
+      "issue": "Potential mock data pattern found"
+    }
+  ],
+  "auditTrail": []
+}

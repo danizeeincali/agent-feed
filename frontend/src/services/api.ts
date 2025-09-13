@@ -189,7 +189,7 @@ class ApiService {
         this.emit('agents_updated', data.payload);
         break;
       case 'posts_updated':
-        this.clearCache('/agent-posts');
+        this.clearCache('/v1/agent-posts');
         this.emit('posts_updated', data.payload);
         break;
       case 'metrics_updated':
@@ -262,12 +262,12 @@ class ApiService {
       sortOrder
     });
     
-    const cacheKey = `/agent-posts?${params}`;
+    const cacheKey = `/v1/agent-posts?${params}`;
     const cached = this.getCachedData<any>(cacheKey);
     if (cached) return cached;
     
     try {
-      const response = await this.request<any>(`/agent-posts?${params}`, {}, false);
+      const response = await this.request<any>(`/v1/agent-posts?${params}`, {}, false);
       this.setCachedData(cacheKey, response, 10000); // 10 second cache
       
       // Normalize the response format for components
@@ -294,20 +294,20 @@ class ApiService {
   }
 
   async getAgentPost(id: string): Promise<ApiResponse<AgentPost>> {
-    return this.request<ApiResponse<AgentPost>>(`/agent-posts/${id}`);
+    return this.request<ApiResponse<AgentPost>>(`/v1/agent-posts/${id}`);
   }
 
   async createAgentPost(postData: Partial<AgentPost>): Promise<ApiResponse<AgentPost>> {
-    this.clearCache('/agent-posts');
-    return this.request<ApiResponse<AgentPost>>('/agent-posts', {
+    this.clearCache('/v1/agent-posts');
+    return this.request<ApiResponse<AgentPost>>('/v1/agent-posts', {
       method: 'POST',
       body: JSON.stringify(postData),
     });
   }
 
   async updatePostEngagement(postId: string, action: 'comment'): Promise<ApiResponse<AgentPost>> {
-    this.clearCache('/agent-posts');
-    return this.request<ApiResponse<AgentPost>>(`/agent-posts/${postId}/engagement`, {
+    this.clearCache('/v1/agent-posts');
+    return this.request<ApiResponse<AgentPost>>(`/v1/agent-posts/${postId}/engagement`, {
       method: 'PUT',
       body: JSON.stringify({ action }),
     });
@@ -316,19 +316,19 @@ class ApiService {
 
   // Save/unsave posts with improved error handling
   async savePost(postId: string, save: boolean, userId = 'anonymous'): Promise<ApiResponse<void>> {
-    this.clearCache('/agent-posts');
+    this.clearCache('/v1/agent-posts');
     this.clearCache('/saved-posts');
     this.clearCache('/filter-stats');
     
     if (save) {
       // Save post - use POST
-      return this.request<ApiResponse<void>>(`/agent-posts/${postId}/save`, {
+      return this.request<ApiResponse<void>>(`/v1/agent-posts/${postId}/save`, {
         method: 'POST',
         body: JSON.stringify({ user_id: userId }),
       });
     } else {
       // Unsave post - use DELETE with query parameter (no body, no Content-Type header)
-      return this.request<ApiResponse<void>>(`/agent-posts/${postId}/save?user_id=${userId}`, {
+      return this.request<ApiResponse<void>>(`/v1/agent-posts/${postId}/save?user_id=${userId}`, {
         method: 'DELETE'
       });
     }
@@ -337,7 +337,7 @@ class ApiService {
   // Check if post is saved by user
   async isPostSaved(postId: string, userId = 'anonymous'): Promise<boolean> {
     try {
-      const response = await this.request<{ isSaved: boolean }>(`/agent-posts/${postId}/saved?user_id=${userId}`);
+      const response = await this.request<{ isSaved: boolean }>(`/v1/agent-posts/${postId}/saved?user_id=${userId}`);
       return response.isSaved || false;
     } catch (error) {
       console.error('Error checking if post is saved:', error);
@@ -358,7 +358,7 @@ class ApiService {
       if (options?.userId) params.set('userId', options.userId);
       
       // FIXED: Use correct backend endpoint
-      const endpoint = `/agent-posts/${postId}/comments${params.toString() ? '?' + params.toString() : ''}`;
+      const endpoint = `/v1/agent-posts/${postId}/comments${params.toString() ? '?' + params.toString() : ''}`;
       const response = await this.request<any>(endpoint, {}, false);
       
       if (response.success && response.data) {
@@ -396,7 +396,7 @@ class ApiService {
         });
       } else {
         // SPARC FIX: Create root comment using correct backend endpoint
-        response = await this.request<any>(`/agent-posts/${postId}/comments`, {
+        response = await this.request<any>(`/v1/agent-posts/${postId}/comments`, {
           method: 'POST',
           body: JSON.stringify({
             content,
@@ -406,7 +406,7 @@ class ApiService {
         });
       }
       
-      this.clearCache(`/agent-posts/${postId}/comments`);
+      this.clearCache(`/v1/agent-posts/${postId}/comments`);
       return response;
     } catch (error) {
       console.error('Error creating comment:', error);
@@ -589,7 +589,7 @@ class ApiService {
   // Get threaded comments for a specific post (full tree structure)
   async getThreadedComments(postId: string): Promise<any[]> {
     try {
-      const response = await this.request<any>(`/agent-posts/${postId}/comments/thread`, {}, false);
+      const response = await this.request<any>(`/v1/agent-posts/${postId}/comments/thread`, {}, false);
       
       if (response.success && response.data) {
         return response.data;
@@ -606,9 +606,9 @@ class ApiService {
 
   // Create a new root comment for agent posts
   async createAgentComment(postId: string, content: string, authorAgent: string): Promise<any> {
-    this.clearCache('/agent-posts');
+    this.clearCache('/v1/agent-posts');
     try {
-      const response = await this.request<any>(`/agent-posts/${postId}/comments`, {
+      const response = await this.request<any>(`/v1/agent-posts/${postId}/comments`, {
         method: 'POST',
         body: JSON.stringify({ content, authorAgent }),
       });
@@ -622,7 +622,7 @@ class ApiService {
 
   // Create a reply to an existing comment
   async createCommentReply(commentId: string, postId: string, content: string, authorAgent: string): Promise<any> {
-    this.clearCache('/agent-posts');
+    this.clearCache('/v1/agent-posts');
     try {
       const response = await this.request<any>(`/comments/${commentId}/reply`, {
         method: 'POST',
@@ -663,7 +663,7 @@ class ApiService {
 
   // Generate an agent response to a comment (for demo purposes)
   async generateAgentResponse(commentId: string): Promise<any> {
-    this.clearCache('/agent-posts');
+    this.clearCache('/v1/agent-posts');
     try {
       const response = await this.request<any>(`/comments/${commentId}/generate-response`, {
         method: 'POST',
@@ -782,8 +782,8 @@ class ApiService {
 
   // Delete posts
   async deletePost(postId: string): Promise<ApiResponse<void>> {
-    this.clearCache('/agent-posts');
-    return this.request<ApiResponse<void>>(`/agent-posts/${postId}`, {
+    this.clearCache('/v1/agent-posts');
+    return this.request<ApiResponse<void>>(`/v1/agent-posts/${postId}`, {
       method: 'DELETE',
     });
   }
@@ -885,12 +885,12 @@ class ApiService {
         params.set('filter', 'all');
     }
     
-    const cacheKey = `/agent-posts?${params}`;
+    const cacheKey = `/v1/agent-posts?${params}`;
     const cached = this.getCachedData<any>(cacheKey);
     if (cached) return cached;
     
     try {
-      const response = await this.request<any>(`/agent-posts?${params}`, {}, false);
+      const response = await this.request<any>(`/v1/agent-posts?${params}`, {}, false);
       this.setCachedData(cacheKey, response, 5000); // 5 second cache for filtered results
       return response;
     } catch (error) {
@@ -1155,6 +1155,196 @@ class ApiService {
     }
   }
 
+  // ==================== DYNAMIC PAGES API METHODS ====================
+
+  /**
+   * Get dynamic pages for an agent
+   */
+  async getDynamicPages(
+    agentId: string, 
+    filters?: {
+      page_type?: string;
+      status?: string;
+      content_type?: string;
+      search?: string;
+      limit?: number;
+      offset?: number;
+      sort_by?: string;
+      sort_order?: string;
+    }
+  ): Promise<any> {
+    const params = new URLSearchParams();
+    
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          params.append(key, value.toString());
+        }
+      });
+    }
+
+    const endpoint = `/agent-pages/agents/${agentId}/pages${params.toString() ? '?' + params.toString() : ''}`;
+    const cacheKey = `dynamic-pages-${agentId}-${params.toString()}`;
+    
+    const cached = this.getCachedData<any>(cacheKey);
+    if (cached) return cached;
+    
+    try {
+      const response = await this.request<any>(endpoint, {}, false);
+      this.setCachedData(cacheKey, response, 10000); // 10 second cache
+      return response;
+    } catch (error) {
+      console.error('API Error in getDynamicPages:', error);
+      return {
+        success: false,
+        agent_id: agentId,
+        pages: [],
+        total: 0,
+        limit: 20,
+        offset: 0,
+        has_more: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Get a specific dynamic page
+   */
+  async getDynamicPage(agentId: string, pageId: string): Promise<any> {
+    const endpoint = `/agent-pages/agents/${agentId}/pages/${pageId}`;
+    
+    try {
+      const response = await this.request<any>(endpoint, {}, false);
+      return response;
+    } catch (error) {
+      console.error('API Error in getDynamicPage:', error);
+      return {
+        success: false,
+        page: null,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Create a new dynamic page
+   */
+  async createDynamicPage(agentId: string, pageData: any): Promise<any> {
+    this.clearCache(`dynamic-pages-${agentId}`);
+    
+    try {
+      const response = await this.request<any>(`/agent-pages/agents/${agentId}/pages`, {
+        method: 'POST',
+        body: JSON.stringify(pageData),
+      });
+      
+      // Emit real-time update
+      this.emit('dynamic_pages_updated', { agentId, action: 'created', page: response.page });
+      
+      return response;
+    } catch (error) {
+      console.error('API Error in createDynamicPage:', error);
+      return {
+        success: false,
+        page: null,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Update a dynamic page
+   */
+  async updateDynamicPage(agentId: string, pageId: string, updateData: any): Promise<any> {
+    this.clearCache(`dynamic-pages-${agentId}`);
+    
+    try {
+      const response = await this.request<any>(`/agent-pages/agents/${agentId}/pages/${pageId}`, {
+        method: 'PUT',
+        body: JSON.stringify(updateData),
+      });
+      
+      // Emit real-time update
+      this.emit('dynamic_pages_updated', { agentId, action: 'updated', page: response.page });
+      
+      return response;
+    } catch (error) {
+      console.error('API Error in updateDynamicPage:', error);
+      return {
+        success: false,
+        page: null,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Delete a dynamic page
+   */
+  async deleteDynamicPage(agentId: string, pageId: string): Promise<any> {
+    this.clearCache(`dynamic-pages-${agentId}`);
+    
+    try {
+      const response = await this.request<any>(`/agent-pages/agents/${agentId}/pages/${pageId}`, {
+        method: 'DELETE',
+      });
+      
+      // Emit real-time update
+      this.emit('dynamic_pages_updated', { agentId, action: 'deleted', pageId });
+      
+      return response;
+    } catch (error) {
+      console.error('API Error in deleteDynamicPage:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Initialize workspace for an agent (creates workspace if it doesn't exist)
+   */
+  async initializeAgentWorkspace(agentId: string): Promise<any> {
+    try {
+      const response = await this.request<any>(`/agent-pages/agents/${agentId}/workspace/init`, {
+        method: 'POST',
+      });
+      
+      return response;
+    } catch (error) {
+      console.error('API Error in initializeAgentWorkspace:', error);
+      return {
+        success: false,
+        workspace: null,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Get workspace info for an agent
+   */
+  async getAgentWorkspace(agentId: string): Promise<any> {
+    const cacheKey = `workspace-${agentId}`;
+    const cached = this.getCachedData<any>(cacheKey);
+    if (cached) return cached;
+    
+    try {
+      const response = await this.request<any>(`/agent-pages/agents/${agentId}/workspace`, {}, false);
+      this.setCachedData(cacheKey, response, 30000); // 30 second cache
+      return response;
+    } catch (error) {
+      console.error('API Error in getAgentWorkspace:', error);
+      return {
+        success: false,
+        workspace: null,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
   // Cleanup method
   public destroy(): void {
     if (this.wsConnection) {
@@ -1167,3 +1357,7 @@ class ApiService {
 }
 
 export const apiService = new ApiService();
+
+// Re-export workspace API for compatibility
+export { workspaceApi } from './api/workspaceApi';
+export type { WorkspaceInfo, AgentPage, CreatePageData, UpdatePageData, PageListFilters, PageListResponse } from './api/workspaceApi';

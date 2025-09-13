@@ -86,7 +86,7 @@ This project uses SPARC (Specification, Pseudocode, Architecture, Refinement, Co
 `sparc-coord`, `sparc-coder`, `specification`, `pseudocode`, `architecture`, `refinement`
 
 ### Specialized Development
-`backend-dev`, `mobile-dev`, `ml-developer`, `cicd-engineer`, `api-docs`, `system-architect`, `code-analyzer`, `base-template-generator`
+`backend-dev`, `mobile-dev`, `ml-developer`, `cicd-engineer`, `api-docs`, `system-architect`, `code-analyzer`, `base-template-generator`, `page-builder-agent`
 
 ### Testing & Validation
 `tdd-london-swarm`, `production-validator`

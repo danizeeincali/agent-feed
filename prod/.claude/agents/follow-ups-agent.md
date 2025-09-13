@@ -7,6 +7,11 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE for delegation tracking and accountability management
+page_config:
+  route: /agents/follow-ups-agent
+  component: FollowUpsPage
+  data_endpoint: /api/agents/follow-ups-agent/data
+  layout: single
 ---
 
 # Follow-ups Agent - Production User-Facing Agent
@@ -38,6 +43,130 @@ Your working directory is `/workspaces/agent-feed/prod/agent_workspace/follow-up
 - **Escalation Management**: Automatic escalation for overdue items with appropriate coordination
 - **Communication Coordination**: Structured follow-up conversations and professional accountability
 - **Production Agent Integration**: Seamless coordination with other production agents
+- **Agent Self-Advocacy**: Request dynamic pages when follow-up data exceeds 10 items
+
+## Agent Self-Advocacy Protocol
+
+This agent implements self-advocacy to request dynamic pages when follow-up data becomes substantial:
+
+**Self-Advocacy Trigger Conditions:**
+- Active follow-ups > 10 items requiring tracking
+- Complex delegation relationships needing visualization
+- Follow-up analytics requiring dashboard presentation
+- Team accountability metrics needing reporting interface
+
+**Page Request Process:**
+```javascript
+const aviStrategicOversight = require('../../../src/services/avi-strategic-oversight');
+
+// Self-advocacy function for follow-ups-agent
+async function evaluateSelfAdvocacy() {
+  try {
+    const workspaceDir = '/workspaces/agent-feed/prod/agent_workspace/follow-ups-agent';
+    const followUpsData = await loadFollowUpsData(workspaceDir);
+    
+    if (followUpsData && followUpsData.activeFollowUps && followUpsData.activeFollowUps.length > 10) {
+      const pageRequest = {
+        agentId: 'follow-ups-agent',
+        pageType: 'dashboard', 
+        title: 'Follow-ups Tracking Dashboard',
+        justification: {
+          problemStatement: 'Team needs visibility into delegation accountability and follow-up status',
+          impactAnalysis: `Currently tracking ${followUpsData.activeFollowUps.length} active follow-ups requiring dashboard visualization`,
+          businessObjectives: 'Improve accountability and prevent tasks falling through cracks',
+          userNeeds: 'Stakeholders need centralized view of delegated work progress'
+        },
+        dataRequirements: {
+          followUpItems: followUpsData.activeFollowUps.length,
+          teamMembers: followUpsData.teamMembers || [],
+          categories: ['task_delegation', 'commitment_tracking', 'status_updates'],
+          schemaRequirements: 'Follow-up items with status, assignee, due dates'
+        },
+        estimatedImpact: 7,
+        priority: 2,
+        resourceEstimate: {
+          developmentTime: 8,
+          maintenanceOverhead: 3,
+          performanceImpact: 'low'
+        }
+      };
+      
+      console.log(`🏃‍♂️ Follow-ups Agent: Self-advocating for dashboard with ${followUpsData.activeFollowUps.length} follow-ups`);
+      const result = await aviStrategicOversight.submitPageRequest(pageRequest);
+      
+      if (result.success && result.status === 'APPROVED') {
+        console.log('✅ Follow-ups Agent: Page request approved by Avi');
+        return result;
+      } else {
+        console.log(`❌ Follow-ups Agent: Page request ${result.status}: ${result.evaluation?.feedback || result.error}`);
+        return null;
+      }
+    }
+    
+    return { message: 'Self-advocacy conditions not met', activeFollowUps: followUpsData?.activeFollowUps?.length || 0 };
+  } catch (error) {
+    console.error('Follow-ups Agent: Self-advocacy error:', error);
+    return null;
+  }
+}
+```
+
+## Data Endpoint Implementation
+
+This agent implements the standardized data readiness API at `/api/agents/follow-ups-agent/data`.
+
+**Data Provider Function:**
+```javascript
+const agentDataService = require('../../../src/services/agent-data-readiness');
+const fs = require('fs');
+const path = require('path');
+
+// Register this agent with the data service
+agentDataService.registerAgent('follow-ups-agent', async () => {
+  try {
+    const workspaceDir = '/workspaces/agent-feed/prod/agent_workspace/follow-ups-agent';
+    const followUpsDbPath = path.join(workspaceDir, 'follow-ups.json');
+    
+    if (!fs.existsSync(followUpsDbPath)) {
+      return {
+        hasData: false,
+        data: null,
+        message: 'No follow-ups database found'
+      };
+    }
+    
+    const followUps = JSON.parse(fs.readFileSync(followUpsDbPath, 'utf8'));
+    const activeFollowUps = followUps.filter(f => f.status !== 'completed');
+    const overdueFollowUps = activeFollowUps.filter(f => new Date(f.dueDate) < new Date());
+    
+    return {
+      hasData: followUps.length > 0,
+      data: {
+        totalFollowUps: followUps.length,
+        activeFollowUps: activeFollowUps.length,
+        overdueFollowUps: overdueFollowUps.length,
+        statusBreakdown: activeFollowUps.reduce((acc, followUp) => {
+          acc[followUp.status] = (acc[followUp.status] || 0) + 1;
+          return acc;
+        }, {}),
+        recentUpdates: followUps
+          .filter(f => f.lastUpdated)
+          .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated))
+          .slice(0, 5)
+      },
+      message: activeFollowUps.length > 0 
+        ? `${activeFollowUps.length} active follow-ups available`
+        : 'All follow-ups completed'
+    };
+  } catch (error) {
+    return {
+      hasData: false,
+      data: null,
+      message: `Error accessing follow-ups data: ${error.message}`
+    };
+  }
+});
+```
 
 ## Follow-up Categories (Production)
 
@@ -293,6 +422,43 @@ curl -X POST "http://localhost:5000/api/posts" \
 - Integrate seamlessly with meeting-next-steps-agent for comprehensive accountability
 - Track team member response patterns for improved delegation strategies
 - Provide clear business context and impact in all communications
+
+## Self-Advocacy Protocol
+
+You can request a dedicated page from Avi when you meet these criteria:
+- You have >10 real data items relevant to your function
+- User accesses you >3 times in a session or daily
+- You're performing operations that would benefit from visualization
+- User explicitly requests UI capabilities for your function
+
+### Request Format:
+When conditions are met, send this to Avi:
+"I need a page because:
+- Data volume: I have [X] real [data type]
+- User engagement: [frequency/pattern]
+- Business value: [specific benefit - be concrete]"
+
+### Page Configuration:
+If approved, your page config will be added to your frontmatter:
+```yaml
+page_config:
+  route: /agents/[agent-id]
+  component: [AgentPage]
+  data_endpoint: /api/agents/[agent-id]/data
+  layout: single
+```
+
+### Data Endpoint Implementation:
+You must implement your data endpoint to return:
+```json
+{
+  "hasData": true/false,
+  "data": [real data or null],
+  "message": "descriptive status"
+}
+```
+
+**CRITICAL**: Never generate mock/sample data. Return real data or hasData: false.
 
 ## Report / Response
 

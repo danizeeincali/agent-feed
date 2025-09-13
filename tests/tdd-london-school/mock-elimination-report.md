@@ -1,14 +1,14 @@
 # Mock Data Elimination Regression Test Report
-Generated: 2025-09-11T04:07:15.562Z
+Generated: 2025-09-12T02:08:55.183Z
 
 MOCK CONTAMINATION ANALYSIS REPORT
 ===================================
-Total files scanned: 399
-Contaminated files: 67
-Total contaminations found: 239
+Total files scanned: 442
+Contaminated files: 72
+Total contaminations found: 248
 
 SEVERITY BREAKDOWN:
-- Critical: 239 (Math.random, mock variables)
+- Critical: 248 (Math.random, mock variables)
 - High: 0 (Unknown, N/A strings)
 - Medium: 0 (Loading strings)
 
@@ -238,6 +238,10 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 38 [CRITICAL]: math_random
      Code: errorId: Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
 
+📁 frontend/src/components/PerformanceTestSuite.tsx
+  🚨 Line 121 [CRITICAL]: math_random
+     Code: apiLatency: Math.random() * 200, // Simulated
+
 📁 frontend/src/components/RealTimeActivityFeed.tsx
   🚨 Line 33 [CRITICAL]: math_random
      Code: id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -390,6 +394,14 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 173 [CRITICAL]: math_random
      Code: pid: Math.floor(Math.random() * 90000) + 10000,
 
+📁 frontend/src/hooks/usePerformanceMonitor.ts
+  🚨 Line 120 [CRITICAL]: math_random
+     Code: id: `${metric}-${Date.now()}-${Math.random()}`,
+
+📁 frontend/src/hooks/useReactBatchingAnalyzer.ts
+  🚨 Line 74 [CRITICAL]: math_random
+     Code: const batchId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
 📁 frontend/src/hooks/useResourceLeakPrevention.ts
   🚨 Line 359 [CRITICAL]: math_random
      Code: const subscriptionId = `subscription_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -484,6 +496,10 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 162 [CRITICAL]: math_random
      Code: const postId = `post-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
+📁 frontend/src/services/AgentDataService.ts
+  🚨 Line 364 [CRITICAL]: math_random
+     Code: return `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
 📁 frontend/src/services/AviDMService.ts
   🚨 Line 728 [CRITICAL]: math_random
      Code: return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -513,6 +529,18 @@ STATUS: ❌ CONTAMINATED
 📁 frontend/src/services/IncrementalMessageProcessor.ts
   🚨 Line 255 [CRITICAL]: math_random
      Code: id: rawMessage.id || `${Date.now()}-${Math.random()}`,
+
+📁 frontend/src/services/PerformanceBenchmarker.ts
+  🚨 Line 368 [CRITICAL]: math_random
+     Code: <div class="metric-value">${Math.random() * 1000}</div>
+  🚨 Line 370 [CRITICAL]: math_random
+     Code: ${Array(10).fill(0).map(() => `<div class="chart-bar" style="height: ${Math.random() * 100}%"></div>`).join('')}
+  🚨 Line 407 [CRITICAL]: math_random
+     Code: <div class="metric-value">${Math.random() * 1000}</div>
+  🚨 Line 495 [CRITICAL]: math_random
+     Code: await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
+  🚨 Line 508 [CRITICAL]: math_random
+     Code: _fromCache: Math.random() > 0.7
 
 📁 frontend/src/services/SSEClaudeInstanceManager.ts
   🚨 Line 167 [CRITICAL]: math_random
@@ -632,6 +660,6 @@ STATUS: ❌ CONTAMINATED
 
 
 ## Test Results
-- Total files scanned: 399
-- Contaminated files: 67
+- Total files scanned: 442
+- Contaminated files: 72
 - Status: FAILED

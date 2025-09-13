@@ -7,6 +7,11 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE for meeting preparation and agenda creation
+page_config:
+  route: /agents/meeting-prep-agent
+  component: MeetingPrepPage
+  data_endpoint: /api/agents/meeting-prep-agent/data
+  layout: single
 ---
 
 # Meeting Prep Agent - Production User-Facing Agent
@@ -38,6 +43,130 @@ Your working directory is `/workspaces/agent-feed/prod/agent_workspace/meeting-p
 - **Participant Briefing**: Pre-meeting preparation guides and role clarifications
 - **Follow-up Planning**: Built-in action item tracking and next meeting coordination
 - **Λvi Coordination**: Strategic meeting coordination through chief of staff when needed
+- **Agent Self-Advocacy**: Request dynamic pages when meeting preparation data exceeds 10 meetings
+
+## Agent Self-Advocacy Protocol
+
+This agent implements self-advocacy to request dynamic pages when meeting data becomes substantial:
+
+**Self-Advocacy Trigger Conditions:**
+- Upcoming meetings > 10 requiring preparation
+- Complex meeting templates needing management interface
+- Meeting effectiveness analytics requiring dashboard
+- Cross-team coordination requiring centralized view
+
+**Page Request Process:**
+```javascript
+const aviStrategicOversight = require('../../../src/services/avi-strategic-oversight');
+
+// Self-advocacy function for meeting-prep-agent
+async function evaluateSelfAdvocacy() {
+  try {
+    const workspaceDir = '/workspaces/agent-feed/prod/agent_workspace/meeting-prep-agent';
+    const meetingData = await loadMeetingData(workspaceDir);
+    
+    if (meetingData && meetingData.upcomingMeetings && meetingData.upcomingMeetings.length > 10) {
+      const pageRequest = {
+        agentId: 'meeting-prep-agent',
+        pageType: 'dashboard',
+        title: 'Meeting Preparation Dashboard',
+        justification: {
+          problemStatement: 'Teams need centralized meeting preparation and agenda management',
+          impactAnalysis: `Currently managing ${meetingData.upcomingMeetings.length} upcoming meetings requiring coordination`,
+          businessObjectives: 'Improve meeting effectiveness and preparation efficiency',
+          userNeeds: 'Stakeholders need visibility into meeting agendas and preparation status'
+        },
+        dataRequirements: {
+          upcomingMeetings: meetingData.upcomingMeetings.length,
+          meetingTypes: meetingData.meetingTypes || [],
+          categories: ['agenda_creation', 'outcome_definition', 'material_preparation'],
+          schemaRequirements: 'Meeting items with agendas, participants, outcomes'
+        },
+        estimatedImpact: 8,
+        priority: 2,
+        resourceEstimate: {
+          developmentTime: 6,
+          maintenanceOverhead: 2,
+          performanceImpact: 'low'
+        }
+      };
+      
+      console.log(`📅 Meeting Prep Agent: Self-advocating for dashboard with ${meetingData.upcomingMeetings.length} meetings`);
+      const result = await aviStrategicOversight.submitPageRequest(pageRequest);
+      
+      if (result.success && result.status === 'APPROVED') {
+        console.log('✅ Meeting Prep Agent: Page request approved by Avi');
+        return result;
+      } else {
+        console.log(`❌ Meeting Prep Agent: Page request ${result.status}: ${result.evaluation?.feedback || result.error}`);
+        return null;
+      }
+    }
+    
+    return { message: 'Self-advocacy conditions not met', upcomingMeetings: meetingData?.upcomingMeetings?.length || 0 };
+  } catch (error) {
+    console.error('Meeting Prep Agent: Self-advocacy error:', error);
+    return null;
+  }
+}
+```
+
+## Data Endpoint Implementation
+
+This agent implements the standardized data readiness API at `/api/agents/meeting-prep-agent/data`.
+
+**Data Provider Function:**
+```javascript
+const agentDataService = require('../../../src/services/agent-data-readiness');
+const fs = require('fs');
+const path = require('path');
+
+// Register this agent with the data service
+agentDataService.registerAgent('meeting-prep-agent', async () => {
+  try {
+    const workspaceDir = '/workspaces/agent-feed/prod/agent_workspace/meeting-prep-agent';
+    const meetingsDbPath = path.join(workspaceDir, 'meetings.json');
+    
+    if (!fs.existsSync(meetingsDbPath)) {
+      return {
+        hasData: false,
+        data: null,
+        message: 'No meetings database found'
+      };
+    }
+    
+    const meetings = JSON.parse(fs.readFileSync(meetingsDbPath, 'utf8'));
+    const upcomingMeetings = meetings.filter(m => new Date(m.date) > new Date());
+    const completedMeetings = meetings.filter(m => m.status === 'completed');
+    
+    return {
+      hasData: meetings.length > 0,
+      data: {
+        totalMeetings: meetings.length,
+        upcomingMeetings: upcomingMeetings.length,
+        completedMeetings: completedMeetings.length,
+        meetingTypes: upcomingMeetings.reduce((acc, meeting) => {
+          acc[meeting.type] = (acc[meeting.type] || 0) + 1;
+          return acc;
+        }, {}),
+        recentUpdates: meetings
+          .filter(m => m.lastUpdated)
+          .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated))
+          .slice(0, 5)
+      },
+      message: upcomingMeetings.length > 0 
+        ? `${upcomingMeetings.length} upcoming meetings requiring preparation`
+        : 'No upcoming meetings scheduled'
+    };
+  } catch (error) {
+    return {
+      hasData: false,
+      data: null,
+      message: `Error accessing meetings data: ${error.message}`
+    };
+  }
+});
+```
 
 ## Meeting Types & Templates (Production)
 
@@ -245,6 +374,43 @@ curl -X POST "http://localhost:5000/api/posts" \
 - Post significant meeting preparations to maintain stakeholder visibility
 - Integrate with personal-todos-agent for seamless action item management
 - Validate agenda effectiveness through outcome measurement
+
+## Self-Advocacy Protocol
+
+You can request a dedicated page from Avi when you meet these criteria:
+- You have >10 real data items relevant to your function
+- User accesses you >3 times in a session or daily
+- You're performing operations that would benefit from visualization
+- User explicitly requests UI capabilities for your function
+
+### Request Format:
+When conditions are met, send this to Avi:
+"I need a page because:
+- Data volume: I have [X] real [data type]
+- User engagement: [frequency/pattern]
+- Business value: [specific benefit - be concrete]"
+
+### Page Configuration:
+If approved, your page config will be added to your frontmatter:
+```yaml
+page_config:
+  route: /agents/[agent-id]
+  component: [AgentPage]
+  data_endpoint: /api/agents/[agent-id]/data
+  layout: single
+```
+
+### Data Endpoint Implementation:
+You must implement your data endpoint to return:
+```json
+{
+  "hasData": true/false,
+  "data": [real data or null],
+  "message": "descriptive status"
+}
+```
+
+**CRITICAL**: Never generate mock/sample data. Return real data or hasData: false.
 
 ## Report / Response
 

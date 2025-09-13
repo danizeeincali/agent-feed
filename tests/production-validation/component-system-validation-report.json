@@ -1,0 +1,316 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-12T15:02:19.994Z",
+    "version": "1.0.0",
+    "environment": "production-validation",
+    "duration": 85
+  },
+  "summary": {
+    "total": 22,
+    "passed": 17,
+    "failed": 5,
+    "warnings": 3,
+    "successRate": "77.3"
+  },
+  "tests": [
+    {
+      "name": "Component Registry File Exists",
+      "category": "Registry",
+      "status": "PASS",
+      "duration": 1,
+      "message": "ComponentRegistry.ts exists and is accessible",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.907Z"
+    },
+    {
+      "name": "Component Registry Structure",
+      "category": "Registry",
+      "status": "PASS",
+      "duration": 1,
+      "message": "All required registry components found",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.908Z"
+    },
+    {
+      "name": "Zod Schema Validation",
+      "category": "Registry",
+      "status": "PASS",
+      "duration": 0,
+      "message": "Found 4/4 Zod schemas",
+      "details": {
+        "schemas": [
+          "basePropsSchema",
+          "buttonPropsSchema",
+          "inputPropsSchema",
+          "cardPropsSchema"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.908Z"
+    },
+    {
+      "name": "Security Sanitizer Implementation",
+      "category": "Registry",
+      "status": "PASS",
+      "duration": 0,
+      "message": "Security implementation complete (5/5 features)",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.909Z"
+    },
+    {
+      "name": "Component Import Syntax",
+      "category": "Instantiation",
+      "status": "PASS",
+      "duration": 1,
+      "message": "Found 4/5 required imports",
+      "details": {
+        "imports": [
+          "import { Button }",
+          "import { Input }",
+          "import * as z from",
+          "import React"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.910Z"
+    },
+    {
+      "name": "Component Factory Pattern",
+      "category": "Instantiation",
+      "status": "PASS",
+      "duration": 0,
+      "message": "Component factory patterns implemented (4/4)",
+      "details": {
+        "patterns": [
+          "createSecureComponent",
+          "createComponentMapper",
+          "React.createElement",
+          "React.forwardRef"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.910Z"
+    },
+    {
+      "name": "Component Registration",
+      "category": "Instantiation",
+      "status": "PASS",
+      "duration": 0,
+      "message": "Component registrations found (3/3)",
+      "details": {
+        "registrations": [
+          "Button = this.createComponentMapper",
+          "Input = this.createComponentMapper",
+          "Card = this.createComponentMapper"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.911Z"
+    },
+    {
+      "name": "Page Rendering - Agent b6a8614f-881b-456d-90b3-ba0bdbc70a63",
+      "category": "Rendering",
+      "status": "FAIL",
+      "duration": 53,
+      "message": "API returned 404 for agent b6a8614f-881b-456d-90b3-ba0bdbc70a63",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.964Z"
+    },
+    {
+      "name": "Page Rendering - Agent b7e35d18-0727-4550-9450-f3130a95f34d",
+      "category": "Rendering",
+      "status": "FAIL",
+      "duration": 3,
+      "message": "API returned 404 for agent b7e35d18-0727-4550-9450-f3130a95f34d",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.967Z"
+    },
+    {
+      "name": "Page Rendering - Agent c12e3358-fb5e-43e6-bbf9-6ef4df4302d2",
+      "category": "Rendering",
+      "status": "FAIL",
+      "duration": 2,
+      "message": "API returned 404 for agent c12e3358-fb5e-43e6-bbf9-6ef4df4302d2",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.969Z"
+    },
+    {
+      "name": "UnifiedAgentPage Component",
+      "category": "Rendering",
+      "status": "PASS",
+      "duration": 5,
+      "message": "Component valid (score: 95/100)",
+      "details": {
+        "score": 95,
+        "issues": [],
+        "warnings": [
+          "Contains console statements - should be removed for production"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.974Z"
+    },
+    {
+      "name": "AgentPagesTab Component",
+      "category": "Rendering",
+      "status": "PASS",
+      "duration": 1,
+      "message": "Component valid (score: 95/100)",
+      "details": {
+        "score": 95,
+        "issues": [],
+        "warnings": [
+          "Contains console statements - should be removed for production"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.975Z"
+    },
+    {
+      "name": "Error Boundary Implementation",
+      "category": "Error Handling",
+      "status": "PASS",
+      "duration": 2,
+      "message": "Error handling patterns found (5/5)",
+      "details": {
+        "patterns": [
+          "try {",
+          "catch (",
+          "error",
+          "Error",
+          "setError"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.977Z"
+    },
+    {
+      "name": "Graceful Degradation",
+      "category": "Error Handling",
+      "status": "PASS",
+      "duration": 3,
+      "message": "Graceful degradation patterns implemented (5/5)",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.980Z"
+    },
+    {
+      "name": "Invalid Props Handling",
+      "category": "Error Handling",
+      "status": "PASS",
+      "duration": 1,
+      "message": "Props validation mechanisms found (4/5)",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.981Z"
+    },
+    {
+      "name": "Component Bundle Size",
+      "category": "Performance",
+      "status": "PASS",
+      "duration": 1,
+      "message": "Average component size: 37.84KB (threshold: 200KB)",
+      "details": {
+        "totalSize": "113.53KB",
+        "fileCount": 3,
+        "avgSize": "37.84KB"
+      },
+      "timestamp": "2025-09-12T15:02:19.982Z"
+    },
+    {
+      "name": "Memory Usage Optimization",
+      "category": "Performance",
+      "status": "FAIL",
+      "duration": 1,
+      "message": "Performance optimizations found (1/5)",
+      "details": {
+        "optimizations": [
+          "useCallback"
+        ]
+      },
+      "timestamp": "2025-09-12T15:02:19.983Z"
+    },
+    {
+      "name": "Rendering Performance",
+      "category": "Performance",
+      "status": "PASS",
+      "duration": 2,
+      "message": "Rendering performance monitoring implemented (5/5)",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.985Z"
+    },
+    {
+      "name": "XSS Protection",
+      "category": "Security",
+      "status": "PASS",
+      "duration": 1,
+      "message": "XSS protection mechanisms found (5/5)",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.986Z"
+    },
+    {
+      "name": "Accessibility Compliance",
+      "category": "Accessibility",
+      "status": "PASS",
+      "duration": 3,
+      "message": "Average accessibility score: 3.7/6 features per component",
+      "details": {
+        "totalFeatures": 11,
+        "totalComponents": 3,
+        "avgScore": "3.7"
+      },
+      "timestamp": "2025-09-12T15:02:19.989Z"
+    },
+    {
+      "name": "Console Error Detection",
+      "category": "Production",
+      "status": "FAIL",
+      "duration": 4,
+      "message": "Found console statements in 2 components - should be removed for production",
+      "details": {},
+      "timestamp": "2025-09-12T15:02:19.993Z"
+    },
+    {
+      "name": "Production Dependencies",
+      "category": "Production",
+      "status": "PASS",
+      "duration": 0,
+      "message": "All required dependencies present (28 total)",
+      "details": {
+        "totalDeps": 28,
+        "requiredDeps": [
+          "react",
+          "react-dom",
+          "zod"
+        ],
+        "missingDeps": []
+      },
+      "timestamp": "2025-09-12T15:02:19.993Z"
+    }
+  ],
+  "issues": [
+    "Page Rendering - Agent b6a8614f-881b-456d-90b3-ba0bdbc70a63: API returned 404 for agent b6a8614f-881b-456d-90b3-ba0bdbc70a63",
+    "Page Rendering - Agent b7e35d18-0727-4550-9450-f3130a95f34d: API returned 404 for agent b7e35d18-0727-4550-9450-f3130a95f34d",
+    "Page Rendering - Agent c12e3358-fb5e-43e6-bbf9-6ef4df4302d2: API returned 404 for agent c12e3358-fb5e-43e6-bbf9-6ef4df4302d2",
+    "Memory Usage Optimization: Performance optimizations found (1/5)",
+    "Console Error Detection: Found console statements in 2 components - should be removed for production"
+  ],
+  "recommendations": [
+    "⚠️ Address warning items before production deployment",
+    "❌ Fix all failing tests before production deployment",
+    "Remove console.log statements from production components",
+    "Optimize component performance before production deployment"
+  ],
+  "config": {
+    "backendUrl": "http://localhost:3000",
+    "frontendUrl": "http://localhost:5173",
+    "testAgentIds": [
+      "b6a8614f-881b-456d-90b3-ba0bdbc70a63",
+      "b7e35d18-0727-4550-9450-f3130a95f34d",
+      "c12e3358-fb5e-43e6-bbf9-6ef4df4302d2"
+    ],
+    "componentPaths": [
+      "frontend/src/services/ComponentRegistry.ts",
+      "frontend/src/components/UnifiedAgentPage.tsx",
+      "frontend/src/components/AgentPagesTab.tsx"
+    ],
+    "requiredComponents": [
+      "CapabilityList",
+      "PerformanceMetrics",
+      "Timeline",
+      "ProfileHeader",
+      "ActivityFeed"
+    ]
+  }
+}

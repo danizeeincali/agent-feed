@@ -38,6 +38,34 @@ let wsServer = null;
 import { databaseService } from './src/database/DatabaseService.js';
 import { enhancedLinkPreviewService } from './src/services/EnhancedLinkPreviewService.js';
 import threadedCommentsRouter from './src/routes/threadedComments.js';
+import agentWorkspaceRouter from './src/routes/agent-workspace.js';
+
+// Import Agent Dynamic Pages API  
+import agentDynamicPagesRouter from './src/routes/agent-dynamic-pages.js';
+
+// Import Agent Data Readiness API
+import agentDataReadinessRouter from './src/routes/agent-data-readiness.js';
+
+// Import Avi Strategic Oversight API
+import aviPageRequestsRouter from './src/routes/avi-page-requests.js';
+
+// Initialize agent data providers
+import { initializeAgentDataProviders } from './src/services/agent-data-initialization.js';
+initializeAgentDataProviders();
+
+// Initialize Avi Strategic Oversight
+import aviStrategicOversight from './src/services/avi-strategic-oversight.js';
+import aviRequestFailurePatterns from './src/nld-patterns/avi-request-failure-patterns.js';
+
+// Initialize services after database connection
+const initializeAviServices = async () => {
+  try {
+    await aviStrategicOversight.initialize();
+    console.log('✅ Avi Strategic Oversight initialized');
+  } catch (error) {
+    console.error('❌ Failed to initialize Avi services:', error);
+  }
+};
 
 // Initialize real-time broadcasting for production data
 const initializeAgentWebSocketEvents = () => {
@@ -66,6 +94,9 @@ const initializeDatabaseServices = async () => {
     
     console.log(`✅ Database service initialized successfully`);
     console.log(`📊 Database: ${databaseService.getDatabaseType()} with real production data`);
+    
+    // Make services available to routes
+    app.locals.databaseService = databaseService;
     
   } catch (error) {
     console.error('❌ Failed to initialize database services:', error.message);
@@ -2130,6 +2161,49 @@ const setupApiRoutes = () => {
       }
     });
 
+    // Add the missing Phase 2 Interactive API routes that are logged but never actually created
+    console.log('🔧 DEBUG: About to register new API routes...');
+    
+    // Simple test endpoint first
+    app.get('/api/test-endpoint', (req, res) => {
+      console.log('🔧 DEBUG: Test endpoint called!');
+      res.json({ message: 'Test endpoint works!', timestamp: new Date().toISOString() });
+    });
+    
+    console.log('🔧 DEBUG: Test endpoint registered');
+
+    // GET /api/v1/agent-posts - Main posts endpoint
+    app.get('/api/v1/agent-posts', async (req, res) => {
+      try {
+        console.log('📝 Fetching posts from database...');
+        const posts = await databaseService.getPosts();
+        console.log(`📝 Found ${posts.length} posts in database`);
+        res.json({
+          success: true,
+          posts: posts,
+          total: posts.length
+        });
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+        res.status(500).json({ success: false, error: error.message });
+      }
+    });
+
+    // GET /api/v1/filter-data - Filter data endpoint  
+    app.get('/api/v1/filter-data', async (req, res) => {
+      try {
+        const filterData = {
+          agents: await databaseService.getAgents(),
+          hashtags: ['#ai', '#productivity', '#workflow', '#automation', '#development', '#meeting'],
+          priorities: ['P0', 'P1', 'P2', 'P3', 'P4']
+        };
+        res.json(filterData);
+      } catch (error) {
+        console.error('Error getting filter data:', error);
+        res.status(500).json({ error: 'Failed to get filter data' });
+      }
+    });
+
     console.log('✅ Phase 2 Interactive API routes registered:');
     console.log('   GET  /api/v1/agent-posts (with filtering)');
     console.log('   POST /api/v1/agent-posts');
@@ -2150,6 +2224,157 @@ const setupApiRoutes = () => {
 
 // Threading API routes
 app.use('/api/v1', threadedCommentsRouter);
+
+// Agent Pages API routes - commented out since module doesn't exist
+// app.use('/api/v1', agentPagesRouter);
+
+// CRITICAL FIX: Add posts API routes BEFORE other routers to prevent interception
+console.log('🚀 CRITICAL FIX: Registering posts API routes directly...');
+
+// Main posts API endpoint (both routes for compatibility)
+const handlePostsRequest = async (req, res) => {
+  try {
+    console.log('📝 Posts API called - fetching from database...');
+    const postsResult = await databaseService.getPosts();
+    console.log(`📝 Found ${postsResult?.posts?.length || postsResult?.length || 0} posts in database`);
+    
+    // Handle different response formats
+    let posts, total;
+    if (postsResult && postsResult.posts) {
+      posts = postsResult.posts;
+      total = postsResult.total || posts.length;
+    } else if (Array.isArray(postsResult)) {
+      posts = postsResult;
+      total = posts.length;
+    } else {
+      posts = [];
+      total = 0;
+    }
+    
+    res.json({
+      success: true,
+      data: posts,
+      posts: posts,  // Keep for backward compatibility
+      total: total,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('❌ Error fetching posts:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Register both routes
+app.get('/api/v1/agent-posts', handlePostsRequest);
+app.get('/api/agent-posts', handlePostsRequest);
+
+// Filter data API endpoint
+app.get('/api/v1/filter-data', async (req, res) => {
+  try {
+    console.log('📝 Filter data API called...');
+    const filterData = {
+      agents: await databaseService.getAgents(),
+      hashtags: ['#ai', '#productivity', '#workflow', '#automation', '#development', '#meeting'],
+      priorities: ['P0', 'P1', 'P2', 'P3', 'P4']
+    };
+    res.json(filterData);
+  } catch (error) {
+    console.error('❌ Error getting filter data:', error);
+    res.status(500).json({ error: 'Failed to get filter data' });
+  }
+});
+
+// Individual agent endpoint
+app.get('/api/agents/:agentId', async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    console.log(`📝 Individual agent API called for: ${agentId}`);
+    const agent = await databaseService.getAgent(agentId);
+    
+    if (!agent) {
+      return res.status(404).json({
+        success: false,
+        error: 'Agent not found',
+        message: `Agent ${agentId} not found`
+      });
+    }
+    
+    res.json({
+      success: true,
+      data: agent,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('❌ Error fetching individual agent:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Filter stats endpoint
+app.get('/api/filter-stats', async (req, res) => {
+  try {
+    const { user_id = 'anonymous' } = req.query;
+    console.log(`📝 Filter stats API called for user: ${user_id}`);
+    
+    const filterCounts = await databaseService.getFilterCounts(user_id);
+    res.json({
+      success: true,
+      filterCounts: filterCounts
+    });
+  } catch (error) {
+    console.error('❌ Error fetching filter stats:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+console.log('✅ CRITICAL FIX: Posts API routes registered directly');
+
+// Agent Data Readiness API - MUST come BEFORE other agent routes
+app.use('/api', agentDataReadinessRouter);
+
+// Avi Strategic Oversight API routes - handles page request evaluation
+app.use('/api', aviPageRequestsRouter);
+
+// Agent Workspace API routes  
+// Use simple file-based agent pages router (not database workspace router)
+app.use('/api', agentDynamicPagesRouter);
+
+// Agent Dynamic Pages API routes (Comprehensive version) - using /api prefix
+
+// Agent Dynamic Pages API routes - NEW COMPREHENSIVE API
+import { MigrationRunner } from './src/database/MigrationRunner.js';
+import errorHandler from './src/middleware/errorHandler.js';
+
+// Initialize migration runner and run migrations on startup
+const initializeMigrations = async () => {
+  try {
+    console.log('🔄 Initializing database migrations...');
+    const migrationRunner = new MigrationRunner(databaseService);
+    await migrationRunner.initialize();
+    await migrationRunner.runMigrations();
+    console.log('✅ Database migrations completed');
+  } catch (error) {
+    console.error('❌ Migration initialization failed:', error);
+    console.log('⚠️ Continuing without migrations - some features may not work');
+  }
+};
+
+// Apply error handling middleware
+app.use(errorHandler.requestLogger);
+app.use(errorHandler.performanceMonitor);
+
+// Initialize migrations after database is ready
+if (databaseService.isInitialized()) {
+  initializeMigrations();
+} else {
+  // Wait for database to be initialized
+  const checkDatabase = setInterval(() => {
+    if (databaseService.isInitialized()) {
+      clearInterval(checkDatabase);
+      initializeMigrations();
+    }
+  }, 1000);
+}
 
 // CRITICAL PHASE 2 FIX: Add API route aliases for frontend compatibility
 // Frontend expects /api/agent-posts but backend has /api/v1/agent-posts
@@ -4330,6 +4555,10 @@ function broadcastToWebSockets(instanceId, message) {
   }
 }
 
+// Add final error handling middleware
+app.use(errorHandler.notFoundHandler);
+app.use(errorHandler.errorHandler);
+
 // SPARC INTEGRATION: Initialize tool call status manager with broadcast function
 // toolCallStatusManager.setBroadcastFunction(broadcastToWebSockets);
 
@@ -4344,8 +4573,14 @@ const startServer = async () => {
     // Setup API routes
     setupApiRoutes();
     
+    // Agent Dynamic Pages API routes already registered above
+    console.log('✅ Agent Dynamic Pages API routes already registered');
+    
     // Initialize agent WebSocket events
     initializeAgentWebSocketEvents();
+    
+    // Initialize Avi Strategic Oversight
+    await initializeAviServices();
     
     // Start the server
     server.listen(PORT, () => {

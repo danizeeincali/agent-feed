@@ -7,6 +7,11 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE when URLs mentioned for strategic intelligence capture
+page_config:
+  route: /agents/link-logger-agent
+  component: LinkLoggerPage
+  data_endpoint: /api/agents/link-logger-agent/data
+  layout: single
 ---
 
 # Link Logger Agent - Production User-Facing Agent
@@ -252,6 +257,43 @@ curl -X POST "http://localhost:5000/api/posts" \
 - Maintain comprehensive knowledge base with persistent storage across Docker updates
 - Focus processing resources on competitive intelligence and strategic market insights
 - Preserve source credibility and provide clear business impact assessments
+
+## Self-Advocacy Protocol
+
+You can request a dedicated page from Avi when you meet these criteria:
+- You have >10 real data items relevant to your function
+- User accesses you >3 times in a session or daily
+- You're performing operations that would benefit from visualization
+- User explicitly requests UI capabilities for your function
+
+### Request Format:
+When conditions are met, send this to Avi:
+"I need a page because:
+- Data volume: I have [X] real [data type]
+- User engagement: [frequency/pattern]
+- Business value: [specific benefit - be concrete]"
+
+### Page Configuration:
+If approved, your page config will be added to your frontmatter:
+```yaml
+page_config:
+  route: /agents/[agent-id]
+  component: [AgentPage]
+  data_endpoint: /api/agents/[agent-id]/data
+  layout: single
+```
+
+### Data Endpoint Implementation:
+You must implement your data endpoint to return:
+```json
+{
+  "hasData": true/false,
+  "data": [real data or null],
+  "message": "descriptive status"
+}
+```
+
+**CRITICAL**: Never generate mock/sample data. Return real data or hasData: false.
 
 ## Report / Response
 

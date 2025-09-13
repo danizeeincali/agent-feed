@@ -1,0 +1,63 @@
+{
+  "neural_pattern_id": "RVWS-2025091101",
+  "failure_category": "react_vite_white_screen_import_failure",
+  "pattern_analysis": {
+    "root_cause_chain": [
+      "workspaceApi import not found in api.ts",
+      "Missing export in services/api/index.ts aggregator",
+      "Build fails at compile time", 
+      "Vite serves HTML shell without JS bundle",
+      "React app never initializes",
+      "User sees white screen"
+    ],
+    "diagnostic_indicators": {
+      "server_running": true,
+      "html_response": true,
+      "js_bundle_compiled": false,
+      "console_errors_likely": true,
+      "build_errors_present": true
+    },
+    "failure_patterns": {
+      "import_resolution_failure": {
+        "frequency": "high",
+        "detection_confidence": 0.95,
+        "typical_locations": [
+          "src/services/api/index.ts",
+          "component import statements",
+          "barrel export files"
+        ]
+      },
+      "build_time_vs_runtime": {
+        "issue": "build_time",
+        "user_impact": "complete_failure",
+        "visibility": "immediate"
+      }
+    }
+  },
+  "tdd_prevention_strategies": {
+    "import_contract_tests": {
+      "test_type": "unit",
+      "description": "Validate all exports are properly exposed",
+      "example": "expect(import('./api')).toHaveProperty('workspaceApi')"
+    },
+    "build_pipeline_validation": {
+      "test_type": "integration", 
+      "description": "Ensure build completes without errors",
+      "example": "npm run build should exit with code 0"
+    },
+    "smoke_tests": {
+      "test_type": "e2e",
+      "description": "Basic app loading verification",
+      "example": "page should render main components"
+    }
+  },
+  "neural_training_weights": {
+    "white_screen_keywords": ["white screen", "blank page", "nothing loads", "empty page"],
+    "build_error_patterns": ["not exported by", "Cannot resolve", "Module not found"],
+    "confidence_degradation_factors": {
+      "server_running_but_ui_broken": 0.8,
+      "build_errors_present": 0.9,
+      "import_errors": 0.95
+    }
+  }
+}
