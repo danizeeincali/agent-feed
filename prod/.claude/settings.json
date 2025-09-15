@@ -1,112 +1,32 @@
 {
-  "environment": {
-    "name": "production",
-    "type": "isolated-production",
-    "strictMode": true,
-    "sandboxed": true,
-    "isolation": "complete"
-  },
-  "paths": {
-    "workingDirectory": "/workspaces/agent-feed/prod",
-    "agentWorkspace": "/workspaces/agent-feed/prod/agent_workspace",
-    "systemInstructions": "/workspaces/agent-feed/prod/system_instructions",
-    "logs": "/workspaces/agent-feed/prod/logs",
-    "temp": "/workspaces/agent-feed/prod/temp",
-    "backups": "/workspaces/agent-feed/prod/backups"
-  },
-  "restrictions": {
-    "enforceWorkspaceBoundaries": true,
-    "disableParentAccess": true,
-    "restrictedDirectories": [
-      "/workspaces/agent-feed/src",
-      "/workspaces/agent-feed/frontend",
-      "/workspaces/agent-feed/business",
-      "/workspaces/agent-feed/docs",
-      "/workspaces/agent-feed/tests",
-      "/workspaces/agent-feed/.claude",
-      "/workspaces/agent-feed/.git"
+  "cwd": "/workspaces/agent-feed/prod",
+  "permissions": {
+    "allowedTools": [
+      "Bash",
+      "Read",
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "Grep",
+      "Glob",
+      "Task",
+      "WebFetch",
+      "WebSearch"
     ],
-    "readOnlyDirectories": [
-      "/workspaces/agent-feed/prod/system_instructions",
-      "/workspaces/agent-feed/prod/config",
-      "/workspaces/agent-feed/prod/security"
-    ],
-    "maxFileOperations": 10000,
-    "maxConcurrentAgents": 10,
-    "operationTimeout": 300000
+    "deniedTools": [],
+    "permissionMode": "bypassPermissions"
   },
-  "security": {
-    "validateAllOperations": true,
-    "auditTrailEnabled": true,
-    "dangerousOperationsBlocked": true,
-    "systemModificationBlocked": true,
-    "networkAccessRestricted": true,
-    "allowedCommandsOnly": true,
-    "encryptSensitiveData": true
-  },
-  "userExperience": {
-    "confirmDangerousOperations": true,
-    "showIsolationWarnings": true,
-    "displayWorkspaceBoundaries": true,
-    "verboseLogging": false,
-    "progressIndicators": true,
-    "performanceMetrics": true
+  "logging": {
+    "level": "info",
+    "file": "/workspaces/agent-feed/prod/.claude/session.log"
   },
   "monitoring": {
-    "healthChecksEnabled": true,
-    "performanceTracking": true,
-    "resourceMonitoring": true,
-    "alertingEnabled": true,
-    "metricsCollection": true,
-    "anomalyDetection": true
+    "trackTokenUsage": true,
+    "trackPerformance": true
   },
-  "backup": {
-    "autoBackupEnabled": true,
-    "backupFrequency": "daily",
-    "maxBackupAge": "30d",
-    "backupCompression": true,
-    "backupEncryption": false
-  },
-  "integration": {
-    "mcpProtocol": {
-      "enabled": true,
-      "version": "1.0.0",
-      "server": "claude-flow",
-      "endpoints": [
-        "swarm_init",
-        "agent_spawn",
-        "task_orchestrate",
-        "memory_usage",
-        "neural_status"
-      ]
-    },
-    "claudeFlow": {
-      "enabled": true,
-      "version": "2.0.0",
-      "sparcEnabled": true,
-      "swarmCoordination": true,
-      "neuralTraining": true
-    },
-    "agentLink": {
-      "enabled": true,
-      "apiEndpoint": "http://localhost:3000/api/v1",
-      "webhookSupport": true,
-      "realTimeUpdates": true
-    }
-  },
-  "development": {
-    "hotReload": false,
-    "debugMode": false,
-    "testMode": false,
-    "mockServices": false,
-    "verboseErrors": true
-  },
-  "advanced": {
-    "memoryOptimization": true,
-    "garbageCollection": true,
-    "cacheEnabled": true,
-    "compressionEnabled": true,
-    "parallelProcessing": true,
-    "loadBalancing": false
+  "context": {
+    "autoCompaction": true,
+    "maxContextLength": 128000,
+    "preserveHistory": true
   }
 }

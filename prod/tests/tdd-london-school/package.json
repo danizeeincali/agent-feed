@@ -1,0 +1,82 @@
+{
+  "name": "@agent-feed/tdd-london-school-tests",
+  "version": "1.0.0",
+  "description": "TDD London School test suite for Claude Code integration",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest unit/",
+    "test:integration": "jest integration/",
+    "test:acceptance": "jest acceptance/",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:verbose": "jest --verbose",
+    "test:debug": "TEST_DEBUG=true jest --verbose --no-cache",
+    "test:london-school": "jest --testPathPattern=tdd-london-school",
+    "test:contracts": "jest contracts/ mocks/",
+    "test:behavior": "jest --testNamePattern=\"behavior|interaction|collaboration\"",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf coverage .jest-cache",
+    "report:coverage": "open coverage/lcov-report/index.html",
+    "report:html": "open coverage/html-report/jest-report.html"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.9.0",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "jest-circus": "^29.7.0",
+    "jest-html-reporters": "^3.1.7",
+    "jest-junit": "^16.0.0",
+    "jest-serializer-ansi-escapes": "^2.0.1",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": ["<rootDir>"],
+    "testMatch": [
+      "**/*.test.ts",
+      "**/*.spec.ts"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/*.d.ts",
+      "!**/*.test.{ts,tsx}",
+      "!**/*.spec.{ts,tsx}",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/jest.setup.ts"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/jest.globals.ts"
+    ]
+  },
+  "keywords": [
+    "tdd",
+    "london-school",
+    "testing",
+    "claude-code",
+    "behavior-verification",
+    "mocking",
+    "jest"
+  ],
+  "author": "Agent Feed Team",
+  "license": "MIT"
+}

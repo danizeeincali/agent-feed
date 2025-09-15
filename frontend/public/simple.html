@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Test</title>
+</head>
+<body>
+    <div id="root">
+        <h1>JavaScript is Loading...</h1>
+    </div>
+
+    <script type="module">
+        console.log('Script loading...');
+        document.getElementById('root').innerHTML = `
+            <div style="padding: 20px; font-family: system-ui;">
+                <h1 style="color: green;">✅ JavaScript Works!</h1>
+                <p>If you see this green checkmark, JavaScript is executing correctly.</p>
+                <button onclick="alert('Button clicked!')">Test Button</button>
+            </div>
+        `;
+    </script>
+</body>
+</html>

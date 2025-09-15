@@ -111,7 +111,7 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-600 mr-3" />
+          <Loader2 className="w-6 h-6 animate-spin text-blue-600 mr-3" data-testid="loading-spinner" />
           <span className="text-gray-600">Loading dynamic pages...</span>
         </div>
       </div>

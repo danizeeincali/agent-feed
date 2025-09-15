@@ -1,10 +1,18 @@
+console.log('main.tsx: File loading...');
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+// import App from './App'
+// import TestApp from './TestApp'
+// import SimpleTestApp from './SimpleTestApp'
+// import WorkingApp from './WorkingApp'
+// import DebugApp from './DebugApp'
 import App from './App'
+// import App from './DiagnosticApp'
 import './index.css'
 
 // SPARC Phase: Completion - Production-ready application entry point
-console.log('AgentLink: Starting application...');
+console.log('main.tsx: Imports complete, starting application...');
 
 const rootElement = document.getElementById('root');
 

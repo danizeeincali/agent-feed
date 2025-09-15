@@ -97,37 +97,110 @@ export class ClaudeProcessManager extends EventEmitter {
   }
 
   /**
-   * Create new Claude instance with configuration
+   * Create new Claude instance with configuration (BULLETPROOF VERSION)
    */
   async createInstance(config: ClaudeInstanceConfig = {}): Promise<string> {
-    const instanceId = `claude-${Math.floor(Math.random() * 9000) + 1000}`;
-    
+    const instanceId = `claude-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
     try {
-      const instance = new ClaudeInstance(instanceId, config, this.logger, this.sessionStorage);
-      
-      // Set up event handlers
+      // Validate configuration
+      const validatedConfig = this.validateAndSanitizeConfig(config);
+
+      // Check system limits
+      if (this.instances.size >= 50) { // Prevent resource exhaustion
+        throw new Error('Maximum number of Claude instances reached (50)');
+      }
+
+      const instance = new ClaudeInstance(instanceId, validatedConfig, this.logger, this.sessionStorage);
+
+      // Set up event handlers with error boundaries
       instance.on('message', (message: ClaudeMessage) => {
-        this.emit('message', message);
+        try {
+          this.emit('message', message);
+        } catch (emitError) {
+          this.logger.error(`Error emitting message for ${instanceId}:`, emitError);
+        }
       });
 
       instance.on('statusChange', (status: ClaudeInstanceStatus) => {
-        this.emit('statusChange', status);
+        try {
+          this.emit('statusChange', status);
+        } catch (emitError) {
+          this.logger.error(`Error emitting status change for ${instanceId}:`, emitError);
+        }
       });
 
       instance.on('error', (error: Error) => {
-        this.logger.error(`Instance ${instanceId} error:`, error);
-        this.emit('error', { instanceId, error });
+        try {
+          this.logger.error(`Instance ${instanceId} error:`, error);
+          this.emit('error', { instanceId, error });
+        } catch (emitError) {
+          console.error(`Critical error handling failure for ${instanceId}:`, emitError);
+        }
       });
 
       this.instances.set(instanceId, instance);
-      await instance.start();
+
+      // Start with timeout and error recovery
+      try {
+        await Promise.race([
+          instance.start(),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Instance start timeout')), 30000)
+          )
+        ]);
+      } catch (startError) {
+        // Clean up failed instance
+        this.instances.delete(instanceId);
+        instance.cleanup();
+        throw startError;
+      }
 
       this.logger.info(`Created Claude instance ${instanceId}`);
       return instanceId;
     } catch (error) {
       this.logger.error(`Failed to create Claude instance ${instanceId}:`, error);
+      // Ensure cleanup on any failure
+      if (this.instances.has(instanceId)) {
+        const instance = this.instances.get(instanceId);
+        this.instances.delete(instanceId);
+        try {
+          await instance?.cleanup();
+        } catch (cleanupError) {
+          this.logger.error(`Cleanup error for ${instanceId}:`, cleanupError);
+        }
+      }
       throw error;
     }
+  }
+
+  /**
+   * Validate and sanitize configuration to prevent crashes
+   */
+  private validateAndSanitizeConfig(config: ClaudeInstanceConfig): ClaudeInstanceConfig {
+    const sanitized: ClaudeInstanceConfig = {
+      command: Array.isArray(config.command) ? config.command.slice(0, 10) : ['claude'], // Limit command length
+      workingDirectory: typeof config.workingDirectory === 'string'
+        ? config.workingDirectory.substring(0, 500) // Limit path length
+        : process.cwd(),
+      environment: config.environment && typeof config.environment === 'object'
+        ? config.environment
+        : {},
+      timeout: typeof config.timeout === 'number' && config.timeout > 0 && config.timeout <= 1800000
+        ? config.timeout
+        : 300000, // 5 minutes default
+      maxMemory: typeof config.maxMemory === 'number' && config.maxMemory > 0
+        ? Math.min(config.maxMemory, 4 * 1024 * 1024 * 1024) // Cap at 4GB
+        : 1024 * 1024 * 1024, // 1GB default
+      maxCpu: typeof config.maxCpu === 'number' && config.maxCpu > 0 && config.maxCpu <= 100
+        ? config.maxCpu
+        : 80,
+      restartOnCrash: typeof config.restartOnCrash === 'boolean'
+        ? config.restartOnCrash
+        : true
+    };
+
+    return sanitized;
   }
 
   /**
@@ -138,11 +211,25 @@ export class ClaudeProcessManager extends EventEmitter {
   }
 
   /**
-   * Get specific instance details
+   * Get specific instance details (SAFE VERSION)
    */
   getInstance(instanceId: string): ClaudeInstanceStatus | null {
-    const instance = this.instances.get(instanceId);
-    return instance ? instance.getStatus() : null;
+    try {
+      if (!instanceId || typeof instanceId !== 'string') {
+        this.logger.warn('Invalid instanceId provided to getInstance');
+        return null;
+      }
+
+      const instance = this.instances.get(instanceId);
+      if (!instance) {
+        return null;
+      }
+
+      return instance.getStatus();
+    } catch (error) {
+      this.logger.error(`Error getting instance ${instanceId}:`, error);
+      return null;
+    }
   }
 
   /**
@@ -158,29 +245,78 @@ export class ClaudeProcessManager extends EventEmitter {
   }
 
   /**
-   * Send terminal input to Claude instance (CRITICAL FIX)
+   * Send terminal input to Claude instance (BULLETPROOF VERSION)
    */
   async sendInput(instanceId: string, input: string): Promise<void> {
-    const instance = this.instances.get(instanceId);
-    if (!instance) {
-      throw new Error(`Instance ${instanceId} not found`);
-    }
+    try {
+      // Validate inputs
+      if (!instanceId || typeof instanceId !== 'string') {
+        throw new Error('Invalid instanceId: must be a non-empty string');
+      }
 
-    await instance.sendInput(input);
+      if (typeof input !== 'string') {
+        throw new Error('Invalid input: must be a string');
+      }
+
+      if (input.length > 10000) {
+        throw new Error('Input too long: maximum 10000 characters allowed');
+      }
+
+      const instance = this.instances.get(instanceId);
+      if (!instance) {
+        throw new Error(`Instance ${instanceId} not found`);
+      }
+
+      const status = instance.getStatus();
+      if (status.status !== 'running') {
+        throw new Error(`Instance ${instanceId} is not running (status: ${status.status})`);
+      }
+
+      await instance.sendInput(input);
+
+    } catch (error) {
+      this.logger.error(`Failed to send input to instance ${instanceId}:`, error);
+      throw error;
+    }
   }
 
   /**
-   * Terminate Claude instance
+   * Terminate Claude instance (SAFE VERSION)
    */
   async terminateInstance(instanceId: string, force = false): Promise<void> {
-    const instance = this.instances.get(instanceId);
-    if (!instance) {
-      throw new Error(`Instance ${instanceId} not found`);
-    }
-
     try {
-      await instance.stop(force);
-      this.instances.delete(instanceId);
+      if (!instanceId || typeof instanceId !== 'string') {
+        throw new Error('Invalid instanceId: must be a non-empty string');
+      }
+
+      const instance = this.instances.get(instanceId);
+      if (!instance) {
+        throw new Error(`Instance ${instanceId} not found`);
+      }
+
+      try {
+        await Promise.race([
+          instance.stop(force),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Termination timeout')), force ? 5000 : 15000)
+          )
+        ]);
+      } catch (stopError) {
+        this.logger.error(`Error stopping instance ${instanceId}:`, stopError);
+        if (!force) {
+          // Retry with force if graceful termination failed
+          await instance.stop(true);
+        }
+      } finally {
+        // Always remove from instances map and cleanup
+        this.instances.delete(instanceId);
+        try {
+          await instance.cleanup();
+        } catch (cleanupError) {
+          this.logger.error(`Cleanup error for ${instanceId}:`, cleanupError);
+        }
+      }
+
       this.logger.info(`Terminated Claude instance ${instanceId}`);
     } catch (error) {
       this.logger.error(`Failed to terminate instance ${instanceId}:`, error);
@@ -189,15 +325,30 @@ export class ClaudeProcessManager extends EventEmitter {
   }
 
   /**
-   * Health check for instance
+   * Health check for instance (SAFE VERSION)
    */
   async healthCheck(instanceId: string): Promise<boolean> {
-    const instance = this.instances.get(instanceId);
-    if (!instance) {
+    try {
+      if (!instanceId || typeof instanceId !== 'string') {
+        return false;
+      }
+
+      const instance = this.instances.get(instanceId);
+      if (!instance) {
+        return false;
+      }
+
+      // Add timeout to health check
+      return await Promise.race([
+        instance.healthCheck(),
+        new Promise<boolean>((resolve) =>
+          setTimeout(() => resolve(false), 5000)
+        )
+      ]);
+    } catch (error) {
+      this.logger.error(`Health check failed for instance ${instanceId}:`, error);
       return false;
     }
-
-    return await instance.healthCheck();
   }
 
   /**
@@ -439,8 +590,20 @@ class ClaudeInstance extends EventEmitter {
    * Send terminal input to Claude instance (CRITICAL FIX)
    */
   async sendInput(input: string): Promise<void> {
-    if (!this.process || !this.process.stdin) {
-      throw new Error('Process not available for terminal input');
+    if (!input || typeof input !== 'string') {
+      throw new Error('Input must be a non-empty string');
+    }
+
+    if (input.length > 10000) {
+      throw new Error('Input too long: maximum 10000 characters allowed');
+    }
+
+    if (!this.process || this.process.killed) {
+      throw new Error('Process not available or has been killed');
+    }
+
+    if (!this.process.stdin || this.process.stdin.destroyed) {
+      throw new Error('Process stdin not available or has been destroyed');
     }
 
     const message: ClaudeMessage = {
@@ -453,12 +616,39 @@ class ClaudeInstance extends EventEmitter {
     };
 
     try {
-      // For terminal input, write directly without extra newline to preserve user control
-      this.process.stdin.write(input);
+      // For terminal input, write with proper error handling
+      const writeSuccess = this.process.stdin.write(input);
+
+      if (!writeSuccess) {
+        // Handle backpressure
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error('Write timeout - stdin buffer full'));
+          }, 5000);
+
+          this.process!.stdin!.once('drain', () => {
+            clearTimeout(timeout);
+            resolve();
+          });
+
+          this.process!.stdin!.once('error', (error) => {
+            clearTimeout(timeout);
+            reject(error);
+          });
+        });
+      }
+
       this.messageQueue.push(message);
       this.status.lastActivity = new Date();
       this.status.metrics.messagesProcessed++;
-      await this.saveMessageToSession(message);
+
+      try {
+        await this.saveMessageToSession(message);
+      } catch (saveError) {
+        // Log but don't fail the operation
+        this.logger.warn(`Failed to save message to session: ${saveError.message}`);
+      }
+
       this.logger.debug(`Terminal input sent to instance ${this.id}: ${input.slice(0, 50)}`);
     } catch (error) {
       this.logger.error(`Failed to send terminal input to instance ${this.id}:`, error);
@@ -467,38 +657,97 @@ class ClaudeInstance extends EventEmitter {
     }
   }
 
-  async stop(force = false): Promise<void> {
-    if (!this.process) {
-      this.updateStatus('stopped');
-      return;
-    }
-
-    this.updateStatus('stopping');
-    this.stopHealthCheck();
-
+  /**
+   * Cleanup resources when instance is destroyed
+   */
+  async cleanup(): Promise<void> {
     try {
+      this.stopHealthCheck();
+
+      if (this.process && !this.process.killed) {
+        try {
+          this.process.kill('SIGTERM');
+
+          // Wait briefly for graceful exit
+          await new Promise<void>((resolve) => {
+            const timeout = setTimeout(() => {
+              if (this.process && !this.process.killed) {
+                this.process.kill('SIGKILL');
+              }
+              resolve();
+            }, 3000);
+
+            this.process!.once('exit', () => {
+              clearTimeout(timeout);
+              resolve();
+            });
+          });
+        } catch (killError) {
+          this.logger.error(`Error during process cleanup: ${killError.message}`);
+        }
+      }
+
+      // Clear message queue to free memory
+      this.messageQueue = [];
+
+    } catch (error) {
+      this.logger.error(`Cleanup error for instance ${this.id}:`, error);
+    }
+  }
+
+  async stop(force = false): Promise<void> {
+    try {
+      if (!this.process || this.process.killed) {
+        this.updateStatus('stopped');
+        return;
+      }
+
+      this.updateStatus('stopping');
+      this.stopHealthCheck();
+
       if (force) {
         this.process.kill('SIGKILL');
-      } else {
+        this.updateStatus('stopped');
+        return;
+      }
+
+      // Graceful shutdown with timeout
+      try {
         this.process.kill('SIGTERM');
-        
-        // Wait for graceful shutdown
+
         await new Promise<void>((resolve, reject) => {
           const timeout = setTimeout(() => {
-            if (this.process) {
+            if (this.process && !this.process.killed) {
+              this.logger.warn(`Force killing unresponsive instance ${this.id}`);
               this.process.kill('SIGKILL');
             }
-            reject(new Error('Timeout during graceful shutdown'));
+            resolve(); // Don't reject, just resolve after force kill
           }, 10000);
 
-          this.process!.on('exit', () => {
+          this.process!.once('exit', () => {
             clearTimeout(timeout);
             resolve();
           });
+
+          this.process!.once('error', (error) => {
+            clearTimeout(timeout);
+            this.logger.error(`Process exit error for ${this.id}:`, error);
+            resolve(); // Still resolve to continue cleanup
+          });
         });
+
+      } catch (shutdownError) {
+        this.logger.error(`Graceful shutdown failed for ${this.id}:`, shutdownError);
+        // Force kill as fallback
+        if (this.process && !this.process.killed) {
+          this.process.kill('SIGKILL');
+        }
       }
+
+      this.updateStatus('stopped');
     } catch (error) {
       this.logger.error(`Error stopping instance ${this.id}:`, error);
+      this.updateStatus('error');
       throw error;
     }
   }
@@ -524,20 +773,37 @@ class ClaudeInstance extends EventEmitter {
   }
 
   async healthCheck(): Promise<boolean> {
-    if (!this.process) {
-      return false;
-    }
-
     try {
-      // Check if process is still running
-      const isRunning = !this.process.killed && this.process.pid !== undefined;
-      
-      // Check resource usage
-      if (isRunning) {
-        this.updateMetrics();
+      if (!this.process || this.process.killed) {
+        return false;
       }
 
-      return isRunning;
+      // Check if process is still running
+      const isRunning = !this.process.killed &&
+                       this.process.pid !== undefined &&
+                       this.status.status === 'running';
+
+      if (!isRunning) {
+        return false;
+      }
+
+      // Verify process still exists by checking if we can get its info
+      try {
+        process.kill(this.process.pid!, 0); // Signal 0 doesn't actually kill, just checks existence
+      } catch (processCheckError) {
+        this.logger.debug(`Process ${this.process.pid} no longer exists`);
+        return false;
+      }
+
+      // Update metrics if process is healthy
+      try {
+        this.updateMetrics();
+      } catch (metricsError) {
+        this.logger.warn(`Failed to update metrics for ${this.id}:`, metricsError);
+        // Don't fail health check just because metrics failed
+      }
+
+      return true;
     } catch (error) {
       this.logger.error(`Health check failed for instance ${this.id}:`, error);
       return false;
@@ -545,18 +811,31 @@ class ClaudeInstance extends EventEmitter {
   }
 
   updateMetrics(): void {
-    if (!this.process || !this.process.pid) return;
+    if (!this.process || !this.process.pid || this.process.killed) {
+      return;
+    }
 
     try {
-      // Update memory usage
-      this.status.memoryUsage = process.memoryUsage();
-      
-      // Update CPU usage (simplified)
-      this.status.cpuUsage = process.cpuUsage();
-      
-      // Check resource limits
-      if (this.status.memoryUsage && this.status.memoryUsage.heapUsed > this.config.maxMemory!) {
-        this.logger.warn(`Instance ${this.id} exceeding memory limit`);
+      // Update memory usage safely
+      try {
+        this.status.memoryUsage = process.memoryUsage();
+      } catch (memError) {
+        this.logger.debug(`Could not get memory usage for ${this.id}:`, memError);
+      }
+
+      // Update CPU usage safely
+      try {
+        this.status.cpuUsage = process.cpuUsage();
+      } catch (cpuError) {
+        this.logger.debug(`Could not get CPU usage for ${this.id}:`, cpuError);
+      }
+
+      // Check resource limits with safe fallbacks
+      const maxMemory = this.config.maxMemory || (1024 * 1024 * 1024); // 1GB default
+      if (this.status.memoryUsage?.heapUsed && this.status.memoryUsage.heapUsed > maxMemory) {
+        const memoryMB = Math.round(this.status.memoryUsage.heapUsed / 1024 / 1024);
+        const limitMB = Math.round(maxMemory / 1024 / 1024);
+        this.logger.warn(`Instance ${this.id} exceeding memory limit: ${memoryMB}MB > ${limitMB}MB`);
       }
     } catch (error) {
       this.logger.error(`Error updating metrics for instance ${this.id}:`, error);

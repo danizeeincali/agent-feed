@@ -5,6 +5,7 @@
 
 export { ClaudeInstanceSelector } from './ClaudeInstanceSelector';
 export { EnhancedChatInterface } from './EnhancedChatInterface';
+export { AviChatInterface } from './AviChatInterface';
 export { ImageUploadZone } from './ImageUploadZone';
 export { InstanceStatusIndicator } from './InstanceStatusIndicator';
 
@@ -15,3 +16,11 @@ export type {
   ImageUploadZoneProps,
   InstanceStatusIndicatorProps
 } from '../../types/claude-instances';
+
+export type {
+  AviChatInterfaceProps,
+  AviPersonalityTraits,
+  AviContextData,
+  AviChatMessage,
+  AviServiceCapabilities
+} from '../../types/avi-interface';

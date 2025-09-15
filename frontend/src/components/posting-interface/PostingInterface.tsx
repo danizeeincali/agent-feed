@@ -10,7 +10,7 @@ import {
 import { cn } from '@/utils/cn';
 import { PostCreator } from '../PostCreator';
 import { QuickPostSection } from './QuickPostSection';
-import { AviDMSection } from './AviDMSection';
+import { AviDirectChatReal } from './AviDirectChatReal';
 
 export type PostingTab = 'post' | 'quickPost' | 'aviDM';
 
@@ -250,7 +250,7 @@ export const PostingInterface: React.FC<PostingInterfaceProps> = ({
       case 'aviDM':
         return (
           <div className={contentClasses}>
-            <AviDMSection 
+            <AviDirectChatReal
               onMessageSent={handlePostCreated}
               isMobile={isMobile}
             />

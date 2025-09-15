@@ -41,13 +41,15 @@ interface AviDirectChatSDKProps {
   onConnectionStateChange?: (state: ConnectionState) => void;
   onError?: (error: Error) => void;
   className?: string;
+  isLoading?: boolean; // Add optional isLoading prop to prevent undefined errors
 }
 
 export const AviDirectChatSDK: React.FC<AviDirectChatSDKProps> = ({
   onMessageSent,
   onConnectionStateChange,
   onError,
-  className
+  className,
+  isLoading = false // Default to false to prevent undefined errors
 }) => {
   // Core State
   const [messages, setMessages] = useState<AviMessage[]>([]);
@@ -279,7 +281,7 @@ export const AviDirectChatSDK: React.FC<AviDirectChatSDKProps> = ({
       {/* Streaming Ticker - Real-time progress */}
       <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
         <StreamingTicker
-          enabled={connectionState === ConnectionState.CONNECTED || isTyping}
+          enabled={connectionState === ConnectionState.CONNECTED || isTyping || isLoading}
           userId="avi-chat-user"
           className="text-sm"
           maxMessages={3}

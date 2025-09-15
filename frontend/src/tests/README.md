@@ -2,6 +2,33 @@
 
 This directory contains a comprehensive test suite designed to prevent regressions and ensure the quality of the Agent Feed Frontend application.
 
+## 🚀 NEW: Avi DM Phase 1 Test Suite (London School TDD)
+
+**Location**: `src/tests/avi-dm/`
+
+A dedicated, comprehensive test suite for the Avi DM (Direct Messaging) Phase 1 transformation following **London School TDD** methodology. This suite emphasizes behavior verification, interaction testing, and mock-driven development.
+
+### Quick Start
+```bash
+# Run Avi DM test suite
+./src/tests/scripts/run-tests.sh all
+
+# Development watch mode
+./src/tests/scripts/run-tests.sh watch
+
+# See full documentation
+cat src/tests/avi-dm/README.md
+```
+
+### Key Features
+- ✅ **London School TDD**: Behavior-driven testing with comprehensive mocking
+- ✅ **Complete Coverage**: Component behavior, integration, real-time communication
+- ✅ **User Workflows**: End-to-end user journey testing
+- ✅ **Performance Monitoring**: Test execution and memory usage tracking
+- ✅ **CI/CD Integration**: Automated quality gates and reporting
+
+---
+
 ## Test Structure
 
 ```

@@ -28,6 +28,7 @@ import EnhancedAgentManagerWrapper from './components/EnhancedAgentManagerWrappe
 import RealAnalytics from './components/RealAnalytics';
 import RouteWrapper from './components/RouteWrapper';
 import BulletproofClaudeCodePanel from './components/BulletproofClaudeCodePanel';
+import ClaudeCodeWithStreamingInterface from './components/ClaudeCodeWithStreamingInterface';
 import AgentDashboard from './components/AgentDashboard';
 import WorkflowVisualizationFixed from './components/WorkflowVisualizationFixed';
 import BulletproofActivityPanel from './components/BulletproofActivityPanel';
@@ -40,6 +41,7 @@ import SimpleSettings from './components/SimpleSettings';
 import DualModeClaudeManager from './components/claude-manager/DualModeClaudeManager';
 import { ClaudeInstanceManagerComponentSSE } from './components/claude-manager/ClaudeInstanceManagerComponentSSE';
 import EnhancedSSEInterface from './components/claude-manager/EnhancedSSEInterface';
+import EnhancedAviDMWithClaudeCode from './components/claude-manager/EnhancedAviDMWithClaudeCode';
 import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
@@ -276,10 +278,10 @@ const App: React.FC = () => {
                   {/* SPARC Phase 5: SSE-based Interactive Control */}
                   <Route path="/interactive-control" element={
                     <RouteErrorBoundary routeName="InteractiveControlSSE" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="EnhancedSSEInterface">
-                        <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Enhanced Interactive Control..." />}>
+                      <AsyncErrorBoundary componentName="EnhancedAviDMWithClaudeCode">
+                        <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Avi DM with Claude Code..." />}>
                           <div className="h-screen flex flex-col">
-                            <EnhancedSSEInterface />
+                            <EnhancedAviDMWithClaudeCode />
                           </div>
                         </Suspense>
                       </AsyncErrorBoundary>
@@ -343,7 +345,7 @@ const App: React.FC = () => {
                   <Route path="/claude-code" element={
                     <RouteErrorBoundary routeName="ClaudeCode">
                       <Suspense fallback={<FallbackComponents.ClaudeCodeFallback />}>
-                        <BulletproofClaudeCodePanel />
+                        <ClaudeCodeWithStreamingInterface />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

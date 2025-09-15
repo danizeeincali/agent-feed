@@ -3,6 +3,10 @@
  * Complete terminal I/O integration with actual Claude processes
  */
 
+// Load environment variables FIRST
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -48,6 +52,15 @@ import agentDataReadinessRouter from './src/routes/agent-data-readiness.js';
 
 // Import Avi Strategic Oversight API
 import aviPageRequestsRouter from './src/routes/avi-page-requests.js';
+
+// Import Anthropic SDK routes
+import anthropicRoutes from "./src/api/routes/anthropic-sdk.js";
+
+// Import Claude Code SDK routes
+import claudeCodeRoutes from "./src/api/routes/claude-code-sdk.js";
+
+// Import Streaming Ticker routes
+import streamingTickerRoutes from "./src/api/routes/streaming-ticker.js";
 
 // Initialize agent data providers
 import { initializeAgentDataProviders } from './src/services/agent-data-initialization.js';
@@ -2329,17 +2342,34 @@ app.get('/api/filter-stats', async (req, res) => {
 
 console.log('✅ CRITICAL FIX: Posts API routes registered directly');
 
+// CRITICAL: Anthropic SDK routes MUST come FIRST to avoid being intercepted
+app.use('/api/avi', anthropicRoutes);
+console.log("✅ Anthropic SDK routes mounted at /api/avi");
+
+// Claude Code SDK routes with full tool access
+app.use('/api/claude-code', claudeCodeRoutes);
+console.log("✅ Claude Code SDK routes mounted at /api/claude-code");
+
+// Streaming Ticker routes for real-time progress
+app.use('/api/streaming-ticker', streamingTickerRoutes);
+console.log("✅ Streaming Ticker routes mounted at /api/streaming-ticker");
+
 // Agent Data Readiness API - MUST come BEFORE other agent routes
 app.use('/api', agentDataReadinessRouter);
 
 // Avi Strategic Oversight API routes - handles page request evaluation
 app.use('/api', aviPageRequestsRouter);
 
-// Agent Workspace API routes  
+// Agent Workspace API routes
 // Use simple file-based agent pages router (not database workspace router)
 app.use('/api', agentDynamicPagesRouter);
 
 // Agent Dynamic Pages API routes (Comprehensive version) - using /api prefix
+
+// Real Claude Instances API
+import realClaudeInstancesRouter from './src/api/routes/real-claude-instances.js';
+app.use('/api/claude-instances', realClaudeInstancesRouter);
+console.log('✅ Real Claude Instances API registered: /api/claude-instances');
 
 // Agent Dynamic Pages API routes - NEW COMPREHENSIVE API
 import { MigrationRunner } from './src/database/MigrationRunner.js';

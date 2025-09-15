@@ -1,0 +1,566 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/tests/e2e/playwright.config.ts",
+    "rootDir": "/workspaces/agent-feed/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/workspaces/agent-feed/tests/e2e/setup/global-setup.ts",
+    "globalTeardown": "/workspaces/agent-feed/tests/e2e/setup/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "./reports/html",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "./reports/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "./reports/junit.xml"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "iPad",
+        "name": "iPad",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "accessibility",
+        "name": "accessibility",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "performance",
+        "name": "performance",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 6,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "mock-elimination-regression.spec.ts",
+      "file": "mock-elimination-regression.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Mock Elimination Regression Tests",
+          "file": "mock-elimination-regression.spec.ts",
+          "line": 15,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Comprehensive Mock Pattern Detection - All UI Components",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13515,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting Comprehensive Mock Pattern Detection\n"
+                        },
+                        {
+                          "text": "✅ No mock patterns detected in UI components\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T01:01:21.959Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de91d4eae5f439d58330-cc8271f63495249573cd",
+              "file": "mock-elimination-regression.spec.ts",
+              "line": 123,
+              "column": 7
+            },
+            {
+              "title": "Interactive Message Testing - Various Input Scenarios",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 63841,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting Interactive Message Testing\n"
+                        },
+                        {
+                          "text": "Testing message: \"hello\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"hi there\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"what can you do?\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"help me\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"write code\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"debug this\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"explain quantum physics\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"create a function to sort arrays\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"how do I use React hooks?\"\n"
+                        },
+                        {
+                          "text": "Testing message: \"what is the weather today?\"\n"
+                        },
+                        {
+                          "text": "✅ No mock patterns detected in message responses\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T01:01:22.036Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de91d4eae5f439d58330-eb38ab1f8eb20bd0b73d",
+              "file": "mock-elimination-regression.spec.ts",
+              "line": 168,
+              "column": 7
+            },
+            {
+              "title": "JavaScript Code Analysis - Runtime Mock Detection",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 14779,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting JavaScript Runtime Mock Detection\n"
+                        },
+                        {
+                          "text": "✅ No mock patterns detected in JavaScript runtime\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T01:01:22.049Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de91d4eae5f439d58330-6624b05a5e4b94607b82",
+              "file": "mock-elimination-regression.spec.ts",
+              "line": 232,
+              "column": 7
+            },
+            {
+              "title": "API Response Content Analysis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 21485,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting API Response Content Analysis\n"
+                        },
+                        {
+                          "text": "✅ Analyzed 1 API responses - no mock patterns detected\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T01:01:22.191Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de91d4eae5f439d58330-e78b833f5c0fcbf4d38d",
+              "file": "mock-elimination-regression.spec.ts",
+              "line": 289,
+              "column": 7
+            },
+            {
+              "title": "Error Handling Mock Detection",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 20843,
+                      "error": {
+                        "message": "Error: locator.count: Unexpected token \"=\" while parsing css selector \".error, [data-error], .alert-error, text=\"Error\", text=\"Failed\"\". Did you mean to CSS.escape it?",
+                        "stack": "Error: locator.count: Unexpected token \"=\" while parsing css selector \".error, [data-error], .alert-error, text=\"Error\", text=\"Failed\"\". Did you mean to CSS.escape it?\n    at /workspaces/agent-feed/tests/e2e/mock-elimination-regression.spec.ts:369:48",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/mock-elimination-regression.spec.ts",
+                          "column": 48,
+                          "line": 369
+                        },
+                        "snippet": "  367 |         );\n  368 |\n> 369 |         const errorCount = await errorElements.count();\n      |                                                ^\n  370 |         for (let i = 0; i < errorCount; i++) {\n  371 |           const errorText = await errorElements.nth(i).textContent();\n  372 |           if (errorText) {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/mock-elimination-regression.spec.ts",
+                            "column": 48,
+                            "line": 369
+                          },
+                          "message": "Error: locator.count: Unexpected token \"=\" while parsing css selector \".error, [data-error], .alert-error, text=\"Error\", text=\"Failed\"\". Did you mean to CSS.escape it?\n\n  367 |         );\n  368 |\n> 369 |         const errorCount = await errorElements.count();\n      |                                                ^\n  370 |         for (let i = 0; i < errorCount; i++) {\n  371 |           const errorText = await errorElements.nth(i).textContent();\n  372 |           if (errorText) {\n    at /workspaces/agent-feed/tests/e2e/mock-elimination-regression.spec.ts:369:48"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting Error Handling Mock Detection\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T01:01:22.397Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/mock-elimination-regression.spec.ts",
+                        "column": 48,
+                        "line": 369
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "de91d4eae5f439d58330-80a54465bfcf305aa9db",
+              "file": "mock-elimination-regression.spec.ts",
+              "line": 341,
+              "column": 7
+            },
+            {
+              "title": "Component State Mock Detection",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 15293,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting Component State Mock Detection\n"
+                        },
+                        {
+                          "text": "✅ No mock patterns detected in component state\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T01:01:22.339Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de91d4eae5f439d58330-fae6a12092b60b0ccf35",
+              "file": "mock-elimination-regression.spec.ts",
+              "line": 391,
+              "column": 7
+            },
+            {
+              "title": "Performance Timing Mock Detection",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 58487,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🚀 Starting Performance Timing Mock Detection\n"
+                        },
+                        {
+                          "text": "✅ Performance timing analysis completed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T01:01:36.243Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de91d4eae5f439d58330-6c509d96ef99dd078e98",
+              "file": "mock-elimination-regression.spec.ts",
+              "line": 424,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-14T01:01:16.896Z",
+    "duration": 78027.839,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

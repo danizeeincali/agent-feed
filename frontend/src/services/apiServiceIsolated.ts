@@ -1,11 +1,47 @@
-import { EventEmitter } from 'events';
 import { Agent, Post, ApiResponse } from '../types/api';
+
+/**
+ * Custom EventEmitter implementation for browser compatibility
+ */
+class BrowserEventEmitter {
+  private listeners: Map<string, Function[]> = new Map();
+
+  on(event: string, listener: Function): this {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, []);
+    }
+    this.listeners.get(event)!.push(listener);
+    return this;
+  }
+
+  emit(event: string, ...args: any[]): boolean {
+    const eventListeners = this.listeners.get(event);
+    if (eventListeners) {
+      eventListeners.forEach(listener => listener(...args));
+      return true;
+    }
+    return false;
+  }
+
+  removeAllListeners(event?: string): this {
+    if (event) {
+      this.listeners.delete(event);
+    } else {
+      this.listeners.clear();
+    }
+    return this;
+  }
+
+  listenerCount(event: string): number {
+    return this.listeners.get(event)?.length || 0;
+  }
+}
 
 /**
  * Isolated API Service - Prevents route conflicts
  * Each route gets its own instance with proper cleanup
  */
-class IsolatedApiService extends EventEmitter {
+class IsolatedApiService extends BrowserEventEmitter {
   private baseURL: string;
   private routeKey: string;
   private abortController: AbortController;

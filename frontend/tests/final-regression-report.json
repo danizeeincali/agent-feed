@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "totalTests": 7,
+    "passedTests": 6,
+    "failedTests": 1,
+    "unknownTests": 0,
+    "successRate": "86%",
+    "timestamp": "2025-09-15T07:11:29.037Z"
+  },
+  "details": {
+    "buildValidation": {
+      "status": "pass",
+      "details": "Build validation successful. Files: 40, Build time: 1ms",
+      "timestamp": "2025-09-15T07:11:11.911Z"
+    },
+    "pageLoadTest": {
+      "status": "fail",
+      "details": "Page load test failed: Failed critical checks: HTML doctype",
+      "timestamp": "2025-09-15T07:11:16.995Z"
+    },
+    "componentIntegration": {
+      "status": "pass",
+      "details": "All 3 routes accessible. Test time: 1479ms",
+      "timestamp": "2025-09-15T07:11:18.482Z"
+    },
+    "apiConnectivity": {
+      "status": "pass",
+      "details": "API connectivity verified. WebSocket: available, REST: available. Test time: 0ms",
+      "timestamp": "2025-09-15T07:11:18.483Z"
+    },
+    "navigationFlow": {
+      "status": "pass",
+      "details": "All 3 navigation flows successful. Test time: 1140ms",
+      "timestamp": "2025-09-15T07:11:19.624Z"
+    },
+    "claudeCodeIntegration": {
+      "status": "pass",
+      "details": "Claude Code integration accessible. Page loads correctly. Test time: 4534ms",
+      "timestamp": "2025-09-15T07:11:24.158Z"
+    },
+    "errorHandling": {
+      "status": "pass",
+      "details": "Error handling validated. 404 handling: working. Test time: 4879ms",
+      "timestamp": "2025-09-15T07:11:29.037Z"
+    }
+  },
+  "recommendations": [
+    "Fix page loading: Check for JavaScript errors, missing dependencies, or server configuration issues"
+  ]
+}

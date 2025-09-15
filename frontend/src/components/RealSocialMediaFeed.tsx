@@ -10,6 +10,7 @@ import { CommentForm } from './CommentForm';
 import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
 import { EnhancedPostingInterface } from './EnhancedPostingInterface';
+import StreamingTickerWorking from '../StreamingTickerWorking';
 import '../styles/comments.css';
 
 interface RealSocialMediaFeedProps {
@@ -49,6 +50,7 @@ interface FilterData {
 }
 
 const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '' }) => {
+  // Core state - must be declared first, before any conditional returns
   const [posts, setPosts] = useState<AgentPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -67,7 +69,71 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
   const [userId] = useState('anonymous'); // In a real app, this would come from authentication
+
+  // Claude Code interface state - MUST be declared here, not after early returns
+  const [claudeMessage, setClaudeMessage] = useState('');
+  const [claudeMessages, setClaudeMessages] = useState<Array<{role: string, content: string, timestamp: number}>>([]);
+  const [claudeLoading, setClaudeLoading] = useState(false);
+  const [showClaudeCode, setShowClaudeCode] = useState(false);
+
   const limit = 20;
+
+  // Claude Code functionality - must be defined after all hooks
+  const sendToClaudeCode = useCallback(async () => {
+    if (!claudeMessage.trim() || claudeLoading) return;
+
+    setClaudeLoading(true);
+    const userMessage = { role: 'user', content: claudeMessage, timestamp: Date.now() };
+    setClaudeMessages(prev => [...prev, userMessage]);
+
+    try {
+      const response = await fetch('/api/claude-code/streaming-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: claudeMessage,
+          conversation_id: `agent-feed-${Date.now()}`,
+          stream: true
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Claude Code Response:', data);
+
+        let responseContent = 'Response received';
+        if (data.message) {
+          responseContent = data.message;
+        } else if (data.responses?.response) {
+          responseContent = data.responses.response;
+        } else if (data.responses?.message) {
+          responseContent = data.responses.message;
+        } else if (typeof data.responses === 'string') {
+          responseContent = data.responses;
+        }
+
+        const assistantMessage = {
+          role: 'assistant',
+          content: responseContent,
+          timestamp: Date.now()
+        };
+        setClaudeMessages(prev => [...prev, assistantMessage]);
+      } else {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Claude Code API Error:', error);
+      const errorMessage = {
+        role: 'assistant',
+        content: `Error: ${error instanceof Error ? error.message : String(error)}`,
+        timestamp: Date.now()
+      };
+      setClaudeMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setClaudeLoading(false);
+      setClaudeMessage('');
+    }
+  }, [claudeMessage, claudeLoading]);
 
   // Real data loading from production database with filtering
   const loadPosts = useCallback(async (pageNum: number = 0, append: boolean = false) => {
@@ -557,26 +623,42 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     );
   }
 
+  // Claude Code functionality moved to proper location after hooks declaration
+
   return (
-    <div className={`max-w-2xl mx-auto ${className}`} data-testid="social-media-feed">
-      {/* Header */}
-      <div className="space-y-4 mb-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Agent Feed</h2>
-            <p className="text-gray-600 mt-1">
-              Real-time posts from production agents
-            </p>
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Main Feed - Left Column */}
+      <div className={`lg:col-span-2 ${className}`} data-testid="social-media-feed">
+        {/* Header */}
+        <div className="space-y-4 mb-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Agent Feed</h2>
+              <p className="text-gray-600 mt-1">
+                Real-time posts from production agents
+              </p>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setShowClaudeCode(!showClaudeCode)}
+                className={`flex items-center px-4 py-2 border rounded-lg transition-colors ${
+                  showClaudeCode
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                🤖 Claude Code
+              </button>
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </button>
+            </div>
           </div>
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
-          </button>
-        </div>
         
         {/* Filter Panel */}
         <FilterPanel
@@ -848,7 +930,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Post Actions - Integrated */}
                   <div className="flex items-center space-x-4">
                     <div className="text-xs text-gray-500">
-                      ID: {post.id.slice(0, 8)}...
+                      ID: {post.id?.slice(0, 8) || 'Unknown'}...
                     </div>
                     
                     {/* Save Button with Animation */}
@@ -1069,12 +1151,110 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         </div>
       )}
 
-      {/* Connection Status */}
-      <div className="mt-8 text-center">
-        <div className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
-          <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-          Live database feed active
+        {/* Connection Status */}
+        <div className="mt-8 text-center">
+          <div className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+            <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+            Live database feed active
+          </div>
         </div>
+      </div>
+
+      {/* Right Sidebar - Claude Code Interface */}
+      <div className="lg:col-span-1 space-y-6">
+        {/* Streaming Ticker */}
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+            📊 Live Tool Execution
+          </h3>
+          <StreamingTickerWorking
+            enabled={true}
+            userId="agent-feed-user"
+            maxMessages={6}
+          />
+        </div>
+
+        {/* Claude Code Interface */}
+        {showClaudeCode && (
+          <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
+              <h3 className="text-lg font-semibold text-white flex items-center">
+                🤖 Claude Code SDK
+              </h3>
+              <p className="text-blue-100 text-sm mt-1">
+                Real file system access & tool execution
+              </p>
+            </div>
+
+            {/* Chat Messages */}
+            <div className="h-80 overflow-y-auto p-4 space-y-3">
+              {claudeMessages.length === 0 && (
+                <div className="text-center text-gray-500 py-8">
+                  <p className="text-sm">
+                    Send a message to Claude Code and watch tool execution in real-time!
+                  </p>
+                  <p className="text-xs mt-2 text-gray-400">
+                    Try: "List files in current directory" or "What's in package.json?"
+                  </p>
+                </div>
+              )}
+
+              {claudeMessages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`p-3 rounded-lg ${
+                    msg.role === 'user'
+                      ? 'bg-blue-500 text-white ml-4'
+                      : 'bg-gray-100 text-gray-900 mr-4'
+                  }`}
+                >
+                  <div className="text-xs font-medium mb-1 opacity-75">
+                    {msg.role === 'user' ? 'You' : '🤖 Claude Code'}
+                  </div>
+                  <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
+                  <div className="text-xs mt-1 opacity-60">
+                    {new Date(msg.timestamp).toLocaleTimeString()}
+                  </div>
+                </div>
+              ))}
+
+              {claudeLoading && (
+                <div className="bg-gray-100 text-gray-900 mr-4 p-3 rounded-lg">
+                  <div className="text-xs font-medium mb-1 opacity-75">🤖 Claude Code</div>
+                  <div className="text-sm text-gray-600 flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                    Executing tools... (watch ticker above →)
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Input */}
+            <div className="border-t border-gray-200 p-4">
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={claudeMessage}
+                  onChange={(e) => setClaudeMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendToClaudeCode()}
+                  placeholder="Ask Claude Code to work with files..."
+                  disabled={claudeLoading}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <button
+                  onClick={sendToClaudeCode}
+                  disabled={!claudeMessage.trim() || claudeLoading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                >
+                  {claudeLoading ? '⏳' : '📤'}
+                </button>
+              </div>
+              <div className="text-xs text-gray-500 mt-2">
+                Working directory: /workspaces/agent-feed/prod
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

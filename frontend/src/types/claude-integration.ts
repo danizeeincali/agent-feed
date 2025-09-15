@@ -537,6 +537,72 @@ export interface ClaudeCodeAPI {
 }
 
 // ============================================================================
+// AVI-SPECIFIC TYPES AND CONFIGURATION
+// ============================================================================
+
+export interface AviPersonality {
+  name: string;
+  avatar: string;
+  displayName: string;
+  description: string;
+  capabilities: string[];
+  specialties: string[];
+  responseStyle: 'helpful' | 'technical' | 'creative' | 'analytical';
+  greeting: string;
+  quickReplies: string[];
+}
+
+export interface AviMessage extends ConversationMessage {
+  aviContext?: {
+    intent: string;
+    confidence: number;
+    suggestedActions: string[];
+  };
+}
+
+export interface AviDirectChatProps {
+  onMessageSent?: (message: any) => void;
+  isMobile?: boolean;
+  className?: string;
+  aviConfig?: Partial<AviPersonality>;
+  projectContext?: Partial<ProjectContext>;
+  autoConnect?: boolean;
+}
+
+export const DEFAULT_AVI_PERSONALITY: AviPersonality = {
+  name: 'avi',
+  avatar: '🤖',
+  displayName: 'Avi',
+  description: 'Your intelligent coding assistant powered by Claude',
+  capabilities: [
+    'Code review and analysis',
+    'Architecture guidance',
+    'Bug fixing assistance',
+    'Performance optimization',
+    'Testing strategies',
+    'Documentation generation'
+  ],
+  specialties: [
+    'TypeScript/JavaScript',
+    'React/Next.js',
+    'Node.js',
+    'Python',
+    'System Architecture',
+    'DevOps'
+  ],
+  responseStyle: 'helpful',
+  greeting: 'Hello! I\'m Avi, your AI coding assistant. How can I help you with your project today?',
+  quickReplies: [
+    'Review my code',
+    'Help with debugging',
+    'Architecture advice',
+    'Performance optimization',
+    'Write tests',
+    'Create documentation'
+  ]
+};
+
+// ============================================================================
 // EXPORT ALL
 // ============================================================================
 

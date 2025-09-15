@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { Edit3, Zap, Bot } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { PostCreator } from './PostCreator';
 import { MentionInput, MentionSuggestion } from './MentionInput';
+import { AviDirectChatSDK } from './posting-interface/AviDirectChatSDK';
 
 type PostingTab = 'post' | 'quick' | 'avi';
 
 interface EnhancedPostingInterfaceProps {
   className?: string;
   onPostCreated?: (post: any) => void;
+  isLoading?: boolean; // Add optional isLoading prop to prevent undefined errors
 }
 
 export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> = ({
   className,
-  onPostCreated
+  onPostCreated,
+  isLoading = false // Default to false to prevent undefined errors
 }) => {
   const [activeTab, setActiveTab] = useState<PostingTab>('quick');
 
@@ -58,13 +61,17 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
             className="border-0 shadow-none"
           />
         )}
-        
+
         {activeTab === 'quick' && (
           <QuickPostSection onPostCreated={onPostCreated} />
         )}
-        
+
         {activeTab === 'avi' && (
-          <AviDMSection />
+          <AviDirectChatSDK
+            onMessageSent={onPostCreated}
+            className="h-96"
+            isLoading={isLoading} // Pass isLoading to AviDirectChatSDK if it expects it
+          />
         )}
       </div>
     </div>
@@ -130,7 +137,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
         <h3 className="text-lg font-medium text-gray-900 mb-2">Quick Post</h3>
         <p className="text-sm text-gray-600">Share a quick thought or update</p>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <MentionInput
@@ -147,7 +154,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
             {content.length}/500 characters
           </div>
         </div>
-        
+
         <button
           type="submit"
           disabled={!content.trim() || isSubmitting}
@@ -165,75 +172,5 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
   );
 };
 
-// Simple Avi DM Placeholder
-const AviDMSection: React.FC = () => {
-  const [message, setMessage] = useState('');
-  const [conversation, setConversation] = useState<Array<{ role: 'user' | 'avi'; content: string }>>([
-    { role: 'avi', content: 'Hi! I\'m Avi, your development assistant. How can I help you today?' }
-  ]);
-
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-
-    // Add user message
-    const newConversation = [
-      ...conversation,
-      { role: 'user' as const, content: message },
-      { role: 'avi' as const, content: `I received your message: "${message}". Avi DM integration with Claude Code will be available soon! For now, you can use the regular Post or Quick Post features.` }
-    ];
-    
-    setConversation(newConversation);
-    setMessage('');
-  };
-
-  return (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Chat with Avi</h3>
-        <p className="text-sm text-gray-600">Direct message with your AI assistant</p>
-      </div>
-      
-      <div className="h-64 border border-gray-200 rounded-lg p-4 overflow-y-auto bg-gray-50">
-        {conversation.map((msg, index) => (
-          <div key={index} className={cn(
-            'mb-3 p-2 rounded-lg max-w-xs',
-            msg.role === 'user' 
-              ? 'bg-blue-500 text-white ml-auto' 
-              : 'bg-white border border-gray-200'
-          )}>
-            <div className="text-sm">{msg.content}</div>
-          </div>
-        ))}
-      </div>
-      
-      <form onSubmit={handleSendMessage} className="flex space-x-2">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Message Avi..."
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-        <button
-          type="submit"
-          disabled={!message.trim()}
-          className={cn(
-            'px-4 py-2 rounded-lg font-medium transition-colors',
-            message.trim()
-              ? 'bg-blue-600 text-white hover:bg-blue-700'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          )}
-        >
-          Send
-        </button>
-      </form>
-      
-      <div className="text-xs text-gray-500 text-center p-2 bg-yellow-50 rounded">
-        💡 Note: This will integrate with Claude Code in production (/prod directory)
-      </div>
-    </div>
-  );
-};
 
 export default EnhancedPostingInterface;

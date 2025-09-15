@@ -1,0 +1,93 @@
+<testsuites id="" name="" tests="7" failures="1" skipped="0" errors="0" time="78.027839">
+<testsuite name="mock-elimination-regression.spec.ts" timestamp="2025-09-14T01:01:18.842Z" hostname="chromium" tests="7" failures="1" skipped="0" time="208.243" errors="0">
+<testcase name="Mock Elimination Regression Tests › Comprehensive Mock Pattern Detection - All UI Components" classname="mock-elimination-regression.spec.ts" time="13.515">
+<system-out>
+<![CDATA[🚀 Starting Comprehensive Mock Pattern Detection
+✅ No mock patterns detected in UI components
+]]>
+</system-out>
+</testcase>
+<testcase name="Mock Elimination Regression Tests › Interactive Message Testing - Various Input Scenarios" classname="mock-elimination-regression.spec.ts" time="63.841">
+<system-out>
+<![CDATA[🚀 Starting Interactive Message Testing
+Testing message: "hello"
+Testing message: "hi there"
+Testing message: "what can you do?"
+Testing message: "help me"
+Testing message: "write code"
+Testing message: "debug this"
+Testing message: "explain quantum physics"
+Testing message: "create a function to sort arrays"
+Testing message: "how do I use React hooks?"
+Testing message: "what is the weather today?"
+✅ No mock patterns detected in message responses
+]]>
+</system-out>
+</testcase>
+<testcase name="Mock Elimination Regression Tests › JavaScript Code Analysis - Runtime Mock Detection" classname="mock-elimination-regression.spec.ts" time="14.779">
+<system-out>
+<![CDATA[🚀 Starting JavaScript Runtime Mock Detection
+✅ No mock patterns detected in JavaScript runtime
+]]>
+</system-out>
+</testcase>
+<testcase name="Mock Elimination Regression Tests › API Response Content Analysis" classname="mock-elimination-regression.spec.ts" time="21.485">
+<system-out>
+<![CDATA[🚀 Starting API Response Content Analysis
+✅ Analyzed 1 API responses - no mock patterns detected
+]]>
+</system-out>
+</testcase>
+<testcase name="Mock Elimination Regression Tests › Error Handling Mock Detection" classname="mock-elimination-regression.spec.ts" time="20.843">
+<failure message="mock-elimination-regression.spec.ts:341:7 Error Handling Mock Detection" type="FAILURE">
+<![CDATA[  [chromium] › mock-elimination-regression.spec.ts:341:7 › Mock Elimination Regression Tests › Error Handling Mock Detection 
+
+    Error: locator.count: Unexpected token "=" while parsing css selector ".error, [data-error], .alert-error, text="Error", text="Failed"". Did you mean to CSS.escape it?
+
+      367 |         );
+      368 |
+    > 369 |         const errorCount = await errorElements.count();
+          |                                                ^
+      370 |         for (let i = 0; i < errorCount; i++) {
+      371 |           const errorText = await errorElements.nth(i).textContent();
+      372 |           if (errorText) {
+        at /workspaces/agent-feed/tests/e2e/mock-elimination-regression.spec.ts:369:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[🚀 Starting Error Handling Mock Detection
+
+[[ATTACHMENT|../test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/video.webm]]
+
+[[ATTACHMENT|../test-results/mock-elimination-regressio-beee6-ror-Handling-Mock-Detection-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Mock Elimination Regression Tests › Component State Mock Detection" classname="mock-elimination-regression.spec.ts" time="15.293">
+<system-out>
+<![CDATA[🚀 Starting Component State Mock Detection
+✅ No mock patterns detected in component state
+]]>
+</system-out>
+</testcase>
+<testcase name="Mock Elimination Regression Tests › Performance Timing Mock Detection" classname="mock-elimination-regression.spec.ts" time="58.487">
+<system-out>
+<![CDATA[🚀 Starting Performance Timing Mock Detection
+✅ Performance timing analysis completed
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

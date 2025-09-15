@@ -1,0 +1,16 @@
+[
+  {
+    "timestamp": "2025-09-13T17:41:32.450Z",
+    "summary": {
+      "totalFailures": 1,
+      "analysisId": "analysis_1757785292450_we5gw6w81",
+      "recommendationCount": 3
+    },
+    "metrics": {
+      "totalFailures": 1,
+      "patternsIdentified": 1,
+      "avgConfidence": 0,
+      "recommendationAccuracy": 0.84
+    }
+  }
+]
