@@ -22,18 +22,32 @@ import {
 import StreamingTickerWorking from '../../StreamingTickerWorking';
 import { AviChatInterface } from '../claude-instances/AviChatInterface';
 import { cn } from '../../lib/utils';
+import { ErrorCategorizer } from '../../services/ErrorCategorizer';
 
 interface ClaudeMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: number;
+  isError?: boolean;
+  isRetry?: boolean;
+}
+
+interface LoadingState {
+  isLoading: boolean;
+  status: 'idle' | 'sending' | 'processing' | 'retrying' | 'completing';
+  progress?: string;
+  retryCount?: number;
+  startTime?: number;
 }
 
 const EnhancedAviDMWithClaudeCode: React.FC = () => {
   const [activeTab, setActiveTab] = useState('avi-dm');
   const [claudeMessage, setClaudeMessage] = useState('');
   const [claudeMessages, setClaudeMessages] = useState<ClaudeMessage[]>([]);
-  const [claudeLoading, setClaudeLoading] = useState(false);
+  const [loadingState, setLoadingState] = useState<LoadingState>({
+    isLoading: false,
+    status: 'idle'
+  });
   const [toolMode, setToolMode] = useState(true);
 
   // Avi DM specific state
@@ -41,12 +55,19 @@ const EnhancedAviDMWithClaudeCode: React.FC = () => {
   const [aviLoading, setAviLoading] = useState(false);
   const [aviConnected, setAviConnected] = useState(true);
 
-  const handleSendMessage = async () => {
-    if (!claudeMessage.trim() || claudeLoading) return;
+  const handleSendMessage = async (retryCount = 0) => {
+    if (!claudeMessage.trim() || loadingState.isLoading) return;
 
     const userMessage = claudeMessage.trim();
     setClaudeMessage('');
-    setClaudeLoading(true);
+
+    setLoadingState({
+      isLoading: true,
+      status: 'sending',
+      progress: 'Connecting to Claude Code...',
+      retryCount,
+      startTime: Date.now()
+    });
 
     // Add user message immediately
     const userMsg: ClaudeMessage = {
@@ -57,46 +78,141 @@ const EnhancedAviDMWithClaudeCode: React.FC = () => {
     setClaudeMessages(prev => [...prev, userMsg]);
 
     try {
+      // Update status to processing
+      setLoadingState(prev => ({
+        ...prev,
+        status: 'processing',
+        progress: 'Processing your request...'
+      }));
+
+      // Set up timeout and progress tracking
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 300000); // 5 minutes timeout to match AviDMService configuration
+
+      // Progress updates for long operations
+      const progressInterval = setInterval(() => {
+        setLoadingState(prev => {
+          if (!prev.startTime) return prev;
+
+          const elapsedSeconds = Math.floor((Date.now() - prev.startTime) / 1000);
+          const progress = ErrorCategorizer.getLongOperationExplanation(elapsedSeconds);
+
+          return { ...prev, progress };
+        });
+      }, 5000);
+
+      console.log('🔧 DEBUG: Sending request to /api/claude-code/streaming-chat');
+      console.log('🔧 DEBUG: Request payload:', {
+        message: toolMode ? `Use tools to help with: ${userMessage}. Execute commands and show real output.` : userMessage,
+        options: {
+          cwd: '/workspaces/agent-feed',
+          model: 'claude-sonnet-4-20250514',
+          enableTools: toolMode,
+          forceToolUse: toolMode
+        }
+      });
+
       const response = await fetch('/api/claude-code/streaming-chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        signal: controller.signal,
         body: JSON.stringify({
           message: toolMode ? `Use tools to help with: ${userMessage}. Execute commands and show real output.` : userMessage,
-          cwd: '/workspaces/agent-feed',
-          model: 'claude-sonnet-4-20250514',
-          enableTools: toolMode,
-          forceToolUse: toolMode
+          options: {
+            cwd: '/workspaces/agent-feed',
+            model: 'claude-sonnet-4-20250514',
+            enableTools: toolMode,
+            forceToolUse: toolMode
+          }
         }),
       });
 
+      clearTimeout(timeoutId);
+      clearInterval(progressInterval);
+
+      console.log('🔧 DEBUG: Response status:', response.status);
+      console.log('🔧 DEBUG: Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('🚨 Claude Code API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText
+        });
+        throw new Error(`HTTP ${response.status}: ${errorText || 'Request failed'}`);
       }
 
-      const data = await response.json();
+      setLoadingState(prev => ({
+        ...prev,
+        status: 'completing',
+        progress: 'Finalizing response...'
+      }));
 
-      // Add Claude's response
+      const data = await response.json();
+      console.log('🔧 DEBUG: Response data:', data);
+
+      // Add Claude's response - handle the backend response format
+      let responseContent = 'No response received';
+      if (data.success && data.message) {
+        responseContent = data.message;
+      } else if (data.responses && data.responses.length > 0) {
+        const lastResponse = data.responses[data.responses.length - 1];
+        responseContent = lastResponse.content || lastResponse.message || lastResponse;
+      } else if (data.content) {
+        responseContent = data.content;
+      }
+
       const claudeMsg: ClaudeMessage = {
         role: 'assistant',
-        content: data.message || data.response || 'No response received',
-        timestamp: Date.now()
+        content: responseContent,
+        timestamp: Date.now(),
+        isRetry: retryCount > 0
       };
       setClaudeMessages(prev => [...prev, claudeMsg]);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending message to Claude Code:', error);
 
-      // Add error message
+      // Use error categorizer for better error handling
+      const errorCategory = ErrorCategorizer.categorizeError(error, retryCount);
+
+      // Show retry option if appropriate
+      if (errorCategory.shouldRetry && retryCount < errorCategory.maxRetries) {
+        setLoadingState({
+          isLoading: true,
+          status: 'retrying',
+          progress: `Retrying... (attempt ${retryCount + 2})`,
+          retryCount: retryCount + 1
+        });
+
+        setTimeout(() => {
+          handleSendMessage(retryCount + 1);
+        }, errorCategory.retryDelay);
+
+        return; // Don't show error message yet, we're retrying
+      }
+
+      // Add error message if not retrying
       const errorMsg: ClaudeMessage = {
         role: 'assistant',
-        content: `Error: ${error.message}. Make sure the backend is running on port 3000.`,
-        timestamp: Date.now()
+        content: errorCategory.userMessage,
+        timestamp: Date.now(),
+        isError: true
       };
       setClaudeMessages(prev => [...prev, errorMsg]);
     } finally {
-      setClaudeLoading(false);
+      // Only reset loading if not retrying
+      if (!loadingState.isLoading || loadingState.status !== 'retrying') {
+        setLoadingState({
+          isLoading: false,
+          status: 'idle'
+        });
+      }
     }
   };
 
@@ -154,7 +270,15 @@ const EnhancedAviDMWithClaudeCode: React.FC = () => {
                 </CardHeader>
                 <CardContent className="h-full p-0">
                   <AviChatInterface
-                    instance={{ id: 'avi-dm', name: 'Avi DM', status: 'active' }}
+                    instance={{
+                      id: 'avi-dm',
+                      name: 'Avi DM',
+                      status: 'running',
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                      isConnected: aviConnected,
+                      hasOutput: true
+                    }}
                     messages={aviMessages}
                     isConnected={aviConnected}
                     isLoading={aviLoading}
@@ -226,12 +350,19 @@ const EnhancedAviDMWithClaudeCode: React.FC = () => {
                               "max-w-2xl rounded-lg p-4",
                               msg.role === 'user'
                                 ? 'bg-blue-600 text-white'
+                                : msg.isError
+                                ? 'bg-red-50 text-red-900 border border-red-200'
                                 : 'bg-gray-100 text-gray-900'
                             )}>
                               <div className="flex items-center mb-2">
                                 <span className="font-medium">
-                                  {msg.role === 'user' ? '👤 You' : '🤖 Claude'}
+                                  {msg.role === 'user' ? '👤 You' : msg.isError ? '❌ Error' : '🤖 Claude'}
                                 </span>
+                                {msg.isRetry && (
+                                  <Badge variant="outline" className="ml-2 text-xs">
+                                    Retry Success
+                                  </Badge>
+                                )}
                                 <span className="text-xs opacity-75 ml-2">
                                   {new Date(msg.timestamp).toLocaleTimeString()}
                                 </span>
@@ -245,6 +376,26 @@ const EnhancedAviDMWithClaudeCode: React.FC = () => {
                       )}
                     </div>
 
+                    {/* Progress Indicator */}
+                    {loadingState.isLoading && loadingState.progress && (
+                      <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="flex items-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                          <span className="text-blue-800 text-sm">{loadingState.progress}</span>
+                          {loadingState.retryCount && loadingState.retryCount > 0 && (
+                            <Badge variant="outline" className="ml-2 text-xs bg-yellow-100 text-yellow-800">
+                              Retry #{loadingState.retryCount}
+                            </Badge>
+                          )}
+                        </div>
+                        {loadingState.startTime && (
+                          <div className="text-xs text-blue-600 mt-1">
+                            Elapsed: {Math.round((Date.now() - loadingState.startTime) / 1000)}s
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* Input Area */}
                     <div className="flex space-x-3">
                       <input
@@ -254,21 +405,26 @@ const EnhancedAviDMWithClaudeCode: React.FC = () => {
                         placeholder={toolMode ? "Enter command (e.g., 'ls', 'pwd', 'cat package.json')..." : "Chat with Claude..."}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         onKeyPress={(e) => {
-                          if (e.key === 'Enter' && !claudeLoading) {
+                          if (e.key === 'Enter' && !loadingState.isLoading) {
                             handleSendMessage();
                           }
                         }}
-                        disabled={claudeLoading}
+                        disabled={loadingState.isLoading}
                       />
                       <Button
-                        onClick={handleSendMessage}
-                        disabled={claudeLoading || !claudeMessage.trim()}
+                        onClick={() => handleSendMessage()}
+                        disabled={loadingState.isLoading || !claudeMessage.trim()}
                         className="flex items-center space-x-2"
                       >
-                        {claudeLoading ? (
+                        {loadingState.isLoading ? (
                           <>
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                            <span>Executing...</span>
+                            <span>
+                              {loadingState.status === 'sending' && 'Sending...'}
+                              {loadingState.status === 'processing' && 'Processing...'}
+                              {loadingState.status === 'retrying' && `Retrying... (${loadingState.retryCount})`}
+                              {loadingState.status === 'completing' && 'Completing...'}
+                            </span>
                           </>
                         ) : (
                           <>
@@ -292,12 +448,35 @@ const EnhancedAviDMWithClaudeCode: React.FC = () => {
                   <CardContent className="space-y-4">
                     {/* Status Indicators */}
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className={cn(
+                        "flex items-center justify-between p-3 border rounded-lg",
+                        loadingState.isLoading
+                          ? "bg-blue-50 border-blue-200"
+                          : "bg-green-50 border-green-200"
+                      )}>
                         <div>
-                          <div className="font-medium text-green-900">Claude Code SDK</div>
-                          <div className="text-sm text-green-700">Official SDK Active</div>
+                          <div className={cn(
+                            "font-medium",
+                            loadingState.isLoading ? "text-blue-900" : "text-green-900"
+                          )}>
+                            Claude Code SDK
+                          </div>
+                          <div className={cn(
+                            "text-sm",
+                            loadingState.isLoading ? "text-blue-700" : "text-green-700"
+                          )}>
+                            {loadingState.isLoading
+                              ? `${loadingState.status.charAt(0).toUpperCase() + loadingState.status.slice(1)}...`
+                              : "Official SDK Active"
+                            }
+                          </div>
                         </div>
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <div className={cn(
+                          "w-3 h-3 rounded-full",
+                          loadingState.isLoading
+                            ? "bg-blue-500 animate-pulse"
+                            : "bg-green-500"
+                        )}></div>
                       </div>
 
                       <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">

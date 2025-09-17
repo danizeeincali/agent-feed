@@ -144,11 +144,48 @@ export default defineConfig({
     /* Accessibility tests */
     {
       name: 'accessibility',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         channel: 'chrome'
       },
       testDir: './tests/e2e/accessibility',
+    },
+
+    /* Claude SDK Analytics tests */
+    {
+      name: 'claude-sdk',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        viewport: { width: 1920, height: 1080 },
+        permissions: ['clipboard-read', 'clipboard-write'],
+        ignoreHTTPSErrors: true,
+        acceptDownloads: true,
+      },
+      testDir: './tests/e2e/claude-sdk',
+    },
+
+    /* Analytics tests - Chrome */
+    {
+      name: 'analytics-chrome',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        viewport: { width: 1920, height: 1080 },
+        ignoreHTTPSErrors: true,
+      },
+      testDir: './tests/e2e/analytics',
+    },
+
+    /* Analytics tests - Firefox */
+    {
+      name: 'analytics-firefox',
+      use: {
+        ...devices['Desktop Firefox'],
+        viewport: { width: 1920, height: 1080 },
+        ignoreHTTPSErrors: true,
+      },
+      testDir: './tests/e2e/analytics',
     },
   ],
 

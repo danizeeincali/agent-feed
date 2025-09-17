@@ -9,6 +9,7 @@ interface TickerMessage {
     message?: string;
     timestamp: number;
     priority?: string;
+    connectionId?: string;
   };
 }
 

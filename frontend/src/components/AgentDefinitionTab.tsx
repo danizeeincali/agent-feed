@@ -18,7 +18,19 @@ import {
   Calendar,
   FileCode
 } from 'lucide-react';
-import { UnifiedAgentData } from './UnifiedAgentPage';
+// Define UnifiedAgentData interface locally
+interface UnifiedAgentData {
+  id: string;
+  name: string;
+  description: string;
+  capabilities?: string[];
+  type?: string;
+  status?: 'active' | 'inactive' | 'maintenance';
+  documentation?: string;
+  examples?: string[];
+  metadata?: Record<string, any>;
+  definition?: string;
+}
 
 interface AgentDefinitionTabProps {
   agent: UnifiedAgentData;

@@ -92,9 +92,18 @@ router.post('/', async (req, res) => {
       console.log(`🚀 Creating REAL Claude Code processor with command execution for instance ${instanceId}`);
 
       const claudeProcess = spawn('node', ['-e', `
-        const { execSync } = require('child_process');
+        const { spawn } = require('child_process');
         const fs = require('fs');
         const path = require('path');
+
+        // Add error handling to prevent crashes
+        process.on('uncaughtException', (error) => {
+          console.error('Uncaught exception:', error);
+        });
+
+        process.on('unhandledRejection', (reason) => {
+          console.error('Unhandled rejection:', reason);
+        });
 
         class RealClaudeProcessor {
           constructor(workingDirectory, instanceId) {
@@ -106,6 +115,45 @@ router.post('/', async (req, res) => {
               sessionStart: new Date(),
               commandCount: 0
             };
+          }
+
+          async safeExec(command, timeout = 8000) {
+            return new Promise((resolve, reject) => {
+              const child = spawn('sh', ['-c', command], {
+                cwd: this.workingDirectory,
+                stdio: ['pipe', 'pipe', 'pipe']
+              });
+
+              let stdout = '';
+              let stderr = '';
+
+              child.stdout.on('data', (data) => {
+                stdout += data.toString();
+              });
+
+              child.stderr.on('data', (data) => {
+                stderr += data.toString();
+              });
+
+              const timeoutHandle = setTimeout(() => {
+                child.kill('SIGTERM');
+                reject(new Error('Command timeout'));
+              }, timeout);
+
+              child.on('close', (code) => {
+                clearTimeout(timeoutHandle);
+                if (code === 0) {
+                  resolve(stdout.trim());
+                } else {
+                  reject(new Error(stderr.trim() || 'Command failed'));
+                }
+              });
+
+              child.on('error', (error) => {
+                clearTimeout(timeoutHandle);
+                reject(error);
+              });
+            });
           }
 
           async processMessage(message) {
@@ -151,11 +199,7 @@ router.post('/', async (req, res) => {
             if ((normalizedMessage.includes('list') || normalizedMessage.includes('what')) &&
                 (normalizedMessage.includes('file') || normalizedMessage.includes('folder') || normalizedMessage.includes('directory'))) {
               try {
-                const result = execSync('ls -la', {
-                  cwd: this.workingDirectory,
-                  encoding: 'utf8',
-                  timeout: 5000
-                });
+                const result = await this.safeExec('ls -la');
                 return \`Files and folders in \${this.workingDirectory}:\\n\\n\${result}\\n\\nI can read any of these files for you.\`;
               } catch (error) {
                 return \`Unable to list directory: \${error.message}\`;
@@ -166,11 +210,7 @@ router.post('/', async (req, res) => {
             if (normalizedMessage.includes('pwd') || normalizedMessage.includes('current directory') ||
                 normalizedMessage.includes('where am i')) {
               try {
-                const result = execSync('pwd', {
-                  cwd: this.workingDirectory,
-                  encoding: 'utf8',
-                  timeout: 5000
-                });
+                const result = await this.safeExec('pwd');
                 return \`Current working directory: \${result.trim()}\\n\\nI can execute commands and access files here.\`;
               } catch (error) {
                 return \`Working directory: \${this.workingDirectory}\`;
@@ -185,11 +225,7 @@ router.post('/', async (req, res) => {
             // Git status
             if (normalizedMessage.includes('git status')) {
               try {
-                const result = execSync('git status --porcelain', {
-                  cwd: this.workingDirectory,
-                  encoding: 'utf8',
-                  timeout: 10000
-                });
+                const result = await this.safeExec('git status --porcelain', 10000);
                 return result.trim() ? \`Git status:\\n\\n\${result}\` : 'Git status: Working directory is clean';
               } catch (error) {
                 return \`Git status unavailable: \${error.message}\`;
@@ -199,8 +235,8 @@ router.post('/', async (req, res) => {
             // System info
             if (normalizedMessage.includes('node version') || normalizedMessage.includes('npm version')) {
               try {
-                const nodeVersion = execSync('node --version', { encoding: 'utf8', timeout: 5000 }).trim();
-                const npmVersion = execSync('npm --version', { encoding: 'utf8', timeout: 5000 }).trim();
+                const nodeVersion = await this.safeExec('node --version');
+                const npmVersion = await this.safeExec('npm --version');
                 return \`System versions:\\n- Node.js: \${nodeVersion}\\n- npm: \${npmVersion}\`;
               } catch (error) {
                 return \`Version check failed: \${error.message}\`;

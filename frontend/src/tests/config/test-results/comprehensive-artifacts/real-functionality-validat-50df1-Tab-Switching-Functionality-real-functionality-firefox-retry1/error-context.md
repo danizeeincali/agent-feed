@@ -1,0 +1,176 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Interactive Control" [ref=e12] [cursor=pointer]:
+        - /url: /interactive-control
+        - img [ref=e13] [cursor=pointer]
+        - text: Interactive Control
+      - link "Claude Manager" [ref=e20] [cursor=pointer]:
+        - /url: /claude-manager
+        - img [ref=e21] [cursor=pointer]
+        - text: Claude Manager
+      - link "Feed" [ref=e26] [cursor=pointer]:
+        - /url: /
+        - img [ref=e27] [cursor=pointer]
+        - text: Feed
+      - link "Create" [ref=e29] [cursor=pointer]:
+        - /url: /posting
+        - img [ref=e30] [cursor=pointer]
+        - text: Create
+      - link "Mention Demo" [ref=e36] [cursor=pointer]:
+        - /url: /mention-demo
+        - img [ref=e37] [cursor=pointer]
+        - text: Mention Demo
+      - link "Drafts" [ref=e40] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e41] [cursor=pointer]
+        - text: Drafts
+      - link "Agents" [ref=e47] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e48] [cursor=pointer]
+        - text: Agents
+      - link "Workflows" [ref=e55] [cursor=pointer]:
+        - /url: /workflows
+        - img [ref=e56] [cursor=pointer]
+        - text: Workflows
+      - link "Claude Code" [ref=e60] [cursor=pointer]:
+        - /url: /claude-code
+        - img [ref=e61] [cursor=pointer]
+        - text: Claude Code
+      - link "Live Activity" [ref=e64] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e65] [cursor=pointer]
+        - text: Live Activity
+      - link "Analytics" [ref=e70] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e71] [cursor=pointer]
+        - text: Analytics
+      - link "Performance Monitor" [ref=e76] [cursor=pointer]:
+        - /url: /performance-monitor
+        - img [ref=e77] [cursor=pointer]
+        - text: Performance Monitor
+      - link "Settings" [ref=e79] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e80] [cursor=pointer]
+        - text: Settings
+    - generic [ref=e84]:
+      - generic [ref=e85]:
+        - generic [ref=e87]: Connected
+        - img [ref=e88]
+      - generic [ref=e93]:
+        - img [ref=e94]
+        - generic [ref=e99]: "0"
+  - generic [ref=e100]:
+    - banner [ref=e101]:
+      - generic [ref=e102]:
+        - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e104]
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - img [ref=e107]
+            - textbox "Search posts..." [ref=e110]
+          - button "Notifications (3 unread)" [ref=e112] [cursor=pointer]:
+            - img [ref=e113] [cursor=pointer]
+            - generic [ref=e115] [cursor=pointer]: "3"
+    - main [ref=e116]:
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - heading "System Analytics" [level=2] [ref=e120]
+            - paragraph [ref=e121]: Real-time production metrics and performance data
+          - generic [ref=e122]:
+            - combobox [ref=e123]:
+              - option "Last Hour"
+              - option "Last 24 Hours" [selected]
+              - option "Last 7 Days"
+              - option "Last 30 Days"
+            - button "Refresh" [ref=e124] [cursor=pointer]:
+              - img [ref=e125] [cursor=pointer]
+              - text: Refresh
+        - generic [ref=e130]:
+          - img [ref=e131]
+          - generic [ref=e135]:
+            - paragraph [ref=e136]: Error
+            - paragraph [ref=e137]: "HTTP error! status: 500"
+          - button "×" [ref=e138] [cursor=pointer]
+        - navigation "Tabs" [ref=e141]:
+          - button "System Analytics" [ref=e142] [cursor=pointer]:
+            - img [ref=e143] [cursor=pointer]
+            - text: System Analytics
+          - button "Claude SDK Cost Analytics" [ref=e145] [cursor=pointer]:
+            - img [ref=e146] [cursor=pointer]
+            - text: Claude SDK Cost Analytics
+        - generic [ref=e149]:
+          - generic [ref=e151]:
+            - img [ref=e153]
+            - generic [ref=e158]:
+              - paragraph [ref=e159]: Active Agents
+              - paragraph [ref=e160]: "0"
+          - generic [ref=e162]:
+            - img [ref=e164]
+            - generic [ref=e166]:
+              - paragraph [ref=e167]: Total Posts
+              - paragraph [ref=e168]: "0"
+          - generic [ref=e170]:
+            - img [ref=e172]
+            - generic [ref=e176]:
+              - paragraph [ref=e177]: System Health
+              - paragraph [ref=e178]: 95.0%
+          - generic [ref=e180]:
+            - img [ref=e182]
+            - generic [ref=e185]:
+              - paragraph [ref=e186]: Avg Response
+              - paragraph [ref=e187]: 250ms
+        - generic [ref=e188]:
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - img [ref=e191]
+              - heading "Performance Metrics" [level=3] [ref=e196]
+            - generic [ref=e197]:
+              - generic [ref=e199]:
+                - generic [ref=e200]: CPU Usage
+                - generic [ref=e201]: 0.0%
+              - generic [ref=e204]:
+                - generic [ref=e205]: Memory Usage
+                - generic [ref=e206]: 0.0%
+              - generic [ref=e209]:
+                - generic [ref=e210]: Database Performance
+                - generic [ref=e211]: 95.0%
+          - generic [ref=e214]:
+            - generic [ref=e215]:
+              - img [ref=e216]
+              - heading "Activity Breakdown" [level=3] [ref=e219]
+            - generic [ref=e220]:
+              - generic [ref=e221]:
+                - generic [ref=e222]: Agent Operations
+                - generic [ref=e223]: "45"
+              - generic [ref=e224]:
+                - generic [ref=e225]: Post Creations
+                - generic [ref=e226]: "23"
+              - generic [ref=e227]:
+                - generic [ref=e228]: System Events
+                - generic [ref=e229]: "12"
+              - generic [ref=e230]:
+                - generic [ref=e231]: User Interactions
+                - generic [ref=e232]: "67"
+        - generic [ref=e233]:
+          - generic [ref=e234]:
+            - img [ref=e235]
+            - heading "Database Status" [level=3] [ref=e239]
+          - generic [ref=e240]:
+            - generic [ref=e241]:
+              - paragraph [ref=e242]: Database Type
+              - paragraph [ref=e243]: SQLite Production
+            - generic [ref=e244]:
+              - paragraph [ref=e245]: Connection Status
+              - paragraph [ref=e248]: Connected
+            - generic [ref=e249]:
+              - paragraph [ref=e250]: Last Update
+              - paragraph [ref=e251]: Just now
+        - generic [ref=e253]: Real-time analytics streaming active
+```

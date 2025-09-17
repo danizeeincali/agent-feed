@@ -12,7 +12,7 @@ import { MessageRouter } from '../routing/MessageRouter';
 import { SecurityManager } from '../security/SecurityManager';
 import { ClientRegistry } from './ClientRegistry';
 import { ProtocolTranslator } from './ProtocolTranslator';
-import { NLDWebSocketIntegration } from '@/nld/websocket-integration';
+// NLD WebSocket integration removed during cleanup
 
 export interface WebSocketHubConfig {
   port: number;
@@ -24,7 +24,7 @@ export interface WebSocketHubConfig {
   pingTimeout: number;
   pingInterval: number;
   maxConnections: number;
-  enableNLD: boolean;
+  // enableNLD removed during cleanup
   enableSecurity: boolean;
   enableMetrics: boolean;
   routingStrategy: 'round-robin' | 'weighted' | 'session-affinity';

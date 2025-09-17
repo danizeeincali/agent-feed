@@ -180,6 +180,55 @@ export const NotFoundFallback: React.FC = () => (
   </div>
 );
 
+// Component error fallback for bulletproof components
+export const ComponentErrorFallback: React.FC<{ error?: Error; retry?: () => void }> = ({
+  error,
+  retry
+}) => (
+  <div className="p-6 bg-red-50 border border-red-200 rounded-lg" data-testid="component-error-fallback">
+    <div className="flex items-center mb-4">
+      <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center mr-3">
+        <span className="text-white text-sm">!</span>
+      </div>
+      <h3 className="text-red-800 font-semibold">Component Error</h3>
+    </div>
+    <p className="text-red-700 mb-4">
+      {error?.message || 'Something went wrong rendering this component.'}
+    </p>
+    {retry && (
+      <button
+        onClick={retry}
+        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+      >
+        Try Again
+      </button>
+    )}
+  </div>
+);
+
+// Chunk error fallback for code splitting errors
+export const ChunkErrorFallback: React.FC<{ retry?: () => void }> = ({ retry }) => (
+  <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg" data-testid="chunk-error-fallback">
+    <div className="flex items-center mb-4">
+      <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+        <span className="text-white text-sm">⚠</span>
+      </div>
+      <h3 className="text-yellow-800 font-semibold">Loading Error</h3>
+    </div>
+    <p className="text-yellow-700 mb-4">
+      Failed to load application resources. This might be due to a network issue or an outdated cached version.
+    </p>
+    {retry && (
+      <button
+        onClick={retry}
+        className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition-colors"
+      >
+        Reload Page
+      </button>
+    )}
+  </div>
+);
+
 // Main export - object with all fallback components
 const FallbackComponents = {
   LoadingFallback,
@@ -193,7 +242,9 @@ const FallbackComponents = {
   ClaudeCodeFallback,
   ActivityFallback,
   SettingsFallback,
-  NotFoundFallback
+  NotFoundFallback,
+  ComponentErrorFallback,
+  ChunkErrorFallback
 };
 
 export default FallbackComponents;

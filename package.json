@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "jest",
+    "test": "jest --config jest.config.cjs",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:performance": "node tests/performance/performance-runner.js",
@@ -21,7 +21,12 @@
     "performance:baseline": "UPDATE_BASELINE=true npm run test:performance",
     "ci:performance": "npm run test:performance -- --no-browser",
     "analyze:bundle": "ANALYZE=true npm run build",
-    "bundle:report": "webpack-bundle-analyzer .next/static/chunks/webpack-*.js"
+    "bundle:report": "webpack-bundle-analyzer .next/static/chunks/webpack-*.js",
+    "test:token-analytics": "node tests/token-analytics/run-all-tests.js",
+    "test:token-analytics:unit": "jest --config tests/token-analytics/jest.config.js",
+    "test:token-analytics:integration": "jest tests/token-analytics/integration/api-integration.test.js",
+    "test:token-analytics:e2e": "playwright test --config tests/token-analytics/e2e/playwright.config.js",
+    "test:token-analytics:regression": "jest tests/token-analytics/regression/fake-data-prevention.test.js"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^1.0.113",
@@ -48,6 +53,7 @@
     "@lhci/cli": "^0.12.0",
     "@next/bundle-analyzer": "^14.0.0",
     "@playwright/test": "^1.40.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "20.0.0",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.0",
@@ -56,6 +62,8 @@
     "jest": "^29.7.0",
     "lighthouse": "^11.0.0",
     "puppeteer": "^21.0.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.2",
     "typescript": "5.9.2",
     "webpack-bundle-analyzer": "^4.9.0"
   },

@@ -34,9 +34,9 @@ class AnthropicSDKManager {
         apiKey: apiKey
       });
 
-      // Mock streaming and headless clients for development
-      this.streamingClient = { query: this.mockStreamingQuery.bind(this) };
-      this.headlessClient = { execute: this.mockHeadlessExecute.bind(this) };
+      // Real streaming and headless clients - disabled mocks for production
+      this.streamingClient = null; // TODO: Initialize real streaming client when available
+      this.headlessClient = null; // TODO: Initialize real headless client when available
 
       this.initialized = true;
       console.log('✅ Anthropic SDK Manager initialized securely');

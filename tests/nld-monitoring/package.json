@@ -1,0 +1,19 @@
+{
+  "name": "nld-monitoring",
+  "version": "1.0.0",
+  "description": "Neural Learning Detection monitoring for fake data patterns",
+  "main": "nld-runner.js",
+  "scripts": {
+    "scan": "node nld-runner.js scan",
+    "watch": "node nld-runner.js watch",
+    "validate": "node nld-runner.js validate",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

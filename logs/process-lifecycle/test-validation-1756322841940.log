@@ -1,2 +1,0 @@
-{"timestamp":"2025-08-27T19:27:21.940Z","level":"INFO","instanceId":"test-validation-1756322841940","message":"Process registered for lifecycle monitoring","data":{"pid":12345},"pid":12345}
-{"timestamp":"2025-08-27T19:27:21.941Z","level":"INFO","instanceId":"test-validation-1756322841940","message":"Shutting down process for lifecycle manager shutdown","data":{},"pid":12345}

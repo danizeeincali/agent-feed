@@ -89,7 +89,7 @@ const StreamingTickerWorking: React.FC<StreamingTickerProps> = ({
         const message: TickerMessage = JSON.parse(event.data);
 
         if (message.type === 'connection') {
-          setConnectionId(message.data.connectionId as string);
+          setConnectionId((message.data as any).connectionId as string);
         } else if (message.type === 'heartbeat') {
           // Silent heartbeat
         } else {

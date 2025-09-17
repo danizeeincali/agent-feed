@@ -1,5 +1,0 @@
-# Page snapshot
-
-```yaml
-- generic [ref=e2]: "{\"success\":false,\"error\":\"Endpoint not found\",\"type\":\"NOT_FOUND_ERROR\",\"timestamp\":\"2025-09-12T20:02:51.406Z\",\"requestId\":\"mfh9l3tae7ga938yzvb\",\"availableEndpoints\":[\"GET /api/agents/:agentId/pages\",\"POST /api/agents/:agentId/pages\",\"GET /api/agents/:agentId/pages/:pageId\",\"PUT /api/agents/:agentId/pages/:pageId\",\"DELETE /api/agents/:agentId/pages/:pageId\",\"GET /api/agents/:agentId/pages/:pageId/data\",\"POST /api/agents/:agentId/pages/:pageId/data\",\"PUT /api/agents/:agentId/pages/:pageId/data/:key\",\"DELETE /api/agents/:agentId/pages/:pageId/data/:key\",\"GET /api/agents/:agentId/pages/:pageId/versions\",\"POST /api/agents/:agentId/pages/:pageId/migrate\",\"GET /api/agents/:agentId/pages/:pageId/schema\",\"GET /api/agents/pages/health\",\"GET /api/v1/agent-posts\",\"GET /api/v1/filter-data\",\"GET /api/filter-stats\",\"GET /api/test-endpoint\",\"GET /api/agents\"]}"
-```

@@ -1,0 +1,933 @@
+{
+  "summary": {
+    "totalFindings": 109,
+    "bySeverity": {
+      "CRITICAL": 32,
+      "HIGH": 77
+    },
+    "byCategory": {
+      "analyticsFakeData": 8,
+      "fakeTokens": 52,
+      "fakeCosts": 24,
+      "fakeData": 25
+    },
+    "byFile": {
+      "/workspaces/agent-feed/frontend/src/components/AgentManager.tsx": 1,
+      "/workspaces/agent-feed/frontend/src/components/BulletproofAgentProfile.tsx": 4,
+      "/workspaces/agent-feed/frontend/src/components/analytics/AnalyticsImportTest.tsx": 2,
+      "/workspaces/agent-feed/frontend/src/components/analytics/CostOverviewDashboard.tsx": 5,
+      "/workspaces/agent-feed/frontend/src/components/analytics/ExportReportingFeatures.tsx": 5,
+      "/workspaces/agent-feed/frontend/src/database/sqlite-fallback.ts": 2,
+      "/workspaces/agent-feed/frontend/src/hooks/useAnalytics.ts": 5,
+      "/workspaces/agent-feed/frontend/src/tests/VideoThumbnailDebug.test.tsx": 4,
+      "/workspaces/agent-feed/frontend/src/tests/analytics-loading-comprehensive.test.tsx": 1,
+      "/workspaces/agent-feed/frontend/src/tests/e2e/analytics-user-flow.e2e.test.ts": 1,
+      "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/analytics-test-runner.ts": 2,
+      "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-analytics-comprehensive.e2e.test.ts": 1,
+      "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts": 12,
+      "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-cost-analytics-comprehensive.e2e.test.ts": 2,
+      "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/dashboard-analytics.e2e.test.ts": 2,
+      "/workspaces/agent-feed/frontend/src/tests/fixtures/analytics-test-data.ts": 5,
+      "/workspaces/agent-feed/frontend/src/tests/fixtures/claude-sdk-test-data.ts": 3,
+      "/workspaces/agent-feed/frontend/src/tests/integration/analytics-user-flow.integration.test.tsx": 1,
+      "/workspaces/agent-feed/frontend/src/tests/integration/api/claude-sdk-analytics.integration.test.ts": 2,
+      "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts": 7,
+      "/workspaces/agent-feed/frontend/src/tests/production-validation/RealComponentTests.test.tsx": 3,
+      "/workspaces/agent-feed/frontend/src/tests/tdd-london-school/data-integration/HTTPService.behavior.test.ts": 3,
+      "/workspaces/agent-feed/frontend/src/tests/unit/APIService.london.test.tsx": 1,
+      "/workspaces/agent-feed/frontend/src/tests/unit/AgentManager.test.tsx": 3,
+      "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts": 8,
+      "/workspaces/agent-feed/frontend/src/tests/unit/tdd-london-school/hook-behavior-contracts.test.tsx": 1,
+      "/workspaces/agent-feed/backend/examples/costTrackingExample.ts": 7,
+      "/workspaces/agent-feed/src/components/analytics/TokenAnalyticsDashboard.tsx": 1,
+      "/workspaces/agent-feed/src/database/DatabaseService.js": 1,
+      "/workspaces/agent-feed/src/database/sqlite-fallback.js": 2,
+      "/workspaces/agent-feed/src/middleware/fake-data-detector.ts": 2,
+      "/workspaces/agent-feed/src/services/AnthropicSDKManager.js": 3,
+      "/workspaces/agent-feed/src/services/claude-flow.ts": 1,
+      "/workspaces/agent-feed/src/tests/token-analytics-demo.ts": 6
+    },
+    "recommendations": [
+      "Connect analytics to real usage data and metrics",
+      "Implement real token counting from Claude API responses",
+      "Replace hardcoded cost values with real API calculations",
+      "Remove mock data arrays and use real data sources"
+    ]
+  },
+  "findings": [
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: {\n            success_rate: 0.95,\n            average_response_time: 1200,\n            total_tokens_used: agent.usage_count ? agent.usage_count * 100 : 5000,\n            error_count: agent.status === 'error' ? 3 : 0\n          }",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/AgentManager.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:40.999Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 2048",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/BulletproofAgentProfile.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.027Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 2048",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/BulletproofAgentProfile.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.027Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 4096",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/BulletproofAgentProfile.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.027Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 2048",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/BulletproofAgentProfile.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.027Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/inputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "inputTokens: 30000",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/AnalyticsImportTest.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.462Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/outputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "outputTokens: 20000",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/AnalyticsImportTest.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.462Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 45.67",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/CostOverviewDashboard.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.499Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 78.45",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/CostOverviewDashboard.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.499Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 32.66",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/CostOverviewDashboard.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.499Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/inputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "inputTokens: 169823",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/CostOverviewDashboard.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.499Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/outputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "outputTokens: 114915",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/CostOverviewDashboard.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.499Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 45.67",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/ExportReportingFeatures.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.503Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 78.45",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/ExportReportingFeatures.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.503Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 32.66",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/ExportReportingFeatures.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.503Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/inputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "inputTokens: 169823",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/ExportReportingFeatures.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.503Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/outputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "outputTokens: 114915",
+      "filePath": "/workspaces/agent-feed/frontend/src/components/analytics/ExportReportingFeatures.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.503Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const agents = [\n      {\n        id: 'prod-agent-1',\n        name: 'ProductionValidator',\n        display_name: 'Production Validator',\n        description: 'Ensures applications are production-ready with real integrations',\n        system_prompt: 'You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment.',\n        avatar_color: '#10B981',\n        capabilities: JSON.stringify(['production-validation', 'real-data-testing', 'integration-verification']),\n        status: 'active',\n        performance_metrics: JSON.stringify({\n          success_rate: 98.5,\n          average_response_time: 250,\n          total_tokens_used: 75000,\n          error_count: 3\n        }",
+      "filePath": "/workspaces/agent-feed/frontend/src/database/sqlite-fallback.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.809Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const activities = [\n      {\n        id: 'prod-activity-1',\n        type: 'validation_completed',\n        description: 'Production readiness validation completed successfully',\n        agent_id: 'prod-agent-1',\n        status: 'completed',\n        metadata: JSON.stringify({\n          duration: 2500,\n          tokens_used: 850\n        }",
+      "filePath": "/workspaces/agent-feed/frontend/src/database/sqlite-fallback.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.809Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 45.67",
+      "filePath": "/workspaces/agent-feed/frontend/src/hooks/useAnalytics.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.864Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 78.45",
+      "filePath": "/workspaces/agent-feed/frontend/src/hooks/useAnalytics.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.864Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 32.66",
+      "filePath": "/workspaces/agent-feed/frontend/src/hooks/useAnalytics.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:41.864Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/inputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "inputTokens: 169823",
+      "filePath": "/workspaces/agent-feed/frontend/src/hooks/useAnalytics.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.865Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/outputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "outputTokens: 114915",
+      "filePath": "/workspaces/agent-feed/frontend/src/hooks/useAnalytics.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:41.865Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/VideoThumbnailDebug.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:42.550Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/VideoThumbnailDebug.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:42.550Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/VideoThumbnailDebug.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:42.550Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/VideoThumbnailDebug.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:42.550Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/testData\\s*=\\s*\\[/g",
+      "match": "testData = [",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/analytics-loading-comprehensive.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:42.602Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*cost[^}]*\\}/g",
+      "match": "const subTabs = [\n        { tab: 'cost-overview-tab', content: 'cost-overview-content' }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/analytics-user-flow.e2e.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.151Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 156",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/analytics-test-runner.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.158Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 245",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/analytics-test-runner.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.158Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.00",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-analytics-comprehensive.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.160Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.00",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.12",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.05",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.00",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.09",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.02",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.07",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.00",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.00",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.161Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 15420",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.162Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 8960",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.162Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 7830",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-charts-interactions.e2e.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.162Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.00",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-cost-analytics-comprehensive.e2e.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.164Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 150",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/claude-sdk-cost-analytics-comprehensive.e2e.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.164Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 156",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/dashboard-analytics.e2e.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.165Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 245",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/e2e/claude-sdk/dashboard-analytics.e2e.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.165Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1200",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/analytics-test-data.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1245",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/analytics-test-data.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 150",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/analytics-test-data.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 320",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/analytics-test-data.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 470",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/analytics-test-data.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/cost:\\s*[\"']?\\$?\\d+\\.\\d{2}[\"']?/g",
+      "match": "cost: 0.00",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/claude-sdk-test-data.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 150",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/claude-sdk-test-data.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 239",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/fixtures/claude-sdk-test-data.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.261Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*cost[^}]*\\}/g",
+      "match": "const subTabs = [\n        { tab: 'cost-overview-tab', content: 'cost-overview-content' }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/integration/analytics-user-flow.integration.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.301Z"
+    },
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: {\n        totalRequests: 1250,\n        averageResponseTime: 485,\n        errorRate: 0.02,\n        tokensProcessed: 125000,\n        cost: {\n          total: 3.75,\n          byModel: {\n            'claude-3-5-sonnet-20241022': 3.45,\n            'claude-3-haiku-20240307': 0.30\n          }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/integration/api/claude-sdk-analytics.integration.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.306Z"
+    },
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: {\n          messagesProcessed: 15,\n          tokensUsed: 4500,\n          averageResponseTime: 520\n        }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/integration/api/claude-sdk-analytics.integration.test.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.306Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.331Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 2500",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.331Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 3500",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.331Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 100",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.331Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 150",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.331Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 250",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.331Z"
+    },
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: {\n          totalRequests: this.getCallCount('streaming-chat'),\n          averageResponseTime: 350 + Math.random() * 200,\n          errorRate: 0.02,\n          tokensProcessed: this.costTracker.totalTokens,\n          cost: this.costTracker.totalCost,\n          uptime: 3600,\n          memoryUsage: {\n            used: 512 + Math.random() * 200,\n            total: 1024\n          }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/mocks/claude-code-sdk.mock.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.331Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const mockAgents = [\n  {\n    id: 'prod-agent-1',\n    name: 'ProductionValidator',\n    display_name: 'Production Validator',\n    description: 'Ensures applications are production-ready with real integrations',\n    system_prompt: 'You are a Production Validation Specialist',\n    avatar_color: '#10B981',\n    capabilities: ['production-validation', 'real-data-testing'],\n    status: 'active',\n    created_at: '2024-01-15T10:30:00Z',\n    updated_at: '2024-01-15T10:30:00Z',\n    last_used: '2024-01-15T10:30:00Z',\n    usage_count: 50,\n    performance_metrics: {\n      success_rate: 98.5,\n      average_response_time: 250,\n      total_tokens_used: 75000,\n      error_count: 3\n    }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/production-validation/RealComponentTests.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.361Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const mockActivities = [\n  {\n    id: 'prod-activity-1',\n    type: 'validation_completed',\n    description: 'Production readiness validation completed successfully',\n    timestamp: '2024-01-15T10:30:00Z',\n    agent_id: 'prod-agent-1',\n    status: 'completed',\n    metadata: {\n      duration: 2500,\n      tokens_used: 850\n    }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/production-validation/RealComponentTests.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:43.361Z"
+    },
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: {\n      success_rate: 98.5,\n      average_response_time: 250,\n      total_tokens_used: 75000,\n      error_count: 3\n    }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/production-validation/RealComponentTests.test.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:43.361Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/tdd-london-school/data-integration/HTTPService.behavior.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:49.377Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/tdd-london-school/data-integration/HTTPService.behavior.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:49.377Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/tdd-london-school/data-integration/HTTPService.behavior.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:49.377Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/APIService.london.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:50.856Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const mockAgents = [\n    {\n      id: 'agent-1',\n      name: 'test-agent-1',\n      display_name: 'Test Agent 1',\n      description: 'A test agent for research',\n      system_prompt: 'You are a research agent',\n      avatar_color: '#3B82F6',\n      capabilities: ['research', 'analysis'],\n      status: 'active' as const,\n      created_at: '2023-01-01T00:00:00Z',\n      updated_at: '2023-01-01T00:00:00Z',\n      usage_count: 5,\n      performance_metrics: {\n        success_rate: 0.95,\n        average_response_time: 1200,\n        total_tokens_used: 5000,\n        error_count: 1,\n      }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/AgentManager.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:50.859Z"
+    },
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: {\n        success_rate: 0.95,\n        average_response_time: 1200,\n        total_tokens_used: 5000,\n        error_count: 1,\n      }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/AgentManager.test.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:50.859Z"
+    },
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: {\n        success_rate: 0.92,\n        average_response_time: 1400,\n        total_tokens_used: 3000,\n        error_count: 0,\n      }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/AgentManager.test.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:50.859Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 100",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const testCases = [\n        {\n          model: 'claude-3-5-sonnet-20241022',\n          tokens: 1000,\n          requestType: 'chat',\n          expectedCost: 0.003 // 1000 tokens * 0.003 / 1000\n        }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const sampleData = [\n        {\n          provider: 'claude' as const,\n          model: 'claude-3-5-sonnet-20241022',\n          tokensUsed: 1000,\n          requestType: 'chat' as const,\n          component: 'AviDirectChatSDK'\n        }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const sampleData = [\n        {\n          provider: 'claude' as const,\n          model: 'claude-3-5-sonnet-20241022',\n          tokensUsed: 100,\n          requestType: 'chat' as const,\n          component: 'AviDirectChatSDK',\n          sessionId: 'session-1'\n        }",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/services/CostTrackingService.test.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:51.212Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/mockData\\s*=/g",
+      "match": "mockData =",
+      "filePath": "/workspaces/agent-feed/frontend/src/tests/unit/tdd-london-school/hook-behavior-contracts.test.tsx",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:53.206Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/inputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "inputTokens: 500",
+      "filePath": "/workspaces/agent-feed/backend/examples/costTrackingExample.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.285Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/inputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "inputTokens: 300",
+      "filePath": "/workspaces/agent-feed/backend/examples/costTrackingExample.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.285Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/inputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "inputTokens: 200",
+      "filePath": "/workspaces/agent-feed/backend/examples/costTrackingExample.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.285Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/outputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "outputTokens: 200",
+      "filePath": "/workspaces/agent-feed/backend/examples/costTrackingExample.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.285Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/outputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "outputTokens: 800",
+      "filePath": "/workspaces/agent-feed/backend/examples/costTrackingExample.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.285Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/outputTokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "outputTokens: 150",
+      "filePath": "/workspaces/agent-feed/backend/examples/costTrackingExample.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.285Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const steps = [\n        {\n          stepId: 'step-1',\n          messageId: 'msg-001',\n          tool: 'Read',\n          stepType: 'tool_use',\n          tokens: { inputTokens: 500, outputTokens: 200, totalTokens: 700 }",
+      "filePath": "/workspaces/agent-feed/backend/examples/costTrackingExample.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.285Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/\\$12\\.45/g",
+      "match": "$12.45",
+      "filePath": "/workspaces/agent-feed/src/components/analytics/TokenAnalyticsDashboard.tsx",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:55.543Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const agents = [\n      {\n        id: 'prod-agent-1',\n        name: 'ProductionValidator',\n        display_name: 'Production Validator',\n        description: 'Ensures applications are production-ready with real integrations',\n        system_prompt: 'You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment.',\n        avatar_color: '#10B981',\n        capabilities: JSON.stringify(['production-validation', 'real-data-testing', 'integration-verification']),\n        performance_metrics: JSON.stringify({\n          success_rate: 98.5,\n          average_response_time: 250,\n          total_tokens_used: 75000,\n          error_count: 3\n        }",
+      "filePath": "/workspaces/agent-feed/src/database/DatabaseService.js",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.555Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const agents = [\n      {\n        id: 'prod-agent-1',\n        name: 'ProductionValidator',\n        display_name: 'Production Validator',\n        description: 'Ensures applications are production-ready with real integrations and comprehensive testing',\n        system_prompt: 'You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.',\n        avatar_color: '#10B981',\n        capabilities: JSON.stringify(['production-validation', 'real-data-testing', 'integration-verification', 'deployment-readiness', 'system-health-monitoring']),\n        status: 'active',\n        performance_metrics: JSON.stringify({\n          success_rate: 98.5,\n          average_response_time: 250,\n          total_tokens_used: 75000,\n          error_count: 3,\n          validations_completed: 147,\n          uptime_percentage: 99.8\n        }",
+      "filePath": "/workspaces/agent-feed/src/database/sqlite-fallback.js",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.590Z"
+    },
+    {
+      "category": "fakeData",
+      "pattern": "/const\\s+\\w+\\s*=\\s*\\[\\s*\\{[^}]*token[^}]*\\}/g",
+      "match": "const activities = [\n      {\n        id: 'prod-activity-1',\n        type: 'production_validation',\n        description: 'Completed comprehensive production readiness validation with real data testing',\n        agent_id: 'prod-agent-1',\n        status: 'completed',\n        metadata: JSON.stringify({\n          duration: 2500,\n          tokens_used: 850,\n          validations_run: 147,\n          success_rate: 98.5,\n          critical_issues: 0\n        }",
+      "filePath": "/workspaces/agent-feed/src/database/sqlite-fallback.js",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.590Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/\\$12\\.45/g",
+      "match": "$12.45",
+      "filePath": "/workspaces/agent-feed/src/middleware/fake-data-detector.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:55.660Z"
+    },
+    {
+      "category": "fakeCosts",
+      "pattern": "/\\$12\\.45/g",
+      "match": "$12.45",
+      "filePath": "/workspaces/agent-feed/src/middleware/fake-data-detector.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:55.660Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/src/services/AnthropicSDKManager.js",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.867Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/src/services/AnthropicSDKManager.js",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.867Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/src/services/AnthropicSDKManager.js",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:55.867Z"
+    },
+    {
+      "category": "analyticsFakeData",
+      "pattern": "/metrics:\\s*\\{[^}]*token[^}]*:\\s*\\d+[^}]*\\}/g",
+      "match": "metrics: { duration: 120000, tokensUsed: 500 }",
+      "filePath": "/workspaces/agent-feed/src/services/claude-flow.ts",
+      "severity": "CRITICAL",
+      "timestamp": "2025-09-17T05:45:56.152Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 245",
+      "filePath": "/workspaces/agent-feed/src/tests/token-analytics-demo.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:56.369Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 387",
+      "filePath": "/workspaces/agent-feed/src/tests/token-analytics-demo.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:56.369Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 1000",
+      "filePath": "/workspaces/agent-feed/src/tests/token-analytics-demo.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:56.369Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 150",
+      "filePath": "/workspaces/agent-feed/src/tests/token-analytics-demo.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:56.369Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 300",
+      "filePath": "/workspaces/agent-feed/src/tests/token-analytics-demo.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:56.369Z"
+    },
+    {
+      "category": "fakeTokens",
+      "pattern": "/tokens?:\\s*[\"']?\\d{3,6}[\"']?/g",
+      "match": "tokens: 12500",
+      "filePath": "/workspaces/agent-feed/src/tests/token-analytics-demo.ts",
+      "severity": "HIGH",
+      "timestamp": "2025-09-17T05:45:56.369Z"
+    }
+  ],
+  "generatedAt": "2025-09-17T05:45:56.615Z",
+  "status": "ISSUES_FOUND"
+}

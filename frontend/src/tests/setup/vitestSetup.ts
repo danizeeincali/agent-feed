@@ -1,10 +1,37 @@
 /**
- * Test Setup Configuration for Vitest
- * Global test configuration and mock setup for SSE Interactive Control Tab tests
+ * Vitest Setup Configuration
+ * Configures testing environment for analytics tests
  */
 
-import { vi, beforeEach, afterEach } from 'vitest';
-import '@testing-library/jest-dom/vitest';
+// Import vi from vitest first
+import { vi } from 'vitest';
+
+// Use the standard import that exists
+import '@testing-library/jest-dom';
+
+// Mock window.performance for consistent testing
+Object.defineProperty(global, 'performance', {
+  writable: true,
+  value: {
+    now: vi.fn(() => Date.now()),
+    mark: vi.fn(),
+    measure: vi.fn(),
+    getEntriesByType: vi.fn(() => []),
+    memory: {
+      usedJSHeapSize: 1024 * 1024 * 10, // 10MB
+      totalJSHeapSize: 1024 * 1024 * 50, // 50MB
+      jsHeapSizeLimit: 1024 * 1024 * 100 // 100MB
+    }
+  }
+});
+
+// Mock requestAnimationFrame
+global.requestAnimationFrame = vi.fn((cb) => {
+  setTimeout(cb, 16); // ~60fps
+  return 1;
+});
+
+global.cancelAnimationFrame = vi.fn();
 
 // Mock window.matchMedia which is not implemented in JSDOM
 Object.defineProperty(window, 'matchMedia', {
@@ -35,6 +62,12 @@ global.IntersectionObserver = vi.fn().mockImplementation(() => ({
   disconnect: vi.fn(),
 }));
 
+// Mock PerformanceObserver
+global.PerformanceObserver = vi.fn().mockImplementation((callback) => ({
+  observe: vi.fn(),
+  disconnect: vi.fn()
+}));
+
 // Mock EventSource for SSE testing
 global.EventSource = vi.fn().mockImplementation(() => ({
   addEventListener: vi.fn(),
@@ -63,16 +96,8 @@ global.WebSocket = vi.fn().mockImplementation(() => ({
   CLOSED: 3
 }));
 
-// Global test configuration
-beforeEach(() => {
-  // Clear all mocks before each test
-  vi.clearAllMocks();
-});
-
-afterEach(() => {
-  // Clean up timers
-  vi.clearAllTimers();
-});
+// Set up fetch mock
+global.fetch = vi.fn();
 
 // Mock canvas context for xterm
 HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
@@ -102,14 +127,11 @@ HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
   clip: vi.fn(),
 }));
 
-// Set up fetch mock
-global.fetch = vi.fn();
-
 // Suppress specific console warnings that are expected in test environment
 const originalError = console.error;
 console.error = (...args: any[]) => {
   const message = args.join(' ');
-  
+
   // Suppress known test environment warnings
   if (
     message.includes('Warning: validateDOMNesting') ||
@@ -124,7 +146,7 @@ console.error = (...args: any[]) => {
   ) {
     return;
   }
-  
+
   originalError(...args);
 };
 
@@ -145,7 +167,7 @@ const TestUtils = {
       checkCondition();
     });
   },
-  
+
   flushPromises: (): Promise<void> => {
     return new Promise(resolve => setTimeout(resolve, 0));
   }

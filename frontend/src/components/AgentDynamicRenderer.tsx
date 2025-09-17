@@ -459,9 +459,9 @@ const AgentDynamicRenderer = memo<AgentDynamicRendererProps>(({
         }
 
         // Handle children
-        let children = componentSpec.children;
+        let children: any = componentSpec.children;
         if (Array.isArray(children)) {
-          children = children.map((child, childIndex) => 
+          children = children.map((child: any, childIndex: number) =>
             typeof child === 'string' ? child : renderComponent(child, childIndex)
           );
         }

@@ -1,5 +1,5 @@
 /**
- * MCP Tool Utilities for NLD Integration
+ * MCP Tool Utilities for Claude-Flow Integration
  * Provides typed interfaces for Claude-Flow MCP tools
  */
 

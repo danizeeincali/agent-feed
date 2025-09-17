@@ -1,0 +1,195 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Interactive Control" [ref=e12] [cursor=pointer]:
+        - /url: /interactive-control
+        - img [ref=e13] [cursor=pointer]
+        - text: Interactive Control
+      - link "Claude Manager" [ref=e20] [cursor=pointer]:
+        - /url: /claude-manager
+        - img [ref=e21] [cursor=pointer]
+        - text: Claude Manager
+      - link "Feed" [ref=e26] [cursor=pointer]:
+        - /url: /
+        - img [ref=e27] [cursor=pointer]
+        - text: Feed
+      - link "Create" [ref=e29] [cursor=pointer]:
+        - /url: /posting
+        - img [ref=e30] [cursor=pointer]
+        - text: Create
+      - link "Mention Demo" [ref=e36] [cursor=pointer]:
+        - /url: /mention-demo
+        - img [ref=e37] [cursor=pointer]
+        - text: Mention Demo
+      - link "Drafts" [ref=e40] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e41] [cursor=pointer]
+        - text: Drafts
+      - link "Agents" [ref=e47] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e48] [cursor=pointer]
+        - text: Agents
+      - link "Workflows" [ref=e55] [cursor=pointer]:
+        - /url: /workflows
+        - img [ref=e56] [cursor=pointer]
+        - text: Workflows
+      - link "Claude Code" [ref=e60] [cursor=pointer]:
+        - /url: /claude-code
+        - img [ref=e61] [cursor=pointer]
+        - text: Claude Code
+      - link "Live Activity" [ref=e64] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e65] [cursor=pointer]
+        - text: Live Activity
+      - link "Analytics" [ref=e70] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e71] [cursor=pointer]
+        - text: Analytics
+      - link "Performance Monitor" [ref=e76] [cursor=pointer]:
+        - /url: /performance-monitor
+        - img [ref=e77] [cursor=pointer]
+        - text: Performance Monitor
+      - link "Settings" [ref=e79] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e80] [cursor=pointer]
+        - text: Settings
+    - generic [ref=e84]:
+      - generic [ref=e85]:
+        - generic [ref=e87]: Connected
+        - img [ref=e88]
+      - generic [ref=e93]:
+        - img [ref=e94]
+        - generic [ref=e99]: "0"
+  - generic [ref=e100]:
+    - banner [ref=e101]:
+      - generic [ref=e102]:
+        - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e104]
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - img [ref=e107]
+            - textbox "Search posts..." [ref=e110]
+          - generic [ref=e111]:
+            - button "Notifications" [ref=e112] [cursor=pointer]:
+              - img [ref=e113] [cursor=pointer]
+            - generic [ref=e115]:
+              - heading "Notifications" [level=3] [ref=e117]
+              - generic [ref=e118]:
+                - generic [ref=e120] [cursor=pointer]:
+                  - generic [ref=e121] [cursor=pointer]: ✅
+                  - generic [ref=e122] [cursor=pointer]:
+                    - paragraph [ref=e123] [cursor=pointer]: System initialized successfully
+                    - paragraph [ref=e124] [cursor=pointer]: now
+                - generic [ref=e126] [cursor=pointer]:
+                  - generic [ref=e127] [cursor=pointer]: ℹ️
+                  - generic [ref=e128] [cursor=pointer]:
+                    - paragraph [ref=e129] [cursor=pointer]: Mock components loaded
+                    - paragraph [ref=e130] [cursor=pointer]: 1m ago
+                - generic [ref=e132] [cursor=pointer]:
+                  - generic [ref=e133] [cursor=pointer]: ✅
+                  - generic [ref=e134] [cursor=pointer]:
+                    - paragraph [ref=e135] [cursor=pointer]: Application ready
+                    - paragraph [ref=e136] [cursor=pointer]: 2m ago
+              - button "View all notifications" [ref=e138] [cursor=pointer]
+    - main [ref=e140]:
+      - generic [ref=e141]:
+        - generic [ref=e142]:
+          - generic [ref=e143]:
+            - heading "System Analytics" [level=2] [ref=e144]
+            - paragraph [ref=e145]: Real-time production metrics and performance data
+          - generic [ref=e146]:
+            - combobox [ref=e147]:
+              - option "Last Hour"
+              - option "Last 24 Hours" [selected]
+              - option "Last 7 Days"
+              - option "Last 30 Days"
+            - button "Refresh" [ref=e148] [cursor=pointer]:
+              - img [ref=e149] [cursor=pointer]
+              - text: Refresh
+        - generic [ref=e154]:
+          - img [ref=e155]
+          - generic [ref=e159]:
+            - paragraph [ref=e160]: Error
+            - paragraph [ref=e161]: "HTTP error! status: 500"
+          - button "×" [ref=e162] [cursor=pointer]
+        - navigation "Tabs" [ref=e165]:
+          - button "System Analytics" [ref=e166] [cursor=pointer]:
+            - img [ref=e167] [cursor=pointer]
+            - text: System Analytics
+          - button "Claude SDK Cost Analytics" [ref=e169] [cursor=pointer]:
+            - img [ref=e170] [cursor=pointer]
+            - text: Claude SDK Cost Analytics
+        - generic [ref=e173]:
+          - generic [ref=e175]:
+            - img [ref=e177]
+            - generic [ref=e182]:
+              - paragraph [ref=e183]: Active Agents
+              - paragraph [ref=e184]: "0"
+          - generic [ref=e186]:
+            - img [ref=e188]
+            - generic [ref=e190]:
+              - paragraph [ref=e191]: Total Posts
+              - paragraph [ref=e192]: "0"
+          - generic [ref=e194]:
+            - img [ref=e196]
+            - generic [ref=e200]:
+              - paragraph [ref=e201]: System Health
+              - paragraph [ref=e202]: 95.0%
+          - generic [ref=e204]:
+            - img [ref=e206]
+            - generic [ref=e209]:
+              - paragraph [ref=e210]: Avg Response
+              - paragraph [ref=e211]: 250ms
+        - generic [ref=e212]:
+          - generic [ref=e213]:
+            - generic [ref=e214]:
+              - img [ref=e215]
+              - heading "Performance Metrics" [level=3] [ref=e220]
+            - generic [ref=e221]:
+              - generic [ref=e223]:
+                - generic [ref=e224]: CPU Usage
+                - generic [ref=e225]: 0.0%
+              - generic [ref=e228]:
+                - generic [ref=e229]: Memory Usage
+                - generic [ref=e230]: 0.0%
+              - generic [ref=e233]:
+                - generic [ref=e234]: Database Performance
+                - generic [ref=e235]: 95.0%
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - img [ref=e240]
+              - heading "Activity Breakdown" [level=3] [ref=e243]
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - generic [ref=e246]: Agent Operations
+                - generic [ref=e247]: "45"
+              - generic [ref=e248]:
+                - generic [ref=e249]: Post Creations
+                - generic [ref=e250]: "23"
+              - generic [ref=e251]:
+                - generic [ref=e252]: System Events
+                - generic [ref=e253]: "12"
+              - generic [ref=e254]:
+                - generic [ref=e255]: User Interactions
+                - generic [ref=e256]: "67"
+        - generic [ref=e257]:
+          - generic [ref=e258]:
+            - img [ref=e259]
+            - heading "Database Status" [level=3] [ref=e263]
+          - generic [ref=e264]:
+            - generic [ref=e265]:
+              - paragraph [ref=e266]: Database Type
+              - paragraph [ref=e267]: SQLite Production
+            - generic [ref=e268]:
+              - paragraph [ref=e269]: Connection Status
+              - paragraph [ref=e272]: Connected
+            - generic [ref=e273]:
+              - paragraph [ref=e274]: Last Update
+              - paragraph [ref=e275]: Just now
+        - generic [ref=e277]: Real-time analytics streaming active
+```

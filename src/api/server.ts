@@ -45,6 +45,8 @@ import demoAgentsRoutes from '@/api/routes/demo-agents';
 import claudeCodeIntegrationRoutes from '@/api/routes/claude-code-integration';
 import prodClaudeRoutes from '@/api/routes/prod-claude';
 import simpleLauncherRoutes from '@/api/routes/simple-claude-launcher';
+import claudeCodeSDKRoutes from '@/api/routes/claude-code-sdk';
+import tokenAnalyticsRoutes from '@/api/routes/token-analytics';
 
 // NEW: Import Claude Instance Management routes
 import claudeInstancesRoutes from '@/api/routes/claude-instances';
@@ -61,6 +63,9 @@ import { prodClaudeService } from '@/services/prod-claude-service';
 // Import enhanced SSE services
 import { sseConnectionManager, SSEConnectionManager } from '@/services/SSEConnectionManager';
 import { enhancedProcessManager } from '@/services/EnhancedProcessManager';
+
+// Import token analytics database
+import { tokenAnalyticsDB } from '@/database/token-analytics-db';
 
 // Load environment variables
 dotenv.config();
@@ -253,12 +258,24 @@ apiV1.use('/demo', demoAgentsRoutes);
 apiV1.use('/claude-live', claudeCodeIntegrationRoutes);
 apiV1.use('/prod-claude', prodClaudeRoutes);
 apiV1.use('/claude-launcher', simpleLauncherRoutes);
+apiV1.use('/claude-code', claudeCodeSDKRoutes);
+apiV1.use('/token-analytics', tokenAnalyticsRoutes);
 
 // NEW: Mount Claude Instance Management routes
 apiV1.use('/claude/instances', claudeInstancesRoutes);
 
 // CRITICAL FIX: Mount simple launcher at the path frontend expects
 app.use('/api/claude', simpleLauncherRoutes);
+
+// CRITICAL FIX: Mount Claude Code SDK routes at frontend expected path
+console.log('🔧 CRITICAL FIX: Mounting Claude Code SDK routes at /api/claude-code');
+app.use('/api/claude-code', claudeCodeSDKRoutes);
+console.log('✅ Claude Code SDK routes mounted successfully');
+
+// Mount Token Analytics routes at frontend expected path
+console.log('🔧 Mounting Token Analytics routes at /api/token-analytics');
+app.use('/api/token-analytics', tokenAnalyticsRoutes);
+console.log('✅ Token Analytics routes mounted successfully');
 
 // NEW: Mount Claude Instance Management at expected paths  
 app.use('/api/claude/instances', claudeInstancesRoutes);
@@ -757,6 +774,15 @@ const startServer = async () => {
     console.log('   Terminal streaming available via SSE endpoint: /api/v1/claude/instances/:id/terminal/stream');
     console.log('   All real-time features converted to HTTP polling/SSE');
     
+    // Initialize Token Analytics Database
+    try {
+      await tokenAnalyticsDB.initialize();
+      console.log('✅ Token Analytics Database initialized successfully');
+    } catch (error) {
+      console.error('❌ Failed to initialize Token Analytics Database:', error);
+      // Continue without token analytics for now
+    }
+
     // Initialize Claude Code orchestrator and health monitoring
     try {
       // await claudeCodeOrchestrator.initialize();

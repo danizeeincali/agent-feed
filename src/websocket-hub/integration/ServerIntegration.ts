@@ -7,7 +7,7 @@ import { Server as HTTPServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { WebSocketHub, WebSocketHubConfig, createWebSocketHub } from '../core';
 import { logger } from '@/utils/logger';
-import { integrateNLDWithWebSocket, NLDWebSocketIntegration } from '@/nld/websocket-integration';
+// NLD integration removed
 
 export interface ServerIntegrationConfig {
   enableHub: boolean;
@@ -21,7 +21,6 @@ export interface ServerIntegrationConfig {
 
 export interface IntegrationResult {
   hub: WebSocketHub;
-  nldIntegration?: NLDWebSocketIntegration;
   originalIO: SocketIOServer;
   metrics: {
     hubConnections: number;
@@ -33,7 +32,6 @@ export interface IntegrationResult {
 export class ServerIntegration {
   private hub: WebSocketHub;
   private originalIO: SocketIOServer;
-  private nldIntegration?: NLDWebSocketIntegration;
   private config: ServerIntegrationConfig;
   private isInitialized: boolean = false;
   private connectionMap: Map<string, 'hub' | 'original'> = new Map();
@@ -78,10 +76,7 @@ export class ServerIntegration {
         this.setupHubEventHandlers();
       }
 
-      // Initialize NLD integration
-      if (this.config.enableNLD) {
-        await this.initializeNLDIntegration();
-      }
+      // NLD integration removed
 
       // Set up routing strategy
       await this.setupRoutingStrategy();
@@ -90,7 +85,6 @@ export class ServerIntegration {
 
       const result: IntegrationResult = {
         hub: this.hub,
-        nldIntegration: this.nldIntegration,
         originalIO: this.originalIO,
         metrics: this.getConnectionMetrics()
       };
@@ -115,80 +109,9 @@ export class ServerIntegration {
     }
   }
 
-  /**
-   * Initialize NLD integration
-   */
-  private async initializeNLDIntegration(): Promise<void> {
-    try {
-      // Create a WebSocket service wrapper for the original Socket.IO server
-      const webSocketServiceWrapper = this.createWebSocketServiceWrapper();
-      
-      this.nldIntegration = await integrateNLDWithWebSocket(webSocketServiceWrapper, {
-        enableLearning: true,
-        enableAdaptiveRetry: true,
-        enablePerformanceMonitoring: true,
-        enableTroubleshooting: true,
-        neuralTrainingEnabled: true
-      });
+  // NLD integration methods removed
 
-      // Forward NLD events to hub if hub is enabled
-      if (this.hub) {
-        this.setupNLDHubIntegration();
-      }
 
-      logger.info('NLD integration initialized successfully');
-
-    } catch (error) {
-      logger.warn('Failed to initialize NLD integration', { error: error.message });
-    }
-  }
-
-  /**
-   * Create WebSocket service wrapper for NLD integration
-   */
-  private createWebSocketServiceWrapper(): any {
-    return {
-      connect: async () => {
-        // Wrapper for original Socket.IO connection logic
-        return Promise.resolve();
-      },
-      send: (type: string, data: any) => {
-        // Broadcast to all connected clients via original IO
-        this.originalIO.emit(type, data);
-      },
-      disconnect: () => {
-        // Handle disconnection
-        this.originalIO.close();
-      },
-      url: `ws://localhost:${process.env.PORT || 3000}/socket.io/`
-    };
-  }
-
-  /**
-   * Set up integration between NLD and Hub
-   */
-  private setupNLDHubIntegration(): void {
-    if (!this.nldIntegration || !this.hub) return;
-
-    // Forward NLD events to hub clients
-    this.nldIntegration.on('nldPatternDetected', (data) => {
-      this.hub.broadcastToInstanceType('claude-production', 'nld:pattern:detected', data);
-    });
-
-    this.nldIntegration.on('nldConnectionSuccess', (data) => {
-      this.hub.broadcastToInstanceType('frontend', 'nld:connection:success', data);
-    });
-
-    this.nldIntegration.on('nldAlert', (alert) => {
-      this.hub.broadcastToInstanceType('claude-production', 'nld:alert', alert);
-    });
-
-    this.nldIntegration.on('troubleshootingSuggestions', (suggestions) => {
-      this.hub.broadcastToInstanceType('frontend', 'nld:troubleshooting', suggestions);
-    });
-
-    logger.debug('NLD-Hub integration event forwarding set up');
-  }
 
   /**
    * Set up routing strategy between hub and original Socket.IO
@@ -366,14 +289,12 @@ export class ServerIntegration {
   getStatus(): {
     initialized: boolean;
     hubActive: boolean;
-    nldActive: boolean;
     routingStrategy: string;
     metrics: IntegrationResult['metrics'];
   } {
     return {
       initialized: this.isInitialized,
       hubActive: this.hub?.isActive() || false,
-      nldActive: !!this.nldIntegration,
       routingStrategy: this.config.routingStrategy,
       metrics: this.getConnectionMetrics()
     };
@@ -426,20 +347,7 @@ export class ServerIntegration {
     }
   }
 
-  /**
-   * Enable or disable NLD integration
-   */
-  async toggleNLD(enabled: boolean): Promise<void> {
-    if (enabled && !this.nldIntegration) {
-      await this.initializeNLDIntegration();
-    } else if (!enabled && this.nldIntegration) {
-      await this.nldIntegration.shutdown();
-      this.nldIntegration = undefined;
-    }
-
-    this.config.enableNLD = enabled;
-    logger.info(`NLD integration ${enabled ? 'enabled' : 'disabled'}`);
-  }
+  // NLD integration toggle methods removed
 
   /**
    * Update configuration
@@ -461,11 +369,6 @@ export class ServerIntegration {
     logger.info('Shutting down WebSocket Hub integration');
 
     try {
-      // Shutdown NLD integration
-      if (this.nldIntegration) {
-        await this.nldIntegration.shutdown();
-      }
-
       // Shutdown hub
       if (this.hub) {
         await this.hub.stop();

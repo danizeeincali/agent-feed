@@ -1,0 +1,31 @@
+{
+  "name": "claude-api-validation",
+  "version": "1.0.0",
+  "description": "Test suite to validate Claude API is making real calls to Anthropic servers",
+  "main": "manual-validation.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "validate": "node manual-validation.js",
+    "test:real-api": "jest real-api-call.test.js",
+    "test:usage": "jest usage-tracking.test.js",
+    "test:analytics": "jest analytics-endpoints.test.js",
+    "test:tokens": "jest token-accuracy.test.js",
+    "test:all": "npm run test && npm run validate"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.62.0",
+    "dotenv": "^17.2.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 60000,
+    "verbose": true
+  }
+}

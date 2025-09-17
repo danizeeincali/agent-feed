@@ -33,6 +33,7 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
+        timeout: 300000, // 5 minute timeout for Claude Code processing
         configure: (proxy, _options) => {
           proxy.on('proxyReq', (proxyReq, req, _res) => {
             console.log('🔍 SPARC DEBUG: HTTP API proxy request:', req.method, req.url, '->', proxyReq.path);
@@ -40,37 +41,46 @@ export default defineConfig({
           proxy.on('error', (err, _req, _res) => {
             console.log('🔍 SPARC DEBUG: HTTP API proxy error:', err.message);
           });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            if (proxyRes.statusCode && proxyRes.statusCode >= 400) {
+              console.log('🔍 SPARC DEBUG: HTTP API proxy response error:', req.url, '->', proxyRes.statusCode);
+            }
+          });
         }
       },
-      // CRITICAL FIX: WebSocket proxy for Socket.IO (fixing terminal regression) - FIXED TO PORT 3002  
-      '/socket.io': {
-        target: 'http://localhost:3002',
+      // CRITICAL FIX: WebSocket proxy for backend WebSocket server - FIXED TO PORT 3000
+      '/ws': {
+        target: 'http://localhost:3000',
         ws: true,           // Enable WebSocket proxying
         changeOrigin: true, // Change origin headers to match target
         secure: false,
-        headers: {
-          'Connection': 'upgrade',
-          'Upgrade': 'websocket'
-        },
         configure: (proxy, _options) => {
           proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('🔍 SPARC DEBUG: WebSocket proxy request:', req.url, '->', proxyReq.path);
-            // Ensure proper headers for WebSocket upgrade
-            if (req.headers.connection) {
-              proxyReq.setHeader('Connection', req.headers.connection);
-            }
-            if (req.headers.upgrade) {
-              proxyReq.setHeader('Upgrade', req.headers.upgrade);
-            }
+            console.log('🔍 SPARC DEBUG: WebSocket /ws proxy request:', req.url, '->', proxyReq.path);
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('🔍 SPARC DEBUG: WebSocket proxy response:', req.url, '->', proxyRes.statusCode);
+            console.log('🔍 SPARC DEBUG: WebSocket /ws proxy response:', req.url, '->', proxyRes.statusCode);
           });
           proxy.on('error', (err, _req, _res) => {
-            console.log('🔍 SPARC DEBUG: WebSocket proxy error:', err.message);
+            console.log('🔍 SPARC DEBUG: WebSocket /ws proxy error:', err.message);
           });
           proxy.on('upgrade', (req, socket, head) => {
-            console.log('🔍 SPARC DEBUG: WebSocket upgrade request:', req.url);
+            console.log('🔍 SPARC DEBUG: WebSocket /ws upgrade request:', req.url);
+          });
+        }
+      },
+      // Terminal WebSocket proxy
+      '/terminal': {
+        target: 'http://localhost:3000',
+        ws: true,
+        changeOrigin: true,
+        secure: false,
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('🔍 SPARC DEBUG: WebSocket /terminal proxy request:', req.url, '->', proxyReq.path);
+          });
+          proxy.on('error', (err, _req, _res) => {
+            console.log('🔍 SPARC DEBUG: WebSocket /terminal proxy error:', err.message);
           });
         }
       },
@@ -92,6 +102,7 @@ export default defineConfig({
           router: ['react-router-dom'],
           query: ['@tanstack/react-query'],
           ui: ['lucide-react'],
+          charts: ['chart.js', 'react-chartjs-2', 'chartjs-adapter-date-fns'],
           // HTTP/SSE only - socket.io-client removed
           // realtime: ['socket.io-client'],
         },

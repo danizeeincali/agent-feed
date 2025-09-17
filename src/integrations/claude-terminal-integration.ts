@@ -85,6 +85,6 @@ export class ClaudeTerminalProcessor extends EventEmitter {
       chunkCount++;
 
       // Process complete responses or every N chunks
-      const shouldProcess = 
+      const shouldProcess =
         buffer.includes('</thinking>') ||
         buffer.includes('

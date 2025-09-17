@@ -388,7 +388,7 @@ export const withRetry = async <T>(
   maxRetries: number = 3,
   delay: number = 1000
 ): Promise<ApiResponse<T>> => {
-  let lastError: Error;
+  let lastError: Error = new Error('Operation failed');
   
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {

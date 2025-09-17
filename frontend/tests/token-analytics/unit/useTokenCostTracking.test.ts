@@ -5,7 +5,7 @@ import '../setup';
 
 // Now import the hook after mocks are set up
 import { useTokenCostTracking, TokenUsage } from '@/hooks/useTokenCostTracking';
-import * as nldLogger from '@/utils/nld-logger';
+// NLD logger removed - using console for test logging
 
 // Additional localStorage mock for this specific test
 const localStorageMock = {
@@ -84,11 +84,7 @@ describe('useTokenCostTracking Hook', () => {
 
       const cost = result.current.calculateTokenCost('unknown', 'model', 1000, 500);
       expect(cost).toBe(0);
-      expect(nldLogger.nldLogger.renderFailure).toHaveBeenCalledWith(
-        'useTokenCostTracking',
-        expect.any(Error),
-        { provider: 'unknown', model: 'model' }
-      );
+      // NLD logger calls removed
     });
 
     test('should handle unknown models gracefully', () => {
@@ -96,11 +92,7 @@ describe('useTokenCostTracking Hook', () => {
 
       const cost = result.current.calculateTokenCost('claude', 'unknown-model', 1000, 500);
       expect(cost).toBe(0);
-      expect(nldLogger.nldLogger.renderFailure).toHaveBeenCalledWith(
-        'useTokenCostTracking',
-        expect.any(Error),
-        { provider: 'claude', model: 'unknown-model' }
-      );
+      // NLD logger calls removed
     });
   });
 
@@ -129,8 +121,7 @@ describe('useTokenCostTracking Hook', () => {
         expect(usage.timestamp).toBeInstanceOf(Date);
       });
 
-      expect(nldLogger.nldLogger.renderAttempt).toHaveBeenCalled();
-      expect(nldLogger.nldLogger.renderSuccess).toHaveBeenCalled();
+      // NLD logger calls removed
     });
 
     test('should maintain memory limits (max 1000 entries)', async () => {
@@ -313,11 +304,7 @@ describe('useTokenCostTracking Hook', () => {
       });
 
       // Should handle error gracefully
-      expect(nldLogger.nldLogger.renderFailure).toHaveBeenCalledWith(
-        'useTokenCostTracking',
-        expect.any(Error),
-        { action: 'localStorage' }
-      );
+      // NLD logger calls removed
     });
   });
 
@@ -344,7 +331,7 @@ describe('useTokenCostTracking Hook', () => {
         expect(result.current.error).toBeInstanceOf(Error);
       });
 
-      expect(nldLogger.nldLogger.renderFailure).toHaveBeenCalled();
+      // NLD logger calls removed
     });
 
     test('should handle fetch errors during initialization', async () => {

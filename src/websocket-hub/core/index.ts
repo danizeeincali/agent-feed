@@ -15,7 +15,7 @@ export { SecurityManager, type SecurityManagerConfig, type ClientSecurityContext
 import { WebSocketHub, WebSocketHubConfig } from './WebSocketHub';
 import { Server as HTTPServer } from 'http';
 import { logger } from '@/utils/logger';
-import { integrateNLDWithWebSocket } from '@/nld/websocket-integration';
+// NLD integration removed
 
 export interface WebSocketHubFactoryConfig extends Partial<WebSocketHubConfig> {
   enableNLD?: boolean;
@@ -69,27 +69,15 @@ export async function integrateWithExistingWebSocket(
   config: WebSocketHubFactoryConfig = {}
 ): Promise<{
   hub: WebSocketHub;
-  nldIntegration?: any;
 }> {
   // Extract HTTP server from existing Socket.IO instance
   const httpServer = existingIO.httpServer || existingIO.engine.httpServer;
-  
+
   if (!httpServer) {
     throw new Error('Cannot extract HTTP server from existing Socket.IO instance');
   }
 
   const hub = await createWebSocketHub(httpServer, config);
 
-  let nldIntegration;
-  if (config.enableNLD) {
-    try {
-      // Note: This would need to be adapted based on the actual WebSocket service structure
-      logger.info('Integrating NLD with WebSocket Hub');
-      // nldIntegration = await integrateNLDWithWebSocket(webSocketService);
-    } catch (error) {
-      logger.warn('Failed to integrate NLD', { error: error.message });
-    }
-  }
-
-  return { hub, nldIntegration };
+  return { hub };
 }

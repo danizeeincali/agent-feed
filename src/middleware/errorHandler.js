@@ -337,10 +337,21 @@ export const notFoundHandler = (req, res) => {
       'GET /api/agents/:agentId/pages/:pageId/schema',
       'GET /api/agents/pages/health',
       'GET /api/v1/agent-posts',
+      'POST /api/v1/agent-posts',
+      'POST /api/v1/agent-posts/filter',
       'GET /api/v1/filter-data',
+      'GET /api/v1/filter-suggestions',
+      'POST /api/v1/link-preview',
+      'DELETE /api/v1/agent-posts/:id',
+      'POST /api/v1/agent-posts/:id/save',
+      'DELETE /api/v1/agent-posts/:id/save',
       'GET /api/filter-stats',
       'GET /api/test-endpoint',
-      'GET /api/agents'
+      'GET /api/agents',
+      'GET /api/agent-posts',
+      'POST /api/agent-posts',
+      'GET /api/filter-data',
+      'GET /api/filter-suggestions'
     ]
   });
 };

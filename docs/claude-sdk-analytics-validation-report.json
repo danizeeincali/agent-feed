@@ -1,0 +1,28 @@
+{
+  "summary": {
+    "totalTests": 2,
+    "passed": 0,
+    "failed": 2,
+    "successRate": "0.0%",
+    "timestamp": "2025-09-16T04:25:07.808Z",
+    "url": "http://127.0.0.1:5173/analytics"
+  },
+  "testResults": [
+    {
+      "test": "Browser Launch",
+      "browser": "chromium",
+      "passed": false,
+      "error": "Failed to execute 'querySelectorAll' on 'Document': '[data-*], .loaded, .has-data' is not a valid selector.",
+      "details": "Failed to launch chromium: Failed to execute 'querySelectorAll' on 'Document': '[data-*], .loaded, .has-data' is not a valid selector."
+    },
+    {
+      "test": "Browser Launch",
+      "browser": "firefox",
+      "passed": false,
+      "error": "Could not find Firefox (rev. latest). This can occur if either\n 1. you did not perform an installation for Firefox before running the script (e.g. `npx puppeteer browsers install firefox`) or\n 2. your cache path is incorrectly configured (which is: /home/codespace/.cache/puppeteer).\nFor (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration.",
+      "details": "Failed to launch firefox: Could not find Firefox (rev. latest). This can occur if either\n 1. you did not perform an installation for Firefox before running the script (e.g. `npx puppeteer browsers install firefox`) or\n 2. your cache path is incorrectly configured (which is: /home/codespace/.cache/puppeteer).\nFor (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration."
+    }
+  ],
+  "recommendations": [],
+  "criticalIssues": []
+}

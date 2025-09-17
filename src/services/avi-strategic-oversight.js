@@ -5,7 +5,7 @@
  */
 
 import DatabaseService from '../database/DatabaseService.js';
-import nldPatternDetectionService from '../nld-patterns/pattern-detection-service.js';
+// NLD pattern detection removed during cleanup
 import agentDataReadiness from './agent-data-readiness.js';
 import aviAIConfig from './avi-ai-config.js';
 
@@ -168,11 +168,9 @@ class AviStrategicOversight {
       // Check agent data readiness
       const dataCheck = await this.validateAgentDataReadiness(request.agentId);
       if (!dataCheck.hasData && request.requiresData !== false) {
-        // Log as failed request pattern for NLD
-        await this.recordFailedRequest(requestId, request, 'insufficient_data', {
-          message: 'Agent has no data available for page creation',
-          dataStatus: dataCheck
-        });
+        // Log failed request for monitoring
+        console.warn(`Request failed - insufficient data for agent ${request.agentId}`);
+
         
         return {
           success: false,
@@ -240,11 +238,8 @@ class AviStrategicOversight {
     } catch (error) {
       console.error(`❌ Avi: Failed to submit request:`, error);
       
-      // Record failure pattern
-      await this.recordFailedRequest(requestId || 'unknown', request, 'submission_error', {
-        message: error.message,
-        stack: error.stack
-      });
+      // Log submission failure
+      console.error('Request submission failed:', error.message);
       
       return {
         success: false,
@@ -299,18 +294,8 @@ class AviStrategicOversight {
     } catch (error) {
       console.error(`❌ Avi Hybrid: Evaluation failed for request ${requestId}:`, error);
       
-      // Record evaluation failure pattern
-      await nldPatternDetectionService.detectPattern({
-        type: 'avi_evaluation_error',
-        requestId,
-        agentId: request.agentId,
-        error: {
-          message: error.message,
-          stack: error.stack
-        },
-        description: 'Avi hybrid evaluation process failed',
-        db: this.db
-      });
+      // Log evaluation failure
+      console.error(`Evaluation failed for request ${requestId}:`, error.message);
       
       return {
         requestId,
@@ -865,30 +850,22 @@ class AviStrategicOversight {
   }
   
   /**
-   * Record failed request for NLD pattern detection
+   * Record failed request for monitoring (NLD pattern detection removed)
    */
   async recordFailedRequest(requestId, request, failureType, errorDetails) {
     try {
       this.stats.patternsDetected++;
-      
-      await nldPatternDetectionService.detectPattern({
-        type: 'avi_request_failure',
+
+      // Simple logging instead of NLD pattern detection
+      console.log(`📊 Monitor: Request failed - ${requestId} (${failureType})`);
+      console.log(`Failed request details:`, {
         requestId,
         agentId: request.agentId,
         failureType,
-        request: {
-          pageType: request.pageType,
-          title: request.title,
-          priority: request.priority
-        },
-        error: errorDetails,
-        description: `Agent page request failed: ${failureType}`,
-        db: this.db
+        error: errorDetails
       });
-      
-      console.log(`📊 NLD: Recorded failed request pattern for ${requestId}`);
     } catch (error) {
-      console.warn(`⚠️ Avi: Failed to record request failure pattern:`, error);
+      console.warn(`⚠️ Avi: Failed to record request failure:`, error);
     }
   }
   

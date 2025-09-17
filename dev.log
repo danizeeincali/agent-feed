@@ -1,64 +1,19 @@
 
-> agent-feed@1.0.0 dev
-> tsx watch src/api/server.ts
+> agent-feed@0.1.0 dev
+> next dev
 
-23:51:20 [[32minfo[39m]: Redis fallback manager initialized with in-memory store {
-  "service": "agent-feed",
-  "version": "1.0.0"
-}
-23:51:20 [[32minfo[39m]: Redis disabled in configuration, using memory-only fallback store {
-  "service": "agent-feed",
-  "version": "1.0.0"
-}
-🔌 WebSocket configuration: {
-  enabled: true,
-  pingTimeout: 20000,
-  pingInterval: 8000,
-  transports: [ 'polling', 'websocket' ]
-}
-🚀 WebSocket enabled but authentication delegated to WebSocket Hub
-🔧 Initializing ClaudeInstanceTerminalWebSocket...
-🔧 Setting up terminal namespace /terminal...
-✅ Terminal namespace /terminal created successfully
-✅ ClaudeInstanceTerminalWebSocket initialized successfully
-Agent Feed API server started on port 3000 {
-  port: 3000,
-  environment: 'development',
-  version: '1.0.0',
-  websocket: true,
-  claude_flow: false
-}
-23:51:21 [[32minfo[39m]: Comment WebSocket server initialized {
-  "service": "agent-feed",
-  "version": "1.0.0"
-}
-23:51:21 [[32minfo[39m]: Claude Agent WebSocket manager initialized {
-  "service": "agent-feed",
-  "version": "1.0.0"
-}
-WebSocket servers initialized (Comments and Claude Agents)
-Failed to initialize Claude Code integration: ReferenceError: claudeHealthMonitor is not defined
-    at Server.<anonymous> (/workspaces/agent-feed/src/api/server.ts:1256:7)
-    at Object.onceWrapper (node:events:632:28)
-    at Server.emit (node:events:530:35)
-    at emitListeningNT (node:net:1983:10)
-    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
-23:51:21 [[31merror[39m]: Query error: {
-  "service": "agent-feed",
-  "version": "1.0.0",
-  "query": "\n        SELECT id, name, type, pid, status, created_at, last_seen, config\n        FROM instances\n        WHERE status IN ('running', 'starting')\n      ",
-  "error": ""
-}
-23:51:21 [[31merror[39m]: Failed to load existing instances {
-  "service": "agent-feed",
-  "version": "1.0.0",
-  "error": ""
-}
-🔄 Dual Instance Manager initialized successfully
-📁 Communication queue: /tmp/claude-communication/
-⚙️  Dev config loaded: true
-⚙️  Prod config loaded: true
-12:29:50 AM [tsx] change in ./src/api/server.ts Restarting...
-12:29:56 AM [tsx] Process didn't exit in 5s. Force killing...
-12:42:32 AM [tsx] change in ./src/api/server.ts Process hasn't exited. Killing process...
-12:42:52 AM [tsx] change in ./src/api/server.ts Process hasn't exited. Killing process...
+ ⚠ Port 3000 is in use, trying 3001 instead.
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3001
+   - Environments: .env
+   - Experiments (use at your own risk):
+     · optimizeCss
+
+ ⚠ Invalid next.config.mjs options detected: 
+ ⚠     Unrecognized key(s) in object: 'appDir'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+Error: > Couldn't find any `pages` or `app` directory. Please create one under the project root
+    at findPagesDir (/workspaces/agent-feed/node_modules/next/dist/lib/find-pages-dir.js:42:15)
+    at initialize (/workspaces/agent-feed/node_modules/next/dist/server/lib/router-server.js:67:69)
+    at async Server.<anonymous> (/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js:236:36)
+[?25h

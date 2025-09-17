@@ -95,7 +95,7 @@ export class AviDMService {
   private mergeWithDefaults(config: Partial<ClaudeCodeConfig>): ClaudeCodeConfig {
     return {
       baseUrl: config.baseUrl || 'http://localhost:8080/api',
-      timeout: config.timeout || 30000,
+      timeout: config.timeout || 300000, // 5 minutes for Claude Code SDK variable performance (15-17s + buffer)
       retryAttempts: config.retryAttempts || 3,
       websocketUrl: config.websocketUrl || 'ws://localhost:8080/ws',
       apiKey: config.apiKey,
@@ -233,10 +233,18 @@ export class AviDMService {
         }
       };
       
-      // Send request
+      // Send request to the correct Claude Code SDK endpoint
+      console.log('🔧 AviDMService: Sending request to /api/claude-code/streaming-chat');
       const response = await this.httpClient.post<ClaudeResponse>(
-        '/chat/message',
-        request
+        '/api/claude-code/streaming-chat',
+        {
+          message: request.message,
+          options: {
+            cwd: context.projectPath || '/workspaces/agent-feed',
+            enableTools: true,
+            ...request.options
+          }
+        }
       );
       
       // Record request for rate limiting

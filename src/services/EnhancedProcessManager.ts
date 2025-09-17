@@ -7,7 +7,7 @@
  * - Resource monitoring and automatic cleanup
  * - Integration with existing codebase architecture
  * 
- * Addresses TDD test requirements and NLD analysis root causes.
+ * Addresses TDD test requirements and process management needs.
  */
 
 import { EventEmitter } from 'events';

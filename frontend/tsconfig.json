@@ -2,12 +2,15 @@
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -16,24 +19,34 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "allowJs": true,
-
     /* Linting */
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "src/agents/**/*",
     "src/services/neural-patterns.ts",
-    "src/services/queen-chief-of-staff.ts", 
+    "src/services/queen-chief-of-staff.ts",
     "src/utils/neural-utils.ts",
     "src/hooks/useBackgroundOrchestration.ts",
     "src/tests/**/*",
@@ -46,5 +59,9 @@
     "src/debug/**/*",
     "src/utils/apiSafety.ts"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

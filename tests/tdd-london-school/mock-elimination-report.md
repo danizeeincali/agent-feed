@@ -1,14 +1,14 @@
 # Mock Data Elimination Regression Test Report
-Generated: 2025-09-12T02:08:55.183Z
+Generated: 2025-09-17T04:36:47.994Z
 
 MOCK CONTAMINATION ANALYSIS REPORT
 ===================================
-Total files scanned: 442
-Contaminated files: 72
-Total contaminations found: 248
+Total files scanned: 451
+Contaminated files: 73
+Total contaminations found: 364
 
 SEVERITY BREAKDOWN:
-- Critical: 248 (Math.random, mock variables)
+- Critical: 364 (Math.random, mock variables)
 - High: 0 (Unknown, N/A strings)
 - Medium: 0 (Loading strings)
 
@@ -17,6 +17,16 @@ STATUS: ❌ CONTAMINATED
 ## Detailed Findings
 
 ❌ MOCK CONTAMINATION DETECTED
+
+📁 frontend/src/WorkingApp.tsx
+  🚨 Line 22 [CRITICAL]: math_random
+     Code: priority: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)],
+  🚨 Line 22 [CRITICAL]: math_random
+     Code: priority: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)],
+  🚨 Line 24 [CRITICAL]: math_random
+     Code: tool: ['thinking', 'read', 'search', 'write', 'edit', 'bash'][Math.floor(Math.random() * 6)]
+  🚨 Line 24 [CRITICAL]: math_random
+     Code: tool: ['thinking', 'read', 'search', 'write', 'edit', 'bash'][Math.floor(Math.random() * 6)]
 
 📁 frontend/src/components/ActivityPanel.tsx
   🚨 Line 165 [CRITICAL]: math_random
@@ -43,6 +53,54 @@ STATUS: ❌ CONTAMINATED
      Code: metadata: { progress: Math.floor(Math.random() * 100) }
   🚨 Line 172 [CRITICAL]: math_random
      Code: metadata: { progress: Math.floor(Math.random() * 100) }
+
+📁 frontend/src/components/AgentProfile.tsx
+  🚨 Line 229 [CRITICAL]: math_random
+     Code: experience_hours: Math.floor(Math.random() * 1000) + 100
+  🚨 Line 229 [CRITICAL]: math_random
+     Code: experience_hours: Math.floor(Math.random() * 1000) + 100
+  🚨 Line 232 [CRITICAL]: math_random
+     Code: tasksCompleted: Math.floor(Math.random() * 1000) + 100,
+  🚨 Line 232 [CRITICAL]: math_random
+     Code: tasksCompleted: Math.floor(Math.random() * 1000) + 100,
+  🚨 Line 233 [CRITICAL]: math_random
+     Code: successRate: 95 + Math.random() * 5,
+  🚨 Line 237 [CRITICAL]: math_random
+     Code: todayTasks: Math.floor(Math.random() * 20) + 5,
+  🚨 Line 237 [CRITICAL]: math_random
+     Code: todayTasks: Math.floor(Math.random() * 20) + 5,
+  🚨 Line 238 [CRITICAL]: math_random
+     Code: weeklyTasks: Math.floor(Math.random() * 100) + 50,
+  🚨 Line 238 [CRITICAL]: math_random
+     Code: weeklyTasks: Math.floor(Math.random() * 100) + 50,
+  🚨 Line 239 [CRITICAL]: math_random
+     Code: monthlyTasks: Math.floor(Math.random() * 400) + 200
+  🚨 Line 239 [CRITICAL]: math_random
+     Code: monthlyTasks: Math.floor(Math.random() * 400) + 200
+  🚨 Line 242 [CRITICAL]: math_random
+     Code: efficiency: 90 + Math.floor(Math.random() * 10),
+  🚨 Line 242 [CRITICAL]: math_random
+     Code: efficiency: 90 + Math.floor(Math.random() * 10),
+  🚨 Line 243 [CRITICAL]: math_random
+     Code: reliability: 95 + Math.floor(Math.random() * 5),
+  🚨 Line 243 [CRITICAL]: math_random
+     Code: reliability: 95 + Math.floor(Math.random() * 5),
+  🚨 Line 244 [CRITICAL]: math_random
+     Code: quality: 85 + Math.floor(Math.random() * 15),
+  🚨 Line 244 [CRITICAL]: math_random
+     Code: quality: 85 + Math.floor(Math.random() * 15),
+  🚨 Line 245 [CRITICAL]: math_random
+     Code: collaboration: 90 + Math.floor(Math.random() * 10)
+  🚨 Line 245 [CRITICAL]: math_random
+     Code: collaboration: 90 + Math.floor(Math.random() * 10)
+  🚨 Line 259 [CRITICAL]: math_random
+     Code: activeTasks: Math.floor(Math.random() * 5) + 1,
+  🚨 Line 259 [CRITICAL]: math_random
+     Code: activeTasks: Math.floor(Math.random() * 5) + 1,
+  🚨 Line 260 [CRITICAL]: math_random
+     Code: queuedTasks: Math.floor(Math.random() * 10) + 2,
+  🚨 Line 260 [CRITICAL]: math_random
+     Code: queuedTasks: Math.floor(Math.random() * 10) + 2,
 
 📁 frontend/src/components/BulletproofActivityPanel.tsx
   🚨 Line 93 [CRITICAL]: math_random
@@ -224,6 +282,24 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 928 [CRITICAL]: math_random
      Code: last_activity: new Date(Date.now() - Math.random() * 3600000).toISOString()
 
+📁 frontend/src/components/DynamicPageRenderer.tsx
+  🚨 Line 82 [CRITICAL]: math_random
+     Code: <div key={Math.random()} className={`bg-white rounded-lg border border-gray-200 p-4 ${props.className || ''}`}>
+  🚨 Line 91 [CRITICAL]: math_random
+     Code: <div key={Math.random()} className={`grid grid-cols-${props.cols || 1} gap-${props.gap || 4}`}>
+  🚨 Line 104 [CRITICAL]: math_random
+     Code: <span key={Math.random()} className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${variants[props.variant] || variants.default}`}>
+  🚨 Line 111 [CRITICAL]: math_random
+     Code: <div key={Math.random()} className="text-center">
+  🚨 Line 120 [CRITICAL]: math_random
+     Code: <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+  🚨 Line 145 [CRITICAL]: math_random
+     Code: <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-4">
+  🚨 Line 166 [CRITICAL]: math_random
+     Code: <button key={Math.random()} className={`inline-flex items-center px-4 py-2 rounded-md font-medium ${buttonVariants[props.variant] || buttonVariants.default} ${props.className || ''}`}>
+  🚨 Line 174 [CRITICAL]: math_random
+     Code: <div key={Math.random()} className="p-2 border border-gray-200 rounded">
+
 📁 frontend/src/components/EnhancedLinkPreview.tsx
   🚨 Line 230 [CRITICAL]: math_random
      Code: readingTime = Math.floor(Math.random() * 10) + 3; // Estimated reading time
@@ -332,6 +408,24 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 427 [CRITICAL]: math_random
      Code: <div key={i} className="w-2 bg-blue-200 rounded" style={{ height: `${10 + Math.random() * 20}px` }}></div>
 
+📁 frontend/src/components/analytics/CostOverviewDashboard.tsx
+  🚨 Line 101 [CRITICAL]: math_random
+     Code: const baseValue = 0.5 + Math.random() * 2;
+
+📁 frontend/src/components/analytics/MessageStepAnalytics.tsx
+  🚨 Line 81 [CRITICAL]: math_random
+     Code: const baseValue = 45 + Math.random() * 30;
+  🚨 Line 101 [CRITICAL]: math_random
+     Code: const baseValue = 120 + Math.random() * 80;
+  🚨 Line 121 [CRITICAL]: math_random
+     Code: const baseValue = 1200 + Math.random() * 600;
+  🚨 Line 122 [CRITICAL]: math_random
+     Code: const spike = Math.random() > 0.9 ? 1000 : 0; // Occasional spikes
+
+📁 frontend/src/components/avi-integration/AviChatInterface.tsx
+  🚨 Line 187 [CRITICAL]: math_random
+     Code: id: `img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+
 📁 frontend/src/components/claude-instances/ClaudeInstanceManagementDemo.tsx
   🚨 Line 28 [CRITICAL]: math_random
      Code: pid: status === 'running' ? Math.floor(Math.random() * 10000) + 1000 : undefined,
@@ -370,9 +464,197 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 207 [CRITICAL]: math_random
      Code: }, 2000 + Math.random() * 3000);
 
+📁 frontend/src/components/posting-interface/AviDirectChatReal.tsx
+  🚨 Line 158 [CRITICAL]: math_random
+     Code: const jitter = exponentialDelay * finalRetryConfig.jitterFactor * Math.random();
+  🚨 Line 201 [CRITICAL]: math_random
+     Code: id: `claude-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+  🚨 Line 446 [CRITICAL]: math_random
+     Code: id: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+
 📁 frontend/src/context/WebSocketSingletonContext.tsx
   🚨 Line 198 [CRITICAL]: math_random
      Code: id: `${Date.now()}-${Math.random()}`,
+
+📁 frontend/src/hooks/useAnalytics.ts
+  🚨 Line 59 [CRITICAL]: math_random
+     Code: totalCost: 156.78 + Math.random() * 20,
+  🚨 Line 60 [CRITICAL]: math_random
+     Code: dailyCost: 12.45 + Math.random() * 5,
+  🚨 Line 61 [CRITICAL]: math_random
+     Code: weeklyCost: 87.32 + Math.random() * 15,
+  🚨 Line 62 [CRITICAL]: math_random
+     Code: monthlyCost: 345.67 + Math.random() * 50,
+  🚨 Line 63 [CRITICAL]: math_random
+     Code: costTrend: Math.random() > 0.5 ? 'increasing' : 'decreasing',
+  🚨 Line 64 [CRITICAL]: math_random
+     Code: averageCostPerRequest: 0.023 + Math.random() * 0.01,
+  🚨 Line 69 [CRITICAL]: math_random
+     Code: totalTokens: 2847392 + Math.floor(Math.random() * 100000),
+  🚨 Line 69 [CRITICAL]: math_random
+     Code: totalTokens: 2847392 + Math.floor(Math.random() * 100000),
+  🚨 Line 70 [CRITICAL]: math_random
+     Code: inputTokens: 1698234 + Math.floor(Math.random() * 50000),
+  🚨 Line 70 [CRITICAL]: math_random
+     Code: inputTokens: 1698234 + Math.floor(Math.random() * 50000),
+  🚨 Line 71 [CRITICAL]: math_random
+     Code: outputTokens: 1149158 + Math.floor(Math.random() * 50000),
+  🚨 Line 71 [CRITICAL]: math_random
+     Code: outputTokens: 1149158 + Math.floor(Math.random() * 50000),
+  🚨 Line 72 [CRITICAL]: math_random
+     Code: tokensPerHour: 12453 + Math.floor(Math.random() * 2000),
+  🚨 Line 72 [CRITICAL]: math_random
+     Code: tokensPerHour: 12453 + Math.floor(Math.random() * 2000),
+  🚨 Line 73 [CRITICAL]: math_random
+     Code: tokensPerDay: 298872 + Math.floor(Math.random() * 50000),
+  🚨 Line 73 [CRITICAL]: math_random
+     Code: tokensPerDay: 298872 + Math.floor(Math.random() * 50000),
+  🚨 Line 74 [CRITICAL]: math_random
+     Code: averageTokensPerRequest: 1247 + Math.floor(Math.random() * 200),
+  🚨 Line 74 [CRITICAL]: math_random
+     Code: averageTokensPerRequest: 1247 + Math.floor(Math.random() * 200),
+  🚨 Line 75 [CRITICAL]: math_random
+     Code: tokenEfficiency: 0.87 + Math.random() * 0.1
+  🚨 Line 79 [CRITICAL]: math_random
+     Code: totalMessages: 1247 + Math.floor(Math.random() * 100),
+  🚨 Line 79 [CRITICAL]: math_random
+     Code: totalMessages: 1247 + Math.floor(Math.random() * 100),
+  🚨 Line 80 [CRITICAL]: math_random
+     Code: successfulMessages: 1198 + Math.floor(Math.random() * 50),
+  🚨 Line 80 [CRITICAL]: math_random
+     Code: successfulMessages: 1198 + Math.floor(Math.random() * 50),
+  🚨 Line 81 [CRITICAL]: math_random
+     Code: failedMessages: 49 + Math.floor(Math.random() * 10),
+  🚨 Line 81 [CRITICAL]: math_random
+     Code: failedMessages: 49 + Math.floor(Math.random() * 10),
+  🚨 Line 82 [CRITICAL]: math_random
+     Code: averageResponseTime: 1234 + Math.floor(Math.random() * 500),
+  🚨 Line 82 [CRITICAL]: math_random
+     Code: averageResponseTime: 1234 + Math.floor(Math.random() * 500),
+  🚨 Line 84 [CRITICAL]: math_random
+     Code: 'text-generation': 567 + Math.floor(Math.random() * 100),
+  🚨 Line 84 [CRITICAL]: math_random
+     Code: 'text-generation': 567 + Math.floor(Math.random() * 100),
+  🚨 Line 85 [CRITICAL]: math_random
+     Code: 'code-analysis': 234 + Math.floor(Math.random() * 50),
+  🚨 Line 85 [CRITICAL]: math_random
+     Code: 'code-analysis': 234 + Math.floor(Math.random() * 50),
+  🚨 Line 86 [CRITICAL]: math_random
+     Code: 'data-processing': 189 + Math.floor(Math.random() * 30),
+  🚨 Line 86 [CRITICAL]: math_random
+     Code: 'data-processing': 189 + Math.floor(Math.random() * 30),
+  🚨 Line 87 [CRITICAL]: math_random
+     Code: 'image-generation': 123 + Math.floor(Math.random() * 20),
+  🚨 Line 87 [CRITICAL]: math_random
+     Code: 'image-generation': 123 + Math.floor(Math.random() * 20),
+  🚨 Line 88 [CRITICAL]: math_random
+     Code: 'document-parsing': 89 + Math.floor(Math.random() * 15),
+  🚨 Line 88 [CRITICAL]: math_random
+     Code: 'document-parsing': 89 + Math.floor(Math.random() * 15),
+  🚨 Line 89 [CRITICAL]: math_random
+     Code: 'other': 45 + Math.floor(Math.random() * 10)
+  🚨 Line 89 [CRITICAL]: math_random
+     Code: 'other': 45 + Math.floor(Math.random() * 10)
+  🚨 Line 91 [CRITICAL]: math_random
+     Code: errorRate: 0.039 + Math.random() * 0.01
+  🚨 Line 95 [CRITICAL]: math_random
+     Code: totalSteps: 3456 + Math.floor(Math.random() * 500),
+  🚨 Line 95 [CRITICAL]: math_random
+     Code: totalSteps: 3456 + Math.floor(Math.random() * 500),
+  🚨 Line 96 [CRITICAL]: math_random
+     Code: completedSteps: 3298 + Math.floor(Math.random() * 400),
+  🚨 Line 96 [CRITICAL]: math_random
+     Code: completedSteps: 3298 + Math.floor(Math.random() * 400),
+  🚨 Line 97 [CRITICAL]: math_random
+     Code: failedSteps: 158 + Math.floor(Math.random() * 50),
+  🚨 Line 97 [CRITICAL]: math_random
+     Code: failedSteps: 158 + Math.floor(Math.random() * 50),
+  🚨 Line 98 [CRITICAL]: math_random
+     Code: averageStepDuration: 2340 + Math.floor(Math.random() * 500),
+  🚨 Line 98 [CRITICAL]: math_random
+     Code: averageStepDuration: 2340 + Math.floor(Math.random() * 500),
+  🚨 Line 100 [CRITICAL]: math_random
+     Code: 'prompt-generation': 1234 + Math.floor(Math.random() * 200),
+  🚨 Line 100 [CRITICAL]: math_random
+     Code: 'prompt-generation': 1234 + Math.floor(Math.random() * 200),
+  🚨 Line 101 [CRITICAL]: math_random
+     Code: 'api-call': 987 + Math.floor(Math.random() * 150),
+  🚨 Line 101 [CRITICAL]: math_random
+     Code: 'api-call': 987 + Math.floor(Math.random() * 150),
+  🚨 Line 102 [CRITICAL]: math_random
+     Code: 'response-parsing': 654 + Math.floor(Math.random() * 100),
+  🚨 Line 102 [CRITICAL]: math_random
+     Code: 'response-parsing': 654 + Math.floor(Math.random() * 100),
+  🚨 Line 103 [CRITICAL]: math_random
+     Code: 'data-validation': 321 + Math.floor(Math.random() * 50),
+  🚨 Line 103 [CRITICAL]: math_random
+     Code: 'data-validation': 321 + Math.floor(Math.random() * 50),
+  🚨 Line 104 [CRITICAL]: math_random
+     Code: 'error-handling': 158 + Math.floor(Math.random() * 30),
+  🚨 Line 104 [CRITICAL]: math_random
+     Code: 'error-handling': 158 + Math.floor(Math.random() * 30),
+  🚨 Line 105 [CRITICAL]: math_random
+     Code: 'caching': 102 + Math.floor(Math.random() * 20)
+  🚨 Line 105 [CRITICAL]: math_random
+     Code: 'caching': 102 + Math.floor(Math.random() * 20)
+  🚨 Line 107 [CRITICAL]: math_random
+     Code: stepSuccessRate: 0.954 + Math.random() * 0.03
+  🚨 Line 113 [CRITICAL]: math_random
+     Code: requestCount: 1247 + Math.floor(Math.random() * 200),
+  🚨 Line 113 [CRITICAL]: math_random
+     Code: requestCount: 1247 + Math.floor(Math.random() * 200),
+  🚨 Line 114 [CRITICAL]: math_random
+     Code: tokenUsage: 847392 + Math.floor(Math.random() * 100000),
+  🚨 Line 114 [CRITICAL]: math_random
+     Code: tokenUsage: 847392 + Math.floor(Math.random() * 100000),
+  🚨 Line 115 [CRITICAL]: math_random
+     Code: cost: 45.67 + Math.random() * 10,
+  🚨 Line 116 [CRITICAL]: math_random
+     Code: percentage: 29.1 + Math.random() * 5,
+  🚨 Line 117 [CRITICAL]: math_random
+     Code: responseTime: 234 + Math.floor(Math.random() * 50)
+  🚨 Line 117 [CRITICAL]: math_random
+     Code: responseTime: 234 + Math.floor(Math.random() * 50)
+  🚨 Line 121 [CRITICAL]: math_random
+     Code: requestCount: 856 + Math.floor(Math.random() * 150),
+  🚨 Line 121 [CRITICAL]: math_random
+     Code: requestCount: 856 + Math.floor(Math.random() * 150),
+  🚨 Line 122 [CRITICAL]: math_random
+     Code: tokenUsage: 1294857 + Math.floor(Math.random() * 150000),
+  🚨 Line 122 [CRITICAL]: math_random
+     Code: tokenUsage: 1294857 + Math.floor(Math.random() * 150000),
+  🚨 Line 123 [CRITICAL]: math_random
+     Code: cost: 78.45 + Math.random() * 15,
+  🚨 Line 124 [CRITICAL]: math_random
+     Code: percentage: 50.0 + Math.random() * 5,
+  🚨 Line 125 [CRITICAL]: math_random
+     Code: responseTime: 156 + Math.floor(Math.random() * 30)
+  🚨 Line 125 [CRITICAL]: math_random
+     Code: responseTime: 156 + Math.floor(Math.random() * 30)
+  🚨 Line 129 [CRITICAL]: math_random
+     Code: requestCount: 423 + Math.floor(Math.random() * 100),
+  🚨 Line 129 [CRITICAL]: math_random
+     Code: requestCount: 423 + Math.floor(Math.random() * 100),
+  🚨 Line 130 [CRITICAL]: math_random
+     Code: tokenUsage: 705143 + Math.floor(Math.random() * 80000),
+  🚨 Line 130 [CRITICAL]: math_random
+     Code: tokenUsage: 705143 + Math.floor(Math.random() * 80000),
+  🚨 Line 131 [CRITICAL]: math_random
+     Code: cost: 32.66 + Math.random() * 8,
+  🚨 Line 132 [CRITICAL]: math_random
+     Code: percentage: 20.9 + Math.random() * 3,
+  🚨 Line 133 [CRITICAL]: math_random
+     Code: responseTime: 89 + Math.floor(Math.random() * 20)
+  🚨 Line 133 [CRITICAL]: math_random
+     Code: responseTime: 89 + Math.floor(Math.random() * 20)
+  🚨 Line 137 [CRITICAL]: math_random
+     Code: const mockBudgetAlerts: BudgetAlert[] = Math.random() > 0.7 ? [
+  🚨 Line 141 [CRITICAL]: math_random
+     Code: message: `Daily budget at ${(78 + Math.random() * 15).toFixed(0)}% - approaching limit`,
+  🚨 Line 143 [CRITICAL]: math_random
+     Code: currentValue: 78 + Math.random() * 15,
+  🚨 Line 206 [CRITICAL]: math_random
+     Code: totalCost: prev.totalCost + Math.random() * 0.1 - 0.05,
 
 📁 frontend/src/hooks/useDualModeMessages.ts
   🚨 Line 189 [CRITICAL]: math_random
@@ -420,91 +702,45 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 129 [CRITICAL]: math_random
      Code: id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
 
-📁 frontend/src/lib/nld/core.ts
-  🚨 Line 431 [CRITICAL]: math_random
-     Code: return `nld-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  🚨 Line 435 [CRITICAL]: math_random
-     Code: return `evt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  🚨 Line 439 [CRITICAL]: math_random
-     Code: return `pat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  🚨 Line 443 [CRITICAL]: math_random
-     Code: return `rec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-📁 frontend/src/nld/analysis/PatternAnalysisEngine.ts
-  🚨 Line 169 [CRITICAL]: math_random
-     Code: id: `fp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-  🚨 Line 196 [CRITICAL]: math_random
-     Code: id: `pp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-  🚨 Line 483 [CRITICAL]: math_random
-     Code: id: `sp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-
-📁 frontend/src/nld/core/FailureDetectionEngine.ts
-  🚨 Line 73 [CRITICAL]: math_random
-     Code: id: `stale_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-  🚨 Line 109 [CRITICAL]: math_random
-     Code: id: `conn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-
-📁 frontend/src/nld/core/UserFeedbackCapture.ts
-  🚨 Line 147 [CRITICAL]: math_random
-     Code: id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-
-📁 frontend/src/nld/detection/FailurePatternDetector.ts
-  🚨 Line 392 [CRITICAL]: math_random
-     Code: return `pattern_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-📁 frontend/src/nld/detection/ResourceLeakDetector.ts
-  🚨 Line 478 [CRITICAL]: math_random
-     Code: return `leak_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-📁 frontend/src/nld/integration/TestFrameworkIntegration.ts
-  🚨 Line 142 [CRITICAL]: math_random
-     Code: const runId = `run-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  🚨 Line 586 [CRITICAL]: math_random
-     Code: testId: `test-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-
-📁 frontend/src/nld/learning/NeuralLearningSystem.ts
-  🚨 Line 877 [CRITICAL]: math_random
-     Code: return model.accuracy + (Math.random() - 0.5) * 0.1; // Small random adjustment
-  🚨 Line 957 [CRITICAL]: math_random
-     Code: if (Math.random() < this.explorationRate) {
-  🚨 Line 959 [CRITICAL]: math_random
-     Code: return availableActions[Math.floor(Math.random() * availableActions.length)];
-  🚨 Line 959 [CRITICAL]: math_random
-     Code: return availableActions[Math.floor(Math.random() * availableActions.length)];
-  🚨 Line 1008 [CRITICAL]: math_random
-     Code: return [Math.random()]; // Simplified
-
-📁 frontend/src/nld/prediction/FailurePredictionEngine.ts
-  🚨 Line 597 [CRITICAL]: math_random
-     Code: return Math.random() * 60000; // 0-1 minute
-
-📁 frontend/src/patterns/nld-alert-system.ts
-  🚨 Line 220 [CRITICAL]: math_random
-     Code: id: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-  🚨 Line 246 [CRITICAL]: math_random
-     Code: id: `batch-alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-
-📁 frontend/src/patterns/nld-core-monitor.ts
-  🚨 Line 315 [CRITICAL]: math_random
-     Code: id: `nlt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-
-📁 frontend/src/patterns/nld-instance-sync-patterns.ts
-  🚨 Line 98 [CRITICAL]: math_random
-     Code: id: `sync-failure-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-
 📁 frontend/src/repositories/PostRepository.ts
   🚨 Line 162 [CRITICAL]: math_random
      Code: const postId = `post-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 📁 frontend/src/services/AgentDataService.ts
-  🚨 Line 364 [CRITICAL]: math_random
+  🚨 Line 381 [CRITICAL]: math_random
      Code: return `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
+📁 frontend/src/services/AviConfigurationManager.ts
+  🚨 Line 176 [CRITICAL]: math_random
+     Code: id: `avi-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+
+📁 frontend/src/services/AviConnectionManager.ts
+  🚨 Line 193 [CRITICAL]: math_random
+     Code: const jitter = exponentialDelay * this.config.jitterFactor * Math.random();
+
 📁 frontend/src/services/AviDMService.ts
-  🚨 Line 728 [CRITICAL]: math_random
+  🚨 Line 736 [CRITICAL]: math_random
      Code: return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  🚨 Line 732 [CRITICAL]: math_random
+  🚨 Line 740 [CRITICAL]: math_random
      Code: return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+📁 frontend/src/services/AviHealthMonitor.ts
+  🚨 Line 547 [CRITICAL]: math_random
+     Code: throughput: Math.random() * 1000 // Simulated throughput
+  🚨 Line 640 [CRITICAL]: math_random
+     Code: return this.performanceProfile.averageLatency + Math.random() * 100;
+  🚨 Line 648 [CRITICAL]: math_random
+     Code: return Math.random() * 0.8; // Simulated memory usage
+
+📁 frontend/src/services/AviInstanceManager.ts
+  🚨 Line 381 [CRITICAL]: math_random
+     Code: id: `avi-msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+  🚨 Line 456 [CRITICAL]: math_random
+     Code: id: `avi-img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+
+📁 frontend/src/services/AviPersonality.ts
+  🚨 Line 1438 [CRITICAL]: math_random
+     Code: return `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
 📁 frontend/src/services/ClaudeServiceManager.ts
   🚨 Line 112 [CRITICAL]: math_random
@@ -573,25 +809,25 @@ STATUS: ❌ CONTAMINATED
      Code: this.sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 📁 frontend/src/services/api.ts
-  🚨 Line 535 [CRITICAL]: math_random
+  🚨 Line 673 [CRITICAL]: math_random
      Code: likesCount: Math.floor(Math.random() * 10) + 1,
-  🚨 Line 535 [CRITICAL]: math_random
+  🚨 Line 673 [CRITICAL]: math_random
      Code: likesCount: Math.floor(Math.random() * 10) + 1,
-  🚨 Line 544 [CRITICAL]: math_random
+  🚨 Line 682 [CRITICAL]: math_random
      Code: like: Math.floor(Math.random() * 5),
-  🚨 Line 544 [CRITICAL]: math_random
+  🚨 Line 682 [CRITICAL]: math_random
      Code: like: Math.floor(Math.random() * 5),
-  🚨 Line 545 [CRITICAL]: math_random
+  🚨 Line 683 [CRITICAL]: math_random
      Code: heart: Math.floor(Math.random() * 3)
-  🚨 Line 545 [CRITICAL]: math_random
+  🚨 Line 683 [CRITICAL]: math_random
      Code: heart: Math.floor(Math.random() * 3)
-  🚨 Line 564 [CRITICAL]: math_random
+  🚨 Line 702 [CRITICAL]: math_random
      Code: likesCount: Math.floor(Math.random() * 5),
-  🚨 Line 564 [CRITICAL]: math_random
+  🚨 Line 702 [CRITICAL]: math_random
      Code: likesCount: Math.floor(Math.random() * 5),
-  🚨 Line 573 [CRITICAL]: math_random
+  🚨 Line 711 [CRITICAL]: math_random
      Code: like: Math.floor(Math.random() * 3)
-  🚨 Line 573 [CRITICAL]: math_random
+  🚨 Line 711 [CRITICAL]: math_random
      Code: like: Math.floor(Math.random() * 3)
 
 📁 frontend/src/services/connection/error-handler.ts
@@ -613,6 +849,10 @@ STATUS: ❌ CONTAMINATED
      Code: const jitter = (Math.random() - 0.5) * 2 * jitterRange;
   🚨 Line 209 [CRITICAL]: math_random
      Code: const jitter = (Math.random() - 0.5) * 2 * jitterRange;
+
+📁 frontend/src/services/cost-tracking/CostTrackingService.ts
+  🚨 Line 104 [CRITICAL]: math_random
+     Code: id: `usage-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
 
 📁 frontend/src/utils/analytics-state-manager.ts
   🚨 Line 173 [CRITICAL]: mock_variable
@@ -636,12 +876,6 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 123 [CRITICAL]: math_random
      Code: // Use deterministic counter instead of Math.random()
 
-📁 frontend/src/utils/nld-ui-capture.ts
-  🚨 Line 80 [CRITICAL]: math_random
-     Code: return `nld-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  🚨 Line 210 [CRITICAL]: math_random
-     Code: return `pattern-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
-
 📁 frontend/src/utils/real-data-transformers.ts
   🚨 Line 50 [CRITICAL]: math_random
      Code: * Eliminates Math.random() usage completely
@@ -660,6 +894,6 @@ STATUS: ❌ CONTAMINATED
 
 
 ## Test Results
-- Total files scanned: 442
-- Contaminated files: 72
+- Total files scanned: 451
+- Contaminated files: 73
 - Status: FAILED

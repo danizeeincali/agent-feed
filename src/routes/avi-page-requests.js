@@ -6,13 +6,11 @@
 
 import express from 'express';
 import aviStrategicOversight from '../services/avi-strategic-oversight.js';
-import { nldPreRequestMiddleware, nldErrorHandler } from '../middleware/nld-integration.js';
-import nldPatternDetectionService from '../nld-patterns/pattern-detection-service.js';
+// NLD middleware and pattern detection removed during cleanup
 
 const router = express.Router();
 
-// Apply NLD middleware to all routes
-router.use(nldPreRequestMiddleware);
+// NLD middleware removed during cleanup
 
 /**
  * Submit a page request for Avi's strategic evaluation
@@ -77,16 +75,10 @@ router.post('/page-requests', async (req, res) => {
   } catch (error) {
     console.error('❌ Avi: Page request submission failed:', error);
     
-    // Record failure pattern
-    await nldPatternDetectionService.detectPattern({
-      type: 'avi_request_submission_error',
+    // Log failure
+    console.error('Page request submission endpoint failed:', {
       agentId: req.body.agentId,
-      error: {
-        message: error.message,
-        stack: error.stack
-      },
-      description: 'Page request submission endpoint failed',
-      db: aviStrategicOversight.db
+      error: error.message
     });
     
     res.status(500).json({
@@ -320,15 +312,14 @@ router.get('/stats', async (req, res) => {
       LIMIT 10
     `);
     
-    // Get patterns detected
-    const patternStats = await nldPatternDetectionService.getStats();
+    // Pattern detection stats removed (NLD cleanup)
     
     res.json({
       success: true,
       timestamp: new Date().toISOString(),
       oversight: stats,
       recentActivity: recentRequests,
-      nldPatterns: patternStats,
+      // nldPatterns removed during cleanup
       systemHealth: {
         status: 'healthy',
         uptime: process.uptime(),
@@ -461,7 +452,6 @@ router.get('/health', async (req, res) => {
   }
 });
 
-// Apply error handler
-router.use(nldErrorHandler);
+// NLD error handler removed during cleanup
 
 export default router;

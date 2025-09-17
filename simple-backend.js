@@ -59,6 +59,9 @@ import anthropicRoutes from "./src/api/routes/anthropic-sdk.js";
 // Import Claude Code SDK routes
 import claudeCodeRoutes from "./src/api/routes/claude-code-sdk.js";
 
+// Import Token Analytics routes
+import tokenAnalyticsRoutes from "./src/api/routes/token-analytics.js";
+
 // Import Streaming Ticker routes
 import streamingTickerRoutes from "./src/api/routes/streaming-ticker.js";
 
@@ -68,7 +71,7 @@ initializeAgentDataProviders();
 
 // Initialize Avi Strategic Oversight
 import aviStrategicOversight from './src/services/avi-strategic-oversight.js';
-import aviRequestFailurePatterns from './src/nld-patterns/avi-request-failure-patterns.js';
+// import aviRequestFailurePatterns from './src/nld-patterns/avi-request-failure-patterns.js'; // Removed - NLD cleanup
 
 // Initialize services after database connection
 const initializeAviServices = async () => {
@@ -490,13 +493,16 @@ async function createMockClaudeInstance(instanceType, instanceId, workingDir) {
   console.log(`   Working Directory: ${workingDir}`);
   
   try {
-    // Create mock Claude process with realistic behavior
-    const mockProcess = new MockClaudeProcess(instanceId, {
-      cwd: workingDir,
-      verbose: true,
-      responseDelay: 800,  // Realistic response time
-      startupDelay: 300    // Quick startup for development
-    });
+    // TODO: Replace with real Claude process integration
+    // const mockProcess = new MockClaudeProcess(instanceId, {
+    //   cwd: workingDir,
+    //   verbose: true,
+    //   responseDelay: 800,  // Realistic response time
+    //   startupDelay: 300    // Quick startup for development
+    // });
+
+    // For now, return error indicating mock service disabled
+    throw new Error('Mock Claude process disabled - real Claude integration needed');
     
     const processInfo = {
       process: mockProcess,
@@ -1325,6 +1331,7 @@ function generateRealPostsFromAgent(agent) {
 // Initialize database services and add API routes
 const setupApiRoutes = () => {
   try {
+    console.log('🔧 DEBUG: Starting setupApiRoutes function...');
     // Register agent management routes
     app.get('/api/agents', async (req, res) => {
       try {
@@ -1452,7 +1459,9 @@ const setupApiRoutes = () => {
     // Always register real database API routes
     console.log('✅ Registering real database API endpoints...');
     
+    console.log('🔧 DEBUG: About to register POST /api/v1/agent-posts route...');
     app.post('/api/v1/agent-posts', async (req, res) => {
+      console.log('🔧 DEBUG: POST /api/v1/agent-posts route handler called!');
       try {
         const postData = {
           title: req.body.title,
@@ -1897,27 +1906,7 @@ const setupApiRoutes = () => {
       }
     });
 
-    // GET /api/v1/filter-data - Get available agents and hashtags for filtering
-    app.get('/api/v1/filter-data', async (req, res) => {
-      try {
-        // Get available agents
-        const agents = await databaseService.getFilterSuggestions('agent', '', 100);
-        const hashtags = await databaseService.getFilterSuggestions('hashtag', '', 100);
-
-        res.json({
-          agents: agents.map(agent => agent.value),
-          hashtags: hashtags.map(hashtag => hashtag.value)
-        });
-
-      } catch (error) {
-        console.error('Error getting filter data:', error);
-        res.status(500).json({
-          agents: [],
-          hashtags: [],
-          error: 'Failed to get filter data'
-        });
-      }
-    });
+    // Note: /api/v1/filter-data route will be defined once below to avoid duplicates
 
     // ==================== THREADED COMMENTS API ENDPOINTS ====================
 
@@ -2202,20 +2191,7 @@ const setupApiRoutes = () => {
       }
     });
 
-    // GET /api/v1/filter-data - Filter data endpoint  
-    app.get('/api/v1/filter-data', async (req, res) => {
-      try {
-        const filterData = {
-          agents: await databaseService.getAgents(),
-          hashtags: ['#ai', '#productivity', '#workflow', '#automation', '#development', '#meeting'],
-          priorities: ['P0', 'P1', 'P2', 'P3', 'P4']
-        };
-        res.json(filterData);
-      } catch (error) {
-        console.error('Error getting filter data:', error);
-        res.status(500).json({ error: 'Failed to get filter data' });
-      }
-    });
+    // Note: /api/v1/filter-data route consolidated below to avoid duplicates
 
     console.log('✅ Phase 2 Interactive API routes registered:');
     console.log('   GET  /api/v1/agent-posts (with filtering)');
@@ -2231,6 +2207,7 @@ const setupApiRoutes = () => {
     console.log('   GET  /api/filter-stats (ADDED)');
   } catch (error) {
     console.error('❌ Failed to register API routes:', error.message);
+    console.error('❌ Full error stack:', error.stack);
     console.log('⚠️ Continuing without API routes - Claude terminal still available');
   }
 };
@@ -2281,19 +2258,30 @@ const handlePostsRequest = async (req, res) => {
 app.get('/api/v1/agent-posts', handlePostsRequest);
 app.get('/api/agent-posts', handlePostsRequest);
 
-// Filter data API endpoint
+// CONSOLIDATED Filter data API endpoint - single definition to avoid duplicates
 app.get('/api/v1/filter-data', async (req, res) => {
   try {
     console.log('📝 Filter data API called...');
+
+    // Get available agents
+    const agents = await databaseService.getFilterSuggestions('agent', '', 100);
+    const hashtags = await databaseService.getFilterSuggestions('hashtag', '', 100);
+
     const filterData = {
-      agents: await databaseService.getAgents(),
-      hashtags: ['#ai', '#productivity', '#workflow', '#automation', '#development', '#meeting'],
+      agents: agents.map(agent => agent.value),
+      hashtags: hashtags.map(hashtag => hashtag.value),
       priorities: ['P0', 'P1', 'P2', 'P3', 'P4']
     };
+
     res.json(filterData);
   } catch (error) {
     console.error('❌ Error getting filter data:', error);
-    res.status(500).json({ error: 'Failed to get filter data' });
+    res.status(500).json({
+      agents: [],
+      hashtags: [],
+      priorities: ['P0', 'P1', 'P2', 'P3', 'P4'],
+      error: 'Failed to get filter data'
+    });
   }
 });
 
@@ -2350,9 +2338,17 @@ console.log("✅ Anthropic SDK routes mounted at /api/avi");
 app.use('/api/claude-code', claudeCodeRoutes);
 console.log("✅ Claude Code SDK routes mounted at /api/claude-code");
 
+// Claude SDK routes - Additional mounting for cost tracking endpoints
+app.use('/api/claude-sdk', claudeCodeRoutes);
+console.log("✅ Claude SDK routes mounted at /api/claude-sdk");
+
 // Streaming Ticker routes for real-time progress
 app.use('/api/streaming-ticker', streamingTickerRoutes);
 console.log("✅ Streaming Ticker routes mounted at /api/streaming-ticker");
+
+// Token Analytics routes for real-time token usage tracking
+app.use('/api/token-analytics', tokenAnalyticsRoutes);
+console.log("✅ Token Analytics routes mounted at /api/token-analytics");
 
 // Agent Data Readiness API - MUST come BEFORE other agent routes
 app.use('/api', agentDataReadinessRouter);
@@ -2408,29 +2404,88 @@ if (databaseService.isInitialized()) {
 
 // CRITICAL PHASE 2 FIX: Add API route aliases for frontend compatibility
 // Frontend expects /api/agent-posts but backend has /api/v1/agent-posts
-app.get('/api/agent-posts', (req, res) => {
-  // Redirect to versioned endpoint
-  const query = req.url.includes('?') ? req.url.split('?')[1] : '';
-  req.url = '/api/v1/agent-posts' + (query ? '?' + query : '');
-  app._router.handle(req, res);
+app.get('/api/agent-posts', async (req, res) => {
+  // Forward to the same handler as /api/v1/agent-posts
+  try {
+    await handlePostsRequest(req, res);
+  } catch (error) {
+    console.error('Error in /api/agent-posts:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
-app.post('/api/agent-posts', (req, res) => {
-  req.url = '/api/v1/agent-posts';
-  app._router.handle(req, res);
+app.post('/api/agent-posts', async (req, res) => {
+  // Forward to the same handler as /api/v1/agent-posts
+  try {
+    const {
+      title,
+      content,
+      author = 'anonymous',
+      hashtags = [],
+      agent_id = 'general',
+      priority = 'P2',
+      category = 'general'
+    } = req.body;
+
+    const result = await databaseService.createAgentPost({
+      title,
+      content,
+      author,
+      hashtags,
+      agent_id,
+      priority,
+      category
+    });
+
+    if (result.success) {
+      res.status(201).json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error) {
+    console.error('Error creating post via /api/agent-posts:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // Other critical frontend API aliases
-app.get('/api/filter-data', (req, res) => {
-  const query = req.url.includes('?') ? req.url.split('?')[1] : '';
-  req.url = '/api/v1/filter-data' + (query ? '?' + query : '');
-  app._router.handle(req, res);
+app.get('/api/filter-data', async (req, res) => {
+  // Forward to the consolidated /api/v1/filter-data handler
+  try {
+    console.log('📝 Filter data API called via alias...');
+
+    // Get available agents
+    const agents = await databaseService.getFilterSuggestions('agent', '', 100);
+    const hashtags = await databaseService.getFilterSuggestions('hashtag', '', 100);
+
+    const filterData = {
+      agents: agents.map(agent => agent.value),
+      hashtags: hashtags.map(hashtag => hashtag.value),
+      priorities: ['P0', 'P1', 'P2', 'P3', 'P4']
+    };
+
+    res.json(filterData);
+  } catch (error) {
+    console.error('❌ Error getting filter data via alias:', error);
+    res.status(500).json({
+      agents: [],
+      hashtags: [],
+      priorities: ['P0', 'P1', 'P2', 'P3', 'P4'],
+      error: 'Failed to get filter data'
+    });
+  }
 });
 
-app.get('/api/filter-suggestions', (req, res) => {
-  const query = req.url.includes('?') ? req.url.split('?')[1] : '';
-  req.url = '/api/v1/filter-suggestions' + (query ? '?' + query : '');
-  app._router.handle(req, res);
+app.get('/api/filter-suggestions', async (req, res) => {
+  // Forward to the same handler as /api/v1/filter-suggestions
+  try {
+    const { type = 'agent', query = '', limit = 10 } = req.query;
+    const suggestions = await databaseService.getFilterSuggestions(type, query, parseInt(limit));
+    res.json(suggestions);
+  } catch (error) {
+    console.error('Error getting filter suggestions:', error);
+    res.status(500).json([]);
+  }
 });
 
 // SPARC FIX: Add alias route for frontend compatibility (/api/posts -> /api/v1/agent-posts)
@@ -4585,10 +4640,6 @@ function broadcastToWebSockets(instanceId, message) {
   }
 }
 
-// Add final error handling middleware
-app.use(errorHandler.notFoundHandler);
-app.use(errorHandler.errorHandler);
-
 // SPARC INTEGRATION: Initialize tool call status manager with broadcast function
 // toolCallStatusManager.setBroadcastFunction(broadcastToWebSockets);
 
@@ -4596,12 +4647,17 @@ app.use(errorHandler.errorHandler);
 const startServer = async () => {
   try {
     console.log('🔄 Initializing SPARC unified server...');
-    
+
     // Initialize database services
     await initializeDatabaseServices();
-    
+
     // Setup API routes
     setupApiRoutes();
+
+    // Add final error handling middleware AFTER all routes are set up
+    console.log('🔧 DEBUG: Registering error handlers...');
+    app.use(errorHandler.notFoundHandler);
+    app.use(errorHandler.errorHandler);
     
     // Agent Dynamic Pages API routes already registered above
     console.log('✅ Agent Dynamic Pages API routes already registered');

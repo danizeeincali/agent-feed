@@ -4,10 +4,10 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  BarChart3, 
-  Clock, 
-  Memory, 
+import {
+  BarChart3,
+  Clock,
+  MemoryStick,
   Activity,
   AlertTriangle,
   CheckCircle,
@@ -57,12 +57,9 @@ const AgentPerformanceDashboard: React.FC<DashboardProps> = ({
   } = usePerformanceMonitor(isMonitoring);
 
   useEffect(() => {
-    benchmarkRunnerRef.current = new AgentPagesBenchmarkRunner();
-    
+    // Static methods don't need instantiation
     return () => {
-      if (benchmarkRunnerRef.current) {
-        benchmarkRunnerRef.current.dispose();
-      }
+      AgentPagesBenchmarkRunner.dispose();
     };
   }, []);
 
@@ -75,7 +72,7 @@ const AgentPerformanceDashboard: React.FC<DashboardProps> = ({
     
     setIsBenchmarking(true);
     try {
-      const report = await benchmarkRunnerRef.current.runComprehensiveBenchmarks();
+      const report = await AgentPagesBenchmarkRunner.runComprehensiveBenchmarks(agentId);
       setBenchmarkReport(report);
       setActiveTab('benchmark');
     } catch (error) {
@@ -286,7 +283,7 @@ const AgentPerformanceDashboard: React.FC<DashboardProps> = ({
                   <div className="bg-white p-6 rounded-lg shadow-sm border">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-gray-600">Memory Usage</span>
-                      <Memory className="w-4 h-4 text-purple-500" />
+                      <MemoryStick className="w-4 h-4 text-purple-500" />
                     </div>
                     <div className="text-2xl font-bold text-gray-900">
                       {formatBytes(metrics[metrics.length - 1]?.memoryUsage || 0)}
@@ -429,7 +426,7 @@ const AgentPerformanceDashboard: React.FC<DashboardProps> = ({
                       {result.testCases.map((testCase, index) => (
                         <div key={index} className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded">
                           <div className="flex items-center gap-2">
-                            {getPerformanceIcon(testCase.performance)}
+                            {getPerformanceIcon(testCase.performance > 90 ? 'excellent' : testCase.performance > 75 ? 'good' : 'poor')}
                             <span className="text-sm font-medium">{testCase.name}</span>
                           </div>
                           <div className="flex items-center gap-2 text-sm">
@@ -450,7 +447,7 @@ const AgentPerformanceDashboard: React.FC<DashboardProps> = ({
                         <div className="font-medium text-red-800 mb-2">Critical Issues:</div>
                         <ul className="text-sm text-red-700 space-y-1">
                           {result.criticalIssues.map((issue, index) => (
-                            <li key={index}>• {issue}</li>
+                            <li key={index}>• {issue.message}</li>
                           ))}
                         </ul>
                       </div>
