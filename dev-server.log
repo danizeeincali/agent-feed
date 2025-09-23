@@ -1,0 +1,1453 @@
+
+> agent-feed@0.1.0 dev
+> next dev
+
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3000
+   - Environments: .env
+   - Experiments (use at your own risk):
+     · optimizeCss
+
+ ⚠ Found lockfile missing swc dependencies, patching...
+ ✓ Ready in 4.2s
+ ⚠ Lockfile was successfully patched, please run "npm install" to ensure @next/swc dependencies are downloaded
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 3.6s (216 modules)
+ ⨯ Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js
+- /workspaces/agent-feed/.next/server/pages/_document.js
+- /workspaces/agent-feed/node_modules/next/dist/server/require.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-components.js
+- /workspaces/agent-feed/node_modules/next/dist/build/utils.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/hot-middleware.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/router-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at Object.critters (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:16430)
+    at r (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:17113)
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11662
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js',
+    '/workspaces/agent-feed/.next/server/pages/_document.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/require.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/build/utils.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/router-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+ ⨯ TypeError: t is not a constructor
+    at /workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11678
+    at l (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:6:11931)
+    at async e8 (/workspaces/agent-feed/node_modules/next/dist/compiled/next-server/pages.runtime.dev.js:28:318)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async DevServer.renderErrorToResponseImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:2014:24)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25)
+Error: Cannot find module 'critters'
+Require stack:
+- /workspaces/agent-feed/node_modules/next/dist/server/post-process.js
+- /workspaces/agent-feed/node_modules/next/dist/server/render.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js
+- /workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js
+- /workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js
+- /workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js
+- /workspaces/agent-feed/node_modules/next/dist/server/next.js
+- /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at /workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:54:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (/workspaces/agent-feed/node_modules/next/dist/server/require-hook.js:64:28)
+    at require (node:internal/modules/helpers:135:16)
+    at /workspaces/agent-feed/node_modules/next/dist/server/post-process.js:147:30
+    at postProcessHTML (/workspaces/agent-feed/node_modules/next/dist/server/post-process.js:165:29)
+    at async renderToHTMLImpl (/workspaces/agent-feed/node_modules/next/dist/server/render.js:943:27)
+    at async doRender (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1313:26)
+    at async cacheEntry.responseCache.get.incrementalCache.incrementalCache (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1500:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1408:28)
+    at async pipe.req.req (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:1892:30)
+    at async DevServer.pipeImpl (/workspaces/agent-feed/node_modules/next/dist/server/base-server.js:851:25) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/workspaces/agent-feed/node_modules/next/dist/server/post-process.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/render.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/module.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/future/route-modules/pages/builtin/_error.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/load-default-error-components.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/dev/next-dev-server.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/next.js',
+    '/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js'
+  ]
+}
+[?25h

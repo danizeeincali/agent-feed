@@ -1,0 +1,178 @@
+{
+  "apiEndpoints": {
+    "/api/agents": {
+      "exists": true,
+      "path": "/workspaces/agent-feed/pages/api/agents.js",
+      "hasRealData": true,
+      "hasMockData": true,
+      "description": "Agent discovery",
+      "status": "MIXED"
+    },
+    "/api/token-analytics": {
+      "exists": true,
+      "path": "/workspaces/agent-feed/src/api/routes/token-analytics.js",
+      "hasRealData": true,
+      "hasMockData": true,
+      "description": "Token analytics",
+      "status": "MIXED"
+    },
+    "/api/claude/instances": {
+      "exists": false,
+      "path": null,
+      "hasRealData": false,
+      "hasMockData": false,
+      "description": "Claude instances",
+      "status": "MISSING"
+    },
+    "/api/feeds": {
+      "exists": true,
+      "path": "/workspaces/agent-feed/src/api/routes/feeds.ts",
+      "hasRealData": true,
+      "hasMockData": true,
+      "description": "Feed data",
+      "status": "MIXED"
+    },
+    "/api/comments": {
+      "exists": true,
+      "path": "/workspaces/agent-feed/src/api/routes/comments.ts",
+      "hasRealData": true,
+      "hasMockData": false,
+      "description": "Comments",
+      "status": "REAL"
+    }
+  },
+  "databaseConnections": {
+    "Token Analytics": {
+      "exists": true,
+      "path": "/workspaces/agent-feed/data/token-analytics.db",
+      "tableCount": 2,
+      "recordCount": 100,
+      "hasRealData": true,
+      "status": "REAL_DATA"
+    },
+    "Agent Feed": {
+      "exists": true,
+      "path": "/workspaces/agent-feed/data/agent-feed.db",
+      "tableCount": 20,
+      "recordCount": 0,
+      "hasRealData": false,
+      "status": "EMPTY"
+    }
+  },
+  "dataAuthenticity": {
+    "tokenTracking": {
+      "hasRealRequestIds": true,
+      "hasRealModels": true,
+      "hasRealisticTokens": true,
+      "requestIdSample": [
+        "req_011CTF8t6iK4n6YZQMFo8xNX",
+        "req_011CTF8rThZyNHRKrS6Urrny",
+        "req_011CTF78A9M4KdenWH7g1YcC"
+      ],
+      "modelsSample": [
+        "claude-3-haiku-20240307",
+        "claude-3-5-sonnet-20241022",
+        "claude-sonnet-4-20250514"
+      ],
+      "status": "AUTHENTIC"
+    },
+    "agentSources": {
+      "realAgentFiles": 14,
+      "agentSources": [
+        {
+          "directory": "/workspaces/agent-feed/prod/.claude/agents",
+          "fileCount": 11,
+          "files": [
+            "agent-feedback-agent.md",
+            "agent-ideas-agent.md",
+            "follow-ups-agent.md",
+            "get-to-know-you-agent.md",
+            "link-logger-agent.md"
+          ]
+        },
+        {
+          "directory": "/workspaces/agent-feed/.claude/agents",
+          "fileCount": 3,
+          "files": [
+            "MIGRATION_SUMMARY.md",
+            "README.md",
+            "base-template-generator.md"
+          ]
+        }
+      ],
+      "agentApiUsesRealFiles": false,
+      "status": "QUESTIONABLE"
+    }
+  },
+  "authIntegrations": {
+    "hasAuthConfig": true,
+    "hasClaudeIntegration": true,
+    "hasApiClients": true,
+    "status": "CONFIGURED"
+  },
+  "mockDataFound": [
+    {
+      "pattern": "Math.random",
+      "path": "src/api",
+      "matches": 10
+    },
+    {
+      "pattern": "Math.random",
+      "path": "pages/api",
+      "matches": 10
+    },
+    {
+      "pattern": "Math.random",
+      "path": "frontend/src",
+      "matches": 10
+    },
+    {
+      "pattern": "Math.random",
+      "path": "backend",
+      "matches": 2
+    },
+    {
+      "pattern": "mockData",
+      "path": "frontend/src",
+      "matches": 10
+    },
+    {
+      "pattern": "TEST_",
+      "path": "src/api",
+      "matches": 1
+    },
+    {
+      "pattern": "TEST_",
+      "path": "frontend/src",
+      "matches": 10
+    },
+    {
+      "pattern": "fallback.*data",
+      "path": "frontend/src",
+      "matches": 10
+    },
+    {
+      "pattern": "mock.*agent",
+      "path": "src/api",
+      "matches": 1
+    },
+    {
+      "pattern": "mock.*agent",
+      "path": "frontend/src",
+      "matches": 10
+    },
+    {
+      "pattern": "demo.*data",
+      "path": "frontend/src",
+      "matches": 3
+    },
+    {
+      "pattern": "fake.*response",
+      "path": "frontend/src",
+      "matches": 10
+    }
+  ],
+  "realDataSources": [],
+  "issues": [],
+  "score": 37
+}

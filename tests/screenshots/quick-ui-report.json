@@ -1,0 +1,201 @@
+{
+  "timestamp": "2025-09-23T02:12:00.570Z",
+  "summary": {
+    "totalPages": 17,
+    "successfulPages": 0,
+    "errorPages": 17,
+    "notFoundPages": 0,
+    "totalIssues": 0,
+    "totalErrors": 17,
+    "avgLoadTime": 37
+  },
+  "results": [
+    {
+      "name": "Homepage (Feed)",
+      "url": "/",
+      "status": "error",
+      "loadTime": 122,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Interactive Control",
+      "url": "/interactive-control",
+      "status": "error",
+      "loadTime": 20,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/interactive-control\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/interactive-control\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Claude Manager",
+      "url": "/claude-manager",
+      "status": "error",
+      "loadTime": 91,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/claude-manager\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/claude-manager\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Create Post",
+      "url": "/posting",
+      "status": "error",
+      "loadTime": 29,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/posting\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/posting\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Mention Demo",
+      "url": "/mention-demo",
+      "status": "error",
+      "loadTime": 39,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/mention-demo\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/mention-demo\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Drafts",
+      "url": "/drafts",
+      "status": "error",
+      "loadTime": 43,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/drafts\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/drafts\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Agents",
+      "url": "/agents",
+      "status": "error",
+      "loadTime": 21,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/agents\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/agents\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Workflows",
+      "url": "/workflows",
+      "status": "error",
+      "loadTime": 39,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/workflows\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/workflows\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Claude Code",
+      "url": "/claude-code",
+      "status": "error",
+      "loadTime": 43,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/claude-code\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/claude-code\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Live Activity",
+      "url": "/activity",
+      "status": "error",
+      "loadTime": 15,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/activity\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/activity\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Analytics",
+      "url": "/analytics",
+      "status": "error",
+      "loadTime": 43,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/analytics\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/analytics\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Performance Monitor",
+      "url": "/performance-monitor",
+      "status": "error",
+      "loadTime": 17,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/performance-monitor\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/performance-monitor\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Settings",
+      "url": "/settings",
+      "status": "error",
+      "loadTime": 16,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/settings\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/settings\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "status": "error",
+      "loadTime": 21,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/dashboard\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/dashboard\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Debug Posts",
+      "url": "/debug-posts",
+      "status": "error",
+      "loadTime": 20,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/debug-posts\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/debug-posts\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "Mention Debug",
+      "url": "/mention-debug",
+      "status": "error",
+      "loadTime": 15,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/mention-debug\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/mention-debug\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    },
+    {
+      "name": "404 Error Page",
+      "url": "/non-existent-page",
+      "status": "error",
+      "loadTime": 35,
+      "screenshots": [],
+      "issues": [],
+      "errors": [
+        "Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/non-existent-page\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/non-existent-page\", waiting until \"networkidle\"\u001b[22m\n"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "tests": [
+    {
+      "name": "Server Response",
+      "passed": true,
+      "details": {
+        "status": 200,
+        "loadTime": 566
+      }
+    },
+    {
+      "name": "HTML Structure",
+      "passed": true,
+      "details": {
+        "totalElements": 61,
+        "tailwindElements": 30,
+        "gradientElements": 12,
+        "flexElements": 13,
+        "bgElements": 18
+      }
+    },
+    {
+      "name": "Purple Gradient Detection",
+      "passed": true,
+      "details": {
+        "hasGradientClasses": true,
+        "hasPurpleClasses": true,
+        "hasIndigoClasses": true,
+        "hasBackdropBlur": true,
+        "gradientClassCount": 12,
+        "foundSpecificClasses": 5
+      }
+    },
+    {
+      "name": "CSS and PostCSS",
+      "passed": true,
+      "details": {
+        "hasStyleTags": 2,
+        "hasLinkTags": 0,
+        "hasNextCss": true,
+        "hasTailwindConfig": false,
+        "cssLinks": []
+      }
+    },
+    {
+      "name": "Component Structure",
+      "passed": true,
+      "details": {
+        "hasHeader": true,
+        "hasNav": true,
+        "hasMain": true,
+        "hasSidebar": false,
+        "hasAgentLink": true,
+        "hasCards": 1
+      }
+    },
+    {
+      "name": "Performance",
+      "passed": true,
+      "details": {
+        "responseSize": 4733,
+        "gzipSupported": false,
+        "responseTime": 566,
+        "htmlSizeKB": "4.62"
+      }
+    }
+  ],
+  "errors": [],
+  "performance": {
+    "responseTime": 566
+  },
+  "summary": {
+    "totalTests": 6,
+    "passedTests": 6,
+    "failedTests": 0,
+    "passRate": 100,
+    "errors": 0,
+    "timestamp": "2025-09-22T20:46:51.247Z"
+  }
+}

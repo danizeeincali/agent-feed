@@ -1,0 +1,55 @@
+{
+  "timestamp": "2025-09-23T03:32:28.379Z",
+  "tests": [
+    {
+      "name": "X-Content-Type-Options",
+      "present": false,
+      "expected": "nosniff",
+      "critical": false
+    },
+    {
+      "name": "X-Frame-Options",
+      "present": false,
+      "expected": "DENY or SAMEORIGIN",
+      "critical": true
+    },
+    {
+      "name": "X-XSS-Protection",
+      "present": false,
+      "expected": "1; mode=block",
+      "critical": false
+    },
+    {
+      "name": "Strict-Transport-Security",
+      "present": false,
+      "expected": "Present for HTTPS",
+      "critical": false
+    },
+    {
+      "name": "Content-Security-Policy",
+      "present": false,
+      "expected": "Restrictive policy",
+      "critical": true
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "type": "missing_security_header",
+      "header": "X-Frame-Options",
+      "severity": "high",
+      "description": "Missing critical security header: X-Frame-Options"
+    },
+    {
+      "type": "missing_security_header",
+      "header": "Content-Security-Policy",
+      "severity": "high",
+      "description": "Missing critical security header: Content-Security-Policy"
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "failed": 5,
+    "critical": 2
+  }
+}

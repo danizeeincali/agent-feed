@@ -1,47 +1,109 @@
-// Playwright Configuration for AgentLink Testing
-const { defineConfig, devices } = require('@playwright/test');
+// @ts-check
+import { defineConfig, devices } from '@playwright/test';
 
-module.exports = defineConfig({
-  testDir: './tests',
+/**
+ * @see https://playwright.dev/docs/test-configuration
+ */
+export default defineConfig({
+  testDir: './tests/e2e',
+  /* Run tests in files in parallel */
   fullyParallel: true,
+  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
+  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
+  /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+  reporter: [
+    ['html', { outputFolder: 'test-results/html-report' }],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['json', { outputFile: 'test-results/results.json' }]
+  ],
+  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: 'http://localhost:3001',
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: 'http://localhost:5173',
+
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    /* Take screenshot on failure */
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+
+    /* Record video on failure */
+    video: 'retain-on-failure',
+
+    /* Global timeout for all tests */
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
   },
 
+  /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+
+    /* Test against mobile viewports. */
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
     },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
+    },
+
+    /* Test against branded browsers. */
+    // {
+    //   name: 'Microsoft Edge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // },
+    // {
+    //   name: 'Google Chrome',
+    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    // },
   ],
 
-  webServer: [
-    {
-      command: 'npm run dev',
-      port: 3000,
-      cwd: '/workspaces/agent-feed',
-      reuseExistingServer: true,
+  /* Run your local dev server before starting the tests */
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:5173',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
+
+  /* Global setup and teardown */
+  globalSetup: require.resolve('./tests/e2e/fixtures/global-setup.js'),
+  globalTeardown: require.resolve('./tests/e2e/fixtures/global-teardown.js'),
+
+  /* Output directories */
+  outputDir: 'test-results/artifacts',
+
+  /* Test timeout */
+  timeout: 30 * 1000,
+
+  /* Expect timeout */
+  expect: {
+    timeout: 10 * 1000,
+    toHaveScreenshot: {
+      mode: 'strict',
+      threshold: 0.2,
     },
-    {
-      command: 'npm run dev',
-      port: 3001,
-      cwd: '/workspaces/agent-feed/frontend',
-      reuseExistingServer: true,
-    }
-  ],
+    toMatchSnapshot: {
+      threshold: 0.2,
+    },
+  },
 });

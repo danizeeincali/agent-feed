@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-09-23T03:19:19.747Z",
+  "baseUrl": "http://localhost:5173",
+  "viewports": {
+    "desktop": {
+      "width": 1920,
+      "height": 1080
+    },
+    "mobile": {
+      "width": 375,
+      "height": 667
+    }
+  },
+  "pages": [
+    {
+      "name": "home",
+      "path": "/",
+      "description": "Home page"
+    },
+    {
+      "name": "agents",
+      "path": "/agents",
+      "description": "Agents page"
+    },
+    {
+      "name": "feed",
+      "path": "/feed",
+      "description": "Feed page"
+    }
+  ],
+  "screenshotsDirectory": "/workspaces/agent-feed/tests/screenshots/baseline"
+}

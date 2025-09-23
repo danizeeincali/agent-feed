@@ -2,7 +2,7 @@
  * Agents Page - Simplified version that works with production agents
  */
 import React, { useState, useEffect } from 'react';
-import './Agents.css';
+// CSS moved to global styles in _app.tsx to avoid Next.js import restrictions
 
 const Agents = () => {
   const [agents, setAgents] = useState([]);

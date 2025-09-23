@@ -1,14 +1,14 @@
 # Mock Data Elimination Regression Test Report
-Generated: 2025-09-17T04:36:47.994Z
+Generated: 2025-09-23T03:26:42.831Z
 
 MOCK CONTAMINATION ANALYSIS REPORT
 ===================================
-Total files scanned: 451
-Contaminated files: 73
-Total contaminations found: 364
+Total files scanned: 456
+Contaminated files: 74
+Total contaminations found: 370
 
 SEVERITY BREAKDOWN:
-- Critical: 364 (Math.random, mock variables)
+- Critical: 370 (Math.random, mock variables)
 - High: 0 (Unknown, N/A strings)
 - Medium: 0 (Loading strings)
 
@@ -396,6 +396,32 @@ STATUS: ❌ CONTAMINATED
   🚨 Line 150 [CRITICAL]: math_random
      Code: fallbacks.push(`https://picsum.photos/320/180?random=${Math.floor(Math.random() * 1000)}`);
 
+📁 frontend/src/components/TokenAnalyticsTest.tsx
+  🚨 Line 16 [CRITICAL]: math_random
+     Code: data: Array.from({ length: 24 }, () => Math.floor(Math.random() * 5000) + 1000),
+  🚨 Line 16 [CRITICAL]: math_random
+     Code: data: Array.from({ length: 24 }, () => Math.floor(Math.random() * 5000) + 1000),
+  🚨 Line 23 [CRITICAL]: math_random
+     Code: data: Array.from({ length: 24 }, () => Math.floor(Math.random() * 50) + 10),
+  🚨 Line 23 [CRITICAL]: math_random
+     Code: data: Array.from({ length: 24 }, () => Math.floor(Math.random() * 50) + 10),
+  🚨 Line 37 [CRITICAL]: math_random
+     Code: data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50000) + 10000),
+  🚨 Line 37 [CRITICAL]: math_random
+     Code: data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 50000) + 10000),
+  🚨 Line 49 [CRITICAL]: math_random
+     Code: total_tokens: Math.floor(Math.random() * 2000) + 500,
+  🚨 Line 49 [CRITICAL]: math_random
+     Code: total_tokens: Math.floor(Math.random() * 2000) + 500,
+  🚨 Line 50 [CRITICAL]: math_random
+     Code: cost_total: Math.floor(Math.random() * 100) + 20, // cents
+  🚨 Line 50 [CRITICAL]: math_random
+     Code: cost_total: Math.floor(Math.random() * 100) + 20, // cents
+  🚨 Line 51 [CRITICAL]: math_random
+     Code: processing_time_ms: Math.floor(Math.random() * 3000) + 500,
+  🚨 Line 51 [CRITICAL]: math_random
+     Code: processing_time_ms: Math.floor(Math.random() * 3000) + 500,
+
 📁 frontend/src/components/agent-customization/ThemeCustomizer.tsx
   🚨 Line 178 [CRITICAL]: math_random
      Code: const hue = Math.floor(Math.random() * 360);
@@ -477,183 +503,171 @@ STATUS: ❌ CONTAMINATED
      Code: id: `${Date.now()}-${Math.random()}`,
 
 📁 frontend/src/hooks/useAnalytics.ts
-  🚨 Line 59 [CRITICAL]: math_random
-     Code: totalCost: 156.78 + Math.random() * 20,
-  🚨 Line 60 [CRITICAL]: math_random
-     Code: dailyCost: 12.45 + Math.random() * 5,
-  🚨 Line 61 [CRITICAL]: math_random
-     Code: weeklyCost: 87.32 + Math.random() * 15,
-  🚨 Line 62 [CRITICAL]: math_random
-     Code: monthlyCost: 345.67 + Math.random() * 50,
-  🚨 Line 63 [CRITICAL]: math_random
-     Code: costTrend: Math.random() > 0.5 ? 'increasing' : 'decreasing',
-  🚨 Line 64 [CRITICAL]: math_random
-     Code: averageCostPerRequest: 0.023 + Math.random() * 0.01,
-  🚨 Line 69 [CRITICAL]: math_random
-     Code: totalTokens: 2847392 + Math.floor(Math.random() * 100000),
-  🚨 Line 69 [CRITICAL]: math_random
+  🚨 Line 70 [CRITICAL]: math_random
      Code: totalTokens: 2847392 + Math.floor(Math.random() * 100000),
   🚨 Line 70 [CRITICAL]: math_random
-     Code: inputTokens: 1698234 + Math.floor(Math.random() * 50000),
-  🚨 Line 70 [CRITICAL]: math_random
+     Code: totalTokens: 2847392 + Math.floor(Math.random() * 100000),
+  🚨 Line 71 [CRITICAL]: math_random
      Code: inputTokens: 1698234 + Math.floor(Math.random() * 50000),
   🚨 Line 71 [CRITICAL]: math_random
-     Code: outputTokens: 1149158 + Math.floor(Math.random() * 50000),
-  🚨 Line 71 [CRITICAL]: math_random
+     Code: inputTokens: 1698234 + Math.floor(Math.random() * 50000),
+  🚨 Line 72 [CRITICAL]: math_random
      Code: outputTokens: 1149158 + Math.floor(Math.random() * 50000),
   🚨 Line 72 [CRITICAL]: math_random
-     Code: tokensPerHour: 12453 + Math.floor(Math.random() * 2000),
-  🚨 Line 72 [CRITICAL]: math_random
+     Code: outputTokens: 1149158 + Math.floor(Math.random() * 50000),
+  🚨 Line 73 [CRITICAL]: math_random
      Code: tokensPerHour: 12453 + Math.floor(Math.random() * 2000),
   🚨 Line 73 [CRITICAL]: math_random
-     Code: tokensPerDay: 298872 + Math.floor(Math.random() * 50000),
-  🚨 Line 73 [CRITICAL]: math_random
+     Code: tokensPerHour: 12453 + Math.floor(Math.random() * 2000),
+  🚨 Line 74 [CRITICAL]: math_random
      Code: tokensPerDay: 298872 + Math.floor(Math.random() * 50000),
   🚨 Line 74 [CRITICAL]: math_random
-     Code: averageTokensPerRequest: 1247 + Math.floor(Math.random() * 200),
-  🚨 Line 74 [CRITICAL]: math_random
+     Code: tokensPerDay: 298872 + Math.floor(Math.random() * 50000),
+  🚨 Line 75 [CRITICAL]: math_random
      Code: averageTokensPerRequest: 1247 + Math.floor(Math.random() * 200),
   🚨 Line 75 [CRITICAL]: math_random
+     Code: averageTokensPerRequest: 1247 + Math.floor(Math.random() * 200),
+  🚨 Line 76 [CRITICAL]: math_random
      Code: tokenEfficiency: 0.87 + Math.random() * 0.1
-  🚨 Line 79 [CRITICAL]: math_random
-     Code: totalMessages: 1247 + Math.floor(Math.random() * 100),
-  🚨 Line 79 [CRITICAL]: math_random
+  🚨 Line 80 [CRITICAL]: math_random
      Code: totalMessages: 1247 + Math.floor(Math.random() * 100),
   🚨 Line 80 [CRITICAL]: math_random
-     Code: successfulMessages: 1198 + Math.floor(Math.random() * 50),
-  🚨 Line 80 [CRITICAL]: math_random
+     Code: totalMessages: 1247 + Math.floor(Math.random() * 100),
+  🚨 Line 81 [CRITICAL]: math_random
      Code: successfulMessages: 1198 + Math.floor(Math.random() * 50),
   🚨 Line 81 [CRITICAL]: math_random
-     Code: failedMessages: 49 + Math.floor(Math.random() * 10),
-  🚨 Line 81 [CRITICAL]: math_random
+     Code: successfulMessages: 1198 + Math.floor(Math.random() * 50),
+  🚨 Line 82 [CRITICAL]: math_random
      Code: failedMessages: 49 + Math.floor(Math.random() * 10),
   🚨 Line 82 [CRITICAL]: math_random
+     Code: failedMessages: 49 + Math.floor(Math.random() * 10),
+  🚨 Line 83 [CRITICAL]: math_random
      Code: averageResponseTime: 1234 + Math.floor(Math.random() * 500),
-  🚨 Line 82 [CRITICAL]: math_random
+  🚨 Line 83 [CRITICAL]: math_random
      Code: averageResponseTime: 1234 + Math.floor(Math.random() * 500),
-  🚨 Line 84 [CRITICAL]: math_random
-     Code: 'text-generation': 567 + Math.floor(Math.random() * 100),
-  🚨 Line 84 [CRITICAL]: math_random
+  🚨 Line 85 [CRITICAL]: math_random
      Code: 'text-generation': 567 + Math.floor(Math.random() * 100),
   🚨 Line 85 [CRITICAL]: math_random
-     Code: 'code-analysis': 234 + Math.floor(Math.random() * 50),
-  🚨 Line 85 [CRITICAL]: math_random
+     Code: 'text-generation': 567 + Math.floor(Math.random() * 100),
+  🚨 Line 86 [CRITICAL]: math_random
      Code: 'code-analysis': 234 + Math.floor(Math.random() * 50),
   🚨 Line 86 [CRITICAL]: math_random
-     Code: 'data-processing': 189 + Math.floor(Math.random() * 30),
-  🚨 Line 86 [CRITICAL]: math_random
+     Code: 'code-analysis': 234 + Math.floor(Math.random() * 50),
+  🚨 Line 87 [CRITICAL]: math_random
      Code: 'data-processing': 189 + Math.floor(Math.random() * 30),
   🚨 Line 87 [CRITICAL]: math_random
-     Code: 'image-generation': 123 + Math.floor(Math.random() * 20),
-  🚨 Line 87 [CRITICAL]: math_random
+     Code: 'data-processing': 189 + Math.floor(Math.random() * 30),
+  🚨 Line 88 [CRITICAL]: math_random
      Code: 'image-generation': 123 + Math.floor(Math.random() * 20),
   🚨 Line 88 [CRITICAL]: math_random
-     Code: 'document-parsing': 89 + Math.floor(Math.random() * 15),
-  🚨 Line 88 [CRITICAL]: math_random
+     Code: 'image-generation': 123 + Math.floor(Math.random() * 20),
+  🚨 Line 89 [CRITICAL]: math_random
      Code: 'document-parsing': 89 + Math.floor(Math.random() * 15),
   🚨 Line 89 [CRITICAL]: math_random
+     Code: 'document-parsing': 89 + Math.floor(Math.random() * 15),
+  🚨 Line 90 [CRITICAL]: math_random
      Code: 'other': 45 + Math.floor(Math.random() * 10)
-  🚨 Line 89 [CRITICAL]: math_random
+  🚨 Line 90 [CRITICAL]: math_random
      Code: 'other': 45 + Math.floor(Math.random() * 10)
-  🚨 Line 91 [CRITICAL]: math_random
+  🚨 Line 92 [CRITICAL]: math_random
      Code: errorRate: 0.039 + Math.random() * 0.01
-  🚨 Line 95 [CRITICAL]: math_random
-     Code: totalSteps: 3456 + Math.floor(Math.random() * 500),
-  🚨 Line 95 [CRITICAL]: math_random
+  🚨 Line 96 [CRITICAL]: math_random
      Code: totalSteps: 3456 + Math.floor(Math.random() * 500),
   🚨 Line 96 [CRITICAL]: math_random
-     Code: completedSteps: 3298 + Math.floor(Math.random() * 400),
-  🚨 Line 96 [CRITICAL]: math_random
+     Code: totalSteps: 3456 + Math.floor(Math.random() * 500),
+  🚨 Line 97 [CRITICAL]: math_random
      Code: completedSteps: 3298 + Math.floor(Math.random() * 400),
   🚨 Line 97 [CRITICAL]: math_random
-     Code: failedSteps: 158 + Math.floor(Math.random() * 50),
-  🚨 Line 97 [CRITICAL]: math_random
+     Code: completedSteps: 3298 + Math.floor(Math.random() * 400),
+  🚨 Line 98 [CRITICAL]: math_random
      Code: failedSteps: 158 + Math.floor(Math.random() * 50),
   🚨 Line 98 [CRITICAL]: math_random
+     Code: failedSteps: 158 + Math.floor(Math.random() * 50),
+  🚨 Line 99 [CRITICAL]: math_random
      Code: averageStepDuration: 2340 + Math.floor(Math.random() * 500),
-  🚨 Line 98 [CRITICAL]: math_random
+  🚨 Line 99 [CRITICAL]: math_random
      Code: averageStepDuration: 2340 + Math.floor(Math.random() * 500),
-  🚨 Line 100 [CRITICAL]: math_random
-     Code: 'prompt-generation': 1234 + Math.floor(Math.random() * 200),
-  🚨 Line 100 [CRITICAL]: math_random
+  🚨 Line 101 [CRITICAL]: math_random
      Code: 'prompt-generation': 1234 + Math.floor(Math.random() * 200),
   🚨 Line 101 [CRITICAL]: math_random
-     Code: 'api-call': 987 + Math.floor(Math.random() * 150),
-  🚨 Line 101 [CRITICAL]: math_random
+     Code: 'prompt-generation': 1234 + Math.floor(Math.random() * 200),
+  🚨 Line 102 [CRITICAL]: math_random
      Code: 'api-call': 987 + Math.floor(Math.random() * 150),
   🚨 Line 102 [CRITICAL]: math_random
-     Code: 'response-parsing': 654 + Math.floor(Math.random() * 100),
-  🚨 Line 102 [CRITICAL]: math_random
+     Code: 'api-call': 987 + Math.floor(Math.random() * 150),
+  🚨 Line 103 [CRITICAL]: math_random
      Code: 'response-parsing': 654 + Math.floor(Math.random() * 100),
   🚨 Line 103 [CRITICAL]: math_random
-     Code: 'data-validation': 321 + Math.floor(Math.random() * 50),
-  🚨 Line 103 [CRITICAL]: math_random
+     Code: 'response-parsing': 654 + Math.floor(Math.random() * 100),
+  🚨 Line 104 [CRITICAL]: math_random
      Code: 'data-validation': 321 + Math.floor(Math.random() * 50),
   🚨 Line 104 [CRITICAL]: math_random
-     Code: 'error-handling': 158 + Math.floor(Math.random() * 30),
-  🚨 Line 104 [CRITICAL]: math_random
+     Code: 'data-validation': 321 + Math.floor(Math.random() * 50),
+  🚨 Line 105 [CRITICAL]: math_random
      Code: 'error-handling': 158 + Math.floor(Math.random() * 30),
   🚨 Line 105 [CRITICAL]: math_random
+     Code: 'error-handling': 158 + Math.floor(Math.random() * 30),
+  🚨 Line 106 [CRITICAL]: math_random
      Code: 'caching': 102 + Math.floor(Math.random() * 20)
-  🚨 Line 105 [CRITICAL]: math_random
+  🚨 Line 106 [CRITICAL]: math_random
      Code: 'caching': 102 + Math.floor(Math.random() * 20)
-  🚨 Line 107 [CRITICAL]: math_random
+  🚨 Line 108 [CRITICAL]: math_random
      Code: stepSuccessRate: 0.954 + Math.random() * 0.03
-  🚨 Line 113 [CRITICAL]: math_random
-     Code: requestCount: 1247 + Math.floor(Math.random() * 200),
-  🚨 Line 113 [CRITICAL]: math_random
+  🚨 Line 114 [CRITICAL]: math_random
      Code: requestCount: 1247 + Math.floor(Math.random() * 200),
   🚨 Line 114 [CRITICAL]: math_random
-     Code: tokenUsage: 847392 + Math.floor(Math.random() * 100000),
-  🚨 Line 114 [CRITICAL]: math_random
+     Code: requestCount: 1247 + Math.floor(Math.random() * 200),
+  🚨 Line 115 [CRITICAL]: math_random
      Code: tokenUsage: 847392 + Math.floor(Math.random() * 100000),
   🚨 Line 115 [CRITICAL]: math_random
-     Code: cost: 45.67 + Math.random() * 10,
+     Code: tokenUsage: 847392 + Math.floor(Math.random() * 100000),
   🚨 Line 116 [CRITICAL]: math_random
+     Code: cost: 45.67 + Math.random() * 10,
+  🚨 Line 117 [CRITICAL]: math_random
      Code: percentage: 29.1 + Math.random() * 5,
-  🚨 Line 117 [CRITICAL]: math_random
+  🚨 Line 118 [CRITICAL]: math_random
      Code: responseTime: 234 + Math.floor(Math.random() * 50)
-  🚨 Line 117 [CRITICAL]: math_random
+  🚨 Line 118 [CRITICAL]: math_random
      Code: responseTime: 234 + Math.floor(Math.random() * 50)
-  🚨 Line 121 [CRITICAL]: math_random
-     Code: requestCount: 856 + Math.floor(Math.random() * 150),
-  🚨 Line 121 [CRITICAL]: math_random
+  🚨 Line 122 [CRITICAL]: math_random
      Code: requestCount: 856 + Math.floor(Math.random() * 150),
   🚨 Line 122 [CRITICAL]: math_random
-     Code: tokenUsage: 1294857 + Math.floor(Math.random() * 150000),
-  🚨 Line 122 [CRITICAL]: math_random
+     Code: requestCount: 856 + Math.floor(Math.random() * 150),
+  🚨 Line 123 [CRITICAL]: math_random
      Code: tokenUsage: 1294857 + Math.floor(Math.random() * 150000),
   🚨 Line 123 [CRITICAL]: math_random
-     Code: cost: 78.45 + Math.random() * 15,
+     Code: tokenUsage: 1294857 + Math.floor(Math.random() * 150000),
   🚨 Line 124 [CRITICAL]: math_random
+     Code: cost: 78.45 + Math.random() * 15,
+  🚨 Line 125 [CRITICAL]: math_random
      Code: percentage: 50.0 + Math.random() * 5,
-  🚨 Line 125 [CRITICAL]: math_random
+  🚨 Line 126 [CRITICAL]: math_random
      Code: responseTime: 156 + Math.floor(Math.random() * 30)
-  🚨 Line 125 [CRITICAL]: math_random
+  🚨 Line 126 [CRITICAL]: math_random
      Code: responseTime: 156 + Math.floor(Math.random() * 30)
-  🚨 Line 129 [CRITICAL]: math_random
-     Code: requestCount: 423 + Math.floor(Math.random() * 100),
-  🚨 Line 129 [CRITICAL]: math_random
+  🚨 Line 130 [CRITICAL]: math_random
      Code: requestCount: 423 + Math.floor(Math.random() * 100),
   🚨 Line 130 [CRITICAL]: math_random
-     Code: tokenUsage: 705143 + Math.floor(Math.random() * 80000),
-  🚨 Line 130 [CRITICAL]: math_random
+     Code: requestCount: 423 + Math.floor(Math.random() * 100),
+  🚨 Line 131 [CRITICAL]: math_random
      Code: tokenUsage: 705143 + Math.floor(Math.random() * 80000),
   🚨 Line 131 [CRITICAL]: math_random
-     Code: cost: 32.66 + Math.random() * 8,
+     Code: tokenUsage: 705143 + Math.floor(Math.random() * 80000),
   🚨 Line 132 [CRITICAL]: math_random
+     Code: cost: 32.66 + Math.random() * 8,
+  🚨 Line 133 [CRITICAL]: math_random
      Code: percentage: 20.9 + Math.random() * 3,
-  🚨 Line 133 [CRITICAL]: math_random
+  🚨 Line 134 [CRITICAL]: math_random
      Code: responseTime: 89 + Math.floor(Math.random() * 20)
-  🚨 Line 133 [CRITICAL]: math_random
+  🚨 Line 134 [CRITICAL]: math_random
      Code: responseTime: 89 + Math.floor(Math.random() * 20)
-  🚨 Line 137 [CRITICAL]: math_random
+  🚨 Line 138 [CRITICAL]: math_random
      Code: const mockBudgetAlerts: BudgetAlert[] = Math.random() > 0.7 ? [
-  🚨 Line 141 [CRITICAL]: math_random
+  🚨 Line 142 [CRITICAL]: math_random
      Code: message: `Daily budget at ${(78 + Math.random() * 15).toFixed(0)}% - approaching limit`,
-  🚨 Line 143 [CRITICAL]: math_random
+  🚨 Line 144 [CRITICAL]: math_random
      Code: currentValue: 78 + Math.random() * 15,
-  🚨 Line 206 [CRITICAL]: math_random
+  🚨 Line 207 [CRITICAL]: math_random
      Code: totalCost: prev.totalCost + Math.random() * 0.1 - 0.05,
 
 📁 frontend/src/hooks/useDualModeMessages.ts
@@ -894,6 +908,6 @@ STATUS: ❌ CONTAMINATED
 
 
 ## Test Results
-- Total files scanned: 451
-- Contaminated files: 73
+- Total files scanned: 456
+- Contaminated files: 74
 - Status: FAILED

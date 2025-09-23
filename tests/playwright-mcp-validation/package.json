@@ -1,0 +1,40 @@
+{
+  "name": "playwright-mcp-validation",
+  "version": "1.0.0",
+  "description": "Comprehensive Playwright MCP validation suite for UI/UX testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "test:broken-state": "playwright test specs/01-ui-state-capture.spec.ts",
+    "test:navigation": "playwright test specs/02-navigation-validation.spec.ts",
+    "test:visual": "playwright test specs/03-visual-regression.spec.ts",
+    "test:accessibility": "playwright test specs/04-accessibility-validation.spec.ts",
+    "test:performance": "playwright test specs/05-performance-validation.spec.ts",
+    "test:report": "playwright show-report",
+    "test:install": "playwright install",
+    "setup": "npm install && npm run test:install",
+    "clean": "rm -rf test-results playwright-report",
+    "validate:all": "npm run clean && npm run test && npm run test:report"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.40.0",
+    "axe-playwright": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "ui",
+    "accessibility",
+    "performance",
+    "validation",
+    "mcp"
+  ],
+  "author": "Claude Code Agent",
+  "license": "MIT"
+}

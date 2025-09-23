@@ -1,0 +1,784 @@
+{
+  "timestamp": "2025-09-21T23:58:32.931Z",
+  "testSuite": "Agents Page Validation",
+  "results": [
+    {
+      "test": "01 - Initial Navigation",
+      "status": "PASS",
+      "details": {
+        "url": "http://localhost:5173/agents",
+        "title": "Agent Feed - Claude Code Orchestration",
+        "timestamp": "2025-09-21T23:58:39.610Z"
+      }
+    },
+    {
+      "test": "02 - Agent Loading",
+      "status": "PASS",
+      "details": {
+        "agentRequests": [
+          {
+            "url": "http://localhost:5173/api/agents",
+            "method": "GET",
+            "headers": {
+              "sec-ch-ua-platform": "\"Windows\"",
+              "referer": "http://localhost:5173/agents",
+              "accept-language": "en-US",
+              "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+              "x-route-key": "agents",
+              "sec-ch-ua-mobile": "?0",
+              "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.7339.16 Safari/537.36",
+              "content-type": "application/json"
+            }
+          }
+        ],
+        "correctPath": false,
+        "timestamp": "2025-09-21T23:58:42.873Z"
+      }
+    },
+    {
+      "test": "03 - Agent List Display",
+      "status": "PASS",
+      "details": {
+        "agentCount": 20,
+        "hasAgents": true,
+        "agentMetadata": [
+          {
+            "index": 0,
+            "text": "Isolated Agent ManagerRoute: agents | API Status: ActiveRefreshSpawn AgentToken Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivateVS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 19938HomeDetailsActivateClaude Code ExtensionactiveActive Claude Code extension in VS Code (6 processes)HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 19939HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 19941HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20017HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20018HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20029HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20041HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20042HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20053HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20054HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20122HomeDetailsActivateMCP Server (Port 3001)activeReal MCP server listening on port 3001HomeDetailsActivateIsolated API Service (agents) - 0 active requests",
+            "classes": "route-wrapper route-agents ",
+            "id": "",
+            "dataset": {
+              "testid": "route-agents",
+              "routeKey": "agents"
+            }
+          },
+          {
+            "index": 1,
+            "text": "Isolated Agent ManagerRoute: agents | API Status: ActiveRefreshSpawn AgentToken Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivateVS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 19938HomeDetailsActivateClaude Code ExtensionactiveActive Claude Code extension in VS Code (6 processes)HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 19939HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 19941HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20017HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20018HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20029HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20041HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20042HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20053HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20054HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20122HomeDetailsActivateMCP Server (Port 3001)activeReal MCP server listening on port 3001HomeDetailsActivateIsolated API Service (agents) - 0 active requests",
+            "classes": "p-6 ",
+            "id": "",
+            "dataset": {
+              "testid": "isolated-agent-manager"
+            }
+          },
+          {
+            "index": 2,
+            "text": "Token Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivateVS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 19938HomeDetailsActivateClaude Code ExtensionactiveActive Claude Code extension in VS Code (6 processes)HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 19939HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 19941HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20017HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20018HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20029HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20041HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20042HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20053HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20054HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20122HomeDetailsActivateMCP Server (Port 3001)activeReal MCP server listening on port 3001HomeDetailsActivate",
+            "classes": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+            "id": "",
+            "dataset": {
+              "testid": "agent-list"
+            }
+          },
+          {
+            "index": 3,
+            "text": "Token Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivate",
+            "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+            "id": "",
+            "dataset": {
+              "testid": "agent-card"
+            }
+          },
+          {
+            "index": 4,
+            "text": "VS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivate",
+            "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+            "id": "",
+            "dataset": {
+              "testid": "agent-card"
+            }
+          }
+        ],
+        "timestamp": "2025-09-21T23:58:45.520Z"
+      }
+    },
+    {
+      "test": "04 - Agent Details",
+      "status": "PASS",
+      "details": {
+        "agentClickable": true,
+        "timestamp": "2025-09-21T23:58:50.531Z"
+      }
+    },
+    {
+      "test": "05 - Error States and Loading",
+      "status": "PASS",
+      "details": {
+        "loadingIndicators": 0,
+        "errorElements": 0,
+        "timestamp": "2025-09-21T23:58:53.406Z"
+      }
+    },
+    {
+      "test": "06 - Responsive Design - mobile",
+      "status": "PASS",
+      "details": {
+        "viewport": {
+          "name": "mobile",
+          "width": 375,
+          "height": 667
+        },
+        "agentCount": 20,
+        "timestamp": "2025-09-21T23:58:55.839Z"
+      }
+    },
+    {
+      "test": "06 - Responsive Design - tablet",
+      "status": "PASS",
+      "details": {
+        "viewport": {
+          "name": "tablet",
+          "width": 768,
+          "height": 1024
+        },
+        "agentCount": 20,
+        "timestamp": "2025-09-21T23:58:57.945Z"
+      }
+    },
+    {
+      "test": "06 - Responsive Design - desktop",
+      "status": "PASS",
+      "details": {
+        "viewport": {
+          "name": "desktop",
+          "width": 1920,
+          "height": 1080
+        },
+        "agentCount": 20,
+        "timestamp": "2025-09-21T23:58:59.953Z"
+      }
+    }
+  ],
+  "screenshots": [
+    "01-agents-page-initial.png",
+    "02-agents-loading.png",
+    "02-agents-loaded.png",
+    "03-agent-list-detail.png",
+    "04-before-agent-click.png",
+    "04-after-agent-click.png",
+    "05-final-state.png",
+    "06-responsive-mobile.png",
+    "06-responsive-tablet.png",
+    "06-responsive-desktop.png"
+  ],
+  "errors": [
+    {
+      "timestamp": "2025-09-21T23:58:37.651Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:37.706Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:37.706Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:38.789Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:38.790Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:39.855Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:39.855Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:40.461Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:40.466Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:40.466Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:41.550Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:41.550Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:42.556Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:42.556Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:43.464Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:43.475Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:43.475Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:44.575Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:44.575Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:45.580Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:45.580Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:46.283Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:46.311Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:46.311Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:47.316Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:47.316Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:48.347Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:48.347Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:49.357Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:49.359Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:50.351Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:50.351Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:51.273Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:51.276Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:51.276Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:52.532Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:52.535Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:53.657Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:53.657Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:54.129Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:54.140Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:54.140Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:55.151Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:55.151Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:56.258Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:56.263Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:56.263Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:57.264Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:57.265Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:58.100Z",
+      "message": "WebSocket connection to 'ws://localhost:443/?token=wA7vwNpKv9It' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:5173/@vite/client",
+        "lineNumber": 535,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:58.108Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:58.108Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:58:59.109Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:58:59.109Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    },
+    {
+      "timestamp": "2025-09-21T23:59:00.132Z",
+      "type": "network_failure",
+      "url": "http://localhost:443/",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "timestamp": "2025-09-21T23:59:00.132Z",
+      "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:443/",
+        "lineNumber": 0,
+        "columnNumber": 0
+      }
+    }
+  ],
+  "agentData": {
+    "count": 20,
+    "agents": [
+      {
+        "index": 0,
+        "text": "Isolated Agent ManagerRoute: agents | API Status: ActiveRefreshSpawn AgentToken Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivateVS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 19938HomeDetailsActivateClaude Code ExtensionactiveActive Claude Code extension in VS Code (6 processes)HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 19939HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 19941HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20017HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20018HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20029HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20041HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20042HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20053HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20054HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20122HomeDetailsActivateMCP Server (Port 3001)activeReal MCP server listening on port 3001HomeDetailsActivateIsolated API Service (agents) - 0 active requests",
+        "classes": "route-wrapper route-agents ",
+        "id": "",
+        "dataset": {
+          "testid": "route-agents",
+          "routeKey": "agents"
+        }
+      },
+      {
+        "index": 1,
+        "text": "Isolated Agent ManagerRoute: agents | API Status: ActiveRefreshSpawn AgentToken Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivateVS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 19938HomeDetailsActivateClaude Code ExtensionactiveActive Claude Code extension in VS Code (6 processes)HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 19939HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 19941HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20017HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20018HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20029HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20041HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20042HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20053HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20054HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20122HomeDetailsActivateMCP Server (Port 3001)activeReal MCP server listening on port 3001HomeDetailsActivateIsolated API Service (agents) - 0 active requests",
+        "classes": "p-6 ",
+        "id": "",
+        "dataset": {
+          "testid": "isolated-agent-manager"
+        }
+      },
+      {
+        "index": 2,
+        "text": "Token Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivateVS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 19938HomeDetailsActivateClaude Code ExtensionactiveActive Claude Code extension in VS Code (6 processes)HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 19939HomeDetailsActivateReal Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 19941HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20017HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20018HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20029HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20041HomeDetailsActivateRUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20042HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20053HomeDetailsActivateFlow Nexus ManageridleReal Flow Nexus Manager process running with PID 20054HomeDetailsActivateClaude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20122HomeDetailsActivateMCP Server (Port 3001)activeReal MCP server listening on port 3001HomeDetailsActivate",
+        "classes": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+        "id": "",
+        "dataset": {
+          "testid": "agent-list"
+        }
+      },
+      {
+        "index": 3,
+        "text": "Token Analytics Database AgentactiveReal token usage data persistence and analyticsHomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 4,
+        "text": "VS Code Claude ExtensionsactiveActive Claude-related VS Code extensions (1 found)HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 5,
+        "text": "Claude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 19938HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 6,
+        "text": "Claude Code ExtensionactiveActive Claude Code extension in VS Code (6 processes)HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 7,
+        "text": "Real Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 8,
+        "text": "RUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 19939HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 9,
+        "text": "Real Token Analytics AgentactiveAuthentic Claude API token usage tracking and analyticsHomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 10,
+        "text": "Flow Nexus ManageridleReal Flow Nexus Manager process running with PID 19941HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 11,
+        "text": "Claude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20017HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 12,
+        "text": "Claude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20018HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 13,
+        "text": "Claude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20029HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 14,
+        "text": "RUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20041HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 15,
+        "text": "RUV Swarm CoordinatoridleReal RUV Swarm Coordinator process running with PID 20042HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 16,
+        "text": "Flow Nexus ManageridleReal Flow Nexus Manager process running with PID 20053HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 17,
+        "text": "Flow Nexus ManageridleReal Flow Nexus Manager process running with PID 20054HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 18,
+        "text": "Claude Flow OrchestratoridleReal Claude Flow Orchestrator process running with PID 20122HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      },
+      {
+        "index": 19,
+        "text": "MCP Server (Port 3001)activeReal MCP server listening on port 3001HomeDetailsActivate",
+        "classes": "bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow",
+        "id": "",
+        "dataset": {
+          "testid": "agent-card"
+        }
+      }
+    ]
+  }
+}

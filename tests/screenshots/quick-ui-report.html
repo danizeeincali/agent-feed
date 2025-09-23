@@ -1,0 +1,834 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick UI Capture Report</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { margin: 0 0 10px 0; font-size: 2.5em; font-weight: 700; }
+        .header p { margin: 0; opacity: 0.9; font-size: 1.1em; }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        .stat {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid #667eea;
+        }
+        .stat h3 { margin: 0 0 10px 0; font-size: 2.5em; color: #2d3748; font-weight: 700; }
+        .stat p { margin: 0; color: #718096; font-weight: 500; font-size: 1.1em; }
+        .results { padding: 40px; }
+        .results h2 { margin: 0 0 30px 0; color: #2d3748; font-size: 2em; }
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+        .page-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .page-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+        .page-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+        }
+        .page-title { font-weight: 600; color: #2d3748; font-size: 1.2em; }
+        .page-url { color: #718096; font-size: 0.9em; margin-top: 5px; }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-success { background: #c6f6d5; color: #22543d; }
+        .status-error { background: #fed7d7; color: #742a2a; }
+        .status-not_found { background: #fefcbf; color: #744210; }
+        .page-content { padding: 20px; }
+        .screenshots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .screenshot {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .screenshot img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+        .screenshot-label {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            font-size: 0.85em;
+            color: #718096;
+            text-align: center;
+        }
+        .issues, .errors { margin-top: 15px; }
+        .issues h4, .errors h4 {
+            margin: 0 0 10px 0;
+            font-size: 1em;
+            color: #2d3748;
+        }
+        .error-list {
+            background: #fed7d7;
+            border: 1px solid #f56565;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 0.9em;
+        }
+        .issue-list {
+            background: #fefcbf;
+            border: 1px solid #ecc94b;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 0.9em;
+        }
+        .error-list ul, .issue-list ul { margin: 0; padding-left: 20px; }
+        .error-list li, .issue-list li { margin-bottom: 5px; }
+        .load-time {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+        .no-issues {
+            color: #38a169;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quick UI Capture Report</h1>
+            <p>Generated: 2025-09-23T02:12:00.570Z</p>
+        </div>
+
+        <div class="summary">
+            <div class="stat">
+                <h3>17</h3>
+                <p>Total Pages</p>
+            </div>
+            <div class="stat">
+                <h3>0</h3>
+                <p>Successful</p>
+            </div>
+            <div class="stat">
+                <h3>17</h3>
+                <p>Errors</p>
+            </div>
+            <div class="stat">
+                <h3>0</h3>
+                <p>Not Found</p>
+            </div>
+            <div class="stat">
+                <h3>37ms</h3>
+                <p>Avg Load Time</p>
+            </div>
+            <div class="stat">
+                <h3>17</h3>
+                <p>Total Issues</p>
+            </div>
+        </div>
+
+        <div class="results">
+            <h2>Page Results</h2>
+            <div class="page-grid">
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Homepage (Feed)</div>
+                                <div class="page-url">/</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">122ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/
+Call log:
+[2m  - navigating to "http://localhost:3000/", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Interactive Control</div>
+                                <div class="page-url">/interactive-control</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">20ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/interactive-control
+Call log:
+[2m  - navigating to "http://localhost:3000/interactive-control", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Claude Manager</div>
+                                <div class="page-url">/claude-manager</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">91ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/claude-manager
+Call log:
+[2m  - navigating to "http://localhost:3000/claude-manager", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Create Post</div>
+                                <div class="page-url">/posting</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">29ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/posting
+Call log:
+[2m  - navigating to "http://localhost:3000/posting", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Mention Demo</div>
+                                <div class="page-url">/mention-demo</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">39ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/mention-demo
+Call log:
+[2m  - navigating to "http://localhost:3000/mention-demo", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Drafts</div>
+                                <div class="page-url">/drafts</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">43ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/drafts
+Call log:
+[2m  - navigating to "http://localhost:3000/drafts", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Agents</div>
+                                <div class="page-url">/agents</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">21ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/agents
+Call log:
+[2m  - navigating to "http://localhost:3000/agents", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Workflows</div>
+                                <div class="page-url">/workflows</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">39ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/workflows
+Call log:
+[2m  - navigating to "http://localhost:3000/workflows", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Claude Code</div>
+                                <div class="page-url">/claude-code</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">43ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/claude-code
+Call log:
+[2m  - navigating to "http://localhost:3000/claude-code", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Live Activity</div>
+                                <div class="page-url">/activity</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">15ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/activity
+Call log:
+[2m  - navigating to "http://localhost:3000/activity", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Analytics</div>
+                                <div class="page-url">/analytics</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">43ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/analytics
+Call log:
+[2m  - navigating to "http://localhost:3000/analytics", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Performance Monitor</div>
+                                <div class="page-url">/performance-monitor</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">17ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/performance-monitor
+Call log:
+[2m  - navigating to "http://localhost:3000/performance-monitor", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Settings</div>
+                                <div class="page-url">/settings</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">16ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/settings
+Call log:
+[2m  - navigating to "http://localhost:3000/settings", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Dashboard</div>
+                                <div class="page-url">/dashboard</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">21ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/dashboard
+Call log:
+[2m  - navigating to "http://localhost:3000/dashboard", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Debug Posts</div>
+                                <div class="page-url">/debug-posts</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">20ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/debug-posts
+Call log:
+[2m  - navigating to "http://localhost:3000/debug-posts", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">Mention Debug</div>
+                                <div class="page-url">/mention-debug</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">15ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/mention-debug
+Call log:
+[2m  - navigating to "http://localhost:3000/mention-debug", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+                    <div class="page-card">
+                        <div class="page-header">
+                            <div>
+                                <div class="page-title">404 Error Page</div>
+                                <div class="page-url">/non-existent-page</div>
+                            </div>
+                            <div>
+                                <span class="status-badge status-error">
+                                    error
+                                </span>
+                                <div class="load-time">35ms</div>
+                            </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="screenshots">
+                                
+                            </div>
+
+                            
+                                <div class="errors">
+                                    <h4>Errors (1)</h4>
+                                    <div class="error-list">
+                                        <ul>
+                                            <li>Capture failed: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/non-existent-page
+Call log:
+[2m  - navigating to "http://localhost:3000/non-existent-page", waiting until "networkidle"[22m
+</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            
+
+                            
+                                <div class="no-issues">✅ No issues detected</div>
+                            
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    

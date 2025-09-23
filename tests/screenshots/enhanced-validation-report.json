@@ -1,0 +1,84 @@
+{
+  "timestamp": "2025-09-22T04:25:47.908Z",
+  "url": "http://localhost:5173/agents/",
+  "pageContent": {
+    "title": "",
+    "bodyClasses": "",
+    "mainContent": "<div class=\"Agents_container__OdVGL\"><header class=\"Agents_header__bqypK\"><h1 class=\"Agents_title__tpdmD\">Production Agents</h1><p class=\"Agents_subtitle__ij5Ov\">3 agents discovered from /prod/.claude/agents/</p></header><div class=\"Agents_fallbackMessage___8urK\"><p><strong>Warning:</strong> Could not connect to agent API</p><p>Using fallback data. Error: HTTP error! status: 404</p></div><div class=\"Agents_agentsGrid__l2r40\" data-testid=\"agent-list\"><div class=\"Agents_agentCard__nr7lM\" data-test...",
+    "stylesheets": [],
+    "inlineStyles": 3
+  },
+  "cssModules": {
+    "foundModuleClasses": true,
+    "sampleClasses": [
+      "Agents_container__OdVGL",
+      "Agents_header__bqypK",
+      "Agents_title__tpdmD",
+      "Agents_subtitle__ij5Ov",
+      "Agents_fallbackMessage___8urK"
+    ],
+    "totalElements": 55
+  },
+  "styling": {
+    "container": {
+      "background": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(102, 126, 234) 0%, rgb(118, 75, 162) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+      "backgroundImage": "linear-gradient(135deg, rgb(102, 126, 234) 0%, rgb(118, 75, 162) 100%)",
+      "minHeight": "720px",
+      "padding": "32px"
+    },
+    "agentCardCount": 10,
+    "agentCards": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none",
+        "borderRadius": "0px",
+        "padding": "0px"
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "boxShadow": "rgba(0, 0, 0, 0.15) 0px 8px 25px 0px",
+        "borderRadius": "12px",
+        "padding": "24px"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "boxShadow": "none",
+        "borderRadius": "0px",
+        "padding": "0px"
+      }
+    ],
+    "badges": [
+      {
+        "backgroundColor": "rgb(220, 252, 231)",
+        "color": "rgb(22, 101, 52)",
+        "text": "active"
+      },
+      {
+        "backgroundColor": "rgb(220, 252, 231)",
+        "color": "rgb(22, 101, 52)",
+        "text": "active"
+      },
+      {
+        "backgroundColor": "rgb(220, 252, 231)",
+        "color": "rgb(22, 101, 52)",
+        "text": "active"
+      }
+    ],
+    "heading": {
+      "fontFamily": "Arial, sans-serif",
+      "fontSize": "48px",
+      "fontWeight": "700",
+      "color": "rgb(255, 255, 255)",
+      "textShadow": "rgba(0, 0, 0, 0.3) 0px 2px 4px"
+    }
+  },
+  "consoleMessages": [],
+  "validation": {
+    "pageLoaded": true,
+    "cssModulesWorking": true,
+    "gradientBackground": true,
+    "agentCardsFound": 10,
+    "statusBadgesFound": 3,
+    "typographyStyled": true
+  }
+}

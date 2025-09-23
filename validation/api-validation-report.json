@@ -1,0 +1,150 @@
+{
+  "timestamp": "2025-09-23T03:29:13.811Z",
+  "baseUrl": "http://localhost:5173",
+  "endpoints": [
+    {
+      "path": "/",
+      "url": "http://localhost:5173/",
+      "description": "Main Application",
+      "expectedStatus": 200,
+      "timestamp": "2025-09-23T03:29:13.835Z",
+      "actualStatus": 200,
+      "responseTime": 28,
+      "contentType": "text/html",
+      "contentLength": 890,
+      "success": true
+    },
+    {
+      "path": "/api/health",
+      "url": "http://localhost:5173/api/health",
+      "description": "Health Check",
+      "expectedStatus": [
+        200,
+        404,
+        500
+      ],
+      "timestamp": "2025-09-23T03:29:13.926Z",
+      "actualStatus": 500,
+      "responseTime": 5,
+      "contentType": "text/plain",
+      "contentLength": 0,
+      "success": false
+    },
+    {
+      "path": "/api/agents",
+      "url": "http://localhost:5173/api/agents",
+      "description": "Agents API",
+      "expectedStatus": [
+        200,
+        404,
+        500
+      ],
+      "timestamp": "2025-09-23T03:29:13.931Z",
+      "actualStatus": 500,
+      "responseTime": 6,
+      "contentType": "text/plain",
+      "contentLength": 0,
+      "success": false
+    },
+    {
+      "path": "/api/posts",
+      "url": "http://localhost:5173/api/posts",
+      "description": "Posts API",
+      "expectedStatus": [
+        200,
+        404,
+        500
+      ],
+      "timestamp": "2025-09-23T03:29:13.938Z",
+      "actualStatus": 500,
+      "responseTime": 6,
+      "contentType": "text/plain",
+      "contentLength": 0,
+      "success": false
+    },
+    {
+      "path": "/api/analytics",
+      "url": "http://localhost:5173/api/analytics",
+      "description": "Analytics API",
+      "expectedStatus": [
+        200,
+        404,
+        500
+      ],
+      "timestamp": "2025-09-23T03:29:13.945Z",
+      "actualStatus": 500,
+      "responseTime": 7,
+      "contentType": "text/plain",
+      "contentLength": 0,
+      "success": false
+    },
+    {
+      "path": "/api/workflows",
+      "url": "http://localhost:5173/api/workflows",
+      "description": "Workflows API",
+      "expectedStatus": [
+        200,
+        404,
+        500
+      ],
+      "timestamp": "2025-09-23T03:29:13.952Z",
+      "actualStatus": 500,
+      "responseTime": 5,
+      "contentType": "text/plain",
+      "contentLength": 0,
+      "success": false
+    },
+    {
+      "path": "/api/performance",
+      "url": "http://localhost:5173/api/performance",
+      "description": "Performance API",
+      "expectedStatus": [
+        200,
+        404,
+        500
+      ],
+      "timestamp": "2025-09-23T03:29:13.957Z",
+      "actualStatus": 500,
+      "responseTime": 3,
+      "contentType": "text/plain",
+      "contentLength": 0,
+      "success": false
+    },
+    {
+      "path": "/vite.svg",
+      "url": "http://localhost:5173/vite.svg",
+      "description": "Static Assets",
+      "expectedStatus": [
+        200,
+        404
+      ],
+      "timestamp": "2025-09-23T03:29:13.960Z",
+      "actualStatus": 200,
+      "responseTime": 58,
+      "contentType": "text/html",
+      "contentLength": 890,
+      "success": false
+    },
+    {
+      "path": "/non-existent-endpoint",
+      "url": "http://localhost:5173/non-existent-endpoint",
+      "description": "404 Handling",
+      "expectedStatus": [
+        404,
+        500
+      ],
+      "timestamp": "2025-09-23T03:29:14.018Z",
+      "actualStatus": 200,
+      "responseTime": 17,
+      "contentType": "text/html",
+      "contentLength": 890,
+      "success": false
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "successful": 1,
+    "failed": 8,
+    "errors": []
+  }
+}
