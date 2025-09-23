@@ -11,7 +11,7 @@ import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
 import { EnhancedPostingInterface } from './EnhancedPostingInterface';
 import StreamingTickerWorking from '../StreamingTickerWorking';
-import '../styles/comments.css';
+// import '../styles/comments.css'; // Moved to _app.tsx
 
 interface RealSocialMediaFeedProps {
   className?: string;

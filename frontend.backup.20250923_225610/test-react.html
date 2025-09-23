@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>React App Test</title>
+    <script>
+        setTimeout(function() {
+            fetch('http://127.0.0.1:3001/')
+                .then(response => response.text())
+                .then(html => {
+                    console.log('HTML received:', html.includes('root') ? 'Contains root div' : 'No root div');
+                    
+                    // Check if React would be able to mount
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const rootDiv = doc.getElementById('root');
+                    
+                    if (rootDiv) {
+                        console.log('✅ Root div found - React should be able to mount');
+                        console.log('✅ HTML structure is correct for React app');
+                        
+                        // Check if main.tsx script is included
+                        const scripts = doc.querySelectorAll('script[src*="main.tsx"]');
+                        if (scripts.length > 0) {
+                            console.log('✅ main.tsx script found - React should load');
+                        } else {
+                            console.log('❌ main.tsx script missing');
+                        }
+                    } else {
+                        console.log('❌ No root div found');
+                    }
+                })
+                .catch(err => console.error('❌ Fetch error:', err));
+        }, 1000);
+    </script>
+</head>
+<body>
+    <h1>Testing React App...</h1>
+    <p>Check console for results</p>
+</body>
+</html>

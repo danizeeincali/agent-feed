@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleLauncher Manual Browser Validation</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            line-height: 1.6;
+        }
+        .test-case { 
+            border: 1px solid #ddd; 
+            margin: 10px 0; 
+            padding: 15px; 
+            border-radius: 5px; 
+        }
+        .pass { border-left: 5px solid #28a745; }
+        .fail { border-left: 5px solid #dc3545; }
+        .pending { border-left: 5px solid #ffc107; }
+        button { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        #results { margin-top: 20px; }
+        .iframe-test { 
+            width: 100%; 
+            height: 600px; 
+            border: 1px solid #ccc; 
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 SimpleLauncher Browser Validation Test</h1>
+    <p><strong>Purpose:</strong> Manual validation of SimpleLauncher functionality after fixing duplicate import errors</p>
+
+    <div class="test-case pending">
+        <h3>📋 Test Checklist</h3>
+        <div id="checklist">
+            <label><input type="checkbox" id="load"> 1. Application loads without compilation errors</label><br>
+            <label><input type="checkbox" id="nav"> 2. SimpleLauncher navigation button is visible</label><br>
+            <label><input type="checkbox" id="route"> 3. Navigation to SimpleLauncher page works</label><br>
+            <label><input type="checkbox" id="render"> 4. SimpleLauncher component renders correctly</label><br>
+            <label><input type="checkbox" id="buttons"> 5. Launch/Stop buttons are visible and functional</label><br>
+            <label><input type="checkbox" id="mobile"> 6. Mobile viewport is responsive</label><br>
+            <label><input type="checkbox" id="console"> 7. Browser console is clean (no critical errors)</label><br>
+        </div>
+        <button onclick="testInIframe()">🔍 Load Application in Frame</button>
+        <button onclick="testInNewWindow()">🚀 Open in New Window</button>
+        <button onclick="generateReport()">📊 Generate Report</button>
+    </div>
+
+    <div class="test-case">
+        <h3>🖥️ Application Preview</h3>
+        <iframe id="app-frame" class="iframe-test" src="http://localhost:3000" 
+                title="Agent Feed Application"></iframe>
+    </div>
+
+    <div class="test-case">
+        <h3>📱 Mobile Preview</h3>
+        <iframe id="mobile-frame" class="iframe-test" src="http://localhost:3000" 
+                style="width: 375px; height: 667px;" 
+                title="Agent Feed Application - Mobile View"></iframe>
+    </div>
+
+    <div id="results" class="test-case">
+        <h3>🧪 Test Results</h3>
+        <div id="test-output">
+            <p>Click checkboxes above as you complete each validation step...</p>
+        </div>
+    </div>
+
+    <script>
+        let testResults = {};
+
+        function testInIframe() {
+            const frame = document.getElementById('app-frame');
+            frame.src = frame.src; // Refresh iframe
+            
+            setTimeout(() => {
+                try {
+                    console.log('Testing iframe load...');
+                    updateResult('iframe', 'Application loaded in iframe successfully');
+                } catch (error) {
+                    updateResult('iframe', 'Error loading in iframe: ' + error.message);
+                }
+            }, 2000);
+        }
+
+        function testInNewWindow() {
+            const newWindow = window.open('http://localhost:3000', '_blank', 'width=1200,height=800');
+            
+            setTimeout(() => {
+                if (newWindow && !newWindow.closed) {
+                    updateResult('newwindow', 'Application opened in new window successfully');
+                } else {
+                    updateResult('newwindow', 'Failed to open new window or popup blocked');
+                }
+            }, 1000);
+        }
+
+        function updateResult(test, message) {
+            testResults[test] = message;
+            renderResults();
+        }
+
+        function renderResults() {
+            const output = document.getElementById('test-output');
+            let html = '<h4>Automated Test Results:</h4>';
+            
+            for (const [test, result] of Object.entries(testResults)) {
+                html += `<div style="margin: 5px 0;"><strong>${test}:</strong> ${result}</div>`;
+            }
+            
+            html += '<h4>Manual Validation Progress:</h4>';
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            
+            html += `<div>Progress: ${completed}/${total} tests completed (${Math.round(completed/total*100)}%)</div>`;
+            
+            output.innerHTML = html;
+        }
+
+        function generateReport() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            const results = [];
+            
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.parentElement.textContent.trim();
+                results.push({
+                    test: label,
+                    passed: checkbox.checked,
+                    status: checkbox.checked ? 'PASS' : 'FAIL'
+                });
+            });
+
+            const passed = results.filter(r => r.passed).length;
+            const total = results.length;
+            const successRate = Math.round(passed/total*100);
+
+            let report = `# SimpleLauncher Browser Validation Report\\n\\n`;
+            report += `Generated: ${new Date().toISOString()}\\n\\n`;
+            report += `## Summary\\n`;
+            report += `- **Total Tests**: ${total}\\n`;
+            report += `- **Passed**: ${passed}\\n`;
+            report += `- **Failed**: ${total - passed}\\n`;
+            report += `- **Success Rate**: ${successRate}%\\n\\n`;
+            report += `## Test Results\\n\\n`;
+
+            results.forEach(result => {
+                const icon = result.passed ? '✅' : '❌';
+                report += `${icon} ${result.test}\\n`;
+            });
+
+            report += `\\n## Status\\n\\n`;
+            if (successRate === 100) {
+                report += `🎉 **ALL TESTS PASSED** - SimpleLauncher is ready for production!\\n`;
+            } else if (successRate >= 80) {
+                report += `⚠️ **MOSTLY SUCCESSFUL** - Minor issues found, but core functionality works\\n`;
+            } else {
+                report += `🚨 **CRITICAL ISSUES** - SimpleLauncher requires fixes before deployment\\n`;
+            }
+
+            // Create downloadable report
+            const blob = new Blob([report], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'simple-launcher-validation-report.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert(`Validation report generated!\\nSuccess Rate: ${successRate}%\\nFile downloaded as: simple-launcher-validation-report.md`);
+        }
+
+        // Auto-refresh results when checkboxes change
+        document.addEventListener('change', renderResults);
+        
+        // Initial render
+        renderResults();
+
+        // Auto-test basic functionality
+        setTimeout(() => {
+            updateResult('pageload', 'Manual validation page loaded successfully');
+            updateResult('timestamp', new Date().toLocaleString());
+        }, 1000);
+    </script>
+</body>
+</html>

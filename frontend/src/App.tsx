@@ -48,7 +48,7 @@ import DebugPostsDisplay from './components/DebugPostsDisplay';
 import { PostingInterface } from './components/posting-interface';
 import MentionInputDemo from './components/MentionInputDemo';
 import { MentionDebugTest } from './components/MentionDebugTest';
-import './styles/agents.css';
+// import './styles/agents.css'; // Moved to _app.tsx
 import { 
   LayoutDashboard, 
   Activity, 

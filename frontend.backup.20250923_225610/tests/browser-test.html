@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browser Test - White Screen Check</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-frame { border: 2px solid #ccc; margin: 10px 0; }
+        .status { padding: 10px; background: #f0f0f0; margin: 10px 0; }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+    </style>
+</head>
+<body>
+    <h1>White Screen Detection Test</h1>
+    <div id="status" class="status">Loading test...</div>
+    
+    <h2>Test Frame:</h2>
+    <iframe id="test-frame" src="http://localhost:3001/" width="100%" height="500" class="test-frame"></iframe>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        const iframe = document.getElementById('test-frame');
+        let checkCount = 0;
+        const maxChecks = 10;
+        
+        function checkApp() {
+            checkCount++;
+            
+            try {
+                // Try to access iframe content (will fail with CORS but that's ok)
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const rootEl = iframeDoc.getElementById('root');
+                
+                if (rootEl && rootEl.children.length > 0) {
+                    statusDiv.innerHTML = '<span class="success">✅ App is rendering! Root has ' + 
+                                        rootEl.children.length + ' child elements.</span>';
+                    return true;
+                } else if (rootEl) {
+                    statusDiv.innerHTML = '<span class="warning">⚠️ Root element exists but is empty (white screen)</span>';
+                } else {
+                    statusDiv.innerHTML = '<span class="error">❌ No root element found</span>';
+                }
+            } catch (e) {
+                // CORS error expected when accessing cross-origin iframe
+                statusDiv.innerHTML = '<span class="warning">⚠️ Cannot access iframe due to CORS. ' +
+                                    'Open <a href="http://localhost:3001/" target="_blank">http://localhost:3001/</a> directly to test.</span>';
+                return false;
+            }
+            
+            // Keep checking for a bit
+            if (checkCount < maxChecks) {
+                setTimeout(checkApp, 1000);
+            } else {
+                statusDiv.innerHTML += '<br><span class="error">❌ App did not render after ' + maxChecks + ' seconds</span>';
+            }
+            
+            return false;
+        }
+        
+        // Start checking after iframe loads
+        iframe.onload = function() {
+            setTimeout(checkApp, 1000); // Give React time to render
+        };
+        
+        // Also provide a manual test instruction
+        setTimeout(() => {
+            const instructions = document.createElement('div');
+            instructions.innerHTML = `
+                <h2>Manual Verification Steps:</h2>
+                <ol>
+                    <li>Open <a href="http://localhost:3001/" target="_blank">http://localhost:3001/</a> in a new tab</li>
+                    <li>Press F12 to open Developer Tools</li>
+                    <li>Check the Console tab for JavaScript errors</li>
+                    <li>Check the Network tab to ensure all resources loaded</li>
+                    <li>In Elements/Inspector tab, expand the #root div to see if it has content</li>
+                </ol>
+                <h3>Expected Result:</h3>
+                <p>The #root element should contain React components, not be empty.</p>
+            `;
+            document.body.appendChild(instructions);
+        }, 2000);
+    </script>
+</body>
+</html>

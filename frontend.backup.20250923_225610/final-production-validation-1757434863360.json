@@ -1,0 +1,151 @@
+{
+  "timestamp": "2025-09-09T16:20:56.382Z",
+  "environment": {
+    "frontend": "http://localhost:5173",
+    "backend": "http://localhost:3000"
+  },
+  "tests": [
+    {
+      "category": "API Endpoints",
+      "results": [
+        {
+          "name": "Agents",
+          "path": "/api/agents",
+          "status": "PASS",
+          "responseTime": 44,
+          "statusCode": 200,
+          "hasRealData": false,
+          "dataSize": 5983
+        },
+        {
+          "name": "Activities",
+          "path": "/api/v1/activities",
+          "status": "PASS",
+          "responseTime": 9,
+          "statusCode": 200,
+          "hasRealData": false,
+          "dataSize": 6439
+        },
+        {
+          "name": "System Metrics",
+          "path": "/api/v1/metrics/system",
+          "status": "PASS",
+          "responseTime": 3,
+          "statusCode": 200,
+          "hasRealData": true,
+          "dataSize": 9941
+        },
+        {
+          "name": "Analytics",
+          "path": "/api/v1/analytics",
+          "status": "PASS",
+          "responseTime": 3,
+          "statusCode": 200,
+          "hasRealData": true,
+          "dataSize": 3211
+        },
+        {
+          "name": "Health",
+          "path": "/api/health",
+          "status": "PASS",
+          "responseTime": 3,
+          "statusCode": 200,
+          "hasRealData": true,
+          "dataSize": 195
+        }
+      ],
+      "summary": {
+        "total": 5,
+        "passed": 5,
+        "avgResponseTime": 12.4
+      }
+    },
+    {
+      "category": "Frontend Application",
+      "results": [
+        {
+          "name": "Application Load",
+          "status": "PASS",
+          "details": {
+            "loadTime": 1544
+          },
+          "metric": "1544ms"
+        },
+        {
+          "name": "React App Rendering",
+          "status": "PASS",
+          "details": {
+            "hasReactRoot": true,
+            "hasContent": true
+          }
+        },
+        {
+          "name": "Frontend Application",
+          "status": "FAIL",
+          "details": {
+            "error": "this.page.waitForTimeout is not a function"
+          }
+        }
+      ],
+      "summary": {
+        "total": 3,
+        "passed": 2
+      }
+    },
+    {
+      "category": "Real-time Features",
+      "results": [
+        {
+          "name": "WebSocket Connection",
+          "status": "PASS",
+          "details": {
+            "status": "connected",
+            "latency": 1757434862199
+          }
+        }
+      ],
+      "summary": {
+        "total": 1,
+        "passed": 1
+      }
+    },
+    {
+      "category": "Performance",
+      "results": [
+        {
+          "name": "Page Load Time",
+          "status": "PASS",
+          "value": 1158,
+          "unit": "ms",
+          "benchmark": "< 5000ms"
+        },
+        {
+          "name": "Memory Usage",
+          "status": "PASS",
+          "value": 20,
+          "unit": "MB",
+          "benchmark": "< 100MB"
+        }
+      ],
+      "summary": {
+        "total": 2,
+        "passed": 2
+      }
+    }
+  ],
+  "summary": {
+    "totalTests": 11,
+    "passedTests": 10,
+    "failedTests": 1,
+    "partialTests": 0,
+    "passRate": 91,
+    "productionReady": false,
+    "criticalIssues": 1,
+    "minorIssues": 0
+  },
+  "issues": [],
+  "recommendations": [
+    "⚠️ Review failed tests before production deployment",
+    "🔧 Fix critical failures in API endpoints or frontend components"
+  ]
+}

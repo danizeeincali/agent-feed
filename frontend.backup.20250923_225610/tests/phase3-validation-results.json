@@ -1,0 +1,276 @@
+Global setup complete
+Global teardown complete
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/frontend/playwright.config.ts",
+    "rootDir": "/workspaces/agent-feed/frontend/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/workspaces/agent-feed/frontend/src/tests/e2e/global-setup.ts",
+    "globalTeardown": "/workspaces/agent-feed/frontend/src/tests/e2e/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "test-type": "e2e-regression-prevention",
+      "project": "agent-feed",
+      "environment": "development"
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "core-features-chrome",
+        "name": "core-features-chrome",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/core-features",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "core-features-firefox",
+        "name": "core-features-firefox",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/core-features",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "core-features-webkit",
+        "name": "core-features-webkit",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/core-features",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "regression-chrome",
+        "name": "regression-chrome",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/regression",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "regression-firefox",
+        "name": "regression-firefox",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/regression",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "regression-webkit",
+        "name": "regression-webkit",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/regression",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/core-features",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "mobile-safari",
+        "name": "mobile-safari",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/core-features",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "integration",
+        "name": "integration",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/integration",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "visual",
+        "name": "visual",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "performance",
+        "name": "performance",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/performance",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "test-type": "e2e-regression-prevention",
+          "project": "agent-feed",
+          "environment": "development"
+        },
+        "id": "accessibility",
+        "name": "accessibility",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e/accessibility",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
+    }
+  ],
+  "stats": {
+    "startTime": "2025-09-10T04:27:27.381Z",
+    "duration": 6535.316000000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,7 +1,8 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import '../frontend/src/index.css';
-import '../styles/agents.css';
+import '../frontend/src/styles/agents.css';
+import '../frontend/src/styles/comments.css';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (

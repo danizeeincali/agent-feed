@@ -1,0 +1,1473 @@
+{
+  "timestamp": "2025-08-22T17:05:00.717Z",
+  "tests": [
+    {
+      "name": "Application Loads Without Errors",
+      "status": "passed",
+      "duration": 1533,
+      "timestamp": "2025-08-22T17:05:12.332Z"
+    },
+    {
+      "name": "Navigate to Dual Instance Route",
+      "status": "passed",
+      "duration": 2927,
+      "timestamp": "2025-08-22T17:05:15.259Z"
+    },
+    {
+      "name": "Launch Instance and Verify Creation",
+      "status": "failed",
+      "error": "locator.count: Unknown engine \"text*\" while parsing selector text*=success",
+      "duration": 3110,
+      "timestamp": "2025-08-22T17:05:18.370Z"
+    },
+    {
+      "name": "Navigate to Terminal and Verify SearchAddon",
+      "status": "failed",
+      "error": "locator.count: Unknown engine \"text*\" while parsing selector text*=Terminal >> nth=0",
+      "duration": 0,
+      "timestamp": "2025-08-22T17:05:18.371Z"
+    },
+    {
+      "name": "Test Search Functionality",
+      "status": "passed",
+      "duration": 2,
+      "timestamp": "2025-08-22T17:05:18.374Z"
+    },
+    {
+      "name": "Validate WebSocket Connections",
+      "status": "failed",
+      "error": "locator.count: Unknown engine \"text*\" while parsing selector text*=connect",
+      "duration": 1,
+      "timestamp": "2025-08-22T17:05:18.375Z"
+    }
+  ],
+  "errors": [
+    {
+      "test": "Launch Instance and Verify Creation",
+      "message": "locator.count: Unknown engine \"text*\" while parsing selector text*=success",
+      "stack": "locator.count: Unknown engine \"text*\" while parsing selector text*=success\n    at /workspaces/agent-feed/frontend/tests/production-validation-test.js:202:74\n    at async ProductionValidator.runTest (/workspaces/agent-feed/frontend/tests/production-validation-test.js:94:7)\n    at async ProductionValidator.validateInstanceLaunch (/workspaces/agent-feed/frontend/tests/production-validation-test.js:187:5)\n    at async runValidation (/workspaces/agent-feed/frontend/tests/production-validation-test.js:388:5)",
+      "timestamp": "2025-08-22T17:05:18.370Z"
+    },
+    {
+      "test": "Navigate to Terminal and Verify SearchAddon",
+      "message": "locator.count: Unknown engine \"text*\" while parsing selector text*=Terminal >> nth=0",
+      "stack": "locator.count: Unknown engine \"text*\" while parsing selector text*=Terminal >> nth=0\n    at /workspaces/agent-feed/frontend/tests/production-validation-test.js:215:30\n    at ProductionValidator.runTest (/workspaces/agent-feed/frontend/tests/production-validation-test.js:94:13)\n    at ProductionValidator.validateTerminalNavigation (/workspaces/agent-feed/frontend/tests/production-validation-test.js:211:16)\n    at runValidation (/workspaces/agent-feed/frontend/tests/production-validation-test.js:389:21)",
+      "timestamp": "2025-08-22T17:05:18.371Z"
+    },
+    {
+      "test": "Validate WebSocket Connections",
+      "message": "locator.count: Unknown engine \"text*\" while parsing selector text*=connect",
+      "stack": "locator.count: Unknown engine \"text*\" while parsing selector text*=connect\n    at /workspaces/agent-feed/frontend/tests/production-validation-test.js:295:76\n    at ProductionValidator.runTest (/workspaces/agent-feed/frontend/tests/production-validation-test.js:94:13)\n    at ProductionValidator.validateWebSocketConnections (/workspaces/agent-feed/frontend/tests/production-validation-test.js:278:16)\n    at runValidation (/workspaces/agent-feed/frontend/tests/production-validation-test.js:391:21)",
+      "timestamp": "2025-08-22T17:05:18.375Z"
+    }
+  ],
+  "console_logs": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://localhost:3001/@vite/client",
+        "lineNumber": 228,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:10.973Z"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://localhost:3001/@vite/client",
+        "lineNumber": 324,
+        "columnNumber": 20
+      },
+      "timestamp": "2025-08-22T17:05:11.026Z"
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/chunk-WALXKXZM.js?v=1c4d7abd",
+        "lineNumber": 21579,
+        "columnNumber": 24
+      },
+      "timestamp": "2025-08-22T17:05:11.470Z"
+    },
+    {
+      "type": "log",
+      "text": "🎭 Mock API service initialized - intercepting API calls",
+      "location": {
+        "url": "http://localhost:3001/src/services/mockApiService.ts",
+        "lineNumber": 212,
+        "columnNumber": 10
+      },
+      "timestamp": "2025-08-22T17:05:11.548Z"
+    },
+    {
+      "type": "warning",
+      "text": "⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/react-router-dom.js?v=1c4d7abd",
+        "lineNumber": 4408,
+        "columnNumber": 12
+      },
+      "timestamp": "2025-08-22T17:05:11.637Z"
+    },
+    {
+      "type": "warning",
+      "text": "⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/react-router-dom.js?v=1c4d7abd",
+        "lineNumber": 4408,
+        "columnNumber": 12
+      },
+      "timestamp": "2025-08-22T17:05:11.637Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2zqnh8gg",
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:11.644Z"
+    },
+    {
+      "type": "log",
+      "text": "💡 WebSocket Debug Helper Loaded!",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 81,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:11.647Z"
+    },
+    {
+      "type": "log",
+      "text": "💡 Run: testWebSocket() to test connections",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 82,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:11.647Z"
+    },
+    {
+      "type": "log",
+      "text": "💡 Or visit: http://localhost:3002/health to check hub status",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 83,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:11.647Z"
+    },
+    {
+      "type": "log",
+      "text": "🔧 WebSocket Debug Helper loaded in development mode",
+      "location": {
+        "url": "http://localhost:3001/src/main.tsx?t=1755881449220",
+        "lineNumber": 7,
+        "columnNumber": 12
+      },
+      "timestamp": "2025-08-22T17:05:11.648Z"
+    },
+    {
+      "type": "error",
+      "text": "🔌 WebSocketSingletonProvider: Connection error: TransportError: xhr poll error\n    at XHR.onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:497:33)\n    at _Request.<anonymous> (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:780:12)\n    at Emitter.emit (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:356:20)\n    at _Request._onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:878:10)\n    at http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:856:18",
+      "location": {
+        "url": "http://localhost:3001/src/context/WebSocketSingletonContext.tsx",
+        "lineNumber": 144,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:11.650Z"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "location": {
+        "url": "http://localhost:3001/@vite/client",
+        "lineNumber": 228,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:12.380Z"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "location": {
+        "url": "http://localhost:3001/@vite/client",
+        "lineNumber": 324,
+        "columnNumber": 20
+      },
+      "timestamp": "2025-08-22T17:05:12.407Z"
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/chunk-WALXKXZM.js?v=1c4d7abd",
+        "lineNumber": 21579,
+        "columnNumber": 24
+      },
+      "timestamp": "2025-08-22T17:05:12.523Z"
+    },
+    {
+      "type": "log",
+      "text": "🎭 Mock API service initialized - intercepting API calls",
+      "location": {
+        "url": "http://localhost:3001/src/services/mockApiService.ts",
+        "lineNumber": 212,
+        "columnNumber": 10
+      },
+      "timestamp": "2025-08-22T17:05:12.548Z"
+    },
+    {
+      "type": "log",
+      "text": "No instanceId provided for terminal",
+      "location": {
+        "url": "http://localhost:3001/src/pages/DualInstancePage.tsx?t=1755877917575",
+        "lineNumber": 90,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:12.579Z"
+    },
+    {
+      "type": "log",
+      "text": "No instanceId provided for terminal",
+      "location": {
+        "url": "http://localhost:3001/src/pages/DualInstancePage.tsx?t=1755877917575",
+        "lineNumber": 90,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:12.583Z"
+    },
+    {
+      "type": "warning",
+      "text": "⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/react-router-dom.js?v=1c4d7abd",
+        "lineNumber": 4408,
+        "columnNumber": 12
+      },
+      "timestamp": "2025-08-22T17:05:12.636Z"
+    },
+    {
+      "type": "warning",
+      "text": "⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/react-router-dom.js?v=1c4d7abd",
+        "lineNumber": 4408,
+        "columnNumber": 12
+      },
+      "timestamp": "2025-08-22T17:05:12.636Z"
+    },
+    {
+      "type": "warning",
+      "text": "WebSocket connection to 'ws://localhost:3000/socket.io/?EIO=4&transport=websocket' failed: WebSocket is closed before the connection is established.",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd",
+        "lineNumber": 1036,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:12.636Z"
+    },
+    {
+      "type": "warning",
+      "text": "WebSocket connection to 'ws://localhost:3000/socket.io/?EIO=4&transport=websocket' failed: WebSocket is closed before the connection is established.",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd",
+        "lineNumber": 1036,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:12.638Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2zrevdr0",
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:12.639Z"
+    },
+    {
+      "type": "log",
+      "text": "💡 WebSocket Debug Helper Loaded!",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 81,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:12.650Z"
+    },
+    {
+      "type": "log",
+      "text": "💡 Run: testWebSocket() to test connections",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 82,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:12.653Z"
+    },
+    {
+      "type": "log",
+      "text": "💡 Or visit: http://localhost:3002/health to check hub status",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 83,
+        "columnNumber": 8
+      },
+      "timestamp": "2025-08-22T17:05:12.653Z"
+    },
+    {
+      "type": "log",
+      "text": "🔧 WebSocket Debug Helper loaded in development mode",
+      "location": {
+        "url": "http://localhost:3001/src/main.tsx?t=1755881449220",
+        "lineNumber": 7,
+        "columnNumber": 12
+      },
+      "timestamp": "2025-08-22T17:05:12.654Z"
+    },
+    {
+      "type": "error",
+      "text": "🔌 WebSocketSingletonProvider: Connection error: TransportError: xhr poll error\n    at XHR.onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:497:33)\n    at _Request.<anonymous> (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:780:12)\n    at Emitter.emit (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:356:20)\n    at _Request._onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:878:10)\n    at http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:856:18",
+      "location": {
+        "url": "http://localhost:3001/src/context/WebSocketSingletonContext.tsx",
+        "lineNumber": 144,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:12.657Z"
+    },
+    {
+      "type": "log",
+      "text": "Instance manager connected to WebSocket",
+      "location": {
+        "url": "http://localhost:3001/src/hooks/useInstanceManager.ts?t=1755877917575",
+        "lineNumber": 20,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:12.677Z"
+    },
+    {
+      "type": "log",
+      "text": "Instance manager connected to WebSocket",
+      "location": {
+        "url": "http://localhost:3001/src/hooks/useInstanceManager.ts?t=1755877917575",
+        "lineNumber": 20,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:12.681Z"
+    },
+    {
+      "type": "log",
+      "text": "No instanceId provided for terminal",
+      "location": {
+        "url": "http://localhost:3001/src/pages/DualInstancePage.tsx?t=1755877917575",
+        "lineNumber": 90,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:12.711Z"
+    },
+    {
+      "type": "log",
+      "text": "No instanceId provided for terminal",
+      "location": {
+        "url": "http://localhost:3001/src/pages/DualInstancePage.tsx?t=1755877917575",
+        "lineNumber": 90,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:12.711Z"
+    },
+    {
+      "type": "log",
+      "text": "\n🚀 Auto-running WebSocket test...",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 87,
+        "columnNumber": 10
+      },
+      "timestamp": "2025-08-22T17:05:13.649Z"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Testing WebSocket Connection from Frontend...",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 6,
+        "columnNumber": 10
+      },
+      "timestamp": "2025-08-22T17:05:13.649Z"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:3003/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd",
+        "lineNumber": 1060,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:13.715Z"
+    },
+    {
+      "type": "error",
+      "text": "🔌 WebSocketSingletonProvider: Connection error: TransportError: websocket error\n    at WS.onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:497:33)\n    at ws.onerror (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:1012:35)",
+      "location": {
+        "url": "http://localhost:3001/src/context/WebSocketSingletonContext.tsx",
+        "lineNumber": 144,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:13.716Z"
+    },
+    {
+      "type": "log",
+      "text": "📦 Socket.IO loaded, retrying connection...",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 13,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:13.963Z"
+    },
+    {
+      "type": "log",
+      "text": "🧪 Testing multiple WebSocket URLs...",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 33,
+        "columnNumber": 10
+      },
+      "timestamp": "2025-08-22T17:05:14.965Z"
+    },
+    {
+      "type": "log",
+      "text": "\n📡 Attempting connection to: http://localhost:3002",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 37,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:14.965Z"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:3002/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "https://cdn.socket.io/4.7.4/socket.io.min.js",
+        "lineNumber": 5,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:14.968Z"
+    },
+    {
+      "type": "log",
+      "text": "❌ Failed to connect to http://localhost:3002: websocket error",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 69,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:14.970Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2ztrtnl9",
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:15.651Z"
+    },
+    {
+      "type": "error",
+      "text": "🔌 WebSocketSingletonProvider: Connection error: TransportError: xhr poll error\n    at XHR.onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:497:33)\n    at _Request.<anonymous> (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:780:12)\n    at Emitter.emit (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:356:20)\n    at _Request._onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:878:10)\n    at http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:856:18",
+      "location": {
+        "url": "http://localhost:3001/src/context/WebSocketSingletonContext.tsx",
+        "lineNumber": 144,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:15.653Z"
+    },
+    {
+      "type": "log",
+      "text": "\n📡 Attempting connection to: http://localhost:3003",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 37,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:15.968Z"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:3003/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "https://cdn.socket.io/4.7.4/socket.io.min.js",
+        "lineNumber": 5,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:15.971Z"
+    },
+    {
+      "type": "log",
+      "text": "❌ Failed to connect to http://localhost:3003: websocket error",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 69,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:15.971Z"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:3002/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "https://cdn.socket.io/4.7.4/socket.io.min.js",
+        "lineNumber": 5,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:16.229Z"
+    },
+    {
+      "type": "log",
+      "text": "❌ Failed to connect to http://localhost:3002: websocket error",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 69,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:16.229Z"
+    },
+    {
+      "type": "log",
+      "text": "\n📡 Attempting connection to: http://localhost:3001",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 37,
+        "columnNumber": 14
+      },
+      "timestamp": "2025-08-22T17:05:16.965Z"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:3003/socket.io/?EIO=4&transport=websocket' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "https://cdn.socket.io/4.7.4/socket.io.min.js",
+        "lineNumber": 5,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:17.062Z"
+    },
+    {
+      "type": "log",
+      "text": "❌ Failed to connect to http://localhost:3003: websocket error",
+      "location": {
+        "url": "http://localhost:3001/src/websocket-debug.js",
+        "lineNumber": 69,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:17.063Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "location": {
+        "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2zvopopz",
+        "lineNumber": 0,
+        "columnNumber": 0
+      },
+      "timestamp": "2025-08-22T17:05:18.126Z"
+    },
+    {
+      "type": "error",
+      "text": "🔌 WebSocketSingletonProvider: Connection error: TransportError: xhr poll error\n    at XHR.onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:497:33)\n    at _Request.<anonymous> (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:780:12)\n    at Emitter.emit (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:356:20)\n    at _Request._onError (http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:878:10)\n    at http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd:856:18",
+      "location": {
+        "url": "http://localhost:3001/src/context/WebSocketSingletonContext.tsx",
+        "lineNumber": 144,
+        "columnNumber": 16
+      },
+      "timestamp": "2025-08-22T17:05:18.126Z"
+    }
+  ],
+  "network_requests": [
+    {
+      "url": "http://localhost:3001/",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.810Z"
+    },
+    {
+      "url": "http://localhost:3001/@vite/client",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.920Z"
+    },
+    {
+      "url": "http://localhost:3001/src/main.tsx?t=1755881449220",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.921Z"
+    },
+    {
+      "url": "http://localhost:3001/@react-refresh",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.930Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/vite/dist/client/env.mjs",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.930Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.934Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.934Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react-dom_client.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.934Z"
+    },
+    {
+      "url": "http://localhost:3001/src/App.tsx?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.935Z"
+    },
+    {
+      "url": "http://localhost:3001/src/index.css?t=1755881449220",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.937Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/mockApiService.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.937Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/chunk-WQMOH32Y.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.998Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/chunk-5WWUZCGV.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.998Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/chunk-WALXKXZM.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:10.998Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react-router-dom.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.003Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/@tanstack_react-query.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.003Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ErrorBoundary.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/FallbackComponents.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/RealTimeNotifications.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SocialMediaFeed.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleAgentManager.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/EnhancedAgentManagerWrapper.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleAnalytics.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/BulletproofClaudeCodePanel.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/AgentDashboard.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/WorkflowVisualizationFixed.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/BulletproofAgentProfile.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/BulletproofActivityPanel.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleSettings.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/DualInstanceDashboardEnhanced.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/pages/DualInstancePage.tsx?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/PerformanceMonitor.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/context/WebSocketSingletonContext.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/styles/agents.css",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/lucide-react.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/cn.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ConnectionStatus.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.004Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react-error-boundary.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.062Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/errorHandling.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.064Z"
+    },
+    {
+      "url": "http://localhost:3001/src/context/WebSocketContext.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.098Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/PostCreator.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.098Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/TypingIndicator.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.098Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/LiveActivityIndicator.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.103Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/EnhancedAgentManager.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.104Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/nld-logger.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.105Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleErrorBoundary.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.115Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/safetyUtils.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.139Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useWebSocket.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.177Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/WebSocketDebugPanel.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.185Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ErrorTesting.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.185Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/DualInstanceMonitor.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.185Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useWebSocketSingleton.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.188Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/InstanceLauncher.tsx?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.189Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/TerminalView.tsx?t=1755879303844",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.189Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useInstanceManager.ts?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.189Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/card.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.189Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/badge.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.189Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/button.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.189Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/tabs.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.190Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useDualInstanceMonitoring.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.190Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/sonner.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.191Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/clsx.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.191Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/tailwind-merge.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.191Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/LoadingSpinner.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.200Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/EmojiPicker.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.200Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useKeyboardShortcuts.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.200Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.201Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useConnectionManager.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.217Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useNotification.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.267Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.272Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm-addon-fit.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.273Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm-addon-web-links.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.273Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm-addon-search.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.273Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/xterm/css/xterm.css",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.273Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useTerminalSocket.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.273Z"
+    },
+    {
+      "url": "http://localhost:3001/src/lib/utils.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.286Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/uuid.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.286Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/types.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.332Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/connection-manager.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.332Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/strategies.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/health-monitor.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/metrics-tracker.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/websocket-debug.js",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.543Z"
+    },
+    {
+      "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2zqnh8gg",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:11.600Z"
+    },
+    {
+      "url": "http://localhost:3001/dual-instance",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.337Z"
+    },
+    {
+      "url": "http://localhost:3001/@vite/client",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.362Z"
+    },
+    {
+      "url": "http://localhost:3001/src/main.tsx?t=1755881449220",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.363Z"
+    },
+    {
+      "url": "http://localhost:3001/@react-refresh",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.365Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/vite/dist/client/env.mjs",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.367Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.370Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.370Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react-dom_client.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.370Z"
+    },
+    {
+      "url": "http://localhost:3001/src/App.tsx?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.371Z"
+    },
+    {
+      "url": "http://localhost:3001/src/index.css?t=1755881449220",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.371Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/mockApiService.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.371Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/chunk-WQMOH32Y.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.377Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/chunk-5WWUZCGV.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.378Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/chunk-WALXKXZM.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.379Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react-router-dom.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.397Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/@tanstack_react-query.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.398Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ErrorBoundary.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.398Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/FallbackComponents.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.398Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/RealTimeNotifications.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.398Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SocialMediaFeed.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.398Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleAgentManager.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.398Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/EnhancedAgentManagerWrapper.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleAnalytics.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/BulletproofClaudeCodePanel.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/AgentDashboard.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/WorkflowVisualizationFixed.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/BulletproofAgentProfile.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/BulletproofActivityPanel.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.399Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleSettings.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.403Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/DualInstanceDashboardEnhanced.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.403Z"
+    },
+    {
+      "url": "http://localhost:3001/src/pages/DualInstancePage.tsx?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.403Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/PerformanceMonitor.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.403Z"
+    },
+    {
+      "url": "http://localhost:3001/src/context/WebSocketSingletonContext.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.403Z"
+    },
+    {
+      "url": "http://localhost:3001/src/styles/agents.css",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.403Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/lucide-react.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.403Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/cn.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.404Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ConnectionStatus.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.404Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/react-error-boundary.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.413Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/errorHandling.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.413Z"
+    },
+    {
+      "url": "http://localhost:3001/src/context/WebSocketContext.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.431Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/PostCreator.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.431Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/TypingIndicator.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.431Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/LiveActivityIndicator.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.431Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/EnhancedAgentManager.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.431Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/nld-logger.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.431Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/SimpleErrorBoundary.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.431Z"
+    },
+    {
+      "url": "http://localhost:3001/src/utils/safetyUtils.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.437Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useWebSocket.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.438Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/card.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.440Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/badge.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.440Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/button.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.440Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ui/tabs.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.440Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useDualInstanceMonitoring.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.440Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/sonner.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.440Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/InstanceLauncher.tsx?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.440Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/DualInstanceMonitor.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.451Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/TerminalView.tsx?t=1755879303844",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.451Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useInstanceManager.ts?t=1755877917575",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.452Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/WebSocketDebugPanel.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.452Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/ErrorTesting.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.452Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useWebSocketSingleton.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.452Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/clsx.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.452Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/tailwind-merge.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.452Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/EmojiPicker.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.465Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useKeyboardShortcuts.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.465Z"
+    },
+    {
+      "url": "http://localhost:3001/src/components/LoadingSpinner.tsx",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.481Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/socket__io-client.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.499Z"
+    },
+    {
+      "url": "http://localhost:3001/src/lib/utils.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.500Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useNotification.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.506Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.506Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm-addon-fit.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.506Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm-addon-web-links.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.507Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/xterm-addon-search.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.510Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/xterm/css/xterm.css",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.510Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useTerminalSocket.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.511Z"
+    },
+    {
+      "url": "http://localhost:3001/node_modules/.vite/deps/uuid.js?v=1c4d7abd",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.511Z"
+    },
+    {
+      "url": "http://localhost:3001/src/hooks/useConnectionManager.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.514Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/types.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.517Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/connection-manager.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.517Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/strategies.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.519Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/health-monitor.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.519Z"
+    },
+    {
+      "url": "http://localhost:3001/src/services/connection/metrics-tracker.ts",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.519Z"
+    },
+    {
+      "url": "http://localhost:3001/src/websocket-debug.js",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.548Z"
+    },
+    {
+      "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2zrevdr0",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:12.585Z"
+    },
+    {
+      "url": "https://cdn.socket.io/4.7.4/socket.io.min.js",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:13.649Z"
+    },
+    {
+      "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2ztrtnl9",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:15.646Z"
+    },
+    {
+      "url": "http://localhost:3003/socket.io/?EIO=4&transport=polling&t=2zvopopz",
+      "method": "GET",
+      "timestamp": "2025-08-22T17:05:18.124Z"
+    }
+  ],
+  "performance_metrics": {
+    "initial_load_time": 1532
+  },
+  "overall_status": "partial_failure",
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 3,
+    "failed_tests": 3,
+    "total_errors": 3,
+    "searchaddon_errors": 0,
+    "performance": {
+      "load_time": 1532,
+      "total_requests": 171,
+      "console_logs": 53
+    }
+  },
+  "production_ready": false,
+  "recommendations": [
+    "⚠️ High error rate detected - review error logs"
+  ]
+}

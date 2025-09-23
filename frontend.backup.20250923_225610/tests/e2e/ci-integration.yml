@@ -1,0 +1,376 @@
+name: E2E Regression Prevention Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  e2e-regression-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]  # Run tests in parallel across 4 shards
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps
+      
+    - name: Build application
+      working-directory: ./frontend
+      run: npm run build
+      
+    - name: Start dev server
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        sleep 10  # Wait for server to start
+        
+    - name: Run E2E Regression Tests
+      working-directory: ./frontend
+      run: npx playwright test --shard=${{ matrix.shard }}/4
+      env:
+        CI: true
+        
+    - name: Upload Playwright Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report-shard-${{ matrix.shard }}
+        path: frontend/playwright-report/
+        retention-days: 30
+        
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-shard-${{ matrix.shard }}
+        path: frontend/test-results/
+        retention-days: 30
+
+  cross-browser-tests:
+    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    strategy:
+      matrix:
+        project: [chromium, firefox, webkit]
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps ${{ matrix.project }}
+      
+    - name: Build application
+      working-directory: ./frontend
+      run: npm run build
+      
+    - name: Start dev server
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        sleep 10
+        
+    - name: Run Cross-Browser Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=${{ matrix.project }} tests/e2e/regression/
+      env:
+        CI: true
+
+  visual-regression-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps chromium
+      
+    - name: Build application
+      working-directory: ./frontend
+      run: npm run build
+      
+    - name: Start dev server
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        sleep 10
+        
+    - name: Run Visual Regression Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=visual
+      env:
+        CI: true
+        
+    - name: Upload Visual Diff Screenshots
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: visual-diff-screenshots
+        path: frontend/test-results/**/diff-*.png
+        retention-days: 7
+
+  performance-tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps chromium
+      
+    - name: Build application
+      working-directory: ./frontend
+      run: npm run build
+      
+    - name: Start production server
+      working-directory: ./frontend
+      run: |
+        npm run preview &
+        sleep 10
+        
+    - name: Run Performance Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=performance
+      env:
+        CI: true
+        
+    - name: Upload Performance Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: performance-report
+        path: frontend/test-results/performance-baseline.json
+        retention-days: 30
+
+  accessibility-tests:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps chromium
+      
+    - name: Build application
+      working-directory: ./frontend
+      run: npm run build
+      
+    - name: Start dev server
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        sleep 10
+        
+    - name: Run Accessibility Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=accessibility
+      env:
+        CI: true
+        
+    - name: Upload Accessibility Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: accessibility-report
+        path: frontend/playwright-report/
+        retention-days: 30
+
+  mobile-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    strategy:
+      matrix:
+        device: ['Mobile Chrome', 'Mobile Safari']
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps
+      
+    - name: Build application
+      working-directory: ./frontend
+      run: npm run build
+      
+    - name: Start dev server
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        sleep 10
+        
+    - name: Run Mobile Tests
+      working-directory: ./frontend
+      run: npx playwright test --project="${{ matrix.device }}" tests/e2e/regression/
+      env:
+        CI: true
+
+  integration-tests:
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      working-directory: ./frontend
+      run: npx playwright install --with-deps chromium
+      
+    - name: Start backend services (if needed)
+      run: |
+        # Add backend startup commands if needed
+        echo "Backend services would start here"
+        
+    - name: Build application
+      working-directory: ./frontend
+      run: npm run build
+      
+    - name: Start dev server
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        sleep 10
+        
+    - name: Run Integration Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=integration
+      env:
+        CI: true
+
+  merge-reports:
+    # Merge all reports after sharded tests complete
+    if: always()
+    needs: [e2e-regression-tests]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install Playwright
+      run: npm install -g @playwright/test
+      
+    - name: Download all reports
+      uses: actions/download-artifact@v4
+      with:
+        pattern: playwright-report-shard-*
+        path: all-reports/
+        merge-multiple: true
+        
+    - name: Merge reports
+      run: npx playwright merge-reports --reporter html ./all-reports
+      
+    - name: Upload merged report
+      uses: actions/upload-artifact@v4
+      with:
+        name: merged-playwright-report
+        path: playwright-report/
+        retention-days: 30
+
+  notify-on-failure:
+    if: failure()
+    needs: [e2e-regression-tests, cross-browser-tests, visual-regression-tests]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Notify team of test failures
+      run: |
+        echo "E2E tests failed! Check the artifacts for details."
+        # Add Slack/Teams notification here if needed

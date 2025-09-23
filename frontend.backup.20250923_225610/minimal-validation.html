@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>React App Test</title>
+</head>
+<body>
+    <h1>Testing React App</h1>
+    <iframe src="http://localhost:5173/" width="800" height="600" onload="console.log('App loaded')"></iframe>
+    
+    <script>
+        // Simple validation script
+        setTimeout(() => {
+            const iframe = document.querySelector('iframe');
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const hasReactRoot = iframeDoc.getElementById('root');
+                const hasScriptTag = iframeDoc.querySelector('script[src*="main.tsx"]');
+                
+                console.log('React root element exists:', !!hasReactRoot);
+                console.log('Main React script exists:', !!hasScriptTag);
+                
+                if (hasReactRoot && hasScriptTag) {
+                    document.body.innerHTML += '<p style="color: green;">✅ React app structure is valid</p>';
+                } else {
+                    document.body.innerHTML += '<p style="color: red;">❌ React app structure issue</p>';
+                }
+            } catch (e) {
+                document.body.innerHTML += '<p style="color: orange;">⚠️ Cross-origin access restricted (normal for dev server)</p>';
+                console.log('Cross-origin restriction (normal):', e.message);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

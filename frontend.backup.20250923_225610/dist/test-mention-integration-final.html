@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ MENTION SYSTEM INTEGRATION TEST</title>
+    <style>
+        body {
+            font-family: 'Monaco', 'Consolas', monospace;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: #2c3e50;
+        }
+        .test-header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .integration-panel {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+        .status-warning { background: #ffc107; }
+        .status-info { background: #007bff; }
+        
+        .test-instruction {
+            background: #e7f3ff;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .success-msg {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>✅ MENTION SYSTEM INTEGRATION TEST</h1>
+        <h2>Post-Fix Validation Suite</h2>
+        <p><strong>STATUS:</strong> Testing MentionInputRef interface fix</p>
+        <div id="overall-status">
+            <span class="status-indicator status-info"></span>
+            Ready to test @ mention functionality
+        </div>
+    </div>
+
+    <div class="integration-panel">
+        <h3>🎯 TEST INSTRUCTIONS</h3>
+        <div class="test-instruction">
+            1. Open the main application: <a href="http://localhost:5173" target="_blank">http://localhost:5173</a><br>
+            2. Navigate to the PostCreator component<br>
+            3. Click in the content textarea<br>
+            4. Type the @ symbol<br>
+            5. Check if the mention dropdown appears<br>
+            6. Try selecting an agent from the dropdown<br>
+            7. Verify the mention is inserted correctly
+        </div>
+        
+        <div class="integration-panel">
+            <h4>Expected Behavior After Fix:</h4>
+            <ul>
+                <li><span class="status-indicator status-success"></span>Typing @ should trigger the mention dropdown</li>
+                <li><span class="status-indicator status-success"></span>Dropdown should show available agents</li>
+                <li><span class="status-indicator status-success"></span>Clicking an agent should insert @agent-name into text</li>
+                <li><span class="status-indicator status-success"></span>Cursor should be positioned after the inserted mention</li>
+                <li><span class="status-indicator status-success"></span>No console errors should occur</li>
+            </ul>
+        </div>
+        
+        <div class="integration-panel">
+            <h4>What Was Fixed:</h4>
+            <div class="success-msg">
+                ✅ <strong>CRITICAL FIX APPLIED:</strong> MentionInputRef interface mismatch resolved<br>
+                • Added missing selectionStart and selectionEnd properties to MentionInputRef<br>
+                • Added setSelectionRange method to MentionInputRef<br>
+                • Fixed PostCreator's insertFormatting function compatibility<br>
+                • Exposed textarea properties through forwardRef properly
+            </div>
+        </div>
+        
+        <div class="integration-panel">
+            <h4>Components to Test:</h4>
+            <ul>
+                <li><strong>PostCreator:</strong> Main content textarea with @ mention support</li>
+                <li><strong>CommentForm:</strong> Comment input with @ mention support</li>
+                <li><strong>QuickPost:</strong> (If available) Quick posting with mentions</li>
+            </ul>
+        </div>
+        
+        <div class="integration-panel">
+            <h4>🔍 Debugging Information:</h4>
+            <p>If mentions still don't work, check the browser console for:</p>
+            <ul>
+                <li>MentionService initialization logs</li>
+                <li>findMentionQuery debug messages</li>
+                <li>updateMentionState function calls</li>
+                <li>Dropdown rendering messages</li>
+                <li>Any remaining TypeScript errors</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="integration-panel">
+        <h3>✅ SUCCESS CRITERIA</h3>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+            <h4>The mention system is working if:</h4>
+            <ol>
+                <li>User types @ in any supported component</li>
+                <li>A dropdown with agent suggestions appears immediately</li>
+                <li>User can navigate suggestions with arrow keys</li>
+                <li>User can click or press Enter to select an agent</li>
+                <li>The mention @agent-name is inserted into the text</li>
+                <li>The cursor is positioned correctly after the mention</li>
+                <li>No errors appear in the browser console</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        console.log('✅ MENTION SYSTEM INTEGRATION TEST LOADED');
+        console.log('🔧 MentionInputRef interface fix has been applied');
+        console.log('🎯 Please test @ mentions in the main application at http://localhost:5173');
+        
+        // Auto-open main application
+        setTimeout(() => {
+            const mainApp = window.open('http://localhost:5173', '_blank');
+            if (mainApp) {
+                console.log('🚀 Main application opened in new tab');
+            } else {
+                console.log('⚠️ Please manually open http://localhost:5173 to test');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

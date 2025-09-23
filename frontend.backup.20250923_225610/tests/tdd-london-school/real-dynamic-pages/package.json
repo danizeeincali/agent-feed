@@ -1,0 +1,93 @@
+{
+  "name": "london-school-tdd-real-dynamic-pages",
+  "version": "1.0.0",
+  "description": "London School TDD test suite for dynamic pages with real API integration",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:api": "jest --testPathPattern=api-integration",
+    "test:components": "jest --testPathPattern=component-behavior", 
+    "test:errors": "jest --testPathPattern=error-handling",
+    "test:performance": "jest --testPathPattern=performance",
+    "test:e2e": "playwright test",
+    "test:all": "./scripts/run-tests.sh",
+    "test:ci": "./scripts/run-tests.sh",
+    "reports:open": "open reports/london-school-test-report.html",
+    "coverage:open": "open reports/coverage/lcov-report/index.html",
+    "playwright:install": "playwright install --with-deps",
+    "validate:no-mocks": "! find . -name '*.test.*' -exec grep -l 'mock\\|stub\\|fake' {} \\; | head -1"
+  },
+  "keywords": [
+    "london-school-tdd",
+    "real-api-testing", 
+    "no-mocks",
+    "integration-testing",
+    "behavior-driven",
+    "collaboration-testing"
+  ],
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^13.4.0", 
+    "@testing-library/user-event": "^14.6.1",
+    "@playwright/test": "^1.55.0",
+    "@tanstack/react-query": "^5.85.5",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-html-reporters": "^3.1.5",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/test-setup.ts"],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/../../src/$1"
+    },
+    "testMatch": [
+      "<rootDir>/**/*.test.{ts,tsx}"
+    ],
+    "collectCoverageFrom": [
+      "../../src/components/DynamicAgentPageRenderer.tsx",
+      "../../src/services/api.ts",
+      "!**/*.d.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 85,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "testTimeout": 30000,
+    "reporters": [
+      "default",
+      ["jest-html-reporters", {
+        "publicPath": "./reports",
+        "filename": "london-school-test-report.html",
+        "pageTitle": "London School TDD - Real Dynamic Pages Tests"
+      }]
+    ]
+  },
+  "author": "London School TDD Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/agent-feed.git",
+    "directory": "frontend/tests/tdd-london-school/real-dynamic-pages"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/agent-feed/issues"
+  },
+  "homepage": "https://github.com/your-org/agent-feed#readme"
+}

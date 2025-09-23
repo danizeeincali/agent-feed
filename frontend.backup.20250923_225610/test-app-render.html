@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App Render Test</title>
+</head>
+<body>
+    <h1>Testing App Render Status</h1>
+    <div id="status"></div>
+    <iframe id="app-frame" src="http://localhost:3001/" width="100%" height="600" style="border: 1px solid #ccc;"></iframe>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        const iframe = document.getElementById('app-frame');
+        
+        // Check iframe load
+        iframe.onload = function() {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const rootElement = iframeDoc.getElementById('root');
+                
+                if (rootElement && rootElement.children.length > 0) {
+                    statusDiv.innerHTML = '<p style="color: green;">✅ App is rendering! Root element has ' + rootElement.children.length + ' children.</p>';
+                    
+                    // Check for React app
+                    const hasReactApp = rootElement.innerHTML.includes('class=') || rootElement.innerHTML.includes('data-');
+                    if (hasReactApp) {
+                        statusDiv.innerHTML += '<p style="color: green;">✅ React app detected!</p>';
+                    }
+                } else {
+                    statusDiv.innerHTML = '<p style="color: red;">❌ App not rendering - root element is empty</p>';
+                }
+            } catch (e) {
+                statusDiv.innerHTML = '<p style="color: orange;">⚠️ Cannot access iframe content (CORS) - open http://localhost:3001/ directly</p>';
+            }
+        };
+        
+        iframe.onerror = function() {
+            statusDiv.innerHTML = '<p style="color: red;">❌ Failed to load app</p>';
+        };
+    </script>
+</body>
+</html>

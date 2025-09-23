@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Live Suggestion Debug</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-panel {
+            background: white;
+            border: 2px solid #dc3545;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .emergency-header {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .test-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #007bff;
+            border-radius: 4px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .results {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .warning { background: #fff3cd; border-color: #ffeaa7; }
+        .button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .critical-button {
+            background: #dc3545;
+        }
+        .critical-button:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="emergency-header">
+        🚨 EMERGENCY LIVE SUGGESTION LOADING VALIDATION 🚨
+    </div>
+
+    <div class="debug-panel">
+        <h2>CRITICAL FAILURE: "Suggestions: 0" Bug Reproduction</h2>
+        
+        <div class="test-section">
+            <h3>Test 1: Direct @ Input Testing</h3>
+            <input type="text" class="test-input" id="mentionInput" placeholder="Type @ to trigger suggestions">
+            <div class="results" id="inputResults">Waiting for input...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 2: Direct MentionService Method Testing</h3>
+            <button class="button" onclick="testGetAllAgents()">Test getAllAgents()</button>
+            <button class="button" onclick="testSearchMentions()">Test searchMentions('')</button>
+            <button class="button" onclick="testQuickMentions()">Test getQuickMentions('post')</button>
+            <div class="results" id="serviceResults">Click buttons to test MentionService methods...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 3: Suggestion Loading Pipeline Debug</h3>
+            <button class="button critical-button" onclick="debugSuggestionPipeline()">Debug Full Pipeline</button>
+            <div class="results" id="pipelineResults">Click to start pipeline debug...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 4: Live Console Monitor</h3>
+            <button class="button" onclick="startConsoleMonitor()">Start Monitoring</button>
+            <button class="button" onclick="stopConsoleMonitor()">Stop Monitoring</button>
+            <div class="results" id="consoleResults">Console monitor inactive...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 5: Network Request Analysis</h3>
+            <button class="button" onclick="analyzeNetworkRequests()">Analyze Requests</button>
+            <div class="results" id="networkResults">Click to analyze network activity...</div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let consoleMonitor = null;
+        let originalConsoleLog = console.log;
+        let originalConsoleError = console.error;
+        let originalConsoleWarn = console.warn;
+        let consoleLogs = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupMentionInputTest();
+            exposeMentionServiceForTesting();
+        });
+
+        function setupMentionInputTest() {
+            const input = document.getElementById('mentionInput');
+            const results = document.getElementById('inputResults');
+            
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                results.innerHTML = `Input value: "${value}"\nTesting suggestion loading...\n`;
+                
+                // Simulate mention detection
+                if (value.includes('@')) {
+                    setTimeout(() => {
+                        // Try to access suggestion system
+                        testSuggestionTrigger(value, results);
+                    }, 500);
+                }
+            });
+        }
+
+        async function testSuggestionTrigger(value, resultsElement) {
+            try {
+                const query = value.split('@').pop() || '';
+                resultsElement.innerHTML += `Query extracted: "${query}"\n`;
+                
+                // Test if MentionService is available
+                if (window.MentionService) {
+                    const suggestions = await window.MentionService.searchMentions(query);
+                    resultsElement.innerHTML += `Suggestions found: ${suggestions?.length || 0}\n`;
+                    resultsElement.innerHTML += `Suggestion data: ${JSON.stringify(suggestions, null, 2)}\n`;
+                } else {
+                    resultsElement.innerHTML += `ERROR: MentionService not available on window\n`;
+                    // Try to import it
+                    try {
+                        const { MentionService } = await import('/src/services/MentionService.ts');
+                        const service = new MentionService();
+                        const suggestions = await service.searchMentions(query);
+                        resultsElement.innerHTML += `Direct import - Suggestions found: ${suggestions?.length || 0}\n`;
+                    } catch (importError) {
+                        resultsElement.innerHTML += `Import error: ${importError.message}\n`;
+                    }
+                }
+            } catch (error) {
+                resultsElement.innerHTML += `ERROR: ${error.message}\n`;
+                resultsElement.className = 'results error';
+            }
+        }
+
+        async function exposeMentionServiceForTesting() {
+            try {
+                // Try to make MentionService available globally for testing
+                const { MentionService } = await import('/src/services/MentionService.ts');
+                window.MentionService = new MentionService();
+                console.log('✅ MentionService exposed globally for testing');
+            } catch (error) {
+                console.error('❌ Failed to expose MentionService:', error);
+            }
+        }
+
+        async function testGetAllAgents() {
+            const results = document.getElementById('serviceResults');
+            results.innerHTML = 'Testing getAllAgents()...\n';
+            
+            try {
+                if (!window.MentionService) {
+                    await exposeMentionServiceForTesting();
+                }
+                
+                const agents = await window.MentionService.getAllAgents();
+                results.innerHTML += `getAllAgents() result:\n`;
+                results.innerHTML += `Count: ${agents?.length || 0}\n`;
+                results.innerHTML += `Data: ${JSON.stringify(agents, null, 2)}\n`;
+                results.className = agents?.length > 0 ? 'results success' : 'results error';
+            } catch (error) {
+                results.innerHTML += `ERROR: ${error.message}\n`;
+                results.className = 'results error';
+            }
+        }
+
+        async function testSearchMentions() {
+            const results = document.getElementById('serviceResults');
+            results.innerHTML = 'Testing searchMentions("")...\n';
+            
+            try {
+                if (!window.MentionService) {
+                    await exposeMentionServiceForTesting();
+                }
+                
+                const suggestions = await window.MentionService.searchMentions('');
+                results.innerHTML += `searchMentions('') result:\n`;
+                results.innerHTML += `Count: ${suggestions?.length || 0}\n`;
+                results.innerHTML += `Data: ${JSON.stringify(suggestions, null, 2)}\n`;
+                results.className = suggestions?.length > 0 ? 'results success' : 'results error';
+            } catch (error) {
+                results.innerHTML += `ERROR: ${error.message}\n`;
+                results.className = 'results error';
+            }
+        }
+
+        async function testQuickMentions() {
+            const results = document.getElementById('serviceResults');
+            results.innerHTML = 'Testing getQuickMentions("post")...\n';
+            
+            try {
+                if (!window.MentionService) {
+                    await exposeMentionServiceForTesting();
+                }
+                
+                const mentions = await window.MentionService.getQuickMentions('post');
+                results.innerHTML += `getQuickMentions('post') result:\n`;
+                results.innerHTML += `Count: ${mentions?.length || 0}\n`;
+                results.innerHTML += `Data: ${JSON.stringify(mentions, null, 2)}\n`;
+                results.className = mentions?.length > 0 ? 'results success' : 'results error';
+            } catch (error) {
+                results.innerHTML += `ERROR: ${error.message}\n`;
+                results.className = 'results error';
+            }
+        }
+
+        async function debugSuggestionPipeline() {
+            const results = document.getElementById('pipelineResults');
+            results.innerHTML = 'Starting full pipeline debug...\n';
+            
+            try {
+                // Step 1: Check service availability
+                results.innerHTML += '1. Checking MentionService availability...\n';
+                if (!window.MentionService) {
+                    await exposeMentionServiceForTesting();
+                }
+                results.innerHTML += '   ✅ MentionService available\n';
+                
+                // Step 2: Test getAllAgents
+                results.innerHTML += '2. Testing getAllAgents()...\n';
+                const allAgents = await window.MentionService.getAllAgents();
+                results.innerHTML += `   Result: ${allAgents?.length || 0} agents\n`;
+                
+                // Step 3: Test empty query search
+                results.innerHTML += '3. Testing searchMentions("")...\n';
+                const emptySearch = await window.MentionService.searchMentions('');
+                results.innerHTML += `   Result: ${emptySearch?.length || 0} suggestions\n`;
+                
+                // Step 4: Test quick mentions
+                results.innerHTML += '4. Testing getQuickMentions("post")...\n';
+                const quickMentions = await window.MentionService.getQuickMentions('post');
+                results.innerHTML += `   Result: ${quickMentions?.length || 0} quick mentions\n`;
+                
+                // Step 5: Analyze the pipeline
+                results.innerHTML += '5. Pipeline Analysis:\n';
+                if (allAgents?.length === 0) {
+                    results.innerHTML += '   🚨 CRITICAL: No agents loaded in service\n';
+                    results.className = 'results error';
+                } else if (emptySearch?.length === 0) {
+                    results.innerHTML += '   🚨 CRITICAL: searchMentions() returns empty for empty query\n';
+                    results.className = 'results error';
+                } else {
+                    results.innerHTML += '   ✅ Pipeline appears functional\n';
+                    results.className = 'results success';
+                }
+                
+            } catch (error) {
+                results.innerHTML += `PIPELINE ERROR: ${error.message}\n`;
+                results.className = 'results error';
+            }
+        }
+
+        function startConsoleMonitor() {
+            const results = document.getElementById('consoleResults');
+            consoleLogs = [];
+            results.innerHTML = 'Console monitoring started...\n';
+            
+            // Override console methods
+            console.log = function(...args) {
+                const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ');
+                consoleLogs.push(`[LOG] ${message}`);
+                updateConsoleResults();
+                originalConsoleLog.apply(console, args);
+            };
+            
+            console.error = function(...args) {
+                const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ');
+                consoleLogs.push(`[ERROR] ${message}`);
+                updateConsoleResults();
+                originalConsoleError.apply(console, args);
+            };
+            
+            console.warn = function(...args) {
+                const message = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : arg).join(' ');
+                consoleLogs.push(`[WARN] ${message}`);
+                updateConsoleResults();
+                originalConsoleWarn.apply(console, args);
+            };
+            
+            consoleMonitor = setInterval(() => {
+                // Keep the monitor alive
+            }, 1000);
+        }
+
+        function stopConsoleMonitor() {
+            const results = document.getElementById('consoleResults');
+            
+            // Restore console methods
+            console.log = originalConsoleLog;
+            console.error = originalConsoleError;
+            console.warn = originalConsoleWarn;
+            
+            if (consoleMonitor) {
+                clearInterval(consoleMonitor);
+                consoleMonitor = null;
+            }
+            
+            results.innerHTML += '\nConsole monitoring stopped.\n';
+        }
+
+        function updateConsoleResults() {
+            const results = document.getElementById('consoleResults');
+            const recentLogs = consoleLogs.slice(-10); // Show last 10 logs
+            results.innerHTML = 'Recent console activity:\n' + recentLogs.join('\n') + '\n';
+            
+            // Highlight mention-related logs
+            if (recentLogs.some(log => log.includes('Query:') || log.includes('Suggestions:'))) {
+                results.className = 'results warning';
+            }
+        }
+
+        function analyzeNetworkRequests() {
+            const results = document.getElementById('networkResults');
+            results.innerHTML = 'Network analysis feature not implemented in this debug tool.\n';
+            results.innerHTML += 'Use browser DevTools Network tab to monitor requests during @ input.\n';
+            results.className = 'results warning';
+        }
+    </script>
+</body>
+</html>

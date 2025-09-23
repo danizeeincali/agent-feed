@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 EMERGENCY @ MENTION DEBUG TEST</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 20px;
+            background: #f8f9fa;
+        }
+        .debug-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .emergency-header {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .test-section {
+            border: 2px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: #f8f9ff;
+        }
+        .test-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .test-input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+        }
+        .debug-log {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 6px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-working { background: #28a745; }
+        .status-broken { background: #dc3545; }
+        .status-unknown { background: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <div class="emergency-header">
+            🚨 EMERGENCY @ MENTION SYSTEM DEBUG TEST 🚨
+        </div>
+
+        <div class="instructions">
+            <h3>🔍 Testing Instructions:</h3>
+            <ol>
+                <li>Type an <strong>@</strong> symbol in any of the test areas below</li>
+                <li>You should immediately see a dropdown with agent suggestions</li>
+                <li>If no dropdown appears, the mention system is broken</li>
+                <li>Check the debug log below for detailed information</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3><span class="status-indicator status-unknown"></span>Test 1: Basic Textarea with @ Detection</h3>
+            <textarea id="basic-test" class="test-input" placeholder="Type @ here to test basic mention detection..."></textarea>
+            <div>Status: <span id="basic-status">Not tested</span></div>
+        </div>
+
+        <div class="test-section">
+            <h3><span class="status-indicator status-unknown"></span>Test 2: Manual Dropdown Trigger</h3>
+            <textarea id="manual-test" class="test-input" placeholder="Type @ here and we'll force trigger dropdown..."></textarea>
+            <button onclick="forceShowDropdown()" style="margin-top: 10px; padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px;">Force Show Dropdown</button>
+            <div>Status: <span id="manual-status">Not tested</span></div>
+            <div id="manual-dropdown" style="display: none; border: 1px solid #ddd; background: white; max-height: 200px; overflow-y: auto; margin-top: 5px;">
+                <!-- Dropdown will be populated here -->
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3><span class="status-indicator status-unknown"></span>Test 3: Agent Data Availability</h3>
+            <div id="agent-data-test">Testing agent data availability...</div>
+        </div>
+
+        <div class="debug-log" id="debug-log">
+            🚨 EMERGENCY DEBUG LOG - All mention system events will be logged here...
+            <br>System initialized at: <span id="init-time"></span>
+            <br>==========================================
+            <br>
+        </div>
+    </div>
+
+    <script>
+        // Emergency debug logging
+        const debugLog = document.getElementById('debug-log');
+        const initTime = document.getElementById('init-time');
+        initTime.textContent = new Date().toLocaleTimeString();
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const colors = {
+                error: '#ff4444',
+                warn: '#ffaa00', 
+                info: '#00ff00',
+                success: '#00ffaa'
+            };
+            
+            debugLog.innerHTML += `<br><span style="color: ${colors[type]}">[${timestamp}] ${message}</span>`;
+            debugLog.scrollTop = debugLog.scrollHeight;
+            console.log(`[EMERGENCY DEBUG] ${message}`);
+        }
+
+        // Mock agent data for testing
+        const mockAgents = [
+            { id: 'chief-of-staff', name: 'chief-of-staff-agent', displayName: 'Chief of Staff', description: 'Strategic coordination and planning' },
+            { id: 'personal-todos', name: 'personal-todos-agent', displayName: 'Personal Todos', description: 'Task and project management' },
+            { id: 'meeting-prep', name: 'meeting-prep-agent', displayName: 'Meeting Prep', description: 'Meeting preparation and coordination' }
+        ];
+
+        // Test 1: Basic @ detection
+        document.getElementById('basic-test').addEventListener('input', function(e) {
+            const value = e.target.value;
+            const cursorPos = e.target.selectionStart;
+            
+            log(`Basic test input: "${value}", cursor at ${cursorPos}`, 'info');
+            
+            // Check for @ symbol
+            if (value.includes('@')) {
+                log('@ symbol detected in basic test!', 'success');
+                updateStatus('basic', 'working', '@ detected successfully');
+                
+                // Find mention query
+                const textBeforeCursor = value.substring(0, cursorPos);
+                const mentionMatch = textBeforeCursor.match(/@(\w*)$/);
+                
+                if (mentionMatch) {
+                    log(`Mention query found: "${mentionMatch[1]}"`, 'success');
+                    
+                    // Filter mock agents
+                    const query = mentionMatch[1].toLowerCase();
+                    const suggestions = mockAgents.filter(agent => 
+                        agent.name.toLowerCase().includes(query) ||
+                        agent.displayName.toLowerCase().includes(query)
+                    );
+                    
+                    log(`Found ${suggestions.length} agent suggestions`, 'info');
+                    suggestions.forEach(agent => {
+                        log(`  - ${agent.displayName} (@${agent.name})`, 'info');
+                    });
+                } else {
+                    log('No valid mention query found', 'warn');
+                }
+            } else {
+                updateStatus('basic', 'unknown', 'Waiting for @ symbol');
+            }
+        });
+
+        // Test 2: Manual dropdown trigger
+        document.getElementById('manual-test').addEventListener('input', function(e) {
+            log(`Manual test input: "${e.target.value}"`, 'info');
+        });
+
+        function forceShowDropdown() {
+            log('Forcing dropdown display...', 'info');
+            const dropdown = document.getElementById('manual-dropdown');
+            dropdown.style.display = 'block';
+            dropdown.innerHTML = '';
+            
+            mockAgents.forEach(agent => {
+                const item = document.createElement('div');
+                item.style.padding = '8px 12px';
+                item.style.borderBottom = '1px solid #eee';
+                item.style.cursor = 'pointer';
+                item.innerHTML = `
+                    <strong>${agent.displayName}</strong> (@${agent.name})<br>
+                    <small style="color: #666">${agent.description}</small>
+                `;
+                item.addEventListener('click', () => {
+                    log(`Agent selected: ${agent.displayName}`, 'success');
+                    updateStatus('manual', 'working', `Selected ${agent.displayName}`);
+                });
+                dropdown.appendChild(item);
+            });
+            
+            updateStatus('manual', 'working', 'Dropdown forced successfully');
+            log('Dropdown populated with agents', 'success');
+        }
+
+        // Test 3: Agent data availability
+        function testAgentData() {
+            log('Testing agent data availability...', 'info');
+            
+            if (mockAgents.length > 0) {
+                log(`Found ${mockAgents.length} mock agents`, 'success');
+                document.getElementById('agent-data-test').innerHTML = `
+                    <div style="color: green;">✅ Agent data available (${mockAgents.length} agents)</div>
+                    <ul>
+                        ${mockAgents.map(agent => `<li>${agent.displayName} (@${agent.name})</li>`).join('')}
+                    </ul>
+                `;
+                updateStatus('agent-data', 'working', `${mockAgents.length} agents available`);
+            } else {
+                log('No agent data found!', 'error');
+                document.getElementById('agent-data-test').innerHTML = '<div style="color: red;">❌ No agent data available</div>';
+                updateStatus('agent-data', 'broken', 'No agents found');
+            }
+        }
+
+        // Utility function to update status indicators
+        function updateStatus(testId, status, message) {
+            const statusElement = document.getElementById(`${testId}-status`);
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.style.color = status === 'working' ? 'green' : status === 'broken' ? 'red' : 'orange';
+            }
+            
+            // Update indicator dot
+            const indicators = document.querySelectorAll('.status-indicator');
+            indicators.forEach(indicator => {
+                if (indicator.parentNode.textContent.includes(`Test 1`) && testId === 'basic') {
+                    indicator.className = `status-indicator status-${status}`;
+                } else if (indicator.parentNode.textContent.includes(`Test 2`) && testId === 'manual') {
+                    indicator.className = `status-indicator status-${status}`;
+                }
+            });
+        }
+
+        // Initialize tests
+        log('Emergency debug system initialized', 'success');
+        log('Testing environment: Direct HTML with vanilla JS', 'info');
+        testAgentData();
+
+        // Enhanced input monitoring
+        document.addEventListener('input', function(e) {
+            if (e.target.tagName === 'TEXTAREA') {
+                const value = e.target.value;
+                const hasAt = value.includes('@');
+                log(`Global input monitor - @ present: ${hasAt}, length: ${value.length}`, 'info');
+            }
+        });
+
+        // Focus monitoring
+        document.addEventListener('focus', function(e) {
+            if (e.target.tagName === 'TEXTAREA') {
+                log(`Focus gained on ${e.target.id || 'textarea'}`, 'info');
+            }
+        }, true);
+
+        log('All event listeners attached successfully', 'success');
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "tdd-london-school-tests",
+  "version": "1.0.0",
+  "description": "TDD London School tests for preventing recentActivities.slice errors",
+  "scripts": {
+    "test": "jest --config jest.config.london-school.js",
+    "test:watch": "jest --config jest.config.london-school.js --watch",
+    "test:coverage": "jest --config jest.config.london-school.js --coverage",
+    "test:verbose": "jest --config jest.config.london-school.js --verbose",
+    "test:contracts": "jest --config jest.config.london-school.js --testPathPattern=contracts",
+    "test:api": "jest --config jest.config.london-school.js --testPathPattern=api",
+    "test:components": "jest --config jest.config.london-school.js --testPathPattern=components",
+    "test:integration": "jest --config jest.config.london-school.js --testPathPattern=integration"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "tdd",
+    "london-school",
+    "mockist",
+    "behavior-verification",
+    "array-safety",
+    "swarm-testing"
+  ]
+}

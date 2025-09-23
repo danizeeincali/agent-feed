@@ -1,0 +1,35 @@
+{
+  "name": "@agent-feed/style-validation",
+  "version": "1.0.0",
+  "description": "Comprehensive visual style validation test suite using Playwright",
+  "main": "run-tests.js",
+  "scripts": {
+    "test": "node run-tests.js",
+    "test:visual": "playwright test visual-regression.spec.ts",
+    "test:tailwind": "playwright test tailwind-validation.spec.ts",
+    "test:responsive": "playwright test responsive-design.spec.ts",
+    "test:components": "playwright test component-styling.spec.ts",
+    "test:framework": "playwright test visual-regression-framework.spec.ts",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "report": "playwright show-report",
+    "baseline": "playwright test --update-snapshots visual-regression-framework.spec.ts",
+    "clean": "rm -rf test-results"
+  },
+  "keywords": [
+    "playwright",
+    "visual-testing",
+    "style-validation",
+    "tailwind",
+    "responsive-design",
+    "regression-testing"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

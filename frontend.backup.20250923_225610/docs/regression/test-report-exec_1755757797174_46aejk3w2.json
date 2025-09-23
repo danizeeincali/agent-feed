@@ -1,0 +1,181 @@
+{
+  "execution": {
+    "id": "exec_1755757797174_46aejk3w2",
+    "suiteId": "timing-test",
+    "results": [
+      {
+        "testId": "timing-test-test-0",
+        "status": "passed",
+        "duration": 12,
+        "startTime": "2025-08-21T06:29:57.174Z",
+        "endTime": "2025-08-21T06:29:57.186Z",
+        "output": "Mock test timing-test-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "timing-test-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T06:29:57.186Z",
+        "endTime": "2025-08-21T06:29:57.196Z",
+        "output": "Mock test timing-test-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "timing-test-test-2",
+        "status": "passed",
+        "duration": 15,
+        "startTime": "2025-08-21T06:29:57.196Z",
+        "endTime": "2025-08-21T06:29:57.211Z",
+        "output": "Mock test timing-test-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "summary": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "duration": 37
+    },
+    "startTime": "2025-08-21T06:29:57.174Z",
+    "endTime": "2025-08-21T06:29:57.211Z",
+    "environment": {
+      "platform": "linux",
+      "version": "0.0.0",
+      "nodeVersion": "v22.17.0",
+      "dependencies": {
+        "@radix-ui/react-slot": "^1.2.3",
+        "@tanstack/react-query": "^4.35.0",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "lucide-react": "^0.279.0",
+        "puppeteer": "^24.16.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-error-boundary": "^6.0.0",
+        "react-router-dom": "^6.15.0",
+        "socket.io-client": "^4.8.1",
+        "sonner": "^2.0.7",
+        "tailwind-merge": "^1.14.0",
+        "ws": "^8.14.0"
+      },
+      "variables": {
+        "NODE_ENV": "test",
+        "CI": "false"
+      }
+    },
+    "configuration": {
+      "parallel": false,
+      "maxWorkers": 2,
+      "timeout": 5000,
+      "retries": 0,
+      "reporters": [
+        "console",
+        "json"
+      ],
+      "coverage": true,
+      "screenshots": false,
+      "videos": false,
+      "outputDir": "./test-reports",
+      "enableNLD": true,
+      "enableVerificationWorkflow": true,
+      "generatePMReports": true
+    }
+  },
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "duration": 37
+  },
+  "results": [
+    {
+      "testId": "timing-test-test-0",
+      "status": "passed",
+      "duration": 12,
+      "startTime": "2025-08-21T06:29:57.174Z",
+      "endTime": "2025-08-21T06:29:57.186Z",
+      "output": "Mock test timing-test-test-0 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "timing-test-test-1",
+      "status": "passed",
+      "duration": 10,
+      "startTime": "2025-08-21T06:29:57.186Z",
+      "endTime": "2025-08-21T06:29:57.196Z",
+      "output": "Mock test timing-test-test-1 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    {
+      "testId": "timing-test-test-2",
+      "status": "passed",
+      "duration": 15,
+      "startTime": "2025-08-21T06:29:57.196Z",
+      "endTime": "2025-08-21T06:29:57.211Z",
+      "output": "Mock test timing-test-test-2 completed successfully",
+      "logs": [],
+      "artifacts": []
+    }
+  ],
+  "categories": {
+    "passed": [
+      {
+        "testId": "timing-test-test-0",
+        "status": "passed",
+        "duration": 12,
+        "startTime": "2025-08-21T06:29:57.174Z",
+        "endTime": "2025-08-21T06:29:57.186Z",
+        "output": "Mock test timing-test-test-0 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "timing-test-test-1",
+        "status": "passed",
+        "duration": 10,
+        "startTime": "2025-08-21T06:29:57.186Z",
+        "endTime": "2025-08-21T06:29:57.196Z",
+        "output": "Mock test timing-test-test-1 completed successfully",
+        "logs": [],
+        "artifacts": []
+      },
+      {
+        "testId": "timing-test-test-2",
+        "status": "passed",
+        "duration": 15,
+        "startTime": "2025-08-21T06:29:57.196Z",
+        "endTime": "2025-08-21T06:29:57.211Z",
+        "output": "Mock test timing-test-test-2 completed successfully",
+        "logs": [],
+        "artifacts": []
+      }
+    ],
+    "failed": [],
+    "skipped": [],
+    "errors": [],
+    "timeouts": []
+  },
+  "metrics": {
+    "averageDuration": 12.333333333333334,
+    "longestTest": {
+      "testId": "timing-test-test-2",
+      "status": "passed",
+      "duration": 15,
+      "startTime": "2025-08-21T06:29:57.196Z",
+      "endTime": "2025-08-21T06:29:57.211Z",
+      "output": "Mock test timing-test-test-2 completed successfully",
+      "logs": [],
+      "artifacts": []
+    },
+    "totalDuration": 37
+  },
+  "timestamp": "2025-08-21T06:29:57.211Z"
+}

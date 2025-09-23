@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-09-05T00:50:59.866Z",
+  "tests": [
+    {
+      "name": "Frontend HTTP Response",
+      "status": "PASSED",
+      "details": {
+        "statusCode": 200,
+        "hasHtml": true,
+        "hasReactRoot": true,
+        "hasTitle": true,
+        "contentLength": 909
+      }
+    },
+    {
+      "name": "Backend API Response",
+      "status": "FAILED",
+      "error": ""
+    },
+    {
+      "name": "Frontend Content Analysis",
+      "status": "PASSED",
+      "details": {
+        "hasReactRoot": true,
+        "hasViteClient": true,
+        "hasScriptTags": 4,
+        "hasMetaTags": 3,
+        "hasTitle": true,
+        "hasStylesheets": true,
+        "totalLength": 909,
+        "validityScore": "4/4"
+      }
+    },
+    {
+      "name": "Application Health Check",
+      "status": "FAILED",
+      "error": ""
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 2,
+    "total": 4
+  },
+  "overallStatus": "FAILED",
+  "successRate": "50.0"
+}

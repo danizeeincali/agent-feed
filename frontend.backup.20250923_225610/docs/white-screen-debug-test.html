@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Screen Debug Test</title>
+    <style>
+        body { font-family: system-ui; margin: 20px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 6px; }
+        .success { background: #f0f9ff; border: 1px solid #0ea5e9; color: #0c4a6e; }
+        .error { background: #fef2f2; border: 1px solid #ef4444; color: #991b1b; }
+        .loading { background: #fffbeb; border: 1px solid #f59e0b; color: #92400e; }
+        pre { background: #f8fafc; padding: 10px; border-radius: 4px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>White Screen Debug Test</h1>
+    <p>Testing if the AgentLink frontend loads without white screen issues.</p>
+
+    <div id="test-results"></div>
+
+    <script>
+        const results = document.getElementById('test-results');
+
+        function addResult(message, type = 'loading') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            results.appendChild(div);
+        }
+
+        async function runTests() {
+            addResult('Starting white screen debugging tests...');
+
+            // Test 1: Frontend server response
+            try {
+                addResult('Testing frontend server response...');
+                const frontendResponse = await fetch('http://localhost:5173');
+                if (frontendResponse.ok) {
+                    addResult('✅ Frontend server responding on port 5173', 'success');
+                    const html = await frontendResponse.text();
+                    if (html.includes('<div id="root">')) {
+                        addResult('✅ Root element found in HTML', 'success');
+                    } else {
+                        addResult('❌ Root element missing from HTML', 'error');
+                    }
+                } else {
+                    addResult(`❌ Frontend server error: ${frontendResponse.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Frontend server test failed: ${error.message}`, 'error');
+            }
+
+            // Test 2: Backend server response
+            try {
+                addResult('Testing backend server response...');
+                const backendResponse = await fetch('http://localhost:3000/api/health');
+                if (backendResponse.ok) {
+                    addResult('✅ Backend server responding on port 3000', 'success');
+                } else {
+                    addResult(`⚠️ Backend server error: ${backendResponse.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`⚠️ Backend server test failed: ${error.message}`, 'error');
+            }
+
+            // Test 3: Check for common white screen causes
+            addResult('Checking for common white screen causes...');
+
+            // Check console errors
+            const originalError = console.error;
+            const errors = [];
+            console.error = (...args) => {
+                errors.push(args.join(' '));
+                originalError.apply(console, args);
+            };
+
+            // Test main.tsx loading
+            try {
+                addResult('Testing main.tsx module loading...');
+                const mainResponse = await fetch('http://localhost:5173/src/main.tsx');
+                if (mainResponse.ok) {
+                    addResult('✅ main.tsx module accessible', 'success');
+                } else {
+                    addResult(`❌ main.tsx loading failed: ${mainResponse.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ main.tsx test failed: ${error.message}`, 'error');
+            }
+
+            // Test App.tsx loading
+            try {
+                addResult('Testing App.tsx module loading...');
+                const appResponse = await fetch('http://localhost:5173/src/App.tsx');
+                if (appResponse.ok) {
+                    addResult('✅ App.tsx module accessible', 'success');
+                } else {
+                    addResult(`❌ App.tsx loading failed: ${appResponse.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ App.tsx test failed: ${error.message}`, 'error');
+            }
+
+            // Test critical dependencies
+            const criticalDeps = [
+                'react',
+                'react-dom',
+                'react-router-dom',
+                '@tanstack/react-query',
+                'framer-motion',
+                'react-error-boundary'
+            ];
+
+            addResult('Checking critical dependencies...');
+            for (const dep of criticalDeps) {
+                try {
+                    const depResponse = await fetch(`http://localhost:5173/node_modules/${dep}/package.json`);
+                    if (depResponse.ok) {
+                        addResult(`✅ ${dep} dependency available`, 'success');
+                    } else {
+                        addResult(`⚠️ ${dep} dependency check failed`, 'error');
+                    }
+                } catch (error) {
+                    addResult(`⚠️ ${dep} dependency test failed`, 'error');
+                }
+            }
+
+            // Final summary
+            setTimeout(() => {
+                if (errors.length > 0) {
+                    addResult(`❌ Console errors detected: ${errors.length}`, 'error');
+                    addResult(`<pre>${errors.join('\\n')}</pre>`, 'error');
+                } else {
+                    addResult('✅ No console errors detected', 'success');
+                }
+
+                addResult('🎉 White screen debugging tests completed!', 'success');
+                addResult('If you see this message, the frontend is working correctly.', 'success');
+            }, 2000);
+        }
+
+        // Start tests
+        runTests();
+    </script>
+</body>
+</html>

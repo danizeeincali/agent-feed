@@ -1,0 +1,34 @@
+{
+  "default": [
+    {
+      "key": "spec-pseudocode_analysis",
+      "value": "Analyzed terminal width constraints in frontend components. Found terminal components using fixed width/height (h-96, w-full) in Tailwind classes and inline styles. Terminal currently constrained by container padding and max-width settings. Need to expand to full horizontal space within frame to prevent Claude CLI cascading.",
+      "namespace": "default",
+      "timestamp": 1756105814602
+    },
+    {
+      "key": "swarm/debug/tripling-analysis",
+      "value": "CRITICAL FINDINGS: 1) WebSocket handler processes each message ONCE via triggerHandlers 2) setOutput concatenates to existing content 3) MessageList calls parseTerminalOutput on EVERY render 4) parseTerminalOutput splits entire output into sections EACH TIME",
+      "namespace": "default",
+      "timestamp": 1756496673212
+    },
+    {
+      "key": "swarm/debug/root-cause",
+      "value": "ROOT CAUSE FOUND! MessageList.tsx Line 135: parseTerminalOutput(output, instanceId) called on EVERY render. Since output is cumulative string, parser creates ALL messages from scratch each time, causing exponential duplication!",
+      "namespace": "default",
+      "timestamp": 1756496690623
+    },
+    {
+      "key": "swarm/debug/fix-strategy",
+      "value": "FIX STRATEGY: 1) Memoize parseTerminalOutput with useMemo 2) Only reparse when output changes 3) Track last processed length to avoid full reparse 4) Add React.memo for MessageBubble components",
+      "namespace": "default",
+      "timestamp": 1756496697471
+    },
+    {
+      "key": "architect_analysis",
+      "value": "Found critical MentionInput.tsx issues: findMentionQuery function at line 59-119 with @ symbol detection logic, state management with isDropdownOpen/mentionQuery state, async suggestion loading with complex fallback chains, over-complex debugging and error handling",
+      "namespace": "default",
+      "timestamp": 1757349223048
+    }
+  ]
+}
