@@ -41,7 +41,6 @@ import SimpleSettings from './components/SimpleSettings';
 import DualModeClaudeManager from './components/claude-manager/DualModeClaudeManager';
 import { ClaudeInstanceManagerComponentSSE } from './components/claude-manager/ClaudeInstanceManagerComponentSSE';
 import EnhancedSSEInterface from './components/claude-manager/EnhancedSSEInterface';
-import EnhancedAviDMWithClaudeCode from './components/claude-manager/EnhancedAviDMWithClaudeCode';
 import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
@@ -105,7 +104,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   // Memoized navigation to prevent re-creation on every render
   // Cleaned up navigation - keeping only essential pages
   const navigation = React.useMemo(() => [
-    { name: 'Interactive Control', href: '/interactive-control', icon: Bot },
     { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
     { name: 'Feed', href: '/', icon: Activity },
     { name: 'Create', href: '/posting', icon: FileText },
@@ -274,18 +272,6 @@ const App: React.FC = () => {
                         </SafeFeedWrapper>
                       </RouteErrorBoundary>
                     </RouteWrapper>
-                  } />
-                  {/* SPARC Phase 5: SSE-based Interactive Control */}
-                  <Route path="/interactive-control" element={
-                    <RouteErrorBoundary routeName="InteractiveControlSSE" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="EnhancedAviDMWithClaudeCode">
-                        <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Avi DM with Claude Code..." />}>
-                          <div className="h-screen flex flex-col">
-                            <EnhancedAviDMWithClaudeCode />
-                          </div>
-                        </Suspense>
-                      </AsyncErrorBoundary>
-                    </RouteErrorBoundary>
                   } />
                   
                   {/* New Claude Instance Manager Routes */}

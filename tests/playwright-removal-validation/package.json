@@ -1,0 +1,40 @@
+{
+  "name": "playwright-removal-validation",
+  "version": "1.0.0",
+  "description": "Playwright UI/UX validation suite for interactive-control removal",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:baseline": "TEST_PHASE=baseline playwright test",
+    "test:post-removal": "TEST_PHASE=post-removal playwright test",
+    "test:visual": "playwright test specs/05-visual-regression.spec.js",
+    "test:avi-dm": "playwright test specs/03-avi-dm-validation.spec.js",
+    "test:navigation": "playwright test specs/02-navigation-flow.spec.js",
+    "test:responsive": "playwright test specs/04-responsive-design.spec.js",
+    "update-snapshots": "playwright test --update-snapshots",
+    "show-report": "playwright show-report",
+    "install-browsers": "playwright install",
+    "validate:baseline": "./run-validation.sh baseline",
+    "validate:post-removal": "./run-validation.sh post-removal",
+    "validate:full": "./run-validation.sh full"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.55.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "playwright",
+    "testing",
+    "ui",
+    "ux",
+    "validation",
+    "visual-regression",
+    "interactive-control",
+    "removal"
+  ],
+  "author": "Claude Code",
+  "license": "MIT"
+}

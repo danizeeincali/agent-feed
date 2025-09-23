@@ -1,0 +1,82 @@
+{
+  "timestamp": "2025-09-23T05:02:44.793Z",
+  "lighthouse": null,
+  "bundle": null,
+  "memory": null,
+  "api": null,
+  "interaction": null,
+  "summary": {
+    "passed": false,
+    "score": 0,
+    "passedTests": 0,
+    "totalTests": 2,
+    "totalTime": 3628,
+    "regressions": [
+      {
+        "type": "bundle_size",
+        "severity": "high",
+        "description": "Bundle size increased beyond threshold"
+      },
+      {
+        "type": "lighthouse",
+        "severity": "high",
+        "description": "Lighthouse performance scores below threshold",
+        "details": {
+          "passed": false,
+          "error": "Command failed: npx lhci autorun --config=/workspaces/agent-feed/tests/performance/lighthouse-config.js\nError: Command exited with code 1\n    at ChildProcess.exitListener (/workspaces/agent-feed/node_modules/@lhci/utils/src/child-process-helper.js:51:19)\n    at ChildProcess.emit (node:events:518:28)\n    at ChildProcess._handle.onexit (node:internal/child_process:293:12)\n\n> agent-feed@0.1.0 start\n> next start\n\n\n ⨯ Failed to start server\nError: listen EADDRINUSE: address already in use :::3000\n    at Server.setupListenHandle [as _listen2] (node:net:1940:16)\n    at listenInCluster (node:net:1997:12)\n    at Server.listen (node:net:2102:7)\n    at /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js:268:16\n    at new Promise (<anonymous>)\n    at startServer (/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js:181:11)\n    at nextStart (/workspaces/agent-feed/node_modules/next/dist/cli/next-start.js:50:40)\n    at /workspaces/agent-feed/node_modules/next/dist/bin/next:150:54\n    at async main (/workspaces/agent-feed/node_modules/next/dist/bin/next:150:5) {\n  code: 'EADDRINUSE',\n  errno: -98,\n  syscall: 'listen',\n  address: '::',\n  port: 3000\n}\n"
+        }
+      }
+    ],
+    "recommendations": [
+      {
+        "priority": "high",
+        "category": "Bundle Size",
+        "action": "Analyze bundle composition and remove unused dependencies",
+        "impact": "Reduce initial load time"
+      },
+      {
+        "priority": "high",
+        "category": "Core Web Vitals",
+        "action": "Optimize images, reduce JavaScript execution time, minimize layout shifts",
+        "impact": "Improve user experience and SEO ranking"
+      }
+    ]
+  },
+  "budgets": {
+    "lighthouse": {
+      "performance": 90,
+      "accessibility": 90,
+      "bestPractices": 90,
+      "seo": 90,
+      "fcp": 1800,
+      "lcp": 2500,
+      "cls": 0.1,
+      "tbt": 300
+    },
+    "bundle": {
+      "totalSize": 524288,
+      "mainChunk": 307200,
+      "vendorChunk": 204800
+    },
+    "memory": {
+      "maxHeapSize": 52428800,
+      "maxGrowthRate": 0.1
+    },
+    "api": {
+      "maxResponseTime": 500,
+      "maxErrorRate": 0.01,
+      "minThroughput": 100
+    },
+    "interaction": {
+      "minScore": 80,
+      "maxFID": 100,
+      "maxINP": 200
+    }
+  },
+  "environment": {
+    "node": "v22.17.0",
+    "platform": "linux",
+    "arch": "x64",
+    "timestamp": "2025-09-23T05:02:48.426Z"
+  }
+}

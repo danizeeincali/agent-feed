@@ -41,8 +41,7 @@ import {
   FileCode
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import './claude-manager.css';
-import './instance-table.css';
+// CSS handled by global styles
 
 // Types
 interface ChatMessage {

@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import ClaudeServiceManagerComponent from './ClaudeServiceManagerComponent';
 import ClaudeInstanceManagerComponent from './ClaudeInstanceManagerComponent';
 import { FeedIntegrationService, FeedWorkerStatus, createProductionFeedIntegration } from '../../services/FeedIntegrationService';
-import './claude-manager.css';
+// Removed global CSS import - will be handled at app level
 
 interface DualModeClaudeManagerProps {
   apiUrl?: string;

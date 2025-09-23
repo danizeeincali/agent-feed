@@ -8,7 +8,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useSSEClaudeInstance } from '../../hooks/useSSEClaudeInstance';
 import { ConnectionState, InstanceOutputMessage } from '../../managers/ClaudeInstanceManager';
-import './claude-manager.css';
+// CSS handled by global styles
 
 interface SSETerminalInterfaceProps {
   instanceId: string;

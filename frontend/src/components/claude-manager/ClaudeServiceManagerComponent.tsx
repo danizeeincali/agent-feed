@@ -8,7 +8,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { ClaudeServiceManager, ClaudeServiceInstance, ClaudeServiceMetrics, createProductionClaudeServiceManager } from '../../services/ClaudeServiceManager';
-import './claude-manager.css';
+// CSS handled by global styles
 
 interface ClaudeServiceManagerComponentProps {
   apiUrl?: string;

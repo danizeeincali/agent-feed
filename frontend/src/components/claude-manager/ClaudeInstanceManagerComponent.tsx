@@ -8,8 +8,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ClaudeInstanceManager, ClaudeInstanceConfig, InstanceOutputMessage } from '../../managers/ClaudeInstanceManager';
 import { ConnectionState } from '../../services/SingleConnectionManager';
-import './claude-manager.css';
-import './instance-table.css';
+// CSS handled by global styles
 
 interface ClaudeInstanceManagerComponentProps {
   apiUrl?: string;
