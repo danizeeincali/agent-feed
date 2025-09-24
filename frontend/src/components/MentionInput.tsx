@@ -731,4 +731,4 @@ export const MentionInput = forwardRef<MentionInputRef, MentionInputProps>(({
 
 MentionInput.displayName = 'MentionInput';
 
-export type { MentionInputProps, MentionInputRef, MentionSuggestion };
+export type { MentionInputProps, MentionInputRef };

@@ -45,14 +45,12 @@ import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
-import MentionInputDemo from './components/MentionInputDemo';
-import { MentionDebugTest } from './components/MentionDebugTest';
 // import './styles/agents.css'; // Moved to _app.tsx
-import { 
-  LayoutDashboard, 
-  Activity, 
-  GitBranch, 
-  Settings as SettingsIcon, 
+import {
+  LayoutDashboard,
+  Activity,
+  GitBranch,
+  Settings as SettingsIcon,
   Search,
   Menu,
   X,
@@ -62,7 +60,6 @@ import {
   BarChart3,
   Code,
   FileText,
-  AtSign,
 } from 'lucide-react';
 import { cn } from './utils/cn';
 import { ConnectionStatus } from './components/ConnectionStatus';
@@ -105,7 +102,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const navigation = React.useMemo(() => [
     { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
     { name: 'Feed', href: '/', icon: Activity },
-    { name: 'Mention Demo', href: '/mention-demo', icon: AtSign },
     { name: 'Drafts', href: '/drafts', icon: FileText },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Workflows', href: '/workflows', icon: Workflow },
@@ -365,20 +361,6 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="DebugPosts">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Debug Posts..." />}>
                         <DebugPostsDisplay />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/mention-demo" element={
-                    <RouteErrorBoundary routeName="MentionInputDemo">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Mention Demo..." />}>
-                        <MentionInputDemo />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/mention-debug" element={
-                    <RouteErrorBoundary routeName="MentionDebugTest">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Mention Debug Test..." />}>
-                        <MentionDebugTest />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

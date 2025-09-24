@@ -143,17 +143,7 @@ vi.mock('../../components/posting-interface', () => ({
   }
 }));
 
-vi.mock('../../components/MentionInputDemo', () => ({
-  default: function MockMentionInputDemo() {
-    return <div data-testid="mention-input-demo">Mention Input Demo</div>;
-  }
-}));
-
-vi.mock('../../components/MentionDebugTest', () => ({
-  MentionDebugTest: function MockMentionDebugTest() {
-    return <div data-testid="mention-debug-test">Mention Debug Test</div>;
-  }
-}));
+// Removed MentionInputDemo and MentionDebugTest mocks - components deleted
 
 // Mock all Error Boundary components
 vi.mock('../../components/GlobalErrorBoundary', () => ({

@@ -137,12 +137,7 @@ vi.mock('../../components/DebugPostsDisplay', () => ({
 vi.mock('../../components/posting-interface', () => ({
   PostingInterface: () => <div data-testid="posting-interface">Posting Interface</div>
 }));
-vi.mock('../../components/MentionInputDemo', () => ({
-  default: () => <div data-testid="mention-input-demo">Mention Input Demo</div>
-}));
-vi.mock('../../components/MentionDebugTest', () => ({
-  MentionDebugTest: () => <div data-testid="mention-debug-test">Mention Debug Test</div>
-}));
+// Removed MentionInputDemo and MentionDebugTest mocks - components deleted
 vi.mock('../../components/AsyncErrorBoundary', () => ({
   default: function MockAsyncErrorBoundary({ children }: { children: React.ReactNode }) {
     return <div data-testid="async-error-boundary">{children}</div>;

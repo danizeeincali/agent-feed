@@ -191,27 +191,27 @@ class MentionServiceImpl {
    * Search for mention suggestions based on query
    */
   public async searchMentions(
-    query: string = '', 
+    query: string = '',
     config: MentionConfig = {}
   ): Promise<MentionSuggestion[]> {
     // CRITICAL FIX: Validate and sanitize query parameter
     const sanitizedQuery = typeof query === 'string' ? query : '';
-    console.log('🔄 EMERGENCY DEBUG MentionService: searchMentions called', { 
-      originalQuery: query, 
+    console.log('🔄 EMERGENCY DEBUG MentionService: searchMentions called', {
+      originalQuery: query,
       queryType: typeof query,
-      sanitizedQuery, 
-      config, 
-      totalAgents: this.agents ? this.agents.length : 'UNDEFINED' 
+      sanitizedQuery,
+      config,
+      totalAgents: this.agents ? this.agents.length : 'UNDEFINED'
     });
-    
+
     // CRITICAL FIX: Validate agents array exists first
     if (!this.agents || !Array.isArray(this.agents) || this.agents.length === 0) {
-      console.error('🚨 CRITICAL: MentionService.agents is invalid:', { 
+      console.error('🚨 CRITICAL: MentionService.agents is invalid:', {
         hasAgents: !!this.agents,
         isArray: Array.isArray(this.agents),
         length: this.agents ? this.agents.length : 'N/A'
       });
-      
+
       // EMERGENCY RECOVERY: Try to reinitialize agents
       console.log('🚨 EMERGENCY RECOVERY: Attempting to reinitialize agents...');
       try {
@@ -219,13 +219,27 @@ class MentionServiceImpl {
         console.log('✅ EMERGENCY RECOVERY: Agents reinitialized with', this.agents.length, 'agents');
       } catch (recoveryError) {
         console.error('🚨 EMERGENCY RECOVERY FAILED:', recoveryError);
-        return [];
+        // Return fallback agents instead of empty array
+        return [{
+          id: 'fallback-agent',
+          name: 'emergency-agent',
+          displayName: 'Emergency Agent',
+          description: 'Fallback agent when service fails',
+          type: 'fallback'
+        }];
       }
-      
+
       // Verify recovery worked
       if (!this.agents || !Array.isArray(this.agents) || this.agents.length === 0) {
         console.error('🚨 EMERGENCY RECOVERY FAILED: Agents still invalid after recovery attempt');
-        return [];
+        // Return fallback agents instead of empty array
+        return [{
+          id: 'fallback-agent',
+          name: 'emergency-agent',
+          displayName: 'Emergency Agent',
+          description: 'Fallback agent when service fails',
+          type: 'fallback'
+        }];
       }
     }
     
