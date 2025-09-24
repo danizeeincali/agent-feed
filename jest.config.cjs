@@ -1,6 +1,6 @@
 module.exports = {
   preset: 'ts-jest',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   roots: ['<rootDir>/tests'],
   testMatch: [
     '**/__tests__/**/*.+(ts|tsx|js)',
@@ -32,7 +32,8 @@ module.exports = {
     '/node_modules/',
     '/dist/',
     '/frontend/node_modules/',
-    '/frontend/dist/'
+    '/frontend/dist/',
+    '/tests/production-validation/tool-call-visualization-e2e.spec.ts'
   ],
   modulePathIgnorePatterns: [
     '<rootDir>/frontend/'

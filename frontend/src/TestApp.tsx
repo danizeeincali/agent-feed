@@ -1,5 +1,5 @@
 import React from 'react';
-import { AviDirectChatSDK } from './components/posting-interface/AviDirectChatSDK';
+// Removed AviDirectChatSDK import - test app simplified
 
 const TestApp: React.FC = () => {
   return (
@@ -20,7 +20,9 @@ const TestApp: React.FC = () => {
         borderRadius: '8px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
       }}>
-        <AviDirectChatSDK />
+        <div style={{ padding: '20px', textAlign: 'center', color: '#6b7280' }}>
+          Test app simplified - chat functionality in main feed
+        </div>
       </div>
 
       <div style={{

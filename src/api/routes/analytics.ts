@@ -10,7 +10,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { CostTracker } from '../../../backend/services/CostTracker';
+import { CostTracker } from '@/backend/services/CostTracker';
 import { logger } from '@/utils/logger';
 
 const router = Router();

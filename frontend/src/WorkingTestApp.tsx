@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import StreamingTicker from './components/StreamingTicker';
-import { AviDirectChatSDK } from './components/posting-interface/AviDirectChatSDK';
+// Removed AviDirectChatSDK import - using simplified chat interface
 
 const WorkingTestApp: React.FC = () => {
   const [showChat, setShowChat] = useState(true);
@@ -95,7 +95,9 @@ const WorkingTestApp: React.FC = () => {
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           overflow: 'hidden'
         }}>
-          <AviDirectChatSDK />
+          <div style={{ padding: '20px', textAlign: 'center', color: '#6b7280' }}>
+            Avi Chat functionality moved to main feed EnhancedPostingInterface
+          </div>
         </div>
       )}
 

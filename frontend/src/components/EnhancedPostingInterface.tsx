@@ -3,7 +3,7 @@ import { Edit3, Zap, Bot } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { PostCreator } from './PostCreator';
 import { MentionInput, MentionSuggestion } from './MentionInput';
-import { AviDirectChatSDK } from './posting-interface/AviDirectChatSDK';
+// Removed AviDirectChatSDK import - using built-in Avi chat component
 
 type PostingTab = 'post' | 'quick' | 'avi';
 
@@ -67,10 +67,9 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
         )}
 
         {activeTab === 'avi' && (
-          <AviDirectChatSDK
+          <AviChatSection
             onMessageSent={onPostCreated}
-            className="h-96"
-            isLoading={isLoading} // Pass isLoading to AviDirectChatSDK if it expects it
+            isLoading={isLoading}
           />
         )}
       </div>
@@ -172,5 +171,114 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
   );
 };
 
+// Simple Avi Chat Component
+const AviChatSection: React.FC<{
+  onMessageSent?: (message: any) => void;
+  isLoading?: boolean;
+}> = ({ onMessageSent, isLoading = false }) => {
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [chatHistory, setChatHistory] = useState<Array<{
+    id: string;
+    content: string;
+    sender: 'user' | 'avi';
+    timestamp: Date;
+  }>>([]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim() || isSubmitting) return;
+
+    const userMessage = {
+      id: Date.now().toString(),
+      content: message.trim(),
+      sender: 'user' as const,
+      timestamp: new Date(),
+    };
+
+    setChatHistory(prev => [...prev, userMessage]);
+    setIsSubmitting(true);
+
+    try {
+      // Simple Avi response - in real implementation this would call Claude SDK
+      const aviResponse = {
+        id: (Date.now() + 1).toString(),
+        content: `Thanks for your message: "${message.trim()}". I'm Avi, your AI assistant!`,
+        sender: 'avi' as const,
+        timestamp: new Date(),
+      };
+
+      setTimeout(() => {
+        setChatHistory(prev => [...prev, aviResponse]);
+        onMessageSent?.(userMessage);
+      }, 1000);
+
+      setMessage('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Chat with Avi</h3>
+        <p className="text-sm text-gray-600">Send direct messages to Avi AI assistant</p>
+      </div>
+
+      {/* Chat History */}
+      <div className="h-64 border border-gray-200 rounded-lg p-4 overflow-y-auto bg-gray-50">
+        {chatHistory.length === 0 ? (
+          <div className="text-center text-gray-500 mt-8">
+            <Bot className="w-8 h-8 mx-auto mb-2" />
+            <p>Start a conversation with Avi!</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {chatHistory.map((msg) => (
+              <div key={msg.id} className={cn(
+                'p-3 rounded-lg max-w-xs',
+                msg.sender === 'user'
+                  ? 'bg-blue-100 text-blue-900 ml-auto'
+                  : 'bg-white text-gray-900'
+              )}>
+                <p className="text-sm">{msg.content}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {msg.timestamp.toLocaleTimeString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Message Input */}
+      <form onSubmit={handleSubmit} className="flex space-x-2">
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type your message to Avi..."
+          disabled={isSubmitting || isLoading}
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        <button
+          type="submit"
+          disabled={!message.trim() || isSubmitting || isLoading}
+          className={cn(
+            'px-4 py-2 rounded-lg font-medium transition-colors',
+            message.trim() && !isSubmitting && !isLoading
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          )}
+        >
+          {isSubmitting ? 'Sending...' : 'Send'}
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default EnhancedPostingInterface;

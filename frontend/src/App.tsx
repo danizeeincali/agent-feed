@@ -45,7 +45,6 @@ import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
-import { PostingInterface } from './components/posting-interface';
 import MentionInputDemo from './components/MentionInputDemo';
 import { MentionDebugTest } from './components/MentionDebugTest';
 // import './styles/agents.css'; // Moved to _app.tsx
@@ -106,7 +105,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const navigation = React.useMemo(() => [
     { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
     { name: 'Feed', href: '/', icon: Activity },
-    { name: 'Create', href: '/posting', icon: FileText },
     { name: 'Mention Demo', href: '/mention-demo', icon: AtSign },
     { name: 'Drafts', href: '/drafts', icon: FileText },
     { name: 'Agents', href: '/agents', icon: Bot },
@@ -367,13 +365,6 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="DebugPosts">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Debug Posts..." />}>
                         <DebugPostsDisplay />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/posting" element={
-                    <RouteErrorBoundary routeName="PostingInterface">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Posting Interface..." />}>
-                        <PostingInterface />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
