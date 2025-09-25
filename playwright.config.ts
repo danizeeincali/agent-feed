@@ -1,14 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: './tests/e2e',
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : 1,
   reporter: [
-    ['html'],
-    ['json', { outputFile: 'test-results/validation-results.json' }],
+    ['html', { outputFolder: 'tests/e2e/playwright-report' }],
+    ['json', { outputFile: 'tests/e2e/test-results.json' }],
     ['line']
   ],
   use: {

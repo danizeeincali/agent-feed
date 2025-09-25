@@ -1,13 +1,13 @@
 /**
- * TDD Tests for Performance Monitor Integration
- * Testing WebSocket Debug Panel and Error Testing integration into Performance section
+ * TDD Tests for Enhanced Performance Metrics Integration
+ * Testing performance monitoring integration into Analytics dashboard
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // Mock functions and setup for Jest
-import PerformanceMonitor from '@/components/PerformanceMonitor';
+import EnhancedPerformanceMetrics from '@/components/EnhancedPerformanceMetrics';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
 
 // Mock WebSocket
@@ -49,174 +49,151 @@ const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-describe('PerformanceMonitor Integration Tests', () => {
+describe('EnhancedPerformanceMetrics Integration Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render performance metrics in main view', async () => {
+  it('should render real-time performance metrics', async () => {
     render(
       <TestWrapper>
-        <PerformanceMonitor />
+        <EnhancedPerformanceMetrics />
       </TestWrapper>
     );
 
-    expect(screen.getByText('Performance Dashboard')).toBeInTheDocument();
-    expect(screen.getByText(/FPS:/)).toBeInTheDocument();
-    expect(screen.getByText(/Memory:/)).toBeInTheDocument();
+    expect(screen.getByText('Frame Rate')).toBeInTheDocument();
+    expect(screen.getByText('Memory Usage')).toBeInTheDocument();
+    expect(screen.getByText('Render Time')).toBeInTheDocument();
+    expect(screen.getByText('Component Mounts')).toBeInTheDocument();
   });
 
-  it('should include WebSocket Debug Panel tab in performance section', async () => {
+  it('should show performance status indicators', async () => {
     render(
       <TestWrapper>
-        <PerformanceMonitor />
+        <EnhancedPerformanceMetrics />
       </TestWrapper>
     );
 
-    expect(screen.getByText('WebSocket Debug')).toBeInTheDocument();
-    expect(screen.getByText('Error Testing')).toBeInTheDocument();
-  });
-
-  it('should switch between performance tabs correctly', async () => {
-    render(
-      <TestWrapper>
-        <PerformanceMonitor />
-      </TestWrapper>
-    );
-
-    // Click on WebSocket Debug tab
-    fireEvent.click(screen.getByText('WebSocket Debug'));
-    
     await waitFor(() => {
-      expect(screen.getByText('WebSocket Connection Debug Panel')).toBeInTheDocument();
-    });
-
-    // Click on Error Testing tab
-    fireEvent.click(screen.getByText('Error Testing'));
-    
-    await waitFor(() => {
-      expect(screen.getByText('Error Testing Tools')).toBeInTheDocument();
+      expect(screen.getByText(/FPS/)).toBeInTheDocument();
+      expect(screen.getByText(/MB/)).toBeInTheDocument();
+      expect(screen.getByText(/ms/)).toBeInTheDocument();
     });
   });
 
-  it('should show WebSocket connection tests in debug panel', async () => {
+  it('should display performance insights panel', async () => {
     render(
       <TestWrapper>
-        <PerformanceMonitor />
+        <EnhancedPerformanceMetrics />
       </TestWrapper>
     );
 
-    fireEvent.click(screen.getByText('WebSocket Debug'));
+    expect(screen.getByText('Real-time Performance Insights')).toBeInTheDocument();
+    expect(screen.getByText('Overall Status:')).toBeInTheDocument();
+    expect(screen.getByText('Memory Health:')).toBeInTheDocument();
+    expect(screen.getByText('Render Performance:')).toBeInTheDocument();
+  });
+
+  it('should show detailed metrics table', async () => {
+    render(
+      <TestWrapper>
+        <EnhancedPerformanceMetrics />
+      </TestWrapper>
+    );
+
+    expect(screen.getByText('Detailed Performance Metrics')).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByText('WebSocket Hub (Primary)')).toBeInTheDocument();
-      expect(screen.getByText('Robust WebSocket Server')).toBeInTheDocument();
+      expect(screen.getByText('Frames Per Second')).toBeInTheDocument();
+      expect(screen.getByText('Current Value')).toBeInTheDocument();
+      expect(screen.getByText('Status')).toBeInTheDocument();
+      expect(screen.getByText('Target')).toBeInTheDocument();
     });
   });
 
-  it('should provide error testing buttons in error testing tab', async () => {
+  it('should display performance recommendations', async () => {
     render(
       <TestWrapper>
-        <PerformanceMonitor />
+        <EnhancedPerformanceMetrics />
       </TestWrapper>
     );
 
-    fireEvent.click(screen.getByText('Error Testing'));
-
     await waitFor(() => {
-      expect(screen.getByText('Render Error')).toBeInTheDocument();
-      expect(screen.getByText('Async Error')).toBeInTheDocument();
-      expect(screen.getByText('Network Error')).toBeInTheDocument();
+      // Should show at least one status indicator
+      const statusElements = screen.getAllByText(/optimal|excellent|good|poor|high|moderate/i);
+      expect(statusElements.length).toBeGreaterThan(0);
     });
   });
 
-  it('should not render WebSocket debug panel outside performance section', () => {
-    // This test ensures the debug panel is removed from App.tsx
-    const { container } = render(
-      <div data-testid="app-main">
-        {/* Simulating App.tsx without WebSocket debug panel */}
-      </div>
-    );
-
-    // Should not find WebSocket debug panel in main app area
-    expect(container.querySelector('[data-testid="websocket-debug-panel"]')).toBeNull();
-  });
-
-  it('should maintain all WebSocket testing capabilities in performance section', async () => {
+  it('should show mini performance indicator when enabled', async () => {
     render(
       <TestWrapper>
-        <PerformanceMonitor />
+        <EnhancedPerformanceMetrics showMiniIndicator={true} />
       </TestWrapper>
     );
 
-    fireEvent.click(screen.getByText('WebSocket Debug'));
+    expect(screen.getByText('Live Performance')).toBeInTheDocument();
+  });
 
-    // Should have retest functionality
-    const retestButton = await screen.findByText(/Retest/);
-    expect(retestButton).toBeInTheDocument();
+  it('should hide mini performance indicator when disabled', async () => {
+    render(
+      <TestWrapper>
+        <EnhancedPerformanceMetrics showMiniIndicator={false} />
+      </TestWrapper>
+    );
 
-    // Should have quick actions
+    expect(screen.queryByText('Live Performance')).not.toBeInTheDocument();
+  });
+
+  it('should update performance metrics over time', async () => {
+    const { rerender } = render(
+      <TestWrapper>
+        <EnhancedPerformanceMetrics />
+      </TestWrapper>
+    );
+
+    // Initial render should show metrics
+    expect(screen.getByText('Frame Rate')).toBeInTheDocument();
+
+    // Mock time passage
+    jest.advanceTimersByTime(1000);
+
+    rerender(
+      <TestWrapper>
+        <EnhancedPerformanceMetrics />
+      </TestWrapper>
+    );
+
     await waitFor(() => {
-      expect(screen.getByText('Hub Health')).toBeInTheDocument();
-      expect(screen.getByText('Show Config')).toBeInTheDocument();
-      expect(screen.getByText('Manual Test')).toBeInTheDocument();
+      expect(screen.getByText(/FPS/)).toBeInTheDocument();
     });
   });
 
-  it('should trigger error tests correctly from performance section', async () => {
+  it('should handle memory usage status colors correctly', async () => {
     render(
       <TestWrapper>
-        <PerformanceMonitor />
+        <EnhancedPerformanceMetrics />
       </TestWrapper>
     );
 
-    fireEvent.click(screen.getByText('Error Testing'));
-
-    const renderErrorButton = await screen.findByText('Render Error');
-    fireEvent.click(renderErrorButton);
-
-    // Should show error testing component
+    // Check that memory usage is displayed
     await waitFor(() => {
-      expect(screen.getByText(/Testing: render error/)).toBeInTheDocument();
+      expect(screen.getByText('Memory Usage')).toBeInTheDocument();
     });
   });
 
-  it('should show performance metrics alongside debug tools', async () => {
+  it('should show performance status with correct color coding', async () => {
     render(
       <TestWrapper>
-        <PerformanceMonitor />
+        <EnhancedPerformanceMetrics />
       </TestWrapper>
     );
 
-    // Performance metrics should always be visible
-    expect(screen.getByText(/FPS:/)).toBeInTheDocument();
-    expect(screen.getByText(/Memory:/)).toBeInTheDocument();
-
-    // Switch to debug panel - metrics should still be visible
-    fireEvent.click(screen.getByText('WebSocket Debug'));
-    expect(screen.getByText(/FPS:/)).toBeInTheDocument();
-  });
-
-  it('should have proper tab styling and navigation', async () => {
-    render(
-      <TestWrapper>
-        <PerformanceMonitor />
-      </TestWrapper>
-    );
-
-    const performanceTab = screen.getByRole('tab', { name: /Performance/i });
-    const debugTab = screen.getByRole('tab', { name: /WebSocket Debug/i });
-    const errorTab = screen.getByRole('tab', { name: /Error Testing/i });
-
-    expect(performanceTab).toHaveAttribute('aria-selected', 'true');
-    expect(debugTab).toHaveAttribute('aria-selected', 'false');
-    expect(errorTab).toHaveAttribute('aria-selected', 'false');
-
-    fireEvent.click(debugTab);
-    
     await waitFor(() => {
-      expect(debugTab).toHaveAttribute('aria-selected', 'true');
-      expect(performanceTab).toHaveAttribute('aria-selected', 'false');
+      expect(screen.getByText('Frame Rate')).toBeInTheDocument();
+      // Should have some status indication
+      const statusText = screen.getByText(/Status:/);
+      expect(statusText).toBeInTheDocument();
     });
   });
 });

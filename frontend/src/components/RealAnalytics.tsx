@@ -9,6 +9,9 @@ import type { SystemMetrics as ApiSystemMetrics, AnalyticsData as ApiAnalyticsDa
 const EnhancedAnalyticsPage = lazy(() => import('./analytics/EnhancedAnalyticsPage'));
 const TokenAnalyticsDashboard = lazy(() => import('./TokenAnalyticsDashboard'));
 
+// Import EnhancedPerformanceMetrics for the performance tab
+import EnhancedPerformanceMetrics from './EnhancedPerformanceMetrics';
+
 // Extended SystemMetrics for dashboard display
 interface SystemMetrics extends ApiSystemMetrics {
   active_agents?: number;
@@ -298,10 +301,10 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
     );
   }
 
-  // Performance Metrics Component
-  const PerformanceMetrics = () => (
+  // Application Performance Metrics - Enhanced with system data
+  const ApplicationPerformanceMetrics = () => (
     <div className="space-y-6" data-testid="performance-metrics">
-      {/* Performance Overview */}
+      {/* Application Performance Overview */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Application Performance</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -324,9 +327,12 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
         </div>
       </div>
 
+      {/* Real-time Performance Monitoring */}
+      <EnhancedPerformanceMetrics showMiniIndicator={false} />
+
       {/* Resource Usage */}
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Resource Usage</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">System Resource Usage</h3>
         <div className="space-y-4">
           <div>
             <div className="flex justify-between mb-1">
@@ -342,7 +348,7 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
           </div>
           <div>
             <div className="flex justify-between mb-1">
-              <span className="text-sm text-gray-600">Memory Usage</span>
+              <span className="text-sm text-gray-600">System Memory</span>
               <span className="text-sm font-medium">{metrics[0]?.memory_usage || 0}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -526,7 +532,7 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
             FallbackComponent={ErrorFallback}
             onReset={() => window.location.reload()}
           >
-            <PerformanceMetrics />
+            <ApplicationPerformanceMetrics />
           </ErrorBoundary>
         </TabsContent>
       </Tabs>

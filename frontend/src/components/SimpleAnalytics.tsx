@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { BarChart3, Activity, Cpu, Zap, Users, TrendingUp, RefreshCw, DollarSign } from 'lucide-react';
+import { BarChart3, Activity, Cpu, Zap, Users, TrendingUp, RefreshCw, DollarSign, Monitor } from 'lucide-react';
 import SimpleErrorBoundary from './SimpleErrorBoundary';
 
 // Lazy load TokenCostAnalytics to prevent blocking tab switches
-const TokenCostAnalytics = lazy(() => 
+const TokenCostAnalytics = lazy(() =>
   import('./TokenCostAnalytics').catch(error => {
     console.error('Failed to load TokenCostAnalytics:', error);
     // Return a fallback component that shows the error
@@ -16,6 +16,34 @@ const TokenCostAnalytics = lazy(() =>
           </div>
           <p className="text-red-700 mb-4">
             Failed to load TokenCostAnalytics component: {error.message}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50"
+          >
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Retry
+          </button>
+        </div>
+      )
+    };
+  })
+);
+
+// Lazy load EnhancedPerformanceTab to prevent blocking tab switches
+const EnhancedPerformanceTab = lazy(() =>
+  import('./EnhancedPerformanceTab').catch(error => {
+    console.error('Failed to load EnhancedPerformanceTab:', error);
+    // Return a fallback component that shows the error
+    return {
+      default: () => (
+        <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center gap-3 mb-3">
+            <Monitor className="w-6 h-6 text-red-600" />
+            <h3 className="text-lg font-semibold text-red-800">Performance Tab Error</h3>
+          </div>
+          <p className="text-red-700 mb-4">
+            Performance monitoring temporarily unavailable. Please try again later.
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -51,7 +79,7 @@ const SimpleAnalytics: React.FC = () => {
   const [metrics, setMetrics] = useState<SystemMetric[]>([]);
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'system' | 'tokens'>('system');
+  const [activeTab, setActiveTab] = useState<'system' | 'tokens' | 'performance'>('system');
 
   // Mock data
   const mockMetrics: SystemMetric[] = [
@@ -253,9 +281,11 @@ const SimpleAnalytics: React.FC = () => {
         
         <div className="flex items-center gap-3">
           {/* Tab Selector */}
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex bg-gray-100 rounded-lg p-1" data-testid="tab-selector">
             <button
               onClick={() => setActiveTab('system')}
+              role="tab"
+              aria-selected={activeTab === 'system'}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
                 activeTab === 'system'
                   ? 'bg-white text-blue-600 shadow-sm'
@@ -267,6 +297,8 @@ const SimpleAnalytics: React.FC = () => {
             </button>
             <button
               onClick={() => setActiveTab('tokens')}
+              role="tab"
+              aria-selected={activeTab === 'tokens'}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
                 activeTab === 'tokens'
                   ? 'bg-white text-blue-600 shadow-sm'
@@ -275,6 +307,19 @@ const SimpleAnalytics: React.FC = () => {
             >
               <DollarSign className="w-4 h-4" />
               Token Costs
+            </button>
+            <button
+              onClick={() => setActiveTab('performance')}
+              role="tab"
+              aria-selected={activeTab === 'performance'}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
+                activeTab === 'performance'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <Monitor className="w-4 h-4" data-testid="performance-tab-icon" />
+              Performance
             </button>
           </div>
 
@@ -297,7 +342,7 @@ const SimpleAnalytics: React.FC = () => {
           }}
         >
           <Suspense fallback={<TokenTabFallback />}>
-            <TokenCostAnalytics 
+            <TokenCostAnalytics
               showBudgetAlerts={true}
               enableExport={true}
               budgetLimits={{
@@ -306,6 +351,45 @@ const SimpleAnalytics: React.FC = () => {
                 monthly: 200
               }}
             />
+          </Suspense>
+        </SimpleErrorBoundary>
+      ) : activeTab === 'performance' ? (
+        <SimpleErrorBoundary
+          fallback={
+            <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center gap-3 mb-3">
+                <Monitor className="w-6 h-6 text-red-600" />
+                <h3 className="text-lg font-semibold text-red-800">Performance tab encountered an error</h3>
+              </div>
+              <p className="text-red-700 mb-4">
+                Performance monitoring temporarily unavailable. Please try again later.
+              </p>
+              <button
+                onClick={() => window.location.reload()}
+                className="inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Retry
+              </button>
+            </div>
+          }
+          onError={(error, errorInfo) => {
+            console.error('PerformanceTab Error:', error, errorInfo);
+          }}
+        >
+          <Suspense
+            fallback={
+              <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="flex items-center gap-3 mb-3">
+                  <Monitor className="w-6 h-6 text-yellow-600" />
+                  <h3 className="text-lg font-semibold text-yellow-800">Performance Loading</h3>
+                </div>
+                <p className="text-yellow-700 mb-4">Performance metrics are being loaded. Please wait...</p>
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-600"></div>
+              </div>
+            }
+          >
+            <EnhancedPerformanceTab />
           </Suspense>
         </SimpleErrorBoundary>
       ) : (

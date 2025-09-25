@@ -8,7 +8,6 @@ import { describe, test, expect, beforeAll, afterAll, beforeEach, afterEach } fr
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { io, Socket } from 'socket.io-client';
 import WebSocketDebugPanel from '@/components/WebSocketDebugPanel';
-import PerformanceMonitor from '@/components/PerformanceMonitor';
 import { WebSocketProvider } from '@/context/WebSocketSingletonContext';
 
 // Test configuration

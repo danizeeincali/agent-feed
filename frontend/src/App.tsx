@@ -35,7 +35,6 @@ import BulletproofActivityPanel from './components/BulletproofActivityPanel';
 import WorkingAgentProfile from './components/WorkingAgentProfile';
 import DynamicPageRenderer from './components/DynamicPageRenderer';
 import SimpleSettings from './components/SimpleSettings';
-import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
@@ -99,7 +98,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     // { name: 'Workflows', href: '/workflows', icon: Workflow }, // REMOVED: TDD GREEN Phase
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Performance Monitor', href: '/performance-monitor', icon: Zap },
     { name: 'Settings', href: '/settings', icon: SettingsIcon },
   ], []);
 
@@ -306,13 +304,6 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="Settings">
                       <Suspense fallback={<FallbackComponents.SettingsFallback />}>
                         <SimpleSettings />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/performance-monitor" element={
-                    <RouteErrorBoundary routeName="PerformanceMonitor">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Performance Monitor..." />}>
-                        <PerformanceMonitor />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
