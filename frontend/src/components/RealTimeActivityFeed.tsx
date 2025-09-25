@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Bell, BellOff, Activity, MessageCircle, Share2, UserPlus, Zap } from 'lucide-react';
-import { useWebSocket } from '@/hooks/useWebSocket';
-import { cn } from '@/utils/cn';
+import { useWebSocket } from '../hooks/useWebSocket';
+import { cn } from '../utils/cn';
 
 interface ActivityItem {
   id: string;

@@ -19,7 +19,7 @@ import { PostCreator } from '@/components/PostCreator';
 import type { IDraftManager, IMentionService, IHTTPService } from '../contracts/ComponentContracts';
 
 // Mock external dependencies
-vi.mock('@/hooks/useDraftManager', () => ({
+vi.mock('../hooks/useDraftManager', () => ({
   useDraftManager: () => ({
     createDraft: vi.fn(),
     updateDraft: vi.fn(),
@@ -27,7 +27,7 @@ vi.mock('@/hooks/useDraftManager', () => ({
   })
 }));
 
-vi.mock('@/hooks/useTemplates', () => ({
+vi.mock('../hooks/useTemplates', () => ({
   useTemplates: () => ({
     getTemplates: vi.fn(),
     applyTemplate: vi.fn()

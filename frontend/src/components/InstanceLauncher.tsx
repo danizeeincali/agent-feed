@@ -20,7 +20,7 @@ import {
   Loader
 } from 'lucide-react';
 import { useNotification } from '../hooks/useNotification';
-import { useInstanceManager } from '@/hooks/useInstanceManager';
+import { useInstanceManager } from '../hooks/useInstanceManager';
 
 interface LaunchConfig {
   type: 'production' | 'development';

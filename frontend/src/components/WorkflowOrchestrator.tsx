@@ -29,7 +29,7 @@ import {
   TestTube,
   RefreshCw
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface WorkflowStep {
   id: string;

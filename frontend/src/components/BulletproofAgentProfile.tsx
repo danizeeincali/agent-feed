@@ -27,7 +27,7 @@ import {
   Copy,
   ExternalLink
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
   safeArray,
@@ -39,13 +39,13 @@ import {
   LoadingFallback,
   withSafetyWrapper,
   safeHandler
-} from '@/utils/safetyUtils';
+} from '../utils/safetyUtils';
 import {
   SafeAgent,
   agentValidationSchema,
   validateComponentProps,
   isValidAgent
-} from '@/types/safety';
+} from '../types/safety';
 
 interface Agent {
   id: string;

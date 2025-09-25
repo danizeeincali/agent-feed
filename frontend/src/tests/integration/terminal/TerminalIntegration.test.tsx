@@ -94,7 +94,7 @@ jest.mock('xterm-addon-web-links', () => ({
 
 // Mock notification hook
 const mockAddNotification = jest.fn();
-jest.mock('@/hooks/useNotification', () => ({
+jest.mock('../hooks/useNotification', () => ({
   useNotification: () => ({
     addNotification: mockAddNotification
   })

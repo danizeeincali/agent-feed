@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useWebSocket } from '@/hooks/useWebSocket';
-import { useAgentCustomization } from '@/hooks/useAgentCustomization';
+import { useWebSocket } from '../hooks/useWebSocket';
+import { useAgentCustomization } from '../hooks/useAgentCustomization';
 import ProfileSettingsManager from './agent-customization/ProfileSettingsManager';
 import { 
   Home,
@@ -37,7 +37,7 @@ import {
   List,
   Palette
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 

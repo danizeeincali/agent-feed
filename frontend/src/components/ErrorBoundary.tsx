@@ -7,10 +7,10 @@ import {
   ErrorDetails,
   createErrorBoundaryConfig,
   logErrorBoundaryRender 
-} from '@/utils/errorHandling';
+} from '../utils/errorHandling';
 
 // Re-export types from errorHandling utility
-export type { ErrorDetails } from '@/utils/errorHandling';
+export type { ErrorDetails } from '../utils/errorHandling';
 
 interface Props {
   children: ReactNode;

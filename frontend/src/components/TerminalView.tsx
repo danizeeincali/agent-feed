@@ -25,8 +25,8 @@ import {
   Maximize,
   Minimize
 } from 'lucide-react';
-import { useTerminalSocket } from '@/hooks/useTerminalSocket';
-import { useNotification } from '@/hooks/useNotification';
+import { useTerminalSocket } from '../hooks/useTerminalSocket';
+import { useNotification } from '../hooks/useNotification';
 
 interface TerminalSettings {
   fontSize: number;

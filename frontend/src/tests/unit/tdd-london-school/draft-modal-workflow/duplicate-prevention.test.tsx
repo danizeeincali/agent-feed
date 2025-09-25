@@ -15,7 +15,7 @@ import {
   createMockDraftService,
   createUserInteractionMocks
 } from './test-utils';
-import { DraftStatus } from '@/types/drafts';
+import { DraftStatus } from '../types/drafts';
 
 // Mock DraftService with deduplication logic tracking
 const mockDraftService = createMockDraftService();

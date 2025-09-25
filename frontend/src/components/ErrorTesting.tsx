@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Bug, AlertTriangle, Wifi, Zap } from 'lucide-react';
 import ErrorBoundary from './ErrorBoundary';
 const ComponentErrorBoundary = ErrorBoundary;
-// import { simulateError } from '@/utils/errorHandling';
+// import { simulateError } from '../utils/errorHandling';
 
 // Component that throws an error
 const ErrorComponent: React.FC<{ errorType: string }> = ({ errorType }) => {

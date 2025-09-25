@@ -20,7 +20,7 @@ import {
   MessageAnalytics, 
   StepAnalytics, 
   ChartDataPoint
-} from '@/types/analytics';
+} from '../types/analytics';
 
 interface MessageStepAnalyticsProps {
   className?: string;

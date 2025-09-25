@@ -17,9 +17,9 @@ import {
   ChevronUp,
   ChevronDown
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useResponsive, useComponentVisibility } from '@/utils/responsiveHelpers';
-import { useWebSocketContext } from '@/context/WebSocketContext';
+import { cn } from '../utils/cn';
+import { useResponsive, useComponentVisibility } from '../utils/responsiveHelpers';
+import { useWebSocketContext } from '../context/WebSocketContext';
 
 interface MobileOptimizedLayoutProps {
   children: React.ReactNode;

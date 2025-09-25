@@ -25,7 +25,7 @@ import type {
 } from '../contracts/ComponentContracts';
 
 // Mock all external dependencies
-vi.mock('@/hooks/useDraftManager', () => {
+vi.mock('../hooks/useDraftManager', () => {
   const mockDraftManager = {
     createDraft: vi.fn(),
     updateDraft: vi.fn(),
@@ -37,7 +37,7 @@ vi.mock('@/hooks/useDraftManager', () => {
   };
 });
 
-vi.mock('@/hooks/useTemplates', () => ({
+vi.mock('../hooks/useTemplates', () => ({
   useTemplates: () => ({
     templates: [],
     applyTemplate: vi.fn()

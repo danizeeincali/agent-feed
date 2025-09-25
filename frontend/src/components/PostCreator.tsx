@@ -31,10 +31,10 @@ import {
   Heart
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { EmojiPicker } from './EmojiPicker';
 import { MentionInput, MentionInputRef, MentionSuggestion } from './MentionInput';
-import { useKeyboardShortcuts, useShortcutsHelp } from '@/hooks/useKeyboardShortcuts';
+import { useKeyboardShortcuts, useShortcutsHelp } from '../hooks/useKeyboardShortcuts';
 import { TemplateLibrary } from './post-creation/TemplateLibrary';
 import { useTemplates } from '../hooks/useTemplates';
 import { useDraftManager } from '../hooks/useDraftManager';

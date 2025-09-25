@@ -14,8 +14,8 @@ import {
   BarChart3,
   Clock
 } from 'lucide-react';
-// Temporarily disabled: import { useTokenCostTracking, TokenUsage, TokenCostMetrics, BudgetStatus } from '@/hooks/useTokenCostTracking';
-import { nldLogger } from '@/utils/nld-logger';
+// Temporarily disabled: import { useTokenCostTracking, TokenUsage, TokenCostMetrics, BudgetStatus } from '../hooks/useTokenCostTracking';
+import { nldLogger } from '../utils/nld-logger';
 
 // Temporary mock interfaces for disabled state
 interface TokenUsage {

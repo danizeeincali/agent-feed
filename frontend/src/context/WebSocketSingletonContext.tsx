@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useCallback, useEffect, useState, useMemo, memo } from 'react';
 // HTTP/SSE only - WebSocket imports removed
-// import { useWebSocketSingleton } from '@/hooks/useWebSocketSingleton';
+// import { useWebSocketSingleton } from '../hooks/useWebSocketSingleton';
 // import { getSocketIOUrl } from '@/utils/websocket-url';
 
 interface ConnectionState {

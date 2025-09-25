@@ -144,19 +144,6 @@ export const ActivityFallback: React.FC = () => (
   </div>
 );
 
-// Settings fallback
-export const SettingsFallback: React.FC = () => (
-  <div className="p-6" data-testid="settings-fallback">
-    <div className="space-y-6">
-      {[1, 2, 3].map(i => (
-        <div key={i} className="space-y-2">
-          <div className="h-5 bg-gray-200 rounded w-1/4 animate-pulse"></div>
-          <div className="h-10 bg-gray-200 rounded w-full animate-pulse"></div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
 
 // 404 Not Found fallback
 export const NotFoundFallback: React.FC = () => (
@@ -231,7 +218,6 @@ const FallbackComponents = {
   AnalyticsFallback,
   ClaudeCodeFallback,
   ActivityFallback,
-  SettingsFallback,
   NotFoundFallback,
   ComponentErrorFallback,
   ChunkErrorFallback

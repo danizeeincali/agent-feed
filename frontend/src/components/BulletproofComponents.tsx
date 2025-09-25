@@ -5,8 +5,8 @@
 
 import React, { memo, Suspense } from 'react';
 import { ComponentErrorBoundary } from './ErrorBoundary';
-import { withSafetyWrapper, safeRender } from '@/utils/safetyUtils';
-import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { withSafetyWrapper, safeRender } from '../utils/safetyUtils';
+import { useErrorHandler } from '../hooks/useErrorHandler';
 import FallbackComponents from './FallbackComponents';
 
 // Import original components

@@ -70,11 +70,11 @@ const mockUseNotification = {
   addNotification: jest.fn()
 };
 
-jest.mock('@/hooks/useTerminalSocket', () => ({
+jest.mock('../hooks/useTerminalSocket', () => ({
   useTerminalSocket: () => mockUseTerminalSocket
 }));
 
-jest.mock('@/hooks/useNotification', () => ({
+jest.mock('../hooks/useNotification', () => ({
   useNotification: () => mockUseNotification
 }));
 

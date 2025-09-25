@@ -33,7 +33,7 @@ const mockWebSocketContext = {
   unsubscribe: jest.fn()
 };
 
-jest.mock('@/hooks/useWebSocket', () => ({
+jest.mock('../hooks/useWebSocket', () => ({
   useWebSocket: () => mockWebSocketContext
 }));
 

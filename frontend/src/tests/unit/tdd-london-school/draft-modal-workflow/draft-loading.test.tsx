@@ -28,7 +28,7 @@ const mockUseDraftManager = {
 const mockUseNavigate = jest.fn();
 
 // Mock the hooks
-jest.mock('@/hooks/useDraftManager', () => ({
+jest.mock('../hooks/useDraftManager', () => ({
   useDraftManager: () => mockUseDraftManager
 }));
 

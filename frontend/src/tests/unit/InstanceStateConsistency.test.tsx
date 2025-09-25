@@ -9,11 +9,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act } from '@testing-library/react';
 
-import { useInstanceManager } from '@/hooks/useInstanceManager';
+import { useInstanceManager } from '../hooks/useInstanceManager';
 import DualInstancePage from '@/pages/DualInstancePage';
 
 // Mock the useInstanceManager hook
-jest.mock('@/hooks/useInstanceManager');
+jest.mock('../hooks/useInstanceManager');
 const mockUseInstanceManager = useInstanceManager as jest.MockedFunction<typeof useInstanceManager>;
 
 // Mock navigation

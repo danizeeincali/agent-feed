@@ -17,7 +17,7 @@ import {
   verifyMockInteractions,
   createSwarmCoordination
 } from './test-utils';
-import { DraftStatus } from '@/types/drafts';
+import { DraftStatus } from '../types/drafts';
 
 // Mock collaborative dependencies
 const mockDraftService = {

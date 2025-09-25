@@ -17,7 +17,7 @@ import {
   createUserInteractionMocks,
   verifyMockInteractions
 } from './test-utils';
-import { DraftStatus } from '@/types/drafts';
+import { DraftStatus } from '../types/drafts';
 
 // Mock DraftService with comprehensive interaction tracking
 const mockDraftService = createMockDraftService();

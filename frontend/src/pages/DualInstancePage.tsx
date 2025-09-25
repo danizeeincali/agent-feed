@@ -19,7 +19,7 @@ import {
 import InstanceLauncher from '@/components/InstanceLauncher';
 import DualInstanceMonitor from '@/components/DualInstanceMonitor';
 import TerminalView from '@/components/TerminalView';
-import { useInstanceManager } from '@/hooks/useInstanceManager';
+import { useInstanceManager } from '../hooks/useInstanceManager';
 
 type TabType = 'launcher' | 'monitor' | 'terminal';
 

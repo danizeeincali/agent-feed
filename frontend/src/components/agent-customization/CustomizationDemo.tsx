@@ -25,14 +25,14 @@ import {
   Zap,
   TrendingUp
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 import AgentHomePage from '@/components/AgentHomePage';
 import ProfileSettingsManager from './ProfileSettingsManager';
-import { useAgentCustomization } from '@/hooks/useAgentCustomization';
-import { validateAllSettings } from '@/utils/validation';
+import { useAgentCustomization } from '../hooks/useAgentCustomization';
+import { validateAllSettings } from '../utils/validation';
 
 interface CustomizationDemoProps {
   className?: string;

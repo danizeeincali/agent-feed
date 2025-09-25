@@ -18,7 +18,7 @@ import {
   WebSocketSingletonProvider, 
   useWebSocketSingletonContext 
 } from '@/context/WebSocketSingletonContext';
-import * as useWebSocketSingletonModule from '@/hooks/useWebSocketSingleton';
+import * as useWebSocketSingletonModule from '../hooks/useWebSocketSingleton';
 
 // Mock the useWebSocketSingleton hook
 const mockUseWebSocketSingleton = jest.fn();

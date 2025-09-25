@@ -20,7 +20,7 @@ import {
   Database,
   RefreshCw
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import LoadingSpinner from './LoadingSpinner';
 
 // Types

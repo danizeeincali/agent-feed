@@ -22,7 +22,7 @@ import {
   Filter,
   Maximize2
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface PerformanceMetric {
   timestamp: string;

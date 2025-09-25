@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
-import { useWebSocket } from '@/hooks/useWebSocket';
+import { useWebSocket } from '../hooks/useWebSocket';
 import { 
   Activity, 
   Clock, 
@@ -16,7 +16,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 // Temporarily removed cn utility import - using inline styles
-// import { cn } from '@/utils/cn';
+// import { cn } from '../utils/cn';
 
 interface Agent {
   id: string;

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AnalyticsDashboardState, RealTimeUpdate } from '@/types/analytics';
+import { AnalyticsDashboardState, RealTimeUpdate } from '../types/analytics';
 
 interface AnalyticsContextType {
   state: AnalyticsDashboardState;

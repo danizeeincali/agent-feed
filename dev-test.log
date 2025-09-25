@@ -1,23 +1,59 @@
 
 > agent-feed@0.1.0 dev
-> PORT=5173 node --max-old-space-size=2048 --optimize-for-size --gc-interval=50 --expose-gc node_modules/.bin/next dev
+> next dev
 
- ⨯ Failed to start server
-Error: listen EADDRINUSE: address already in use :::5173
-    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
-    at listenInCluster (node:net:1997:12)
-    at Server.listen (node:net:2102:7)
-    at /workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js:268:16
-    at new Promise (<anonymous>)
-    at startServer (/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js:181:11)
-    at process.<anonymous> (/workspaces/agent-feed/node_modules/next/dist/server/lib/start-server.js:291:19)
-    at process.emit (node:events:518:28)
-    at emit (node:internal/child_process:949:14)
-    at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
-  code: 'EADDRINUSE',
-  errno: -98,
-  syscall: 'listen',
-  address: '::',
-  port: 5173
-}
-[?25h
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3000
+   - Environments: .env
+   - Experiments (use at your own risk):
+     · optimizeCss
+
+ ✓ Ready in 2.1s
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1243ms (235 modules)
+Time 7ms
+ ○ Compiling / ...
+ ⨯ ./frontend/src/components/analytics/CostOverviewDashboard.tsx:16:0
+Module not found: Can't resolve '@/components/ui/button'
+[0m [90m 14 |[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m[0m
+[0m [90m 15 |[39m [36mimport[39m { cn } [36mfrom[39m [32m'@/lib/utils'[39m[33m;[39m[0m
+[0m[31m[1m>[22m[39m[90m 16 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m[0m
+[0m [90m 17 |[39m [36mimport[39m [33mLineChart[39m [36mfrom[39m [32m'@/components/charts/LineChart'[39m[33m;[39m[0m
+[0m [90m 18 |[39m [36mimport[39m [33mBarChart[39m [36mfrom[39m [32m'@/components/charts/BarChart'[39m[33m;[39m[0m
+[0m [90m 19 |[39m [36mimport[39m [33mPieChart[39m [36mfrom[39m [32m'@/components/charts/PieChart'[39m[33m;[39m[0m
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./frontend/src/components/analytics/EnhancedAnalyticsPage.tsx
+./frontend/src/components/RealAnalytics.tsx
+./frontend/src/App.tsx
+./pages/index.tsx
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/workspaces/agent-feed/.next/cache/webpack/client-development/4.pack.gz_' -> '/workspaces/agent-feed/.next/cache/webpack/client-development/4.pack.gz'
+ ⨯ ./frontend/src/components/analytics/CostOverviewDashboard.tsx:16:0
+Module not found: Can't resolve '@/components/ui/button'
+[0m [90m 14 |[39m } [36mfrom[39m [32m'lucide-react'[39m[33m;[39m[0m
+[0m [90m 15 |[39m [36mimport[39m { cn } [36mfrom[39m [32m'@/lib/utils'[39m[33m;[39m[0m
+[0m[31m[1m>[22m[39m[90m 16 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m[0m
+[0m [90m 17 |[39m [36mimport[39m [33mLineChart[39m [36mfrom[39m [32m'@/components/charts/LineChart'[39m[33m;[39m[0m
+[0m [90m 18 |[39m [36mimport[39m [33mBarChart[39m [36mfrom[39m [32m'@/components/charts/BarChart'[39m[33m;[39m[0m
+[0m [90m 19 |[39m [36mimport[39m [33mPieChart[39m [36mfrom[39m [32m'@/components/charts/PieChart'[39m[33m;[39m[0m
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./frontend/src/components/analytics/EnhancedAnalyticsPage.tsx
+./frontend/src/components/RealAnalytics.tsx
+./frontend/src/App.tsx
+./pages/index.tsx
+Time 13ms
+ ✓ Compiled /_error in 596ms (233 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/workspaces/agent-feed/.next/cache/webpack/client-development/4.pack.gz_' -> '/workspaces/agent-feed/.next/cache/webpack/client-development/4.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/workspaces/agent-feed/.next/cache/webpack/server-development/3.pack.gz_' -> '/workspaces/agent-feed/.next/cache/webpack/server-development/3.pack.gz'
+ ✓ Compiled /_error in 121ms (235 modules)
+ ✓ Compiled /api/agents in 227ms (65 modules)
+✅ Discovered 11 real agents from file system
+✅ Discovered 11 real agents from file system
+✅ Discovered 11 real agents from file system
+✅ Discovered 11 real agents from file system
+✅ Discovered 11 real agents from file system

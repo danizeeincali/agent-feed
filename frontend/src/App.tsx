@@ -34,7 +34,6 @@ import BulletproofActivityPanel from './components/BulletproofActivityPanel';
 // Removed AgentDynamicPageV2 import - component deleted during cleanup
 import WorkingAgentProfile from './components/WorkingAgentProfile';
 import DynamicPageRenderer from './components/DynamicPageRenderer';
-import SimpleSettings from './components/SimpleSettings';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
@@ -98,7 +97,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     // { name: 'Workflows', href: '/workflows', icon: Workflow }, // REMOVED: TDD GREEN Phase
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Settings', href: '/settings', icon: SettingsIcon },
   ], []);
 
   return (
@@ -213,7 +211,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
 
 Layout.displayName = 'Layout';
 
-// Using BulletproofSettings component instead of inline Settings
 
 
 const App: React.FC = () => {
@@ -297,13 +294,6 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="Activity">
                       <Suspense fallback={<FallbackComponents.ActivityFallback />}>
                         <RealActivityFeed />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/settings" element={
-                    <RouteErrorBoundary routeName="Settings">
-                      <Suspense fallback={<FallbackComponents.SettingsFallback />}>
-                        <SimpleSettings />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

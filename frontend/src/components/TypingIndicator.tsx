@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTypingUsers } from '@/context/WebSocketContext';
-import { cn } from '@/utils/cn';
+import { useTypingUsers } from '../context/WebSocketContext';
+import { cn } from '../utils/cn';
 
 interface TypingIndicatorProps {
   postId: string;

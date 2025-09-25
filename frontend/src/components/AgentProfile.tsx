@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-// import { useWebSocket } from '@/hooks/useWebSocket';
+// import { useWebSocket } from '../hooks/useWebSocket';
 import { 
   User,
   Activity,
@@ -19,7 +19,7 @@ import {
   Download,
   RefreshCw
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface AgentActivity {
   id: string;

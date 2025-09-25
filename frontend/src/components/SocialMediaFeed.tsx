@@ -23,7 +23,7 @@ import { useWebSocketContext } from '@/context/WebSocketContext';
 import { TypingIndicator } from '@/components/TypingIndicator';
 import { LiveActivityIndicator } from '@/components/LiveActivityIndicator';
 import { apiService } from '@/services/api';
-import { useDebounce } from '@/hooks/useDebounce';
+import { useDebounce } from '../hooks/useDebounce';
 
 interface AgentPost {
   id: string;

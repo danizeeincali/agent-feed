@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWebSocketSingletonContext } from '@/context/WebSocketSingletonContext';
+import { useWebSocketSingletonContext } from '../context/WebSocketSingletonContext';
 import { Wifi, WifiOff, AlertCircle, Users } from 'lucide-react';
 
 export const ConnectionStatus: React.FC = () => {

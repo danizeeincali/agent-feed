@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Flag, AlertTriangle, X, Check, Eye, EyeOff } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface CommentModerationPanelProps {
   commentId: string;

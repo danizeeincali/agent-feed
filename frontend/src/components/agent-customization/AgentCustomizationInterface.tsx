@@ -18,7 +18,7 @@ import {
   CheckCircle,
   Info
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { AgentHomePageData, AgentWidget } from '@/components/AgentHomePage';

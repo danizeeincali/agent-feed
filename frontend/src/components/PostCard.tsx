@@ -10,8 +10,8 @@ import {
 } from 'lucide-react';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
-import { useWebSocket } from '@/hooks/useWebSocket';
-import { cn } from '@/utils/cn';
+import { useWebSocket } from '../hooks/useWebSocket';
+import { cn } from '../utils/cn';
 
 interface PostCardProps {
   post: {

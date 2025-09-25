@@ -12,11 +12,11 @@ import {
   Clock,
   Activity
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import LineChart from '@/components/charts/LineChart';
-import BarChart from '@/components/charts/BarChart';
-import PieChart from '@/components/charts/PieChart';
+import { cn } from '../../lib/utils';
+import { Button } from '../ui/button';
+import LineChart from '../charts/LineChart';
+import BarChart from '../charts/BarChart';
+import PieChart from '../charts/PieChart';
 import { 
   CostMetrics, 
   TokenUsageMetrics, 
@@ -25,7 +25,7 @@ import {
   DashboardCard,
   BudgetAlert,
   AnalyticsDashboardState
-} from '@/types/analytics';
+} from '../types/analytics';
 
 interface CostOverviewDashboardProps {
   className?: string;

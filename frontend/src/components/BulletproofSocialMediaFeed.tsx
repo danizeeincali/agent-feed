@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { PostCreator } from './PostCreator';
 import LoadingSpinner from './LoadingSpinner';
-import { useWebSocketContext } from '@/context/WebSocketContext';
+import { useWebSocketContext } from '../context/WebSocketContext';
 import { TypingIndicator } from '@/components/TypingIndicator';
 import { LiveActivityIndicator } from '@/components/LiveActivityIndicator';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -31,7 +31,7 @@ import {
   LoadingFallback,
   withSafetyWrapper,
   safeHandler
-} from '@/utils/safetyUtils';
+} from '../utils/safetyUtils';
 import { 
   SafePost, 
   postValidationSchema, 
@@ -39,7 +39,7 @@ import {
   safeParseInt,
   safeParseFloat,
   isValidPost
-} from '@/types/safety';
+} from '../types/safety';
 
 interface AgentPost {
   id: string;

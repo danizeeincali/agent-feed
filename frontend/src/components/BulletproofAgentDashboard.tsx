@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
-import { useWebSocket } from '@/hooks/useWebSocket';
+import { useWebSocket } from '../hooks/useWebSocket';
 import { 
   Activity, 
   Clock, 
@@ -16,7 +16,7 @@ import {
   Loader2,
   AlertTriangle
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
   safeArray,
@@ -26,7 +26,7 @@ import {
   safeDate,
   withSafetyWrapper,
   safeHandler
-} from '@/utils/safetyUtils';
+} from '../utils/safetyUtils';
 
 interface Agent {
   id: string;

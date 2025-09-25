@@ -6,7 +6,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { Bot, ChevronDown, ChevronUp } from 'lucide-react';
 import { MentionService, MentionSuggestion as BaseMentionSuggestion } from '../services/MentionService';
 

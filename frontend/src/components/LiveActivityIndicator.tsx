@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useWebSocketContext } from '@/context/WebSocketContext';
 import { Users, Wifi, WifiOff, Activity, Power, RefreshCw, AlertCircle } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface LiveActivityIndicatorProps {
   className?: string;

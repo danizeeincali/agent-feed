@@ -1,6 +1,6 @@
 import React from 'react';
 import EnhancedAgentManager from './EnhancedAgentManager';
-import { nldLogger } from '@/utils/nld-logger';
+import { nldLogger } from '../utils/nld-logger';
 
 interface Props {
   className?: string;

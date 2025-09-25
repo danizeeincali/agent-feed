@@ -20,7 +20,7 @@ import {
   GitBranch,
   Globe
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface AgentMetrics {
   id: string;

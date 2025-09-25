@@ -21,9 +21,9 @@ import {
   Eye,
   MoreHorizontal
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { PostTemplate, TemplateCategory, TemplateSuggestion } from '@/types/templates';
-import { useTemplates, useTemplateSearch, useTemplateSuggestions } from '@/hooks/useTemplates';
+import { cn } from '../utils/cn';
+import { PostTemplate, TemplateCategory, TemplateSuggestion } from '../types/templates';
+import { useTemplates, useTemplateSearch, useTemplateSuggestions } from '../hooks/useTemplates';
 
 interface TemplateLibraryProps {
   onSelectTemplate: (template: PostTemplate) => void;

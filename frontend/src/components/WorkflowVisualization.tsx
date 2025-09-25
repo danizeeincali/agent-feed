@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useWebSocket } from '@/hooks/useWebSocket';
+import { useWebSocket } from '../hooks/useWebSocket';
 import { 
   CheckCircle,
   Clock,
@@ -14,7 +14,7 @@ import {
   ZapOff,
   Pause
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface WorkflowStep {
   id: string;

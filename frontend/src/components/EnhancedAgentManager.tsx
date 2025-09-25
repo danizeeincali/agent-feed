@@ -26,10 +26,10 @@ import {
   Zap,
   Info
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useWebSocketSingleton } from '@/hooks/useWebSocketSingleton';
+import { cn } from '../utils/cn';
+import { useWebSocketSingleton } from '../hooks/useWebSocketSingleton';
 import LoadingSpinner from './LoadingSpinner';
-import { nldLogger } from '@/utils/nld-logger';
+import { nldLogger } from '../utils/nld-logger';
 import { getWebSocketUrl } from '../utils/websocket-url.ts';
 
 // Types

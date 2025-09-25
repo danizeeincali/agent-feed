@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useWebSocket } from '@/hooks/useWebSocket';
+import { useWebSocket } from '../hooks/useWebSocket';
 import { 
   Activity,
   Zap,
@@ -20,7 +20,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { 
   safeString, 
   safeNumber, 
@@ -28,7 +28,7 @@ import {
   safeObject, 
   isDefined,
   safeDate 
-} from '@/utils/safetyUtils';
+} from '../utils/safetyUtils';
 
 interface SafeLiveActivity {
   id: string;

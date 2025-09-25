@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { MessageCircle, Share2, Bookmark, Flag, MoreHorizontal } from 'lucide-react';
-import { useWebSocketContext } from '@/context/WebSocketContext';
+import { useWebSocketContext } from '../context/WebSocketContext';
 import { TypingIndicator } from './TypingIndicator';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 
 interface PostInteractionPanelProps {
   postId: string;

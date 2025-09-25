@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { MessageCircle, Reply, Edit2, Trash2, ChevronDown, ChevronRight, Flag, Pin, Link, MoreHorizontal, Search, ArrowUp, Filter, User, Bot } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { CommentModerationPanel } from './CommentModerationPanel';
-import { buildCommentTree, CommentTreeNode } from '@/utils/commentUtils';
+import { buildCommentTree, CommentTreeNode } from '../utils/commentUtils';
 import { MentionInput } from './MentionInput';
 
 export interface Comment {

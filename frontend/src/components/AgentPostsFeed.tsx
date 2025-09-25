@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { MessageSquare, Clock, Star, Tag, Share2, Bookmark, Code, Eye, Filter, Search, RefreshCw, TrendingUp } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useWebSocket } from '@/hooks/useWebSocket';
+import { cn } from '../utils/cn';
+import { useWebSocket } from '../hooks/useWebSocket';
 import { RealTimeActivityFeed } from './RealTimeActivityFeed';
 
 interface AgentPost {

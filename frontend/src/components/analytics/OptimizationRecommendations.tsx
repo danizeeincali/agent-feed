@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { CostOptimization } from '@/types/analytics';
+import { CostOptimization } from '../types/analytics';
 
 interface OptimizationRecommendationsProps {
   className?: string;

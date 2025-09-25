@@ -23,9 +23,9 @@ import {
   Download,
   Upload
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useDraftManager } from '@/hooks/useDraftManager';
-import { Draft, DraftStatus } from '@/types/drafts';
+import { cn } from '../utils/cn';
+import { useDraftManager } from '../hooks/useDraftManager';
+import { Draft, DraftStatus } from '../types/drafts';
 import { PostCreatorModal } from './PostCreatorModal';
 
 interface DraftManagerProps {

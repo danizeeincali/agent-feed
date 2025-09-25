@@ -11,8 +11,8 @@ import { MemoryRouter } from 'react-router-dom';
 import TerminalView from '@/components/TerminalView';
 
 // Mock the hooks to avoid complex setup
-jest.mock('@/hooks/useNotification');
-jest.mock('@/hooks/useTerminalSocket');
+jest.mock('../hooks/useNotification');
+jest.mock('../hooks/useTerminalSocket');
 jest.mock('xterm', () => ({
   Terminal: jest.fn().mockImplementation(() => ({
     loadAddon: jest.fn(),
@@ -46,7 +46,7 @@ jest.mock('xterm-addon-search', () => ({
 describe('TerminalView Integration - showNotification Fix Validation', () => {
   beforeEach(() => {
     // Mock the fixed useNotification hook
-    const mockUseNotification = require('@/hooks/useNotification');
+    const mockUseNotification = require('../hooks/useNotification');
     mockUseNotification.useNotification.mockReturnValue({
       notifications: [],
       addNotification: jest.fn(),
@@ -56,7 +56,7 @@ describe('TerminalView Integration - showNotification Fix Validation', () => {
     });
 
     // Mock useTerminalSocket
-    const mockUseTerminalSocket = require('@/hooks/useTerminalSocket');
+    const mockUseTerminalSocket = require('../hooks/useTerminalSocket');
     mockUseTerminalSocket.useTerminalSocket.mockReturnValue({
       connected: false,
       connecting: false,
@@ -92,7 +92,7 @@ describe('TerminalView Integration - showNotification Fix Validation', () => {
     );
 
     // Get the mock to verify it was called correctly
-    const mockUseNotification = require('@/hooks/useNotification');
+    const mockUseNotification = require('../hooks/useNotification');
     expect(mockUseNotification.useNotification).toHaveBeenCalled();
 
     // Verify the returned object has showNotification
@@ -103,7 +103,7 @@ describe('TerminalView Integration - showNotification Fix Validation', () => {
 
   it('should handle error scenarios with showNotification', () => {
     // Mock an error condition
-    const mockUseTerminalSocket = require('@/hooks/useTerminalSocket');
+    const mockUseTerminalSocket = require('../hooks/useTerminalSocket');
     mockUseTerminalSocket.useTerminalSocket.mockReturnValue({
       connected: false,
       connecting: false,
@@ -132,7 +132,7 @@ describe('TerminalView Integration - showNotification Fix Validation', () => {
   it('should validate that showNotification function is properly called', () => {
     const mockShowNotification = jest.fn();
     
-    const mockUseNotification = require('@/hooks/useNotification');
+    const mockUseNotification = require('../hooks/useNotification');
     mockUseNotification.useNotification.mockReturnValue({
       notifications: [],
       addNotification: jest.fn(),
@@ -142,7 +142,7 @@ describe('TerminalView Integration - showNotification Fix Validation', () => {
     });
 
     // Set up error condition to trigger showNotification
-    const mockUseTerminalSocket = require('@/hooks/useTerminalSocket');
+    const mockUseTerminalSocket = require('../hooks/useTerminalSocket');
     mockUseTerminalSocket.useTerminalSocket.mockReturnValue({
       connected: false,
       connecting: false,
@@ -175,7 +175,7 @@ describe('TerminalView Integration - showNotification Fix Validation', () => {
 describe('TDD London School Validation Summary', () => {
   it('should confirm the complete fix for showNotification error', () => {
     // This test serves as documentation of the fix
-    const mockUseNotification = require('@/hooks/useNotification');
+    const mockUseNotification = require('../hooks/useNotification');
     mockUseNotification.useNotification.mockReturnValue({
       notifications: [],
       addNotification: jest.fn(),

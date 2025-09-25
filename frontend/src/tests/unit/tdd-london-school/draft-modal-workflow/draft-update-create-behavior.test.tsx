@@ -23,7 +23,7 @@ const mockDraftService = createMockDraftService();
 const mockNavigate = jest.fn();
 
 // Mock hooks
-jest.mock('@/hooks/useDraftManager', () => ({
+jest.mock('../hooks/useDraftManager', () => ({
   useDraftManager: () => ({
     drafts: [createMockDraft()],
     saveDraft: mockDraftService.createDraft,

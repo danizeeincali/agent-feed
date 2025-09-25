@@ -22,7 +22,7 @@ import {
   Copy,
   Check
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { cn } from '../utils/cn';
 import { Badge } from '@/components/ui/badge';
 
 export interface ThemeSettings {

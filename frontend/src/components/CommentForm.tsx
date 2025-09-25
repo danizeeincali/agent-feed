@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Send, MessageCircle, AtSign, Hash, Bold, Italic, Code, Link2, Bot, User, Reply } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { extractMentions } from '@/utils/commentUtils';
+import { cn } from '../utils/cn';
+import { extractMentions } from '../utils/commentUtils';
 import { apiService } from '../services/api';
 import { MentionInput, MentionInputRef, MentionSuggestion } from './MentionInput';
 import { MentionService } from '../services/MentionService';

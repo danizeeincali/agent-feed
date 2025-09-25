@@ -29,7 +29,7 @@ const MockPostCreator = ({ onClose }: { onClose: () => void }) => (
 
 try {
   console.log('Loading WebSocket context...');
-  const webSocketModule = require('@/context/WebSocketContext');
+  const webSocketModule = require('../context/WebSocketContext');
   useWebSocketContext = webSocketModule.useWebSocketContext;
 } catch (error) {
   console.warn('WebSocket context unavailable, using mock');
