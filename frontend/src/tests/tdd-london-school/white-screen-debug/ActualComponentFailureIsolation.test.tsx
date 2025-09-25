@@ -98,7 +98,6 @@ describe('TDD London School: Real Component Import Isolation', () => {
       './components/RealAnalytics',
       './components/RouteWrapper',
       './components/BulletproofClaudeCodePanel',
-      './components/ClaudeCodeWithStreamingInterface',
       './components/AgentDashboard',
       './components/WorkflowVisualizationFixed',
       './components/BulletproofActivityPanel',

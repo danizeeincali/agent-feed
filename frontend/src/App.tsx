@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import FallbackComponents from './components/FallbackComponents';
-import { RealTimeNotifications } from './components/RealTimeNotifications';
 import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import AsyncErrorBoundary from './components/AsyncErrorBoundary';
@@ -194,8 +193,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
                 />
               </div>
 
-              {/* Notifications */}
-              <RealTimeNotifications />
             </div>
           </div>
         </header>

@@ -119,9 +119,7 @@ vi.mock('../../components/DynamicPageRenderer', () => ({
 vi.mock('../../components/WorkflowVisualizationFixed', () => ({
   default: () => <div data-testid="workflow-visualization-fixed">Workflow Visualization</div>
 }));
-vi.mock('../../components/ClaudeCodeWithStreamingInterface', () => ({
-  default: () => <div data-testid="claude-code-with-streaming-interface">Claude Code Interface</div>
-}));
+// ClaudeCodeWithStreamingInterface removed during TDD component cleanup
 vi.mock('../../components/SimpleSettings', () => ({
   default: () => <div data-testid="simple-settings">Simple Settings</div>
 }));

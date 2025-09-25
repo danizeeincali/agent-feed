@@ -107,11 +107,7 @@ vi.mock('../../components/WorkflowVisualizationFixed', () => ({
   }
 }));
 
-vi.mock('../../components/ClaudeCodeWithStreamingInterface', () => ({
-  default: function MockClaudeCodeWithStreamingInterface() {
-    return <div data-testid="claude-code-with-streaming-interface">Claude Code with Streaming Interface</div>;
-  }
-}));
+// ClaudeCodeWithStreamingInterface removed during TDD component cleanup
 
 vi.mock('../../components/SimpleSettings', () => ({
   default: function MockSimpleSettings() {
