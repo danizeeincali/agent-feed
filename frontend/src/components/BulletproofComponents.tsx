@@ -14,7 +14,7 @@ import SocialMediaFeedOriginal from './SocialMediaFeed';
 import DualInstanceDashboardOriginal from './DualInstanceDashboard';
 import AgentManagerOriginal from './AgentManager';
 import SystemAnalyticsOriginal from './SystemAnalytics';
-import ClaudeCodePanelOriginal from './ClaudeCodePanel';
+// ClaudeCodePanel import removed - component cleaned up
 import AgentDashboardOriginal from './AgentDashboard';
 import WorkflowVisualizationFixedOriginal from './WorkflowVisualizationFixed';
 import AgentProfileOriginal from './AgentProfile';
@@ -96,12 +96,7 @@ export const BulletproofSystemAnalytics = withBulletproofWrapper(
   FallbackComponents.AnalyticsFallback
 );
 
-// Bulletproof ClaudeCodePanel
-export const BulletproofClaudeCodePanel = withBulletproofWrapper(
-  withSafetyWrapper(ClaudeCodePanelOriginal, 'ClaudeCodePanel'),
-  'ClaudeCodePanel',
-  FallbackComponents.ClaudeCodeFallback
-);
+// BulletproofClaudeCodePanel removed - component cleaned up
 
 // Bulletproof AgentDashboard
 export const BulletproofAgentDashboard = withBulletproofWrapper(
@@ -244,7 +239,7 @@ export default {
   BulletproofDualInstanceDashboard,
   BulletproofAgentManager,
   BulletproofSystemAnalytics,
-  BulletproofClaudeCodePanel,
+  // BulletproofClaudeCodePanel removed - component cleaned up
   BulletproofAgentDashboard,
   BulletproofWorkflowVisualization,
   BulletproofAgentProfile,

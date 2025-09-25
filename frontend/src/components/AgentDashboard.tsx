@@ -15,7 +15,8 @@ import {
   List,
   RefreshCw
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+// Temporarily removed cn utility import - using inline styles
+// import { cn } from '@/utils/cn';
 
 interface Agent {
   id: string;

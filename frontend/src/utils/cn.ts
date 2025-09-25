@@ -1,7 +1,9 @@
+import { clsx } from 'clsx';
+
 /**
- * Simple class name utility function
+ * Class name utility function using clsx
  * Concatenates class names and removes falsy values
  */
 export function cn(...classes: (string | undefined | null | boolean)[]): string {
-  return classes.filter(Boolean).join(' ');
+  return clsx(...classes);
 }
