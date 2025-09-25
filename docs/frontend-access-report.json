@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-09-24T22:49:24.665Z",
+  "testObjective": "Verify /workflows route is inaccessible after removal",
+  "results": {
+    "workflowsRouteAccessible": "UNKNOWN",
+    "navigationMenuClean": true,
+    "fallbackBehavior": null,
+    "frontendResponsive": true
+  }
+}

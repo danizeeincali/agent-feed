@@ -97,17 +97,7 @@ export const AgentProfileFallback: React.FC = () => (
   </div>
 );
 
-// Workflow visualization fallback
-export const WorkflowFallback: React.FC = () => (
-  <div className="p-6" data-testid="workflow-fallback">
-    <div className="flex items-center justify-center h-64">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-        <p className="text-gray-500">Loading workflow visualization...</p>
-      </div>
-    </div>
-  </div>
-);
+// REMOVED: WorkflowFallback component - TDD GREEN Phase
 
 // Analytics fallback
 export const AnalyticsFallback: React.FC = () => (
@@ -237,7 +227,7 @@ const FallbackComponents = {
   DashboardFallback,
   AgentManagerFallback,
   AgentProfileFallback,
-  WorkflowFallback,
+  // WorkflowFallback, // REMOVED: TDD GREEN Phase
   AnalyticsFallback,
   ClaudeCodeFallback,
   ActivityFallback,

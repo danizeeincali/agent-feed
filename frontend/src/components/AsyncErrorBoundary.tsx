@@ -173,7 +173,7 @@ class AsyncErrorBoundary extends Component<Props, State> {
 
       // Chunk error gets special treatment
       if (this.state.errorType === 'chunk') {
-        return <FallbackComponents.ChunkErrorFallback onRetry={this.handleHardRefresh} />;
+        return <FallbackComponents.ChunkErrorFallback retry={this.handleHardRefresh} />;
       }
 
       // Default async error UI

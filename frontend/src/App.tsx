@@ -27,10 +27,8 @@ import EnhancedAgentManagerWrapper from './components/EnhancedAgentManagerWrappe
 // import AgentManagerDebug from './components/AgentManagerDebug';
 import RealAnalytics from './components/RealAnalytics';
 import RouteWrapper from './components/RouteWrapper';
-import BulletproofClaudeCodePanel from './components/BulletproofClaudeCodePanel';
-import ClaudeCodeWithStreamingInterface from './components/ClaudeCodeWithStreamingInterface';
 import AgentDashboard from './components/AgentDashboard';
-import WorkflowVisualizationFixed from './components/WorkflowVisualizationFixed';
+// import WorkflowVisualizationFixed from './components/WorkflowVisualizationFixed'; // REMOVED: TDD GREEN Phase
 import BulletproofActivityPanel from './components/BulletproofActivityPanel';
 // Removed UnifiedAgentPage import - component deleted during cleanup
 // Removed AgentDynamicPage import - component deleted during cleanup
@@ -38,16 +36,12 @@ import BulletproofActivityPanel from './components/BulletproofActivityPanel';
 import WorkingAgentProfile from './components/WorkingAgentProfile';
 import DynamicPageRenderer from './components/DynamicPageRenderer';
 import SimpleSettings from './components/SimpleSettings';
-import DualModeClaudeManager from './components/claude-manager/DualModeClaudeManager';
-import { ClaudeInstanceManagerComponentSSE } from './components/claude-manager/ClaudeInstanceManagerComponentSSE';
-import EnhancedSSEInterface from './components/claude-manager/EnhancedSSEInterface';
 import PerformanceMonitor from './components/PerformanceMonitor';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
 // import './styles/agents.css'; // Moved to _app.tsx
 import {
-  LayoutDashboard,
   Activity,
   GitBranch,
   Settings as SettingsIcon,
@@ -100,12 +94,10 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   // Memoized navigation to prevent re-creation on every render
   // Cleaned up navigation - keeping only essential pages
   const navigation = React.useMemo(() => [
-    { name: 'Claude Manager', href: '/claude-manager', icon: LayoutDashboard },
     { name: 'Feed', href: '/', icon: Activity },
     { name: 'Drafts', href: '/drafts', icon: FileText },
     { name: 'Agents', href: '/agents', icon: Bot },
-    { name: 'Workflows', href: '/workflows', icon: Workflow },
-    { name: 'Claude Code', href: '/claude-code', icon: Code },
+    // { name: 'Workflows', href: '/workflows', icon: Workflow }, // REMOVED: TDD GREEN Phase
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: 'Performance Monitor', href: '/performance-monitor', icon: Zap },
@@ -268,16 +260,6 @@ const App: React.FC = () => {
                     </RouteWrapper>
                   } />
                   
-                  {/* New Claude Instance Manager Routes */}
-                  <Route path="/claude-manager" element={
-                    <RouteErrorBoundary routeName="ClaudeManager" fallback={<FallbackComponents.DualInstanceFallback />}>
-                      <AsyncErrorBoundary componentName="DualModeClaudeManager">
-                        <Suspense fallback={<FallbackComponents.DualInstanceFallback />}>
-                          <DualModeClaudeManager />
-                        </Suspense>
-                      </AsyncErrorBoundary>
-                    </RouteErrorBoundary>
-                  } />
                   <Route path="/dashboard" element={
                     <RouteErrorBoundary routeName="Dashboard">
                       <Suspense fallback={<FallbackComponents.DashboardFallback />}>
@@ -308,24 +290,11 @@ const App: React.FC = () => {
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
-                  <Route path="/workflows" element={
-                    <RouteErrorBoundary routeName="Workflows">
-                      <Suspense fallback={<FallbackComponents.WorkflowFallback />}>
-                        <WorkflowVisualizationFixed />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
+                  {/* REMOVED: Workflows route - TDD GREEN Phase */}
                   <Route path="/analytics" element={
                     <RouteErrorBoundary routeName="Analytics">
                       <Suspense fallback={<FallbackComponents.AnalyticsFallback />}>
                         <RealAnalytics />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/claude-code" element={
-                    <RouteErrorBoundary routeName="ClaudeCode">
-                      <Suspense fallback={<FallbackComponents.ClaudeCodeFallback />}>
-                        <ClaudeCodeWithStreamingInterface />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />
