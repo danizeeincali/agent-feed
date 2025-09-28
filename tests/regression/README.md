@@ -1,326 +1,274 @@
-# Agent Feed Regression Test Suite
+# CSS Architecture Regression Test Suite
 
-Comprehensive regression tests for the agent-feed application, covering all critical functionality including API endpoints, UI components, authentication, data validation, cost tracking, and end-to-end workflows.
+A comprehensive TDD regression testing framework designed to prevent CSS architecture regressions in the agent-feed project. This suite validates the unified CSS architecture combining React 18.2.0, Tailwind CSS 4.x, and Next.js 14.0.0.
 
-## Overview
+## 🎯 Purpose
 
-This test suite validates that the agent-feed application maintains its functionality and performance characteristics across code changes. It includes:
+This test suite was created to prevent regressions of the CSS architecture fixes that resolved white screen issues and ensured proper integration between:
+- CSS Variables (HSL format)
+- Tailwind CSS utilities
+- React component rendering
+- Server-side rendering (SSR)
+- Multi-viewport responsive design
 
-- **API Regression Tests**: Validates all agent-related API endpoints
-- **UI Component Tests**: Tests React components and user interface functionality
-- **Security & Authentication Tests**: Validates security measures and access controls
-- **Data Validation Tests**: Ensures data integrity and validation rules
-- **Cost Tracking Tests**: Tests token analytics and cost tracking functionality
-- **End-to-End Workflow Tests**: Validates complete user workflows using Playwright
-- **Performance & Reliability Tests**: Tests system performance under various conditions
+## 📋 Test Coverage
 
-## Test Categories
+### 1. CSS Variable Loading Tests (`css-variable-loading.test.js`)
+- ✅ HSL format validation (`--background: 0 0% 100%`)
+- ✅ CSS custom property inheritance
+- ✅ Dark mode variable switching
+- ✅ Layer precedence validation
+- ✅ Accessibility contrast ratios
 
-### 1. API Endpoints (`api/agent-endpoints.test.js`)
-- Tests `/api/agents` endpoint functionality
-- Validates response structure and data integrity
-- Tests error handling and edge cases
-- Validates performance and concurrency handling
-- **Priority**: High | **Category**: Integration
+### 2. Tailwind Class Application Tests (`tailwind-class-application.test.js`)
+- ✅ Basic utility class application
+- ✅ Flexbox and Grid utilities
+- ✅ Responsive breakpoint classes
+- ✅ Hover and focus states
+- ✅ Custom config utilities
+- ✅ Dark mode classes
 
-### 2. UI Components (`ui/component-validation.test.jsx`)
-- Tests Agents page React component
-- Validates loading states and error handling
-- Tests responsive design and accessibility
-- Validates component props and state management
-- **Priority**: High | **Category**: Unit
+### 3. Component Rendering Tests (`component-rendering.test.js`)
+- ✅ White screen prevention
+- ✅ Layout component rendering
+- ✅ Loading state handling
+- ✅ Error boundary styling
+- ✅ Form component styling
+- ✅ Animation performance
+- ✅ FOUC prevention
 
-### 3. Security & Authentication (`security/auth-validation.test.js`)
-- Tests security headers and CORS configuration
-- Validates input sanitization and XSS prevention
-- Tests rate limiting and DOS protection
-- Validates data privacy and information disclosure prevention
-- **Priority**: Critical | **Category**: Security
+### 4. React Hook Integration Tests (`react-hook-integration.test.js`)
+- ✅ useState with CSS updates
+- ✅ useEffect infinite loop prevention
+- ✅ Animation frame management
+- ✅ Event listener cleanup
+- ✅ DOM mutation handling
+- ✅ Intersection observer integration
 
-### 4. Data Validation (`data/validation-integrity.test.js`)
-- Tests data structure consistency
-- Validates field requirements and data types
-- Tests data uniqueness and referential integrity
-- Validates input sanitization and boundary conditions
-- **Priority**: High | **Category**: Integration
+### 5. Multi-viewport Responsive Tests (`multi-viewport-responsive.test.js`)
+- ✅ Mobile (375px), Tablet (768px), Desktop (1920px)
+- ✅ Responsive navigation
+- ✅ Grid layout adaptation
+- ✅ Typography scaling
+- ✅ Spacing adjustments
+- ✅ Media queries
+- ✅ Orientation changes
+- ✅ Accessibility maintenance
 
-### 5. Cost Tracking (`analytics/cost-tracking.test.js`)
-- Tests CostTracker service functionality
-- Validates token usage calculation and deduplication
-- Tests session management and analytics
-- Validates database operations and error handling
-- **Priority**: Medium | **Category**: Unit
+### 6. Build Process Validation Tests (`build-process-validation.test.js`)
+- ✅ Next.js build success
+- ✅ Tailwind CSS compilation
+- ✅ CSS variable preservation
+- ✅ PostCSS processing
+- ✅ TypeScript compilation
+- ✅ Static asset handling
 
-### 6. E2E Workflows (`e2e/workflow-integration.test.js`)
-- Tests complete user workflows in browser
-- Validates navigation and routing
-- Tests performance and loading behavior
-- Validates error handling and recovery
-- **Priority**: High | **Category**: E2E
+### 7. Server Integration Tests (`server-integration.test.js`)
+- ✅ Frontend (3003) and Backend (3000) integration
+- ✅ SSR CSS hydration
+- ✅ CORS configuration
+- ✅ Performance under load
+- ✅ Error page styling
+- ✅ Security headers
 
-### 7. Performance & Reliability (`performance/reliability-tests.test.js`)
-- Tests API response times and throughput
-- Validates system behavior under load
-- Tests memory usage and resource efficiency
-- Validates network performance and reliability
-- **Priority**: Medium | **Category**: Performance
+## 🚀 Quick Start
 
-## Test Infrastructure
-
-### Configuration Files
-- `jest.config.js`: Jest configuration for regression tests
-- `jest.setup.js`: Global test setup and custom matchers
-- `global-setup.js`: Environment setup before all tests
-- `global-teardown.js`: Cleanup after all tests
-- `test-sequencer.js`: Controls test execution order
-
-### Custom Matchers
-The test suite includes custom Jest matchers:
-- `toBeValidAgent()`: Validates agent object structure
-- `toBeValidApiResponse()`: Validates API response format
-- `toHaveValidTokenUsage()`: Validates token usage data
-
-### Test Utilities
-Global utilities available in all tests:
-- `testUtils.delay()`: Promise-based delay function
-- `testUtils.retryAsync()`: Retry failed operations
-- `testUtils.generateMockAgent()`: Create mock agent data
-- `testUtils.generateMockTokenUsage()`: Create mock token usage data
-
-## Running Tests
-
-### Prerequisites
-- Node.js 18+
-- Jest testing framework
-- Playwright for E2E tests (optional)
-- Agent-feed application running on localhost:3000
-
-### Quick Start
+### Run All Tests
 ```bash
-# Run all regression tests
+# Run the complete regression suite
+./tests/regression/run-regression-suite.js
+
+# Or with npm
 npm run test:regression
-
-# Or use the test runner directly
-node tests/regression/run-regression-tests.js
-
-# Run specific test category
-npx jest --config tests/regression/jest.config.js --testPathPattern=api
-npx jest --config tests/regression/jest.config.js --testPathPattern=ui
-npx jest --config tests/regression/jest.config.js --testPathPattern=security
 ```
 
-### Test Runner Options
+### Run Individual Test Types
 ```bash
-# Run tests sequentially (default: parallel)
-node tests/regression/run-regression-tests.js --no-parallel
+# Jest unit tests only
+npx jest --config tests/regression/jest.config.regression.js
 
-# Disable coverage collection
-node tests/regression/run-regression-tests.js --no-coverage
-
-# Bail on first failure
-node tests/regression/run-regression-tests.js --bail
-
-# Quiet mode (less verbose output)
-node tests/regression/run-regression-tests.js --quiet
-
-# Custom timeout (in milliseconds)
-node tests/regression/run-regression-tests.js --timeout=180000
+# Playwright E2E tests only
+npx playwright test --config tests/regression/playwright.config.regression.js
 ```
 
-### Environment Variables
-```bash
-# Test configuration
-export TEST_BASE_URL=http://localhost:3000
-export TEST_API_URL=http://localhost:3000/api
-export TEST_DB_PATH=:memory:
+## 📊 Test Results and Reports
 
-# Enable real API testing (default: mock)
-export ENABLE_REAL_API=true
+Test results are generated in `/tests/regression/reports/`:
 
-# Enable browser-based E2E tests
-export ENABLE_BROWSER_TESTS=true
+- `regression-test-results.xml` - Jest unit test results (JUnit format)
+- `regression-e2e-results.xml` - Playwright E2E test results (JUnit format)
+- `regression-summary.json` - Combined test summary (JSON)
+- `regression-summary.txt` - Human-readable summary
+- `playwright/` - Playwright HTML reports
+- `screenshots/` - Visual regression screenshots
+
+## 🔧 Configuration
+
+### Jest Configuration
+- **Config**: `jest.config.regression.js`
+- **Setup**: `jest.setup.regression.js`
+- **Environment**: `jest.env.js`
+- **Sequencer**: `jest.sequencer.js`
+
+### Playwright Configuration
+- **Config**: `playwright.config.regression.js`
+- **Global Setup**: `playwright.global-setup.js`
+- **Global Teardown**: `playwright.global-teardown.js`
+
+## 🛠 Prerequisites
+
+Before running the tests, ensure:
+
+1. **Dependencies installed**:
+   ```bash
+   npm install
+   ```
+
+2. **Playwright browsers installed**:
+   ```bash
+   npx playwright install --with-deps
+   ```
+
+3. **Development server running** (for E2E tests):
+   ```bash
+   npm run dev  # Should start on port 3003
+   ```
+
+4. **Backend server running** (for integration tests):
+   ```bash
+   # Backend should be available on port 3000
+   ```
+
+## 📁 Directory Structure
+
+```
+tests/regression/
+├── README.md                          # This file
+├── run-regression-suite.js            # Main test runner
+├── jest.config.regression.js          # Jest configuration
+├── jest.setup.regression.js           # Jest test setup
+├── jest.env.js                        # Environment variables
+├── jest.sequencer.js                  # Test execution order
+├── playwright.config.regression.js    # Playwright configuration
+├── playwright.global-setup.js         # Playwright setup
+├── playwright.global-teardown.js      # Playwright teardown
+├── css-variable-loading.test.js       # CSS variables tests
+├── tailwind-class-application.test.js # Tailwind utilities tests
+├── component-rendering.test.js        # Component rendering tests
+├── react-hook-integration.test.js     # React hooks tests
+├── multi-viewport-responsive.test.js  # Responsive design tests
+├── build-process-validation.test.js   # Build process tests
+├── server-integration.test.js         # Server integration tests
+├── reports/                           # Test results and reports
+└── screenshots/                       # Visual regression screenshots
 ```
 
-## Test Results and Reporting
+## 🔍 Custom Jest Matchers
 
-### Generated Artifacts
-All test results and artifacts are saved to `tests/regression/artifacts/`:
+The test suite includes custom Jest matchers for CSS testing:
 
-- `regression-results-{timestamp}.json`: Detailed test results
-- `regression-summary-{timestamp}.txt`: Human-readable summary
-- `latest-results.json`: Symlink to most recent detailed results
-- `latest-summary.txt`: Symlink to most recent summary
-- Individual test suite results: `{suite-name}-results.json`
+```javascript
+// CSS variable validation
+expect(cssText).toHaveValidCSSVariable('background');
 
-### Coverage Reports
-Test coverage reports are generated in `coverage/regression/`:
-- `lcov-report/index.html`: Interactive HTML coverage report
-- `coverage-final.json`: Machine-readable coverage data
+// HSL format validation
+expect('221.2 83.2% 53.3%').toHaveValidHSLFormat();
 
-### Sample Output
-```
-🎯 Agent Feed Regression Test Suite
-=====================================
+// Tailwind class validation
+expect(element).toHaveTailwindClass('bg-primary');
 
-🔍 Checking prerequisites...
-  ✅ Node.js version: v18.17.0
-  ✅ Jest installation: 29.7.0
-  ✅ Project package.json: true
-  ✅ Test directory: true
+// Viewport visibility
+expect(element).toBeVisibleInViewport();
 
-🛠️ Setting up test environment...
-  📁 Created directory: tests/regression/artifacts
-  ✅ Test environment ready
-
-🚀 Starting comprehensive regression test suite...
-📊 Total test suites: 7
-⚡ Running tests in parallel...
-
-🧪 Running API Endpoints tests...
-  ✅ API Endpoints completed in 2847ms
-
-🧪 Running UI Components tests...
-  ✅ UI Components completed in 1532ms
-
-...
-
-╔════════════════════════════════════════════════════════════════╗
-║                    REGRESSION TEST SUMMARY                     ║
-╠════════════════════════════════════════════════════════════════╣
-║ Total Test Suites:   7 │ Pass Rate: 100.00% │ Duration: 12s   ║
-║ Passed:          7 │ Failed:       0 │ Errors:       0        ║
-╠════════════════════════════════════════════════════════════════╣
-║ CATEGORY BREAKDOWN:                                            ║
-║ integration    : 3/3 (100%)                                   ║
-║ unit          : 2/2 (100%)                                    ║
-║ security      : 1/1 (100%)                                    ║
-║ e2e           : 1/1 (100%)                                    ║
-║ performance   : 1/1 (100%)                                    ║
-╚════════════════════════════════════════════════════════════════╝
-
-🏁 Test run completed with exit code: 0
-🎉 All regression tests passed!
+// Responsive CSS validation
+expect(cssText).toHaveResponsiveCSS('md');
 ```
 
-## Continuous Integration
+## 🎯 Target Specifications
 
-### GitHub Actions
-Add to `.github/workflows/regression-tests.yml`:
+This test suite validates:
+- **React**: 18.2.0
+- **Next.js**: 14.0.0
+- **Tailwind CSS**: 4.1.13
+- **PostCSS**: 8.5.6
+- **TypeScript**: 5.9.2
+
+## 🚨 Common Issues and Solutions
+
+### White Screen Issues
+If tests detect white screen issues:
+1. Check CSS variable loading
+2. Verify Tailwind compilation
+3. Validate component rendering
+4. Review build process logs
+
+### CSS Variable Failures
+If CSS variable tests fail:
+1. Ensure HSL format (no parentheses)
+2. Check `:root` and `.dark` definitions
+3. Verify CSS layer structure
+4. Validate PostCSS configuration
+
+### Responsive Test Failures
+If responsive tests fail:
+1. Check Tailwind breakpoint configuration
+2. Verify media query compilation
+3. Test viewport meta tag
+4. Validate responsive utility classes
+
+### Build Process Failures
+If build tests fail:
+1. Check Next.js configuration
+2. Verify Tailwind config paths
+3. Review PostCSS setup
+4. Validate TypeScript compilation
+
+## 📈 Continuous Integration
+
+To integrate with CI/CD:
 
 ```yaml
-name: Regression Tests
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-
-jobs:
-  regression:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm ci
-      - run: npm run test:regression
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: regression-test-results
-          path: tests/regression/artifacts/
+- name: Run CSS Regression Tests
+  run: |
+    npm ci
+    npx playwright install --with-deps
+    npm run dev &
+    sleep 10
+    ./tests/regression/run-regression-suite.js
 ```
 
-### Local Pre-commit Hook
-Add to `.git/hooks/pre-commit`:
-
-```bash
-#!/bin/sh
-echo "Running regression tests..."
-npm run test:regression:quick || {
-  echo "❌ Regression tests failed. Commit aborted."
-  exit 1
-}
-```
-
-## Maintenance and Updates
+## 🔄 Maintenance
 
 ### Adding New Tests
-1. Create test files in appropriate subdirectory (`api/`, `ui/`, etc.)
-2. Follow existing naming convention: `*.test.js` or `*.test.jsx`
-3. Update `run-regression-tests.js` to include new test suites
-4. Add appropriate test data and mocks
+1. Create test file in `/tests/regression/`
+2. Follow naming convention: `*.test.js`
+3. Update jest.sequencer.js for execution order
+4. Add coverage documentation to README
 
-### Updating Existing Tests
-1. Modify test files directly
-2. Update test expectations as application evolves
-3. Maintain backward compatibility where possible
-4. Update documentation for any breaking changes
+### Updating Configurations
+1. Modify respective config files
+2. Test changes locally
+3. Update documentation
+4. Validate CI integration
 
-### Performance Baselines
-Performance tests include baseline expectations:
-- API response time: < 2 seconds
-- Concurrent request handling: 20 requests successfully
-- Memory usage: < 100MB increase during stress testing
-- E2E page load: < 5 seconds
+## 📝 Contributing
 
-Update these baselines as the application scales or requirements change.
+When adding new CSS features:
+1. Add corresponding regression tests
+2. Update test coverage documentation
+3. Ensure tests cover edge cases
+4. Test across all supported browsers
 
-## Troubleshooting
+## 📞 Support
 
-### Common Issues
+For issues with the regression test suite:
+1. Check test output and logs
+2. Review configuration files
+3. Validate environment setup
+4. Check for known issues in README
 
-**Jest out of memory errors**:
-```bash
-export NODE_OPTIONS="--max-old-space-size=8192"
-npm run test:regression
-```
+---
 
-**Playwright browser launch failures**:
-```bash
-npx playwright install
-export ENABLE_BROWSER_TESTS=false  # Skip E2E tests
-```
-
-**API connection timeouts**:
-```bash
-# Ensure application is running
-npm run dev &
-sleep 10  # Wait for startup
-npm run test:regression
-```
-
-**File permission errors**:
-```bash
-chmod +x tests/regression/run-regression-tests.js
-```
-
-### Debug Mode
-Run tests with additional debugging:
-
-```bash
-DEBUG=* node tests/regression/run-regression-tests.js --verbose
-```
-
-## Best Practices
-
-1. **Test Independence**: Each test should be independent and not rely on state from other tests
-2. **Mock External Dependencies**: Use mocks for external services and APIs
-3. **Clear Test Names**: Use descriptive test names that explain what is being tested
-4. **Regular Updates**: Keep tests updated as the application evolves
-5. **Performance Monitoring**: Monitor test execution time and optimize slow tests
-6. **Documentation**: Document any special test requirements or setup procedures
-
-## Contributing
-
-When adding new regression tests:
-
-1. Follow the existing test structure and naming conventions
-2. Include both positive and negative test cases
-3. Add appropriate error handling and edge case testing
-4. Update this README with any new test categories or requirements
-5. Ensure tests are deterministic and not flaky
-6. Include performance expectations where appropriate
-
-For questions or issues with the regression test suite, please check the troubleshooting section or contact the development team.
+**Last Updated**: September 28, 2025
+**Test Suite Version**: 1.0.0
+**Supported Environment**: Node.js 16+, agent-feed project

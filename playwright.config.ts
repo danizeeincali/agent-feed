@@ -12,7 +12,7 @@ export default defineConfig({
     ['line']
   ],
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:3001',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -29,7 +29,7 @@ export default defineConfig({
   webServer: [
     {
       command: 'cd frontend && npm run dev',
-      port: 5173,
+      port: 3001,
       reuseExistingServer: !process.env.CI,
     },
     {

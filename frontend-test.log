@@ -1,0 +1,26 @@
+
+> agent-feed@0.1.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+ ⚠ Port 3001 is in use, trying 3002 instead.
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:3002
+   - Environments: .env.development, .env
+   - Experiments (use at your own risk):
+     · optimizeCss
+
+ ✓ Ready in 2.2s
+ ○ Compiling / ...
+ ✓ Compiled / in 11.8s (990 modules)
+Time 11ms
+(node:55864) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Time 7ms
+Time 2ms
+ ○ Compiling /agents ...
+ ✓ Compiled /agents in 699ms (994 modules)
+Time 1ms
+Time 1ms
+ ✓ Compiled in 1286ms (233 modules)
+ ✓ Compiled in 662ms (233 modules)

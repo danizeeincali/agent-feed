@@ -23,7 +23,7 @@ import {
   Check
 } from 'lucide-react';
 import { cn } from '../utils/cn';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '../ui/badge';
 
 export interface ThemeSettings {
   // Colors

@@ -50,286 +50,73 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
 
   const { isConnected, subscribe } = useWebSocket();
 
-  // Mock agent data - In production, this would come from API
-  const mockAgents: Agent[] = [
-    {
-      id: 'chief-of-staff',
-      name: 'Chief of Staff Agent',
-      type: 'coordinator',
-      status: 'active',
-      capabilities: ['Strategic Planning', 'Task Coordination', 'Priority Assessment'],
-      currentTask: 'Coordinating morning workflow review',
-      metrics: {
-        tasksCompleted: 156,
-        successRate: 98.5,
-        responseTime: 1.2,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Strategic coordination and executive assistance',
-      description: 'Manages high-level strategic initiatives and coordinates between other agents.'
-    },
-    {
-      id: 'personal-todos',
-      name: 'Personal Todos Agent',
-      type: 'specialist',
-      status: 'busy',
-      capabilities: ['Task Management', 'Priority Sorting', 'Deadline Tracking'],
-      currentTask: 'Processing weekly task priorities',
-      metrics: {
-        tasksCompleted: 342,
-        successRate: 96.8,
-        responseTime: 0.8,
-        lastActive: new Date(Date.now() - 5 * 60 * 1000).toISOString()
-      },
-      specialization: 'Personal productivity and task organization',
-      description: 'Organizes and prioritizes personal and professional tasks.'
-    },
-    {
-      id: 'impact-filter',
-      name: 'Impact Filter Agent',
-      type: 'analyst',
-      status: 'active',
-      capabilities: ['Impact Analysis', 'Priority Assessment', 'Business Value Calculation'],
-      currentTask: 'Analyzing project impact scores',
-      metrics: {
-        tasksCompleted: 89,
-        successRate: 99.1,
-        responseTime: 2.1,
-        lastActive: new Date(Date.now() - 2 * 60 * 1000).toISOString()
-      },
-      specialization: 'Business impact and priority analysis',
-      description: 'Evaluates and filters initiatives based on business impact potential.'
-    },
-    {
-      id: 'code-review',
-      name: 'Code Review Agent',
-      type: 'reviewer',
-      status: 'idle',
-      capabilities: ['Code Analysis', 'Quality Assurance', 'Security Review'],
-      metrics: {
-        tasksCompleted: 67,
-        successRate: 97.2,
-        responseTime: 3.4,
-        lastActive: new Date(Date.now() - 15 * 60 * 1000).toISOString()
-      },
-      specialization: 'Code quality and security analysis',
-      description: 'Reviews code for quality, security vulnerabilities, and best practices.'
-    },
-    {
-      id: 'documentation',
-      name: 'Documentation Agent',
-      type: 'documenter',
-      status: 'active',
-      capabilities: ['Technical Writing', 'API Documentation', 'User Guides'],
-      currentTask: 'Updating API documentation',
-      metrics: {
-        tasksCompleted: 124,
-        successRate: 95.6,
-        responseTime: 4.2,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Technical documentation and knowledge management',
-      description: 'Creates and maintains comprehensive technical documentation.'
-    },
-    {
-      id: 'testing',
-      name: 'Testing Agent',
-      type: 'tester',
-      status: 'busy',
-      capabilities: ['Automated Testing', 'Test Case Generation', 'Quality Validation'],
-      currentTask: 'Running integration test suite',
-      metrics: {
-        tasksCompleted: 203,
-        successRate: 94.3,
-        responseTime: 5.8,
-        lastActive: new Date(Date.now() - 1 * 60 * 1000).toISOString()
-      },
-      specialization: 'Automated testing and quality assurance',
-      description: 'Develops and executes comprehensive test suites for quality validation.'
-    },
-    {
-      id: 'security',
-      name: 'Security Agent',
-      type: 'security',
-      status: 'offline',
-      capabilities: ['Vulnerability Scanning', 'Security Analysis', 'Threat Detection'],
-      metrics: {
-        tasksCompleted: 45,
-        successRate: 99.8,
-        responseTime: 6.2,
-        lastActive: new Date(Date.now() - 30 * 60 * 1000).toISOString()
-      },
-      specialization: 'Security analysis and vulnerability assessment',
-      description: 'Monitors and analyzes security vulnerabilities and threats.'
-    },
-    {
-      id: 'performance',
-      name: 'Performance Agent',
-      type: 'optimizer',
-      status: 'active',
-      capabilities: ['Performance Analysis', 'Optimization', 'Bottleneck Detection'],
-      currentTask: 'Analyzing system performance metrics',
-      metrics: {
-        tasksCompleted: 78,
-        successRate: 96.9,
-        responseTime: 3.1,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'System performance optimization',
-      description: 'Monitors and optimizes system performance and resource usage.'
-    },
-    {
-      id: 'database',
-      name: 'Database Agent',
-      type: 'specialist',
-      status: 'idle',
-      capabilities: ['Database Management', 'Query Optimization', 'Data Analysis'],
-      metrics: {
-        tasksCompleted: 112,
-        successRate: 98.1,
-        responseTime: 2.7,
-        lastActive: new Date(Date.now() - 8 * 60 * 1000).toISOString()
-      },
-      specialization: 'Database administration and optimization',
-      description: 'Manages database operations, optimization, and data integrity.'
-    },
-    {
-      id: 'frontend',
-      name: 'Frontend Agent',
-      type: 'coder',
-      status: 'busy',
-      capabilities: ['UI Development', 'React', 'User Experience'],
-      currentTask: 'Implementing responsive design updates',
-      metrics: {
-        tasksCompleted: 187,
-        successRate: 95.4,
-        responseTime: 4.6,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Frontend development and user interface',
-      description: 'Develops and maintains frontend applications and user interfaces.'
-    },
-    {
-      id: 'backend',
-      name: 'Backend Agent',
-      type: 'coder',
-      status: 'active',
-      capabilities: ['API Development', 'Microservices', 'System Architecture'],
-      currentTask: 'Optimizing API endpoints',
-      metrics: {
-        tasksCompleted: 156,
-        successRate: 97.3,
-        responseTime: 3.8,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Backend development and API design',
-      description: 'Develops backend services, APIs, and system architecture.'
-    },
-    {
-      id: 'devops',
-      name: 'DevOps Agent',
-      type: 'engineer',
-      status: 'active',
-      capabilities: ['Infrastructure', 'CI/CD', 'Deployment'],
-      currentTask: 'Monitoring deployment pipeline',
-      metrics: {
-        tasksCompleted: 134,
-        successRate: 98.7,
-        responseTime: 2.9,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Infrastructure and deployment automation',
-      description: 'Manages infrastructure, CI/CD pipelines, and deployment processes.'
-    },
-    {
-      id: 'analytics',
-      name: 'Analytics Agent',
-      type: 'analyst',
-      status: 'busy',
-      capabilities: ['Data Analysis', 'Metrics Tracking', 'Reporting'],
-      currentTask: 'Generating weekly performance report',
-      metrics: {
-        tasksCompleted: 98,
-        successRate: 96.5,
-        responseTime: 5.1,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Data analytics and business intelligence',
-      description: 'Analyzes data patterns and generates insights for decision making.'
-    },
-    {
-      id: 'monitoring',
-      name: 'Monitoring Agent',
-      type: 'monitor',
-      status: 'active',
-      capabilities: ['System Monitoring', 'Alert Management', 'Health Checks'],
-      currentTask: 'Monitoring system health',
-      metrics: {
-        tasksCompleted: 267,
-        successRate: 99.2,
-        responseTime: 1.5,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'System monitoring and alerting',
-      description: 'Continuously monitors system health and manages alerts.'
-    },
-    {
-      id: 'deployment',
-      name: 'Deployment Agent',
-      type: 'engineer',
-      status: 'idle',
-      capabilities: ['Release Management', 'Deployment', 'Rollback'],
-      metrics: {
-        tasksCompleted: 56,
-        successRate: 99.6,
-        responseTime: 4.3,
-        lastActive: new Date(Date.now() - 12 * 60 * 1000).toISOString()
-      },
-      specialization: 'Release and deployment management',
-      description: 'Manages software releases and deployment processes.'
-    },
-    {
-      id: 'integration',
-      name: 'Integration Agent',
-      type: 'coordinator',
-      status: 'active',
-      capabilities: ['Service Integration', 'API Orchestration', 'Data Flow'],
-      currentTask: 'Synchronizing service integrations',
-      metrics: {
-        tasksCompleted: 89,
-        successRate: 97.8,
-        responseTime: 3.2,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Service integration and orchestration',
-      description: 'Coordinates integrations between different services and systems.'
-    },
-    {
-      id: 'research',
-      name: 'Research Agent',
-      type: 'researcher',
-      status: 'busy',
-      capabilities: ['Technology Research', 'Market Analysis', 'Innovation'],
-      currentTask: 'Researching emerging technologies',
-      metrics: {
-        tasksCompleted: 73,
-        successRate: 95.9,
-        responseTime: 7.1,
-        lastActive: new Date().toISOString()
-      },
-      specialization: 'Technology research and innovation',
-      description: 'Researches new technologies and identifies innovation opportunities.'
-    }
-  ];
+  // Real agents fetched from API - no mock data
 
   useEffect(() => {
-    // Simulate loading delay
-    const timer = setTimeout(() => {
-      setAgents(mockAgents);
-      setLoading(false);
-    }, 1000);
+    // Fetch real agents from API
+    const fetchAgents = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-    return () => clearTimeout(timer);
+        const response = await fetch('/api/agents');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Transform frontend proxy data to match UI expectations
+        const transformAgent = (agent: any) => ({
+          ...agent,
+          // Map real performance metrics to UI structure
+          metrics: {
+            tasksCompleted: agent.usage_count || 0,
+            successRate: Math.round(agent.performance_metrics?.success_rate || 0),
+            responseTime: agent.performance_metrics?.average_response_time ?
+              (agent.performance_metrics.average_response_time / 1000).toFixed(1) : '0.0',
+            lastActive: agent.health_status?.last_heartbeat ||
+              agent.last_used ||
+              agent.updated_at ||
+              new Date().toISOString()
+          },
+          // Generate currentTask from health status
+          currentTask: agent.health_status?.active_tasks > 0 ?
+            `Processing ${agent.health_status.active_tasks} active task${agent.health_status.active_tasks > 1 ? 's' : ''}` :
+            agent.status === 'inactive' ? null :
+            agent.capabilities && agent.capabilities.length > 0 ?
+              `Ready to ${agent.capabilities[0]} and assist` : 'Ready for tasks',
+          // Map available fields to UI expectations
+          type: agent.capabilities?.[0] || 'specialist',
+          specialization: agent.usage || agent.description || 'General purpose agent'
+        });
+
+        if (data.data && Array.isArray(data.data)) {
+          setAgents(data.data.map(transformAgent));
+        } else if (data.agents && Array.isArray(data.agents)) {
+          setAgents(data.agents.map(transformAgent));
+        } else if (Array.isArray(data)) {
+          setAgents(data.map(transformAgent));
+        } else {
+          console.warn('Unexpected API response format:', data);
+          setAgents([]);
+        }
+      } catch (err) {
+        console.error('Error fetching agents:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch agents');
+        setAgents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAgents();
+
+    // Refresh agents data every 30 seconds
+    const intervalId = setInterval(fetchAgents, 30000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -578,23 +365,21 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
         <div className="flex items-center border border-gray-300 rounded-lg">
           <button
             onClick={() => setViewMode('grid')}
-            className={cn(
-              'px-3 py-2 text-sm font-medium rounded-l-lg',
+            className={`px-3 py-2 text-sm font-medium rounded-l-lg ${
               viewMode === 'grid'
                 ? 'bg-blue-500 text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
-            )}
+            }`}
           >
             <Grid3X3 className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={cn(
-              'px-3 py-2 text-sm font-medium rounded-r-lg border-l border-gray-300',
+            className={`px-3 py-2 text-sm font-medium rounded-r-lg border-l border-gray-300 ${
               viewMode === 'list'
                 ? 'bg-blue-500 text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
-            )}
+            }`}
           >
             <List className="w-4 h-4" />
           </button>
@@ -618,10 +403,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
                     <p className="text-sm text-gray-500 capitalize">{agent.type}</p>
                   </div>
                 </div>
-                <div className={cn(
-                  'px-2 py-1 rounded-full border text-xs font-medium flex items-center gap-1',
-                  getStatusColor(agent.status)
-                )}>
+                <div className={`px-2 py-1 rounded-full border text-xs font-medium flex items-center gap-1 ${getStatusColor(agent.status)}`}>
                   {getStatusIcon(agent.status)}
                   {agent.status}
                 </div>
@@ -707,10 +489,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
                     </div>
                   </div>
                   <div>
-                    <div className={cn(
-                      'px-2 py-1 rounded-full border text-xs font-medium flex items-center gap-1 w-fit',
-                      getStatusColor(agent.status)
-                    )}>
+                    <div className={`px-2 py-1 rounded-full border text-xs font-medium flex items-center gap-1 w-fit ${getStatusColor(agent.status)}`}>
                       {getStatusIcon(agent.status)}
                       {agent.status}
                     </div>

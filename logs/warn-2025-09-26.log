@@ -1,0 +1,4 @@
+{"timestamp":"2025-09-26T05:03:51.598Z","level":"WARN","message":"Route not found","requestId":"mg0dmwx76nrq9gcutos","method":"GET","url":"/agents","ip":"::1"}
+{"timestamp":"2025-09-26T05:03:51.817Z","level":"WARN","message":"Route not found","requestId":"mg0dmx3b9s70f0wnq0n","method":"GET","url":"/favicon.ico","ip":"::1"}
+{"timestamp":"2025-09-26T05:05:11.178Z","level":"WARN","message":"Route not found","requestId":"mg0dombr2352tq7z2fh","method":"GET","url":"/","ip":"::1"}
+{"timestamp":"2025-09-26T05:13:24.853Z","level":"WARN","message":"Route not found","requestId":"mg0dz78yr7zcpenll0s","method":"GET","url":"/favicon.ico","ip":"::1"}

@@ -1,0 +1,9 @@
+{
+  "testName": "Navigation between pages works smoothly",
+  "status": "timedOut",
+  "consoleErrors": [],
+  "reactErrors": [],
+  "pageLoadTimes": {},
+  "timestamp": "2025-09-28T04:12:36.738Z",
+  "url": "http://localhost:3001/"
+}

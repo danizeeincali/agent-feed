@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Activity, AlertCircle, Shield, Zap, CheckCircle, XCircle, RefreshCw, BarChart3 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui/button';
 import AnalyticsErrorBoundary from './AnalyticsErrorBoundary';
 import { AnalyticsNLDIntegration } from '../../nld/integration/AnalyticsNLDIntegration';
 import { NLDCore } from '../../nld/core/NLDCore';

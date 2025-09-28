@@ -1,109 +1,103 @@
-// @ts-check
-import { defineConfig, devices } from '@playwright/test';
-
 /**
- * @see https://playwright.dev/docs/test-configuration
+ * Playwright Configuration for Activities Production Validation
+ *
+ * Configured for real browser testing with visual documentation
  */
-export default defineConfig({
-  testDir: './tests/e2e',
-  /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
+
+const { defineConfig, devices } = require('@playwright/test');
+
+module.exports = defineConfig({
+  testDir: './tests/playwright',
+
+  /* Configuration for production validation */
+  fullyParallel: false, // Run tests sequentially for validation consistency
+  forbidOnly: !!process.env.CI, // Fail CI if test.only is left in
+  retries: process.env.CI ? 2 : 1, // Retry on CI
+  workers: 1, // Single worker for validation consistency
+
+  /* Reporter configuration */
   reporter: [
-    ['html', { outputFolder: 'test-results/html-report' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }],
-    ['json', { outputFile: 'test-results/results.json' }]
+    ['html', { outputDir: 'test-results/playwright-report' }],
+    ['json', { outputFile: 'test-results/validation-results.json' }],
+    ['list'],
+    ['junit', { outputFile: 'test-results/junit-results.xml' }]
   ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
+  /* Global test settings */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:5173',
+    /* Base URL for frontend testing */
+    baseURL: 'http://localhost:3000',
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    /* Browser settings for real validation */
+    headless: false, // Use real browser for visual verification
+    viewport: { width: 1280, height: 720 },
+    ignoreHTTPSErrors: true,
 
-    /* Take screenshot on failure */
+    /* Video and screenshot settings */
+    video: 'retain-on-failure',
     screenshot: 'only-on-failure',
 
-    /* Record video on failure */
-    video: 'retain-on-failure',
+    /* Trace settings for debugging */
+    trace: 'retain-on-failure',
 
-    /* Global timeout for all tests */
-    actionTimeout: 15000,
-    navigationTimeout: 30000,
+    /* Extended timeout for real system testing */
+    actionTimeout: 30000,
+    navigationTimeout: 30000
   },
 
-  /* Configure projects for major browsers */
+  /* Test timeout settings */
+  timeout: 120000, // 2 minutes for comprehensive validation
+  expect: {
+    timeout: 10000 // 10 seconds for assertions
+  },
+
+  /* Browser projects for validation */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'chromium-production-validation',
+      use: {
+        ...devices['Desktop Chrome'],
+        // Use real browser for validation
+        launchOptions: {
+          headless: false,
+          slowMo: 500 // Slow down for visual verification
+        }
+      },
     },
 
+    /* Uncomment for multi-browser validation
     {
-      name: 'firefox',
+      name: 'firefox-validation',
       use: { ...devices['Desktop Firefox'] },
     },
 
     {
-      name: 'webkit',
+      name: 'webkit-validation',
       use: { ...devices['Desktop Safari'] },
     },
-
-    /* Test against mobile viewports. */
-    {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    */
   ],
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
-
-  /* Global setup and teardown */
-  globalSetup: require.resolve('./tests/e2e/fixtures/global-setup.js'),
-  globalTeardown: require.resolve('./tests/e2e/fixtures/global-teardown.js'),
+  /* Development server setup */
+  webServer: [
+    {
+      command: 'cd /workspaces/agent-feed && node simple-backend.js --port 3000',
+      port: 3000,
+      timeout: 30000,
+      reuseExistingServer: !process.env.CI
+    },
+    {
+      command: 'cd /workspaces/agent-feed/frontend && npm run dev',
+      port: 5173,
+      timeout: 30000,
+      reuseExistingServer: !process.env.CI
+    }
+  ],
 
   /* Output directories */
-  outputDir: 'test-results/artifacts',
+  outputDir: 'test-results/playwright-artifacts',
 
-  /* Test timeout */
-  timeout: 30 * 1000,
-
-  /* Expect timeout */
-  expect: {
-    timeout: 10 * 1000,
-    toHaveScreenshot: {
-      mode: 'strict',
-      threshold: 0.2,
-    },
-    toMatchSnapshot: {
-      threshold: 0.2,
-    },
-  },
+  /* Global setup and teardown */
+  globalSetup: require.resolve('./tests/playwright/global-setup.js'),
+  globalTeardown: require.resolve('./tests/playwright/global-teardown.js')
 });

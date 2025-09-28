@@ -1,8 +1,9 @@
-import React, { useState, memo, Suspense } from 'react';
+import * as React from 'react';
+import { useState, memo, Suspense, useEffect, useMemo } from 'react';
 
 // Debug logging for App.tsx
 console.log('DEBUG: App.tsx loading...');
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import FallbackComponents from './components/FallbackComponents';
@@ -90,7 +91,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
 
   // Memoized navigation to prevent re-creation on every render
   // Cleaned up navigation - keeping only essential pages
-  const navigation = React.useMemo(() => [
+  const navigation = useMemo(() => [
     { name: 'Feed', href: '/', icon: Activity },
     { name: 'Drafts', href: '/drafts', icon: FileText },
     { name: 'Agents', href: '/agents', icon: Bot },
@@ -215,11 +216,14 @@ Layout.displayName = 'Layout';
 
 const App: React.FC = () => {
   console.log('DEBUG: App component rendering...');
-  
-  React.useEffect(() => {
+
+  useEffect(() => {
     console.log('DEBUG: App component mounted!');
   }, []);
-  
+
+  // SSR-safe router selection
+  const Router = typeof window !== 'undefined' ? BrowserRouter : MemoryRouter;
+
   return (
     <GlobalErrorBoundary>
       <QueryClientProvider client={queryClient}>

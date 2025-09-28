@@ -271,21 +271,21 @@ class DatabaseService {
     }
   }
 
-  async getActivities(limit = 20) {
+  async getActivities(limit = 20, offset = 0) {
     if (!this.initialized) {
       await this.initialize();
     }
 
     try {
       if (this.dbType === 'SQLite') {
-        return await this.db.getActivities(limit);
+        return await this.db.getActivities(limit, offset);
       } else {
         const result = await this.db.query(`
           SELECT id, type, description, timestamp, agent_id, status, metadata
-          FROM activities 
-          ORDER BY timestamp DESC 
-          LIMIT $1
-        `, [limit]);
+          FROM activities
+          ORDER BY timestamp DESC
+          LIMIT $1 OFFSET $2
+        `, [limit, offset]);
 
         return result.rows.map(row => ({
           ...row,
@@ -294,6 +294,39 @@ class DatabaseService {
       }
     } catch (error) {
       console.error('Error fetching activities:', error);
+      throw error;
+    }
+  }
+
+  async logActivity(activityData) {
+    if (!this.initialized) {
+      await this.initialize();
+    }
+
+    try {
+      if (this.dbType === 'SQLite') {
+        return await this.db.logActivity(activityData);
+      } else {
+        const {
+          type,
+          description,
+          agent_id = null,
+          status = 'completed',
+          metadata = {}
+        } = activityData;
+
+        const id = `activity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+        const result = await this.db.query(`
+          INSERT INTO activities (id, type, description, agent_id, status, metadata, timestamp)
+          VALUES ($1, $2, $3, $4, $5, $6, NOW())
+          RETURNING *
+        `, [id, type, description, agent_id, status, JSON.stringify(metadata)]);
+
+        return result.rows[0];
+      }
+    } catch (error) {
+      console.error('Error logging activity:', error);
       throw error;
     }
   }

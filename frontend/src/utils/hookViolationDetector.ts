@@ -3,6 +3,8 @@
  * Detects React Hooks rule violations to prevent "rendered more hooks" errors
  */
 
+import * as React from 'react';
+
 interface HookViolation {
   type: 'post_conditional_hook' | 'loop_hook' | 'nested_function_hook' | 'conditional_hook';
   line: number;

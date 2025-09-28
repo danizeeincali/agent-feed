@@ -13,9 +13,9 @@ import {
   PieChart as PieChartIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import LineChart from '@/components/charts/LineChart';
-import BarChart from '@/components/charts/BarChart';
-import PieChart from '@/components/charts/PieChart';
+import LineChart from '../charts/LineChart';
+import BarChart from '../charts/BarChart';
+import PieChart from '../charts/PieChart';
 import { 
   MessageAnalytics, 
   StepAnalytics, 

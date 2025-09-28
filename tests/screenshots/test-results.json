@@ -1,0 +1,401 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/playwright.config.react-validation.js",
+    "rootDir": "/workspaces/agent-feed/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "tests/screenshots/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "tests/screenshots/test-results.json"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/react-useeffect-fix-validation.spec.js"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 1,
+    "webServer": {
+      "command": "echo \"Server already running\"",
+      "port": 3001,
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "react-useeffect-fix-validation.spec.js",
+      "file": "react-useeffect-fix-validation.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "React useEffect Fix Validation",
+          "file": "react-useeffect-fix-validation.spec.js",
+          "line": 15,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Homepage loads without React useEffect errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 22944,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Agent Feed/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Agent Feed/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n\n    at /workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js:104:24",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js",
+                          "column": 24,
+                          "line": 104
+                        },
+                        "snippet": "  102 |\n  103 |     // Check that the page title is correct\n> 104 |     await expect(page).toHaveTitle(/Agent Feed/);\n      |                        ^\n  105 |\n  106 |     // Verify no React useEffect errors occurred\n  107 |     const useEffectErrors = reactErrors.filter(error =>"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js",
+                            "column": 24,
+                            "line": 104
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Agent Feed/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n\n\n  102 |\n  103 |     // Check that the page title is correct\n> 104 |     await expect(page).toHaveTitle(/Agent Feed/);\n      |                        ^\n  105 |\n  106 |     // Verify no React useEffect errors occurred\n  107 |     const useEffectErrors = reactErrors.filter(error =>\n    at /workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js:104:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T04:11:23.554Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-ff828-hout-React-useEffect-errors-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-ff828-hout-React-useEffect-errors-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-ff828-hout-React-useEffect-errors-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js",
+                        "column": 24,
+                        "line": 104
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "2e541c19086f0cfa82ed-8e0b960452b70ca77f6e",
+              "file": "react-useeffect-fix-validation.spec.js",
+              "line": 83,
+              "column": 3
+            },
+            {
+              "title": "Agents page loads without React useEffect errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 17311,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first()\u001b[22m\n\n    at /workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js:149:30",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js",
+                          "column": 30,
+                          "line": 149
+                        },
+                        "snippet": "  147 |     // Verify the agents page loaded (check for key elements)\n  148 |     const agentsList = await page.locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first();\n> 149 |     await expect(agentsList).toBeVisible({ timeout: 10000 });\n      |                              ^\n  150 |\n  151 |     // Verify no React useEffect errors occurred\n  152 |     const useEffectErrors = reactErrors.filter(error =>"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js",
+                            "column": 30,
+                            "line": 149
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first()\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first()\u001b[22m\n\n\n  147 |     // Verify the agents page loaded (check for key elements)\n  148 |     const agentsList = await page.locator('[data-testid=\"agents-list\"], .agents-container, .agent-grid').first();\n> 149 |     await expect(agentsList).toBeVisible({ timeout: 10000 });\n      |                              ^\n  150 |\n  151 |     // Verify no React useEffect errors occurred\n  152 |     const useEffectErrors = reactErrors.filter(error =>\n    at /workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js:149:30"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T04:11:47.446Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-a3c57-hout-React-useEffect-errors-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-a3c57-hout-React-useEffect-errors-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-a3c57-hout-React-useEffect-errors-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js",
+                        "column": 30,
+                        "line": 149
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "2e541c19086f0cfa82ed-847f8f85f98b07f57d73",
+              "file": "react-useeffect-fix-validation.spec.js",
+              "line": 127,
+              "column": 3
+            },
+            {
+              "title": "Navigation between pages works smoothly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 32749,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js",
+                            "column": 16,
+                            "line": 182
+                          },
+                          "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[href=\"/agents\"], [href*=\"agents\"]')\u001b[22m\n\n\n  180 |\n  181 |     // Navigate to agents page\n> 182 |     await page.click('a[href=\"/agents\"], [href*=\"agents\"]');\n      |                ^\n  183 |     await page.waitForURL('**/agents', { timeout: 10000 });\n  184 |     await page.waitForTimeout(2000);\n  185 |\n    at /workspaces/agent-feed/tests/react-useeffect-fix-validation.spec.js:182:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T04:12:06.363Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-fabab-etween-pages-works-smoothly-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-fabab-etween-pages-works-smoothly-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/react-useeffect-fix-valida-fabab-etween-pages-works-smoothly-chromium/error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "2e541c19086f0cfa82ed-9f49d003956f08e2fa71",
+              "file": "react-useeffect-fix-validation.spec.js",
+              "line": 172,
+              "column": 3
+            },
+            {
+              "title": "React 18.2.0 unified configuration validation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4283,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "🔍 Detected React version: unknown\n"
+                        },
+                        {
+                          "text": "✅ React 18.2.0 unified configuration appears to be working correctly\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T04:12:40.427Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2e541c19086f0cfa82ed-7f686b0c8491c4af445f",
+              "file": "react-useeffect-fix-validation.spec.js",
+              "line": 216,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Comprehensive React Validation Report",
+          "file": "react-useeffect-fix-validation.spec.js",
+          "line": 300,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Generate final validation report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 305,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "📋 Validation report template generated at: /workspaces/agent-feed/tests/screenshots/react-useeffect-validation-report.json\n"
+                        },
+                        {
+                          "text": "🚀 Execute tests to populate results\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-28T04:12:44.952Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "2e541c19086f0cfa82ed-0ad1faf0ac3a47d4f394",
+              "file": "react-useeffect-fix-validation.spec.js",
+              "line": 301,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-28T04:11:22.546Z",
+    "duration": 82910.36,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

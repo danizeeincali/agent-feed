@@ -791,19 +791,68 @@ class SQLiteFallbackDatabase {
     };
   }
 
-  async getActivities(limit = 20) {
+  async getActivities(limit = 20, offset = 0) {
     if (!this.db) throw new Error('Database not initialized');
 
     const rows = this.db.prepare(`
-      SELECT * FROM activities 
-      ORDER BY timestamp DESC 
-      LIMIT ?
-    `).all(limit);
+      SELECT * FROM activities
+      ORDER BY timestamp DESC
+      LIMIT ? OFFSET ?
+    `).all(limit, offset);
 
     return rows.map((row) => ({
       ...row,
-      metadata: JSON.parse(row.metadata || '{}')
+      metadata: row.metadata ? JSON.parse(row.metadata) : {}
     }));
+  }
+
+  async logActivity(activityData) {
+    if (!this.db) throw new Error('Database not initialized');
+
+    const {
+      type,
+      description,
+      agent_id = null,
+      status = 'completed',
+      metadata = {}
+    } = activityData;
+
+    const id = `activity-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    const stmt = this.db.prepare(`
+      INSERT INTO activities (id, type, description, agent_id, status, metadata, timestamp)
+      VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    `);
+
+    const result = stmt.run(
+      id,
+      type,
+      description,
+      agent_id,
+      status,
+      JSON.stringify(metadata)
+    );
+
+    const activity = {
+      id,
+      type,
+      description,
+      agent_id,
+      status,
+      metadata,
+      timestamp: new Date().toISOString()
+    };
+
+    // Broadcast activity update via WebSocket if available
+    if (global.broadcastActivityUpdate) {
+      try {
+        await global.broadcastActivityUpdate(activity);
+      } catch (error) {
+        console.error('Failed to broadcast activity update:', error);
+      }
+    }
+
+    return activity;
   }
 
 

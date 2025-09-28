@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { ChartDataPoint, ChartConfig } from '../types/analytics';
+import { ChartDataPoint, ChartConfig } from '@/types/analytics';
 
 interface LineChartProps {
   data: ChartDataPoint[];

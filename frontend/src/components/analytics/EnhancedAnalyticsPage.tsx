@@ -1,7 +1,7 @@
 import React from 'react';
 import { AnalyticsProvider } from './AnalyticsProvider';
 import AnalyticsErrorBoundary from './AnalyticsErrorBoundary';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { ExportData, CostOptimization } from '../types/analytics';
 import { cn } from '@/lib/utils';
 

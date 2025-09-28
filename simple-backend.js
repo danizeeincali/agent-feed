@@ -33,7 +33,7 @@ const toolCallStatusManager = { trackCall: () => {}, updateStatus: () => {} };
 
 const app = express();
 const server = http.createServer(app);
-const PORT = process.argv.includes('--port') ? parseInt(process.argv[process.argv.indexOf('--port') + 1]) : 3000;
+const PORT = process.argv.includes('--port') ? parseInt(process.argv[process.argv.indexOf('--port') + 1]) : (process.env.PORT || 3000);
 
 // Store server references for health checks
 let wsServer = null;
@@ -84,7 +84,7 @@ const initializeAviServices = async () => {
 };
 
 // Initialize real-time broadcasting for production data
-const initializeAgentWebSocketEvents = () => {
+const initializeAgentWebSocketEvents = async () => {
   // Broadcast periodic updates with real data
   setInterval(async () => {
     if (databaseService.isInitialized()) {
@@ -96,8 +96,29 @@ const initializeAgentWebSocketEvents = () => {
       }
     }
   }, 10000); // Every 10 seconds
-  
+
   console.log('✅ Real-time data broadcasting initialized');
+
+  // Make broadcast function globally available for database service
+  global.broadcastActivityUpdate = broadcastActivityUpdate;
+
+  // Log system startup activity
+  try {
+    await databaseService.logActivity({
+      type: 'system_startup',
+      description: 'Agent Feed backend server started successfully',
+      agent_id: null,
+      status: 'completed',
+      metadata: {
+        port: PORT,
+        timestamp: new Date().toISOString(),
+        node_version: process.version,
+        platform: process.platform
+      }
+    });
+  } catch (error) {
+    console.error('Failed to log system startup activity:', error);
+  }
 };
 
 // Initialize database services on startup with unified service
@@ -1140,6 +1161,27 @@ function broadcastToConnections(instanceId, message) {
 }
 
 // Legacy function for backward compatibility - now uses incremental output
+// Broadcast activity updates to WebSocket connections
+async function broadcastActivityUpdate(activity) {
+  if (wsServer) {
+    const message = JSON.stringify({
+      type: 'activity_created',
+      data: activity,
+      timestamp: new Date().toISOString()
+    });
+
+    wsServer.clients.forEach((client) => {
+      if (client.readyState === client.OPEN) {
+        try {
+          client.send(message);
+        } catch (error) {
+          console.error('Failed to broadcast activity update:', error);
+        }
+      }
+    });
+  }
+}
+
 function broadcastToAllConnections(instanceId, message) {
   if (message.type === 'output' && message.data) {
     broadcastIncrementalOutput(instanceId, message.data, message.source);
@@ -1774,6 +1816,33 @@ const setupApiRoutes = () => {
     });
 
     // ENHANCED FILTERING API ENDPOINTS
+
+    // Activity Logging Middleware for Post Creation
+    app.post('/api/v1/agent-posts', async (req, res, next) => {
+      try {
+        // Process the original request first
+        next();
+
+        // After successful post creation, log activity
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          const { author_agent, content, hashtags } = req.body;
+          await databaseService.logActivity({
+            type: 'post_created',
+            description: `New post created by ${author_agent}`,
+            agent_id: author_agent,
+            status: 'completed',
+            metadata: {
+              content_length: content?.length || 0,
+              hashtags_count: hashtags?.length || 0,
+              timestamp: new Date().toISOString()
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Failed to log post creation activity:', error);
+        next(); // Continue even if activity logging fails
+      }
+    });
 
     // POST /api/v1/agent-posts/filter - Advanced multi-filter endpoint
     app.post('/api/v1/agent-posts/filter', async (req, res) => {
@@ -4663,7 +4732,7 @@ const startServer = async () => {
     console.log('✅ Agent Dynamic Pages API routes already registered');
     
     // Initialize agent WebSocket events
-    initializeAgentWebSocketEvents();
+    await initializeAgentWebSocketEvents();
     
     // Initialize Avi Strategic Oversight
     await initializeAviServices();

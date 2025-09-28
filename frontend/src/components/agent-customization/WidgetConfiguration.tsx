@@ -32,7 +32,7 @@ import {
   Upload
 } from 'lucide-react';
 import { cn } from '../utils/cn';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '../ui/badge';
 import { AgentWidget } from '@/components/AgentHomePage';
 
 export interface WidgetTemplate {

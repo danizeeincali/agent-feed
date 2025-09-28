@@ -11,8 +11,8 @@ import {
   Clock,
   AlertCircle
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { cn } from '../../lib/utils';
+import { Button } from '../ui/button';
 import { ExportData, AnalyticsTimeRange } from '../types/analytics';
 
 interface ExportReportingFeaturesProps {

@@ -1,6 +1,0 @@
-{
-  "test:regression": "node scripts/run-regression-tests.js",
-  "test:regression:framework": "npm test tests/regression/regression-framework.test.ts",
-  "test:regression:nld": "npm test tests/regression/nld-pattern-analysis.test.ts",
-  "test:regression:all": "npm test -- tests/regression/"
-}
