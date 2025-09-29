@@ -140,7 +140,7 @@ export const WebSocketSingletonProvider: React.FC<WebSocketSingletonProviderProp
   // Production connection methods - CRITICAL FIX: Implement proper HTTP polling fallback
   const connect = useCallback(async () => {
     try {
-      // CRITICAL FIX: Check if posts API is available first
+      // CRITICAL FIX: Check if posts API is available first - use relative URL for proxy
       const response = await fetch('/api/agent-posts');
       if (response.ok || response.status === 200) {
         setIsConnected(true);

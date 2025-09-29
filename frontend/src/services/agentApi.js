@@ -5,7 +5,8 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/api/agents';
+// Use relative URL to leverage Vite proxy - this will automatically route to the API server
+const API_BASE_URL = '/api/agents';
 
 class AgentApiService {
   constructor() {
@@ -206,7 +207,9 @@ class AgentApiService {
 
     return new Promise((resolve, reject) => {
       try {
-        const wsUrl = 'ws://localhost:3000/terminal';
+        // Use relative WebSocket URL to leverage Vite proxy
+        const wsUrl = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') +
+                      '//' + window.location.host + '/terminal';
         console.log(`🔗 Connecting to agent status WebSocket: ${wsUrl}`);
         
         this.wsConnection = new WebSocket(wsUrl);

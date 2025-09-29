@@ -270,19 +270,23 @@ class ApiService {
   // WebSocket initialization for real-time updates
   private initializeWebSocket(): void {
     if (typeof window === 'undefined') return;
-    
+
     try {
-      // Auto-detect WebSocket URL for Codespaces
+      // Dynamic WebSocket URL construction
       let wsUrl: string;
       if (typeof window !== 'undefined') {
-        const hostname = window.location.hostname;
+        const { protocol, hostname, port } = window.location;
+
+        // Determine WebSocket protocol based on current page protocol
+        const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+
         if (hostname.includes('.app.github.dev')) {
-          // Codespaces environment - use secure WebSocket through Vite proxy
-          const codespaceName = hostname.split('-5173.app.github.dev')[0];
-          wsUrl = `wss://${codespaceName}-5173.app.github.dev/ws`;
+          // Codespaces environment - use secure WebSocket through current host
+          wsUrl = `${wsProtocol}//${hostname}/ws`;
         } else {
-          // Local development - use Vite proxy
-          wsUrl = 'ws://localhost:5173/ws';
+          // Local development or production - use current host and port
+          const wsPort = port ? `:${port}` : '';
+          wsUrl = `${wsProtocol}//${hostname}${wsPort}/ws`;
         }
       } else {
         // Server-side rendering fallback - direct connection

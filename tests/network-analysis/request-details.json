@@ -1,0 +1,253 @@
+{
+  "timestamp": "2025-09-28T22:38:41.064Z",
+  "targetUrl": "http://localhost:3000/agents",
+  "summary": {
+    "totalRequests": 10,
+    "failedRequests": 0,
+    "consoleErrors": 0
+  },
+  "networkRequests": [
+    {
+      "url": "http://localhost:3000/agents",
+      "method": "GET",
+      "headers": {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Linux\""
+      },
+      "timestamp": "2025-09-28T22:38:20.024Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/webpack.js?ts=1759099113143",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:34.296Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/main.js?ts=1759099113143",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:34.297Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/pages/_app.js?ts=1759099113143",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:34.297Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/pages/agents.js?ts=1759099113143",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:34.297Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/development/_buildManifest.js?ts=1759099113143",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:34.297Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/development/_ssgManifest.js?ts=1759099113143",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:34.307Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/chunks/react-refresh.js?ts=1759099113143",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:34.307Z"
+    },
+    {
+      "url": "http://localhost:3000/_next/static/development/_devMiddlewareManifest.json",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:36.327Z"
+    },
+    {
+      "url": "http://localhost:3000/api/agents",
+      "method": "GET",
+      "headers": {
+        "sec-ch-ua-platform": "\"Linux\"",
+        "referer": "http://localhost:3000/agents",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+        "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": "2025-09-28T22:38:36.816Z"
+    }
+  ],
+  "failedRequests": [],
+  "consoleErrors": [],
+  "analysis": {
+    "portAnalysis": {
+      "requests3000": 10,
+      "requests3001": 0,
+      "otherPorts": 0
+    },
+    "corsIssues": [],
+    "apiRoutes": [
+      {
+        "url": "http://localhost:3000/api/agents",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:36.816Z"
+      }
+    ],
+    "staticAssets": [
+      {
+        "url": "http://localhost:3000/_next/static/chunks/webpack.js?ts=1759099113143",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:34.296Z"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/main.js?ts=1759099113143",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:34.297Z"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/pages/_app.js?ts=1759099113143",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:34.297Z"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/pages/agents.js?ts=1759099113143",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:34.297Z"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/development/_buildManifest.js?ts=1759099113143",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:34.297Z"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/development/_ssgManifest.js?ts=1759099113143",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:34.307Z"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/react-refresh.js?ts=1759099113143",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:34.307Z"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/development/_devMiddlewareManifest.json",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Linux\"",
+          "referer": "http://localhost:3000/agents",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/140.0.7339.186 Safari/537.36",
+          "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"HeadlessChrome\";v=\"140\"",
+          "sec-ch-ua-mobile": "?0"
+        },
+        "timestamp": "2025-09-28T22:38:36.327Z"
+      }
+    ]
+  }
+}

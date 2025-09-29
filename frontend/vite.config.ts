@@ -28,12 +28,14 @@ export default defineConfig({
     },
     // Proxy configuration for backend services
     proxy: {
-      // HTTP API proxy (working for Claude detection) - FIXED TO PORT 3000
+      // HTTP API proxy (working for Claude detection) - FIXED TO PORT 3001 FOR SPARC COMPLETION
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://127.0.0.1:3001', // Force IPv4 to avoid IPv6 connection issues
         changeOrigin: true,
         secure: false,
-        timeout: 300000, // 5 minute timeout for Claude Code processing
+        timeout: 10000, // Reduced timeout for faster failure detection
+        followRedirects: true,
+        xfwd: true,
         configure: (proxy, _options) => {
           proxy.on('proxyReq', (proxyReq, req, _res) => {
             console.log('🔍 SPARC DEBUG: HTTP API proxy request:', req.method, req.url, '->', proxyReq.path);
@@ -48,9 +50,9 @@ export default defineConfig({
           });
         }
       },
-      // CRITICAL FIX: WebSocket proxy for backend WebSocket server - FIXED TO PORT 3000
+      // CRITICAL FIX: WebSocket proxy for backend WebSocket server - FIXED TO PORT 3001 FOR SPARC COMPLETION
       '/ws': {
-        target: 'http://localhost:3000',
+        target: 'http://127.0.0.1:3001', // Force IPv4 to avoid IPv6 connection issues
         ws: true,           // Enable WebSocket proxying
         changeOrigin: true, // Change origin headers to match target
         secure: false,
@@ -71,7 +73,7 @@ export default defineConfig({
       },
       // Terminal WebSocket proxy
       '/terminal': {
-        target: 'http://localhost:3000',
+        target: 'http://127.0.0.1:3001', // Force IPv4 to avoid IPv6 connection issues
         ws: true,
         changeOrigin: true,
         secure: false,

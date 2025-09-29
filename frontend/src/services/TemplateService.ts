@@ -17,7 +17,7 @@ import {
 export class TemplateService {
   private baseUrl: string;
 
-  constructor(baseUrl = 'http://localhost:3001') {
+  constructor(baseUrl = '') {
     this.baseUrl = baseUrl;
   }
 
@@ -25,7 +25,7 @@ export class TemplateService {
    * Create a new template
    */
   async createTemplate(request: TemplateCreateRequest): Promise<Template> {
-    const response = await fetch(`${this.baseUrl}/api/templates`, {
+    const response = await fetch('/api/templates', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ export class TemplateService {
       params.append('createdBy', filters.createdBy);
     }
 
-    const response = await fetch(`${this.baseUrl}/api/templates?${params.toString()}`);
+    const response = await fetch(`/api/templates?${params.toString()}`);
     
     if (!response.ok) {
       throw new Error(`Failed to fetch templates: ${response.statusText}`);
@@ -91,7 +91,7 @@ export class TemplateService {
    * Get a single template by ID
    */
   async getTemplate(id: string): Promise<Template | null> {
-    const response = await fetch(`${this.baseUrl}/api/templates/${id}`);
+    const response = await fetch(`/api/templates/${id}`);
     
     if (response.status === 404) {
       return null;
@@ -113,7 +113,7 @@ export class TemplateService {
    * Update an existing template
    */
   async updateTemplate(request: TemplateUpdateRequest): Promise<Template> {
-    const response = await fetch(`${this.baseUrl}/api/templates/${request.id}`, {
+    const response = await fetch(`/api/templates/${request.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ export class TemplateService {
    * Delete a template
    */
   async deleteTemplate(id: string): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/api/templates/${id}`, {
+    const response = await fetch(`/api/templates/${id}`, {
       method: 'DELETE'
     });
 
@@ -153,7 +153,7 @@ export class TemplateService {
    * Render a template with provided variables
    */
   async renderTemplate(templateId: string, variables: Record<string, any>): Promise<RenderedTemplate> {
-    const response = await fetch(`${this.baseUrl}/api/templates/${templateId}/render`, {
+    const response = await fetch(`/api/templates/${templateId}/render`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -172,7 +172,7 @@ export class TemplateService {
    * Increment template usage count
    */
   async incrementUsage(id: string): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/api/templates/${id}/use`, {
+    const response = await fetch(`/api/templates/${id}/use`, {
       method: 'POST'
     });
 
@@ -185,7 +185,7 @@ export class TemplateService {
    * Get template statistics
    */
   async getStats(): Promise<TemplateStats> {
-    const response = await fetch(`${this.baseUrl}/api/templates/stats`);
+    const response = await fetch('/api/templates/stats');
     
     if (!response.ok) {
       throw new Error(`Failed to fetch template stats: ${response.statusText}`);

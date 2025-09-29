@@ -13,12 +13,15 @@ const Agents = () => {
     const fetchAgents = async () => {
       try {
         setLoading(true);
+        // Use relative URL to leverage Vite proxy
         const response = await fetch('/api/agents');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setAgents(Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : []);
+        // Handle different response formats - support both array and object responses
+        const agentsList = Array.isArray(data) ? data : (data?.agents || data?.data || []);
+        setAgents(agentsList);
       } catch (err) {
         console.error('Failed to fetch agents:', err);
         setError(err.message);

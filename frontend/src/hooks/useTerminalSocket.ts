@@ -43,16 +43,35 @@ export const useTerminalSocket = () => {
    */
   const connect = useCallback((instanceId: string) => {
     console.log('🚀 [Terminal WebSocket] Connecting to instance:', instanceId);
-    
+
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       console.log('🚀 [Terminal WebSocket] Already connected');
       return;
     }
-    
+
     setState(prev => ({ ...prev, connecting: true, error: null }));
-    
+
     try {
-      const wsUrl = `ws://localhost:3000/terminal/${instanceId}`;
+      // Dynamic WebSocket URL construction
+      let wsUrl: string;
+      if (typeof window !== 'undefined') {
+        const { protocol, hostname, port } = window.location;
+        const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+
+        if (hostname.includes('.app.github.dev')) {
+          // Codespaces environment - use current host
+          wsUrl = `${wsProtocol}//${hostname}/terminal/${instanceId}`;
+        } else {
+          // Local development or production - use current host and port
+          const wsPort = port ? `:${port}` : '';
+          wsUrl = `${wsProtocol}//${hostname}${wsPort}/terminal/${instanceId}`;
+        }
+      } else {
+        // Server-side rendering fallback
+        wsUrl = `ws://localhost:3000/terminal/${instanceId}`;
+      }
+
+      console.log('🔌 Creating terminal WebSocket connection to:', wsUrl);
       const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
       

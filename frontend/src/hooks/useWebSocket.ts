@@ -32,8 +32,27 @@ interface UseWebSocketReturn {
 }
 
 export const useWebSocket = (options: UseWebSocketOptions = {}): UseWebSocketReturn => {
+  // Helper function to get dynamic WebSocket URL
+  const getDefaultUrl = (): string => {
+    if (typeof window === 'undefined') {
+      return 'ws://localhost:3000';
+    }
+
+    const { protocol, hostname, port } = window.location;
+    const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+
+    if (hostname.includes('.app.github.dev')) {
+      // Codespaces environment
+      return `${wsProtocol}//${hostname}`;
+    } else {
+      // Local development or production
+      const wsPort = port ? `:${port}` : '';
+      return `${wsProtocol}//${hostname}${wsPort}`;
+    }
+  };
+
   const {
-    url = 'ws://localhost:3000', // Real WebSocket URL
+    url = getDefaultUrl(), // Dynamic WebSocket URL
     autoConnect = true,
     reconnectAttempts = 5,
     reconnectDelay = 1000

@@ -69,6 +69,7 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
 
   const fetchPosts = async () => {
     try {
+      // Use relative URL to leverage Vite proxy
       const response = await fetch('/api/agent-posts');
       const data = await response.json();
       

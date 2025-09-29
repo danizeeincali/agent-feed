@@ -1,0 +1,10 @@
+{
+  "type": "cors-validation-failure",
+  "preventionPattern": true,
+  "test": "http-cors-connection",
+  "timestamp": "2025-09-28T22:50:25.501Z",
+  "error": "fetch is not defined",
+  "apiUrl": "http://localhost:3001/api/health",
+  "failureType": "http-cors-blocking",
+  "impact": "api-unavailable"
+}

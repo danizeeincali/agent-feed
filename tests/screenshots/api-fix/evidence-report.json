@@ -1,0 +1,890 @@
+{
+  "timestamp": "2025-09-28T19:46:58.433Z",
+  "testRun": "playwright-screenshot-evidence",
+  "results": {
+    "navigation": {
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:5173/\", waiting until \"networkidle\"\u001b[22m\n",
+      "failed": true
+    }
+  },
+  "errors": {
+    "console": [
+      {
+        "timestamp": "2025-09-28T19:46:58.882Z",
+        "message": "WebSocket connection to 'ws://localhost:443/?token=ApMSABtXyulv' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:5173/@vite/client",
+          "lineNumber": 535,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:58.907Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.381Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.381Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.425Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-data' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.425Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-data",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.426Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/agent-posts",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.426Z",
+        "message": "❌ API connection failed: Error: API check failed: 404\n    at http://localhost:5173/src/context/WebSocketSingletonContext.tsx:82:15",
+        "location": {
+          "url": "http://localhost:5173/src/context/WebSocketSingletonContext.tsx",
+          "lineNumber": 86,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.426Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-stats?user_id=anonymous' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.426Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-stats?user_id=anonymous",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.437Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.437Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:46:59.906Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.406Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.406Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.451Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-data' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.451Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-data",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.454Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-stats?user_id=anonymous' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.454Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-stats?user_id=anonymous",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.464Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.465Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:00.909Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:01.911Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.456Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.456Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.506Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-data' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.506Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-data",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.623Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-stats?user_id=anonymous' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.623Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-stats?user_id=anonymous",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.623Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.623Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:02.931Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:03.928Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:04.929Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:05.932Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.500Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.500Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.500Z",
+        "message": "API request failed after 4 attempts: /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC Error: Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:291:24)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:20",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 118,
+          "columnNumber": 12
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.500Z",
+        "message": "API Error in getAgentPosts: Error: Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:291:24)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:20",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 303,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.598Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-data' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.598Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-data",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.599Z",
+        "message": "API request failed after 4 attempts: /filter-data Error: Network error for /filter-data: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getFilterData (http://localhost:5173/src/services/api.ts:832:24)\n    at async Promise.all (index 0)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 118,
+          "columnNumber": 12
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.599Z",
+        "message": "API Error in getFilterData: Error: Network error for /filter-data: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getFilterData (http://localhost:5173/src/services/api.ts:832:24)\n    at async Promise.all (index 0)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 835,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.608Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.608Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.651Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/filter-stats?user_id=anonymous' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.651Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/filter-stats?user_id=anonymous",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.651Z",
+        "message": "API request failed after 4 attempts: /filter-stats?user_id=anonymous Error: Network error for /filter-stats?user_id=anonymous: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:858:24)\n    at async Promise.all (index 1)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 118,
+          "columnNumber": 12
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.651Z",
+        "message": "API Error in getFilterStats: Error: Network error for /filter-stats?user_id=anonymous: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getFilterStats (http://localhost:5173/src/services/api.ts:858:24)\n    at async Promise.all (index 1)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:138:29",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 861,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.668Z",
+        "message": "Access to fetch at 'http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC' from origin 'http://localhost:5173' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "location": {
+          "url": "http://localhost:5173/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.672Z",
+        "message": "Failed to load resource: net::ERR_FAILED",
+        "location": {
+          "url": "http://localhost:3000/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.673Z",
+        "message": "API request failed after 4 attempts: /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC Error: Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:291:24)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:20",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 118,
+          "columnNumber": 12
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.673Z",
+        "message": "API Error in getAgentPosts: Error: Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed\n    at ApiService.request (http://localhost:5173/src/services/api.ts:106:25)\n    at async ApiService.getAgentPosts (http://localhost:5173/src/services/api.ts:291:24)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:56:20",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 303,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.933Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:07.937Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:08.939Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:09.626Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:09.626Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:09.940Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:10.942Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:11.943Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:12.643Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:12.643Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:12.947Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:13.954Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:14.953Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:15.662Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:15.662Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:15.955Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:16.956Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:17.958Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:18.683Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:18.684Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:18.963Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:19.964Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:20.971Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:21.703Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:21.703Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:21.969Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:22.975Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:23.977Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:24.745Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:24.746Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:24.979Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:25.980Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:26.982Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:27.769Z",
+        "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:27.769Z",
+        "message": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:27.987Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      },
+      {
+        "timestamp": "2025-09-28T19:47:29.002Z",
+        "message": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        }
+      }
+    ],
+    "network": [
+      {
+        "timestamp": "2025-09-28T19:46:59.426Z",
+        "url": "http://localhost:5173/api/agent-posts",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:06.608Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:09.626Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:12.643Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:15.662Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:18.683Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:21.703Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:24.742Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      },
+      {
+        "timestamp": "2025-09-28T19:47:27.769Z",
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "status": 404,
+        "statusText": "Not Found",
+        "method": "GET"
+      }
+    ],
+    "runtime": []
+  }
+}

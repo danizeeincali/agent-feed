@@ -119,6 +119,8 @@ interface ModelStats {
   avg_time: number;
 }
 
+// API_BASE configured for Vite proxy - uses relative URLs that are proxied to backend server
+// This ensures all requests go through the Vite dev server proxy configuration
 const API_BASE = '/api/token-analytics';
 
 // Data validation functions
@@ -178,7 +180,9 @@ const useTokenAnalytics = () => {
     queryKey: ['token-analytics', 'hourly'],
     queryFn: async () => {
       const response = await fetch(`${API_BASE}/hourly`);
-      if (!response.ok) throw new Error('Failed to fetch hourly data');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch hourly data: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
 
       // Validate the chart data structure
@@ -191,13 +195,17 @@ const useTokenAnalytics = () => {
     },
     refetchInterval: 60000, // Refresh every minute
     staleTime: 30000, // Consider data stale after 30 seconds
+    retry: 3, // Retry failed requests up to 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
 
   const dailyQuery = useQuery({
     queryKey: ['token-analytics', 'daily'],
     queryFn: async () => {
       const response = await fetch(`${API_BASE}/daily`);
-      if (!response.ok) throw new Error('Failed to fetch daily data');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch daily data: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
 
       // Validate the chart data structure
@@ -210,13 +218,17 @@ const useTokenAnalytics = () => {
     },
     refetchInterval: 300000, // Refresh every 5 minutes
     staleTime: 60000, // Consider data stale after 1 minute
+    retry: 3, // Retry failed requests up to 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
 
   const messagesQuery = useQuery({
     queryKey: ['token-analytics', 'messages'],
     queryFn: async () => {
       const response = await fetch(`${API_BASE}/messages?limit=50`);
-      if (!response.ok) throw new Error('Failed to fetch messages');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch messages: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
 
       // Validate message data structure
@@ -232,13 +244,17 @@ const useTokenAnalytics = () => {
       return data;
     },
     refetchInterval: 30000, // Refresh every 30 seconds
+    retry: 3, // Retry failed requests up to 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
 
   const summaryQuery = useQuery({
     queryKey: ['token-analytics', 'summary'],
     queryFn: async () => {
       const response = await fetch(`${API_BASE}/summary`);
-      if (!response.ok) throw new Error('Failed to fetch summary');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch summary: ${response.status} ${response.statusText}`);
+      }
       const data = await response.json();
 
       // Validate summary data structure
@@ -250,6 +266,8 @@ const useTokenAnalytics = () => {
       return data;
     },
     refetchInterval: 60000, // Refresh every minute
+    retry: 3, // Retry failed requests up to 3 times
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
   });
 
   const refreshAll = useCallback(() => {
@@ -510,13 +528,21 @@ const MessageList = ({ messages, searchTerm, onSearchChange }: MessageListProps)
   );
 };
 
-// Export functionality
+// Export functionality with improved error handling
 const exportData = async (format: 'csv' | 'json' = 'csv', days: number = 30) => {
   try {
     const response = await fetch(`${API_BASE}/export?format=${format}&days=${days}`);
-    if (!response.ok) throw new Error('Export failed');
+    if (!response.ok) {
+      throw new Error(`Export failed: ${response.status} ${response.statusText}`);
+    }
 
     const blob = await response.blob();
+
+    // Check if the response is actually a blob and not an error response
+    if (blob.size === 0) {
+      throw new Error('Export returned empty data');
+    }
+
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.style.display = 'none';
@@ -524,11 +550,16 @@ const exportData = async (format: 'csv' | 'json' = 'csv', days: number = 30) => 
     a.download = `token-analytics-${days}d.${format}`;
     document.body.appendChild(a);
     a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+
+    // Clean up
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }, 100);
   } catch (error) {
     console.error('Export failed:', error);
-    alert('Export failed. Please try again.');
+    const errorMessage = error instanceof Error ? error.message : 'Export failed. Please try again.';
+    alert(`Export Error: ${errorMessage}`);
   }
 };
 

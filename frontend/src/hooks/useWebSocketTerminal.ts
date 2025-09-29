@@ -37,9 +37,30 @@ class WebSocketTerminalManager {
   private globalHandlers: Set<EventHandler> = new Set();
   private reconnectTimeouts: Map<string, NodeJS.Timeout> = new Map();
   private baseUrl: string;
-  
-  constructor(baseUrl: string = 'ws://localhost:3000') {
-    this.baseUrl = baseUrl;
+
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl || this.getDefaultWebSocketUrl();
+  }
+
+  /**
+   * Get dynamic WebSocket URL based on environment
+   */
+  private getDefaultWebSocketUrl(): string {
+    if (typeof window === 'undefined') {
+      return 'ws://localhost:3000';
+    }
+
+    const { protocol, hostname, port } = window.location;
+    const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+
+    if (hostname.includes('.app.github.dev')) {
+      // Codespaces environment
+      return `${wsProtocol}//${hostname}`;
+    } else {
+      // Local development or production
+      const wsPort = port ? `:${port}` : '';
+      return `${wsProtocol}//${hostname}${wsPort}`;
+    }
   }
 
   /**
@@ -337,12 +358,31 @@ const wsManager = new WebSocketTerminalManager();
 export const useWebSocketTerminal = (
   options: ConnectionOptions = {}
 ) => {
+  // Helper function to get dynamic URL
+  const getDefaultUrl = (): string => {
+    if (typeof window === 'undefined') {
+      return 'ws://localhost:3000';
+    }
+
+    const { protocol, hostname, port } = window.location;
+    const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+
+    if (hostname.includes('.app.github.dev')) {
+      // Codespaces environment
+      return `${wsProtocol}//${hostname}`;
+    } else {
+      // Local development or production
+      const wsPort = port ? `:${port}` : '';
+      return `${wsProtocol}//${hostname}${wsPort}`;
+    }
+  };
+
   const {
     enableRetry = true,
     maxRetryAttempts = 3,
     retryDelay = 2000,
     enableFallback = true,
-    url = 'ws://localhost:3000'
+    url = getDefaultUrl()
   } = options;
 
   const [connectionState, setConnectionState] = useState<ConnectionState>({

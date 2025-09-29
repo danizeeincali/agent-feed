@@ -74,13 +74,21 @@ const StreamingTicker: React.FC<StreamingTickerProps> = ({
 
     setConnectionStatus('connecting');
 
-    const url = new URL('/api/streaming-ticker/stream', window.location.origin);
-    url.searchParams.set('userId', userId);
+    // Use relative URL for Vite proxy compatibility
+    let url = '/api/streaming-ticker/stream';
+    const params = new URLSearchParams();
+    params.set('userId', userId);
     if (demo) {
-      url.searchParams.set('demo', 'true');
+      params.set('demo', 'true');
     }
 
-    const eventSource = new EventSource(url.toString());
+    // Append query parameters if any
+    const queryString = params.toString();
+    if (queryString) {
+      url += '?' + queryString;
+    }
+
+    const eventSource = new EventSource(url);
     eventSourceRef.current = eventSource;
 
     eventSource.onopen = () => {

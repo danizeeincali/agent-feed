@@ -1,0 +1,9 @@
+{
+  "type": "terminal-e2e-failure",
+  "preventionPattern": true,
+  "test": "terminal-input-output",
+  "timestamp": "2025-09-28T22:50:19.742Z",
+  "error": "Cannot read properties of undefined (reading 'goto')",
+  "failureType": "terminal-input-hanging",
+  "impact": "terminal-not-interactive"
+}

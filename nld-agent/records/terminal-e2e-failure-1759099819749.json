@@ -1,0 +1,9 @@
+{
+  "type": "terminal-e2e-failure",
+  "preventionPattern": true,
+  "test": "websocket-reconnection",
+  "timestamp": "2025-09-28T22:50:19.748Z",
+  "error": "Cannot read properties of undefined (reading 'goto')",
+  "failureType": "websocket-reconnection-failure",
+  "impact": "terminal-permanently-broken"
+}
