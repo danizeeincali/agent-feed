@@ -108,6 +108,46 @@ const mockTemplates = [
 const streamingTickerMessages = [];
 const sseConnections = new Set();
 
+/**
+ * Validates and normalizes SSE message structure to ensure complete data
+ * This prevents frontend crashes from incomplete message structures
+ * @param {Object} message - The raw message object to validate
+ * @returns {Object} - Validated message with complete data structure
+ */
+const validateSSEMessage = (message) => {
+  // Ensure we have a base message object
+  if (!message || typeof message !== 'object') {
+    message = {};
+  }
+
+  // Create validated message with complete structure
+  const validatedMessage = {
+    id: message.id || crypto.randomUUID(),
+    type: message.type || 'info',
+    data: {
+      message: message.message || message.data?.message || '',
+      priority: message.priority || message.data?.priority || 'medium',
+      timestamp: message.timestamp || message.data?.timestamp || Date.now(),
+      tool: message.data?.tool || message.tool,
+      action: message.data?.action || message.action,
+      connectionId: message.connectionId || message.data?.connectionId
+    }
+  };
+
+  // Preserve any additional metadata fields
+  if (message.source) {
+    validatedMessage.source = message.source;
+  }
+  if (message.metadata) {
+    validatedMessage.data.metadata = message.metadata;
+  }
+  if (message.data?.metadata) {
+    validatedMessage.data.metadata = message.data.metadata;
+  }
+
+  return validatedMessage;
+};
+
 // API Routes
 app.get('/api/agents', (req, res) => {
   res.json({
@@ -653,12 +693,14 @@ app.get('/api/streaming-ticker/stream', (req, res) => {
     'Access-Control-Allow-Headers': 'Cache-Control'
   });
 
-  // Send initial connection message
-  res.write(`data: ${JSON.stringify({
+  // Send initial connection message with validated structure
+  const connectionMessage = validateSSEMessage({
     type: 'connected',
-    timestamp: new Date().toISOString(),
-    message: 'Streaming ticker connected'
-  })}\n\n`);
+    message: 'Streaming ticker connected',
+    priority: 'low',
+    timestamp: Date.now()
+  });
+  res.write(`data: ${JSON.stringify(connectionMessage)}\n\n`);
 
   // Add to connections set
   sseConnections.add(res);
@@ -671,16 +713,20 @@ app.get('/api/streaming-ticker/stream', (req, res) => {
       return;
     }
 
-    res.write(`data: ${JSON.stringify({
+    const heartbeatMessage = validateSSEMessage({
       type: 'heartbeat',
-      timestamp: new Date().toISOString()
-    })}\n\n`);
+      message: 'Connection alive',
+      priority: 'low',
+      timestamp: Date.now()
+    });
+    res.write(`data: ${JSON.stringify(heartbeatMessage)}\n\n`);
   }, 30000);
 
-  // Send recent messages
+  // Send recent messages with validation
   const recentMessages = streamingTickerMessages.slice(-10);
   recentMessages.forEach(message => {
-    res.write(`data: ${JSON.stringify(message)}\n\n`);
+    const validatedMessage = validateSSEMessage(message);
+    res.write(`data: ${JSON.stringify(validatedMessage)}\n\n`);
   });
 
   // Handle client disconnect
@@ -705,14 +751,19 @@ app.post('/api/streaming-ticker/message', (req, res) => {
       });
     }
 
-    const tickerMessage = {
+    // Create and validate the ticker message
+    const rawMessage = {
       id: crypto.randomUUID(),
       message,
       type,
       source,
       metadata,
-      timestamp: new Date().toISOString()
+      priority: metadata?.priority || 'medium',
+      timestamp: Date.now()
     };
+
+    // Validate message structure
+    const tickerMessage = validateSSEMessage(rawMessage);
 
     // Add to messages array (keep last 100)
     streamingTickerMessages.push(tickerMessage);
@@ -720,7 +771,7 @@ app.post('/api/streaming-ticker/message', (req, res) => {
       streamingTickerMessages.shift();
     }
 
-    // Broadcast to all SSE connections
+    // Broadcast to all SSE connections with validated structure
     sseConnections.forEach(connection => {
       if (!connection.writableEnded) {
         connection.write(`data: ${JSON.stringify(tickerMessage)}\n\n`);
@@ -1637,33 +1688,36 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Generate some initial streaming ticker messages
+// Generate some initial streaming ticker messages with validated structure
 setTimeout(() => {
   const initialMessages = [
-    {
+    validateSSEMessage({
       id: crypto.randomUUID(),
       message: 'System initialized successfully',
       type: 'success',
       source: 'system',
+      priority: 'high',
       metadata: { component: 'server' },
-      timestamp: new Date().toISOString()
-    },
-    {
+      timestamp: Date.now()
+    }),
+    validateSSEMessage({
       id: crypto.randomUUID(),
       message: 'All agents are operational',
       type: 'info',
       source: 'agent-monitor',
+      priority: 'medium',
       metadata: { active_count: mockAgents.length },
-      timestamp: new Date().toISOString()
-    },
-    {
+      timestamp: Date.now()
+    }),
+    validateSSEMessage({
       id: crypto.randomUUID(),
       message: 'Templates library loaded',
       type: 'info',
       source: 'template-service',
+      priority: 'medium',
       metadata: { template_count: mockTemplates.length },
-      timestamp: new Date().toISOString()
-    }
+      timestamp: Date.now()
+    })
   ];
 
   streamingTickerMessages.push(...initialMessages);

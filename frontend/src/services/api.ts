@@ -20,26 +20,9 @@ class ApiService {
   private eventHandlers: Map<string, Set<Function>> = new Map();
 
   constructor(baseUrl?: string) {
-    // Auto-detect the correct base URL for Codespaces
-    if (!baseUrl) {
-      if (typeof window !== 'undefined') {
-        const hostname = window.location.hostname;
-        if (hostname.includes('.app.github.dev')) {
-          // Codespaces environment - use the backend Codespaces URL
-          const codespaceName = hostname.split('-5173.app.github.dev')[0];
-          this.baseUrl = `https://${codespaceName}-3000.app.github.dev/api`;
-        } else {
-          // Local development - Fixed: Remove /v1 as backend doesn't use versioned routes
-          this.baseUrl = 'http://localhost:3000/api';
-        }
-      } else {
-        // Server-side rendering fallback - Fixed: Remove /v1 as backend doesn't use versioned routes
-        this.baseUrl = 'http://localhost:3000/api';
-      }
-    } else {
-      this.baseUrl = baseUrl;
-    }
-    
+    // Use relative URL to leverage Vite proxy in all environments
+    // Vite proxy handles: /api → http://127.0.0.1:3001
+    this.baseUrl = baseUrl || '/api';
     console.log('🔗 API Service initialized with base URL:', this.baseUrl);
     this.initializeWebSocket();
   }
@@ -272,35 +255,24 @@ class ApiService {
     if (typeof window === 'undefined') return;
 
     try {
-      // Dynamic WebSocket URL construction
-      let wsUrl: string;
-      if (typeof window !== 'undefined') {
-        const { protocol, hostname, port } = window.location;
+      // Dynamic WebSocket URL construction based on current location
+      const { protocol, hostname, port } = window.location;
 
-        // Determine WebSocket protocol based on current page protocol
-        const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+      // Determine WebSocket protocol based on current page protocol
+      const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
 
-        if (hostname.includes('.app.github.dev')) {
-          // Codespaces environment - use secure WebSocket through current host
-          wsUrl = `${wsProtocol}//${hostname}/ws`;
-        } else {
-          // Local development or production - use current host and port
-          const wsPort = port ? `:${port}` : '';
-          wsUrl = `${wsProtocol}//${hostname}${wsPort}/ws`;
-        }
-      } else {
-        // Server-side rendering fallback - direct connection
-        wsUrl = 'ws://localhost:3000/ws';
-      }
-      
+      // Use current host and port - Vite proxy will handle routing
+      const wsPort = port ? `:${port}` : '';
+      const wsUrl = `${wsProtocol}//${hostname}${wsPort}/ws`;
+
       console.log('🔌 Attempting WebSocket connection to:', wsUrl);
       this.wsConnection = new WebSocket(wsUrl);
-      
+
       this.wsConnection.onopen = () => {
         console.log('✅ Real-time WebSocket connected');
         this.emit('connected', null);
       };
-      
+
       this.wsConnection.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
@@ -309,12 +281,12 @@ class ApiService {
           console.error('❌ WebSocket message parsing error:', error);
         }
       };
-      
+
       this.wsConnection.onclose = () => {
         console.log('🔌 WebSocket connection closed');
         this.attemptReconnect();
       };
-      
+
       this.wsConnection.onerror = (error) => {
         console.error('❌ WebSocket error:', error);
       };

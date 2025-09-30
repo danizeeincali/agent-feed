@@ -186,7 +186,7 @@ const ActivityPanel: React.FC<ActivityPanelProps> = ({ className = '' }) => {
           setActivities(prev => [data, ...prev.slice(0, 49)]);
           
           // Play sound notification if enabled
-          if (soundEnabled && data.priority === 'critical') {
+          if (soundEnabled && data?.priority === 'critical') {
             // In a real app, you'd play a sound here
             console.log('🔊 Critical activity notification');
           }
@@ -409,9 +409,9 @@ const ActivityPanel: React.FC<ActivityPanelProps> = ({ className = '' }) => {
                     <div className="flex items-center gap-2">
                       <span className={cn(
                         'px-1 py-0.5 rounded text-xs',
-                        getPriorityColor(task.priority)
+                        getPriorityColor(task?.priority || 'medium')
                       )}>
-                        {task.priority}
+                        {task?.priority || 'medium'}
                       </span>
                       <span className="text-gray-500">{task.estimatedDuration}m</span>
                     </div>
@@ -467,9 +467,9 @@ const ActivityPanel: React.FC<ActivityPanelProps> = ({ className = '' }) => {
                     <div className="flex flex-col items-end gap-1">
                       <span className={cn(
                         'px-2 py-0.5 rounded-full text-xs font-medium border',
-                        getPriorityColor(activity.priority)
+                        getPriorityColor(activity?.priority || 'medium')
                       )}>
-                        {activity.priority}
+                        {activity?.priority || 'medium'}
                       </span>
                       <span className="text-xs text-gray-500">
                         {new Date(activity.timestamp).toLocaleTimeString()}

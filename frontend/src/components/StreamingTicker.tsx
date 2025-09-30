@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface TickerMessage {
   type: string;
-  data: {
+  data?: {
     tool?: string;
     action?: string;
     message?: string;
-    timestamp: number;
+    timestamp?: number;
     priority?: string;
     connectionId?: string;
   };
@@ -57,8 +57,21 @@ const StreamingTicker: React.FC<StreamingTickerProps> = ({
     return emojis[priority as keyof typeof emojis] || '📍';
   };
 
+  // Validate message structure
+  const isValidMessage = (msg: TickerMessage): boolean => {
+    return msg && typeof msg === 'object' && typeof msg.type === 'string';
+  };
+
   // Format message for display
   const formatMessage = (msg: TickerMessage) => {
+    if (!isValidMessage(msg)) {
+      return 'Invalid message';
+    }
+
+    if (!msg.data) {
+      return 'System message';
+    }
+
     if (msg.type === 'tool_activity' && msg.data.tool && msg.data.action) {
       return `${msg.data.tool}: ${msg.data.action}`;
     }
@@ -102,15 +115,17 @@ const StreamingTicker: React.FC<StreamingTickerProps> = ({
 
         // Handle different message types
         if (message.type === 'connection') {
-          setConnectionId(message.data.connectionId as string);
+          setConnectionId(message.data?.connectionId as string);
         } else if (message.type === 'heartbeat') {
           // Silent heartbeat
         } else {
-          // Add to message queue
-          setMessages(prev => {
-            const newMessages = [message, ...prev].slice(0, maxMessages);
-            return newMessages;
-          });
+          // Add to message queue (only if valid)
+          if (isValidMessage(message)) {
+            setMessages(prev => {
+              const newMessages = [message, ...prev].slice(0, maxMessages);
+              return newMessages;
+            });
+          }
         }
       } catch (error) {
         console.error('Error parsing ticker message:', error);
@@ -166,7 +181,7 @@ const StreamingTicker: React.FC<StreamingTickerProps> = ({
       x: 0,
       scale: 1,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 20,
         stiffness: 300
       }
@@ -204,26 +219,35 @@ const StreamingTicker: React.FC<StreamingTickerProps> = ({
       {/* Messages */}
       <div className="space-y-1 min-h-[120px] max-h-[200px] overflow-hidden">
         <AnimatePresence mode="popLayout">
-          {messages.map((message, index) => (
-            <motion.div
-              key={`${message.data.timestamp}-${index}`}
-              variants={messageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              className="flex items-center gap-2 p-2 rounded-lg bg-gray-800/50 border border-gray-700/50"
-            >
-              <span className="text-sm">
-                {getPriorityEmoji(message.data.priority)}
-              </span>
-              <span className={`text-sm font-mono ${getToolColor(message.data.tool)}`}>
-                {formatMessage(message)}
-              </span>
-              <span className="text-xs text-gray-500 ml-auto">
-                {new Date(message.data.timestamp).toLocaleTimeString()}
-              </span>
-            </motion.div>
-          ))}
+          {messages.map((message, index) => {
+            // Defensive check: skip invalid messages
+            if (!isValidMessage(message)) {
+              return null;
+            }
+
+            return (
+              <motion.div
+                key={`${message.data?.timestamp || Date.now()}-${index}`}
+                variants={messageVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="flex items-center gap-2 p-2 rounded-lg bg-gray-800/50 border border-gray-700/50"
+              >
+                <span className="text-sm">
+                  {getPriorityEmoji(message.data?.priority || 'medium')}
+                </span>
+                <span className={`text-sm font-mono ${getToolColor(message.data?.tool)}`}>
+                  {formatMessage(message)}
+                </span>
+                <span className="text-xs text-gray-500 ml-auto">
+                  {message.data?.timestamp
+                    ? new Date(message.data.timestamp).toLocaleTimeString()
+                    : new Date().toLocaleTimeString()}
+                </span>
+              </motion.div>
+            );
+          })}
         </AnimatePresence>
 
         {/* Empty state */}
