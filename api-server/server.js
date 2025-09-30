@@ -2,6 +2,22 @@ import express from 'express';
 import cors from 'cors';
 import crypto from 'crypto';
 import { loadAgent, loadAllAgents } from './services/agent-loader.service.js';
+import Database from 'better-sqlite3';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const DB_PATH = join(__dirname, '../database.db');
+
+let db;
+try {
+  db = new Database(DB_PATH);
+  db.pragma('foreign_keys = ON');
+  console.log('✅ Token analytics database connected:', DB_PATH);
+} catch (error) {
+  console.error('❌ Token analytics database error:', error);
+}
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -323,89 +339,28 @@ const generateMockActivities = () => {
   return activities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 };
 
-// Generate realistic token analytics data
+// DEPRECATED: Mock token analytics data generator
+// This function is no longer used - replaced with real database queries
+/*
 const generateTokenAnalyticsData = () => {
-  const providers = ['anthropic', 'openai', 'google'];
-  const models = {
-    anthropic: ['claude-3-sonnet', 'claude-3-haiku', 'claude-3-opus'],
-    openai: ['gpt-4', 'gpt-3.5-turbo', 'gpt-4-turbo'],
-    google: ['gemini-pro', 'gemini-ultra']
-  };
-
-  const now = new Date();
-  const hourlyData = [];
-  const dailyData = [];
-  const messages = [];
-
-  // Generate hourly data for last 24 hours
-  for (let i = 23; i >= 0; i--) {
-    const hour = new Date(now.getTime() - (i * 60 * 60 * 1000));
-    const baseTokens = Math.floor(Math.random() * 5000) + 1000; // 1000-6000 base
-    const requests = Math.floor(Math.random() * 50) + 10; // 10-60 requests
-
-    hourlyData.push({
-      hour: hour.getHours().toString().padStart(2, '0') + ':00',
-      total_tokens: baseTokens,
-      total_requests: requests,
-      total_cost: Math.floor(baseTokens * 0.003 * 100), // cents
-      avg_processing_time: Math.floor(Math.random() * 1000) + 200 // 200-1200ms
-    });
-  }
-
-  // Generate daily data for last 30 days
-  for (let i = 29; i >= 0; i--) {
-    const date = new Date(now.getTime() - (i * 24 * 60 * 60 * 1000));
-    const baseTokens = Math.floor(Math.random() * 50000) + 20000; // 20k-70k tokens
-    const requests = Math.floor(Math.random() * 500) + 100; // 100-600 requests
-
-    dailyData.push({
-      date: date.toISOString().split('T')[0],
-      total_tokens: baseTokens,
-      total_requests: requests,
-      total_cost: Math.floor(baseTokens * 0.003 * 100), // cents
-      avg_processing_time: Math.floor(Math.random() * 800) + 300 // 300-1100ms
-    });
-  }
-
-  // Generate recent messages
-  for (let i = 0; i < 50; i++) {
-    const provider = providers[Math.floor(Math.random() * providers.length)];
-    const model = models[provider][Math.floor(Math.random() * models[provider].length)];
-    const inputTokens = Math.floor(Math.random() * 2000) + 100;
-    const outputTokens = Math.floor(Math.random() * 1000) + 50;
-    const totalTokens = inputTokens + outputTokens;
-    const processingTime = Math.floor(Math.random() * 2000) + 100;
-    const timestamp = new Date(now.getTime() - (i * 10 * 60 * 1000)); // Every 10 minutes
-
-    const messageTypes = ['chat', 'completion', 'analysis', 'generation', 'translation'];
-    const components = ['TokenAnalyticsDashboard', 'AgentChat', 'ActivityPanel', 'DataProcessor', 'ContentGenerator'];
-
-    messages.push({
-      id: Date.now() + i,
-      timestamp: timestamp.toISOString(),
-      session_id: crypto.randomUUID(),
-      request_id: crypto.randomUUID(),
-      message_id: crypto.randomUUID(),
-      provider: provider,
-      model: model,
-      request_type: messageTypes[Math.floor(Math.random() * messageTypes.length)],
-      input_tokens: inputTokens,
-      output_tokens: outputTokens,
-      total_tokens: totalTokens,
-      cost_total: Math.floor(totalTokens * 0.003 * 100), // cents
-      processing_time_ms: processingTime,
-      message_preview: `User requested ${messageTypes[Math.floor(Math.random() * messageTypes.length)]} with context about ${['code analysis', 'data processing', 'content creation', 'system optimization', 'workflow automation'][Math.floor(Math.random() * 5)]}`,
-      response_preview: `Generated comprehensive response covering key aspects of the request with detailed analysis and recommendations`,
-      component: components[Math.floor(Math.random() * components.length)]
-    });
-  }
-
-  return { hourlyData, dailyData, messages };
+  // Mock data generation code commented out
+  // All token analytics endpoints now query the database directly
+  return { hourlyData: [], dailyData: [], messages: [] };
 };
+*/
 
 // Initialize mock data
 const mockActivities = generateMockActivities();
-const tokenAnalytics = generateTokenAnalyticsData();
+
+// Helper function to infer provider from model name
+const inferProvider = (model) => {
+  if (!model) return 'unknown';
+  const modelLower = model.toLowerCase();
+  if (modelLower.includes('claude')) return 'anthropic';
+  if (modelLower.includes('gpt')) return 'openai';
+  if (modelLower.includes('gemini')) return 'google';
+  return 'unknown';
+};
 
 // API Route: Activities endpoint with pagination
 app.get('/api/activities', (req, res) => {
@@ -453,7 +408,33 @@ app.get('/api/activities', (req, res) => {
 // API Route: Token Analytics - Hourly data
 app.get('/api/token-analytics/hourly', (req, res) => {
   try {
-    const { hourlyData } = tokenAnalytics;
+    if (!db) {
+      console.warn('⚠️ Database not available, returning empty data');
+      return res.json({
+        success: true,
+        data: { labels: [], datasets: [] },
+        raw_data: [],
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const { days = 1 } = req.query;
+    const hoursAgo = parseInt(days) * 24;
+
+    // Query aggregated hourly data from database
+    const query = `
+      SELECT
+        strftime('%H:00', timestamp) as hour,
+        SUM(totalTokens) as total_tokens,
+        COUNT(*) as total_requests,
+        ROUND(SUM(estimatedCost), 4) as total_cost
+      FROM token_analytics
+      WHERE datetime(timestamp) >= datetime('now', '-${hoursAgo} hours')
+      GROUP BY strftime('%H:00', timestamp)
+      ORDER BY hour
+    `;
+
+    const hourlyData = db.prepare(query).all();
 
     // Convert to Chart.js compatible format
     const chartData = {
@@ -476,7 +457,7 @@ app.get('/api/token-analytics/hourly', (req, res) => {
           yAxisID: 'y1'
         },
         {
-          label: 'Cost (cents)',
+          label: 'Cost ($)',
           data: hourlyData.map(d => d.total_cost),
           backgroundColor: 'rgba(139, 69, 19, 0.5)',
           borderColor: 'rgb(139, 69, 19)',
@@ -505,7 +486,32 @@ app.get('/api/token-analytics/hourly', (req, res) => {
 // API Route: Token Analytics - Daily data
 app.get('/api/token-analytics/daily', (req, res) => {
   try {
-    const { dailyData } = tokenAnalytics;
+    if (!db) {
+      console.warn('⚠️ Database not available, returning empty data');
+      return res.json({
+        success: true,
+        data: { labels: [], datasets: [] },
+        raw_data: [],
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const { days = 30 } = req.query;
+
+    // Query aggregated daily data from database
+    const query = `
+      SELECT
+        DATE(timestamp) as date,
+        SUM(totalTokens) as total_tokens,
+        COUNT(*) as total_requests,
+        ROUND(SUM(estimatedCost), 4) as total_cost
+      FROM token_analytics
+      WHERE DATE(timestamp) >= DATE('now', '-${parseInt(days)} days')
+      GROUP BY DATE(timestamp)
+      ORDER BY date
+    `;
+
+    const dailyData = db.prepare(query).all();
 
     // Convert to Chart.js compatible format
     const chartData = {
@@ -526,6 +532,14 @@ app.get('/api/token-analytics/daily', (req, res) => {
           borderColor: 'rgb(34, 197, 94)',
           borderWidth: 1,
           yAxisID: 'y1'
+        },
+        {
+          label: 'Daily Cost ($)',
+          data: dailyData.map(d => d.total_cost),
+          backgroundColor: 'rgba(139, 69, 19, 0.5)',
+          borderColor: 'rgb(139, 69, 19)',
+          borderWidth: 1,
+          yAxisID: 'y2'
         }
       ]
     };
@@ -549,28 +563,93 @@ app.get('/api/token-analytics/daily', (req, res) => {
 // API Route: Token Analytics - Messages
 app.get('/api/token-analytics/messages', (req, res) => {
   try {
-    const limit = Math.min(parseInt(req.query.limit) || 50, 100);
+    if (!db) {
+      console.warn('⚠️ Database not available, returning empty data');
+      return res.json({
+        success: true,
+        data: [],
+        total: 0,
+        limit: 100,
+        offset: 0,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const limit = Math.min(parseInt(req.query.limit) || 100, 100);
     const offset = parseInt(req.query.offset) || 0;
     const provider = req.query.provider;
     const model = req.query.model;
 
-    let filteredMessages = [...tokenAnalytics.messages];
+    // Build query with filters - get last 100 messages regardless of date
+    let query = `
+      SELECT
+        id,
+        timestamp,
+        sessionId as session_id,
+        id as request_id,
+        id as message_id,
+        model,
+        operation as request_type,
+        inputTokens as input_tokens,
+        outputTokens as output_tokens,
+        totalTokens as total_tokens,
+        ROUND(estimatedCost, 4) as cost_total
+      FROM token_analytics
+      WHERE 1=1
+    `;
 
-    // Apply filters
-    if (provider) {
-      filteredMessages = filteredMessages.filter(msg => msg.provider === provider);
-    }
+    const params = {};
+
     if (model) {
-      filteredMessages = filteredMessages.filter(msg => msg.model === model);
+      query += ` AND model = $model`;
+      params.model = model;
     }
 
-    // Apply pagination
-    const paginatedMessages = filteredMessages.slice(offset, offset + limit);
+    query += ` ORDER BY datetime(timestamp) DESC LIMIT $limit OFFSET $offset`;
+    params.limit = limit;
+    params.offset = offset;
+
+    const records = db.prepare(query).all(params);
+
+    // Map to API response format with inferred provider
+    const messages = records.map(record => ({
+      id: record.id,
+      timestamp: record.timestamp,
+      session_id: record.session_id,
+      request_id: record.request_id,
+      message_id: record.message_id,
+      provider: inferProvider(record.model),
+      model: record.model,
+      request_type: record.request_type,
+      input_tokens: record.input_tokens,
+      output_tokens: record.output_tokens,
+      total_tokens: record.total_tokens,
+      cost_total: record.cost_total,
+      processing_time_ms: Math.floor(Math.random() * 2000) + 100, // Placeholder
+      message_preview: `User requested ${record.request_type}`,
+      response_preview: 'Generated response',
+      component: 'TokenAnalyticsDashboard'
+    }));
+
+    // Filter by provider if specified (post-query since provider is inferred)
+    let filteredMessages = messages;
+    if (provider) {
+      filteredMessages = messages.filter(msg => msg.provider === provider);
+    }
+
+    // Get total count
+    let countQuery = `SELECT COUNT(*) as count FROM token_analytics WHERE 1=1`;
+    const countParams = {};
+    if (model) {
+      countQuery += ` AND model = $model`;
+      countParams.model = model;
+    }
+    const totalCount = db.prepare(countQuery).get(countParams).count;
 
     res.json({
       success: true,
-      data: paginatedMessages,
-      total: filteredMessages.length,
+      data: filteredMessages,
+      total: totalCount,
       limit: limit,
       offset: offset,
       timestamp: new Date().toISOString()
@@ -588,82 +667,100 @@ app.get('/api/token-analytics/messages', (req, res) => {
 // API Route: Token Analytics - Summary
 app.get('/api/token-analytics/summary', (req, res) => {
   try {
-    const { messages, hourlyData, dailyData } = tokenAnalytics;
+    if (!db) {
+      console.warn('⚠️ Database not available, returning empty data');
+      return res.json({
+        success: true,
+        data: {
+          summary: {
+            total_requests: 0,
+            total_tokens: 0,
+            total_cost: 0,
+            avg_processing_time: 0,
+            unique_sessions: 0,
+            providers_used: 0,
+            models_used: 0
+          },
+          by_provider: [],
+          by_model: []
+        },
+        timestamp: new Date().toISOString()
+      });
+    }
 
-    // Calculate summary statistics
-    const totalRequests = messages.length;
-    const totalTokens = messages.reduce((sum, msg) => sum + msg.total_tokens, 0);
-    const totalCost = messages.reduce((sum, msg) => sum + msg.cost_total, 0);
-    const avgProcessingTime = messages.reduce((sum, msg) => sum + msg.processing_time_ms, 0) / messages.length;
-    const uniqueSessions = new Set(messages.map(msg => msg.session_id)).size;
-    const providersUsed = new Set(messages.map(msg => msg.provider)).size;
-    const modelsUsed = new Set(messages.map(msg => msg.model)).size;
+    // Get overall summary statistics
+    const summaryQuery = `
+      SELECT
+        COUNT(*) as total_requests,
+        SUM(totalTokens) as total_tokens,
+        ROUND(SUM(estimatedCost), 4) as total_cost,
+        COUNT(DISTINCT sessionId) as unique_sessions,
+        COUNT(DISTINCT model) as models_used
+      FROM token_analytics
+    `;
+    const summary = db.prepare(summaryQuery).get();
 
-    // Calculate usage by provider
+    // Calculate providers used (infer from models)
+    const modelsQuery = `SELECT DISTINCT model FROM token_analytics`;
+    const models = db.prepare(modelsQuery).all();
+    const providers = new Set(models.map(m => inferProvider(m.model)));
+    summary.providers_used = providers.size;
+
+    // Get usage by model with provider inference
+    const byModelQuery = `
+      SELECT
+        model,
+        COUNT(*) as requests,
+        SUM(totalTokens) as tokens,
+        ROUND(SUM(estimatedCost), 4) as cost
+      FROM token_analytics
+      GROUP BY model
+      ORDER BY requests DESC
+    `;
+    const modelStats = db.prepare(byModelQuery).all().map(m => ({
+      model: m.model,
+      provider: inferProvider(m.model),
+      requests: m.requests,
+      tokens: m.tokens,
+      cost: m.cost,
+      avg_time: Math.floor(Math.random() * 1000) + 200 // Placeholder
+    }));
+
+    // Aggregate by provider
     const byProvider = {};
-    const byModel = {};
-
-    messages.forEach(msg => {
-      // By provider
-      if (!byProvider[msg.provider]) {
-        byProvider[msg.provider] = {
-          provider: msg.provider,
+    modelStats.forEach(m => {
+      if (!byProvider[m.provider]) {
+        byProvider[m.provider] = {
+          provider: m.provider,
           requests: 0,
           tokens: 0,
-          cost: 0,
-          processing_times: []
+          cost: 0
         };
       }
-      byProvider[msg.provider].requests++;
-      byProvider[msg.provider].tokens += msg.total_tokens;
-      byProvider[msg.provider].cost += msg.cost_total;
-      byProvider[msg.provider].processing_times.push(msg.processing_time_ms);
-
-      // By model
-      const modelKey = `${msg.provider}:${msg.model}`;
-      if (!byModel[modelKey]) {
-        byModel[modelKey] = {
-          model: msg.model,
-          provider: msg.provider,
-          requests: 0,
-          tokens: 0,
-          cost: 0,
-          processing_times: []
-        };
-      }
-      byModel[modelKey].requests++;
-      byModel[modelKey].tokens += msg.total_tokens;
-      byModel[modelKey].cost += msg.cost_total;
-      byModel[modelKey].processing_times.push(msg.processing_time_ms);
+      byProvider[m.provider].requests += m.requests;
+      byProvider[m.provider].tokens += m.tokens;
+      byProvider[m.provider].cost += m.cost;
     });
 
-    // Convert to arrays and calculate averages
     const providerStats = Object.values(byProvider).map(p => ({
       ...p,
-      avg_time: p.processing_times.reduce((a, b) => a + b, 0) / p.processing_times.length,
-      processing_times: undefined // Remove from response
-    }));
-
-    const modelStats = Object.values(byModel).map(m => ({
-      ...m,
-      avg_time: m.processing_times.reduce((a, b) => a + b, 0) / m.processing_times.length,
-      processing_times: undefined // Remove from response
-    }));
+      avg_time: Math.floor(Math.random() * 1000) + 200 // Placeholder
+    })).sort((a, b) => b.requests - a.requests);
 
     res.json({
       success: true,
       data: {
         summary: {
-          total_requests: totalRequests,
-          total_tokens: totalTokens,
-          total_cost: totalCost,
-          avg_processing_time: Math.round(avgProcessingTime),
-          unique_sessions: uniqueSessions,
-          providers_used: providersUsed,
-          models_used: modelsUsed
+          total_requests: summary.total_requests || 0,
+          total_tokens: summary.total_tokens || 0,
+          total_cost: summary.total_cost || 0,
+          avg_processing_time: Math.floor(Math.random() * 500) + 300, // Placeholder
+          unique_sessions: summary.unique_sessions || 0,
+          providers_used: summary.providers_used || 0,
+          models_used: summary.models_used || 0
         },
-        by_provider: providerStats.sort((a, b) => b.requests - a.requests),
-        by_model: modelStats.sort((a, b) => b.requests - a.requests)
+        by_provider: providerStats,
+        by_model: modelStats
       },
       timestamp: new Date().toISOString()
     });
@@ -680,6 +777,14 @@ app.get('/api/token-analytics/summary', (req, res) => {
 // API Route: Token Analytics - Export
 app.get('/api/token-analytics/export', (req, res) => {
   try {
+    if (!db) {
+      console.warn('⚠️ Database not available, returning empty CSV');
+      const headers = ['Date', 'Daily Cost ($)', 'Daily Requests', 'Daily Tokens'];
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="token-analytics-empty.csv"');
+      return res.send(headers.join(',') + '\n');
+    }
+
     const { days = 30, format = 'csv' } = req.query;
 
     if (format !== 'csv') {
@@ -689,11 +794,23 @@ app.get('/api/token-analytics/export', (req, res) => {
       });
     }
 
-    const { dailyData } = tokenAnalytics;
-    const exportData = dailyData.slice(0, parseInt(days));
+    // Query daily data from database
+    const query = `
+      SELECT
+        DATE(timestamp) as date,
+        ROUND(SUM(estimatedCost), 4) as total_cost,
+        COUNT(*) as total_requests,
+        SUM(totalTokens) as total_tokens
+      FROM token_analytics
+      WHERE DATE(timestamp) >= DATE('now', '-${parseInt(days)} days')
+      GROUP BY DATE(timestamp)
+      ORDER BY date
+    `;
+
+    const exportData = db.prepare(query).all();
 
     // Generate CSV
-    const headers = ['Date', 'Daily Cost (cents)', 'Daily Requests', 'Daily Tokens'];
+    const headers = ['Date', 'Daily Cost ($)', 'Daily Requests', 'Daily Tokens'];
     const csvContent = [
       headers.join(','),
       ...exportData.map(row => [

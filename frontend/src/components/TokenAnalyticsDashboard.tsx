@@ -46,7 +46,7 @@ ChartJS.register(
 );
 
 interface TokenUsageRecord {
-  id: number;
+  id: string;
   timestamp: string;
   session_id: string;
   request_id: string;
@@ -57,7 +57,7 @@ interface TokenUsageRecord {
   input_tokens: number;
   output_tokens: number;
   total_tokens: number;
-  cost_total: number; // cents
+  cost_total: number; // dollars
   processing_time_ms: number;
   message_preview: string;
   response_preview: string;
@@ -67,7 +67,7 @@ interface TokenUsageRecord {
 interface UsageSummary {
   total_requests: number;
   total_tokens: number;
-  total_cost: number; // cents
+  total_cost: number; // dollars
   avg_processing_time: number | null;
   unique_sessions: number;
   providers_used: number;
@@ -127,7 +127,7 @@ const API_BASE = '/api/token-analytics';
 const validateTokenUsageRecord = (record: any): record is TokenUsageRecord => {
   return (
     typeof record === 'object' &&
-    typeof record.id === 'number' &&
+    typeof record.id === 'string' &&
     typeof record.timestamp === 'string' &&
     typeof record.session_id === 'string' &&
     typeof record.request_id === 'string' &&
@@ -225,7 +225,7 @@ const useTokenAnalytics = () => {
   const messagesQuery = useQuery({
     queryKey: ['token-analytics', 'messages'],
     queryFn: async () => {
-      const response = await fetch(`${API_BASE}/messages?limit=50`);
+      const response = await fetch(`${API_BASE}/messages?limit=100`);
       if (!response.ok) {
         throw new Error(`Failed to fetch messages: ${response.status} ${response.statusText}`);
       }
@@ -375,6 +375,7 @@ const dailyChartOptions: ChartOptions<'bar'> = {
         text: 'Tokens',
       },
       beginAtZero: true,
+      position: 'left' as const,
     },
     y1: {
       type: 'linear' as const,
@@ -383,6 +384,19 @@ const dailyChartOptions: ChartOptions<'bar'> = {
       title: {
         display: true,
         text: 'Requests',
+      },
+      grid: {
+        drawOnChartArea: false,
+      },
+      beginAtZero: true,
+    },
+    y2: {
+      type: 'linear' as const,
+      display: true,
+      position: 'right' as const,
+      title: {
+        display: true,
+        text: 'Cost ($)',
       },
       grid: {
         drawOnChartArea: false,
@@ -507,7 +521,7 @@ const MessageList = ({ messages, searchTerm, onSearchChange }: MessageListProps)
                       <span title={`Input: ${message.input_tokens?.toLocaleString() || 0}, Output: ${message.output_tokens?.toLocaleString() || 0}`}>
                         {(message.total_tokens || 0).toLocaleString()} tokens
                       </span>
-                      <span>${((message.cost_total || 0) / 100).toFixed(4)}</span>
+                      <span>${(message.cost_total || 0).toFixed(4)}</span>
                       {message.processing_time_ms && (
                         <span>{message.processing_time_ms}ms</span>
                       )}
@@ -580,7 +594,7 @@ export const TokenAnalyticsDashboard = () => {
   } = useTokenAnalytics();
 
   // Format currency
-  const formatCurrency = (cents: number) => `$${(cents / 100).toFixed(4)}`;
+  const formatCurrency = (dollars: number) => `$${dollars.toFixed(4)}`;
 
   // Format numbers
   const formatNumber = (num: number) => num?.toLocaleString() || '0';
