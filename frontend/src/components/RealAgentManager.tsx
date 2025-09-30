@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Search, RefreshCw, Bot, Play, Pause, Trash2, AlertCircle, CheckCircle, Clock, Home, Eye } from 'lucide-react';
+import { Search, RefreshCw, Bot, Trash2, AlertCircle, CheckCircle, Clock, Home, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
 import { Agent, ApiResponse } from '../types/api';
@@ -62,18 +62,6 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
     await loadAgents();
   };
 
-  const handleSpawnAgent = async (type: string) => {
-    try {
-      await apiService.spawnAgent(type, {
-        name: `${type}-agent`,
-        capabilities: [type, 'production-ready'],
-        description: `Production ${type} agent with real database integration`
-      });
-      // WebSocket will update the UI automatically
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to spawn agent');
-    }
-  };
 
   const handleTerminateAgent = async (agentId: string) => {
     try {
@@ -85,12 +73,12 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
   };
 
   // Navigation handlers
-  const handleNavigateToHome = (agentId: string) => {
-    navigate(`/agents/${agentId}/home`);
+  const handleNavigateToHome = (agentSlug: string) => {
+    navigate(`/agents/${agentSlug}/home`);
   };
 
-  const handleNavigateToDetails = (agentId: string) => {
-    navigate(`/agents/${agentId}`);
+  const handleNavigateToDetails = (agentSlug: string) => {
+    navigate(`/agents/${agentSlug}`);
   };
 
   // Filter agents based on search
@@ -153,13 +141,6 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
             Refresh
-          </button>
-          <button
-            onClick={() => handleSpawnAgent('production')}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Spawn Agent
           </button>
         </div>
       </div>
@@ -263,14 +244,14 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
             {/* Navigation Actions */}
             <div className="flex space-x-2 mb-3">
               <button
-                onClick={() => handleNavigateToHome(agent.id)}
+                onClick={() => handleNavigateToHome(agent.slug)}
                 className="flex-1 flex items-center justify-center px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <Home className="w-4 h-4 mr-2" />
                 Home
               </button>
               <button
-                onClick={() => handleNavigateToDetails(agent.id)}
+                onClick={() => handleNavigateToDetails(agent.slug)}
                 className="flex-1 flex items-center justify-center px-3 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <Eye className="w-4 h-4 mr-2" />
@@ -280,13 +261,6 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
 
             {/* Management Actions */}
             <div className="flex space-x-2">
-              <button
-                onClick={() => handleSpawnAgent(agent.name)}
-                className="flex-1 flex items-center justify-center px-3 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700"
-              >
-                <Play className="w-4 h-4 mr-1" />
-                Activate
-              </button>
               <button
                 onClick={() => handleTerminateAgent(agent.id)}
                 className="flex items-center justify-center px-3 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700"
@@ -314,14 +288,6 @@ const RealAgentManager: React.FC<RealAgentManagerProps> = ({ className = '' }) =
           <p className="text-gray-500 mb-4">
             {searchTerm ? 'No agents match your search criteria.' : 'No agents have been created yet.'}
           </p>
-          {!searchTerm && (
-            <button
-              onClick={() => handleSpawnAgent('starter')}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Create First Agent
-            </button>
-          )}
         </div>
       )}
 

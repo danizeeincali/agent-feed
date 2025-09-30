@@ -6,6 +6,7 @@
 // Core entity interfaces
 export interface Agent {
   id: string;
+  slug: string;
   name: string;
   display_name: string;
   description: string;

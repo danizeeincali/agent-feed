@@ -49,7 +49,7 @@ const AgentFileSystem = ({ agent }) => {
   }
 
   const workspace = agent.workspace;
-  const rootPath = workspace.rootPath || `/agents/${agent.id}`;
+  const rootPath = workspace.rootPath || `/agents/${agent.slug}`;
 
   /**
    * Get file icon based on extension or type
@@ -162,7 +162,7 @@ const AgentFileSystem = ({ agent }) => {
     setLoading(true);
     try {
       // Simulate API call to get file content
-      const response = await fetch(`/api/agents/${agent.id}/files?path=${encodeURIComponent(file.path)}`);
+      const response = await fetch(`/api/agents/${agent.slug}/files?path=${encodeURIComponent(file.path)}`);
       if (response.ok) {
         const content = await response.text();
         setFileContent({ file, content });

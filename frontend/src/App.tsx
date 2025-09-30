@@ -272,12 +272,14 @@ const App: React.FC = () => {
                       </RouteErrorBoundary>
                     </RouteWrapper>
                   } />
-                  <Route path="/agents/:agentId" element={
-                    <RouteErrorBoundary routeName="AgentProfile">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading agent profile..." />}>
-                        <WorkingAgentProfile />
-                      </Suspense>
-                    </RouteErrorBoundary>
+                  <Route path="/agents/:agentSlug" element={
+                    <RouteWrapper routeKey="agents">
+                      <RouteErrorBoundary routeName="Agents" key="agents-route">
+                        <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
+                          <IsolatedRealAgentManager key="agents-manager" />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    </RouteWrapper>
                   } />
                   <Route path="/agents/:agentId/pages/:pageId" element={
                     <RouteErrorBoundary routeName="DynamicAgentPage">

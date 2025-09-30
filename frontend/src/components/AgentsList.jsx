@@ -148,7 +148,7 @@ const AgentsList = () => {
    * Handle agent card click
    */
   const handleAgentClick = (agent) => {
-    navigate(`/agents/${agent.id}`);
+    navigate(`/agents/${agent.slug}`);
   };
 
   /**

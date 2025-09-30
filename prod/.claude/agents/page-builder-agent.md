@@ -123,21 +123,21 @@ After creating ANY page file, YOU (the page-builder-agent) MUST execute these co
 
 ```bash
 # For dynamic pages - YOU MUST RUN THIS:
-curl -X POST http://localhost:3000/api/agents/{agent-id}/pages \
+curl -X POST http://localhost:3001/api/agent-pages/agents/{agent-id}/pages \
   -H "Content-Type: application/json" \
   -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-{page-id}.json
 
 # Verify it's accessible:
-curl http://localhost:3000/api/agents/{agent-id}/pages/{page-id}
+curl http://localhost:3001/api/agent-pages/agents/{agent-id}/pages/{page-id}
 # MUST return the page data, not null or 404
 
 # For agent profile pages:
-curl -X POST http://localhost:3000/api/agents/{agent-id}/profile \
+curl -X POST http://localhost:3001/api/agents/{agent-id}/profile \
   -H "Content-Type: application/json" \
   -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-profile.json
 
 # Verify profile is accessible:
-curl http://localhost:3000/api/agents/{agent-id}
+curl http://localhost:3001/api/agents/{agent-id}
 # MUST return profile data, not just "true"
 ```
 
@@ -188,10 +188,10 @@ echo "{...}" > /data/agent-pages/agent-page.json
 
 # ✅ CORRECT - Create file AND register in database:
 echo "{...}" > /data/agent-pages/agent-page.json
-curl -X POST http://localhost:3000/api/agents/agent-id/pages \
+curl -X POST http://localhost:3001/api/agent-pages/agents/agent-id/pages \
   -H "Content-Type: application/json" \
   -d @/data/agent-pages/agent-page.json
-curl http://localhost:3000/api/agents/agent-id/pages/page-id  # Verify it works
+curl http://localhost:3001/api/agent-pages/agents/agent-id/pages/page-id  # Verify it works
 ```
 
 ### 6. Version Control and Maintenance
@@ -910,18 +910,18 @@ For each page building operation, provide:
 2. **Save**: Store in `/workspaces/agent-feed/data/agent-pages/{agent-id}-{page-id}.json`
 3. **Register**: YOU MUST execute this EXACT command yourself using Bash tool:
    ```bash
-   curl -X POST http://localhost:3000/api/agents/{agent-id}/pages \
+   curl -X POST http://localhost:3001/api/agent-pages/agents/{agent-id}/pages \
      -H "Content-Type: application/json" \
      -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-{page-id}.json
    ```
 4. **Verify**: Test accessibility - this MUST return page data:
    ```bash
-   curl http://localhost:3000/api/agents/{agent-id}/pages/{page-id}
+   curl http://localhost:3001/api/agent-pages/agents/{agent-id}/pages/{page-id}
    ```
    ⚠️ **If this returns null or 404, the page is NOT integrated!**
 5. **Confirm**: Check page count increased:
    ```bash
-   curl http://localhost:3000/api/agents/{agent-id}/pages | jq '.pages | length'
+   curl http://localhost:3001/api/agent-pages/agents/{agent-id}/pages | jq '.pages | length'
    ```
 6. **Report**: Only report success after ALL verifications pass
 
@@ -930,13 +930,13 @@ For each page building operation, provide:
 2. **Save**: Store in `/workspaces/agent-feed/data/agent-pages/{agent-id}-profile.json`
 3. **Register**: Execute this EXACT command:
    ```bash
-   curl -X POST http://localhost:3000/api/agents/{agent-id}/profile \
+   curl -X POST http://localhost:3001/api/agents/{agent-id}/profile \
      -H "Content-Type: application/json" \
      -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-profile.json
    ```
 4. **Verify**: Test accessibility - this MUST return full profile data:
    ```bash
-   curl http://localhost:3000/api/agents/{agent-id} | jq '.data'
+   curl http://localhost:3001/api/agents/{agent-id} | jq '.data'
    ```
    ⚠️ **If this returns just "true" or null, the profile is NOT integrated!**
 5. **Confirm**: Ensure frontend URL works: `/agents/{agent-id}`

@@ -13,17 +13,19 @@ import {
 
 interface DynamicPageData {
   id: string;
-  agent_id: string;
+  agentId: string;
   title: string;
-  page_type: string;
-  content_type: string;
-  content_value: string;
-  content_metadata?: any;
-  status: string;
-  tags: string[];
-  created_at: string;
-  updated_at: string;
-  version: number;
+  version: string;
+  layout?: any[];
+  components?: string[];
+  metadata?: {
+    description?: string;
+    tags?: string[];
+    icon?: string;
+  };
+  status?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface ComponentConfig {
@@ -47,12 +49,12 @@ const DynamicPageRenderer: React.FC = () => {
         setLoading(true);
         setError(null);
         
-        const response = await fetch(`/api/agents/${agentId}/pages/${pageId}`);
+        const response = await fetch(`/api/agent-pages/agents/${agentId}/pages/${pageId}`);
         
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
-            setPageData(data.data.page);
+            setPageData(data.page);
           } else {
             setError(data.error || 'Failed to load page');
           }
@@ -77,6 +79,214 @@ const DynamicPageRenderer: React.FC = () => {
 
     // Basic component rendering - can be expanded with more complex components
     switch (type) {
+      case 'header':
+        const HeaderTag = `h${props.level || 1}` as keyof JSX.IntrinsicElements;
+        return (
+          <HeaderTag key={Math.random()} className={`font-bold text-gray-900 mb-4 ${
+            props.level === 1 ? 'text-3xl' :
+            props.level === 2 ? 'text-2xl' :
+            props.level === 3 ? 'text-xl' :
+            props.level === 4 ? 'text-lg' :
+            props.level === 5 ? 'text-base' :
+            'text-sm'
+          }`}>
+            {props.title}
+            {props.subtitle && <span className="block text-sm font-normal text-gray-600 mt-1">{props.subtitle}</span>}
+          </HeaderTag>
+        );
+
+      case 'todoList':
+        const demoTodos = [
+          { id: 1, title: "Example todo item 1", completed: false, priority: "high" },
+          { id: 2, title: "Example todo item 2", completed: true, priority: "medium" },
+          { id: 3, title: "Example todo item 3", completed: false, priority: "low" }
+        ];
+
+        return (
+          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Tasks</h3>
+              <div className="flex items-center gap-2 text-xs text-gray-500">
+                <span>Sort: {props.sortBy || 'default'}</span>
+                {props.showCompleted && (
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">Showing completed</span>
+                )}
+              </div>
+            </div>
+            <div className="space-y-2">
+              {demoTodos.map((todo) => (
+                <div key={todo.id} className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg">
+                  <input type="checkbox" checked={todo.completed} readOnly className="w-4 h-4" />
+                  <span className={`flex-1 ${todo.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>
+                    {todo.title}
+                  </span>
+                  <span className={`text-xs px-2 py-1 rounded ${
+                    todo.priority === 'high' ? 'bg-red-100 text-red-700' :
+                    todo.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-green-100 text-green-700'
+                  }`}>
+                    {todo.priority}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {props.filterTags && props.filterTags.length > 0 && (
+              <div className="flex items-center gap-2 mt-4 pt-4 border-t">
+                <span className="text-xs text-gray-500">Filters:</span>
+                {props.filterTags.map((tag: string, i: number) => (
+                  <span key={i} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">{tag}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+
+      case 'dataTable':
+        const demoData = [
+          { id: 1, name: "Sample Item 1", status: "Active", value: 100 },
+          { id: 2, name: "Sample Item 2", status: "Pending", value: 250 },
+          { id: 3, name: "Sample Item 3", status: "Completed", value: 500 }
+        ];
+
+        return (
+          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {demoData.map((row) => (
+                  <tr key={row.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{row.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.status}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{row.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+
+      case 'stat':
+        return (
+          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">{props.label}</p>
+                <p className="text-3xl font-bold text-gray-900 mt-2">{props.value}</p>
+                {props.change !== undefined && (
+                  <p className={`text-sm mt-2 ${props.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {props.change >= 0 ? '↑' : '↓'} {Math.abs(props.change)}%
+                  </p>
+                )}
+              </div>
+              {props.icon && <span className="text-4xl">{props.icon}</span>}
+            </div>
+            {props.description && <p className="text-xs text-gray-500 mt-3">{props.description}</p>}
+          </div>
+        );
+
+      case 'list':
+        const demoItems = props.items || ["Sample item 1", "Sample item 2", "Sample item 3"];
+        const ListTag = props.ordered ? 'ol' : 'ul';
+
+        return (
+          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+            <ListTag className={`space-y-2 ${props.ordered ? 'list-decimal list-inside' : 'list-disc list-inside'}`}>
+              {demoItems.map((item: string, index: number) => (
+                <li key={index} className="text-gray-700">
+                  {props.icon && <span className="mr-2">{props.icon}</span>}
+                  {item}
+                </li>
+              ))}
+            </ListTag>
+          </div>
+        );
+
+      case 'form':
+        return (
+          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              {props.fields?.map((field: any, index: number) => (
+                <div key={index}>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
+                  <input
+                    type={field.type || 'text'}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              ))}
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {props.submitLabel || 'Submit'}
+              </button>
+            </form>
+          </div>
+        );
+
+      case 'tabs':
+        const [activeTab, setActiveTab] = React.useState(0);
+        const tabs = props.tabs || [
+          { label: "Tab 1", content: "Content 1" },
+          { label: "Tab 2", content: "Content 2" }
+        ];
+
+        return (
+          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200">
+            <div className="flex border-b">
+              {tabs.map((tab: any, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTab(index)}
+                  className={`px-6 py-3 text-sm font-medium ${
+                    activeTab === index
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <div className="p-6">{tabs[activeTab]?.content}</div>
+          </div>
+        );
+
+      case 'timeline':
+        const demoEvents = props.events || [
+          { id: 1, title: "Event 1", date: "2025-09-28", description: "First event" },
+          { id: 2, title: "Event 2", date: "2025-09-29", description: "Second event" },
+          { id: 3, title: "Event 3", date: "2025-09-30", description: "Third event" }
+        ];
+
+        return (
+          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="space-y-4">
+              {demoEvents.map((event: any, index: number) => (
+                <div key={event.id} className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                    {index < demoEvents.length - 1 && <div className="w-0.5 h-full bg-gray-300 my-1"></div>}
+                  </div>
+                  <div className="flex-1 pb-4">
+                    <p className="font-semibold text-gray-900">{event.title}</p>
+                    <p className="text-xs text-gray-500 mt-1">{event.date}</p>
+                    <p className="text-sm text-gray-600 mt-2">{event.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
       case 'Card':
         return (
           <div key={Math.random()} className={`bg-white rounded-lg border border-gray-200 p-4 ${props.className || ''}`}>
@@ -184,38 +394,40 @@ const DynamicPageRenderer: React.FC = () => {
     if (!pageData) return null;
 
     try {
-      if (pageData.content_type === 'json') {
-        const content = JSON.parse(pageData.content_value);
-        
-        if (content.components && Array.isArray(content.components)) {
-          return (
-            <div className="space-y-6">
-              {content.components.map((component: ComponentConfig) => renderComponent(component))}
-            </div>
-          );
-        }
-        
-        // Handle simple component structure
-        if (content.type) {
-          return renderComponent(content);
-        }
-        
-        // Fallback for other JSON structures
+      // Handle layout-based structure (new format)
+      if (pageData.layout && Array.isArray(pageData.layout)) {
         return (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <pre className="text-sm text-gray-700 whitespace-pre-wrap">
-              {JSON.stringify(content, null, 2)}
-            </pre>
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-4">Page Components</h3>
+              <div className="space-y-4">
+                {pageData.layout.map((layoutItem: any) =>
+                  renderComponent({
+                    type: layoutItem.type,
+                    props: layoutItem.config || {},
+                    children: []
+                  })
+                )}
+              </div>
+            </div>
+
+            {pageData.metadata?.description && (
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold mb-2">Description</h3>
+                <p className="text-gray-600">{pageData.metadata.description}</p>
+              </div>
+            )}
           </div>
         );
       }
-      
-      // Handle other content types
+
+      // Fallback: Display as JSON
       return (
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="text-sm text-gray-700 whitespace-pre-wrap">
-            {pageData.content_value}
-          </div>
+          <h3 className="text-lg font-semibold mb-4">Page Data</h3>
+          <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded">
+            {JSON.stringify(pageData, null, 2)}
+          </pre>
         </div>
       );
     } catch (err) {
@@ -223,14 +435,8 @@ const DynamicPageRenderer: React.FC = () => {
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-center py-8">
             <AlertCircle className="mx-auto h-12 w-12 text-yellow-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Content Parse Error</h3>
-            <p className="text-gray-500 mb-4">Unable to parse page content</p>
-            <details className="text-left">
-              <summary className="cursor-pointer text-blue-600 hover:text-blue-800">Show raw content</summary>
-              <pre className="mt-4 text-xs text-gray-600 bg-gray-50 p-4 rounded overflow-auto">
-                {pageData.content_value}
-              </pre>
-            </details>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Content Render Error</h3>
+            <p className="text-gray-500">Unable to render page content</p>
           </div>
         </div>
       );
@@ -290,7 +496,7 @@ const DynamicPageRenderer: React.FC = () => {
                 {pageData.status}
               </span>
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                {pageData.page_type}
+                {pageData.components?.join(', ') || 'custom'}
               </span>
               <span className="text-xs text-gray-500">v{pageData.version}</span>
             </div>
@@ -318,17 +524,17 @@ const DynamicPageRenderer: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />
-              Created {new Date(pageData.created_at).toLocaleDateString()}
+              Created {new Date(pageData.createdAt).toLocaleDateString()}
             </div>
             <div className="flex items-center gap-1">
               <User className="w-3 h-3" />
-              Updated {new Date(pageData.updated_at).toLocaleDateString()}
+              Updated {new Date(pageData.updatedAt).toLocaleDateString()}
             </div>
           </div>
-          {pageData.tags.length > 0 && (
+          {pageData.metadata?.tags && pageData.metadata.tags.length > 0 && (
             <div className="flex items-center gap-2">
               <Tag className="w-3 h-3" />
-              {pageData.tags.map((tag, index) => (
+              {pageData.metadata.tags.map((tag, index) => (
                 <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                   {tag}
                 </span>

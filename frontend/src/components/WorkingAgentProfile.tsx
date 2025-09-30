@@ -25,7 +25,8 @@ interface AgentData {
 }
 
 const WorkingAgentProfile: React.FC = () => {
-  const { agentId } = useParams<{ agentId: string }>();
+  const { agentSlug } = useParams<{ agentSlug: string }>();
+  const agentId = agentSlug; // Keep agentId variable name for internal use
   const navigate = useNavigate();
   const [agentData, setAgentData] = useState<AgentData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,17 +40,23 @@ const WorkingAgentProfile: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        
-        const response = await fetch('/api/agents');
-        const data = await response.json();
-        
-        if (data.success && data.agents) {
-          const agent = data.agents.find((a: any) => a.id === agentId);
-          if (agent) {
-            setAgentData(agent);
-          } else {
+
+        const response = await fetch(`/api/agents/${agentId}`);
+
+        if (!response.ok) {
+          if (response.status === 404) {
             setError(`Agent "${agentId}" not found`);
+          } else {
+            setError('Failed to load agent data');
           }
+          setLoading(false);
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          setAgentData(data.data);
         } else {
           setError('Failed to load agent data');
         }

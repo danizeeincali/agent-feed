@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import crypto from 'crypto';
+import { loadAgent, loadAllAgents } from './services/agent-loader.service.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -149,13 +150,51 @@ const validateSSEMessage = (message) => {
 };
 
 // API Routes
-app.get('/api/agents', (req, res) => {
-  res.json({
-    success: true,
-    data: mockAgents,
-    total: mockAgents.length,
-    timestamp: new Date().toISOString()
-  });
+app.get('/api/agents', async (req, res) => {
+  try {
+    const agents = await loadAllAgents();
+    res.json({
+      success: true,
+      data: agents,
+      total: agents.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error loading agents:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to load agents',
+      message: error.message
+    });
+  }
+});
+
+app.get('/api/agents/:slug', async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const agent = await loadAgent(slug);
+
+    if (!agent) {
+      return res.status(404).json({
+        success: false,
+        error: 'Agent not found',
+        message: `No agent found with slug: ${slug}`
+      });
+    }
+
+    res.json({
+      success: true,
+      data: agent,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error(`Error loading agent ${req.params.slug}:`, error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to load agent',
+      message: error.message
+    });
+  }
 });
 
 app.get('/api/agent-posts', (req, res) => {
@@ -1676,6 +1715,321 @@ app.get('/api/agents/health', (req, res) => {
   }
 });
 
+// =============================================================================
+// DYNAMIC AGENT PAGES API ENDPOINTS (Option A)
+// =============================================================================
+
+// Mock dynamic pages storage (in-memory for now)
+const mockDynamicPages = new Map();
+
+// Initialize with sample data
+const samplePages = [
+  {
+    id: 'personal-todos-dashboard-v3',
+    agentId: 'personal-todos-agent',
+    title: 'Personal Todos Dashboard',
+    version: '3.0.0',
+    layout: [
+      {
+        id: 'header-1',
+        type: 'header',
+        config: { title: 'My Personal Todos', level: 1 }
+      },
+      {
+        id: 'list-1',
+        type: 'todoList',
+        config: {
+          showCompleted: false,
+          sortBy: 'priority',
+          filterTags: []
+        }
+      }
+    ],
+    components: ['header', 'todoList'],
+    metadata: {
+      description: 'Manage your personal tasks',
+      tags: ['productivity', 'todos'],
+      icon: '✓'
+    },
+    createdAt: new Date('2025-09-28T10:00:00Z').toISOString(),
+    updatedAt: new Date('2025-09-30T10:00:00Z').toISOString()
+  },
+  {
+    id: 'analytics-dashboard-v1',
+    agentId: 'analytics-agent',
+    title: 'Analytics Dashboard',
+    version: '1.0.0',
+    layout: [
+      {
+        id: 'header-1',
+        type: 'header',
+        config: { title: 'Analytics Overview', level: 1 }
+      },
+      {
+        id: 'chart-1',
+        type: 'chart',
+        config: {
+          chartType: 'line',
+          dataSource: '/api/analytics/data',
+          refreshInterval: 30000
+        }
+      }
+    ],
+    components: ['header', 'chart'],
+    metadata: {
+      description: 'View analytics and metrics',
+      tags: ['analytics', 'metrics'],
+      icon: '📊'
+    },
+    createdAt: new Date('2025-09-25T10:00:00Z').toISOString(),
+    updatedAt: new Date('2025-09-25T10:00:00Z').toISOString()
+  }
+];
+
+// Initialize mock data
+samplePages.forEach(page => {
+  const agentPages = mockDynamicPages.get(page.agentId) || [];
+  agentPages.push(page);
+  mockDynamicPages.set(page.agentId, agentPages);
+});
+
+/**
+ * GET /api/agent-pages/agents/:agentId/pages
+ * List all pages for an agent with pagination
+ */
+app.get('/api/agent-pages/agents/:agentId/pages', (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { limit = 20, offset = 0 } = req.query;
+
+    const parsedLimit = parseInt(limit);
+    const parsedOffset = parseInt(offset);
+
+    // Get pages for this agent
+    const allPages = mockDynamicPages.get(agentId) || [];
+
+    // Apply pagination
+    const paginatedPages = allPages.slice(parsedOffset, parsedOffset + parsedLimit);
+
+    console.log(`📄 Fetched ${paginatedPages.length} pages for agent ${agentId}`);
+
+    res.json({
+      success: true,
+      pages: paginatedPages,
+      total: allPages.length,
+      limit: parsedLimit,
+      offset: parsedOffset,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error fetching pages:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/agent-pages/agents/:agentId/pages/:pageId
+ * Get a single page by ID
+ */
+app.get('/api/agent-pages/agents/:agentId/pages/:pageId', (req, res) => {
+  try {
+    const { agentId, pageId } = req.params;
+
+    const agentPages = mockDynamicPages.get(agentId) || [];
+    const page = agentPages.find(p => p.id === pageId);
+
+    if (!page) {
+      console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
+      return res.status(404).json({
+        success: false,
+        error: 'Page not found',
+        message: `Page with ID ${pageId} not found for agent ${agentId}`
+      });
+    }
+
+    console.log(`📄 Fetched page ${pageId} for agent ${agentId}`);
+
+    res.json({
+      success: true,
+      page: page,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error fetching page:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * POST /api/agent-pages/agents/:agentId/pages
+ * Create a new page for an agent
+ */
+app.post('/api/agent-pages/agents/:agentId/pages', (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { title, version, layout, components, metadata } = req.body;
+
+    // Validate required fields
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'Title is required'
+      });
+    }
+
+    if (!layout || !Array.isArray(layout)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'Layout must be an array'
+      });
+    }
+
+    // Create new page
+    const newPage = {
+      id: crypto.randomUUID(),
+      agentId: agentId,
+      title: title,
+      version: version || '1.0.0',
+      layout: layout,
+      components: components || [],
+      metadata: metadata || {},
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Add to storage
+    const agentPages = mockDynamicPages.get(agentId) || [];
+    agentPages.push(newPage);
+    mockDynamicPages.set(agentId, agentPages);
+
+    console.log(`✅ Created page ${newPage.id} for agent ${agentId}`);
+
+    res.status(201).json({
+      success: true,
+      page: newPage,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error creating page:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * PUT /api/agent-pages/agents/:agentId/pages/:pageId
+ * Update an existing page (supports partial updates)
+ */
+app.put('/api/agent-pages/agents/:agentId/pages/:pageId', (req, res) => {
+  try {
+    const { agentId, pageId } = req.params;
+    const updates = req.body;
+
+    const agentPages = mockDynamicPages.get(agentId) || [];
+    const pageIndex = agentPages.findIndex(p => p.id === pageId);
+
+    if (pageIndex === -1) {
+      console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
+      return res.status(404).json({
+        success: false,
+        error: 'Page not found',
+        message: `Page with ID ${pageId} not found for agent ${agentId}`
+      });
+    }
+
+    // Validate layout if provided
+    if (updates.layout && !Array.isArray(updates.layout)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation error',
+        message: 'Layout must be an array'
+      });
+    }
+
+    // Update page (partial update)
+    const updatedPage = {
+      ...agentPages[pageIndex],
+      ...updates,
+      id: pageId, // Ensure ID doesn't change
+      agentId: agentId, // Ensure agentId doesn't change
+      updatedAt: new Date().toISOString()
+    };
+
+    agentPages[pageIndex] = updatedPage;
+    mockDynamicPages.set(agentId, agentPages);
+
+    console.log(`✅ Updated page ${pageId} for agent ${agentId}`);
+
+    res.json({
+      success: true,
+      page: updatedPage,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error updating page:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * DELETE /api/agent-pages/agents/:agentId/pages/:pageId
+ * Delete a page
+ */
+app.delete('/api/agent-pages/agents/:agentId/pages/:pageId', (req, res) => {
+  try {
+    const { agentId, pageId } = req.params;
+
+    const agentPages = mockDynamicPages.get(agentId) || [];
+    const pageIndex = agentPages.findIndex(p => p.id === pageId);
+
+    if (pageIndex === -1) {
+      console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
+      return res.status(404).json({
+        success: false,
+        error: 'Page not found',
+        message: `Page with ID ${pageId} not found for agent ${agentId}`
+      });
+    }
+
+    // Remove page
+    const deletedPage = agentPages.splice(pageIndex, 1)[0];
+    mockDynamicPages.set(agentId, agentPages);
+
+    console.log(`🗑️ Deleted page ${pageId} for agent ${agentId}`);
+
+    res.json({
+      success: true,
+      message: 'Page deleted successfully',
+      deletedPage: deletedPage,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error deleting page:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      message: error.message
+    });
+  }
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({
@@ -1730,6 +2084,7 @@ app.listen(PORT, () => {
   console.log(`🤖 Agents API: http://localhost:${PORT}/api/agents`);
   console.log(`📝 Templates API: http://localhost:${PORT}/api/templates`);
   console.log(`📊 Streaming Ticker SSE: http://localhost:${PORT}/api/streaming-ticker/stream`);
+  console.log(`📄 Dynamic Pages API: http://localhost:${PORT}/api/agent-pages/agents/:agentId/pages`);
   console.log(`📈 All analytics APIs available`);
 });
 

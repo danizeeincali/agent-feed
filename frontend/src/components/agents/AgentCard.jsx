@@ -112,15 +112,15 @@ const AgentCard = ({ agent, status, onClick, viewMode = 'grid' }) => {
    */
   const handleNavigateToHome = (e) => {
     e.stopPropagation();
-    navigate(`/agents/${agent.id}/home`);
+    navigate(`/agents/${agent.slug}/home`);
   };
 
   /**
-   * Navigate to agent detail page  
+   * Navigate to agent detail page
    */
   const handleNavigateToDetails = (e) => {
     e.stopPropagation();
-    navigate(`/agents/${agent.id}`);
+    navigate(`/agents/${agent.slug}`);
   };
 
   const cardClassName = `agent-card ${viewMode} ${statusInfo.status} ${agent.isActive ? 'active' : 'inactive'}`;

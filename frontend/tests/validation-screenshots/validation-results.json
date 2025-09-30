@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-09-30T20:15:26.631Z",
+  "tests": {
+    "layoutVisible": true,
+    "sidebarPresent": true,
+    "detailPanelPresent": true,
+    "agentSelectionWorks": true,
+    "urlSyncWorks": true,
+    "noLayoutBreaking": true,
+    "noCriticalErrors": true
+  }
+}

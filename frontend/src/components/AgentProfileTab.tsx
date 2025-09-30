@@ -107,7 +107,7 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
     const shareData = {
       title: agent.configuration.profile.name,
       text: agent.configuration.profile.description,
-      url: `${window.location.origin}/agents/${agent.id}`
+      url: `${window.location.origin}/agents/${agent.slug}`
     };
 
     if (navigator.share) {

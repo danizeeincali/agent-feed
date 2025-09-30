@@ -41,12 +41,12 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
   const fetchPages = async () => {
     try {
       setError(null);
-      const response = await fetch(`/api/agents/${agentId}/pages`);
+      const response = await fetch(`/api/agent-pages/agents/${agentId}/pages`);
       
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          setPages(data.data?.pages || []);
+          setPages(data.pages || []);
         } else {
           setError(data.error || 'Failed to fetch pages');
         }
@@ -71,7 +71,7 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
   const handleCreatePage = async () => {
     setCreating(true);
     try {
-      const response = await fetch(`/api/agents/${agentId}/pages`, {
+      const response = await fetch(`/api/agent-pages/agents/${agentId}/pages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

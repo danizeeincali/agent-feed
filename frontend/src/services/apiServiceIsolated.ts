@@ -114,12 +114,6 @@ class IsolatedApiService extends BrowserEventEmitter {
     return this.request<Post[]>('/agent-posts');
   }
 
-  async spawnAgent(type: string, config: any): Promise<ApiResponse<Agent>> {
-    return this.request<Agent>('/agents', {
-      method: 'POST',
-      body: JSON.stringify({ type, ...config }),
-    });
-  }
 
   async terminateAgent(agentId: string): Promise<ApiResponse<any>> {
     return this.request<any>(`/agents/${agentId}`, {
