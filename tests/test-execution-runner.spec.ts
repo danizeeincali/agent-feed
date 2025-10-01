@@ -1,1 +1,0 @@
-Now let me implement the actual UI removal changes directly to the App.tsx file:

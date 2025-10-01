@@ -1,9 +1,0 @@
-timestamp,connectionId,lifetime,category,messagesSent,messagesReceived,bytesSent,bytesReceived,apiCalls,successfulApiCalls,errors,averagePingTime,closeCode,closeReason
-1756672774341,conn_1,31780,thirty_second_pattern,3,4,5338,1019,3,3,0,0.00,1000,"Thirty second timeout simulation"
-1756672777763,conn_1756672745562_1,32201,thirty_second_pattern,4,5,4432,1115,4,4,0,0.00,1000,"Thirty second timeout simulation"
-1756672778476,conn_1756672745561_0,32914,thirty_second_pattern,4,5,2385,952,4,4,0,0.00,1000,"Thirty second timeout simulation"
-1756672815569,conn_1756672780565_0,35004,normal_closure,5,6,7486,1451,5,4,0,0.00,1000,"Profiling session ended"
-1756672815570,conn_4,67010,normal_closure,7,8,8714,1864,7,7,0,0.00,1000,"Profiling session ended"
-1756672815570,conn_3,69009,normal_closure,7,8,5602,1591,7,7,0,0.00,1000,"Profiling session ended"
-1756672815570,conn_2,71009,normal_closure,6,7,5589,1484,6,6,0,0.00,1000,"Profiling session ended"
-1756672815570,conn_0,75008,normal_closure,7,8,10759,2028,7,7,0,0.00,1000,"Profiling session ended"

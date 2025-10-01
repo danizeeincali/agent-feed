@@ -4,6 +4,7 @@ import { cn } from '../utils/cn';
 import { PostCreator } from './PostCreator';
 import { MentionInput, MentionSuggestion } from './MentionInput';
 import AviTypingIndicator from './AviTypingIndicator';
+import MarkdownRenderer from './markdown/MarkdownRenderer';
 // Removed AviDirectChatSDK import - using built-in Avi chat component
 
 type PostingTab = 'post' | 'quick' | 'avi';
@@ -335,16 +336,21 @@ const AviChatSection: React.FC<{
           <div className="space-y-3">
             {chatHistory.map((msg) => (
               <div key={msg.id} className={cn(
-                'p-3 rounded-lg max-w-xs',
+                'p-3 rounded-lg',
                 msg.sender === 'user'
-                  ? 'bg-blue-100 text-blue-900 ml-auto'
+                  ? 'bg-blue-100 text-blue-900 ml-auto max-w-xs'
                   : msg.sender === 'typing'
-                  ? 'bg-white text-gray-900 border border-gray-200'
-                  : 'bg-white text-gray-900'
+                  ? 'bg-white text-gray-900 border border-gray-200 max-w-xs'
+                  : 'bg-white text-gray-900 max-w-full'
               )}>
-                {/* SPARC UX FIX: Render typing indicator inline or regular text */}
+                {/* SPARC MARKDOWN FIX: Render markdown for Avi responses */}
                 {msg.sender === 'typing' ? (
                   <div className="text-sm">{msg.content}</div>
+                ) : msg.sender === 'avi' ? (
+                  <MarkdownRenderer
+                    content={typeof msg.content === 'string' ? msg.content : String(msg.content)}
+                    className="text-sm"
+                  />
                 ) : (
                   <p className="text-sm">{msg.content}</p>
                 )}
