@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="20" failures="20" errors="0" time="4.449">
+    <testsuite name="src/tests/integration/AviDMClaudeCode.test.tsx" timestamp="2025-10-01T00:47:52.424Z" hostname="codespaces-005acc" tests="20" failures="20" errors="0" skipped="0" time="2.036">
+        <testcase classname="src/tests/integration/AviDMClaudeCode.test.tsx" name="Avi DM Claude Code Integration Tests &gt; Real API Call Tests &gt; should successfully call /api/claude-code/streaming-chat" time="0.01">

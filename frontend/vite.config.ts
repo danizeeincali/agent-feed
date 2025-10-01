@@ -28,12 +28,32 @@ export default defineConfig({
     },
     // Proxy configuration for backend services
     proxy: {
+      // SPARC FIX: Claude Code endpoint needs longer timeout (Claude responses take 10-60s)
+      '/api/claude-code': {
+        target: 'http://127.0.0.1:3001',
+        changeOrigin: true,
+        secure: false,
+        timeout: 120000, // 120 seconds for long-running Claude Code requests
+        followRedirects: true,
+        xfwd: true,
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('🔍 SPARC DEBUG: Claude Code proxy request:', req.method, req.url, '->', proxyReq.path);
+          });
+          proxy.on('error', (err, _req, _res) => {
+            console.log('🔍 SPARC DEBUG: Claude Code proxy error:', err.message);
+          });
+          proxy.on('proxyRes', (proxyRes, req, _res) => {
+            console.log('🔍 SPARC DEBUG: Claude Code proxy response:', req.url, '->', proxyRes.statusCode);
+          });
+        }
+      },
       // HTTP API proxy (working for Claude detection) - FIXED TO PORT 3001 FOR SPARC COMPLETION
       '/api': {
         target: 'http://127.0.0.1:3001', // Force IPv4 to avoid IPv6 connection issues
         changeOrigin: true,
         secure: false,
-        timeout: 10000, // Reduced timeout for faster failure detection
+        timeout: 10000, // Fast timeout for regular API endpoints
         followRedirects: true,
         xfwd: true,
         configure: (proxy, _options) => {

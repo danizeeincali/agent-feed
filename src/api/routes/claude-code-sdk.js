@@ -5,11 +5,30 @@
  */
 
 import express from 'express';
+import crypto from 'crypto';
 import { getClaudeCodeSDKManager } from '../../services/ClaudeCodeSDKManager.js';
 import StreamingTickerManager from '../../services/StreamingTickerManager.js';
+import { TokenAnalyticsWriter } from '../../services/TokenAnalyticsWriter.js';
+
 const router = express.Router();
 
+// TokenAnalyticsWriter will be initialized after db is passed
+let tokenAnalyticsWriter = null;
+
 console.log('🔧 DEBUG: Creating Claude Code SDK router...');
+
+/**
+ * Initialize the router with database connection
+ * This must be called from server.js after db is initialized
+ */
+export function initializeWithDatabase(db) {
+  if (db) {
+    tokenAnalyticsWriter = new TokenAnalyticsWriter(db);
+    console.log('✅ TokenAnalyticsWriter initialized with database connection');
+  } else {
+    console.warn('⚠️ TokenAnalyticsWriter not initialized - database unavailable');
+  }
+}
 
 /**
  * POST /api/claude-code/streaming-chat
@@ -61,6 +80,38 @@ router.post('/streaming-chat', async (req, res) => {
     const responses = await claudeCodeManager.createStreamingChat(message, options);
 
     console.log('🔍 Claude Code Responses:', JSON.stringify(responses, null, 2));
+
+    // Generate unique session ID for token analytics tracking
+    const sessionId = options.sessionId || `avi_dm_${Date.now()}_${crypto.randomUUID()}`;
+
+    // Track token usage analytics (async, non-blocking)
+    if (tokenAnalyticsWriter && responses && responses.length > 0) {
+      // Extract the messages array from the response
+      const firstResponse = responses[0];
+      const messages = firstResponse?.messages || [];
+
+      console.log('🔍 Token Analytics Debug:', {
+        responsesLength: responses.length,
+        hasMessages: !!messages.length,
+        messageTypes: messages.map(m => m.type),
+        sessionId
+      });
+
+      if (messages.length > 0) {
+        tokenAnalyticsWriter.writeTokenMetrics(messages, sessionId)
+          .then(() => {
+            console.log('✅ Token analytics written successfully for session:', sessionId);
+          })
+          .catch(error => {
+            console.error('⚠️ Token analytics write failed (non-blocking):', error.message);
+            console.error('⚠️ Error stack:', error.stack);
+          });
+      } else {
+        console.warn('⚠️ Token analytics skipped - no messages in response');
+      }
+    } else if (!tokenAnalyticsWriter) {
+      console.warn('⚠️ Token analytics skipped - writer not initialized');
+    }
 
     // Extract the actual response content
     let responseContent = 'No response received';

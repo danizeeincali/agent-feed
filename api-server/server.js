@@ -5,6 +5,7 @@ import { loadAgent, loadAllAgents } from './services/agent-loader.service.js';
 import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import claudeCodeRoutes, { initializeWithDatabase } from '../src/api/routes/claude-code-sdk.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,6 +20,14 @@ try {
   console.error('❌ Token analytics database error:', error);
 }
 
+// Export database connection for use in routes
+export { db };
+
+// Initialize Claude Code routes with database connection
+if (initializeWithDatabase) {
+  initializeWithDatabase(db);
+}
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -31,6 +40,9 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Mount Claude Code routes
+app.use('/api/claude-code', claudeCodeRoutes);
 
 // Mock Data
 const mockAgents = [
@@ -51,7 +63,37 @@ const mockAgentPosts = [
     status: "published",
     tags: ["development", "ai", "coding"],
     author: "Code Assistant",
-    authorAgent: mockAgents[0]
+    authorAgent: mockAgents[0].name,
+    authorAgentName: "Code Assistant",
+    publishedAt: "2025-09-28T10:00:00Z",
+    updatedAt: "2025-09-28T10:00:00Z",
+    category: "Development",
+    priority: "medium",
+    visibility: "public",
+    engagement: {
+      comments: 0,
+      shares: 0,
+      views: 0,
+      saves: 0,
+      reactions: {},
+      stars: {
+        average: 0,
+        count: 0,
+        distribution: {}
+      },
+      isSaved: false
+    },
+    metadata: {
+      businessImpact: 5,
+      confidence_score: 0.9,
+      isAgentResponse: false,
+      processing_time_ms: 100,
+      model_version: "1.0",
+      tokens_used: 50,
+      temperature: 0.7,
+      context_length: 200,
+      created_by_agent_id: mockAgents[0].id
+    }
   },
   {
     id: crypto.randomUUID(),
@@ -62,7 +104,37 @@ const mockAgentPosts = [
     status: "published",
     tags: ["data", "analytics", "visualization"],
     author: "Data Analyzer",
-    authorAgent: mockAgents[1]
+    authorAgent: mockAgents[1].name,
+    authorAgentName: "Data Analyzer",
+    publishedAt: "2025-09-28T09:30:00Z",
+    updatedAt: "2025-09-28T09:30:00Z",
+    category: "Analytics",
+    priority: "high",
+    visibility: "public",
+    engagement: {
+      comments: 0,
+      shares: 0,
+      views: 0,
+      saves: 0,
+      reactions: {},
+      stars: {
+        average: 0,
+        count: 0,
+        distribution: {}
+      },
+      isSaved: false
+    },
+    metadata: {
+      businessImpact: 8,
+      confidence_score: 0.95,
+      isAgentResponse: false,
+      processing_time_ms: 150,
+      model_version: "1.0",
+      tokens_used: 75,
+      temperature: 0.7,
+      context_length: 300,
+      created_by_agent_id: mockAgents[1].id
+    }
   }
 ];
 
@@ -247,9 +319,19 @@ app.get('/api/v1/agent-posts', (req, res) => {
 });
 
 app.get('/api/filter-data', (req, res) => {
+  // Extract unique agents and hashtags from mock posts
+  const agents = [...new Set(mockAgentPosts.map(p => p.authorAgent))];
+  const hashtags = [...new Set(
+    mockAgentPosts.flatMap(p =>
+      p.tags ? p.tags.map(tag => `#${tag}`) : []
+    )
+  )];
+
   res.json({
     success: true,
     data: {
+      agents: agents,
+      hashtags: hashtags,
       categories: [
         { id: crypto.randomUUID(), name: 'Development', count: 5 },
         { id: crypto.randomUUID(), name: 'Analytics', count: 3 },
@@ -274,6 +356,61 @@ app.get('/api/filter-stats', (req, res) => {
       ]
     },
     timestamp: new Date().toISOString()
+  });
+});
+
+// Save post endpoint
+app.post('/api/v1/agent-posts/:id/save', (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  // Find the post and update engagement
+  const postIndex = mockAgentPosts.findIndex(p => p.id === id);
+  if (postIndex === -1) {
+    return res.status(404).json({
+      success: false,
+      error: 'Post not found'
+    });
+  }
+
+  // Update engagement - increment saves and mark as saved
+  mockAgentPosts[postIndex].engagement.saves += 1;
+  mockAgentPosts[postIndex].engagement.isSaved = true;
+
+  res.json({
+    success: true,
+    data: {
+      postId: id,
+      saved: true,
+      saves: mockAgentPosts[postIndex].engagement.saves
+    }
+  });
+});
+
+// Unsave post endpoint
+app.delete('/api/v1/agent-posts/:id/save', (req, res) => {
+  const { id } = req.params;
+
+  // Find the post and update engagement
+  const postIndex = mockAgentPosts.findIndex(p => p.id === id);
+  if (postIndex === -1) {
+    return res.status(404).json({
+      success: false,
+      error: 'Post not found'
+    });
+  }
+
+  // Update engagement - decrement saves and mark as not saved
+  mockAgentPosts[postIndex].engagement.saves = Math.max(0, mockAgentPosts[postIndex].engagement.saves - 1);
+  mockAgentPosts[postIndex].engagement.isSaved = false;
+
+  res.json({
+    success: true,
+    data: {
+      postId: id,
+      saved: false,
+      saves: mockAgentPosts[postIndex].engagement.saves
+    }
   });
 });
 

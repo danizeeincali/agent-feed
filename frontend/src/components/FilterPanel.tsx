@@ -63,12 +63,12 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   // Initialize suggestions from available data
   useEffect(() => {
-    setAgentSuggestions(availableAgents.map(agent => ({
+    setAgentSuggestions((availableAgents || []).map(agent => ({
       value: agent,
       label: agent,
       color: 'blue'
     })));
-    setHashtagSuggestions(availableHashtags.map(hashtag => ({
+    setHashtagSuggestions((availableHashtags || []).map(hashtag => ({
       value: hashtag,
       label: `#${hashtag}`,
       color: 'purple'

@@ -1,0 +1,1494 @@
+{
+  "testStartTime": 1759288498329,
+  "appLoaded": true,
+  "aviTabFound": true,
+  "messageInputFound": true,
+  "messageSent": true,
+  "responseReceived": false,
+  "responseTime": 0,
+  "responseContent": "",
+  "consoleLogs": [
+    {
+      "type": "log",
+      "text": "🔍 DEBUG: Calling Avi Claude Code with message: hello what directory are you in?",
+      "timestamp": 1759288514240,
+      "elapsed": 15911
+    },
+    {
+      "type": "log",
+      "text": "🔍 DEBUG: Fetching from /api/claude-code/streaming-chat",
+      "timestamp": 1759288514240,
+      "elapsed": 15911
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288514998,
+      "elapsed": 16669
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288516037,
+      "elapsed": 17708
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288517031,
+      "elapsed": 18702
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288517568,
+      "elapsed": 19239
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288517568,
+      "elapsed": 19239
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288517570,
+      "elapsed": 19241
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288517570,
+      "elapsed": 19241
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288517571,
+      "elapsed": 19242
+    },
+    {
+      "type": "error",
+      "text": "Streaming ticker error: JSHandle@object",
+      "timestamp": 1759288517746,
+      "elapsed": 19417
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "timestamp": 1759288517748,
+      "elapsed": 19419
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288518028,
+      "elapsed": 19699
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288519030,
+      "elapsed": 20701
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288520035,
+      "elapsed": 21706
+    },
+    {
+      "type": "log",
+      "text": "Streaming ticker connected",
+      "timestamp": 1759288520747,
+      "elapsed": 22418
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288521034,
+      "elapsed": 22705
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288522059,
+      "elapsed": 23730
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288522569,
+      "elapsed": 24240
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288522569,
+      "elapsed": 24240
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288522578,
+      "elapsed": 24249
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288522578,
+      "elapsed": 24249
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288522578,
+      "elapsed": 24249
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288523055,
+      "elapsed": 24726
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288524053,
+      "elapsed": 25724
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288525054,
+      "elapsed": 26725
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288526055,
+      "elapsed": 27726
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288527056,
+      "elapsed": 28727
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288527579,
+      "elapsed": 29250
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288527579,
+      "elapsed": 29250
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288527596,
+      "elapsed": 29267
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288527596,
+      "elapsed": 29267
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288527598,
+      "elapsed": 29269
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288528064,
+      "elapsed": 29735
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288529062,
+      "elapsed": 30733
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288530064,
+      "elapsed": 31735
+    },
+    {
+      "type": "error",
+      "text": "Streaming ticker error: JSHandle@object",
+      "timestamp": 1759288530746,
+      "elapsed": 32417
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "timestamp": 1759288530746,
+      "elapsed": 32417
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288531065,
+      "elapsed": 32736
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288532067,
+      "elapsed": 33738
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288532596,
+      "elapsed": 34267
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288532596,
+      "elapsed": 34267
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288532605,
+      "elapsed": 34276
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288532605,
+      "elapsed": 34276
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288532605,
+      "elapsed": 34276
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288533071,
+      "elapsed": 34742
+    },
+    {
+      "type": "log",
+      "text": "Streaming ticker connected",
+      "timestamp": 1759288533755,
+      "elapsed": 35426
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288534071,
+      "elapsed": 35742
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288535073,
+      "elapsed": 36744
+    },
+    {
+      "type": "log",
+      "text": "🔍 DEBUG: Response status: 200 OK",
+      "timestamp": 1759288535640,
+      "elapsed": 37311
+    },
+    {
+      "type": "log",
+      "text": "🔍 DEBUG: Parsed JSON data: JSHandle@object",
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "type": "log",
+      "text": "🔍 DEBUG: Received response: Hello! I'm Λvi, your Chief of Staff and strategic orchestrator. I'm currently in the `/workspaces/agent-feed/prod` directory - this is my designated production workspace.\n\nAs the production Claude instance, I operate within specific boundaries:\n- My work area is `/prod/agent_workspace/` for all agent operations\n- I have read-only access to system instructions and configuration files\n- I'm designed for strategic coordination and agent ecosystem management\n\nI'm here to help coordinate your tasks and provide strategic oversight. What would you like to work on today?",
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "type": "log",
+      "text": "🔍 DEBUG: Adding response to chat history: JSHandle@object",
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "type": "log",
+      "text": "🎨 RealSocialMediaFeed RENDER: JSHandle@object",
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "type": "log",
+      "text": "🎨 About to render posts: JSHandle@object",
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 0 : JSHandle@object",
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 1 : JSHandle@object",
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 2 : JSHandle@object",
+      "timestamp": 1759288535646,
+      "elapsed": 37317
+    },
+    {
+      "type": "log",
+      "text": "🔍 DEBUG: New chat history length: 2",
+      "timestamp": 1759288535662,
+      "elapsed": 37333
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288536074,
+      "elapsed": 37745
+    },
+    {
+      "type": "log",
+      "text": "🔄 RealSocialMediaFeed: loadPosts called JSHandle@object",
+      "timestamp": 1759288536657,
+      "elapsed": 38328
+    },
+    {
+      "type": "log",
+      "text": "🔄 Calling apiService.getAgentPosts...",
+      "timestamp": 1759288536659,
+      "elapsed": 38330
+    },
+    {
+      "type": "log",
+      "text": "🎨 RealSocialMediaFeed RENDER: JSHandle@object",
+      "timestamp": 1759288536660,
+      "elapsed": 38331
+    },
+    {
+      "type": "log",
+      "text": "🎨 About to render posts: JSHandle@object",
+      "timestamp": 1759288536660,
+      "elapsed": 38331
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 0 : JSHandle@object",
+      "timestamp": 1759288536661,
+      "elapsed": 38332
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 1 : JSHandle@object",
+      "timestamp": 1759288536662,
+      "elapsed": 38333
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 2 : JSHandle@object",
+      "timestamp": 1759288536663,
+      "elapsed": 38334
+    },
+    {
+      "type": "log",
+      "text": "📦 Raw API response: JSHandle@object",
+      "timestamp": 1759288536856,
+      "elapsed": 38527
+    },
+    {
+      "type": "log",
+      "text": "📊 Processed data: JSHandle@object",
+      "timestamp": 1759288536857,
+      "elapsed": 38528
+    },
+    {
+      "type": "log",
+      "text": "✅ Valid posts array: JSHandle@object",
+      "timestamp": 1759288536857,
+      "elapsed": 38528
+    },
+    {
+      "type": "log",
+      "text": "📝 Setting posts array with 2 posts",
+      "timestamp": 1759288536857,
+      "elapsed": 38528
+    },
+    {
+      "type": "log",
+      "text": "🏁 loadPosts finished - loading set to false",
+      "timestamp": 1759288536857,
+      "elapsed": 38528
+    },
+    {
+      "type": "log",
+      "text": "🎨 RealSocialMediaFeed RENDER: JSHandle@object",
+      "timestamp": 1759288536864,
+      "elapsed": 38535
+    },
+    {
+      "type": "log",
+      "text": "🎨 About to render posts: JSHandle@object",
+      "timestamp": 1759288536865,
+      "elapsed": 38536
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 0 : JSHandle@object",
+      "timestamp": 1759288536865,
+      "elapsed": 38536
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 1 : JSHandle@object",
+      "timestamp": 1759288536865,
+      "elapsed": 38536
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288537076,
+      "elapsed": 38747
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288537606,
+      "elapsed": 39277
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288537606,
+      "elapsed": 39277
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288537623,
+      "elapsed": 39294
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288537623,
+      "elapsed": 39294
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288537623,
+      "elapsed": 39294
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288538091,
+      "elapsed": 39762
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288539083,
+      "elapsed": 40754
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288540084,
+      "elapsed": 41755
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288541086,
+      "elapsed": 42757
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288542088,
+      "elapsed": 43759
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288542624,
+      "elapsed": 44295
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288542624,
+      "elapsed": 44295
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288542653,
+      "elapsed": 44324
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288542653,
+      "elapsed": 44324
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288542653,
+      "elapsed": 44324
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288543090,
+      "elapsed": 44761
+    },
+    {
+      "type": "error",
+      "text": "Streaming ticker error: JSHandle@object",
+      "timestamp": 1759288543753,
+      "elapsed": 45424
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "timestamp": 1759288543754,
+      "elapsed": 45425
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288544092,
+      "elapsed": 45763
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288545093,
+      "elapsed": 46764
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288546094,
+      "elapsed": 47765
+    },
+    {
+      "type": "log",
+      "text": "Streaming ticker connected",
+      "timestamp": 1759288546756,
+      "elapsed": 48427
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288547100,
+      "elapsed": 48771
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288547653,
+      "elapsed": 49324
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288547653,
+      "elapsed": 49324
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288547681,
+      "elapsed": 49352
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288547681,
+      "elapsed": 49352
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288547681,
+      "elapsed": 49352
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288548100,
+      "elapsed": 49771
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288549105,
+      "elapsed": 50776
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288550106,
+      "elapsed": 51777
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288551107,
+      "elapsed": 52778
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288552108,
+      "elapsed": 53779
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288552681,
+      "elapsed": 54352
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288552682,
+      "elapsed": 54353
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288552837,
+      "elapsed": 54508
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288552837,
+      "elapsed": 54508
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288552838,
+      "elapsed": 54509
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288553109,
+      "elapsed": 54780
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288554112,
+      "elapsed": 55783
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288555113,
+      "elapsed": 56784
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288556115,
+      "elapsed": 57786
+    },
+    {
+      "type": "error",
+      "text": "Streaming ticker error: JSHandle@object",
+      "timestamp": 1759288556760,
+      "elapsed": 58431
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "timestamp": 1759288556760,
+      "elapsed": 58431
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288557116,
+      "elapsed": 58787
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288557838,
+      "elapsed": 59509
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288557838,
+      "elapsed": 59509
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288558005,
+      "elapsed": 59676
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288558005,
+      "elapsed": 59676
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288558005,
+      "elapsed": 59676
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288558117,
+      "elapsed": 59788
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288559119,
+      "elapsed": 60790
+    },
+    {
+      "type": "log",
+      "text": "Streaming ticker connected",
+      "timestamp": 1759288559762,
+      "elapsed": 61433
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288560120,
+      "elapsed": 61791
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288561121,
+      "elapsed": 62792
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288562123,
+      "elapsed": 63794
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288563006,
+      "elapsed": 64677
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288563006,
+      "elapsed": 64677
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288563124,
+      "elapsed": 64795
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288563492,
+      "elapsed": 65163
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288563492,
+      "elapsed": 65163
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288563492,
+      "elapsed": 65163
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288564125,
+      "elapsed": 65796
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288565127,
+      "elapsed": 66798
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288566129,
+      "elapsed": 67800
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288567133,
+      "elapsed": 68804
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288568131,
+      "elapsed": 69802
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288568493,
+      "elapsed": 70164
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288568493,
+      "elapsed": 70164
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288568976,
+      "elapsed": 70647
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288568976,
+      "elapsed": 70647
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288568977,
+      "elapsed": 70648
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288569133,
+      "elapsed": 70804
+    },
+    {
+      "type": "error",
+      "text": "Streaming ticker error: JSHandle@object",
+      "timestamp": 1759288569761,
+      "elapsed": 71432
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "timestamp": 1759288569762,
+      "elapsed": 71433
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288570136,
+      "elapsed": 71807
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288571137,
+      "elapsed": 72808
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288572139,
+      "elapsed": 73810
+    },
+    {
+      "type": "log",
+      "text": "Streaming ticker connected",
+      "timestamp": 1759288572768,
+      "elapsed": 74439
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288573140,
+      "elapsed": 74811
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288573976,
+      "elapsed": 75647
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288573977,
+      "elapsed": 75648
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288574141,
+      "elapsed": 75812
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288574936,
+      "elapsed": 76607
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288574937,
+      "elapsed": 76608
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288574937,
+      "elapsed": 76608
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288575142,
+      "elapsed": 76813
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288576144,
+      "elapsed": 77815
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288577145,
+      "elapsed": 78816
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288578147,
+      "elapsed": 79818
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288579148,
+      "elapsed": 80819
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288579937,
+      "elapsed": 81608
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288579937,
+      "elapsed": 81608
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288580149,
+      "elapsed": 81820
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288581152,
+      "elapsed": 82823
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288582153,
+      "elapsed": 83824
+    },
+    {
+      "type": "error",
+      "text": "Streaming ticker error: JSHandle@object",
+      "timestamp": 1759288582767,
+      "elapsed": 84438
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "timestamp": 1759288582767,
+      "elapsed": 84438
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288583163,
+      "elapsed": 84834
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288583269,
+      "elapsed": 84940
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288583270,
+      "elapsed": 84941
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288583270,
+      "elapsed": 84941
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288584164,
+      "elapsed": 85835
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288585165,
+      "elapsed": 86836
+    },
+    {
+      "type": "log",
+      "text": "Streaming ticker connected",
+      "timestamp": 1759288585779,
+      "elapsed": 87450
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288586166,
+      "elapsed": 87837
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288587168,
+      "elapsed": 88839
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288588169,
+      "elapsed": 89840
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288588272,
+      "elapsed": 89943
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288588272,
+      "elapsed": 89943
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288589170,
+      "elapsed": 90841
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288590171,
+      "elapsed": 91842
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288591173,
+      "elapsed": 92844
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288591925,
+      "elapsed": 93596
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288591925,
+      "elapsed": 93596
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288591925,
+      "elapsed": 93596
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288592174,
+      "elapsed": 93845
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288593175,
+      "elapsed": 94846
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288594184,
+      "elapsed": 95855
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288595183,
+      "elapsed": 96854
+    },
+    {
+      "type": "error",
+      "text": "Streaming ticker error: JSHandle@object",
+      "timestamp": 1759288595773,
+      "elapsed": 97444
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "timestamp": 1759288595773,
+      "elapsed": 97444
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288596185,
+      "elapsed": 97856
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288596926,
+      "elapsed": 98597
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288596926,
+      "elapsed": 98597
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288597186,
+      "elapsed": 98857
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288598187,
+      "elapsed": 99858
+    },
+    {
+      "type": "log",
+      "text": "Streaming ticker connected",
+      "timestamp": 1759288598784,
+      "elapsed": 100455
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288599189,
+      "elapsed": 100860
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+      "timestamp": 1759288599303,
+      "elapsed": 100974
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: JSHandle@object",
+      "timestamp": 1759288599305,
+      "elapsed": 100976
+    },
+    {
+      "type": "log",
+      "text": "🔌 WebSocket connection closed",
+      "timestamp": 1759288599305,
+      "elapsed": 100976
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288600190,
+      "elapsed": 101861
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288601195,
+      "elapsed": 102866
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288602193,
+      "elapsed": 103864
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288603195,
+      "elapsed": 104866
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1759288604196,
+      "elapsed": 105867
+    },
+    {
+      "type": "log",
+      "text": "🔄 Attempting WebSocket reconnection...",
+      "timestamp": 1759288604305,
+      "elapsed": 105976
+    },
+    {
+      "type": "log",
+      "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+      "timestamp": 1759288604306,
+      "elapsed": 105977
+    }
+  ],
+  "debugLogsFound": [
+    {
+      "pattern": "🔍 DEBUG: Calling Avi Claude Code with message:",
+      "found": true,
+      "timestamp": 1759288514240,
+      "elapsed": 15911
+    },
+    {
+      "pattern": "🔍 DEBUG: Fetching from /api/claude-code/streaming-chat",
+      "found": true,
+      "timestamp": 1759288514240,
+      "elapsed": 15911
+    },
+    {
+      "pattern": "🔍 DEBUG: Response status:",
+      "found": true,
+      "timestamp": 1759288535640,
+      "elapsed": 37311
+    },
+    {
+      "pattern": "🔍 DEBUG: Parsed JSON data:",
+      "found": true,
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "pattern": "🔍 DEBUG: Received response:",
+      "found": true,
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "pattern": "🔍 DEBUG: Adding response to chat history:",
+      "found": true,
+      "timestamp": 1759288535645,
+      "elapsed": 37316
+    },
+    {
+      "pattern": "🔍 DEBUG: New chat history length:",
+      "found": true,
+      "timestamp": 1759288535662,
+      "elapsed": 37333
+    }
+  ],
+  "errors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Streaming ticker error: JSHandle@object",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Streaming ticker error: JSHandle@object",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Streaming ticker error: JSHandle@object",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Streaming ticker error: JSHandle@object",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Streaming ticker error: JSHandle@object",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Streaming ticker error: JSHandle@object",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Streaming ticker error: JSHandle@object",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: JSHandle@object",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+  ],
+  "screenshots": [
+    "/workspaces/agent-feed/validation-screenshots/puppeteer-test/01-app-loaded.png",
+    "/workspaces/agent-feed/validation-screenshots/puppeteer-test/02-avi-tab-opened.png",
+    "/workspaces/agent-feed/validation-screenshots/puppeteer-test/03-message-typed.png",
+    "/workspaces/agent-feed/validation-screenshots/puppeteer-test/04-after-response.png"
+  ]
+}

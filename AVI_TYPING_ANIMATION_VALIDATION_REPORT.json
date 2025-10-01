@@ -1,0 +1,62 @@
+{
+  "timestamp": "2025-10-01T04:49:15.925Z",
+  "passed": 6,
+  "failed": 5,
+  "tests": [
+    {
+      "name": "Animation hidden before send",
+      "passed": true,
+      "details": "Visible: false"
+    },
+    {
+      "name": "Animation appears within 50ms",
+      "passed": true,
+      "details": "Appeared in 79ms, Visible: true"
+    },
+    {
+      "name": "Animation positioned correctly",
+      "passed": true,
+      "details": "Above input: true, Left aligned: true"
+    },
+    {
+      "name": "First frame is \"A v i\" in RED",
+      "passed": false,
+      "details": "Frame: \"Λ V i\", Color: #FFD100"
+    },
+    {
+      "name": "Frame sequence correct",
+      "passed": false,
+      "details": "Frames correct: false, Looping correct: false"
+    },
+    {
+      "name": "ROYGBIV colors correct",
+      "passed": false,
+      "details": "All 7 colors verified"
+    },
+    {
+      "name": "Frame timing within tolerance",
+      "passed": false,
+      "details": "Average: 185.00ms, Range: 55-206ms"
+    },
+    {
+      "name": "\"is typing...\" text visible",
+      "passed": true,
+      "details": "Found: true"
+    },
+    {
+      "name": "Glow effect applied",
+      "passed": true,
+      "details": "Text shadow: rgba(255, 255, 255, 0.8) 0px 0px 2px, rgba(255, 0,..."
+    },
+    {
+      "name": "Animation disappears when response arrives",
+      "passed": true,
+      "details": "Disappeared after 14.21s"
+    },
+    {
+      "name": "No console errors",
+      "passed": false,
+      "details": "Errors: 55"
+    }
+  ]
+}

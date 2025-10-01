@@ -1,0 +1,223 @@
+[+15.91s] [log] 🔍 DEBUG: Calling Avi Claude Code with message: hello what directory are you in?
+[+15.91s] [log] 🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+[+16.67s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+17.71s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+18.70s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+19.24s] [log] 🔄 Attempting WebSocket reconnection...
+[+19.24s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+19.24s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+19.24s] [error] ❌ WebSocket error: JSHandle@object
+[+19.24s] [log] 🔌 WebSocket connection closed
+[+19.42s] [error] Streaming ticker error: JSHandle@object
+[+19.42s] [error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[+19.70s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+20.70s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+21.71s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+22.42s] [log] Streaming ticker connected
+[+22.70s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+23.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+24.24s] [log] 🔄 Attempting WebSocket reconnection...
+[+24.24s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+24.25s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+24.25s] [error] ❌ WebSocket error: JSHandle@object
+[+24.25s] [log] 🔌 WebSocket connection closed
+[+24.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+25.72s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+26.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+27.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+28.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+29.25s] [log] 🔄 Attempting WebSocket reconnection...
+[+29.25s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+29.27s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+29.27s] [error] ❌ WebSocket error: JSHandle@object
+[+29.27s] [log] 🔌 WebSocket connection closed
+[+29.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+30.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+31.73s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+32.42s] [error] Streaming ticker error: JSHandle@object
+[+32.42s] [error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[+32.74s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+33.74s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+34.27s] [log] 🔄 Attempting WebSocket reconnection...
+[+34.27s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+34.28s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+34.28s] [error] ❌ WebSocket error: JSHandle@object
+[+34.28s] [log] 🔌 WebSocket connection closed
+[+34.74s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+35.43s] [log] Streaming ticker connected
+[+35.74s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+36.74s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+37.31s] [log] 🔍 DEBUG: Response status: 200 OK
+[+37.32s] [log] 🔍 DEBUG: Parsed JSON data: JSHandle@object
+[+37.32s] [log] 🔍 DEBUG: Received response: Hello! I'm Λvi, your Chief of Staff and strategic orchestrator. I'm currently in the `/workspaces/agent-feed/prod` directory - this is my designated production workspace.
+
+As the production Claude instance, I operate within specific boundaries:
+- My work area is `/prod/agent_workspace/` for all agent operations
+- I have read-only access to system instructions and configuration files
+- I'm designed for strategic coordination and agent ecosystem management
+
+I'm here to help coordinate your tasks and provide strategic oversight. What would you like to work on today?
+[+37.32s] [log] 🔍 DEBUG: Adding response to chat history: JSHandle@object
+[+37.32s] [log] 🎨 RealSocialMediaFeed RENDER: JSHandle@object
+[+37.32s] [log] 🎨 About to render posts: JSHandle@object
+[+37.32s] [log] 🎨 Rendering post 0 : JSHandle@object
+[+37.32s] [log] 🎨 Rendering post 1 : JSHandle@object
+[+37.32s] [log] 🎨 Rendering post 2 : JSHandle@object
+[+37.33s] [log] 🔍 DEBUG: New chat history length: 2
+[+37.74s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+38.33s] [log] 🔄 RealSocialMediaFeed: loadPosts called JSHandle@object
+[+38.33s] [log] 🔄 Calling apiService.getAgentPosts...
+[+38.33s] [log] 🎨 RealSocialMediaFeed RENDER: JSHandle@object
+[+38.33s] [log] 🎨 About to render posts: JSHandle@object
+[+38.33s] [log] 🎨 Rendering post 0 : JSHandle@object
+[+38.33s] [log] 🎨 Rendering post 1 : JSHandle@object
+[+38.33s] [log] 🎨 Rendering post 2 : JSHandle@object
+[+38.53s] [log] 📦 Raw API response: JSHandle@object
+[+38.53s] [log] 📊 Processed data: JSHandle@object
+[+38.53s] [log] ✅ Valid posts array: JSHandle@object
+[+38.53s] [log] 📝 Setting posts array with 2 posts
+[+38.53s] [log] 🏁 loadPosts finished - loading set to false
+[+38.53s] [log] 🎨 RealSocialMediaFeed RENDER: JSHandle@object
+[+38.54s] [log] 🎨 About to render posts: JSHandle@object
+[+38.54s] [log] 🎨 Rendering post 0 : JSHandle@object
+[+38.54s] [log] 🎨 Rendering post 1 : JSHandle@object
+[+38.75s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+39.28s] [log] 🔄 Attempting WebSocket reconnection...
+[+39.28s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+39.29s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+39.29s] [error] ❌ WebSocket error: JSHandle@object
+[+39.29s] [log] 🔌 WebSocket connection closed
+[+39.76s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+40.75s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+41.76s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+42.76s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+43.76s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+44.30s] [log] 🔄 Attempting WebSocket reconnection...
+[+44.30s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+44.32s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+44.32s] [error] ❌ WebSocket error: JSHandle@object
+[+44.32s] [log] 🔌 WebSocket connection closed
+[+44.76s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+45.42s] [error] Streaming ticker error: JSHandle@object
+[+45.42s] [error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[+45.76s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+46.76s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+47.77s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+48.43s] [log] Streaming ticker connected
+[+48.77s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+49.32s] [log] 🔄 Attempting WebSocket reconnection...
+[+49.32s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+49.35s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+49.35s] [error] ❌ WebSocket error: JSHandle@object
+[+49.35s] [log] 🔌 WebSocket connection closed
+[+49.77s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+50.78s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+51.78s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+52.78s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+53.78s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+54.35s] [log] 🔄 Attempting WebSocket reconnection...
+[+54.35s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+54.51s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+54.51s] [error] ❌ WebSocket error: JSHandle@object
+[+54.51s] [log] 🔌 WebSocket connection closed
+[+54.78s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+55.78s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+56.78s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+57.79s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+58.43s] [error] Streaming ticker error: JSHandle@object
+[+58.43s] [error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[+58.79s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+59.51s] [log] 🔄 Attempting WebSocket reconnection...
+[+59.51s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+59.68s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+59.68s] [error] ❌ WebSocket error: JSHandle@object
+[+59.68s] [log] 🔌 WebSocket connection closed
+[+59.79s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+60.79s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+61.43s] [log] Streaming ticker connected
+[+61.79s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+62.79s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+63.79s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+64.68s] [log] 🔄 Attempting WebSocket reconnection...
+[+64.68s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+64.80s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+65.16s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+65.16s] [error] ❌ WebSocket error: JSHandle@object
+[+65.16s] [log] 🔌 WebSocket connection closed
+[+65.80s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+66.80s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+67.80s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+68.80s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+69.80s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+70.16s] [log] 🔄 Attempting WebSocket reconnection...
+[+70.16s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+70.65s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+70.65s] [error] ❌ WebSocket error: JSHandle@object
+[+70.65s] [log] 🔌 WebSocket connection closed
+[+70.80s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+71.43s] [error] Streaming ticker error: JSHandle@object
+[+71.43s] [error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[+71.81s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+72.81s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+73.81s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+74.44s] [log] Streaming ticker connected
+[+74.81s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+75.65s] [log] 🔄 Attempting WebSocket reconnection...
+[+75.65s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+75.81s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+76.61s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+76.61s] [error] ❌ WebSocket error: JSHandle@object
+[+76.61s] [log] 🔌 WebSocket connection closed
+[+76.81s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+77.81s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+78.82s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+79.82s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+80.82s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+81.61s] [log] 🔄 Attempting WebSocket reconnection...
+[+81.61s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+81.82s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+82.82s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+83.82s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+84.44s] [error] Streaming ticker error: JSHandle@object
+[+84.44s] [error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[+84.83s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+84.94s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+84.94s] [error] ❌ WebSocket error: JSHandle@object
+[+84.94s] [log] 🔌 WebSocket connection closed
+[+85.83s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+86.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+87.45s] [log] Streaming ticker connected
+[+87.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+88.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+89.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+89.94s] [log] 🔄 Attempting WebSocket reconnection...
+[+89.94s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+90.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+91.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+92.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+93.60s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+93.60s] [error] ❌ WebSocket error: JSHandle@object
+[+93.60s] [log] 🔌 WebSocket connection closed
+[+93.84s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+94.85s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+95.86s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+96.85s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+97.44s] [error] Streaming ticker error: JSHandle@object
+[+97.44s] [error] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING
+[+97.86s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+98.60s] [log] 🔄 Attempting WebSocket reconnection...
+[+98.60s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws
+[+98.86s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+99.86s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+100.45s] [log] Streaming ticker connected
+[+100.86s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+100.97s] [error] WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+[+100.98s] [error] ❌ WebSocket error: JSHandle@object
+[+100.98s] [log] 🔌 WebSocket connection closed
+[+101.86s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+102.87s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+103.86s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+104.87s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+105.87s] [error] Failed to load resource: net::ERR_CONNECTION_REFUSED
+[+105.98s] [log] 🔄 Attempting WebSocket reconnection...
+[+105.98s] [log] 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws

@@ -50,6 +50,17 @@ interface FilterData {
 }
 
 const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '' }) => {
+  // Utility function: Safely extract agent name from authorAgent (string or object)
+  const getAuthorAgentName = (authorAgent: any): string => {
+    if (typeof authorAgent === 'string') {
+      return authorAgent;
+    }
+    if (authorAgent && typeof authorAgent === 'object' && authorAgent.name) {
+      return authorAgent.name;
+    }
+    return 'A'; // Fallback
+  };
+
   // Core state - must be declared first, before any conditional returns
   const [posts, setPosts] = useState<AgentPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -222,9 +233,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         }
         
         const matchesAgent = !hasAgentFilter || filter.agents!.includes(post.authorAgent);
-        const matchesHashtag = !hasHashtagFilter || 
+        const matchesHashtag = !hasHashtagFilter ||
           filter.hashtags!.some(tag => post.tags?.includes(tag) || extractHashtags(post.content).includes(tag));
-        const matchesSaved = !hasSavedFilter || post.engagement.isSaved === true;
+        const matchesSaved = !hasSavedFilter || post.engagement?.isSaved === true;
         const matchesMyPosts = !hasMyPostsFilter || post.authorAgent === 'ProductionValidator'; // Demo user
         
         // Apply combination mode (AND/OR logic)
@@ -234,7 +245,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
           return matchesAgent && matchesHashtag && matchesSaved && matchesMyPosts;
         }
       case 'saved':
-        return post.engagement.isSaved === true;
+        return post.engagement?.isSaved === true;
       case 'myposts':
         // Filter posts by current user - for demo, filtering by ProductionValidator
         return post.authorAgent === 'ProductionValidator';
@@ -256,16 +267,16 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     try {
       await apiService.savePost(postId, save, userId);
       // Optimistically update UI
-      setPosts(current => 
-        current.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
-                engagement: { 
-                  ...post.engagement, 
+      setPosts(current =>
+        current.map(post =>
+          post.id === postId
+            ? {
+                ...post,
+                engagement: {
+                  ...post.engagement,
                   isSaved: save,
-                  saves: save ? (post.engagement.saves || 0) + 1 : Math.max(0, (post.engagement.saves || 0) - 1)
-                } 
+                  saves: save ? (post.engagement?.saves || 0) + 1 : Math.max(0, (post.engagement?.saves || 0) - 1)
+                }
               }
             : post
         )
@@ -276,16 +287,16 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     } catch (err) {
       console.error('Failed to save/unsave post:', err);
       // Revert optimistic update on error
-      setPosts(current => 
-        current.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
-                engagement: { 
-                  ...post.engagement, 
+      setPosts(current =>
+        current.map(post =>
+          post.id === postId
+            ? {
+                ...post,
+                engagement: {
+                  ...post.engagement,
                   isSaved: !save,
-                  saves: !save ? (post.engagement.saves || 0) + 1 : Math.max(0, (post.engagement.saves || 0) - 1)
-                } 
+                  saves: !save ? (post.engagement?.saves || 0) + 1 : Math.max(0, (post.engagement?.saves || 0) - 1)
+                }
               }
             : post
         )
@@ -412,15 +423,15 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       await loadComments(postId, true);
       
       // Update engagement count optimistically
-      setPosts(current => 
-        current.map(post => 
-          post.id === postId 
-            ? { 
-                ...post, 
-                engagement: { 
-                  ...post.engagement, 
-                  comments: (post.engagement.comments || 0) + 1
-                } 
+      setPosts(current =>
+        current.map(post =>
+          post.id === postId
+            ? {
+                ...post,
+                engagement: {
+                  ...post.engagement,
+                  comments: (post.engagement?.comments || 0) + 1
+                }
               }
             : post
         )
@@ -657,7 +668,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Line 1: Avatar and Title */}
                   <div className="flex items-center space-x-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md flex-shrink-0">
-                      {(post.authorAgent || 'A').charAt(0).toUpperCase()}
+                      {getAuthorAgentName(post.authorAgent).charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-grow min-w-0">
                       <h2 className="text-lg font-bold text-gray-900 leading-tight">{post.title}</h2>
@@ -713,7 +724,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       <svg className="w-3 h-3 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
-                      <span>by {post.authorAgent}</span>
+                      <span>by {getAuthorAgentName(post.authorAgent)}</span>
                     </div>
                   </div>
                 </div>
@@ -724,10 +735,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md">
-                        {(post.authorAgent || 'A').charAt(0).toUpperCase()}
+                        {getAuthorAgentName(post.authorAgent).charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{post.authorAgent}</h3>
+                        <h3 className="font-semibold text-gray-900 text-lg">{getAuthorAgentName(post.authorAgent)}</h3>
                         <div className="flex items-center text-gray-500 text-sm space-x-2">
                           <span>{formatTimeAgo(post.publishedAt)}</span>
                           <span>•</span>
@@ -826,7 +837,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         <svg className="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span className="font-medium">{post.authorAgent}</span>
+                        <span className="font-medium">{getAuthorAgentName(post.authorAgent)}</span>
                         <span className="text-gray-500">agent</span>
                       </div>
                     </div>
@@ -850,10 +861,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     </button>
                     
                     {/* Saves count display */}
-                    {post.engagement?.saves && post.engagement.saves > 0 && (
+                    {post.engagement?.saves && post.engagement?.saves > 0 && (
                       <div className="flex items-center space-x-2 text-gray-600">
                         <Bookmark className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm font-medium">{post.engagement.saves} saved</span>
+                        <span className="text-sm font-medium">{post.engagement?.saves} saved</span>
                       </div>
                     )}
                   </div>
@@ -883,8 +894,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       />
                       <span className="text-xs font-medium">
                         {post.engagement?.isSaved ? 'Saved' : 'Save'}
-                        {post.engagement?.saves && post.engagement.saves > 0 && (
-                          <span className="ml-1 text-gray-500">({post.engagement.saves})</span>
+                        {post.engagement?.saves && post.engagement?.saves > 0 && (
+                          <span className="ml-1 text-gray-500">({post.engagement?.saves})</span>
                         )}
                       </span>
                     </button>

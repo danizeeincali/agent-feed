@@ -1,0 +1,203 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/frontend/playwright.config.debug-validation.ts",
+    "rootDir": "/workspaces/agent-feed/frontend/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "validation-screenshots/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "validation-screenshots/test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/avi-dm-debug-validation.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "avi-dm-debug-validation.spec.ts",
+      "file": "avi-dm-debug-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Avi DM Debug Validation - Production Validator",
+          "file": "avi-dm-debug-validation.spec.ts",
+          "line": 51,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Avi DM - Complete Debug Log Trace Validation",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 18974,
+                      "error": {
+                        "message": "Error: Message input should be visible\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: Message input should be visible\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /workspaces/agent-feed/frontend/tests/e2e/avi-dm-debug-validation.spec.ts:139:61",
+                        "location": {
+                          "file": "/workspaces/agent-feed/frontend/tests/e2e/avi-dm-debug-validation.spec.ts",
+                          "column": 61,
+                          "line": 139
+                        },
+                        "snippet": "  137 |     const inputVisible = await messageInput.isVisible({ timeout: 10000 });\n  138 |\n> 139 |     expect(inputVisible, 'Message input should be visible').toBe(true);\n      |                                                             ^\n  140 |     console.log('✅ Message input field found\\n');\n  141 |\n  142 |     // STEP 3: Type test message"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/frontend/tests/e2e/avi-dm-debug-validation.spec.ts",
+                            "column": 61,
+                            "line": 139
+                          },
+                          "message": "Error: Message input should be visible\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  137 |     const inputVisible = await messageInput.isVisible({ timeout: 10000 });\n  138 |\n> 139 |     expect(inputVisible, 'Message input should be visible').toBe(true);\n      |                                                             ^\n  140 |     console.log('✅ Message input field found\\n');\n  141 |\n  142 |     // STEP 3: Type test message\n    at /workspaces/agent-feed/frontend/tests/e2e/avi-dm-debug-validation.spec.ts:139:61"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🌐 Navigating to http://localhost:5173...\n\n"
+                        },
+                        {
+                          "text": "✅ App loaded\n\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "🧪 AVI DM DEBUG VALIDATION TEST - PRODUCTION VALIDATOR AGENT\n"
+                        },
+                        {
+                          "text": "================================================================================\n"
+                        },
+                        {
+                          "text": "\n📋 Test Mission:\n"
+                        },
+                        {
+                          "text": "   Validate complete debug log sequence from request to response display\n\n"
+                        },
+                        {
+                          "text": "📍 STEP 1: Navigating to Avi DM interface...\n"
+                        },
+                        {
+                          "text": "✅ Clicked Avi DM tab\n\n"
+                        },
+                        {
+                          "text": "📍 STEP 2: Locating message input field...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-01T03:09:06.920Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/frontend/test-results/avi-dm-debug-validation-Av-03c63--Debug-Log-Trace-Validation-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/frontend/test-results/avi-dm-debug-validation-Av-03c63--Debug-Log-Trace-Validation-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/frontend/test-results/avi-dm-debug-validation-Av-03c63--Debug-Log-Trace-Validation-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/frontend/test-results/avi-dm-debug-validation-Av-03c63--Debug-Log-Trace-Validation-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/frontend/tests/e2e/avi-dm-debug-validation.spec.ts",
+                        "column": 61,
+                        "line": 139
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d0967b2ee13540a52627-9da2d981ec3080536986",
+              "file": "avi-dm-debug-validation.spec.ts",
+              "line": 104,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-10-01T03:09:05.743Z",
+    "duration": 20977.888,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

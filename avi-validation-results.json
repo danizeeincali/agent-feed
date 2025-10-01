@@ -1,0 +1,76 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/frontend/playwright.config.avi-validation.ts",
+    "rootDir": "/workspaces/agent-feed/frontend/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspaces/agent-feed/avi-validation-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/workspaces/agent-feed/avi-validation-report"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/avi-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "avi-validation",
+        "name": "avi-validation",
+        "testDir": "/workspaces/agent-feed/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/avi-typing-animation-production-validation.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
+    }
+  ],
+  "stats": {
+    "startTime": "2025-10-01T05:04:31.410Z",
+    "duration": 213.83599999999979,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
