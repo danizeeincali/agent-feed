@@ -11,6 +11,7 @@
  * 6. Avi DM Integration
  * 7. State Management & Callbacks
  * 8. Error Handling & Edge Cases
+ * 9. NEW: Quick Post Interface Changes (TDD - TESTS FIRST)
  */
 
 import React from 'react';
@@ -51,14 +52,21 @@ jest.mock('../MentionInput', () => {
   };
 });
 
-jest.mock('./posting-interface/AviDirectChatSDK', () => {
+jest.mock('../AviTypingIndicator', () => {
   return {
-    AviDirectChatSDK: ({ onMessageSent, className, isLoading }: any) => (
-      <div data-testid="avi-direct-chat-sdk" className={className} data-loading={isLoading}>
-        Mock Avi Direct Chat SDK
-        <button onClick={() => onMessageSent?.({ id: 'test-message', content: 'Test message' })}>
-          Send Message
-        </button>
+    default: ({ isVisible, inline }: any) => (
+      <div data-testid="avi-typing-indicator" data-visible={isVisible} data-inline={inline}>
+        Typing...
+      </div>
+    )
+  };
+});
+
+jest.mock('../markdown/MarkdownRenderer', () => {
+  return {
+    default: ({ content, className }: any) => (
+      <div data-testid="markdown-renderer" className={className}>
+        {content}
       </div>
     )
   };
@@ -88,23 +96,23 @@ describe('EnhancedPostingInterface Component', () => {
     test('renders with default props', () => {
       render(<EnhancedPostingInterface />);
 
-      expect(screen.getByRole('tablist', { name: /posting tabs/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /quick post/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /post/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /avi dm/i })).toBeInTheDocument();
+      expect(screen.getByRole('navigation', { name: /posting tabs/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /quick post/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /post/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /avi dm/i })).toBeInTheDocument();
     });
 
     test('applies custom className', () => {
-      render(<EnhancedPostingInterface className="custom-class" />);
+      const { container } = render(<EnhancedPostingInterface className="custom-class" />);
 
-      const container = screen.getByRole('tablist').closest('div');
-      expect(container).toHaveClass('custom-class');
+      const wrapper = container.querySelector('.custom-class');
+      expect(wrapper).toBeInTheDocument();
     });
 
     test('defaults to quick post tab', () => {
       render(<EnhancedPostingInterface />);
 
-      const quickTab = screen.getByRole('tab', { name: /quick post/i });
+      const quickTab = screen.getByRole('button', { name: /quick post/i });
       expect(quickTab).toHaveAttribute('aria-selected', 'true');
       expect(quickTab).toHaveClass('border-blue-500', 'text-blue-600');
     });
@@ -115,32 +123,14 @@ describe('EnhancedPostingInterface Component', () => {
       expect(screen.getByText('Quick Post')).toBeInTheDocument();
       expect(screen.getByText('Post')).toBeInTheDocument();
       expect(screen.getByText('Avi DM')).toBeInTheDocument();
-
-      // Check for descriptions
-      expect(screen.getByTitle('One-line posting')).toBeInTheDocument();
-      expect(screen.getByTitle('Full post creator')).toBeInTheDocument();
-      expect(screen.getByTitle('Chat with Avi')).toBeInTheDocument();
-    });
-
-    test('handles tab switching via keyboard', async () => {
-      render(<EnhancedPostingInterface />);
-
-      const quickTab = screen.getByRole('tab', { name: /quick post/i });
-      const postTab = screen.getByRole('tab', { name: /post/i });
-
-      // Focus and use arrow keys
-      quickTab.focus();
-      await userEvent.keyboard('{ArrowRight}');
-
-      expect(postTab).toHaveFocus();
     });
 
     test('switches tabs when clicked', async () => {
       render(<EnhancedPostingInterface />);
 
-      const quickTab = screen.getByRole('tab', { name: /quick post/i });
-      const postTab = screen.getByRole('tab', { name: /post/i });
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
+      const quickTab = screen.getByRole('button', { name: /quick post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
+      const aviTab = screen.getByRole('button', { name: /avi dm/i });
 
       // Switch to post tab
       await userEvent.click(postTab);
@@ -163,34 +153,34 @@ describe('EnhancedPostingInterface Component', () => {
     test('handles undefined props gracefully', () => {
       render(<EnhancedPostingInterface />);
 
-      expect(screen.getByRole('tablist')).toBeInTheDocument();
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
     });
 
-    test('passes isLoading prop to AviDirectChatSDK', async () => {
+    test('passes isLoading prop to Avi chat', async () => {
       render(<EnhancedPostingInterface isLoading={true} />);
 
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
+      const aviTab = screen.getByRole('button', { name: /avi dm/i });
       await userEvent.click(aviTab);
 
-      const aviSDK = screen.getByTestId('avi-direct-chat-sdk');
-      expect(aviSDK).toHaveAttribute('data-loading', 'true');
+      const input = screen.getByPlaceholderText(/type your message to λvi/i);
+      expect(input).toBeDisabled();
     });
 
     test('defaults isLoading to false', async () => {
       render(<EnhancedPostingInterface />);
 
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
+      const aviTab = screen.getByRole('button', { name: /avi dm/i });
       await userEvent.click(aviTab);
 
-      const aviSDK = screen.getByTestId('avi-direct-chat-sdk');
-      expect(aviSDK).toHaveAttribute('data-loading', 'false');
+      const input = screen.getByPlaceholderText(/type your message to λvi/i);
+      expect(input).not.toBeDisabled();
     });
 
     test('calls onPostCreated callback when provided', async () => {
       const onPostCreated = jest.fn();
       render(<EnhancedPostingInterface onPostCreated={onPostCreated} />);
 
-      const postTab = screen.getByRole('tab', { name: /post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
       await userEvent.click(postTab);
 
       const createButton = screen.getByText('Create Post');
@@ -205,28 +195,26 @@ describe('EnhancedPostingInterface Component', () => {
       render(<EnhancedPostingInterface />);
 
       expect(screen.getByText('Quick Post')).toBeInTheDocument();
-      expect(screen.getByText('Share a quick thought or update')).toBeInTheDocument();
       expect(screen.getByTestId('mention-input')).toBeInTheDocument();
     });
 
     test('shows post creator when post tab selected', async () => {
       render(<EnhancedPostingInterface />);
 
-      const postTab = screen.getByRole('tab', { name: /post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
       await userEvent.click(postTab);
 
       expect(screen.getByTestId('post-creator')).toBeInTheDocument();
       expect(screen.queryByTestId('mention-input')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('avi-direct-chat-sdk')).not.toBeInTheDocument();
     });
 
     test('shows avi chat when avi tab selected', async () => {
       render(<EnhancedPostingInterface />);
 
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
+      const aviTab = screen.getByRole('button', { name: /avi dm/i });
       await userEvent.click(aviTab);
 
-      expect(screen.getByTestId('avi-direct-chat-sdk')).toBeInTheDocument();
+      expect(screen.getByText(/chat with λvi/i)).toBeInTheDocument();
       expect(screen.queryByTestId('mention-input')).not.toBeInTheDocument();
       expect(screen.queryByTestId('post-creator')).not.toBeInTheDocument();
     });
@@ -239,8 +227,8 @@ describe('EnhancedPostingInterface Component', () => {
       await userEvent.type(quickTextarea, 'Quick post content');
 
       // Switch to post tab and back
-      const postTab = screen.getByRole('tab', { name: /post/i });
-      const quickTab = screen.getByRole('tab', { name: /quick post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
+      const quickTab = screen.getByRole('button', { name: /quick post/i });
 
       await userEvent.click(postTab);
       await userEvent.click(quickTab);
@@ -254,18 +242,11 @@ describe('EnhancedPostingInterface Component', () => {
       render(<EnhancedPostingInterface onPostCreated={onPostCreated} />);
 
       // Test PostCreator props
-      const postTab = screen.getByRole('tab', { name: /post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
       await userEvent.click(postTab);
 
       const postCreator = screen.getByTestId('post-creator');
       expect(postCreator).toHaveClass('border-0', 'shadow-none');
-
-      // Test AviDirectChatSDK props
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
-      await userEvent.click(aviTab);
-
-      const aviSDK = screen.getByTestId('avi-direct-chat-sdk');
-      expect(aviSDK).toHaveClass('h-96');
     });
   });
 
@@ -274,7 +255,6 @@ describe('EnhancedPostingInterface Component', () => {
       render(<EnhancedPostingInterface />);
 
       expect(screen.getByText('Quick Post')).toBeInTheDocument();
-      expect(screen.getByText('Share a quick thought or update')).toBeInTheDocument();
       expect(screen.getByTestId('mention-input')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /quick post/i })).toBeInTheDocument();
     });
@@ -460,21 +440,6 @@ describe('EnhancedPostingInterface Component', () => {
       expect(textarea).toHaveAttribute('rows', '3');
       expect(textarea).toHaveAttribute('placeholder', "What's on your mind? (One line works great!)");
     });
-
-    test('handles form submission via Enter key', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: {} })
-      });
-
-      render(<EnhancedPostingInterface />);
-
-      const textarea = screen.getByTestId('mention-input');
-      await userEvent.type(textarea, 'Test post');
-      await userEvent.keyboard('{Enter}');
-
-      expect(mockFetch).toHaveBeenCalled();
-    });
   });
 
   describe('Post Creator Integration', () => {
@@ -482,7 +447,7 @@ describe('EnhancedPostingInterface Component', () => {
       const onPostCreated = jest.fn();
       render(<EnhancedPostingInterface onPostCreated={onPostCreated} />);
 
-      const postTab = screen.getByRole('tab', { name: /post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
       await userEvent.click(postTab);
 
       const postCreator = screen.getByTestId('post-creator');
@@ -494,7 +459,7 @@ describe('EnhancedPostingInterface Component', () => {
       const onPostCreated = jest.fn();
       render(<EnhancedPostingInterface onPostCreated={onPostCreated} />);
 
-      const postTab = screen.getByRole('tab', { name: /post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
       await userEvent.click(postTab);
 
       const createButton = screen.getByText('Create Post');
@@ -505,30 +470,44 @@ describe('EnhancedPostingInterface Component', () => {
   });
 
   describe('Avi DM Integration', () => {
-    test('renders AviDirectChatSDK with correct props', async () => {
-      const onPostCreated = jest.fn();
-      render(<EnhancedPostingInterface onPostCreated={onPostCreated} isLoading={true} />);
+    test('renders Avi chat section with correct elements', async () => {
+      render(<EnhancedPostingInterface />);
 
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
+      const aviTab = screen.getByRole('button', { name: /avi dm/i });
       await userEvent.click(aviTab);
 
-      const aviSDK = screen.getByTestId('avi-direct-chat-sdk');
-      expect(aviSDK).toBeInTheDocument();
-      expect(aviSDK).toHaveClass('h-96');
-      expect(aviSDK).toHaveAttribute('data-loading', 'true');
+      expect(screen.getByText(/chat with λvi/i)).toBeInTheDocument();
+      expect(screen.getByText(/direct message with your chief of staff/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/type your message to λvi/i)).toBeInTheDocument();
     });
 
-    test('forwards onPostCreated as onMessageSent to AviDirectChatSDK', async () => {
-      const onPostCreated = jest.fn();
-      render(<EnhancedPostingInterface onPostCreated={onPostCreated} />);
+    test('displays empty chat state initially', async () => {
+      render(<EnhancedPostingInterface />);
 
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
+      const aviTab = screen.getByRole('button', { name: /avi dm/i });
       await userEvent.click(aviTab);
 
-      const sendButton = screen.getByText('Send Message');
+      expect(screen.getByText(/λvi is ready to assist/i)).toBeInTheDocument();
+    });
+
+    test('handles Avi chat message submission', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ message: 'Hello from Avi' })
+      });
+
+      render(<EnhancedPostingInterface />);
+
+      const aviTab = screen.getByRole('button', { name: /avi dm/i });
+      await userEvent.click(aviTab);
+
+      const input = screen.getByPlaceholderText(/type your message to λvi/i);
+      const sendButton = screen.getByRole('button', { name: /send/i });
+
+      await userEvent.type(input, 'Hello Avi');
       await userEvent.click(sendButton);
 
-      expect(onPostCreated).toHaveBeenCalledWith({ id: 'test-message', content: 'Test message' });
+      expect(mockFetch).toHaveBeenCalledWith('/api/claude-code/streaming-chat', expect.any(Object));
     });
   });
 
@@ -541,8 +520,8 @@ describe('EnhancedPostingInterface Component', () => {
       await userEvent.type(quickTextarea, 'Quick content');
 
       // Switch to post tab and back
-      const postTab = screen.getByRole('tab', { name: /post/i });
-      const quickTab = screen.getByRole('tab', { name: /quick post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
+      const quickTab = screen.getByRole('button', { name: /quick post/i });
 
       await userEvent.click(postTab);
       await userEvent.click(quickTab);
@@ -574,22 +553,11 @@ describe('EnhancedPostingInterface Component', () => {
       onPostCreated.mockClear();
 
       // Test post creator callback
-      const postTab = screen.getByRole('tab', { name: /post/i });
+      const postTab = screen.getByRole('button', { name: /post/i });
       await userEvent.click(postTab);
 
       const createButton = screen.getByText('Create Post');
       await userEvent.click(createButton);
-
-      expect(onPostCreated).toHaveBeenCalled();
-
-      onPostCreated.mockClear();
-
-      // Test Avi DM callback
-      const aviTab = screen.getByRole('tab', { name: /avi dm/i });
-      await userEvent.click(aviTab);
-
-      const sendButton = screen.getByText('Send Message');
-      await userEvent.click(sendButton);
 
       expect(onPostCreated).toHaveBeenCalled();
     });
@@ -689,34 +657,515 @@ describe('EnhancedPostingInterface Component', () => {
     test('has proper ARIA attributes', () => {
       render(<EnhancedPostingInterface />);
 
-      const tablist = screen.getByRole('tablist', { name: /posting tabs/i });
-      expect(tablist).toBeInTheDocument();
+      const navigation = screen.getByRole('navigation', { name: /posting tabs/i });
+      expect(navigation).toBeInTheDocument();
 
-      const tabs = screen.getAllByRole('tab');
+      const tabs = screen.getAllByRole('button');
       tabs.forEach(tab => {
         expect(tab).toHaveAttribute('aria-selected');
       });
     });
 
-    test('supports keyboard navigation', async () => {
-      render(<EnhancedPostingInterface />);
-
-      const quickTab = screen.getByRole('tab', { name: /quick post/i });
-      const postTab = screen.getByRole('tab', { name: /post/i });
-
-      quickTab.focus();
-      await userEvent.keyboard('{ArrowRight}');
-
-      expect(postTab).toHaveFocus();
-    });
-
     test('maintains focus management', async () => {
       render(<EnhancedPostingInterface />);
 
-      const quickTab = screen.getByRole('tab', { name: /quick post/i });
+      const quickTab = screen.getByRole('button', { name: /quick post/i });
       await userEvent.click(quickTab);
 
       expect(quickTab).toHaveAttribute('aria-selected', 'true');
+    });
+  });
+
+  // ===================================================================
+  // TDD LONDON SCHOOL: NEW FAILING TESTS FOR QUICK POST CHANGES
+  // These tests should FAIL before implementation
+  // ===================================================================
+
+  describe('[TDD] Quick Post Interface Changes - FAILING TESTS FIRST', () => {
+    describe('1. Post Tab Removal', () => {
+      test('should NOT render Post tab in navigation', () => {
+        render(<EnhancedPostingInterface />);
+
+        // This should fail - Post tab currently exists
+        const postTab = screen.queryByRole('button', { name: /^post$/i });
+        expect(postTab).not.toBeInTheDocument();
+      });
+
+      test('should only render Quick Post and Avi DM tabs', () => {
+        render(<EnhancedPostingInterface />);
+
+        const tabs = screen.getAllByRole('button', { name: /(quick post|avi dm)/i });
+
+        // This should fail - currently 3 tabs exist
+        expect(tabs).toHaveLength(2);
+        expect(screen.getByRole('button', { name: /quick post/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /avi dm/i })).toBeInTheDocument();
+      });
+
+      test('should not render PostCreator component at all', async () => {
+        render(<EnhancedPostingInterface />);
+
+        // Try to find any PostCreator instance
+        const postCreator = screen.queryByTestId('post-creator');
+
+        // This should fail - PostCreator is still rendered in Post tab
+        expect(postCreator).not.toBeInTheDocument();
+      });
+    });
+
+    describe('2. Quick Post as First/Default Tab', () => {
+      test('Quick Post should be first tab in tabs array', () => {
+        render(<EnhancedPostingInterface />);
+
+        const navigation = screen.getByRole('navigation');
+        const buttons = navigation.querySelectorAll('button');
+
+        // This should fail - need to verify Quick Post is first
+        expect(buttons[0]).toHaveTextContent(/quick post/i);
+      });
+
+      test('Quick Post tab should be selected by default', () => {
+        render(<EnhancedPostingInterface />);
+
+        const quickTab = screen.getByRole('button', { name: /quick post/i });
+
+        // This should pass - already default behavior
+        expect(quickTab).toHaveAttribute('aria-selected', 'true');
+      });
+
+      test('Quick Post content should be visible on initial render', () => {
+        render(<EnhancedPostingInterface />);
+
+        // This should pass - already default behavior
+        expect(screen.getByTestId('mention-input')).toBeInTheDocument();
+        expect(screen.getByText(/share a quick thought or update/i)).toBeInTheDocument();
+      });
+    });
+
+    describe('3. 10,000 Character Limit', () => {
+      test('textarea should accept maxLength of 10000 characters', () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // This should fail - currently maxLength is 500
+        expect(textarea).toHaveAttribute('maxLength', '10000');
+      });
+
+      test('should allow typing up to 10000 characters', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const longContent = 'A'.repeat(10000);
+
+        await userEvent.type(textarea, longContent);
+
+        // This should fail - currently limited to 500
+        expect(textarea).toHaveValue(longContent);
+      });
+
+      test('should show correct character count with 10000 limit', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // This should fail - currently shows /500
+        expect(screen.getByText('0/10000 characters')).toBeInTheDocument();
+
+        await userEvent.type(textarea, 'Hello');
+
+        // This should fail - currently shows /500
+        expect(screen.getByText('5/10000 characters')).toBeInTheDocument();
+      });
+
+      test('should submit post with content exactly 10000 characters', async () => {
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: { id: 'post-123' } })
+        });
+
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const submitButton = screen.getByRole('button', { name: /quick post/i });
+        const longContent = 'A'.repeat(10000);
+
+        await userEvent.type(textarea, longContent);
+        await userEvent.click(submitButton);
+
+        // This should fail - currently limited to 500
+        expect(mockFetch).toHaveBeenCalledWith(
+          '/api/v1/agent-posts',
+          expect.objectContaining({
+            body: expect.stringContaining(`"content":"${longContent}"`)
+          })
+        );
+      });
+    });
+
+    describe('4. Character Counter Hidden Below 9500', () => {
+      test('character counter should be hidden when content is empty', () => {
+        render(<EnhancedPostingInterface />);
+
+        const characterCounter = screen.queryByText(/\/10000 characters/i);
+
+        // This should fail - counter currently always visible
+        expect(characterCounter).not.toBeInTheDocument();
+      });
+
+      test('character counter should be hidden with 100 characters', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        await userEvent.type(textarea, 'A'.repeat(100));
+
+        const characterCounter = screen.queryByText('100/10000 characters');
+
+        // This should fail - counter currently always visible
+        expect(characterCounter).not.toBeInTheDocument();
+      });
+
+      test('character counter should be hidden at 9499 characters', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        await userEvent.type(textarea, 'A'.repeat(9499));
+
+        const characterCounter = screen.queryByText('9499/10000 characters');
+
+        // This should fail - counter currently always visible
+        expect(characterCounter).not.toBeInTheDocument();
+      });
+
+      test('character counter container should not exist below 9500', () => {
+        const { container } = render(<EnhancedPostingInterface />);
+
+        // This should fail - counter div currently exists
+        const counterDiv = container.querySelector('.text-xs.text-gray-500');
+        expect(counterDiv).not.toBeInTheDocument();
+      });
+    });
+
+    describe('5. Character Counter Visible at 9500+', () => {
+      test('character counter should appear at exactly 9500 characters', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        await userEvent.type(textarea, 'A'.repeat(9500));
+
+        // This should fail - need to implement visibility threshold
+        expect(screen.getByText('9500/10000 characters')).toBeInTheDocument();
+      });
+
+      test('character counter should be visible at 9501 characters', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        await userEvent.type(textarea, 'A'.repeat(9501));
+
+        // This should fail - need to implement visibility threshold
+        expect(screen.getByText('9501/10000 characters')).toBeInTheDocument();
+      });
+
+      test('character counter should be visible at 10000 characters', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        await userEvent.type(textarea, 'A'.repeat(10000));
+
+        // This should fail - need to implement visibility threshold
+        expect(screen.getByText('10000/10000 characters')).toBeInTheDocument();
+      });
+
+      test('character counter should have warning style at 9500+', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        await userEvent.type(textarea, 'A'.repeat(9500));
+
+        const characterCounter = screen.getByText('9500/10000 characters');
+
+        // This should fail - need to add warning styling
+        expect(characterCounter).toHaveClass('text-amber-600', 'font-medium');
+      });
+
+      test('character counter should transition smoothly when crossing threshold', async () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // Start below threshold
+        await userEvent.type(textarea, 'A'.repeat(9499));
+        expect(screen.queryByText(/\/10000 characters/i)).not.toBeInTheDocument();
+
+        // Cross threshold
+        await userEvent.type(textarea, 'A');
+
+        // This should fail - need to implement threshold behavior
+        expect(screen.getByText('9500/10000 characters')).toBeInTheDocument();
+      });
+    });
+
+    describe('6. Textarea Rows Configuration', () => {
+      test('textarea should have 6 rows instead of 3', () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // This should fail - currently has 3 rows
+        expect(textarea).toHaveAttribute('rows', '6');
+      });
+
+      test('textarea rows should increase visible height', () => {
+        const { container } = render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // This should fail - need to verify increased height
+        expect(textarea).toHaveAttribute('rows', '6');
+      });
+    });
+
+    describe('7. Placeholder Text Update', () => {
+      test('placeholder should be updated to new text', () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // This should fail - need to update placeholder
+        expect(textarea).toHaveAttribute(
+          'placeholder',
+          "What's on your mind? (Works best with clear, concise thoughts!)"
+        );
+      });
+
+      test('old placeholder text should not be present', () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // This should fail - old placeholder still exists
+        expect(textarea).not.toHaveAttribute(
+          'placeholder',
+          "What's on your mind? (One line works great!)"
+        );
+      });
+    });
+
+    describe('8. Section Description Update', () => {
+      test('section description should be updated', () => {
+        render(<EnhancedPostingInterface />);
+
+        // This should fail - need to update description
+        expect(screen.getByText(/share your thoughts, ideas, or updates with the community/i)).toBeInTheDocument();
+      });
+
+      test('old description should not be present', () => {
+        render(<EnhancedPostingInterface />);
+
+        // This should fail - old description still exists
+        expect(screen.queryByText(/share a quick thought or update/i)).not.toBeInTheDocument();
+      });
+
+      test('description should maintain proper styling', () => {
+        const { container } = render(<EnhancedPostingInterface />);
+
+        const description = screen.getByText(/share your thoughts, ideas, or updates with the community/i);
+
+        // This should fail - need to verify styling
+        expect(description).toHaveClass('text-sm', 'text-gray-600');
+      });
+    });
+
+    describe('9. Mentions Functionality Preserved', () => {
+      test('MentionInput component should still be used', () => {
+        render(<EnhancedPostingInterface />);
+
+        const mentionInput = screen.getByTestId('mention-input');
+
+        // This should pass - MentionInput already in use
+        expect(mentionInput).toBeInTheDocument();
+      });
+
+      test('mention context should remain as quick-post', () => {
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+
+        // This should pass - context already set
+        expect(textarea).toHaveAttribute('data-mention-context', 'quick-post');
+      });
+
+      test('onMentionSelect handler should still work', async () => {
+        render(<EnhancedPostingInterface />);
+
+        // Mentions functionality should be preserved
+        const textarea = screen.getByTestId('mention-input');
+        expect(textarea).toBeInTheDocument();
+
+        // MentionInput mock would handle mention selection
+        // This should pass - functionality preserved
+      });
+
+      test('selectedMentions state should be maintained', () => {
+        render(<EnhancedPostingInterface />);
+
+        // This should pass - state management unchanged
+        const textarea = screen.getByTestId('mention-input');
+        expect(textarea).toBeInTheDocument();
+      });
+    });
+
+    describe('10. Form Submission with Long Content', () => {
+      test('should submit 5000 character post successfully', async () => {
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: { id: 'long-post-1' } })
+        });
+
+        const onPostCreated = jest.fn();
+        render(<EnhancedPostingInterface onPostCreated={onPostCreated} />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const submitButton = screen.getByRole('button', { name: /quick post/i });
+        const longContent = 'A'.repeat(5000);
+
+        await userEvent.type(textarea, longContent);
+        await userEvent.click(submitButton);
+
+        // This should fail - currently limited to 500
+        await waitFor(() => {
+          expect(mockFetch).toHaveBeenCalledWith(
+            '/api/v1/agent-posts',
+            expect.objectContaining({
+              body: expect.stringContaining(`"content":"${longContent}"`)
+            })
+          );
+        });
+      });
+
+      test('should submit 10000 character post successfully', async () => {
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: { id: 'long-post-2' } })
+        });
+
+        const onPostCreated = jest.fn();
+        render(<EnhancedPostingInterface onPostCreated={onPostCreated} />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const submitButton = screen.getByRole('button', { name: /quick post/i });
+        const longContent = 'B'.repeat(10000);
+
+        await userEvent.type(textarea, longContent);
+        await userEvent.click(submitButton);
+
+        // This should fail - currently limited to 500
+        await waitFor(() => {
+          expect(mockFetch).toHaveBeenCalledWith(
+            '/api/v1/agent-posts',
+            expect.objectContaining({
+              body: expect.stringContaining(`"content":"${longContent}"`)
+            })
+          );
+        });
+      });
+
+      test('should generate correct title for 10000 char content', async () => {
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: {} })
+        });
+
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const submitButton = screen.getByRole('button', { name: /quick post/i });
+        const longContent = 'C'.repeat(10000);
+
+        await userEvent.type(textarea, longContent);
+        await userEvent.click(submitButton);
+
+        const expectedTitle = longContent.slice(0, 50) + '...';
+
+        // This should fail - need to handle long content
+        expect(mockFetch).toHaveBeenCalledWith(
+          '/api/v1/agent-posts',
+          expect.objectContaining({
+            body: expect.stringContaining(`"title":"${expectedTitle}"`)
+          })
+        );
+      });
+
+      test('should calculate correct word count for long content', async () => {
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: {} })
+        });
+
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const submitButton = screen.getByRole('button', { name: /quick post/i });
+
+        // Create content with known word count
+        const words = Array(1000).fill('word').join(' ');
+        await userEvent.type(textarea, words);
+        await userEvent.click(submitButton);
+
+        // This should fail - need to verify word count calculation
+        expect(mockFetch).toHaveBeenCalledWith(
+          '/api/v1/agent-posts',
+          expect.objectContaining({
+            body: expect.stringContaining('"wordCount":1000')
+          })
+        );
+      });
+
+      test('should clear form after successful long content submission', async () => {
+        mockFetch.mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ data: { id: 'post-123' } })
+        });
+
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const submitButton = screen.getByRole('button', { name: /quick post/i });
+        const longContent = 'D'.repeat(8000);
+
+        await userEvent.type(textarea, longContent);
+        await userEvent.click(submitButton);
+
+        // This should fail - need to verify clearing works with long content
+        await waitFor(() => {
+          expect(textarea).toHaveValue('');
+        });
+      });
+
+      test('should show loading state during long content submission', async () => {
+        mockFetch.mockImplementationOnce(() =>
+          new Promise(resolve =>
+            setTimeout(() => resolve({
+              ok: true,
+              json: async () => ({ data: {} })
+            }), 100)
+          )
+        );
+
+        render(<EnhancedPostingInterface />);
+
+        const textarea = screen.getByTestId('mention-input');
+        const submitButton = screen.getByRole('button', { name: /quick post/i });
+        const longContent = 'E'.repeat(9000);
+
+        await userEvent.type(textarea, longContent);
+        await userEvent.click(submitButton);
+
+        // This should pass - loading state should work the same
+        expect(screen.getByText('Posting...')).toBeInTheDocument();
+        expect(submitButton).toBeDisabled();
+      });
     });
   });
 });

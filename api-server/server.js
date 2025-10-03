@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { loadAgent, loadAllAgents } from './services/agent-loader.service.js';
 import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
@@ -306,16 +307,507 @@ app.get('/api/agent-posts', (req, res) => {
   });
 });
 
-app.get('/api/v1/agent-posts', (req, res) => {
-  res.json({
-    success: true,
-    version: "1.0",
-    data: mockAgentPosts.slice(0, 2),
-    meta: {
-      total: 2,
-      timestamp: new Date().toISOString()
+// POST endpoint to create new agent posts
+app.post('/api/v1/agent-posts', (req, res) => {
+  try {
+    const { title, content, author_agent, metadata = {} } = req.body;
+
+    // Validate required fields
+    if (!title || !title.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Title is required'
+      });
     }
-  });
+
+    if (!content || !content.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Content is required'
+      });
+    }
+
+    if (!author_agent || !author_agent.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Author agent is required'
+      });
+    }
+
+    // Validate content length (max 10,000 characters)
+    if (content.length > 10000) {
+      return res.status(400).json({
+        success: false,
+        error: 'Content exceeds maximum length of 10,000 characters'
+      });
+    }
+
+    const postId = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    // Create new post object
+    const newPost = {
+      id: postId,
+      agent_id: crypto.randomUUID(),
+      title: title.trim(),
+      content: content.trim(),
+      published_at: now,
+      status: 'published',
+      tags: metadata.tags || [],
+      author: author_agent,
+      authorAgent: author_agent,
+      authorAgentName: author_agent,
+      publishedAt: now,
+      updatedAt: now,
+      category: metadata.postType || 'General',
+      priority: 'medium',
+      visibility: 'public',
+      engagement: {
+        comments: 0,
+        shares: 0,
+        views: 0,
+        saves: 0,
+        reactions: {},
+        stars: { average: 0, count: 0, distribution: {} },
+        isSaved: false
+      },
+      metadata: {
+        businessImpact: metadata.businessImpact || 5,
+        confidence_score: 0.9,
+        isAgentResponse: metadata.isAgentResponse || false,
+        processing_time_ms: 100,
+        model_version: '1.0',
+        tokens_used: 50,
+        temperature: 0.7,
+        context_length: content.length,
+        postType: metadata.postType || 'quick',
+        wordCount: metadata.wordCount || content.trim().split(/\s+/).length,
+        readingTime: metadata.readingTime || 1,
+        ...metadata
+      }
+    };
+
+    // Insert into database if available
+    if (db) {
+      try {
+        const stmt = db.prepare(`
+          INSERT INTO agent_posts (
+            id, title, content, authorAgent, publishedAt,
+            metadata, engagement, created_at, last_activity_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `);
+
+        stmt.run(
+          postId,
+          newPost.title,
+          newPost.content,
+          newPost.authorAgent,
+          newPost.publishedAt,
+          JSON.stringify(newPost.metadata),
+          JSON.stringify(newPost.engagement),
+          now,
+          now  // Initialize last_activity_at to created_at
+        );
+
+        console.log('✅ Post created in database:', postId);
+      } catch (dbError) {
+        console.error('❌ Database insert failed, using mock array fallback:', dbError.message);
+        // Fallback to mock array if database fails
+        mockAgentPosts.unshift(newPost);
+      }
+    } else {
+      // No database, use mock array
+      mockAgentPosts.unshift(newPost);
+      console.log('✅ Post created in mock array:', postId);
+    }
+
+    // Return created post
+    res.status(201).json({
+      success: true,
+      data: newPost,
+      message: 'Post created successfully'
+    });
+
+  } catch (error) {
+    console.error('❌ Error creating post:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create post',
+      details: error.message
+    });
+  }
+});
+
+app.get('/api/v1/agent-posts', (req, res) => {
+  try {
+    // Database health check
+    if (!db) {
+      return res.status(503).json({
+        success: false,
+        error: 'Database not initialized',
+        details: 'Server starting up or database connection failed'
+      });
+    }
+
+    try {
+      db.prepare('SELECT 1').get();
+    } catch (connError) {
+      return res.status(503).json({
+        success: false,
+        error: 'Database connection failed',
+        details: connError.message
+      });
+    }
+
+    // Parse query parameters
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.offset) || 0;
+
+    // Validate parameters
+    if (limit < 1 || limit > 100) {
+      return res.status(400).json({
+        success: false,
+        error: 'Limit must be between 1 and 100'
+      });
+    }
+
+    if (offset < 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Offset must be non-negative'
+      });
+    }
+
+    // Query database
+    if (db) {
+      try {
+        // Get total count
+        const countResult = db.prepare('SELECT COUNT(*) as total FROM agent_posts').get();
+        const total = countResult.total;
+
+        // Query posts with limit and offset - sorted by comment count and creation time
+        const posts = db.prepare(`
+          SELECT
+            id,
+            title,
+            content,
+            authorAgent,
+            publishedAt,
+            metadata,
+            engagement,
+            created_at,
+            last_activity_at,
+            CAST(json_extract(engagement, '$.comments') AS INTEGER) as comment_count
+          FROM agent_posts
+          ORDER BY
+            datetime(COALESCE(last_activity_at, created_at)) DESC,  -- Most recent activity (post OR comment)
+            id ASC                                                    -- Deterministic tiebreaker
+          LIMIT ? OFFSET ?
+        `).all(limit, offset);
+
+        // Parse JSON fields and transform to match expected format
+        const transformedPosts = posts.map(post => {
+          let metadata = {};
+          let engagement = {};
+
+          try {
+            metadata = JSON.parse(post.metadata);
+          } catch (e) {
+            console.warn(`Failed to parse metadata for post ${post.id}:`, e.message);
+          }
+
+          try {
+            engagement = JSON.parse(post.engagement);
+          } catch (e) {
+            console.warn(`Failed to parse engagement for post ${post.id}:`, e.message);
+          }
+
+          return {
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            authorAgent: post.authorAgent,
+            publishedAt: post.publishedAt,
+            metadata,
+            engagement,
+            created_at: post.created_at,
+            last_activity_at: post.last_activity_at  // Include activity timestamp
+          };
+        });
+
+        return res.json({
+          success: true,
+          version: "1.0",
+          data: transformedPosts,
+          meta: {
+            total,
+            limit,
+            offset,
+            returned: transformedPosts.length,
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (dbError) {
+        console.error('❌ Database query error:', dbError);
+        return res.status(500).json({
+          success: false,
+          error: 'Database query failed',
+          details: dbError.message
+        });
+      }
+    }
+  } catch (error) {
+    console.error('❌ Error in /api/v1/agent-posts:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch agent posts',
+      details: error.message
+    });
+  }
+});
+
+// =============================================================================
+// COMMENTS API ENDPOINTS - REAL DATABASE INTEGRATION
+// =============================================================================
+
+/**
+ * GET /api/agent-posts/:postId/comments
+ * Get all comments for a specific post
+ */
+app.get('/api/agent-posts/:postId/comments', (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    if (!db) {
+      return res.status(503).json({
+        success: false,
+        error: 'Database not available'
+      });
+    }
+
+    // Query comments from database
+    const comments = db.prepare(`
+      SELECT
+        id,
+        post_id,
+        content,
+        author,
+        parent_id,
+        mentioned_users,
+        likes,
+        created_at
+      FROM comments
+      WHERE post_id = ?
+      ORDER BY created_at ASC
+    `).all(postId);
+
+    // Parse JSON fields
+    const parsedComments = comments.map(comment => ({
+      ...comment,
+      mentioned_users: comment.mentioned_users ? JSON.parse(comment.mentioned_users) : []
+    }));
+
+    console.log(`✅ Fetched ${parsedComments.length} comments for post ${postId}`);
+
+    res.json({
+      success: true,
+      data: parsedComments,
+      total: parsedComments.length,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('❌ Error fetching comments:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch comments',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * POST /api/agent-posts/:postId/comments
+ * Create a new comment for a specific post
+ */
+app.post('/api/agent-posts/:postId/comments', (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { content, author, parent_id, mentioned_users } = req.body;
+
+    // Validate required fields
+    if (!content || !content.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Content is required'
+      });
+    }
+
+    if (!author || !author.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Author is required'
+      });
+    }
+
+    if (!db) {
+      return res.status(503).json({
+        success: false,
+        error: 'Database not available'
+      });
+    }
+
+    // Generate UUID for new comment
+    const commentId = uuidv4();
+    const now = new Date().toISOString();
+
+    // Prepare mentioned_users JSON
+    const mentionedUsersJson = mentioned_users && Array.isArray(mentioned_users)
+      ? JSON.stringify(mentioned_users)
+      : JSON.stringify([]);
+
+    // Insert comment into database
+    const stmt = db.prepare(`
+      INSERT INTO comments (
+        id,
+        post_id,
+        content,
+        author,
+        parent_id,
+        mentioned_users,
+        likes,
+        created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      commentId,
+      postId,
+      content.trim(),
+      author.trim(),
+      parent_id || null,
+      mentionedUsersJson,
+      0,
+      now
+    );
+
+    // Fetch the created comment
+    const createdComment = db.prepare(`
+      SELECT
+        id,
+        post_id,
+        content,
+        author,
+        parent_id,
+        mentioned_users,
+        likes,
+        created_at
+      FROM comments
+      WHERE id = ?
+    `).get(commentId);
+
+    // Parse mentioned_users
+    const parsedComment = {
+      ...createdComment,
+      mentioned_users: createdComment.mentioned_users
+        ? JSON.parse(createdComment.mentioned_users)
+        : []
+    };
+
+    console.log(`✅ Created comment ${commentId} for post ${postId}`);
+    console.log(`📊 Comment count will be auto-updated by trigger`);
+
+    res.status(201).json({
+      success: true,
+      data: parsedComment,
+      message: 'Comment created successfully'
+    });
+
+  } catch (error) {
+    console.error('❌ Error creating comment:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create comment',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * PUT /api/agent-posts/:postId/comments/:commentId/like
+ * Like a comment (increment likes count)
+ */
+app.put('/api/agent-posts/:postId/comments/:commentId/like', (req, res) => {
+  try {
+    const { postId, commentId } = req.params;
+
+    if (!db) {
+      return res.status(503).json({
+        success: false,
+        error: 'Database not available'
+      });
+    }
+
+    // Check if comment exists and belongs to the post
+    const comment = db.prepare(`
+      SELECT id, post_id, likes
+      FROM comments
+      WHERE id = ? AND post_id = ?
+    `).get(commentId, postId);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        error: 'Comment not found'
+      });
+    }
+
+    // Increment likes
+    db.prepare(`
+      UPDATE comments
+      SET likes = likes + 1
+      WHERE id = ?
+    `).run(commentId);
+
+    // Fetch updated comment
+    const updatedComment = db.prepare(`
+      SELECT
+        id,
+        post_id,
+        content,
+        author,
+        parent_id,
+        mentioned_users,
+        likes,
+        created_at
+      FROM comments
+      WHERE id = ?
+    `).get(commentId);
+
+    // Parse mentioned_users
+    const parsedComment = {
+      ...updatedComment,
+      mentioned_users: updatedComment.mentioned_users
+        ? JSON.parse(updatedComment.mentioned_users)
+        : []
+    };
+
+    console.log(`✅ Liked comment ${commentId}, new like count: ${parsedComment.likes}`);
+
+    res.json({
+      success: true,
+      data: parsedComment,
+      message: 'Comment liked successfully'
+    });
+
+  } catch (error) {
+    console.error('❌ Error liking comment:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to like comment',
+      details: error.message
+    });
+  }
 });
 
 app.get('/api/filter-data', (req, res) => {

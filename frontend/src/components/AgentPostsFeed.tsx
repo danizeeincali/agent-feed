@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MessageSquare, Clock, Star, Tag, Share2, Bookmark, Code, Eye, Filter, Search, RefreshCw, TrendingUp } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useWebSocket } from '../hooks/useWebSocket';
+import { useRelativeTime } from '../hooks/useRelativeTime';
+import { formatRelativeTime, formatExactDateTime } from '../utils/timeUtils';
 import { RealTimeActivityFeed } from './RealTimeActivityFeed';
 
 interface AgentPost {
@@ -39,10 +41,12 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'newest' | 'popular' | 'impact'>('newest');
   const [expandedPosts, setExpandedPosts] = useState<Set<string>>(new Set());
-  
+
   const { isConnected, subscribe } = useWebSocket();
+
+  // Auto-update relative timestamps every 60 seconds
+  useRelativeTime(60000);
 
   useEffect(() => {
     fetchPosts();
@@ -69,12 +73,12 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
 
   const fetchPosts = async () => {
     try {
-      // Use relative URL to leverage Vite proxy
-      const response = await fetch('/api/agent-posts');
+      // Use v1 endpoint with backend priority sorting
+      const response = await fetch('/api/v1/agent-posts?limit=50');
       const data = await response.json();
-      
+
       if (data.success) {
-        // Enhance posts with mock engagement data
+        // Enhance posts with mock engagement data if not provided
         const enhancedPosts = data.data.map((post: AgentPost) => ({
           ...post,
           metadata: {
@@ -88,6 +92,7 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
             comments: post.content?.length > 200 ? 8 : 3
           }
         }));
+        // Backend already sorted by: comment_count DESC, agent_priority DESC, created_at DESC, id ASC
         setPosts(enhancedPosts);
         setError(null);
       } else {
@@ -99,22 +104,6 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatTimeAgo = (dateString: string) => {
-    const now = new Date();
-    const postTime = new Date(dateString);
-    const diffMs = now.getTime() - postTime.getTime();
-    const diffMins = Math.floor(diffMs / (1000 * 60));
-    
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    
-    const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `${diffHours}h ago`;
-    
-    const diffDays = Math.floor(diffHours / 24);
-    return `${diffDays}d ago`;
   };
 
   const handleEngagement = useCallback(async (postId: string, type: 'bookmark' | 'share') => {
@@ -226,6 +215,8 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
       .join(' ');
   };
 
+  // Trust backend sorting: comment count DESC → agent priority DESC → timestamp DESC → id ASC
+  // Do not override with frontend sorting
   const filteredAndSortedPosts = posts
     .filter(post => {
       const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -233,16 +224,6 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
                            post.authorAgent.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesFilter = filterType === 'all' || post.metadata.postType === filterType;
       return matchesSearch && matchesFilter;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'popular':
-          return b.engagement.bookmarks - a.engagement.bookmarks;
-        case 'impact':
-          return b.metadata.businessImpact - a.metadata.businessImpact;
-        default:
-          return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-      }
     });
 
   if (loading) {
@@ -316,18 +297,7 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
             <option value="alert">Alerts</option>
             <option value="recommendation">Recommendations</option>
           </select>
-          
-          {/* Sort */}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="newest">Newest</option>
-            <option value="popular">Most Popular</option>
-            <option value="impact">Highest Impact</option>
-          </select>
-          
+
           {/* Refresh */}
           <button
             onClick={fetchPosts}
@@ -370,7 +340,13 @@ const AgentPostsFeed: React.FC<AgentPostsFeedProps> = ({ className = '' }) => {
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-500">
                         <Clock className="h-3 w-3" />
-                        {formatTimeAgo(post.publishedAt)}
+                        <span
+                          title={formatExactDateTime(post.publishedAt)}
+                          className="cursor-help"
+                        >
+                          {formatRelativeTime(post.publishedAt)}
+                        </span>
+                        <span className="text-gray-400">•</span>
                         <Eye className="h-3 w-3" />
                         {post.engagement.views} views
                       </div>

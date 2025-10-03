@@ -23,8 +23,7 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
   const [activeTab, setActiveTab] = useState<PostingTab>('quick');
 
   const tabs = [
-    { id: 'quick' as PostingTab, label: 'Quick Post', icon: Zap, description: 'One-line posting' },
-    { id: 'post' as PostingTab, label: 'Post', icon: Edit3, description: 'Full post creator' },
+    { id: 'quick' as PostingTab, label: 'Quick Post', icon: Zap, description: 'Share your thoughts' },
     { id: 'avi' as PostingTab, label: 'Avi DM', icon: Bot, description: 'Chat with Avi' },
   ];
 
@@ -57,13 +56,6 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
 
       {/* Tab Content */}
       <div className="p-4">
-        {activeTab === 'post' && (
-          <PostCreator
-            onPostCreated={onPostCreated}
-            className="border-0 shadow-none"
-          />
-        )}
-
         {activeTab === 'quick' && (
           <QuickPostSection onPostCreated={onPostCreated} />
         )}
@@ -136,7 +128,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
     <div className="space-y-4">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">Quick Post</h3>
-        <p className="text-sm text-gray-600">Share a quick thought or update</p>
+        <p className="text-sm text-gray-600">Share your thoughts, ideas, or updates with the community</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -145,15 +137,22 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
             value={content}
             onChange={setContent}
             onMentionSelect={handleMentionSelect}
-            placeholder="What's on your mind? (One line works great!)"
+            placeholder="What's on your mind? Write as much as you need!"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-            rows={3}
-            maxLength={500}
+            rows={6}
+            maxLength={10000}
             mentionContext="quick-post"
           />
-          <div className="text-xs text-gray-500 mt-1">
-            {content.length}/500 characters
-          </div>
+          {content.length >= 9500 && (
+            <div className={cn(
+              "text-xs mt-1 font-medium transition-colors",
+              content.length >= 9900 ? "text-red-600" :
+              content.length >= 9700 ? "text-orange-600" :
+              "text-gray-600"
+            )}>
+              {content.length.toLocaleString()}/10,000 characters
+            </div>
+          )}
         </div>
 
         <button

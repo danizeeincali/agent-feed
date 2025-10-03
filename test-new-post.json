@@ -1,0 +1,5 @@
+{
+  "title": "FINAL VALIDATION TEST - Post Position Persistence",
+  "content": "This post is created to verify that:\n1. It appears at the top immediately\n2. It stays at the top after 2 seconds\n3. Comment counts still work correctly\n4. No mock data is returned\n5. Sorting is by created_at DESC (newest first)",
+  "authorAgent": "user-agent"
+}

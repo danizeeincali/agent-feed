@@ -11,6 +11,8 @@ import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
 import { EnhancedPostingInterface } from './EnhancedPostingInterface';
 import StreamingTickerWorking from '../StreamingTickerWorking';
+import { formatRelativeTime, formatExactDateTime } from '../utils/timeUtils';
+import { useRelativeTime } from '../hooks/useRelativeTime';
 // import '../styles/comments.css'; // Moved to _app.tsx
 
 interface RealSocialMediaFeedProps {
@@ -81,6 +83,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
   const [userId] = useState('anonymous'); // In a real app, this would come from authentication
 
+  // Auto-update relative timestamps every 60 seconds
+  useRelativeTime(60000);
+
   // UI functionality removed - state variables cleaned up
 
   const limit = 20;
@@ -114,7 +119,14 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       }
       
       console.log('📦 Raw API response:', response);
-      
+
+      // Detect mock data
+      if (response.meta?.source === 'mock') {
+        console.error('⚠️ API returned MOCK DATA - refusing to update posts');
+        setError('Server returned mock data instead of real database. Please refresh.');
+        return; // ABORT! Don't update posts with mock data
+      }
+
       // Fix: Handle the actual API response structure {success: true, data: [...], total: ...}
       const postsData = response.data || response || [];
       const totalCount = response.total || postsData.length || 0;
@@ -156,15 +168,40 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     }
   }, [limit]);
 
-  // Handle post creation
+  // Handle post creation with smart merging
   const handlePostCreated = useCallback((newPost: any) => {
-    // Add the new post to the top of the list
+    // Add post optimistically
     setPosts(current => [newPost, ...current]);
-    // Refresh the posts to get the latest data
-    setTimeout(() => {
-      loadPosts();
+
+    // Smarter refresh: merge instead of replace
+    setTimeout(async () => {
+      try {
+        const response = await apiService.getAgentPosts(limit, 0);
+
+        // Check for mock data
+        if (response.meta?.source === 'mock') {
+          console.warn('⚠️ Skipping post refresh - got mock data');
+          return; // Keep optimistic update
+        }
+
+        // Merge: keep optimistic post if not in server response
+        const serverPosts = response.data || [];
+        const hasOurPost = serverPosts.some(p => p.id === newPost.id);
+
+        if (hasOurPost) {
+          // Server has it, trust server
+          setPosts(serverPosts);
+        } else {
+          // Server doesn't have it yet, keep our optimistic version at top
+          const nonDuplicates = serverPosts.filter(p => p.id !== newPost.id);
+          setPosts([newPost, ...nonDuplicates]);
+        }
+      } catch (error) {
+        console.error('Post refresh failed:', error);
+        // Keep optimistic update on error
+      }
     }, 1000);
-  }, [loadPosts]);
+  }, [limit]);
 
   // Real-time updates via WebSocket and filter data loading
   useEffect(() => {
@@ -537,17 +574,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     await loadPosts(nextPage, true);
   };
 
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (diffInSeconds < 60) return 'just now';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-    return `${Math.floor(diffInSeconds / 86400)}d ago`;
-  };
-
   const getBusinessImpactColor = (impact: number) => {
     if (impact >= 80) return 'text-green-600';
     if (impact >= 60) return 'text-yellow-600';
@@ -699,31 +725,43 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   
                   {/* Line 3: Metrics */}
                   <div className="pl-14 flex items-center space-x-6">
-                    {/* Reading Time */}
+                    {/* Time (Relative with Tooltip) */}
                     <div className="flex items-center space-x-1 text-xs text-gray-500">
                       <svg className="w-3 h-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
+                      <span
+                        className="cursor-help"
+                        title={formatExactDateTime(post.created_at || post.publishedAt)}
+                      >
+                        {formatRelativeTime(post.created_at || post.publishedAt)}
+                      </span>
+                    </div>
+
+                    {/* Reading Time */}
+                    <div className="flex items-center space-x-1 text-xs text-gray-500">
+                      <span>•</span>
                       <span>{postMetrics.readingTime} min read</span>
                     </div>
-                    
+
                     {/* Business Impact */}
                     {post.metadata?.businessImpact && (
-                      <div className="flex items-center space-x-1 text-xs text-gray-500">
-                        <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                        </svg>
-                        <span className={`font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
-                          {post.metadata.businessImpact}% impact
-                        </span>
-                      </div>
+                      <>
+                        <div className="flex items-center space-x-1 text-xs text-gray-500">
+                          <span>•</span>
+                          <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                          </svg>
+                          <span className={`font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
+                            {post.metadata.businessImpact}% impact
+                          </span>
+                        </div>
+                      </>
                     )}
-                    
+
                     {/* Agent */}
                     <div className="flex items-center space-x-1 text-xs text-gray-500">
-                      <svg className="w-3 h-3 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
+                      <span>•</span>
                       <span>by {getAuthorAgentName(post.authorAgent)}</span>
                     </div>
                   </div>
@@ -740,7 +778,12 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       <div>
                         <h3 className="font-semibold text-gray-900 text-lg">{getAuthorAgentName(post.authorAgent)}</h3>
                         <div className="flex items-center text-gray-500 text-sm space-x-2">
-                          <span>{formatTimeAgo(post.publishedAt)}</span>
+                          <span
+                            className="cursor-help"
+                            title={formatExactDateTime(post.created_at || post.publishedAt)}
+                          >
+                            {formatRelativeTime(post.created_at || post.publishedAt)}
+                          </span>
                           <span>•</span>
                           <span>{postMetrics.readingTime} min read</span>
                         </div>

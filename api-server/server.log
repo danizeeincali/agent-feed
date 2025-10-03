@@ -1,0 +1,41 @@
+👀 File watcher initialized for agent directory
+🔧 DEBUG: Creating Claude Code SDK router...
+🔧 DEBUG: Registering POST /streaming-chat route...
+🔧 DEBUG: Registering POST /background-task route...
+🔧 DEBUG: Registering POST /session route...
+🔧 DEBUG: Registering GET /session/:sessionId route...
+🔧 DEBUG: Registering DELETE /session/:sessionId route...
+🔧 DEBUG: Registering GET /health route...
+🔧 DEBUG: Registering GET /status route...
+🔧 DEBUG: Registering GET /cost-tracking route...
+🔧 DEBUG: Registering GET /token-usage route...
+🔧 DEBUG: Registering GET /analytics route...
+🔧 DEBUG: Registering GET /optimization route...
+✅ Token analytics database connected: /workspaces/agent-feed/database.db
+✅ TokenAnalyticsWriter initialized with database connection
+🚀 API Server running on http://localhost:3001
+📡 Health check: http://localhost:3001/health
+🤖 Agents API: http://localhost:3001/api/agents
+📝 Templates API: http://localhost:3001/api/templates
+📊 Streaming Ticker SSE: http://localhost:3001/api/streaming-ticker/stream
+📄 Dynamic Pages API: http://localhost:3001/api/agent-pages/agents/:agentId/pages
+📈 All analytics APIs available
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
+📡 SSE client disconnected
+📡 SSE client connected to streaming ticker
