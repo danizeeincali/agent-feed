@@ -138,19 +138,19 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [timeRange, setTimeRange] = useState('24h');
 
-  // Initialize activeTab from URL parameter or default to 'system'
+  // Initialize activeTab from URL parameter or default to 'claude-sdk'
   const getInitialTab = () => {
-    // In test environments, always default to 'system'
+    // In test environments, always default to 'claude-sdk'
     if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
-      return 'system';
+      return 'claude-sdk';
     }
 
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const tabParam = urlParams.get('tab');
-      return tabParam === 'claude-sdk' ? 'claude-sdk' : 'system';
+      return tabParam === 'performance' ? 'performance' : 'claude-sdk';
     }
-    return 'system';
+    return 'claude-sdk';
   };
 
   const [activeTab, setActiveTab] = useState(getInitialTab);
@@ -162,7 +162,7 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
     // Update URL without page reload
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
-      if (newTab === 'system') {
+      if (newTab === 'claude-sdk') {
         url.searchParams.delete('tab');
       } else {
         url.searchParams.set('tab', newTab);
@@ -394,73 +394,6 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
     </div>
   );
 
-  // System Analytics Component
-  const SystemAnalytics = () => (
-    <div className="space-y-6" data-testid="real-analytics">
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <div className="flex items-center">
-            <Users className="w-8 h-8 text-blue-600" />
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-600">Active Users</p>
-              <p className="text-2xl font-bold text-gray-900">{analytics?.activeUsers || 0}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <div className="flex items-center">
-            <Activity className="w-8 h-8 text-green-600" />
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-600">Total Posts</p>
-              <p className="text-2xl font-bold text-gray-900">{analytics?.totalPosts || 0}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <div className="flex items-center">
-            <TrendingUp className="w-8 h-8 text-yellow-600" />
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-600">Engagement</p>
-              <p className="text-2xl font-bold text-gray-900">{analytics?.engagement?.toFixed(1) || '0.0'}%</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <div className="flex items-center">
-            <BarChart3 className="w-8 h-8 text-purple-600" />
-            <div className="ml-3">
-              <p className="text-sm font-medium text-gray-600">System Health</p>
-              <p className="text-2xl font-bold text-gray-900">{metrics[0]?.system_health || metrics[0]?.cpu_usage || 0}%</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Performance Metrics */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">System Performance</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <p className="text-sm text-gray-600">CPU Usage</p>
-            <p className="text-xl font-bold text-gray-900">{metrics[0]?.cpu_usage || 0}%</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Memory Usage</p>
-            <p className="text-xl font-bold text-gray-900">{metrics[0]?.memory_usage || 0}%</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Response Time</p>
-            <p className="text-xl font-bold text-gray-900">{metrics[0]?.avg_response_time || metrics[0]?.response_time || 0}ms</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
@@ -495,10 +428,7 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
 
       {/* Analytics Tabs */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:grid-cols-3">
-          <TabsTrigger value="system" className="text-sm">
-            System Analytics
-          </TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:grid-cols-2">
           <TabsTrigger value="claude-sdk" className="text-sm">
             Claude SDK Analytics
           </TabsTrigger>
@@ -506,15 +436,6 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
             Performance
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value="system" className="space-y-6 overflow-y-auto">
-          <ErrorBoundary
-            FallbackComponent={ErrorFallback}
-            onReset={() => window.location.reload()}
-          >
-            <SystemAnalytics />
-          </ErrorBoundary>
-        </TabsContent>
 
         <TabsContent value="claude-sdk" className="space-y-6 overflow-y-auto">
           <ErrorBoundary

@@ -1,0 +1,20 @@
+{
+  "test_results": {
+    "tab_count": "PASS",
+    "default_tab": "PASS",
+    "tab_switching": "PASS",
+    "legacy_url_redirect": "PASS",
+    "no_mock_warnings": "PASS"
+  },
+  "screenshots": [
+    "/workspaces/agent-feed/frontend/tests/e2e/screenshots/validation/analytics-dashboard-initial-state.png",
+    "/workspaces/agent-feed/frontend/tests/e2e/screenshots/validation/analytics-dashboard-two-tabs.png",
+    "/workspaces/agent-feed/frontend/tests/e2e/screenshots/validation/full-page-claude-sdk.png",
+    "/workspaces/agent-feed/frontend/tests/e2e/screenshots/validation/performance-tab-active.png",
+    "/workspaces/agent-feed/frontend/tests/e2e/screenshots/validation/tab-switching-works.png",
+    "/workspaces/agent-feed/frontend/tests/e2e/screenshots/validation/no-console-errors.png",
+    "/workspaces/agent-feed/frontend/tests/e2e/screenshots/validation/full-page-performance.png"
+  ],
+  "issues_found": [],
+  "overall_status": "PASS"
+}

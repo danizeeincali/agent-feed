@@ -13,7 +13,7 @@ import FallbackComponents from './FallbackComponents';
 import SocialMediaFeedOriginal from './SocialMediaFeed';
 import DualInstanceDashboardOriginal from './DualInstanceDashboard';
 import AgentManagerOriginal from './AgentManager';
-import SystemAnalyticsOriginal from './SystemAnalytics';
+// SystemAnalytics removed - displayed 100% mock data
 // ClaudeCodePanel import removed - component cleaned up
 import AgentDashboardOriginal from './AgentDashboard';
 import WorkflowVisualizationFixedOriginal from './WorkflowVisualizationFixed';
@@ -89,12 +89,7 @@ export const BulletproofAgentManager = withBulletproofWrapper(
   FallbackComponents.AgentManagerFallback
 );
 
-// Bulletproof SystemAnalytics
-export const BulletproofSystemAnalytics = withBulletproofWrapper(
-  withSafetyWrapper(SystemAnalyticsOriginal, 'SystemAnalytics'),
-  'SystemAnalytics',
-  FallbackComponents.AnalyticsFallback
-);
+// BulletproofSystemAnalytics removed - component displayed 100% mock data
 
 // BulletproofClaudeCodePanel removed - component cleaned up
 
@@ -238,7 +233,7 @@ export default {
   BulletproofSocialMediaFeed,
   BulletproofDualInstanceDashboard,
   BulletproofAgentManager,
-  BulletproofSystemAnalytics,
+  // BulletproofSystemAnalytics removed - component displayed 100% mock data
   // BulletproofClaudeCodePanel removed - component cleaned up
   BulletproofAgentDashboard,
   BulletproofWorkflowVisualization,
