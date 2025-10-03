@@ -124,14 +124,6 @@ export function filterComments(comments: Comment[], filter: CommentFilter): Comm
       return false;
     }
 
-    if (filter.isPinned !== undefined && filter.isPinned !== comment.isPinned) {
-      return false;
-    }
-
-    if (filter.minLikes !== undefined && comment.likesCount < filter.minLikes) {
-      return false;
-    }
-
     return true;
   });
 }

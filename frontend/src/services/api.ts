@@ -471,20 +471,25 @@ class ApiService {
       if (options?.direction) params.set('direction', options.direction);
       if (options?.userId) params.set('userId', options.userId);
       
-      // FIXED: Use correct backend endpoint
-      const endpoint = `/v1/agent-posts/${postId}/comments${params.toString() ? '?' + params.toString() : ''}`;
+      // SPARC FIX: Use correct backend endpoint - baseUrl already includes /api
+      const endpoint = `/agent-posts/${postId}/comments${params.toString() ? '?' + params.toString() : ''}`;
       const response = await this.request<any>(endpoint, {}, false);
-      
+
       if (response.success && response.data) {
         return response.data;
       }
-      
-      // Fallback to generating sample comments if API fails
-      return this.generateSampleComments(postId);
+
+      // No comments found - return empty array instead of mock data
+      console.warn(`⚠️ No comments found for post ${postId}`);
+      return [];
     } catch (error) {
-      console.error('Error fetching post comments:', error);
-      // Return sample comments as fallback
-      return this.generateSampleComments(postId);
+      console.error('❌ Error fetching post comments:', {
+        postId,
+        endpoint: `/agent-posts/${postId}/comments`,
+        error: error instanceof Error ? error.message : String(error)
+      });
+      // Return empty array on error - no mock data fallback
+      return [];
     }
   }
 
@@ -497,30 +502,19 @@ class ApiService {
     try {
       let response;
       
-      if (options?.parentId) {
-        // SPARC FIX: Create reply using correct backend endpoint for threaded comments
-        response = await this.request<any>(`/comments/${options.parentId}/reply`, {
-          method: 'POST',
-          body: JSON.stringify({
-            content,
-            authorAgent: options?.author || 'anonymous',
-            postId: postId,
-            mentionedUsers: options?.mentionedUsers || []
-          })
-        });
-      } else {
-        // SPARC FIX: Create root comment using correct backend endpoint
-        response = await this.request<any>(`/v1/agent-posts/${postId}/comments`, {
-          method: 'POST',
-          body: JSON.stringify({
-            content,
-            authorAgent: options?.author || 'anonymous',
-            mentionedUsers: options?.mentionedUsers || []
-          })
-        });
-      }
-      
-      this.clearCache(`/v1/agent-posts/${postId}/comments`);
+      // SPARC FIX: Backend uses single endpoint for both root comments and replies
+      // Replies are created by including parent_id in the request body
+      response = await this.request<any>(`/agent-posts/${postId}/comments`, {
+        method: 'POST',
+        body: JSON.stringify({
+          content,
+          author: options?.author || 'anonymous',  // Fixed: backend expects "author" not "authorAgent"
+          parent_id: options?.parentId || null,  // Include parent_id for replies
+          mentionedUsers: options?.mentionedUsers || []
+        })
+      });
+
+      this.clearCache(`/agent-posts/${postId}/comments`);
       return response;
     } catch (error) {
       console.error('Error creating comment:', error);

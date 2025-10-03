@@ -76,7 +76,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [loadingComments, setLoadingComments] = useState<{[key: string]: boolean}>({});
   const [showCommentForm, setShowCommentForm] = useState<CommentFormVisibility>({});
   const [commentFormContent, setCommentFormContent] = useState<CommentFormContent>({});
-  const [commentSort, setCommentSort] = useState<{[key: string]: {field: 'createdAt' | 'likes' | 'replies' | 'controversial', direction: 'asc' | 'desc'}}>({});
   const [currentFilter, setCurrentFilter] = useState<FilterOptions>({ type: 'all' });
   const [filterData, setFilterData] = useState<FilterData>({ agents: [], hashtags: [] });
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
@@ -427,15 +426,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
   const loadComments = async (postId: string, refresh = false) => {
     if (loadingComments[postId] && !refresh) return;
-    
+
     setLoadingComments(prev => ({ ...prev, [postId]: true }));
     try {
-      const sortOptions = commentSort[postId] || { field: 'createdAt', direction: 'asc' };
-      const comments = await apiService.getPostComments(postId, {
-        sort: sortOptions.field,
-        direction: sortOptions.direction,
-        userId: userId
-      });
+      const comments = await apiService.getPostComments(postId, { userId });
       setPostComments(prev => ({ ...prev, [postId]: comments }));
     } catch (error) {
       console.error('Failed to load comments:', error);
@@ -481,11 +475,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       alert('Failed to post analysis. Please try again.');
       throw error;
     }
-  };
-
-  const handleCommentSort = (postId: string, sort: {field: 'createdAt' | 'likes' | 'replies' | 'controversial', direction: 'asc' | 'desc'}) => {
-    setCommentSort(prev => ({ ...prev, [postId]: sort }));
-    loadComments(postId, true);
   };
 
   const calculatePostMetrics = (content: string): PostMetrics => {
@@ -994,7 +983,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-sm font-medium text-gray-700">
-                        Comments ({Math.floor(parseFloat(post.engagement?.comments) || 0)})
+                        Comments ({post.engagement?.comments || 0})
                       </h4>
                       <button
                         onClick={() => {
@@ -1014,7 +1003,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         <div className="space-y-3">
                           <div className="flex items-center space-x-2 mb-2">
                             <User className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-600">Agent Response</span>
+                            <span className="text-sm text-gray-600">Add Comment</span>
                           </div>
                           <MentionInput
                             value={commentFormContent[post.id] || ''}
@@ -1025,7 +1014,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                             onMentionSelect={(mention) => {
                               console.log('🎯 REAL SOCIAL FEED: Mention selected in comment:', mention);
                             }}
-                            placeholder="Provide technical analysis or feedback... Use @ to mention agents or users"
+                            placeholder="Write a comment... Use @ to mention agents or users"
                             className="w-full p-3 text-sm border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
                             rows={4}
                             maxLength={2000}
@@ -1059,7 +1048,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                                 }}
                                 className="px-4 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                               >
-                                Post Analysis
+                                Add Comment
                               </button>
                             </div>
                           </div>
@@ -1082,21 +1071,19 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                             comments={postComments[post.id]}
                             currentUser={userId}
                             maxDepth={6}
-                            sort={commentSort[post.id] || { field: 'createdAt', direction: 'asc' }}
                             onCommentsUpdate={() => loadComments(post.id, true)}
-                            onSortChange={(sort) => handleCommentSort(post.id, sort)}
                             enableRealTime={true}
                             className="bg-white rounded-lg"
                           />
                         ) : (
                           <div className="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">
                             <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p>No technical analysis yet.</p>
+                            <p>No comments yet.</p>
                             <button
                               onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: true }))}
                               className="text-blue-600 hover:text-blue-700 font-medium mt-2 transition-colors"
                             >
-                              Provide technical analysis
+                              Add a comment
                             </button>
                           </div>
                         )}

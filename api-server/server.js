@@ -289,22 +289,89 @@ app.get('/api/agents/:slug', async (req, res) => {
 app.get('/api/agent-posts', (req, res) => {
   const { limit = 20, offset = 0, filter = 'all', search = '', sortBy = 'published_at', sortOrder = 'DESC' } = req.query;
 
-  let filteredPosts = [...mockAgentPosts];
+  // Validate and sanitize inputs
+  const parsedLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+  const parsedOffset = Math.max(parseInt(offset) || 0, 0);
 
-  if (search) {
-    filteredPosts = filteredPosts.filter(post =>
-      post.title.toLowerCase().includes(search.toLowerCase()) ||
-      post.content.toLowerCase().includes(search.toLowerCase())
-    );
+  // Query database
+  if (db) {
+    try {
+      // Get total count
+      const countResult = db.prepare('SELECT COUNT(*) as total FROM agent_posts').get();
+      const total = countResult.total;
+
+      // Query posts with limit and offset - sorted by comment count and creation time
+      const posts = db.prepare(`
+        SELECT
+          id,
+          title,
+          content,
+          authorAgent,
+          publishedAt,
+          metadata,
+          engagement,
+          created_at,
+          last_activity_at,
+          CAST(json_extract(engagement, '$.comments') AS INTEGER) as comment_count
+        FROM agent_posts
+        ORDER BY
+          datetime(COALESCE(last_activity_at, created_at)) DESC,
+          id ASC
+        LIMIT ? OFFSET ?
+      `).all(parsedLimit, parsedOffset);
+
+      // Parse JSON fields and transform to match expected format
+      const transformedPosts = posts.map(post => {
+        let metadata = {};
+        let engagement = {};
+
+        try {
+          metadata = JSON.parse(post.metadata);
+        } catch (e) {
+          console.warn(`Failed to parse metadata for post ${post.id}:`, e.message);
+        }
+
+        try {
+          engagement = JSON.parse(post.engagement);
+        } catch (e) {
+          console.warn(`Failed to parse engagement for post ${post.id}:`, e.message);
+        }
+
+        return {
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          authorAgent: post.authorAgent,
+          publishedAt: post.publishedAt,
+          metadata,
+          engagement,
+          created_at: post.created_at,
+          last_activity_at: post.last_activity_at
+        };
+      });
+
+      return res.json({
+        success: true,
+        data: transformedPosts,
+        total,
+        limit: parsedLimit,
+        offset: parsedOffset
+      });
+    } catch (error) {
+      console.error('❌ Database query error:', error);
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to fetch posts from database'
+      });
+    }
+  } else {
+    // Database not available
+    console.error('❌ Database not available');
+    return res.status(503).json({
+      success: false,
+      error: 'Database not available'
+    });
   }
-
-  res.json({
-    success: true,
-    data: filteredPosts,
-    total: filteredPosts.length,
-    limit: parseInt(limit),
-    offset: parseInt(offset)
-  });
 });
 
 // POST endpoint to create new agent posts

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { MessageCircle, Reply, Edit2, Trash2, ChevronDown, ChevronRight, Flag, Pin, Link, MoreHorizontal, Search, ArrowUp, Filter, User, Bot } from 'lucide-react';
+import { MessageCircle, Reply, ChevronDown, ChevronRight, User, Bot, Link, ArrowUp } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { CommentModerationPanel } from './CommentModerationPanel';
 import { buildCommentTree, CommentTreeNode } from '../utils/commentUtils';
@@ -20,7 +20,6 @@ export interface Comment {
   editedAt?: string;
   isDeleted?: boolean;
   isEdited?: boolean;
-  isPinned?: boolean;
   isModerated?: boolean;
   editHistory?: Array<{ content: string; editedAt: string }>;
   mentionedUsers?: string[];
@@ -29,16 +28,11 @@ export interface Comment {
   authorType?: 'agent' | 'user' | 'system';
 }
 
-export interface CommentSort {
-  field: 'createdAt' | 'replies' | 'controversial';
-  direction: 'asc' | 'desc';
-}
 
 export interface CommentFilter {
   author?: string;
   hasReplies?: boolean;
   isEdited?: boolean;
-  isPinned?: boolean;
   authorType?: 'agent' | 'user' | 'system';
 }
 
@@ -56,11 +50,6 @@ interface CommentItemProps {
   currentUser?: string;
   threadState: ThreadState;
   onReply: (parentId: string, content: string) => Promise<void>;
-  onEdit: (commentId: string, content: string) => Promise<void>;
-  onDelete: (commentId: string) => Promise<void>;
-  onReact?: (commentId: string, reaction: string) => Promise<void>;
-  onReport: (commentId: string, reason: string, description?: string) => Promise<void>;
-  onPin: (commentId: string) => Promise<void>;
   onNavigate: (commentId: string, direction: 'parent' | 'next' | 'prev') => void;
   onToggleExpand: (commentId: string) => void;
   onHighlight: (commentId: string) => void;
@@ -75,11 +64,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
   currentUser,
   threadState,
   onReply,
-  onEdit,
-  onDelete,
-  onReact,
-  onReport,
-  onPin,
   onNavigate,
   onToggleExpand,
   onHighlight,
@@ -87,11 +71,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
   isHighlighted = false
 }) => {
   const [isReplying, setIsReplying] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [showMoreOptions, setShowMoreOptions] = useState(false);
-  const [showModerationPanel, setShowModerationPanel] = useState(false);
   const [replyContent, setReplyContent] = useState('');
-  const [editContent, setEditContent] = useState(comment.content);
   const [replyError, setReplyError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showEditHistory, setShowEditHistory] = useState(false);
@@ -167,39 +147,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
     }
   };
 
-  const handleEditSubmit = async () => {
-    if (!editContent.trim()) {
-      return;
-    }
-
-    if (editContent.length > 2000) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      await onEdit(comment.id, editContent.trim());
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Failed to edit comment:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this comment?')) {
-      return;
-    }
-
-    try {
-      await onDelete(comment.id);
-    } catch (error) {
-      console.error('Failed to delete comment:', error);
-    }
-  };
-
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -241,7 +188,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
         shouldIndent && depth > 0 && 'ml-6 border-l border-gray-200',
         `comment-level-${Math.min(depth, maxDepth)}`,
         isHighlighted && 'ring-2 ring-blue-500 ring-opacity-50',
-        comment.isPinned && 'bg-yellow-50 border-yellow-200',
         comment.isModerated && 'bg-red-50 border-red-200 opacity-75'
       )}
     >
@@ -250,15 +196,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
         'p-3 rounded-lg transition-colors relative group',
         shouldIndent && depth > 0 && 'ml-4',
         comment.isDeleted ? 'bg-gray-50' : 'bg-white hover:bg-gray-50',
-        comment.isPinned && 'border border-yellow-300',
         isHighlighted && 'bg-blue-50'
       )}>
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
-            {comment.isPinned && (
-              <Pin className="w-3 h-3 text-yellow-600" />
-            )}
             <span className="font-medium text-sm text-gray-900">
               {comment.author}
             </span>
@@ -301,43 +243,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 </button>
               )}
             </div>
-            
-            {/* Moderation and edit controls */}
-            {(canModify || showModeration) && !comment.isDeleted && (
-              <div className="flex items-center space-x-1">
-                {canModify && (
-                  <>
-                    <button
-                      onClick={() => setIsEditing(true)}
-                      className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
-                      title="Edit comment"
-                    >
-                      <Edit2 className="w-3 h-3" />
-                    </button>
-                    <button
-                      onClick={handleDelete}
-                      className="p-1 text-gray-400 hover:text-red-600 transition-colors"
-                      title="Delete comment"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
-                    <button
-                      onClick={() => onPin(comment.id)}
-                      className={cn(
-                        'p-1 transition-colors',
-                        comment.isPinned 
-                          ? 'text-yellow-600 hover:text-yellow-700'
-                          : 'text-gray-400 hover:text-yellow-600'
-                      )}
-                      title={comment.isPinned ? 'Unpin comment' : 'Pin comment'}
-                    >
-                      <Pin className="w-3 h-3" />
-                    </button>
-                  </>
-                )}
-                
-              </div>
-            )}
           </div>
         </div>
         
@@ -355,58 +260,17 @@ const CommentItem: React.FC<CommentItemProps> = ({
         )}
 
         {/* Content */}
-        {isEditing ? (
-          <div className="space-y-2">
-            <MentionInput
-              value={editContent}
-              onChange={(content) => {
-                console.log('🎯 COMMENT THREAD: Edit content changed:', content);
-                setEditContent(content);
-              }}
-              onMentionSelect={(mention) => {
-                console.log('🎯 COMMENT THREAD: Mention selected in edit:', mention);
-              }}
-              className="w-full p-2 text-sm border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows={3}
-              maxLength={2000}
-              placeholder="Edit your comment... Use @ to mention agents or users"
-              mentionContext="post"
-              autoFocus={true}
-            />
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">
-                {editContent.length}/2000 characters
-              </span>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="px-3 py-1 text-xs text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleEditSubmit}
-                  disabled={isSubmitting || !editContent.trim()}
-                  className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {isSubmitting ? 'Saving...' : 'Save'}
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="text-sm text-gray-700 mb-3 whitespace-pre-wrap leading-relaxed">
-            {comment.isDeleted ? (
-              <span className="italic text-gray-500">[This comment has been deleted]</span>
-            ) : (
-              renderMentions(comment.content)
-            )}
-          </div>
-        )}
+        <div className="text-sm text-gray-700 mb-3 whitespace-pre-wrap leading-relaxed">
+          {comment.isDeleted ? (
+            <span className="italic text-gray-500">[This comment has been deleted]</span>
+          ) : (
+            renderMentions(comment.content)
+          )}
+        </div>
         
 
         {/* Actions */}
-        {!comment.isDeleted && !isEditing && (
+        {!comment.isDeleted && (
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               {!isMaxDepth && (
@@ -530,21 +394,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
         )}
       </div>
 
-      {/* Moderation Panel */}
-      {showModerationPanel && (
-        <div className="mt-4">
-          <CommentModerationPanel
-            commentId={comment.id}
-            isReported={Boolean(comment.reportedCount && comment.reportedCount > 0)}
-            reportedCount={comment.reportedCount}
-            isModerated={comment.isModerated}
-            moderatorNotes={comment.moderatorNotes}
-            onReport={onReport}
-            onClose={() => setShowModerationPanel(false)}
-          />
-        </div>
-      )}
-      
       {/* Replies - REMOVED: This was creating duplicate flat rendering that broke threading.
            The proper nested rendering is handled by the buildCommentTree logic in the main CommentThread component */}
     </div>
@@ -556,13 +405,7 @@ interface CommentThreadProps {
   comments: Comment[];
   currentUser?: string;
   maxDepth?: number;
-  sort?: CommentSort;
-  filter?: CommentFilter;
-  searchQuery?: string;
   onCommentsUpdate?: () => void;
-  onSortChange?: (sort: CommentSort) => void;
-  onFilterChange?: (filter: CommentFilter) => void;
-  onSearchChange?: (query: string) => void;
   showModeration?: boolean;
   enableRealTime?: boolean;
   className?: string;
@@ -573,13 +416,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   comments,
   currentUser = 'current-user',
   maxDepth = 6,
-  sort = { field: 'createdAt', direction: 'asc' },
-  filter,
-  searchQuery,
   onCommentsUpdate,
-  onSortChange,
-  onFilterChange,
-  onSearchChange,
   showModeration = false,
   enableRealTime = false,
   className
@@ -590,8 +427,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     collapsed: new Set<string>(),
     highlighted: undefined
   });
-  const [showControls, setShowControls] = useState(false);
-  
+
   const wsRef = useRef<WebSocket | null>(null);
 
   // Handle URL hash fragment navigation on mount and when comments change
@@ -613,9 +449,9 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
             
             // Find and expand all parents in the chain
             const expandParentChain = (targetComment: Comment) => {
-              let currentComment = targetComment;
-              const parentsToExpand = [];
-              
+              let currentComment: Comment | undefined = targetComment;
+              const parentsToExpand: string[] = [];
+
               // Collect all parent IDs in the chain
               while (currentComment?.parentId) {
                 parentsToExpand.push(currentComment.parentId);
@@ -757,90 +593,6 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     }
   }, [postId, currentUser, onCommentsUpdate]);
 
-  const handleEdit = useCallback(async (commentId: string, content: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/v1/comments/${commentId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update comment');
-      }
-
-      onCommentsUpdate?.();
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onCommentsUpdate]);
-
-  const handleDelete = useCallback(async (commentId: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/v1/comments/${commentId}`, {
-        method: 'DELETE'
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete comment');
-      }
-
-      onCommentsUpdate?.();
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onCommentsUpdate]);
-  
-  
-  const handleReport = useCallback(async (commentId: string, reason: string, description?: string) => {
-    try {
-      const response = await fetch(`/api/v1/comments/${commentId}/reports`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          reason,
-          description,
-          reporterId: currentUser
-        })
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to submit report');
-      }
-      
-      onCommentsUpdate?.();
-    } catch (error) {
-      console.error('Failed to report comment:', error);
-      throw error;
-    }
-  }, [currentUser, onCommentsUpdate]);
-  
-  const handlePin = useCallback(async (commentId: string) => {
-    try {
-      const response = await fetch(`/api/v1/comments/${commentId}/pin`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to pin comment');
-      }
-      
-      onCommentsUpdate?.();
-    } catch (error) {
-      console.error('Failed to pin comment:', error);
-      throw error;
-    }
-  }, [onCommentsUpdate]);
-  
   const handleNavigate = useCallback((commentId: string, direction: 'parent' | 'next' | 'prev') => {
     const comment = comments.find(c => c.id === commentId);
     if (!comment) return;
@@ -921,110 +673,23 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     }));
   }, []);
   
-  // Process comments with sorting and filtering
+  // Process comments - Simple pass-through with replies structure
   const processedComments = useMemo(() => {
-    let result = [...comments];
-    
-    // Apply search filter
-    if (searchQuery) {
-      result = result.filter(comment => 
-        comment.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        comment.author.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    
-    // Apply filters
-    if (filter) {
-      if (filter.author) {
-        result = result.filter(comment => 
-          comment.author.toLowerCase().includes(filter.author!.toLowerCase())
-        );
-      }
-      
-      if (filter.hasReplies !== undefined) {
-        result = result.filter(comment => 
-          (comment.repliesCount > 0) === filter.hasReplies
-        );
-      }
-      
-      if (filter.isEdited !== undefined) {
-        result = result.filter(comment => 
-          comment.isEdited === filter.isEdited
-        );
-      }
-      
-      if (filter.isPinned !== undefined) {
-        result = result.filter(comment => 
-          comment.isPinned === filter.isPinned
-        );
-      }
-      
-      if (filter.minLikes !== undefined) {
-        result = result.filter(comment => 
-          comment.likesCount >= filter.minLikes!
-        );
-      }
-    }
-    
     // CRITICAL FIX: Transform flat comments to nested structure with replies array
-    const commentsWithReplies = result.map(comment => ({
+    const commentsWithReplies = comments.map(comment => ({
       ...comment,
-      replies: result.filter(c => c.parentId === comment.id)
+      replies: comments.filter(c => c.parentId === comment.id)
     }));
 
     return commentsWithReplies;
-  }, [comments, searchQuery, filter]);
+  }, [comments]);
 
   if (processedComments.length === 0) {
     return (
       <div className={cn('space-y-4', className)}>
-        {/* Thread controls */}
-        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setShowControls(!showControls)}
-              className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              <Filter className="w-4 h-4" />
-              <span>Controls</span>
-            </button>
-          </div>
-        </div>
-        
-        {showControls && (
-          <ThreadControls
-            sort={sort}
-            filter={filter}
-            searchQuery={searchQuery}
-            onSortChange={onSortChange}
-            onFilterChange={onFilterChange}
-            onSearchChange={onSearchChange}
-            threadStats={{
-              totalComments: comments.length,
-              totalReplies: comments.filter(c => c.parentId).length,
-              totalLikes: comments.reduce((sum, c) => sum + c.likesCount, 0),
-              maxDepth: Math.max(...comments.map(c => c.threadDepth), 0),
-              topContributors: []
-            }}
-          />
-        )}
-        
         <div className={cn('p-6 text-center text-gray-500')}>
           <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
-          <p className="text-sm">
-            {searchQuery || filter ? 'No comments match your criteria' : 'No comments yet'}
-          </p>
-          {(searchQuery || filter) && (
-            <button
-              onClick={() => {
-                onSearchChange?.('');
-                onFilterChange?.({});
-              }}
-              className="text-blue-600 hover:text-blue-800 text-sm mt-2 transition-colors"
-            >
-              Clear filters
-            </button>
-          )}
+          <p className="text-sm">No comments yet</p>
         </div>
       </div>
     );
@@ -1032,51 +697,6 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
 
   return (
     <div className={cn('space-y-4', className)}>
-      {/* Thread controls */}
-      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => setShowControls(!showControls)}
-            className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            <Filter className="w-4 h-4" />
-            <span>Controls</span>
-            {showControls ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
-          </button>
-          
-          <div className="text-sm text-gray-500">
-            {processedComments.length} of {comments.length} comments
-          </div>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          {enableRealTime && (
-            <div className="flex items-center space-x-2 text-sm text-green-600">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Live</span>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      {showControls && (
-        <ThreadControls
-          sort={sort}
-          filter={filter}
-          searchQuery={searchQuery}
-          onSortChange={onSortChange}
-          onFilterChange={onFilterChange}
-          onSearchChange={onSearchChange}
-          threadStats={{
-            totalComments: comments.length,
-            totalReplies: comments.filter(c => c.parentId).length,
-            totalEngagement: comments.reduce((sum, c) => sum + c.repliesCount, 0),
-            maxDepth: Math.max(...comments.map(c => c.threadDepth), 0),
-            topContributors: []
-          }}
-        />
-      )}
-      
       {/* Comments - Enhanced with threading visibility */}
       <div className="space-y-3" data-testid="comment-thread-container">
         {(() => {
@@ -1113,11 +733,6 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
                     currentUser={currentUser}
                     threadState={threadState}
                     onReply={handleReply}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onReact={undefined}
-                    onReport={handleReport}
-                    onPin={handlePin}
                     onNavigate={handleNavigate}
                     onToggleExpand={handleToggleExpand}
                     onHighlight={handleHighlight}
@@ -1153,115 +768,3 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   );
 };
 
-// Thread controls component
-interface ThreadControlsProps {
-  sort: CommentSort;
-  filter?: CommentFilter;
-  searchQuery?: string;
-  threadStats: {
-    totalComments: number;
-    totalReplies: number;
-    totalEngagement: number;
-    maxDepth: number;
-    topContributors: Array<{ author: string; count: number; engagement: number }>;
-  };
-  onSortChange?: (sort: CommentSort) => void;
-  onFilterChange?: (filter: CommentFilter) => void;
-  onSearchChange?: (query: string) => void;
-}
-
-const ThreadControls: React.FC<ThreadControlsProps> = ({
-  sort,
-  filter,
-  searchQuery,
-  threadStats,
-  onSortChange,
-  onFilterChange,
-  onSearchChange
-}) => {
-  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery || '');
-  const [showStats, setShowStats] = useState(false);
-  
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearchChange?.(localSearchQuery);
-  };
-  
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-4">
-      {/* Search */}
-      <form onSubmit={handleSearchSubmit} className="flex space-x-2">
-        <div className="flex-1 relative">
-          <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
-          <input
-            type="text"
-            value={localSearchQuery}
-            onChange={(e) => setLocalSearchQuery(e.target.value)}
-            placeholder="Search comments..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-        >
-          Search
-        </button>
-      </form>
-      
-      {/* Sort and Filter */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">Sort by:</label>
-            <select
-              value={`${sort.field}-${sort.direction}`}
-              onChange={(e) => {
-                const [field, direction] = e.target.value.split('-') as [CommentSort['field'], CommentSort['direction']];
-                onSortChange?.({ field, direction });
-              }}
-              className="text-sm border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="createdAt-asc">Oldest first</option>
-              <option value="createdAt-desc">Newest first</option>
-              <option value="replies-desc">Most replies</option>
-              <option value="controversial-desc">Most controversial</option>
-            </select>
-          </div>
-        </div>
-        
-        <button
-          onClick={() => setShowStats(!showStats)}
-          className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
-        >
-          {showStats ? 'Hide' : 'Show'} Stats
-        </button>
-      </div>
-      
-      {/* Thread Statistics */}
-      {showStats && (
-        <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-          <h4 className="font-medium text-gray-900">Thread Statistics</h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <div className="text-gray-500">Total Comments</div>
-              <div className="font-semibold">{threadStats.totalComments}</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Total Replies</div>
-              <div className="font-semibold">{threadStats.totalReplies}</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Total Engagement</div>
-              <div className="font-semibold">{threadStats.totalEngagement}</div>
-            </div>
-            <div>
-              <div className="text-gray-500">Max Depth</div>
-              <div className="font-semibold">{threadStats.maxDepth}</div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};

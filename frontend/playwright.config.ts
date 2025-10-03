@@ -187,6 +187,17 @@ export default defineConfig({
       },
       testDir: './tests/e2e/analytics',
     },
+
+    /* Validation tests - Chrome only */
+    {
+      name: 'validation',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        viewport: { width: 1920, height: 1080 },
+      },
+      testDir: './tests/e2e/validation',
+    },
   ],
 
   /* Run your local dev server before starting the tests */
