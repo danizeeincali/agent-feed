@@ -17,6 +17,7 @@ interface AviTypingIndicatorProps {
   isVisible: boolean;
   inline?: boolean;
   className?: string;
+  activityText?: string;
 }
 
 // SPARC SPEC: 10-frame wave pattern
@@ -45,8 +46,19 @@ const ROYGBIV_COLORS = [
 ] as const;
 
 const FRAME_DURATION_MS = 200; // Medium speed as specified
+const MAX_ACTIVITY_LENGTH = 80; // Maximum characters for activity text
 
-const AviTypingIndicator: React.FC<AviTypingIndicatorProps> = memo(({ isVisible, inline = false, className = '' }) => {
+/**
+ * Truncates activity text to MAX_ACTIVITY_LENGTH with ellipsis
+ */
+const truncateActivity = (text: string): string => {
+  if (text.length <= MAX_ACTIVITY_LENGTH) {
+    return text;
+  }
+  return text.substring(0, MAX_ACTIVITY_LENGTH - 3) + '...';
+};
+
+const AviTypingIndicator: React.FC<AviTypingIndicatorProps> = memo(({ isVisible, inline = false, className = '', activityText }) => {
   const [frameIndex, setFrameIndex] = useState(0);
   const [colorIndex, setColorIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -106,15 +118,40 @@ const AviTypingIndicator: React.FC<AviTypingIndicatorProps> = memo(({ isVisible,
         aria-live="polite"
         aria-label="Avi is thinking"
         style={{
-          fontFamily: 'monospace',
-          fontSize: '0.9rem',
-          fontWeight: 600,
-          letterSpacing: '0.1em',
-          color: currentColor,
-          display: 'inline-block',
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          gap: '0.25rem',
         }}
       >
-        {currentFrame}
+        <span
+          style={{
+            fontFamily: 'monospace',
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            letterSpacing: '0.1em',
+            color: currentColor,
+            display: 'inline-block',
+            minWidth: '3ch',
+          }}
+        >
+          {currentFrame}
+        </span>
+        {activityText && activityText.trim() && (
+          <span
+            style={{
+              fontSize: '0.85rem',
+              fontWeight: 400,
+              color: '#D1D5DB',
+              marginLeft: '0.5rem',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            - {truncateActivity(activityText)}
+          </span>
+        )}
       </span>
     );
   }

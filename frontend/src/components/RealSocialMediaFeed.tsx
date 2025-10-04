@@ -10,7 +10,6 @@ import { CommentForm } from './CommentForm';
 import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
 import { EnhancedPostingInterface } from './EnhancedPostingInterface';
-import StreamingTickerWorking from '../StreamingTickerWorking';
 import { formatRelativeTime, formatExactDateTime } from '../utils/timeUtils';
 import { useRelativeTime } from '../hooks/useRelativeTime';
 // import '../styles/comments.css'; // Moved to _app.tsx
@@ -1134,18 +1133,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
       {/* Right Sidebar - Tools Interface */}
       <div className="lg:col-span-1 space-y-6">
-        {/* Streaming Ticker */}
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            📊 Live Tool Execution
-          </h3>
-          <StreamingTickerWorking
-            enabled={true}
-            userId="agent-feed-user"
-            maxMessages={6}
-          />
-        </div>
-
         {/* Additional tool interfaces can be added here */}
       </div>
     </div>

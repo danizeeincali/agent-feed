@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="6" failures="0" errors="0" time="5.206">
+    <testsuite name="src/tests/integration/avi-typing-container-width.test.tsx" timestamp="2025-10-03T22:15:43.593Z" hostname="codespaces-005acc" tests="6" failures="0" errors="0" skipped="0" time="2.29">
+        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have typing indicator container span full available chat width" time="0.438">
+            <system-out>
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test message
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have no layout shift when response replaces typing indicator" time="0.587">
+            <system-out>
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+🔍 DEBUG: Response status: undefined undefined
+🔍 DEBUG: Parsed JSON data: { message: &apos;Response from Avi&apos; }
+🔍 DEBUG: Received response: Response from Avi
+🔍 DEBUG: Replacing typing indicator with response
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should maintain consistent full width across multiple typing indicators" time="0.273">
+            <system-out>
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test 0
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test 1
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test 2
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have typing indicator container width respond to viewport changes" time="0.266">
+            <system-out>
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Calling Avi Claude Code with message: test
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should use full container width with long activity text" time="0.13">
+            <system-out>
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Response status: undefined undefined
+🔍 DEBUG: Parsed JSON data: { message: &apos;Response 0&apos; }
+🔍 DEBUG: Received response: Response 0
+🔍 DEBUG: Replacing typing indicator with response
+
+🔍 DEBUG: Calling Avi Claude Code with message: test
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have typing indicator container match response container styling" time="0.589">
+            <system-out>
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+
+🔍 DEBUG: Response status: undefined undefined
+🔍 DEBUG: Parsed JSON data: { message: &apos;Response 1&apos; }
+🔍 DEBUG: Received response: Response 1
+🔍 DEBUG: Replacing typing indicator with response
+
+🔍 DEBUG: Calling Avi Claude Code with message: test
+🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+
+🔍 DEBUG: Response status: undefined undefined
+🔍 DEBUG: Parsed JSON data: { message: &apos;Avi response message&apos; }
+🔍 DEBUG: Received response: Avi response message
+🔍 DEBUG: Replacing typing indicator with response
+
+            </system-out>
+        </testcase>
+    </testsuite>
+</testsuites>

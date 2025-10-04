@@ -6,6 +6,7 @@
  */
 
 import { query } from '@anthropic-ai/claude-code';
+import { broadcastToolActivity, formatToolAction } from '../api/routes/claude-code-sdk.js';
 
 class ClaudeCodeSDKManager {
   constructor() {
@@ -78,6 +79,30 @@ class ClaudeCodeSDKManager {
       for await (const message of queryResponse) {
         console.log(`📨 Received message type: ${message.type}`);
         messages.push(message);
+
+        // Broadcast tool executions to SSE stream
+        if (message.type === 'assistant' && message.message?.content) {
+          const content = Array.isArray(message.message.content)
+            ? message.message.content
+            : [message.message.content];
+
+          // Look for tool_use blocks in the content
+          content.forEach(block => {
+            if (typeof block === 'object' && block.type === 'tool_use') {
+              const toolName = block.name;
+              const toolInput = block.input;
+              const action = formatToolAction(toolName, toolInput);
+
+              console.log(`🔧 Tool execution detected: ${toolName}(${action})`);
+
+              // Broadcast to SSE
+              broadcastToolActivity(toolName, action, {
+                block_id: block.id,
+                message_uuid: message.uuid
+              });
+            }
+          });
+        }
 
         // Log different message types with details
         if (message.type === 'assistant') {

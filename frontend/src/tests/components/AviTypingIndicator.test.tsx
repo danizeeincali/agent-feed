@@ -11,7 +11,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { vi, describe, test, beforeEach, afterEach, expect } from 'vitest';
-import { AviTypingIndicator } from './AviTypingIndicator';
+import AviTypingIndicator from '../../components/AviTypingIndicator';
 
 // Animation test data
 const FRAMES = [
@@ -546,6 +546,174 @@ describe('AviTypingIndicator - Unit Tests', () => {
       vi.advanceTimersByTime(1000);
 
       expect(container.firstChild).toBeNull();
+    });
+  });
+
+  describe('📝 Activity Text Feature', () => {
+    test('should display activity text with correct styling', () => {
+      const { container } = render(<AviTypingIndicator isVisible={true} inline={true} activityText="Test activity" />);
+
+      expect(container.textContent).toContain('- Test activity');
+
+      // Find the activity text span
+      const activityElement = container.querySelector('span[style*="color: rgb(209, 213, 219)"]');
+      expect(activityElement).toBeInTheDocument();
+      expect(activityElement).toHaveStyle({
+        color: '#D1D5DB',
+        fontWeight: '400',
+        fontSize: '0.85rem'
+      });
+    });
+
+    test('should truncate long activity text at 80 chars', () => {
+      const longText = 'A'.repeat(100);
+      const { container } = render(<AviTypingIndicator isVisible={true} inline={true} activityText={longText} />);
+
+      // The full text content includes the animation frame and separator
+      const fullText = container.textContent || '';
+
+      // Check that the text contains the ellipsis
+      expect(fullText).toContain('...');
+
+      // The truncated part should be at most 80 characters
+      const parts = fullText.split(' - ');
+      if (parts.length > 1) {
+        const activityPart = parts[1];
+        expect(activityPart.length).toBeLessThanOrEqual(80);
+      }
+    });
+
+    test('should not display separator when no activity', () => {
+      const { container } = render(<AviTypingIndicator isVisible={true} inline={true} />);
+      expect(container.textContent).not.toContain(' - ');
+    });
+
+    test('should handle empty string activity', () => {
+      const { container } = render(<AviTypingIndicator isVisible={true} inline={true} activityText="" />);
+      expect(container.textContent).not.toContain(' - ');
+    });
+
+    test('should handle whitespace-only activity', () => {
+      const { container } = render(<AviTypingIndicator isVisible={true} inline={true} activityText="   " />);
+      expect(container.textContent).not.toContain(' - ');
+    });
+
+    test('should update activity text instantly without fade', () => {
+      const { container, rerender } = render(<AviTypingIndicator isVisible={true} inline={true} activityText="First activity" />);
+
+      expect(container.textContent).toContain('First activity');
+
+      rerender(<AviTypingIndicator isVisible={true} inline={true} activityText="Second activity" />);
+
+      expect(container.textContent).toContain('Second activity');
+      expect(container.textContent).not.toContain('First activity');
+    });
+
+    test('should show activity with margin left of 0.5rem', () => {
+      const { container } = render(<AviTypingIndicator isVisible={true} inline={true} activityText="Test activity" />);
+
+      const activityElement = container.querySelector('span[style*="margin-left"]');
+      expect(activityElement).toHaveStyle({ marginLeft: '0.5rem' });
+    });
+
+    test('should not show activity in absolute mode', () => {
+      const { container } = render(<AviTypingIndicator isVisible={true} inline={false} activityText="Test activity" />);
+
+      expect(container.textContent).not.toContain('Test activity');
+    });
+  });
+
+  describe('📏 Full-Width Layout Tests', () => {
+    test('should render with display flex in inline mode', () => {
+      const { container } = render(
+        <AviTypingIndicator
+          isVisible={true}
+          inline={true}
+          activityText="Test activity"
+        />
+      );
+
+      const indicator = container.querySelector('.avi-wave-text-inline');
+      expect(indicator).toBeInTheDocument();
+
+      // Get computed styles
+      const styles = window.getComputedStyle(indicator as Element);
+      expect(styles.display).toBe('flex');
+    });
+
+    test('should render with 100% width in inline mode', () => {
+      const { container } = render(
+        <AviTypingIndicator
+          isVisible={true}
+          inline={true}
+          activityText="Test activity"
+        />
+      );
+
+      const indicator = container.querySelector('.avi-wave-text-inline') as HTMLElement;
+      expect(indicator).toBeInTheDocument();
+      expect(indicator.style.width).toBe('100%');
+    });
+
+    test('should maintain center alignment with flex layout', () => {
+      const { container } = render(
+        <AviTypingIndicator
+          isVisible={true}
+          inline={true}
+          activityText="Test activity"
+        />
+      );
+
+      const indicator = container.querySelector('.avi-wave-text-inline') as HTMLElement;
+      expect(indicator).toBeInTheDocument();
+      expect(indicator.style.alignItems).toBe('center');
+      expect(indicator.style.gap).toBe('0.25rem');
+    });
+
+    test('should not wrap activity text', () => {
+      const longActivity = 'This is a very long activity message that should not wrap to next line';
+
+      const { container } = render(
+        <AviTypingIndicator
+          isVisible={true}
+          inline={true}
+          activityText={longActivity}
+        />
+      );
+
+      // Find the activity text span - it's the second span inside the indicator
+      const spans = container.querySelectorAll('span');
+      const activitySpan = spans[2] as HTMLElement; // First span is container, second is animation, third is activity
+
+      expect(activitySpan).toBeTruthy();
+      expect(activitySpan.style.whiteSpace).toBe('nowrap');
+      expect(activitySpan.style.overflow).toBe('hidden');
+      expect(activitySpan.style.textOverflow).toBe('ellipsis');
+    });
+
+    test('should truncate activity text at 80 characters with ellipsis', () => {
+      const longActivity = 'A'.repeat(100);
+
+      const { container } = render(
+        <AviTypingIndicator
+          isVisible={true}
+          inline={true}
+          activityText={longActivity}
+        />
+      );
+
+      const fullText = container.textContent || '';
+
+      // Check that the text contains ellipsis
+      expect(fullText).toContain('...');
+
+      // Extract activity part (after "- ")
+      const parts = fullText.split(' - ');
+      if (parts.length > 1) {
+        const activityPart = parts[1];
+        // Should be truncated to 80 chars max (77 + '...' = 80)
+        expect(activityPart.length).toBeLessThanOrEqual(80);
+      }
     });
   });
 

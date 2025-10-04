@@ -7,10 +7,165 @@
 import express from 'express';
 import crypto from 'crypto';
 import { getClaudeCodeSDKManager } from '../../services/ClaudeCodeSDKManager.js';
-import StreamingTickerManager from '../../services/StreamingTickerManager.js';
+import { broadcastToSSE } from '../../../api-server/server.js';
 import { TokenAnalyticsWriter } from '../../services/TokenAnalyticsWriter.js';
 
 const router = express.Router();
+
+// =============================================================================
+// SSE BROADCASTING HELPERS FOR CLAUDE CODE TOOLS
+// =============================================================================
+
+/**
+ * Feature flag for gradual rollout
+ * Set BROADCAST_CLAUDE_ACTIVITY=false to disable broadcasting
+ */
+const BROADCAST_TOOL_ACTIVITY = process.env.BROADCAST_CLAUDE_ACTIVITY !== 'false';
+
+/**
+ * High-priority tools to always broadcast
+ * These tools represent critical development operations
+ */
+export const HIGH_PRIORITY_TOOLS = ['Bash', 'Read', 'Write', 'Edit', 'Task', 'Grep', 'Glob', 'Agent'];
+
+/**
+ * Get tool priority for filtering
+ * @param {string} toolName - Name of the tool
+ * @returns {string} - 'high' or 'medium' priority
+ */
+export function getToolPriority(toolName) {
+  if (!toolName) return 'medium';
+
+  const normalized = toolName.charAt(0).toUpperCase() + toolName.slice(1).toLowerCase();
+  return HIGH_PRIORITY_TOOLS.includes(normalized) ? 'high' : 'medium';
+}
+
+/**
+ * Truncate and sanitize action text to prevent data leakage
+ * @param {string} action - Action text to sanitize
+ * @param {number} maxLength - Maximum length (default: 100)
+ * @returns {string} - Sanitized and truncated action
+ */
+export function truncateAction(action, maxLength = 100) {
+  if (!action) return '';
+
+  // Sanitize sensitive patterns
+  let sanitized = String(action)
+    .replace(/token=[^&\s]+/gi, 'token=***')
+    .replace(/key=[^&\s]+/gi, 'key=***')
+    .replace(/password=[^&\s]+/gi, 'password=***')
+    .replace(/secret=[^&\s]+/gi, 'secret=***');
+
+  // Truncate if too long
+  if (sanitized.length > maxLength) {
+    return sanitized.substring(0, maxLength - 3) + '...';
+  }
+
+  return sanitized;
+}
+
+/**
+ * Extract filename from file path
+ * @param {string} path - Full file path
+ * @returns {string} - Filename with truncation if needed
+ */
+function extractFilename(path) {
+  if (!path) return 'unknown';
+
+  const parts = path.split('/');
+  const filename = parts[parts.length - 1];
+
+  // Truncate long filenames
+  if (filename.length > 40) {
+    return filename.substring(0, 37) + '...';
+  }
+
+  return filename;
+}
+
+/**
+ * Format tool action for display in SSE stream
+ * @param {string} toolName - Name of the tool
+ * @param {Object} toolInput - Tool input parameters
+ * @returns {string} - Formatted action string
+ */
+export function formatToolAction(toolName, toolInput) {
+  if (!toolInput) return 'unknown action';
+
+  const toolLower = toolName.toLowerCase();
+
+  switch (toolLower) {
+    case 'bash':
+      return toolInput.command || 'command';
+
+    case 'read_file':
+    case 'read':
+      return extractFilename(toolInput.path || toolInput.file_path);
+
+    case 'write_to_file':
+    case 'write':
+      return extractFilename(toolInput.path || toolInput.file_path);
+
+    case 'edit_file':
+    case 'edit':
+      const filename = extractFilename(toolInput.path || toolInput.file_path);
+      const preview = toolInput.old_str ? ` (${toolInput.old_str.substring(0, 20)}...)` : '';
+      return `${filename}${preview}`;
+
+    case 'grep':
+      return `pattern: ${toolInput.pattern || 'unknown'}`;
+
+    case 'glob':
+      return `pattern: ${toolInput.pattern || 'unknown'}`;
+
+    case 'task':
+      return truncateAction(toolInput.description || toolInput.prompt || 'task', 80);
+
+    default:
+      return truncateAction(JSON.stringify(toolInput), 100);
+  }
+}
+
+/**
+ * Broadcast tool activity to SSE stream
+ * This is the main integration point for Claude Code tool executions
+ * @param {string} toolName - Name of the tool executed
+ * @param {string} action - Tool action description
+ * @param {Object} metadata - Optional metadata (duration, success, etc.)
+ */
+export function broadcastToolActivity(toolName, action, metadata = {}) {
+  if (!BROADCAST_TOOL_ACTIVITY) {
+    return;
+  }
+
+  try {
+    const priority = getToolPriority(toolName);
+    const truncatedAction = truncateAction(action, 100);
+
+    const message = {
+      type: 'tool_activity',
+      data: {
+        tool: toolName,
+        action: truncatedAction,
+        priority: priority,
+        timestamp: Date.now(),
+        metadata: metadata
+      }
+    };
+
+    // Broadcast via broadcastToSSE (persists to history)
+    broadcastToSSE(message);
+
+    console.log(`📡 SSE Broadcast: ${toolName}(${truncatedAction})`);
+  } catch (error) {
+    console.error('❌ Failed to broadcast tool activity:', error);
+    // Don't throw - broadcasting is non-critical
+  }
+}
+
+// =============================================================================
+// END SSE BROADCASTING HELPERS
+// =============================================================================
 
 // TokenAnalyticsWriter will be initialized after db is passed
 let tokenAnalyticsWriter = null;
@@ -54,7 +209,7 @@ router.post('/streaming-chat', async (req, res) => {
     console.log('✅ Claude Code SDK: Valid message received:', message.substring(0, 100));
 
     // Send initial processing message to ticker
-    StreamingTickerManager.broadcast({
+    broadcastToSSE({
       type: 'tool_activity',
       data: {
         tool: 'thinking',
@@ -67,7 +222,7 @@ router.post('/streaming-chat', async (req, res) => {
     const claudeCodeManager = getClaudeCodeSDKManager();
 
     // Send activity update
-    StreamingTickerManager.broadcast({
+    broadcastToSSE({
       type: 'tool_activity',
       data: {
         tool: 'claude',
@@ -127,7 +282,7 @@ router.post('/streaming-chat', async (req, res) => {
     }
 
     // Send completion message
-    StreamingTickerManager.broadcast({
+    broadcastToSSE({
       type: 'execution_complete',
       data: {
         message: 'Claude Code execution completed',
@@ -159,7 +314,7 @@ router.post('/streaming-chat', async (req, res) => {
     });
 
     // Send error message to ticker
-    StreamingTickerManager.broadcast({
+    broadcastToSSE({
       type: 'tool_activity',
       data: {
         tool: 'error',

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Edit3, Zap, Bot } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { PostCreator } from './PostCreator';
 import { MentionInput, MentionSuggestion } from './MentionInput';
 import AviTypingIndicator from './AviTypingIndicator';
 import MarkdownRenderer from './markdown/MarkdownRenderer';
+import { useActivityStream } from '../hooks/useActivityStream';
 // Removed AviDirectChatSDK import - using built-in Avi chat component
 
 type PostingTab = 'post' | 'quick' | 'avi';
@@ -186,6 +187,34 @@ const AviChatSection: React.FC<{
     timestamp: Date;
   }>>([]);
 
+  // Subscribe to activity stream when submitting
+  const { currentActivity, connectionStatus } = useActivityStream(isSubmitting);
+
+  // Update typing indicator when activity changes
+  useEffect(() => {
+    if (isSubmitting && currentActivity) {
+      setChatHistory(prev => {
+        const hasTypingIndicator = prev.some(msg => msg.sender === 'typing');
+        if (!hasTypingIndicator) return prev;
+
+        return prev.map(msg =>
+          msg.sender === 'typing'
+            ? {
+                ...msg,
+                content: (
+                  <AviTypingIndicator
+                    isVisible={true}
+                    inline={true}
+                    activityText={currentActivity}
+                  />
+                ),
+              }
+            : msg
+        );
+      });
+    }
+  }, [currentActivity, isSubmitting]);
+
   const callAviClaudeCode = async (userMessage: string): Promise<string> => {
     // SPARC FIX: Add frontend timeout (90s) before Vite proxy timeout (120s)
     const controller = new AbortController();
@@ -264,10 +293,16 @@ const AviChatSection: React.FC<{
       timestamp: new Date(),
     };
 
-    // SPARC UX FIX: Add typing indicator to chat history
+    // SPARC UX FIX: Add typing indicator to chat history with activity text
     const typingIndicator = {
       id: 'typing-indicator',
-      content: <AviTypingIndicator isVisible={true} inline={true} />,
+      content: (
+        <AviTypingIndicator
+          isVisible={true}
+          inline={true}
+          activityText={currentActivity || undefined}
+        />
+      ),
       sender: 'typing' as const,
       timestamp: new Date(),
     };
@@ -339,7 +374,7 @@ const AviChatSection: React.FC<{
                 msg.sender === 'user'
                   ? 'bg-blue-100 text-blue-900 ml-auto max-w-xs'
                   : msg.sender === 'typing'
-                  ? 'bg-white text-gray-900 border border-gray-200 max-w-xs'
+                  ? 'bg-white text-gray-900 border border-gray-200 max-w-full'
                   : 'bg-white text-gray-900 max-w-full'
               )}>
                 {/* SPARC MARKDOWN FIX: Render markdown for Avi responses */}

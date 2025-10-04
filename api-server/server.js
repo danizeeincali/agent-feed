@@ -198,6 +198,9 @@ const mockTemplates = [
 const streamingTickerMessages = [];
 const sseConnections = new Set();
 
+// Export for testing
+export { streamingTickerMessages };
+
 /**
  * Validates and normalizes SSE message structure to ensure complete data
  * This prevents frontend crashes from incomplete message structures
@@ -237,6 +240,90 @@ const validateSSEMessage = (message) => {
 
   return validatedMessage;
 };
+
+/**
+ * Broadcast activity message to all SSE clients
+ * @param {Object} message - Activity message to broadcast
+ * @param {Set<Response>} connections - Optional connection pool (defaults to global)
+ */
+export function broadcastToSSE(message, connections = sseConnections) {
+  // Validate message structure
+  if (!message || !message.type || !message.data) {
+    console.error('❌ Invalid message format for SSE broadcast:', message);
+    return;
+  }
+
+  try {
+    // Add metadata
+    const enrichedMessage = {
+      ...message,
+      id: message.id || crypto.randomUUID(),
+      data: {
+        ...message.data,
+        timestamp: message.data.timestamp || Date.now()
+      }
+    };
+
+    // Validate with existing validator
+    const validatedMessage = validateSSEMessage(enrichedMessage);
+
+    // Persist to history array BEFORE broadcasting
+    streamingTickerMessages.push(validatedMessage);
+
+    // Maintain 100 message limit (remove oldest if exceeded)
+    if (streamingTickerMessages.length > 100) {
+      streamingTickerMessages.shift();
+    }
+
+    console.log(`📊 Persisted to history: ${message.type}`, {
+      historySize: streamingTickerMessages.length,
+      messageId: validatedMessage.id
+    });
+
+    // Broadcast to all connected clients
+    const deadClients = [];
+
+    for (const client of connections) {
+      // Skip non-writable clients
+      if (!client.writable || client.destroyed) {
+        deadClients.push(client);
+        continue;
+      }
+
+      try {
+        client.write(`data: ${JSON.stringify(validatedMessage)}\n\n`);
+      } catch (error) {
+        console.warn('⚠️ Failed to broadcast to SSE client:', error.message);
+        deadClients.push(client);
+      }
+    }
+
+    // Clean up dead connections
+    for (const deadClient of deadClients) {
+      connections.delete(deadClient);
+    }
+
+    if (deadClients.length > 0) {
+      console.log(`🧹 Removed ${deadClients.length} dead SSE connection(s)`);
+    }
+
+    // Return success metrics
+    // Note: connections.size is already reduced by deadClients removal
+    return {
+      success: true,
+      broadcastCount: connections.size,
+      persistedToHistory: true,
+      historySize: streamingTickerMessages.length
+    };
+
+  } catch (error) {
+    console.error('❌ Error in broadcastToSSE:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
 
 // API Routes
 app.get('/api/agents', async (req, res) => {
