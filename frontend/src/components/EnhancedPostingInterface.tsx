@@ -129,7 +129,6 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
     <div className="space-y-4">
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-2">Quick Post</h3>
-        <p className="text-sm text-gray-600">Share your thoughts, ideas, or updates with the community</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">

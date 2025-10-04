@@ -97,7 +97,6 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
   });
   
   const [isSearching, setIsSearching] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   const debouncedSearchQuery = useDebounce(search.query, 300);
   
   // WebSocket integration
@@ -521,98 +520,36 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
     <div className={`max-w-2xl mx-auto ${className}`}>
       {/* Feed Header */}
       <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-        <div className="flex items-center justify-between">
+        {/* Row 1: Title/Description + Refresh Button */}
+        <div className="flex items-center justify-between mb-4">
+          {/* Left: Title and Description */}
           <div>
             <h2 className="text-xl font-bold text-gray-900">Agent Feed</h2>
             <p className="text-sm text-gray-500">Real-time updates from your Claude Code agents</p>
           </div>
-          
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-              title="Refresh feed"
-            >
-              <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
-            </button>
-            
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-2">
-                <select
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                  className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">All Posts</option>
-                  <option value="high-impact">High Impact</option>
-                  <option value="recent">Recent</option>
-                  <option value="strategic">Strategic</option>
-                  <option value="productivity">Productivity</option>
-                </select>
-                
-                <select
-                  value={`${sortBy}-${sortOrder}`}
-                  onChange={(e) => {
-                    const [newSortBy, newSortOrder] = e.target.value.split('-') as ['published_at' | 'title' | 'author', 'ASC' | 'DESC'];
-                    setSortBy(newSortBy);
-                    setSortOrder(newSortOrder);
-                  }}
-                  className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="published_at-DESC">Newest First</option>
-                  <option value="published_at-ASC">Oldest First</option>
-                  <option value="title-ASC">Title A-Z</option>
-                  <option value="title-DESC">Title Z-A</option>
-                  <option value="author-ASC">Author A-Z</option>
-                </select>
-                
-                <button
-                  onClick={() => setShowSearch(!showSearch)}
-                  className={`p-2 rounded-lg transition-colors ${
-                    showSearch ? 'bg-blue-100 text-blue-600' : 'text-gray-400 hover:text-gray-600'
-                  }`}
-                  title="Search posts"
-                >
-                  <Search className="h-4 w-4" />
-                </button>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs ${
-                  connectionStatus.connected 
-                    ? 'bg-green-100 text-green-700'
-                    : connectionStatus.fallback 
-                    ? 'bg-yellow-100 text-yellow-700'
-                    : 'bg-red-100 text-red-700'
-                }`}>
-                  {connectionStatus.connected ? (
-                    <><Database className="h-3 w-3" /> Database</>    
-                  ) : connectionStatus.fallback ? (
-                    <><AlertCircle className="h-3 w-3" /> Fallback</>    
-                  ) : (
-                    <><WifiOff className="h-3 w-3" /> Offline</>
-                  )}
-                </div>
-                <LiveActivityIndicator />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Search Bar */}
-      {showSearch && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-          <div className="relative">
+          {/* Right: Refresh Button */}
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            title="Refresh feed"
+          >
+            <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        {/* Row 2: Search Input + Filter Controls */}
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Search Input (60-70% width) */}
+          <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
               placeholder="Search posts by title, content, or author..."
               value={search.query}
               onChange={(e) => setSearch(prev => ({ ...prev, query: e.target.value }))}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              autoFocus
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
             {search.loading && (
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -620,20 +557,74 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
               </div>
             )}
           </div>
-          
-          {isSearching && search.query && (
-            <div className="mt-2 text-sm text-gray-600">
-              {search.loading ? (
-                'Searching...'
-              ) : search.hasResults ? (
-                `Found ${search.results.length} posts matching "${search.query}"`
-              ) : (
-                `No posts found matching "${search.query}"`
-              )}
+
+          {/* Right: Filter/Sort Controls + Status Indicators */}
+          <div className="flex items-center space-x-2">
+            {/* Filter Dropdown */}
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="all">All Posts</option>
+              <option value="high-impact">High Impact</option>
+              <option value="recent">Recent</option>
+              <option value="strategic">Strategic</option>
+              <option value="productivity">Productivity</option>
+            </select>
+
+            {/* Sort Dropdown */}
+            <select
+              value={`${sortBy}-${sortOrder}`}
+              onChange={(e) => {
+                const [newSortBy, newSortOrder] = e.target.value.split('-') as ['published_at' | 'title' | 'author', 'ASC' | 'DESC'];
+                setSortBy(newSortBy);
+                setSortOrder(newSortOrder);
+              }}
+              className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="published_at-DESC">Newest First</option>
+              <option value="published_at-ASC">Oldest First</option>
+              <option value="title-ASC">Title A-Z</option>
+              <option value="title-DESC">Title Z-A</option>
+              <option value="author-ASC">Author A-Z</option>
+            </select>
+
+            {/* Connection Status & Live Activity */}
+            <div className="flex items-center space-x-2">
+              <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs ${
+                connectionStatus.connected
+                  ? 'bg-green-100 text-green-700'
+                  : connectionStatus.fallback
+                  ? 'bg-yellow-100 text-yellow-700'
+                  : 'bg-red-100 text-red-700'
+              }`}>
+                {connectionStatus.connected ? (
+                  <><Database className="h-3 w-3" /> Database</>
+                ) : connectionStatus.fallback ? (
+                  <><AlertCircle className="h-3 w-3" /> Fallback</>
+                ) : (
+                  <><WifiOff className="h-3 w-3" /> Offline</>
+                )}
+              </div>
+              <LiveActivityIndicator />
             </div>
-          )}
+          </div>
         </div>
-      )}
+
+        {/* Search Results Info */}
+        {isSearching && search.query && (
+          <div className="mt-2 text-sm text-gray-600">
+            {search.loading ? (
+              'Searching...'
+            ) : search.hasResults ? (
+              `Found ${search.results.length} posts matching "${search.query}"`
+            ) : (
+              `No posts found matching "${search.query}"`
+            )}
+          </div>
+        )}
+      </div>
 
       {/* LinkedIn-style Post Creator */}
       <div className="mb-6">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Plus, Edit3 } from 'lucide-react';
+import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Plus, Edit3, Search } from 'lucide-react';
 import { apiService } from '../services/api';
 import { AgentPost, ApiResponse, FilterStats } from '../types/api';
 import FilterPanel, { FilterOptions } from './FilterPanel';
@@ -80,6 +80,13 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
   const [userId] = useState('anonymous'); // In a real app, this would come from authentication
+  const [search, setSearch] = useState({
+    query: '',
+    loading: false,
+    results: [] as AgentPost[],
+    hasResults: false
+  });
+  const [isSearching, setIsSearching] = useState(false);
 
   // Auto-update relative timestamps every 60 seconds
   useRelativeTime(60000);
@@ -89,6 +96,55 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const limit = 20;
 
   // UI functionality removed - function cleaned up
+
+  // Debounced search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search.query.trim()) {
+        performSearch(search.query);
+      } else {
+        // Empty query - reset to filtered posts
+        setIsSearching(false);
+        setSearch(prev => ({ ...prev, results: [], hasResults: false }));
+        if (!search.query) {
+          loadPosts(0, false);
+        }
+      }
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timer);
+  }, [search.query]);
+
+  // Search API function
+  const performSearch = async (query: string) => {
+    console.log('🔍 Performing search:', query);
+
+    setSearch(prev => ({ ...prev, loading: true }));
+    setIsSearching(true);
+
+    try {
+      // Call search API (simplified signature)
+      const response = await apiService.searchPosts(query, limit, 0);
+
+      if (response.success && response.data) {
+        const searchResults = response.data.items || [];
+        setPosts(searchResults);
+        setTotal(response.data.total || 0);
+        setPage(0); // Reset to first page
+
+        setSearch(prev => ({
+          ...prev,
+          loading: false,
+          results: searchResults,
+          hasResults: searchResults.length > 0
+        }));
+      }
+    } catch (err) {
+      console.error('❌ Search failed:', err);
+      setSearch(prev => ({ ...prev, loading: false }));
+      setError('Search failed. Please try again.');
+    }
+  };
 
   // Real data loading from production database with filtering
   const loadPosts = useCallback(async (pageNum: number = 0, append: boolean = false) => {
@@ -594,29 +650,64 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Main Feed - Left Column */}
-      <div className={`lg:col-span-2 ${className}`} data-testid="social-media-feed">
-        {/* Header */}
-        <div className="space-y-4 mb-6">
-          <div className="flex justify-between items-center">
+      <div className={`lg:col-span-2 ${className}`} data-testid="real-social-media-feed">
+        {/* RESTRUCTURED HEADER WITH SEARCH */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+          {/* Row 1: Title/Description + Refresh Button */}
+          <div className="flex items-center justify-between mb-4">
+            {/* Left: Title */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Agent Feed</h2>
-              <p className="text-gray-600 mt-1">
-                Real-time posts from production agents
-              </p>
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={handleRefresh}
-                disabled={refreshing}
-                className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-                Refresh
-              </button>
+
+            {/* Right: Refresh Button */}
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              title="Refresh feed"
+            >
+              <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
+          </div>
+
+          {/* Row 2: Search Input Only */}
+          <div className="flex items-center gap-4">
+            {/* Search Input (Full width in this row) */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search posts by title, content, or author..."
+                value={search.query}
+                onChange={(e) => setSearch(prev => ({ ...prev, query: e.target.value }))}
+                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                data-testid="search-input"
+              />
+              {search.loading && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
+                </div>
+              )}
             </div>
           </div>
-        
-        {/* Filter Panel */}
+
+          {/* Search Results Info */}
+          {isSearching && search.query && (
+            <div className="mt-3 text-sm text-gray-600" data-testid="search-results-info">
+              {search.loading ? (
+                'Searching...'
+              ) : search.hasResults ? (
+                `Found ${search.results.length} posts matching "${search.query}"`
+              ) : (
+                `No posts found matching "${search.query}"`
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* FilterPanel - Keep as separate component below header */}
         <FilterPanel
           currentFilter={currentFilter}
           availableAgents={filterData.agents}
@@ -631,31 +722,30 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         />
 
         {/* Enhanced Posting Interface - 3 Sections: Post, Quick Post, Avi DM */}
-        <EnhancedPostingInterface 
+        <EnhancedPostingInterface
           onPostCreated={handlePostCreated}
           className="mt-4"
         />
-      </div>
 
-      {/* Error Display */}
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
-          <AlertCircle className="w-5 h-5 text-red-500 mr-3" />
-          <div>
-            <p className="text-red-800 font-medium">Error</p>
-            <p className="text-red-600 text-sm">{error}</p>
+        {/* Error Display */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
+            <AlertCircle className="w-5 h-5 text-red-500 mr-3" />
+            <div>
+              <p className="text-red-800 font-medium">Error</p>
+              <p className="text-red-600 text-sm">{error}</p>
+            </div>
+            <button
+              onClick={() => setError(null)}
+              className="ml-auto text-red-500 hover:text-red-700"
+            >
+              ×
+            </button>
           </div>
-          <button
-            onClick={() => setError(null)}
-            className="ml-auto text-red-500 hover:text-red-700"
-          >
-            ×
-          </button>
-        </div>
-      )}
+        )}
 
-      {/* Posts */}
-      <div className="space-y-6" data-testid="post-list">
+        {/* Posts */}
+        <div className="space-y-6" data-testid="post-list">
         {(() => {
           console.log('🎨 About to render posts:', { 
             postsExists: !!posts,
@@ -1097,30 +1187,30 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
             );
           });
         })()}
-      </div>
-
-      {/* Load More */}
-      {(posts || []).length < total && (
-        <div className="text-center mt-8">
-          <button
-            onClick={handleLoadMore}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Load More Posts ({(posts || []).length} of {total})
-          </button>
         </div>
-      )}
 
-      {/* Empty State */}
-      {(!posts || posts.length === 0) && !loading && (
-        <div className="text-center py-12">
-          <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
-          <p className="text-gray-500 mb-4">
-            No posts have been created by agents yet.
-          </p>
-        </div>
-      )}
+        {/* Load More */}
+        {(posts || []).length < total && (
+          <div className="text-center mt-8">
+            <button
+              onClick={handleLoadMore}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Load More Posts ({(posts || []).length} of {total})
+            </button>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {(!posts || posts.length === 0) && !loading && (
+          <div className="text-center py-12">
+            <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
+            <p className="text-gray-500 mb-4">
+              No posts have been created by agents yet.
+            </p>
+          </div>
+        )}
 
         {/* Connection Status */}
         <div className="mt-8 text-center">

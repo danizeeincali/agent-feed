@@ -1,107 +1,3432 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="6" failures="0" errors="0" time="5.206">
-    <testsuite name="src/tests/integration/avi-typing-container-width.test.tsx" timestamp="2025-10-03T22:15:43.593Z" hostname="codespaces-005acc" tests="6" failures="0" errors="0" skipped="0" time="2.29">
-        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have typing indicator container span full available chat width" time="0.438">
+<testsuites name="vitest tests" tests="11" failures="0" errors="0" time="18.403">
+    <testsuite name="src/tests/integration/real-search-input-layout.test.tsx" timestamp="2025-10-04T03:26:43.777Z" hostname="codespaces-005acc" tests="11" failures="0" errors="0" skipped="0" time="5.329">
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should trigger debounced search after 300ms when typing" time="0.821">
             <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:38.211Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:38.212Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:38.211Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:38.212Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
 🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
 ⏹️ DEBUG: Skipping fetch - dropdown closed
 
-🔍 DEBUG: Calling Avi Claude Code with message: test message
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔍 Performing search: test query
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
 
             </system-out>
         </testcase>
-        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have no layout shift when response replaces typing indicator" time="0.587">
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should combine search and filter state in API call" time="0.554">
             <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:39.031Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:39.031Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:39.031Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:39.031Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
 ⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Response status: undefined undefined
-🔍 DEBUG: Parsed JSON data: { message: &apos;Response from Avi&apos; }
-🔍 DEBUG: Received response: Response from Avi
-🔍 DEBUG: Replacing typing indicator with response
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔍 Performing search: important
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
 
             </system-out>
         </testcase>
-        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should maintain consistent full width across multiple typing indicators" time="0.273">
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should display loading indicator during search" time="0.73">
             <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:39.584Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:39.584Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:39.584Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:39.584Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
 ⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test 0
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
-⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test 1
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
-⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test 2
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔍 Performing search: loading test
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
             </system-out>
         </testcase>
-        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have typing indicator container width respond to viewport changes" time="0.266">
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should maintain layout stability during search" time="0.363">
             <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:40.315Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:40.315Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:40.315Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:40.315Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
 ⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
-⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
-⏹️ DEBUG: Skipping fetch - dropdown closed
-
-🔍 DEBUG: Calling Avi Claude Code with message: test
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
             </system-out>
         </testcase>
-        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should use full container width with long activity text" time="0.13">
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should display search results info message" time="0.248">
             <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:40.678Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:40.678Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:40.678Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:40.678Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
 ⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Response status: undefined undefined
-🔍 DEBUG: Parsed JSON data: { message: &apos;Response 0&apos; }
-🔍 DEBUG: Received response: Response 0
-🔍 DEBUG: Replacing typing indicator with response
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
             </system-out>
         </testcase>
-        <testcase classname="src/tests/integration/avi-typing-container-width.test.tsx" name="Avi Typing Indicator Container Width Integration &gt; should have typing indicator container match response container styling" time="0.589">
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should reset to all posts when search is cleared" time="0.484">
             <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:40.932Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:40.932Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:40.932Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:40.932Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
 ⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Response status: undefined undefined
-🔍 DEBUG: Parsed JSON data: { message: &apos;Response 1&apos; }
-🔍 DEBUG: Received response: Response 1
-🔍 DEBUG: Replacing typing indicator with response
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Calling Avi Claude Code with message: test
-🔍 DEBUG: Fetching from /api/claude-code/streaming-chat
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
 
-🔍 DEBUG: Response status: undefined undefined
-🔍 DEBUG: Parsed JSON data: { message: &apos;Avi response message&apos; }
-🔍 DEBUG: Received response: Avi response message
-🔍 DEBUG: Replacing typing indicator with response
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔍 Performing search: test
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should handle empty search query by loading all posts" time="0.478">
+            <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:41.410Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:41.410Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:41.410Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:41.410Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:41.410Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:41.410Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should show &quot;Searching...&quot; status during active search" time="0.159">
+            <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:41.887Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:41.887Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:41.887Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:41.887Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should show no results message when search returns empty" time="0.498">
+            <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:42.047Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:42.047Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:42.047Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:42.047Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔍 Performing search: nonexistent
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+
+            </system-out>
+        </testcase>
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should handle search errors gracefully" time="0.487">
+            <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:42.545Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:42.545Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:42.545Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:42.545Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔍 Performing search: error test
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: &apos;Search failed. Please try again.&apos;,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+            </system-out>
+            <system-err>
+❌ Search failed: Error: Search API failed
+    at /workspaces/agent-feed/frontend/src/tests/integration/real-search-input-layout.test.tsx:461:50
+    at file:///workspaces/agent-feed/frontend/node_modules/@vitest/runner/dist/index.js:135:14
+    at file:///workspaces/agent-feed/frontend/node_modules/@vitest/runner/dist/index.js:60:26
+    at runTest (file:///workspaces/agent-feed/frontend/node_modules/@vitest/runner/dist/index.js:781:17)
+    at runSuite (file:///workspaces/agent-feed/frontend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///workspaces/agent-feed/frontend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///workspaces/agent-feed/frontend/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///workspaces/agent-feed/frontend/node_modules/@vitest/runner/dist/index.js:967:3)
+    at file:///workspaces/agent-feed/frontend/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+    at withEnv (file:///workspaces/agent-feed/frontend/node_modules/vitest/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:83:5)
+
+            </system-err>
+        </testcase>
+        <testcase classname="src/tests/integration/real-search-input-layout.test.tsx" name="RealSocialMediaFeed - Search Integration Tests &gt; should preserve filter state when performing search" time="0.505">
+            <system-out>
+🎨 RealSocialMediaFeed RENDER: {
+  loading: true,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 Rendering loading state
+🔄 RealSocialMediaFeed: Initial useEffect triggered
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+🔄 RealSocialMediaFeed: Filter changed, reloading posts { type: &apos;all&apos; }
+🔄 RealSocialMediaFeed: loadPosts called { pageNum: 0, append: false, filterType: &apos;all&apos; }
+🔄 Calling apiService.getAgentPosts...
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:43.032Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:43.032Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+📦 Raw API response: {
+  success: true,
+  data: [
+    {
+      id: &apos;post-1&apos;,
+      title: &apos;First Test Post&apos;,
+      content: &apos;Content for first test post with some details&apos;,
+      authorAgent: &apos;TestAgent1&apos;,
+      created_at: &apos;2025-10-04T03:26:43.032Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    },
+    {
+      id: &apos;post-2&apos;,
+      title: &apos;Second Test Post&apos;,
+      content: &apos;Content for second test post&apos;,
+      authorAgent: &apos;TestAgent2&apos;,
+      created_at: &apos;2025-10-04T03:26:43.032Z&apos;,
+      engagement: [Object],
+      tags: [Array]
+    }
+  ],
+  total: 2
+}
+📊 Processed data: {
+  postsDataType: &apos;object&apos;,
+  postsDataIsArray: true,
+  postsDataLength: 2,
+  totalCount: 2
+}
+✅ Valid posts array: {
+  validPostsLength: 2,
+  firstPostId: &apos;post-1&apos;,
+  firstPostTitle: &apos;First Test Post&apos;
+}
+📝 Setting posts array with 2 posts
+🏁 loadPosts finished - loading set to false
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🔄 DEBUG: Fetching suggestions { mentionQuery: null, debouncedQuery: &apos;&apos;, isDropdownOpen: false }
+⏹️ DEBUG: Skipping fetch - dropdown closed
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+
+🔍 Performing search: preserve filter
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: &apos;post-1&apos;
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 2,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
+🎨 Rendering post 0 : { id: &apos;post-1&apos;, title: &apos;First Test Post&apos; }
+🎨 Rendering post 1 : { id: &apos;post-2&apos;, title: &apos;Second Test Post&apos; }
+🎨 RealSocialMediaFeed RENDER: {
+  loading: false,
+  error: null,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  postsIsArray: true,
+  firstPostId: undefined
+}
+🎨 About to render posts: {
+  postsExists: true,
+  postsLength: 0,
+  postsType: &apos;object&apos;,
+  isArray: true
+}
 
             </system-out>
         </testcase>
