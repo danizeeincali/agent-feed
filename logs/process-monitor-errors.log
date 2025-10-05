@@ -1,0 +1,907 @@
+[2025-10-04T15:32:50.977Z] [ERROR] Server stderr: ⚠️ High memory usage: 14MB / 17MB (87%)
+   SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:33:20.978Z] [ERROR] Server stderr: ⚠️ High memory usage: 14MB / 17MB (87%)
+[2025-10-04T15:33:20.978Z] [ERROR] Server stderr: SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:33:50.979Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 17MB (88%)
+   SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:34:20.980Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 17MB (88%)
+   SSE Connections: 0
+[2025-10-04T15:34:20.980Z] [ERROR] Server stderr: Ticker Messages: 3
+[2025-10-04T15:34:50.984Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 18MB (84%)
+[2025-10-04T15:34:50.984Z] [ERROR] Server stderr: SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:35:20.982Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 18MB (85%)
+[2025-10-04T15:35:20.982Z] [ERROR] Server stderr: SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:35:50.982Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 18MB (85%)
+[2025-10-04T15:35:50.982Z] [ERROR] Server stderr: SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:36:20.982Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 18MB (85%)
+   SSE Connections: 0
+[2025-10-04T15:36:20.983Z] [ERROR] Server stderr: Ticker Messages: 3
+[2025-10-04T15:36:50.984Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 18MB (86%)
+   SSE Connections: 0
+[2025-10-04T15:36:50.984Z] [ERROR] Server stderr: Ticker Messages: 3
+[2025-10-04T15:37:20.985Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 18MB (86%)
+[2025-10-04T15:37:20.985Z] [ERROR] Server stderr: SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:37:50.986Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 17MB (88%)
+[2025-10-04T15:37:50.987Z] [ERROR] Server stderr: SSE Connections: 0
+   Ticker Messages: 3
+[2025-10-04T15:38:20.987Z] [ERROR] Server stderr: ⚠️ High memory usage: 15MB / 17MB (89%)
+   SSE Connections: 0
+[2025-10-04T15:38:20.987Z] [ERROR] Server stderr: Ticker Messages: 3
+[2025-10-04T15:39:50.744Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:40:20.747Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:40:50.768Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:41:26.102Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T15:41:26.103Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:41:56.188Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T15:41:56.189Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:42:01.195Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T15:42:01.195Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:43:20.823Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:43:50.869Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:44:20.894Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:44:56.647Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T15:44:56.648Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:45:26.255Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:45:31.954Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:46:50.990Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:47:20.991Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:47:51.015Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:47:51.016Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:47:51.016Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:47:56.511Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:48:26.361Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T15:48:26.361Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T15:49:51.102Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:49:51.102Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:49:51.102Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:50:21.133Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:50:21.133Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:50:21.133Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:50:51.137Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:50:51.137Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:50:51.137Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:51:21.152Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:51:21.153Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:51:21.153Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:51:51.160Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:51:51.160Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:51:51.160Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:52:21.161Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:52:21.161Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:52:21.161Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:52:51.192Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:52:51.192Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:52:51.192Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:53:21.214Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:53:21.214Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:53:21.215Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:53:51.244Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:53:51.245Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:53:51.246Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:54:21.274Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:54:21.274Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:54:21.274Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:54:51.304Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:54:51.305Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:54:51.305Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:55:21.335Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:55:21.335Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:55:21.335Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:55:51.365Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:55:51.366Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:55:51.366Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:56:21.376Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:56:21.376Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:56:21.376Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:56:51.392Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:56:51.392Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:56:51.392Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:57:21.393Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:57:21.393Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:57:21.393Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:57:51.423Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:57:51.423Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:57:51.424Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:58:21.431Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:58:21.431Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:58:21.431Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:58:51.459Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:58:51.460Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:58:51.460Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:59:21.486Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:59:21.486Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:59:21.486Z] [CRITICAL] Manual intervention required!
+[2025-10-04T15:59:51.515Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T15:59:51.516Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T15:59:51.516Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:00:21.546Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:00:21.547Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:00:21.547Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:00:51.574Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:00:51.575Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:00:51.575Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:01:21.605Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:01:21.606Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:01:21.606Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:01:51.635Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:01:51.636Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:01:51.636Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:02:21.638Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:02:21.638Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:02:21.638Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:02:51.668Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:02:51.668Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:02:51.668Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:03:21.697Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:03:21.698Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:03:21.698Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:03:51.729Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:03:51.729Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:03:51.729Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:04:21.732Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:04:21.732Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:04:21.732Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:04:51.763Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:04:51.763Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:04:51.763Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:05:21.793Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:05:21.793Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:05:21.793Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:05:51.824Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:05:51.825Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:05:51.825Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:06:21.831Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:06:21.831Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:06:21.831Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:06:51.859Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:06:51.859Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:06:51.859Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:07:21.860Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:07:21.860Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:07:21.860Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:07:51.890Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:07:51.891Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:07:51.891Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:08:21.906Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:08:21.907Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:08:21.907Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:08:51.912Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:08:51.912Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:08:51.912Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:09:21.943Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:09:21.943Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:09:21.943Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:09:51.952Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:09:51.952Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:09:51.952Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:10:21.975Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:10:21.975Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:10:21.975Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:10:52.005Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:10:52.005Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:10:52.006Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:11:22.036Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:11:22.036Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:11:22.036Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:11:52.066Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:11:52.067Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:11:52.067Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:12:22.068Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:12:22.068Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:12:22.069Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:12:52.097Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:12:52.098Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:12:52.098Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:13:22.124Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:13:22.124Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:13:22.124Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:13:52.154Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:13:52.154Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:13:52.154Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:14:22.161Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:14:22.161Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:14:22.161Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:14:52.189Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:14:52.189Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:14:52.189Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:15:22.220Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:15:22.220Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:15:22.220Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:15:52.246Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:15:52.247Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:15:52.247Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:16:22.277Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:16:22.277Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:16:22.277Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:16:52.282Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:16:52.282Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:16:52.282Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:17:22.284Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:17:22.284Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:17:22.284Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:17:52.296Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:17:52.296Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:17:52.296Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:18:22.326Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:18:22.327Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:18:22.327Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:18:52.357Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:18:52.357Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:18:52.357Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:19:22.370Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:19:22.371Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:19:22.371Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:19:52.401Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:19:52.401Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:19:52.401Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:20:22.423Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:20:22.423Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:20:22.423Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:20:52.446Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:20:52.447Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:20:52.447Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:21:22.463Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:21:22.463Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:21:22.463Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:21:52.466Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:21:52.467Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:21:52.467Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:22:22.468Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:22:22.469Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:22:22.469Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:22:52.488Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:22:52.488Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:22:52.488Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:23:22.519Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:23:22.519Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:23:22.519Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:23:52.544Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:23:52.544Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:23:52.544Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:24:22.575Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:24:22.575Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:24:22.575Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:24:52.601Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:24:52.601Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:24:52.601Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:25:22.631Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:25:22.632Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:25:22.632Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:25:52.655Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:25:52.655Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:25:52.655Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:26:22.670Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:26:22.671Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:26:22.671Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:26:52.683Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:26:52.683Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:26:52.683Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:27:22.685Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:27:22.685Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:27:22.685Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:27:52.716Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:27:52.716Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:27:52.716Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:28:22.732Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:28:22.732Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:28:22.732Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:28:52.762Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:28:52.763Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:28:52.763Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:29:22.793Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:29:22.793Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:29:22.793Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:29:52.824Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:29:52.824Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:29:52.824Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:30:22.836Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:30:22.837Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:30:22.837Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:30:52.867Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:30:52.867Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:30:52.867Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:31:22.898Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:31:22.898Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:31:22.898Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:31:52.918Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:31:52.919Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:31:52.919Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:32:22.921Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:32:22.921Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:32:22.922Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:32:52.952Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:32:52.952Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:32:52.952Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:33:22.983Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:33:22.983Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:33:22.983Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:33:53.012Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:33:53.013Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:33:53.013Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:34:23.043Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:34:23.043Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:34:23.043Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:34:53.072Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:34:53.073Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:34:53.073Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:35:23.103Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:35:23.103Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:35:23.103Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:35:53.107Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:35:53.107Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:35:53.107Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:36:23.109Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:36:23.109Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:36:23.109Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:36:53.121Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:36:53.121Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:36:53.121Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:37:23.124Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:37:23.124Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:37:23.124Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:37:53.154Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:37:53.154Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:37:53.155Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:38:23.185Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:38:23.185Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:38:23.185Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:38:53.216Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:38:53.216Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:38:53.216Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:39:23.246Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:39:23.246Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:39:23.246Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:39:53.258Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:40:23.271Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:40:53.296Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:41:28.628Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:41:28.628Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:41:58.593Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:41:58.593Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:42:03.619Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:42:03.619Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:43:23.406Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:43:53.430Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:44:23.434Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:44:58.900Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:44:58.901Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:45:28.749Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:45:28.750Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:45:33.730Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:45:33.730Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:46:53.506Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:47:23.509Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:47:53.516Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:47:53.516Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:47:53.516Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:47:58.797Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:47:58.798Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:48:28.842Z] [ERROR] Server stderr: ❌ Uncaught Exception: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+[2025-10-04T16:48:28.843Z] [ERROR] Server stderr: Stack: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at Function.listen (/workspaces/agent-feed/api-server/node_modules/express/lib/application.js:635:24)
+    at file:///workspaces/agent-feed/api-server/server.js:3228:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+[2025-10-04T16:49:53.607Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:49:53.608Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:49:53.608Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:50:23.620Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:50:23.620Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:50:23.620Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:50:53.651Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:50:53.651Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:50:53.651Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:51:23.678Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:51:23.679Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:51:23.679Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:51:53.691Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:51:53.691Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:51:53.691Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:52:23.694Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:52:23.694Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:52:23.694Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:52:53.711Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:52:53.711Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:52:53.711Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:53:23.715Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:53:23.715Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:53:23.716Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:53:53.724Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:53:53.724Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:53:53.724Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:54:23.754Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:54:23.755Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:54:23.755Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:54:53.758Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:54:53.758Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:54:53.758Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:55:23.781Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:55:23.781Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:55:23.781Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:55:53.802Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:55:53.802Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:55:53.802Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:56:23.831Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:56:23.831Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:56:23.831Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:56:53.832Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:56:53.832Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:56:53.832Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:57:23.835Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:57:23.835Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:57:23.835Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:57:53.839Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:57:53.839Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:57:53.839Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:58:23.841Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:58:23.841Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:58:23.841Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:58:53.871Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:58:53.871Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:58:53.871Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:59:23.902Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:59:23.902Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:59:23.902Z] [CRITICAL] Manual intervention required!
+[2025-10-04T16:59:53.932Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T16:59:53.932Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T16:59:53.932Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:00:23.934Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:00:23.934Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:00:23.935Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:00:53.938Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:00:53.938Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:00:53.938Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:01:23.968Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:01:23.968Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:01:23.968Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:01:53.998Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:01:53.999Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:01:53.999Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:02:24.002Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:02:24.003Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:02:24.003Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:02:54.033Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:02:54.033Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:02:54.033Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:03:24.064Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:03:24.064Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:03:24.064Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:03:54.090Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:03:54.090Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:03:54.090Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:04:24.106Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:04:24.106Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:04:24.106Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:04:54.134Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:04:54.135Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:04:54.135Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:05:24.138Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:05:24.138Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:05:24.138Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:05:54.169Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:05:54.169Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:05:54.170Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:06:24.198Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:06:24.199Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:06:24.199Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:06:54.214Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:06:54.214Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:06:54.214Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:07:24.217Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:07:24.217Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:07:24.217Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:07:54.230Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:07:54.231Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:07:54.231Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:08:24.246Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:08:24.247Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:08:24.247Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:08:54.262Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:08:54.263Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:08:54.263Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:09:24.279Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:09:24.279Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:09:24.279Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:09:54.294Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:09:54.295Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:09:54.295Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:10:24.296Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:10:24.296Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:10:24.297Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:10:54.307Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:10:54.308Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:10:54.308Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:11:24.337Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:11:24.337Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:11:24.337Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:11:54.358Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:11:54.359Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:11:54.359Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:12:24.363Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:12:24.363Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:12:24.363Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:12:54.391Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:12:54.391Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:12:54.391Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:13:24.421Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:13:24.421Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:13:24.422Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:13:54.452Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:13:54.452Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:13:54.452Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:14:24.482Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:14:24.482Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:14:24.482Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:14:54.512Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:14:54.512Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:14:54.512Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:15:24.534Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:15:24.535Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:15:24.535Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:15:54.565Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:15:54.565Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:15:54.565Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:16:24.596Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:16:24.596Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:16:24.596Z] [CRITICAL] Manual intervention required!
+[2025-10-04T17:16:54.623Z] [ERROR] Too many consecutive failures, attempting restart
+[2025-10-04T17:16:54.623Z] [CRITICAL] Restart rate limit exceeded (10 restarts in last hour). Not restarting.
+[2025-10-04T17:16:54.624Z] [CRITICAL] Manual intervention required!

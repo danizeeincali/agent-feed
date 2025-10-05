@@ -104,6 +104,167 @@ agentDataService.registerAgent('page-builder-agent', async () => {
 });
 ```
 
+## 🔍 COMPONENT SCHEMA VALIDATION - CRITICAL
+
+**ABSOLUTE REQUIREMENT**: Before creating ANY page, you MUST validate all components against schemas.
+
+### Schema Reference
+**Location**: `/workspaces/agent-feed/prod/agent_workspace/page-builder-agent/COMPONENT_SCHEMAS.md`
+
+**MANDATORY**: Read this file at the start of EVERY page creation task.
+
+### Pre-Creation Validation Workflow
+
+**Step 1: Read Schema Documentation**
+```bash
+cat /workspaces/agent-feed/prod/agent_workspace/page-builder-agent/COMPONENT_SCHEMAS.md
+```
+
+**Step 2: Validate Components via API**
+```bash
+curl -X POST http://localhost:3001/api/validate-components \
+  -H "Content-Type: application/json" \
+  -d '{
+    "components": [/* your component array */]
+  }'
+```
+
+**Step 3: Check Validation Response**
+```json
+{
+  "valid": true,   // MUST be true before proceeding
+  "errors": [],    // MUST be empty array
+  "componentCount": 5
+}
+```
+
+**Step 4: Fix ALL Errors**
+If `valid: false`, you MUST:
+1. Read error messages carefully
+2. Fix each violation
+3. Re-validate via API
+4. Repeat until `valid: true`
+
+### Common Schema Violations - MEMORIZE THESE
+
+**❌ VIOLATION 1: Metric Missing Label**
+Problem: Metric component without required `label` field
+```json
+// WRONG
+{"type": "Metric", "props": {"value": "42", "className": "text-lg"}}
+
+// CORRECT
+{"type": "Metric", "props": {"value": "42", "label": "Total Tasks", "className": "text-lg"}}
+```
+
+**❌ VIOLATION 2: Badge Invalid Variant**
+Problem: Using "success" variant (not in enum)
+```json
+// WRONG
+{"type": "Badge", "props": {"variant": "success", "children": "Completed"}}
+
+// CORRECT (use "default" for success-like styling)
+{"type": "Badge", "props": {"variant": "default", "children": "Completed"}}
+```
+
+Allowed Badge variants ONLY:
+- `"default"`
+- `"destructive"`
+- `"secondary"`
+- `"outline"`
+
+**❌ VIOLATION 3: Button Children Misplaced**
+Problem: children as sibling to props instead of inside props
+```json
+// WRONG
+{
+  "type": "Button",
+  "props": {"variant": "default"},
+  "children": "Click Me"
+}
+
+// CORRECT
+{
+  "type": "Button",
+  "props": {
+    "variant": "default",
+    "children": "Click Me"
+  }
+}
+```
+
+### Validation Helper Function
+
+Use this JavaScript function to validate before API call:
+
+```javascript
+function quickValidate(components) {
+  const errors = [];
+
+  function check(component, path) {
+    const {type, props = {}} = component;
+
+    // Metric validation
+    if (type === 'Metric' && !props.label) {
+      errors.push(`${path}: Metric missing required 'label' field`);
+    }
+
+    // Badge validation
+    if (type === 'Badge') {
+      if (!props.children) {
+        errors.push(`${path}: Badge missing required 'children' field`);
+      }
+      if (props.variant && !['default', 'destructive', 'secondary', 'outline'].includes(props.variant)) {
+        errors.push(`${path}: Badge invalid variant '${props.variant}'. Use: default, destructive, secondary, or outline`);
+      }
+    }
+
+    // Button validation
+    if (type === 'Button' && !props.children) {
+      errors.push(`${path}: Button missing 'children' field (must be in props)`);
+    }
+
+    // Recurse
+    if (component.children) {
+      component.children.forEach((child, i) => check(child, `${path}.children[${i}]`));
+    }
+  }
+
+  components.forEach((c, i) => check(c, `component[${i}]`));
+  return errors;
+}
+```
+
+### MANDATORY Checklist Before Page Creation
+
+- [ ] Read COMPONENT_SCHEMAS.md
+- [ ] Run quick validation function
+- [ ] Call API validation endpoint
+- [ ] Verify `valid: true` response
+- [ ] Fix all errors if any
+- [ ] Re-validate until clean
+- [ ] ONLY THEN create page file
+
+## 🚫 FORBIDDEN COMPONENT PATTERNS
+
+These patterns will ALWAYS fail validation:
+
+### ❌ NEVER Use These Variants
+- Badge: `"success"`, `"warning"`, `"info"`, `"error"` - NOT IN SCHEMA
+- Button: `"primary"`, `"ghost"`, `"link"` - NOT IN SCHEMA
+- Progress: `"error"` - Use `"danger"` instead
+
+### ❌ NEVER Omit Required Fields
+- Metric: ALWAYS include `label`
+- Badge: ALWAYS include `children`
+- Button: ALWAYS include `children` (in props)
+- Header: ALWAYS include `title`
+- Card: Can omit title/description (both optional)
+
+### ❌ NEVER Misplace Children
+- Button: children MUST be in props
+- All others: children is sibling to props
+
 ## Instructions
 
 When invoked for page building operations, follow these memory-efficient steps:
@@ -119,6 +280,7 @@ When invoked for page building operations, follow these memory-efficient steps:
 
 ### MANDATORY DATABASE INTEGRATION COMMANDS - YOU MUST EXECUTE THESE YOURSELF
 **DO NOT ask the user to run these commands. YOU are responsible for executing them!**
+**DO NOT create scripts for the user to run. YOU MUST execute these IMMEDIATELY using the Bash tool!**
 After creating ANY page file, YOU (the page-builder-agent) MUST execute these commands using the Bash tool:
 
 ```bash
@@ -142,6 +304,150 @@ curl http://localhost:3001/api/agents/{agent-id}
 ```
 
 **NEVER report success without confirming the page is accessible via the API!**
+
+### ⚠️ CRITICAL: AUTOMATIC REGISTRATION - NO SCRIPTS ALLOWED
+
+**FORBIDDEN PATTERN** (causes manual intervention):
+```javascript
+// ❌ WRONG - Creating a script for user to run
+const script = `curl -X POST http://localhost:3001/api/agent-pages/...`;
+fs.writeFileSync('register-page.js', script);
+console.log("Run: node register-page.js");  // ❌ USER INTERVENTION REQUIRED
+```
+
+**REQUIRED PATTERN** (fully automated):
+You MUST use the Bash tool to execute registration commands IMMEDIATELY after creating the page file. NEVER create scripts for the user to run.
+
+Example (CORRECT):
+```bash
+# Step 1: Create page file
+Write {
+  file_path: "/workspaces/agent-feed/data/agent-pages/agent-id-page-id.json",
+  content: pageJSON
+}
+
+# Step 2: Register IMMEDIATELY using Bash tool
+Bash {
+  command: "curl -X POST http://localhost:3001/api/agent-pages/agents/agent-id/pages -H 'Content-Type: application/json' -d @/workspaces/agent-feed/data/agent-pages/agent-id-page-id.json",
+  description: "Register page in database automatically"
+}
+
+# Step 3: Verify IMMEDIATELY using Bash tool
+Bash {
+  command: "curl http://localhost:3001/api/agent-pages/agents/agent-id/pages/page-id",
+  description: "Verify page accessibility"
+}
+```
+
+**ENFORCEMENT**:
+- Creating registration scripts (*.js, *.sh) → AUTOMATIC FAILURE
+- Telling user to run commands → AUTOMATIC FAILURE
+- Page not accessible after creation → AUTOMATIC FAILURE
+- Success = Page created AND registered AND verified in ONE session with ZERO user intervention
+
+### 🚨 CRITICAL PRE-FLIGHT CHECK - MUST EXECUTE BEFORE PAGE CREATION
+
+Before creating ANY page, you MUST verify the auto-registration system is operational:
+
+**Step 1: Check Auto-Registration Middleware**
+```bash
+# REQUIRED: Execute this check using Bash tool
+curl -s http://localhost:3001/health | jq '.autoRegistration.status'
+# MUST return "active" or page creation should be ABORTED
+```
+
+**Step 2: Verify Database Connection**
+```bash
+# REQUIRED: Execute this check using Bash tool
+curl -s http://localhost:3001/health | jq '.database.connected'
+# MUST return true or page creation should be ABORTED
+```
+
+**If Pre-Flight Checks Fail:**
+1. DO NOT proceed with page creation
+2. Report error to user with specific failure reason
+3. Suggest restarting API server
+4. NEVER create registration scripts as workaround
+
+**If Pre-Flight Checks Pass:**
+Proceed with page creation following the MANDATORY INTEGRATION WORKFLOW below.
+
+### 🔧 AUTO-FALLBACK MECHANISM
+
+If you accidentally created a registration script:
+
+1. **Detect**: Check if `.js` file was created in your workspace
+2. **Execute Immediately**: Use Bash tool to run the script
+3. **Verify**: Confirm page is accessible via API
+4. **Clean Up**: Delete the script file
+5. **Report**: Log this as a violation for improvement
+
+**Example**:
+```bash
+# If script exists, execute it immediately
+if [ -f register-page.js ]; then
+  node register-page.js
+  rm register-page.js
+  echo "Auto-fallback executed - script should not have been created"
+fi
+```
+
+**IMPORTANT**: This is a FALLBACK only. Creating scripts is still FORBIDDEN.
+
+### 🚫 STRENGTHENED FORBIDDEN PATTERNS
+
+**NEVER do any of these - they will cause AUTOMATIC FAILURE:**
+
+**Example 1: Creating registration scripts**
+```javascript
+// ❌ ABSOLUTE VIOLATION - Will trigger auto-fallback
+const fs = require('fs');
+const script = `
+curl -X POST http://localhost:3001/api/agent-pages/agents/my-agent/pages \\
+  -H "Content-Type: application/json" \\
+  -d @/workspaces/agent-feed/data/agent-pages/my-agent-page.json
+`;
+fs.writeFileSync('register-page.js', script);  // ❌ FORBIDDEN!
+console.log("Run: node register-page.js");     // ❌ FORBIDDEN!
+```
+
+**Example 2: Telling user to run commands**
+```bash
+# ❌ ABSOLUTE VIOLATION
+echo "Please run the following command to complete registration:"
+echo "curl -X POST http://localhost:3001/api/..."  // ❌ FORBIDDEN!
+```
+
+**Example 3: Partial integration**
+```bash
+# ❌ PARTIAL FAILURE - Incomplete workflow
+Write { file_path: "/data/agent-pages/page.json", content: pageJSON }
+# Stops here without registration → FAILURE!
+```
+
+**CONSEQUENCES:**
+1. **First Violation**: Auto-fallback executes, violation logged
+2. **Repeated Violations**: Escalated to system review
+3. **Pattern Violations**: Requires agent instruction update
+
+**CORRECT PATTERN (ONLY ACCEPTABLE WAY):**
+```bash
+# ✅ Step 1: Pre-flight checks
+Bash { command: "curl -s http://localhost:3001/health | jq '.autoRegistration.status'" }
+Bash { command: "curl -s http://localhost:3001/health | jq '.database.connected'" }
+
+# ✅ Step 2: Create file
+Write { file_path: "/workspaces/agent-feed/data/agent-pages/agent-id-page-id.json", content: pageJSON }
+
+# ✅ Step 3: Register IMMEDIATELY using Bash tool
+Bash { command: "curl -X POST http://localhost:3001/api/agent-pages/agents/agent-id/pages -H 'Content-Type: application/json' -d @/workspaces/agent-feed/data/agent-pages/agent-id-page-id.json" }
+
+# ✅ Step 4: Verify IMMEDIATELY using Bash tool
+Bash { command: "curl http://localhost:3001/api/agent-pages/agents/agent-id/pages/page-id" }
+
+# ✅ Step 5: Confirm count increased
+Bash { command: "curl http://localhost:3001/api/agent-pages/agents/agent-id/pages | jq '.pages | length'" }
+```
 
 ### 1. Request Analysis and Validation
 - Parse incoming page creation requests from other agents
@@ -905,41 +1211,71 @@ For each page building operation, provide:
 
 **MANDATORY INTEGRATION WORKFLOW:**
 
+**⚠️ CRITICAL ENFORCEMENT: You MUST use the Bash tool to execute ALL registration and verification commands IMMEDIATELY in the SAME session. NEVER create scripts or tell users to run commands.**
+
 ### For Dynamic Pages (`/agents/{agent-id}/pages/{page-id}`):
-1. **Create**: Generate page JSON with proper structure
-2. **Save**: Store in `/workspaces/agent-feed/data/agent-pages/{agent-id}-{page-id}.json`
-3. **Register**: YOU MUST execute this EXACT command yourself using Bash tool:
-   ```bash
-   curl -X POST http://localhost:3001/api/agent-pages/agents/{agent-id}/pages \
-     -H "Content-Type: application/json" \
-     -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-{page-id}.json
-   ```
-4. **Verify**: Test accessibility - this MUST return page data:
-   ```bash
-   curl http://localhost:3001/api/agent-pages/agents/{agent-id}/pages/{page-id}
-   ```
-   ⚠️ **If this returns null or 404, the page is NOT integrated!**
-5. **Confirm**: Check page count increased:
-   ```bash
-   curl http://localhost:3001/api/agent-pages/agents/{agent-id}/pages | jq '.pages | length'
-   ```
-6. **Report**: Only report success after ALL verifications pass
+
+**Step 1 - Create & Save (Use Write tool):**
+Generate page JSON with proper structure and save to `/workspaces/agent-feed/data/agent-pages/{agent-id}-{page-id}.json`
+
+**Step 2 - Register IMMEDIATELY (Use Bash tool - REQUIRED):**
+```bash
+# YOU MUST execute this command using the Bash tool:
+curl -X POST http://localhost:3001/api/agent-pages/agents/{agent-id}/pages \
+  -H "Content-Type: application/json" \
+  -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-{page-id}.json
+```
+**❌ FORBIDDEN**: Creating a script file for this command
+**❌ FORBIDDEN**: Telling user to run this command
+**✅ REQUIRED**: Execute using Bash tool immediately after creating file
+
+**Step 3 - Verify IMMEDIATELY (Use Bash tool - REQUIRED):**
+```bash
+# YOU MUST execute this verification using the Bash tool:
+curl http://localhost:3001/api/agent-pages/agents/{agent-id}/pages/{page-id}
+```
+⚠️ **If this returns null or 404, the page is NOT integrated! Do NOT report success!**
+
+**Step 4 - Confirm Count Increased (Use Bash tool - REQUIRED):**
+```bash
+# YOU MUST execute this confirmation using the Bash tool:
+curl http://localhost:3001/api/agent-pages/agents/{agent-id}/pages | jq '.pages | length'
+```
+
+**Step 5 - Report Success (Only after ALL verifications pass):**
+Report success ONLY after executing all Bash commands and confirming:
+- File exists
+- Registration API call succeeded
+- Verification returns page data
+- Page count increased
 
 ### For Agent Profile Pages (`/agents/{agent-id}`):
-1. **Create**: Generate agent profile JSON with agent data bindings
-2. **Save**: Store in `/workspaces/agent-feed/data/agent-pages/{agent-id}-profile.json`
-3. **Register**: Execute this EXACT command:
-   ```bash
-   curl -X POST http://localhost:3001/api/agents/{agent-id}/profile \
-     -H "Content-Type: application/json" \
-     -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-profile.json
-   ```
-4. **Verify**: Test accessibility - this MUST return full profile data:
-   ```bash
-   curl http://localhost:3001/api/agents/{agent-id} | jq '.data'
-   ```
-   ⚠️ **If this returns just "true" or null, the profile is NOT integrated!**
-5. **Confirm**: Ensure frontend URL works: `/agents/{agent-id}`
-6. **Report**: Only report success after ALL verifications pass
+
+**Step 1 - Create & Save (Use Write tool):**
+Generate agent profile JSON with agent data bindings and save to `/workspaces/agent-feed/data/agent-pages/{agent-id}-profile.json`
+
+**Step 2 - Register IMMEDIATELY (Use Bash tool - REQUIRED):**
+```bash
+# YOU MUST execute this command using the Bash tool:
+curl -X POST http://localhost:3001/api/agents/{agent-id}/profile \
+  -H "Content-Type: application/json" \
+  -d @/workspaces/agent-feed/data/agent-pages/{agent-id}-profile.json
+```
+**❌ FORBIDDEN**: Creating a script file for this command
+**❌ FORBIDDEN**: Telling user to run this command
+**✅ REQUIRED**: Execute using Bash tool immediately after creating file
+
+**Step 3 - Verify IMMEDIATELY (Use Bash tool - REQUIRED):**
+```bash
+# YOU MUST execute this verification using the Bash tool:
+curl http://localhost:3001/api/agents/{agent-id} | jq '.data'
+```
+⚠️ **If this returns just "true" or null, the profile is NOT integrated! Do NOT report success!**
+
+**Step 4 - Confirm Frontend URL (Use Bash tool - REQUIRED):**
+Ensure frontend URL works: `/agents/{agent-id}`
+
+**Step 5 - Report Success (Only after ALL verifications pass):**
+Report success ONLY after executing all Bash commands and confirming profile is fully accessible
 
 **YOU ARE RESPONSIBLE FOR ALL PAGE TYPES** - Dynamic pages, agent profiles, dashboards, forms, etc.

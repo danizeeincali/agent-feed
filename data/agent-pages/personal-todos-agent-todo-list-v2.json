@@ -1,9 +1,0 @@
-{
-  "id": "todo-list-v2",
-  "agent_id": "personal-todos-agent",
-  "title": "Interactive Todo List",
-  "specification": "{\"id\":\"todo-list-v2\",\"version\":1,\"title\":\"My Todo List\",\"layout\":\"single\",\"components\":[{\"type\":\"Card\",\"props\":{\"title\":\"Add New Task\",\"description\":\"Create a new todo item\"},\"children\":[{\"type\":\"Grid\",\"props\":{\"cols\":3,\"gap\":2},\"children\":[{\"type\":\"Input\",\"id\":\"todo-input\",\"props\":{\"placeholder\":\"Enter task title...\",\"type\":\"text\"}},{\"type\":\"Select\",\"id\":\"priority-select\",\"props\":{\"placeholder\":\"Priority\",\"options\":[{\"value\":\"P0\",\"label\":\"P0 Critical\"},{\"value\":\"P1\",\"label\":\"P1 High\"},{\"value\":\"P2\",\"label\":\"P2 Important\"},{\"value\":\"P3\",\"label\":\"P3 Medium\"},{\"value\":\"P4\",\"label\":\"P4 Normal\"}]}},{\"type\":\"Button\",\"props\":{\"children\":\"Add Task\",\"variant\":\"default\"}}]}]},{\"type\":\"Grid\",\"props\":{\"cols\":3,\"gap\":4},\"children\":[{\"type\":\"Card\",\"props\":{\"title\":\"Total Tasks\",\"description\":\"All todos\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"children\":\"{{userData.todos?.length || 0}}\",\"variant\":\"secondary\"}}]},{\"type\":\"Card\",\"props\":{\"title\":\"Completed\",\"description\":\"Done tasks\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"children\":\"{{userData.todos?.filter(t => t.completed).length || 0}}\",\"variant\":\"default\"}}]},{\"type\":\"Card\",\"props\":{\"title\":\"Pending\",\"description\":\"Active tasks\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"children\":\"{{userData.todos?.filter(t => !t.completed).length || 0}}\",\"variant\":\"outline\"}}]}]},{\"type\":\"Card\",\"props\":{\"title\":\"Progress\",\"description\":\"Task completion rate\"},\"children\":[{\"type\":\"Progress\",\"props\":{\"value\":42}}]}]}",
-  "version": 1,
-  "created_at": "2025-09-12T15:02:29.637Z",
-  "updated_at": "2025-09-12T15:02:29.637Z"
-}

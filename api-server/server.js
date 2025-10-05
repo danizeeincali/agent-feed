@@ -7,10 +7,17 @@ import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import claudeCodeRoutes, { initializeWithDatabase } from '../src/api/routes/claude-code-sdk.js';
+import catalogRoutes from './routes/catalog.js';
+import validateComponentsRouter from './routes/validate-components.js';
+import personalTodosAgentRoutes from './routes/agents/personal-todos-agent.js';
+import { initializeAutoRegistration } from './middleware/auto-register-pages.js';
+import agentPagesRouter, { initializeAgentPagesRoutes } from './routes/agent-pages.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const DB_PATH = join(__dirname, '../database.db');
+const AGENT_PAGES_DB_PATH = join(__dirname, '../data/agent-pages.db');
+const AGENT_PAGES_DIR = join(__dirname, '../data/agent-pages');
 
 let db;
 try {
@@ -21,12 +28,32 @@ try {
   console.error('❌ Token analytics database error:', error);
 }
 
-// Export database connection for use in routes
-export { db };
+// Connect to agent pages database
+let agentPagesDb;
+try {
+  agentPagesDb = new Database(AGENT_PAGES_DB_PATH);
+  agentPagesDb.pragma('foreign_keys = ON');
+  console.log('✅ Agent pages database connected:', AGENT_PAGES_DB_PATH);
+} catch (error) {
+  console.error('❌ Agent pages database error:', error);
+}
+
+// Track file watcher for cleanup
+let fileWatcher = null;
+
+// Export database connections for use in routes
+export { db, agentPagesDb };
 
 // Initialize Claude Code routes with database connection
 if (initializeWithDatabase) {
   initializeWithDatabase(db);
+}
+
+// Initialize auto-registration middleware for agent pages
+if (agentPagesDb) {
+  fileWatcher = initializeAutoRegistration(agentPagesDb, AGENT_PAGES_DIR);
+  // Initialize agent pages routes with database
+  initializeAgentPagesRoutes(agentPagesDb);
 }
 
 const app = express();
@@ -44,6 +71,18 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Mount Claude Code routes
 app.use('/api/claude-code', claudeCodeRoutes);
+
+// Mount Component Catalog routes
+app.use('/api/components', catalogRoutes);
+
+// Mount Component Validation routes
+app.use('/api/validate-components', validateComponentsRouter);
+
+// Mount Agent Data routes
+app.use('/api/agents/personal-todos-agent', personalTodosAgentRoutes);
+
+// Mount Agent Pages routes (database-backed)
+app.use('/api/agent-pages', agentPagesRouter);
 
 // Mock Data
 const mockAgents = [
@@ -197,6 +236,13 @@ const mockTemplates = [
 // Streaming ticker data and SSE connections
 const streamingTickerMessages = [];
 const sseConnections = new Set();
+const sseHeartbeats = new Map(); // Track heartbeat intervals for cleanup
+
+// Configuration: Memory management limits
+const MAX_SSE_CONNECTIONS = 50; // Prevent unbounded connection growth
+const MAX_TICKER_MESSAGES = 100; // Maximum messages to keep in memory
+const HEARTBEAT_INTERVAL = 30000; // 30 seconds
+const CONNECTION_TIMEOUT = 300000; // 5 minutes idle timeout
 
 // Export for testing
 export { streamingTickerMessages };
@@ -270,9 +316,9 @@ export function broadcastToSSE(message, connections = sseConnections) {
     // Persist to history array BEFORE broadcasting
     streamingTickerMessages.push(validatedMessage);
 
-    // Maintain 100 message limit (remove oldest if exceeded)
-    if (streamingTickerMessages.length > 100) {
-      streamingTickerMessages.shift();
+    // Maintain MAX_TICKER_MESSAGES limit (remove oldest if exceeded)
+    if (streamingTickerMessages.length > MAX_TICKER_MESSAGES) {
+      streamingTickerMessages.splice(0, streamingTickerMessages.length - MAX_TICKER_MESSAGES);
     }
 
     console.log(`📊 Persisted to history: ${message.type}`, {
@@ -1623,6 +1669,17 @@ app.get('/api/token-analytics/export', (req, res) => {
 
 // SSE Endpoint for streaming ticker
 app.get('/api/streaming-ticker/stream', (req, res) => {
+  // Enforce connection limit to prevent memory exhaustion
+  if (sseConnections.size >= MAX_SSE_CONNECTIONS) {
+    console.warn(`⚠️ SSE connection limit reached (${MAX_SSE_CONNECTIONS}). Rejecting new connection.`);
+    res.status(503).json({
+      success: false,
+      error: 'Too many connections',
+      message: `Maximum ${MAX_SSE_CONNECTIONS} concurrent SSE connections allowed`
+    });
+    return;
+  }
+
   // Set SSE headers
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
@@ -1644,38 +1701,78 @@ app.get('/api/streaming-ticker/stream', (req, res) => {
   // Add to connections set
   sseConnections.add(res);
 
+  // Track last activity time for connection timeout
+  let lastActivity = Date.now();
+
   // Send heartbeat every 30 seconds
   const heartbeat = setInterval(() => {
-    if (res.writableEnded) {
+    if (res.writableEnded || res.destroyed) {
       clearInterval(heartbeat);
       sseConnections.delete(res);
+      sseHeartbeats.delete(res);
       return;
     }
 
-    const heartbeatMessage = validateSSEMessage({
-      type: 'heartbeat',
-      message: 'Connection alive',
-      priority: 'low',
-      timestamp: Date.now()
-    });
-    res.write(`data: ${JSON.stringify(heartbeatMessage)}\n\n`);
-  }, 30000);
+    // Check for idle timeout (5 minutes)
+    const idleTime = Date.now() - lastActivity;
+    if (idleTime > CONNECTION_TIMEOUT) {
+      console.log(`⏱️ SSE connection timed out after ${Math.round(idleTime / 1000)}s idle`);
+      clearInterval(heartbeat);
+      sseConnections.delete(res);
+      sseHeartbeats.delete(res);
+      try {
+        res.write(`data: ${JSON.stringify({type: 'timeout', message: 'Connection timed out'})}\n\n`);
+        res.end();
+      } catch (e) {
+        // Connection already closed
+      }
+      return;
+    }
+
+    try {
+      const heartbeatMessage = validateSSEMessage({
+        type: 'heartbeat',
+        message: 'Connection alive',
+        priority: 'low',
+        timestamp: Date.now()
+      });
+      res.write(`data: ${JSON.stringify(heartbeatMessage)}\n\n`);
+      lastActivity = Date.now();
+    } catch (error) {
+      console.error('⚠️ Error sending heartbeat:', error.message);
+      clearInterval(heartbeat);
+      sseConnections.delete(res);
+      sseHeartbeats.delete(res);
+    }
+  }, HEARTBEAT_INTERVAL);
+
+  // Store heartbeat interval for cleanup
+  sseHeartbeats.set(res, heartbeat);
 
   // Send recent messages with validation
   const recentMessages = streamingTickerMessages.slice(-10);
   recentMessages.forEach(message => {
-    const validatedMessage = validateSSEMessage(message);
-    res.write(`data: ${JSON.stringify(validatedMessage)}\n\n`);
+    try {
+      const validatedMessage = validateSSEMessage(message);
+      res.write(`data: ${JSON.stringify(validatedMessage)}\n\n`);
+      lastActivity = Date.now();
+    } catch (error) {
+      console.error('⚠️ Error sending message:', error.message);
+    }
   });
 
-  // Handle client disconnect
+  // Handle client disconnect - CRITICAL for preventing memory leaks
   req.on('close', () => {
-    clearInterval(heartbeat);
+    const heartbeatInterval = sseHeartbeats.get(res);
+    if (heartbeatInterval) {
+      clearInterval(heartbeatInterval);
+      sseHeartbeats.delete(res);
+    }
     sseConnections.delete(res);
-    console.log('📡 SSE client disconnected');
+    console.log(`📡 SSE client disconnected (${sseConnections.size} active connections)`);
   });
 
-  console.log('📡 SSE client connected to streaming ticker');
+  console.log(`📡 SSE client connected to streaming ticker (${sseConnections.size}/${MAX_SSE_CONNECTIONS} connections)`);
 });
 
 // POST endpoint for streaming ticker messages
@@ -1704,10 +1801,11 @@ app.post('/api/streaming-ticker/message', (req, res) => {
     // Validate message structure
     const tickerMessage = validateSSEMessage(rawMessage);
 
-    // Add to messages array (keep last 100)
+    // Add to messages array (keep last MAX_TICKER_MESSAGES)
     streamingTickerMessages.push(tickerMessage);
-    if (streamingTickerMessages.length > 100) {
-      streamingTickerMessages.shift();
+    if (streamingTickerMessages.length > MAX_TICKER_MESSAGES) {
+      // Remove oldest messages to prevent unbounded growth
+      streamingTickerMessages.splice(0, streamingTickerMessages.length - MAX_TICKER_MESSAGES);
     }
 
     // Broadcast to all SSE connections with validated structure
@@ -2616,331 +2714,484 @@ app.get('/api/agents/health', (req, res) => {
 });
 
 // =============================================================================
-// DYNAMIC AGENT PAGES API ENDPOINTS (Option A)
+// DYNAMIC AGENT PAGES API ENDPOINTS (DEPRECATED - Now using database-backed routes)
 // =============================================================================
+// NOTE: These mock routes are now replaced by database-backed routes in ./routes/agent-pages.js
+// Keeping them commented for reference only
 
-// Mock dynamic pages storage (in-memory for now)
-const mockDynamicPages = new Map();
 
-// Initialize with sample data
-const samplePages = [
-  {
-    id: 'personal-todos-dashboard-v3',
-    agentId: 'personal-todos-agent',
-    title: 'Personal Todos Dashboard',
-    version: '3.0.0',
-    layout: [
-      {
-        id: 'header-1',
-        type: 'header',
-        config: { title: 'My Personal Todos', level: 1 }
-      },
-      {
-        id: 'list-1',
-        type: 'todoList',
-        config: {
-          showCompleted: false,
-          sortBy: 'priority',
-          filterTags: []
-        }
-      }
-    ],
-    components: ['header', 'todoList'],
+// ========================================================================================
+// Dynamic UI Template System Routes
+// ========================================================================================
+
+// Dynamic UI Templates - defined here for now, will be moved to separate file
+const dynamicUITemplates = {
+  dashboard: {
     metadata: {
-      description: 'Manage your personal tasks',
-      tags: ['productivity', 'todos'],
-      icon: '✓'
-    },
-    createdAt: new Date('2025-09-28T10:00:00Z').toISOString(),
-    updatedAt: new Date('2025-09-30T10:00:00Z').toISOString()
-  },
-  {
-    id: 'analytics-dashboard-v1',
-    agentId: 'analytics-agent',
-    title: 'Analytics Dashboard',
-    version: '1.0.0',
-    layout: [
-      {
-        id: 'header-1',
-        type: 'header',
-        config: { title: 'Analytics Overview', level: 1 }
-      },
-      {
-        id: 'chart-1',
-        type: 'chart',
-        config: {
-          chartType: 'line',
-          dataSource: '/api/analytics/data',
-          refreshInterval: 30000
-        }
-      }
-    ],
-    components: ['header', 'chart'],
-    metadata: {
-      description: 'View analytics and metrics',
-      tags: ['analytics', 'metrics'],
-      icon: '📊'
-    },
-    createdAt: new Date('2025-09-25T10:00:00Z').toISOString(),
-    updatedAt: new Date('2025-09-25T10:00:00Z').toISOString()
-  }
-];
-
-// Initialize mock data
-samplePages.forEach(page => {
-  const agentPages = mockDynamicPages.get(page.agentId) || [];
-  agentPages.push(page);
-  mockDynamicPages.set(page.agentId, agentPages);
-});
-
-/**
- * GET /api/agent-pages/agents/:agentId/pages
- * List all pages for an agent with pagination
- */
-app.get('/api/agent-pages/agents/:agentId/pages', (req, res) => {
-  try {
-    const { agentId } = req.params;
-    const { limit = 20, offset = 0 } = req.query;
-
-    const parsedLimit = parseInt(limit);
-    const parsedOffset = parseInt(offset);
-
-    // Get pages for this agent
-    const allPages = mockDynamicPages.get(agentId) || [];
-
-    // Apply pagination
-    const paginatedPages = allPages.slice(parsedOffset, parsedOffset + parsedLimit);
-
-    console.log(`📄 Fetched ${paginatedPages.length} pages for agent ${agentId}`);
-
-    res.json({
-      success: true,
-      pages: paginatedPages,
-      total: allPages.length,
-      limit: parsedLimit,
-      offset: parsedOffset,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Error fetching pages:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal server error',
-      message: error.message
-    });
-  }
-});
-
-/**
- * GET /api/agent-pages/agents/:agentId/pages/:pageId
- * Get a single page by ID
- */
-app.get('/api/agent-pages/agents/:agentId/pages/:pageId', (req, res) => {
-  try {
-    const { agentId, pageId } = req.params;
-
-    const agentPages = mockDynamicPages.get(agentId) || [];
-    const page = agentPages.find(p => p.id === pageId);
-
-    if (!page) {
-      console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
-      return res.status(404).json({
-        success: false,
-        error: 'Page not found',
-        message: `Page with ID ${pageId} not found for agent ${agentId}`
-      });
-    }
-
-    console.log(`📄 Fetched page ${pageId} for agent ${agentId}`);
-
-    res.json({
-      success: true,
-      page: page,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Error fetching page:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal server error',
-      message: error.message
-    });
-  }
-});
-
-/**
- * POST /api/agent-pages/agents/:agentId/pages
- * Create a new page for an agent
- */
-app.post('/api/agent-pages/agents/:agentId/pages', (req, res) => {
-  try {
-    const { agentId } = req.params;
-    const { title, version, layout, components, metadata } = req.body;
-
-    // Validate required fields
-    if (!title) {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation error',
-        message: 'Title is required'
-      });
-    }
-
-    if (!layout || !Array.isArray(layout)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation error',
-        message: 'Layout must be an array'
-      });
-    }
-
-    // Create new page
-    const newPage = {
-      id: crypto.randomUUID(),
-      agentId: agentId,
-      title: title,
-      version: version || '1.0.0',
-      layout: layout,
-      components: components || [],
-      metadata: metadata || {},
+      id: 'dashboard-v1',
+      name: 'Dashboard',
+      description: 'Professional dashboard with metrics and data table',
+      category: 'dashboard',
+      tags: ['metrics', 'analytics', 'overview'],
+      version: '1.0.0',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
-    };
-
-    // Add to storage
-    const agentPages = mockDynamicPages.get(agentId) || [];
-    agentPages.push(newPage);
-    mockDynamicPages.set(agentId, agentPages);
-
-    console.log(`✅ Created page ${newPage.id} for agent ${agentId}`);
-
-    res.status(201).json({
-      success: true,
-      page: newPage,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    console.error('Error creating page:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal server error',
-      message: error.message
-    });
-  }
-});
-
-/**
- * PUT /api/agent-pages/agents/:agentId/pages/:pageId
- * Update an existing page (supports partial updates)
- */
-app.put('/api/agent-pages/agents/:agentId/pages/:pageId', (req, res) => {
-  try {
-    const { agentId, pageId } = req.params;
-    const updates = req.body;
-
-    const agentPages = mockDynamicPages.get(agentId) || [];
-    const pageIndex = agentPages.findIndex(p => p.id === pageId);
-
-    if (pageIndex === -1) {
-      console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
-      return res.status(404).json({
-        success: false,
-        error: 'Page not found',
-        message: `Page with ID ${pageId} not found for agent ${agentId}`
-      });
+    },
+    layout: [
+      { id: 'header', type: 'header', config: { title: '{{title}}', level: 1, subtitle: '{{subtitle}}' } },
+      { id: 'metrics', type: 'Grid', config: { cols: 3, gap: 6 } },
+      { id: 'metric-1', type: 'stat', config: { label: '{{metric1_label}}', value: '{{metric1_value}}', change: '{{metric1_change}}', icon: '{{metric1_icon}}' } },
+      { id: 'metric-2', type: 'stat', config: { label: '{{metric2_label}}', value: '{{metric2_value}}', change: '{{metric2_change}}', icon: '{{metric2_icon}}' } },
+      { id: 'metric-3', type: 'stat', config: { label: '{{metric3_label}}', value: '{{metric3_value}}', change: '{{metric3_change}}', icon: '{{metric3_icon}}' } },
+      { id: 'data-table', type: 'dataTable', config: { sortable: true, filterable: true } }
+    ],
+    components: ['header', 'Grid', 'stat', 'dataTable'],
+    variables: {
+      title: 'Dashboard', subtitle: 'Overview of key metrics',
+      metric1_label: 'Total Users', metric1_value: 0, metric1_change: 0, metric1_icon: '👥',
+      metric2_label: 'Revenue', metric2_value: 0, metric2_change: 0, metric2_icon: '💰',
+      metric3_label: 'Active Sessions', metric3_value: 0, metric3_change: 0, metric3_icon: '📊'
     }
-
-    // Validate layout if provided
-    if (updates.layout && !Array.isArray(updates.layout)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation error',
-        message: 'Layout must be an array'
-      });
-    }
-
-    // Update page (partial update)
-    const updatedPage = {
-      ...agentPages[pageIndex],
-      ...updates,
-      id: pageId, // Ensure ID doesn't change
-      agentId: agentId, // Ensure agentId doesn't change
+  },
+  todoManager: {
+    metadata: {
+      id: 'todo-manager-v1',
+      name: 'Todo List Manager',
+      description: 'Task management interface with todo list',
+      category: 'list',
+      tags: ['tasks', 'productivity', 'todos'],
+      version: '1.0.0',
+      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
-    };
+    },
+    layout: [
+      { id: 'header', type: 'header', config: { title: '{{title}}', level: 1 } },
+      { id: 'stats', type: 'Grid', config: { cols: 2, gap: 4 } },
+      { id: 'stat-total', type: 'stat', config: { label: 'Total Tasks', value: '{{totalTasks}}', icon: '📝' } },
+      { id: 'stat-completed', type: 'stat', config: { label: 'Completed', value: '{{completedTasks}}', icon: '✅' } },
+      { id: 'todo-list', type: 'todoList', config: { showCompleted: false, sortBy: 'priority' } }
+    ],
+    components: ['header', 'Grid', 'stat', 'todoList'],
+    variables: { title: 'My Tasks', totalTasks: 0, completedTasks: 0 }
+  },
+  timeline: {
+    metadata: {
+      id: 'timeline-v1',
+      name: 'Timeline',
+      description: 'Chronological event timeline',
+      category: 'timeline',
+      tags: ['events', 'history', 'chronology'],
+      version: '1.0.0',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    layout: [
+      { id: 'header', type: 'header', config: { title: '{{title}}', level: 1, subtitle: '{{subtitle}}' } },
+      { id: 'timeline', type: 'timeline', config: { orientation: 'vertical' } }
+    ],
+    components: ['header', 'timeline'],
+    variables: { title: 'Project Timeline', subtitle: 'Key milestones and events' }
+  },
+  formPage: {
+    metadata: {
+      id: 'form-page-v1',
+      name: 'Form Page',
+      description: 'Data collection form with validation',
+      category: 'form',
+      tags: ['form', 'input', 'data-collection'],
+      version: '1.0.0',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    layout: [
+      { id: 'header', type: 'header', config: { title: '{{title}}', level: 1, subtitle: '{{subtitle}}' } },
+      { id: 'form', type: 'form', config: { fields: '{{fields}}', submitLabel: '{{submitLabel}}' } }
+    ],
+    components: ['header', 'form'],
+    variables: {
+      title: 'Contact Form',
+      subtitle: 'Get in touch with us',
+      fields: [
+        { label: 'Name', type: 'text', required: true },
+        { label: 'Email', type: 'email', required: true },
+        { label: 'Message', type: 'textarea', required: true }
+      ],
+      submitLabel: 'Submit'
+    }
+  },
+  analytics: {
+    metadata: {
+      id: 'analytics-v1',
+      name: 'Analytics Dashboard',
+      description: 'Comprehensive analytics view with multiple metrics',
+      category: 'analytics',
+      tags: ['analytics', 'metrics', 'kpi', 'dashboard'],
+      version: '1.0.0',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    layout: [
+      { id: 'header', type: 'header', config: { title: '{{title}}', level: 1, subtitle: '{{subtitle}}' } },
+      { id: 'kpi-grid', type: 'Grid', config: { cols: 4, gap: 4 } },
+      { id: 'kpi-1', type: 'stat', config: { label: '{{kpi1_label}}', value: '{{kpi1_value}}', change: '{{kpi1_change}}', icon: '{{kpi1_icon}}' } },
+      { id: 'kpi-2', type: 'stat', config: { label: '{{kpi2_label}}', value: '{{kpi2_value}}', change: '{{kpi2_change}}', icon: '{{kpi2_icon}}' } },
+      { id: 'kpi-3', type: 'stat', config: { label: '{{kpi3_label}}', value: '{{kpi3_value}}', change: '{{kpi3_change}}', icon: '{{kpi3_icon}}' } },
+      { id: 'kpi-4', type: 'stat', config: { label: '{{kpi4_label}}', value: '{{kpi4_value}}', change: '{{kpi4_change}}', icon: '{{kpi4_icon}}' } },
+      { id: 'tabs', type: 'tabs', config: { tabs: [{ label: 'Overview', content: 'overview' }, { label: 'Detailed', content: 'detailed' }] } },
+      { id: 'data-table', type: 'dataTable', config: { sortable: true, filterable: true } }
+    ],
+    components: ['header', 'Grid', 'stat', 'tabs', 'dataTable'],
+    variables: {
+      title: 'Analytics Dashboard', subtitle: 'Real-time performance metrics',
+      kpi1_label: 'Total Revenue', kpi1_value: '$0', kpi1_change: 0, kpi1_icon: '💰',
+      kpi2_label: 'Active Users', kpi2_value: 0, kpi2_change: 0, kpi2_icon: '👥',
+      kpi3_label: 'Conversion Rate', kpi3_value: '0%', kpi3_change: 0, kpi3_icon: '📈',
+      kpi4_label: 'Avg Session', kpi4_value: '0m', kpi4_change: 0, kpi4_icon: '⏱️'
+    }
+  }
+};
 
-    agentPages[pageIndex] = updatedPage;
-    mockDynamicPages.set(agentId, agentPages);
+// Helper function for variable replacement
+function replaceTemplateVariables(obj, variables) {
+  if (typeof obj === 'string') {
+    return obj.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+      return variables[key] !== undefined ? variables[key] : match;
+    });
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(item => replaceTemplateVariables(item, variables));
+  }
+  if (typeof obj === 'object' && obj !== null) {
+    const result = {};
+    for (const key in obj) {
+      result[key] = replaceTemplateVariables(obj[key], variables);
+    }
+    return result;
+  }
+  return obj;
+}
 
-    console.log(`✅ Updated page ${pageId} for agent ${agentId}`);
+// Helper function to fill template with variables
+function fillDynamicUITemplate(template, variables) {
+  const filledLayout = template.layout.map(component => ({
+    ...component,
+    config: replaceTemplateVariables(component.config, variables)
+  }));
+  return { ...template, layout: filledLayout };
+}
+
+// GET /api/dynamic-ui/templates - List all Dynamic UI templates
+app.get('/api/dynamic-ui/templates', (req, res) => {
+  try {
+    const { category, tags } = req.query;
+    let filteredTemplates = Object.values(dynamicUITemplates);
+
+    if (category) {
+      filteredTemplates = filteredTemplates.filter(t => t.metadata.category === category);
+    }
+
+    if (tags) {
+      const tagArray = tags.split(',').map(tag => tag.trim());
+      filteredTemplates = filteredTemplates.filter(t =>
+        tagArray.some(tag => t.metadata.tags.includes(tag))
+      );
+    }
 
     res.json({
       success: true,
-      page: updatedPage,
-      timestamp: new Date().toISOString()
+      templates: filteredTemplates.map(t => t.metadata),
+      total: filteredTemplates.length
     });
   } catch (error) {
-    console.error('Error updating page:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal server error',
+      error: 'Failed to retrieve templates',
       message: error.message
     });
   }
 });
 
-/**
- * DELETE /api/agent-pages/agents/:agentId/pages/:pageId
- * Delete a page
- */
-app.delete('/api/agent-pages/agents/:agentId/pages/:pageId', (req, res) => {
+// GET /api/dynamic-ui/templates/:templateId - Get specific Dynamic UI template
+app.get('/api/dynamic-ui/templates/:templateId', (req, res) => {
   try {
-    const { agentId, pageId } = req.params;
+    const { templateId } = req.params;
+    const template = dynamicUITemplates[templateId];
 
-    const agentPages = mockDynamicPages.get(agentId) || [];
-    const pageIndex = agentPages.findIndex(p => p.id === pageId);
-
-    if (pageIndex === -1) {
-      console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
+    if (!template) {
       return res.status(404).json({
         success: false,
-        error: 'Page not found',
-        message: `Page with ID ${pageId} not found for agent ${agentId}`
+        error: 'Template not found',
+        message: `No template found with id: ${templateId}`
       });
     }
 
-    // Remove page
-    const deletedPage = agentPages.splice(pageIndex, 1)[0];
-    mockDynamicPages.set(agentId, agentPages);
-
-    console.log(`🗑️ Deleted page ${pageId} for agent ${agentId}`);
-
     res.json({
       success: true,
-      message: 'Page deleted successfully',
-      deletedPage: deletedPage,
-      timestamp: new Date().toISOString()
+      template
     });
   } catch (error) {
-    console.error('Error deleting page:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal server error',
+      error: 'Failed to retrieve template',
       message: error.message
     });
   }
 });
 
-// Health check
+// POST /api/dynamic-ui/templates/:templateId/instantiate - Fill template with variables
+app.post('/api/dynamic-ui/templates/:templateId/instantiate', (req, res) => {
+  try {
+    const { templateId } = req.params;
+    const { variables } = req.body;
+    const template = dynamicUITemplates[templateId];
+
+    if (!template) {
+      return res.status(404).json({
+        success: false,
+        error: 'Template not found',
+        message: `No template found with id: ${templateId}`
+      });
+    }
+
+    const filledTemplate = fillDynamicUITemplate(template, variables || {});
+
+    res.json({
+      success: true,
+      page: filledTemplate
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to instantiate template',
+      message: error.message
+    });
+  }
+});
+
+// ========================================================================================
+// Component Catalog API
+// ========================================================================================
+
+// Component catalog with Zod schemas
+const componentCatalog = {
+  Button: {
+    name: 'Button',
+    description: 'Interactive button component with multiple variants and states',
+    category: 'Form',
+    schema: {
+      variant: { type: 'enum', values: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'], required: false },
+      size: { type: 'enum', values: ['default', 'sm', 'lg', 'icon'], required: false },
+      disabled: { type: 'boolean', required: false },
+      loading: { type: 'boolean', required: false },
+      children: { type: 'any', required: false }
+    },
+    examples: [
+      { name: 'Default Button', props: { children: 'Click me' } },
+      { name: 'Destructive Button', props: { variant: 'destructive', children: 'Delete' } }
+    ]
+  },
+  Input: {
+    name: 'Input',
+    description: 'Text input field with validation and various input types',
+    category: 'Form',
+    schema: {
+      type: { type: 'enum', values: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'], required: false },
+      placeholder: { type: 'string', required: false },
+      disabled: { type: 'boolean', required: false },
+      required: { type: 'boolean', required: false }
+    },
+    examples: [
+      { name: 'Text Input', props: { placeholder: 'Enter text...' } },
+      { name: 'Email Input', props: { type: 'email', placeholder: 'Enter email...' } }
+    ]
+  },
+  Card: {
+    name: 'Card',
+    description: 'Flexible content container with header, body, and footer sections',
+    category: 'Layout',
+    schema: {
+      title: { type: 'string', required: false },
+      description: { type: 'string', required: false },
+      variant: { type: 'enum', values: ['default', 'outline', 'filled'], required: false }
+    },
+    examples: [
+      { name: 'Basic Card', props: { title: 'Card Title', description: 'Card description' } }
+    ]
+  },
+  Badge: {
+    name: 'Badge',
+    description: 'Small status or label indicator',
+    category: 'Display',
+    schema: {
+      variant: { type: 'enum', values: ['default', 'secondary', 'destructive', 'outline'], required: false },
+      children: { type: 'any', required: false }
+    },
+    examples: [
+      { name: 'Default Badge', props: { children: 'New' } }
+    ]
+  },
+  Alert: {
+    name: 'Alert',
+    description: 'Prominent notification message',
+    category: 'Feedback',
+    schema: {
+      variant: { type: 'enum', values: ['default', 'destructive'], required: false },
+      title: { type: 'string', required: false },
+      description: { type: 'string', required: false }
+    },
+    examples: [
+      { name: 'Info Alert', props: { title: 'Info', description: 'This is an informational alert' } }
+    ]
+  }
+};
+
+// GET /api/components/catalog - Get all components
+app.get('/api/components/catalog', (req, res) => {
+  try {
+    const components = Object.entries(componentCatalog).map(([key, component]) => ({
+      type: key,
+      ...component
+    }));
+
+    res.json({
+      success: true,
+      data: components,
+      total: components.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve component catalog',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/components/catalog/:componentType - Get specific component
+app.get('/api/components/catalog/:componentType', (req, res) => {
+  try {
+    const { componentType } = req.params;
+    const component = componentCatalog[componentType];
+
+    if (!component) {
+      return res.status(404).json({
+        success: false,
+        error: 'Component not found',
+        message: `No component found with type: ${componentType}`
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        type: componentType,
+        ...component
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve component',
+      message: error.message
+    });
+  }
+});
+
+// GET /api/components/categories - Get component categories
+app.get('/api/components/categories', (req, res) => {
+  try {
+    const categories = [...new Set(Object.values(componentCatalog).map(c => c.category))];
+    const categoriesWithComponents = categories.map(category => ({
+      name: category,
+      components: Object.entries(componentCatalog)
+        .filter(([_, component]) => component.category === category)
+        .map(([type, component]) => ({ type, name: component.name, description: component.description }))
+    }));
+
+    res.json({
+      success: true,
+      data: categoriesWithComponents,
+      total: categories.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve categories',
+      message: error.message
+    });
+  }
+});
+
+// Health check with enhanced monitoring
 app.get('/health', (req, res) => {
+  const memoryUsage = process.memoryUsage();
+  const uptime = process.uptime();
+
+  // Calculate health status based on memory usage
+  const heapPercentage = (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
+  let status = 'healthy';
+  let warnings = [];
+
+  if (heapPercentage > 90) {
+    status = 'critical';
+    warnings.push('Heap usage exceeds 90%');
+  } else if (heapPercentage > 80) {
+    status = 'warning';
+    warnings.push('Heap usage exceeds 80%');
+  }
+
+  if (sseConnections.size > 100) {
+    warnings.push(`High number of SSE connections: ${sseConnections.size}`);
+  }
+
   res.json({
     success: true,
     data: {
-      status: 'healthy',
+      status: status,
       timestamp: new Date().toISOString(),
-      version: '1.0.0'
+      version: '1.0.0',
+      uptime: {
+        seconds: Math.floor(uptime),
+        formatted: formatUptime(uptime)
+      },
+      memory: {
+        rss: Math.round(memoryUsage.rss / 1024 / 1024),
+        heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024),
+        heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024),
+        heapPercentage: Math.round(heapPercentage),
+        external: Math.round(memoryUsage.external / 1024 / 1024),
+        arrayBuffers: Math.round(memoryUsage.arrayBuffers / 1024 / 1024),
+        unit: 'MB'
+      },
+      resources: {
+        sseConnections: sseConnections.size,
+        tickerMessages: streamingTickerMessages.length,
+        databaseConnected: db ? true : false,
+        agentPagesDbConnected: agentPagesDb ? true : false,
+        fileWatcherActive: fileWatcher ? true : false
+      },
+      warnings: warnings
     }
   });
 });
+
+/**
+ * Format uptime in human-readable format
+ */
+function formatUptime(seconds) {
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+
+  const parts = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours > 0) parts.push(`${hours}h`);
+  if (minutes > 0) parts.push(`${minutes}m`);
+  if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
+
+  return parts.join(' ');
+}
 
 // Generate some initial streaming ticker messages with validated structure
 setTimeout(() => {
@@ -2978,7 +3229,7 @@ setTimeout(() => {
 }, 1000);
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 API Server running on http://localhost:${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/health`);
   console.log(`🤖 Agents API: http://localhost:${PORT}/api/agents`);
@@ -2986,6 +3237,151 @@ app.listen(PORT, () => {
   console.log(`📊 Streaming Ticker SSE: http://localhost:${PORT}/api/streaming-ticker/stream`);
   console.log(`📄 Dynamic Pages API: http://localhost:${PORT}/api/agent-pages/agents/:agentId/pages`);
   console.log(`📈 All analytics APIs available`);
+
+  // Log initial memory usage
+  logMemoryUsage();
+});
+
+// =============================================================================
+// MEMORY MONITORING AND HEALTH CHECKS
+// =============================================================================
+
+/**
+ * Log current memory usage
+ */
+function logMemoryUsage() {
+  const used = process.memoryUsage();
+  console.log('💾 Memory Usage:');
+  console.log(`   RSS: ${Math.round(used.rss / 1024 / 1024)} MB`);
+  console.log(`   Heap Total: ${Math.round(used.heapTotal / 1024 / 1024)} MB`);
+  console.log(`   Heap Used: ${Math.round(used.heapUsed / 1024 / 1024)} MB`);
+  console.log(`   External: ${Math.round(used.external / 1024 / 1024)} MB`);
+  console.log(`   Array Buffers: ${Math.round(used.arrayBuffers / 1024 / 1024)} MB`);
+}
+
+/**
+ * Monitor memory usage periodically
+ */
+const memoryMonitorInterval = setInterval(() => {
+  const used = process.memoryUsage();
+  const heapUsedMB = Math.round(used.heapUsed / 1024 / 1024);
+  const heapTotalMB = Math.round(used.heapTotal / 1024 / 1024);
+  const heapPercentage = Math.round((used.heapUsed / used.heapTotal) * 100);
+
+  // Log warning if heap usage exceeds 80%
+  if (heapPercentage > 80) {
+    console.warn(`⚠️ High memory usage: ${heapUsedMB}MB / ${heapTotalMB}MB (${heapPercentage}%)`);
+    console.warn(`   SSE Connections: ${sseConnections.size}`);
+    console.warn(`   Ticker Messages: ${streamingTickerMessages.length}`);
+  }
+
+  // Force garbage collection if available and heap is over 90%
+  if (heapPercentage > 90 && global.gc) {
+    console.warn('🗑️ Forcing garbage collection due to high memory usage');
+    global.gc();
+  }
+}, 30000); // Check every 30 seconds
+
+// =============================================================================
+// GRACEFUL SHUTDOWN HANDLERS
+// =============================================================================
+
+/**
+ * Graceful shutdown handler
+ */
+async function gracefulShutdown(signal) {
+  console.log(`\n🛑 ${signal} received, starting graceful shutdown...`);
+
+  // Stop accepting new connections
+  server.close(() => {
+    console.log('✅ HTTP server closed');
+  });
+
+  // Stop memory monitoring
+  clearInterval(memoryMonitorInterval);
+  console.log('✅ Memory monitoring stopped');
+
+  // Close all SSE connections and cleanup heartbeats
+  console.log(`📡 Closing ${sseConnections.size} SSE connections...`);
+  for (const client of sseConnections) {
+    try {
+      // Clear heartbeat interval if exists
+      const heartbeat = sseHeartbeats.get(client);
+      if (heartbeat) {
+        clearInterval(heartbeat);
+        sseHeartbeats.delete(client);
+      }
+
+      // Close connection
+      if (!client.destroyed && client.writable) {
+        client.write('data: {"type":"shutdown","message":"Server shutting down"}\n\n');
+        client.end();
+      }
+    } catch (error) {
+      console.warn('⚠️ Error closing SSE client:', error.message);
+    }
+  }
+  sseConnections.clear();
+  sseHeartbeats.clear();
+  console.log('✅ All SSE connections and heartbeats cleared');
+
+  // Close file watcher
+  if (fileWatcher) {
+    console.log('📂 Closing file watcher...');
+    try {
+      await fileWatcher.close();
+      console.log('✅ File watcher closed');
+    } catch (error) {
+      console.warn('⚠️ Error closing file watcher:', error.message);
+    }
+  }
+
+  // Close database connections
+  if (db) {
+    console.log('🗄️ Closing main database connection...');
+    try {
+      db.close();
+      console.log('✅ Main database closed');
+    } catch (error) {
+      console.warn('⚠️ Error closing main database:', error.message);
+    }
+  }
+
+  if (agentPagesDb) {
+    console.log('🗄️ Closing agent pages database connection...');
+    try {
+      agentPagesDb.close();
+      console.log('✅ Agent pages database closed');
+    } catch (error) {
+      console.warn('⚠️ Error closing agent pages database:', error.message);
+    }
+  }
+
+  // Log final memory usage
+  console.log('\n📊 Final Memory Report:');
+  logMemoryUsage();
+
+  console.log('\n✅ Graceful shutdown complete');
+  process.exit(0);
+}
+
+// Handle termination signals
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  console.error('Stack:', error.stack);
+  logMemoryUsage();
+  gracefulShutdown('UNCAUGHT_EXCEPTION');
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise);
+  console.error('Reason:', reason);
+  logMemoryUsage();
 });
 
 export default app;

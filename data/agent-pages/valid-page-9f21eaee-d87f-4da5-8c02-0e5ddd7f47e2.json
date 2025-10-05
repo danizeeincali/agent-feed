@@ -1,0 +1,9 @@
+{
+  "id": "valid-page-9f21eaee-d87f-4da5-8c02-0e5ddd7f47e2",
+  "agent_id": "schema-test-483671d8-6b7b-442e-a250-36c8ed6643b6",
+  "title": "Valid Page",
+  "content_type": "json",
+  "content_value": "{\"test\": \"data\"}",
+  "status": "published",
+  "version": 1
+}

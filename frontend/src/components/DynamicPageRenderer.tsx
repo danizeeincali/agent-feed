@@ -1,37 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Loader2, 
-  AlertCircle, 
+import {
+  ArrowLeft,
+  Loader2,
+  AlertCircle,
   Calendar,
   User,
   Tag,
   Settings,
   Eye
 } from 'lucide-react';
+import { ComponentSchemas } from '../schemas/componentSchemas';
+import { ZodError } from 'zod';
+import { ValidationError } from './ValidationError';
+
+interface ComponentConfig {
+  type: string;
+  props?: any;
+  children?: ComponentConfig[];
+}
 
 interface DynamicPageData {
   id: string;
-  agentId: string;
+  agentId?: string;
+  agent_id?: string;
   title: string;
-  version: string;
+  version?: string | number;
   layout?: any[];
-  components?: string[];
+  components?: ComponentConfig[];
+  specification?: string | any;
   metadata?: {
     description?: string;
     tags?: string[];
     icon?: string;
   };
   status?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ComponentConfig {
-  type: string;
-  props?: any;
-  children?: ComponentConfig[];
+  createdAt?: string;
+  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const DynamicPageRenderer: React.FC = () => {
@@ -77,6 +84,30 @@ const DynamicPageRenderer: React.FC = () => {
   const renderComponent = (config: ComponentConfig): React.ReactNode => {
     const { type, props = {}, children = [] } = config;
 
+    // Validate component props
+    const schema = ComponentSchemas[type as keyof typeof ComponentSchemas];
+
+    if (schema) {
+      try {
+        // Validate props with Zod
+        const validatedProps = schema.parse(props);
+
+        // Use validatedProps for rendering
+        return renderValidatedComponent(type, validatedProps, children);
+      } catch (error) {
+        if (error instanceof ZodError) {
+          return <ValidationError componentType={type} errors={error} />;
+        }
+        // Re-throw non-Zod errors
+        throw error;
+      }
+    }
+
+    // For components without schemas, proceed with original rendering
+    return renderValidatedComponent(type, props, children);
+  };
+
+  const renderValidatedComponent = (type: string, props: any, children: ComponentConfig[]): React.ReactNode => {
     // Basic component rendering - can be expanded with more complex components
     switch (type) {
       case 'header':
@@ -298,7 +329,7 @@ const DynamicPageRenderer: React.FC = () => {
       
       case 'Grid':
         return (
-          <div key={Math.random()} className={`grid grid-cols-${props.cols || 1} gap-${props.gap || 4}`}>
+          <div key={Math.random()} className={`grid ${props.className || ''}`}>
             {children.map(child => renderComponent(child))}
           </div>
         );
@@ -377,7 +408,78 @@ const DynamicPageRenderer: React.FC = () => {
             {props.children}
           </button>
         );
-      
+
+      case 'Container':
+        const sizeClasses = {
+          sm: 'max-w-2xl',
+          md: 'max-w-4xl',
+          lg: 'max-w-6xl',
+          xl: 'max-w-7xl',
+          full: 'max-w-full'
+        };
+        return (
+          <div key={Math.random()} className={`mx-auto px-4 ${sizeClasses[props.size || 'md']} ${props.className || ''}`}>
+            {children.map(child => renderComponent(child))}
+          </div>
+        );
+
+      case 'Stack':
+        const direction = props.direction === 'horizontal' ? 'flex-row' : 'flex-col';
+        const spacing = props.spacing || 4;
+        return (
+          <div key={Math.random()} className={`flex ${direction} gap-${spacing} ${props.className || ''}`}>
+            {children.map(child => renderComponent(child))}
+          </div>
+        );
+
+      case 'DataCard':
+        return (
+          <div key={Math.random()} className={`bg-white rounded-lg border border-gray-200 p-6 ${props.className || ''}`}>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-medium text-gray-600">{props.title}</h3>
+              {props.icon && <span className="text-xl">{props.icon}</span>}
+            </div>
+            <p className="text-2xl font-bold text-gray-900">{props.value || '0'}</p>
+            {props.subtitle && <p className="text-sm text-gray-500 mt-1">{props.subtitle}</p>}
+            {props.trend && (
+              <p className={`text-xs mt-2 ${props.trend === 'up' ? 'text-green-600' : props.trend === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
+                {props.trend === 'up' ? '↑' : props.trend === 'down' ? '↓' : '→'}
+              </p>
+            )}
+          </div>
+        );
+
+      case 'Progress':
+        const progressValue = Math.min(props.max || 100, Math.max(0, props.value || 0));
+        const progressMax = props.max || 100;
+        const percentage = (progressValue / progressMax) * 100;
+        const progressVariants = {
+          default: 'bg-blue-600',
+          success: 'bg-green-600',
+          warning: 'bg-yellow-600',
+          danger: 'bg-red-600'
+        };
+        return (
+          <div key={Math.random()} className={`w-full ${props.className || ''}`}>
+            {props.label && <p className="text-sm font-medium text-gray-700 mb-2">{props.label}</p>}
+            <div
+              className="w-full bg-gray-200 rounded-full overflow-hidden"
+              role="progressbar"
+              aria-valuenow={progressValue}
+              aria-valuemin={0}
+              aria-valuemax={progressMax}
+            >
+              <div
+                className={`h-full rounded-full ${progressVariants[props.variant || 'default']}`}
+                style={{ width: `${percentage}%` }}
+              ></div>
+            </div>
+            {props.showValue && (
+              <p className="text-xs text-gray-500 mt-1">{progressValue} / {progressMax}</p>
+            )}
+          </div>
+        );
+
       default:
         // For unknown components, render as a simple div with content
         return (
@@ -394,19 +496,75 @@ const DynamicPageRenderer: React.FC = () => {
     if (!pageData) return null;
 
     try {
-      // Handle layout-based structure (new format)
+      let componentsToRender = null;
+
+      // Try to parse specification field first (new format)
+      // Only try to parse if specification exists and is not null/undefined
+      if (pageData.specification !== null && pageData.specification !== undefined) {
+        try {
+          const spec = typeof pageData.specification === 'string'
+            ? JSON.parse(pageData.specification)
+            : pageData.specification;
+
+          if (spec && typeof spec === 'object' && spec.components && Array.isArray(spec.components)) {
+            componentsToRender = spec.components;
+          }
+        } catch (parseError) {
+          console.warn('Failed to parse specification field:', parseError);
+          // Continue to fallback options
+        }
+      }
+
+      // Fallback to direct components array
+      if (!componentsToRender && pageData.components && Array.isArray(pageData.components)) {
+        componentsToRender = pageData.components;
+      }
+
+      // Render components array (new format with nested children)
+      if (componentsToRender && componentsToRender.length > 0) {
+        return (
+          <div className="space-y-6">
+            {componentsToRender.map((component: any, index: number) => {
+              // Handle component with type and props structure
+              if (component.type) {
+                return (
+                  <div key={index}>
+                    {renderComponent({
+                      type: component.type,
+                      props: component.props || {},
+                      children: component.children || []
+                    })}
+                  </div>
+                );
+              }
+              return null;
+            })}
+
+            {pageData.metadata?.description && (
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold mb-2">Description</h3>
+                <p className="text-gray-600">{pageData.metadata.description}</p>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // Handle layout-based structure (backward compatibility)
       if (pageData.layout && Array.isArray(pageData.layout)) {
         return (
           <div className="space-y-6">
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">Page Components</h3>
               <div className="space-y-4">
-                {pageData.layout.map((layoutItem: any) =>
-                  renderComponent({
-                    type: layoutItem.type,
-                    props: layoutItem.config || {},
-                    children: []
-                  })
+                {pageData.layout.map((layoutItem: any, index: number) =>
+                  <div key={index}>
+                    {renderComponent({
+                      type: layoutItem.type,
+                      props: layoutItem.config || {},
+                      children: []
+                    })}
+                  </div>
                 )}
               </div>
             </div>
@@ -524,11 +682,11 @@ const DynamicPageRenderer: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />
-              Created {new Date(pageData.createdAt).toLocaleDateString()}
+              Created {new Date(pageData.createdAt || pageData.created_at || '').toLocaleDateString()}
             </div>
             <div className="flex items-center gap-1">
               <User className="w-3 h-3" />
-              Updated {new Date(pageData.updatedAt).toLocaleDateString()}
+              Updated {new Date(pageData.updatedAt || pageData.updated_at || '').toLocaleDateString()}
             </div>
           </div>
           {pageData.metadata?.tags && pageData.metadata.tags.length > 0 && (
