@@ -12,6 +12,8 @@ import validateComponentsRouter from './routes/validate-components.js';
 import personalTodosAgentRoutes from './routes/agents/personal-todos-agent.js';
 import { initializeAutoRegistration } from './middleware/auto-register-pages.js';
 import agentPagesRouter, { initializeAgentPagesRoutes } from './routes/agent-pages.js';
+import feedbackRoutes, { initializeFeedbackRoutes } from './routes/feedback.js';
+import feedbackLoop from './services/feedback-loop.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -49,6 +51,13 @@ if (initializeWithDatabase) {
   initializeWithDatabase(db);
 }
 
+// Initialize feedback loop with database
+if (db) {
+  feedbackLoop.setDatabase(db);
+  initializeFeedbackRoutes(db);
+  console.log('✅ Feedback loop system initialized');
+}
+
 // Initialize auto-registration middleware for agent pages
 if (agentPagesDb) {
   fileWatcher = initializeAutoRegistration(agentPagesDb, AGENT_PAGES_DIR);
@@ -83,6 +92,9 @@ app.use('/api/agents/personal-todos-agent', personalTodosAgentRoutes);
 
 // Mount Agent Pages routes (database-backed)
 app.use('/api/agent-pages', agentPagesRouter);
+
+// Mount Feedback routes
+app.use('/api/feedback', feedbackRoutes);
 
 // Mock Data
 const mockAgents = [

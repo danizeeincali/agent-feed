@@ -1,0 +1,88 @@
+{
+  "pageId": "test-gantt-page",
+  "agentId": "test-agent",
+  "title": "Test GanttChart Component",
+  "content": {
+    "components": [
+      {
+        "type": "Header",
+        "props": {
+          "level": 1,
+          "text": "Advanced GanttChart Test"
+        }
+      },
+      {
+        "type": "GanttChart",
+        "props": {
+          "tasks": [
+            {
+              "id": "task-1",
+              "name": "Project Planning",
+              "start": "2025-10-01",
+              "end": "2025-10-07",
+              "progress": 100,
+              "dependencies": [],
+              "type": "project"
+            },
+            {
+              "id": "task-2",
+              "name": "Design Phase",
+              "start": "2025-10-05",
+              "end": "2025-10-14",
+              "progress": 80,
+              "dependencies": ["task-1"],
+              "type": "task"
+            },
+            {
+              "id": "task-3",
+              "name": "Backend Development",
+              "start": "2025-10-10",
+              "end": "2025-10-25",
+              "progress": 45,
+              "dependencies": ["task-2"],
+              "type": "task"
+            },
+            {
+              "id": "task-4",
+              "name": "Frontend Development",
+              "start": "2025-10-12",
+              "end": "2025-10-28",
+              "progress": 35,
+              "dependencies": ["task-2"],
+              "type": "task"
+            },
+            {
+              "id": "task-5",
+              "name": "Integration Testing",
+              "start": "2025-10-26",
+              "end": "2025-11-05",
+              "progress": 0,
+              "dependencies": ["task-3", "task-4"],
+              "type": "task"
+            },
+            {
+              "id": "task-6",
+              "name": "UAT and Bug Fixes",
+              "start": "2025-11-03",
+              "end": "2025-11-12",
+              "progress": 0,
+              "dependencies": ["task-5"],
+              "type": "task"
+            },
+            {
+              "id": "task-7",
+              "name": "Production Deployment",
+              "start": "2025-11-13",
+              "end": "2025-11-15",
+              "progress": 0,
+              "dependencies": ["task-6"],
+              "type": "milestone"
+            }
+          ],
+          "viewMode": "day",
+          "showProgress": true
+        }
+      }
+    ]
+  }
+}

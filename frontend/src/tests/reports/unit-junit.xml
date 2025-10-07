@@ -1,82 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="29" failures="0" errors="0" time="3.733">
-    <testsuite name="src/tests/unit/dynamic-page-component-rendering.test.tsx" timestamp="2025-10-04T23:31:35.912Z" hostname="codespaces-005acc" tests="29" failures="0" errors="0" skipped="0" time="0.831">
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Format Detection Logic &gt; should detect old format with layout as array" time="0.14">
+<testsuites name="vitest tests" tests="22" failures="0" errors="0" time="1.918">
+    <testsuite name="src/tests/header-id-generation.test.tsx" timestamp="2025-10-07T02:03:55.285Z" hostname="codespaces-005acc" tests="22" failures="0" errors="0" skipped="0" time="0.259">
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; ID Generation from Titles &gt; should convert &quot;Text &amp; Content&quot; to &quot;text-content&quot;" time="0.081">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; ID Generation from Titles &gt; should convert &quot;Interactive Forms&quot; to &quot;interactive-forms&quot;" time="0.006">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; ID Generation from Titles &gt; should handle numbers: &quot;Section 1&quot; → &quot;section-1&quot;" time="0.007">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; ID Generation from Titles &gt; should remove special chars: &quot;What&apos;s New?&quot; → &quot;whats-new&quot;" time="0.009">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; ID Generation from Titles &gt; should handle Unicode: &quot;Café &amp; Bar&quot; → &quot;cafe-bar&quot;" time="0.006">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Explicit ID Preservation &gt; should use explicit id when provided" time="0.004">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Explicit ID Preservation &gt; should not modify explicit id" time="0.004">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Explicit ID Preservation &gt; should prefer explicit id over generated" time="0.006">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Edge Cases &gt; should handle empty title (use fallback)" time="0.007">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Edge Cases &gt; should handle very long titles (truncate)" time="0.004">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Edge Cases &gt; should handle only special chars &quot;!!!&quot; → fallback" time="0.003">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Edge Cases &gt; should handle whitespace-only title" time="0.004">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Edge Cases &gt; should handle duplicate titles (add suffix)" time="0.007">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Header Rendering &gt; should render h1 with generated id" time="0.007">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Header Rendering &gt; should render h2 with explicit id" time="0.014">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Header Rendering &gt; should render h3 with title and generated id" time="0.004">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Header Rendering &gt; all header levels h1-h6 should get IDs" time="0.038">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Integration with DynamicPageRenderer &gt; should render header from component config" time="0.006">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Integration with DynamicPageRenderer &gt; should work with multiple headers on page" time="0.013">
+        </testcase>
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Integration with DynamicPageRenderer &gt; should work with sidebar navigation" time="0.021">
             <system-err>
 ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
 ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
 
             </system-err>
         </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Format Detection Logic &gt; should detect new format with specification field containing components array" time="0.028">
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Collaborator Contracts &gt; should define clear generateHeaderId contract" time="0.002">
         </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Format Detection Logic &gt; should prefer components array over layout array when both exist" time="0.016">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Format Detection Logic &gt; should handle specification field with string layout value" time="0.035">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Nested Component Tree Rendering &gt; should render Container → Stack → Grid → Card hierarchy" time="0.058">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Nested Component Tree Rendering &gt; should render deeply nested children (5 levels)" time="0.037">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Nested Component Tree Rendering &gt; should render multiple children at same level" time="0.04">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Container component with proper props" time="0.015">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Stack component with gap spacing" time="0.023">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Grid component with columns and gap" time="0.028">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Card component with title and description" time="0.022">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Badge component with variants" time="0.044">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Button component with variants" time="0.031">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Metric component with label and value" time="0.026">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render Progress component with value" time="0.075">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Type Rendering &gt; should render DataCard component with all props" time="0.014">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Real-World Comprehensive Dashboard &gt; should render the complete comprehensive dashboard with all nested components" time="0.023">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Error Handling and Edge Cases &gt; should handle missing components array gracefully" time="0.007">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Error Handling and Edge Cases &gt; should handle empty components array" time="0.008">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Error Handling and Edge Cases &gt; should handle components with no children property" time="0.015">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Error Handling and Edge Cases &gt; should handle components with empty children array" time="0.009">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Error Handling and Edge Cases &gt; should handle malformed specification JSON" time="0.026">
-            <system-err>
-Failed to parse specification field: SyntaxError: Expected property name or &apos;}&apos; in JSON at position 2 (line 1 column 3)
-    at JSON.parse (&lt;anonymous&gt;)
-    at renderPageContent (/workspaces/agent-feed/frontend/src/components/DynamicPageRenderer.tsx:506:20)
-    at DynamicPageRenderer (/workspaces/agent-feed/frontend/src/components/DynamicPageRenderer.tsx:676:10)
-    at renderWithHooks (/workspaces/agent-feed/frontend/node_modules/react-dom/cjs/react-dom.development.js:16305:18)
-    at updateFunctionComponent (/workspaces/agent-feed/frontend/node_modules/react-dom/cjs/react-dom.development.js:19588:20)
-    at beginWork (/workspaces/agent-feed/frontend/node_modules/react-dom/cjs/react-dom.development.js:21601:16)
-    at beginWork$1 (/workspaces/agent-feed/frontend/node_modules/react-dom/cjs/react-dom.development.js:27426:14)
-    at performUnitOfWork (/workspaces/agent-feed/frontend/node_modules/react-dom/cjs/react-dom.development.js:26560:12)
-    at workLoopSync (/workspaces/agent-feed/frontend/node_modules/react-dom/cjs/react-dom.development.js:26466:5)
-    at renderRootSync (/workspaces/agent-feed/frontend/node_modules/react-dom/cjs/react-dom.development.js:26434:7)
-
-            </system-err>
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Error Handling and Edge Cases &gt; should handle unknown component types gracefully" time="0.008">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Error Handling and Edge Cases &gt; should handle null specification field" time="0.021">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Backward Compatibility with Old Format &gt; should still render old format pages with layout array" time="0.014">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Backward Compatibility with Old Format &gt; should handle old format with various component types" time="0.016">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Rendering Helper Functions &gt; should render Container as a wrapper div with proper classes" time="0.014">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Rendering Helper Functions &gt; should render Stack as a flex container" time="0.011">
-        </testcase>
-        <testcase classname="src/tests/unit/dynamic-page-component-rendering.test.tsx" name="DynamicPageRenderer - Component Rendering Fix (TDD) &gt; Component Rendering Helper Functions &gt; should render Grid with proper grid classes" time="0.021">
+        <testcase classname="src/tests/header-id-generation.test.tsx" name="Header ID Generation - London School TDD &gt; Collaborator Contracts &gt; should verify Header component accepts correct props interface" time="0.003">
         </testcase>
     </testsuite>
 </testsuites>

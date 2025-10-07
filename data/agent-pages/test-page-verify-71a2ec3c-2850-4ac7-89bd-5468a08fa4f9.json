@@ -1,0 +1,14 @@
+{
+  "id": "test-page-verify-71a2ec3c-2850-4ac7-89bd-5468a08fa4f9",
+  "agent_id": "test-agent-fa274077-b766-4126-98ac-bd213caf005b",
+  "title": "Verification Test Page",
+  "page_type": "dynamic",
+  "content_type": "markdown",
+  "content_value": "# Test Page\nThis page tests verification flow.",
+  "status": "published",
+  "version": 1,
+  "tags": [
+    "verification",
+    "test"
+  ]
+}

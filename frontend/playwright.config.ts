@@ -198,6 +198,20 @@ export default defineConfig({
       },
       testDir: './tests/e2e/validation',
     },
+
+    /* Page Verification tests - Chrome with screenshot capture */
+    {
+      name: 'page-verification',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        viewport: { width: 1920, height: 1080 },
+        screenshot: 'on',
+        video: 'on',
+        trace: 'on',
+      },
+      testDir: './tests/e2e/page-verification',
+    },
   ],
 
   /* Run your local dev server before starting the tests */

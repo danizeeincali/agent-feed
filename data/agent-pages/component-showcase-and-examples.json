@@ -1,0 +1,1274 @@
+{
+  "id": "component-showcase-and-examples",
+  "agent_id": "page-builder-agent",
+  "title": "Component Library Showcase - Complete Examples",
+  "specification": {
+    "id": "component-showcase-and-examples",
+    "title": "Component Library Showcase",
+    "layout": "sidebar",
+    "components": [
+      {
+        "type": "Sidebar",
+        "props": {
+          "sections": [
+            { "id": "text-content", "title": "Text & Content", "icon": "Type" },
+            { "id": "interactive-forms", "title": "Interactive Forms", "icon": "FormInput" },
+            { "id": "data-display", "title": "Data Display", "icon": "Table" },
+            { "id": "media-visuals", "title": "Media & Visuals", "icon": "Image" },
+            { "id": "navigation", "title": "Navigation Patterns", "icon": "Menu" },
+            { "id": "date-time", "title": "Date & Time", "icon": "Calendar" },
+            { "id": "project-management", "title": "Project Management", "icon": "Gantt" },
+            { "id": "social", "title": "Social Interactions", "icon": "Heart" },
+            { "id": "communication", "title": "Communication", "icon": "MessageCircle" },
+            { "id": "dashboard", "title": "Dashboard Layouts", "icon": "LayoutDashboard" },
+            { "id": "ecommerce", "title": "E-commerce", "icon": "ShoppingCart" },
+            { "id": "user-profiles", "title": "User Profiles", "icon": "User" },
+            { "id": "documentation", "title": "Documentation", "icon": "FileText" },
+            { "id": "onboarding", "title": "Onboarding Flows", "icon": "Rocket" },
+            { "id": "settings", "title": "Settings Pages", "icon": "Settings" }
+          ]
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "text-content",
+          "content": "# Text & Content Components\n\nThis section demonstrates typography, headings, markdown rendering, and code blocks."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 2, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Typography Examples" },
+            "children": [
+              { "type": "Heading", "props": { "level": 1, "children": "Heading Level 1" } },
+              { "type": "Heading", "props": { "level": 2, "children": "Heading Level 2" } },
+              { "type": "Heading", "props": { "level": 3, "children": "Heading Level 3" } },
+              { "type": "Heading", "props": { "level": 4, "children": "Heading Level 4" } },
+              { "type": "Text", "props": { "children": "Regular paragraph text with standard formatting and sizing." } },
+              { "type": "Text", "props": { "children": "Bold text for emphasis", "className": "font-bold" } },
+              { "type": "Text", "props": { "children": "Italic text for subtle emphasis", "className": "italic" } },
+              { "type": "Text", "props": { "children": "Muted text for secondary information", "className": "text-muted-foreground" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Code Blocks" },
+            "children": [
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "```javascript\n// JavaScript Example\nconst greeting = 'Hello, World!';\nconsole.log(greeting);\n\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n```"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "```python\n# Python Example\ndef hello_world():\n    print('Hello, World!')\n\nclass Agent:\n    def __init__(self, name):\n        self.name = name\n```"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "interactive-forms",
+          "content": "# Interactive Forms\n\nDemonstrating form inputs, buttons, and interactive elements with checklists."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 2, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Form Inputs" },
+            "children": [
+              { "type": "Input", "props": { "placeholder": "Enter your name", "label": "Name" } },
+              { "type": "Input", "props": { "placeholder": "email@example.com", "label": "Email", "type": "email" } },
+              { "type": "Input", "props": { "placeholder": "Password", "label": "Password", "type": "password" } },
+              { "type": "Input", "props": { "placeholder": "Search...", "label": "Search" } },
+              { "type": "Input", "props": { "placeholder": "123-456-7890", "label": "Phone", "type": "tel" } },
+              {
+                "type": "Grid",
+                "props": { "cols": 3, "gap": 8, "className": "mt-4" },
+                "children": [
+                  { "type": "Button", "props": { "children": "Submit", "variant": "default" } },
+                  { "type": "Button", "props": { "children": "Cancel", "variant": "outline" } },
+                  { "type": "Button", "props": { "children": "Reset", "variant": "secondary" } }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Project Setup Checklist" },
+            "children": [
+              {
+                "type": "Checklist",
+                "props": {
+                  "items": [
+                    { "id": "setup-1", "label": "Initialize project repository", "checked": true },
+                    { "id": "setup-2", "label": "Configure environment variables", "checked": true },
+                    { "id": "setup-3", "label": "Set up database connection", "checked": true },
+                    { "id": "setup-4", "label": "Install dependencies", "checked": false },
+                    { "id": "setup-5", "label": "Configure CI/CD pipeline", "checked": false },
+                    { "id": "setup-6", "label": "Set up monitoring", "checked": false },
+                    { "id": "setup-7", "label": "Deploy to staging", "checked": false },
+                    { "id": "setup-8", "label": "Run integration tests", "checked": false }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Button Variations", "className": "mb-8" },
+        "children": [
+          {
+            "type": "Grid",
+            "props": { "cols": 4, "gap": 12 },
+            "children": [
+              { "type": "Button", "props": { "children": "Primary", "variant": "default" } },
+              { "type": "Button", "props": { "children": "Secondary", "variant": "secondary" } },
+              { "type": "Button", "props": { "children": "Outline", "variant": "outline" } },
+              { "type": "Button", "props": { "children": "Ghost", "variant": "ghost" } },
+              { "type": "Button", "props": { "children": "Link", "variant": "link" } },
+              { "type": "Button", "props": { "children": "Destructive", "variant": "destructive" } },
+              { "type": "Button", "props": { "children": "Small Size", "size": "sm" } },
+              { "type": "Button", "props": { "children": "Large Size", "size": "lg" } },
+              { "type": "Button", "props": { "children": "Icon Button", "size": "icon" } },
+              { "type": "Button", "props": { "children": "Disabled", "disabled": true } }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "data-display",
+          "content": "# Data Display Components\n\nShowcasing cards, tables, lists, and grid layouts with 30+ card examples."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 4, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Revenue", "className": "bg-gradient-to-br from-green-50 to-green-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "$45,231", "label": "Total Revenue", "description": "+20.1% from last month" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Users", "className": "bg-gradient-to-br from-blue-50 to-blue-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "2,350", "label": "Active Users", "description": "+180 this week" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Sales", "className": "bg-gradient-to-br from-purple-50 to-purple-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "12,234", "label": "Total Sales", "description": "+19% from last month" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Growth", "className": "bg-gradient-to-br from-orange-50 to-orange-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "+573", "label": "New Customers", "description": "+201 since last week" } }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 3, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Product A" },
+            "children": [
+              { "type": "Text", "props": { "children": "High-performance analytics platform" } },
+              { "type": "Badge", "props": { "children": "Best Seller" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Product B" },
+            "children": [
+              { "type": "Text", "props": { "children": "AI-powered automation suite" } },
+              { "type": "Badge", "props": { "children": "New", "variant": "secondary" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Product C" },
+            "children": [
+              { "type": "Text", "props": { "children": "Enterprise integration tools" } },
+              { "type": "Badge", "props": { "children": "Featured", "variant": "outline" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Product D" },
+            "children": [
+              { "type": "Text", "props": { "children": "Cloud infrastructure management" } },
+              { "type": "Badge", "props": { "children": "Popular" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Product E" },
+            "children": [
+              { "type": "Text", "props": { "children": "Security compliance framework" } },
+              { "type": "Badge", "props": { "children": "Certified", "variant": "default" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Product F" },
+            "children": [
+              { "type": "Text", "props": { "children": "DevOps orchestration platform" } },
+              { "type": "Badge", "props": { "children": "Enterprise", "variant": "secondary" } }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 2, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Team Members" },
+            "children": [
+              {
+                "type": "Grid",
+                "props": { "cols": 1, "gap": 8 },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": { "className": "hover:shadow-lg transition-shadow" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Sarah Chen" } },
+                      { "type": "Text", "props": { "children": "Senior Software Engineer" } },
+                      { "type": "Badge", "props": { "children": "Engineering" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "hover:shadow-lg transition-shadow" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Marcus Johnson" } },
+                      { "type": "Text", "props": { "children": "Product Manager" } },
+                      { "type": "Badge", "props": { "children": "Product", "variant": "secondary" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "hover:shadow-lg transition-shadow" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Emily Rodriguez" } },
+                      { "type": "Text", "props": { "children": "UX Designer" } },
+                      { "type": "Badge", "props": { "children": "Design", "variant": "outline" } }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Recent Activity" },
+            "children": [
+              {
+                "type": "Grid",
+                "props": { "cols": 1, "gap": 8 },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": { "className": "border-l-4 border-l-green-500" },
+                    "children": [
+                      { "type": "Text", "props": { "children": "Deployed v2.1.0 to production" } },
+                      { "type": "Text", "props": { "children": "2 hours ago", "className": "text-muted-foreground text-sm" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "border-l-4 border-l-blue-500" },
+                    "children": [
+                      { "type": "Text", "props": { "children": "Code review completed" } },
+                      { "type": "Text", "props": { "children": "4 hours ago", "className": "text-muted-foreground text-sm" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "border-l-4 border-l-purple-500" },
+                    "children": [
+                      { "type": "Text", "props": { "children": "Sprint planning completed" } },
+                      { "type": "Text", "props": { "children": "1 day ago", "className": "text-muted-foreground text-sm" } }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 3, "gap": 12, "className": "mb-8" },
+        "children": [
+          { "type": "Card", "props": { "title": "Card 1" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 2" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 3" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 4" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 5" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 6" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 7" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 8" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 9" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 10" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 11" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 12" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 13" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 14" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 15" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 16" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 17" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] },
+          { "type": "Card", "props": { "title": "Card 18" }, "children": [{ "type": "Text", "props": { "children": "Sample content" } }] }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "media-visuals",
+          "content": "# Media & Visuals\n\nPhoto grids with lightbox functionality and image galleries."
+        }
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Product Photography", "className": "mb-8" },
+        "children": [
+          {
+            "type": "PhotoGrid",
+            "props": {
+              "images": [
+                { "src": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e", "alt": "Headphones", "caption": "Premium Audio" },
+                { "src": "https://images.unsplash.com/photo-1523275335684-37898b6baf30", "alt": "Watch", "caption": "Smartwatch Collection" },
+                { "src": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f", "alt": "Camera", "caption": "Photography Gear" },
+                { "src": "https://images.unsplash.com/photo-1572635196237-14b3f281503f", "alt": "Sunglasses", "caption": "Fashion Accessories" },
+                { "src": "https://images.unsplash.com/photo-1546868871-7041f2a55e12", "alt": "Smartwatch", "caption": "Wearable Tech" },
+                { "src": "https://images.unsplash.com/photo-1585386959984-a4155224a1ad", "alt": "Perfume", "caption": "Fragrance Line" },
+                { "src": "https://images.unsplash.com/photo-1560343090-f0409e92791a", "alt": "Coffee", "caption": "Artisan Coffee" },
+                { "src": "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa", "alt": "Laptop", "caption": "Tech Workspace" },
+                { "src": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9", "alt": "Phone", "caption": "Mobile Devices" }
+              ],
+              "enableLightbox": true,
+              "columns": 3
+            }
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Team Workspace Gallery", "className": "mb-8" },
+        "children": [
+          {
+            "type": "PhotoGrid",
+            "props": {
+              "images": [
+                { "src": "https://images.unsplash.com/photo-1497366216548-37526070297c", "alt": "Office", "caption": "Modern Office" },
+                { "src": "https://images.unsplash.com/photo-1497366811353-6870744d04b2", "alt": "Workspace", "caption": "Creative Space" },
+                { "src": "https://images.unsplash.com/photo-1519389950473-47ba0277781c", "alt": "Team", "caption": "Collaboration" },
+                { "src": "https://images.unsplash.com/photo-1515169273894-7e876dcf13da", "alt": "Meeting", "caption": "Team Meeting" },
+                { "src": "https://images.unsplash.com/photo-1522071820081-009f0129c71c", "alt": "Discussion", "caption": "Strategy Session" },
+                { "src": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0", "alt": "Presentation", "caption": "Client Presentation" }
+              ],
+              "enableLightbox": true,
+              "columns": 2
+            }
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Nature & Landscapes", "className": "mb-8" },
+        "children": [
+          {
+            "type": "PhotoGrid",
+            "props": {
+              "images": [
+                { "src": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4", "alt": "Mountain", "caption": "Mountain Peak" },
+                { "src": "https://images.unsplash.com/photo-1469474968028-56623f02e42e", "alt": "Nature", "caption": "Forest Trail" },
+                { "src": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e", "alt": "Forest", "caption": "Wilderness" },
+                { "src": "https://images.unsplash.com/photo-1426604966848-d7adac402bff", "alt": "Lake", "caption": "Mountain Lake" },
+                { "src": "https://images.unsplash.com/photo-1472214103451-9374bd1c798e", "alt": "Sunset", "caption": "Golden Hour" },
+                { "src": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d", "alt": "Field", "caption": "Open Fields" },
+                { "src": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29", "alt": "Beach", "caption": "Coastal View" },
+                { "src": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23", "alt": "Valley", "caption": "Valley Vista" },
+                { "src": "https://images.unsplash.com/photo-1470770903676-69b98201ea1c", "alt": "River", "caption": "River Flow" },
+                { "src": "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1", "alt": "Sky", "caption": "Cloud Formation" },
+                { "src": "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07", "alt": "Desert", "caption": "Desert Landscape" },
+                { "src": "https://images.unsplash.com/photo-1519681393784-d120267933ba", "alt": "Stars", "caption": "Night Sky" }
+              ],
+              "enableLightbox": true,
+              "columns": 4
+            }
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "navigation",
+          "content": "# Navigation Patterns\n\nThis page uses sidebar navigation, which you're experiencing right now!"
+        }
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Sidebar Navigation", "className": "mb-8" },
+        "children": [
+          { "type": "Text", "props": { "children": "The sidebar on the left demonstrates a multi-section navigation pattern with 15 sections." } },
+          { "type": "Text", "props": { "children": "Click any section to jump to that content area instantly." } },
+          { "type": "Badge", "props": { "children": "Active Component" } }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "date-time",
+          "content": "# Date & Time Components\n\nCalendars with different modes and event markers."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 2, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Single Date Selection" },
+            "children": [
+              {
+                "type": "Calendar",
+                "props": {
+                  "mode": "single",
+                  "selected": "2025-10-15"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Date Range Selection" },
+            "children": [
+              {
+                "type": "Calendar",
+                "props": {
+                  "mode": "range",
+                  "selected": {
+                    "from": "2025-10-10",
+                    "to": "2025-10-20"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Event Calendar with Markers", "className": "mb-8" },
+        "children": [
+          {
+            "type": "Calendar",
+            "props": {
+              "mode": "single",
+              "eventMarkers": [
+                { "date": "2025-10-06", "label": "Component Showcase Launch", "color": "blue" },
+                { "date": "2025-10-08", "label": "Team Meeting", "color": "green" },
+                { "date": "2025-10-12", "label": "Client Demo", "color": "purple" },
+                { "date": "2025-10-15", "label": "Sprint Planning", "color": "orange" },
+                { "date": "2025-10-18", "label": "Release v2.0", "color": "red" },
+                { "date": "2025-10-22", "label": "Q4 Review", "color": "blue" },
+                { "date": "2025-10-25", "label": "All Hands", "color": "green" },
+                { "date": "2025-10-28", "label": "Training Session", "color": "purple" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "project-management",
+          "content": "# Project Management\n\nGantt charts for timeline visualization and task dependencies."
+        }
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Product Development Timeline", "className": "mb-8" },
+        "children": [
+          {
+            "type": "GanttChart",
+            "props": {
+              "tasks": [
+                { "id": "t1", "name": "Requirements Gathering", "start": "2025-10-01", "end": "2025-10-07", "progress": 100, "color": "blue" },
+                { "id": "t2", "name": "Design Phase", "start": "2025-10-08", "end": "2025-10-14", "progress": 80, "dependencies": ["t1"], "color": "purple" },
+                { "id": "t3", "name": "Frontend Development", "start": "2025-10-10", "end": "2025-10-25", "progress": 60, "dependencies": ["t2"], "color": "green" },
+                { "id": "t4", "name": "Backend Development", "start": "2025-10-10", "end": "2025-10-28", "progress": 50, "dependencies": ["t2"], "color": "orange" },
+                { "id": "t5", "name": "Integration Testing", "start": "2025-10-20", "end": "2025-10-30", "progress": 20, "dependencies": ["t3", "t4"], "color": "red" },
+                { "id": "t6", "name": "UAT", "start": "2025-10-28", "end": "2025-11-05", "progress": 0, "dependencies": ["t5"], "color": "blue" },
+                { "id": "t7", "name": "Deployment Prep", "start": "2025-11-03", "end": "2025-11-08", "progress": 0, "dependencies": ["t6"], "color": "purple" },
+                { "id": "t8", "name": "Production Release", "start": "2025-11-08", "end": "2025-11-10", "progress": 0, "dependencies": ["t7"], "color": "green" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Q4 Marketing Campaign", "className": "mb-8" },
+        "children": [
+          {
+            "type": "GanttChart",
+            "props": {
+              "tasks": [
+                { "id": "m1", "name": "Campaign Strategy", "start": "2025-10-01", "end": "2025-10-08", "progress": 100, "color": "blue" },
+                { "id": "m2", "name": "Content Creation", "start": "2025-10-09", "end": "2025-10-20", "progress": 70, "dependencies": ["m1"], "color": "purple" },
+                { "id": "m3", "name": "Design Assets", "start": "2025-10-12", "end": "2025-10-22", "progress": 60, "dependencies": ["m1"], "color": "green" },
+                { "id": "m4", "name": "Social Media Prep", "start": "2025-10-18", "end": "2025-10-25", "progress": 40, "dependencies": ["m2"], "color": "orange" },
+                { "id": "m5", "name": "Email Campaign", "start": "2025-10-20", "end": "2025-10-28", "progress": 30, "dependencies": ["m2"], "color": "red" },
+                { "id": "m6", "name": "Launch Week", "start": "2025-10-28", "end": "2025-11-03", "progress": 0, "dependencies": ["m3", "m4", "m5"], "color": "blue" },
+                { "id": "m7", "name": "Performance Analysis", "start": "2025-11-04", "end": "2025-11-10", "progress": 0, "dependencies": ["m6"], "color": "purple" },
+                { "id": "m8", "name": "Optimization", "start": "2025-11-11", "end": "2025-11-18", "progress": 0, "dependencies": ["m7"], "color": "green" }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "social",
+          "content": "# Social Interactions\n\nSwipeable card interfaces for content discovery and engagement."
+        }
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Product Recommendations", "className": "mb-8" },
+        "children": [
+          {
+            "type": "SwipeCard",
+            "props": {
+              "cards": [
+                {
+                  "id": "p1",
+                  "title": "AI Analytics Platform",
+                  "description": "Enterprise-grade analytics with machine learning insights",
+                  "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+                  "metadata": { "price": "$99/mo", "rating": "4.8/5", "users": "10k+" }
+                },
+                {
+                  "id": "p2",
+                  "title": "Cloud Infrastructure Suite",
+                  "description": "Scalable cloud solutions for modern applications",
+                  "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
+                  "metadata": { "price": "$149/mo", "rating": "4.9/5", "users": "25k+" }
+                },
+                {
+                  "id": "p3",
+                  "title": "DevOps Automation",
+                  "description": "Streamline your deployment pipeline",
+                  "image": "https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a",
+                  "metadata": { "price": "$79/mo", "rating": "4.7/5", "users": "8k+" }
+                },
+                {
+                  "id": "p4",
+                  "title": "Security Framework",
+                  "description": "Comprehensive security and compliance tools",
+                  "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3",
+                  "metadata": { "price": "$199/mo", "rating": "5.0/5", "users": "15k+" }
+                },
+                {
+                  "id": "p5",
+                  "title": "Data Pipeline Manager",
+                  "description": "Real-time data processing at scale",
+                  "image": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31",
+                  "metadata": { "price": "$129/mo", "rating": "4.6/5", "users": "12k+" }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Job Opportunities", "className": "mb-8" },
+        "children": [
+          {
+            "type": "SwipeCard",
+            "props": {
+              "cards": [
+                {
+                  "id": "j1",
+                  "title": "Senior Frontend Engineer",
+                  "description": "Build next-gen web applications with React and TypeScript",
+                  "metadata": { "company": "TechCorp", "location": "Remote", "salary": "$120k-160k" }
+                },
+                {
+                  "id": "j2",
+                  "title": "Product Manager",
+                  "description": "Lead product strategy for AI-powered platform",
+                  "metadata": { "company": "InnovateLabs", "location": "San Francisco", "salary": "$140k-180k" }
+                },
+                {
+                  "id": "j3",
+                  "title": "DevOps Engineer",
+                  "description": "Scale infrastructure for millions of users",
+                  "metadata": { "company": "CloudScale", "location": "Austin", "salary": "$110k-150k" }
+                },
+                {
+                  "id": "j4",
+                  "title": "UX Designer",
+                  "description": "Create beautiful, intuitive user experiences",
+                  "metadata": { "company": "DesignHub", "location": "New York", "salary": "$100k-140k" }
+                },
+                {
+                  "id": "j5",
+                  "title": "Data Scientist",
+                  "description": "Build ML models for predictive analytics",
+                  "metadata": { "company": "DataWorks", "location": "Seattle", "salary": "$130k-170k" }
+                },
+                {
+                  "id": "j6",
+                  "title": "Backend Engineer",
+                  "description": "Design scalable microservices architecture",
+                  "metadata": { "company": "MicroTech", "location": "Remote", "salary": "$115k-155k" }
+                },
+                {
+                  "id": "j7",
+                  "title": "Mobile Developer",
+                  "description": "Build native iOS and Android applications",
+                  "metadata": { "company": "AppForge", "location": "Boston", "salary": "$105k-145k" }
+                },
+                {
+                  "id": "j8",
+                  "title": "Security Engineer",
+                  "description": "Protect infrastructure from threats",
+                  "metadata": { "company": "SecureNet", "location": "Remote", "salary": "$125k-165k" }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "communication",
+          "content": "# Communication Components\n\nChat interfaces, notifications, and messaging systems."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 2, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Notifications" },
+            "children": [
+              {
+                "type": "Grid",
+                "props": { "cols": 1, "gap": 8 },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-blue-50 border-l-4 border-l-blue-500" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "New message from Sarah" } },
+                      { "type": "Text", "props": { "children": "Hey, can we discuss the project timeline?" } },
+                      { "type": "Text", "props": { "children": "5 minutes ago", "className": "text-muted-foreground text-sm" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-green-50 border-l-4 border-l-green-500" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Deployment successful" } },
+                      { "type": "Text", "props": { "children": "Version 2.1.0 deployed to production" } },
+                      { "type": "Text", "props": { "children": "1 hour ago", "className": "text-muted-foreground text-sm" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-yellow-50 border-l-4 border-l-yellow-500" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Update available" } },
+                      { "type": "Text", "props": { "children": "New dependencies need to be installed" } },
+                      { "type": "Text", "props": { "children": "3 hours ago", "className": "text-muted-foreground text-sm" } }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Alerts & Messages" },
+            "children": [
+              {
+                "type": "Grid",
+                "props": { "cols": 1, "gap": 8 },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-red-50 border-l-4 border-l-red-500" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Critical: Server Error" } },
+                      { "type": "Text", "props": { "children": "Database connection timeout detected" } },
+                      { "type": "Button", "props": { "children": "View Details", "variant": "destructive", "size": "sm" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-purple-50 border-l-4 border-l-purple-500" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Team Mention" } },
+                      { "type": "Text", "props": { "children": "Marcus mentioned you in #engineering" } },
+                      { "type": "Button", "props": { "children": "Reply", "variant": "outline", "size": "sm" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-indigo-50 border-l-4 border-l-indigo-500" },
+                    "children": [
+                      { "type": "Heading", "props": { "level": 4, "children": "Meeting Reminder" } },
+                      { "type": "Text", "props": { "children": "Sprint planning in 15 minutes" } },
+                      { "type": "Button", "props": { "children": "Join", "variant": "default", "size": "sm" } }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "dashboard",
+          "content": "# Dashboard Layouts\n\nMetrics, KPIs, and data visualization for business dashboards."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 4, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Revenue", "className": "bg-gradient-to-br from-emerald-50 to-emerald-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "$124,582", "label": "Monthly Revenue", "description": "+23.5% from last month" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Users", "className": "bg-gradient-to-br from-sky-50 to-sky-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "8,432", "label": "Active Users", "description": "+412 this week" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Sales", "className": "bg-gradient-to-br from-violet-50 to-violet-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "1,893", "label": "Total Sales", "description": "+18.2% growth" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Growth", "className": "bg-gradient-to-br from-amber-50 to-amber-100" },
+            "children": [
+              { "type": "Metric", "props": { "value": "+24.5%", "label": "Growth Rate", "description": "Year over year" } }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "ecommerce",
+          "content": "# E-commerce Components\n\nProduct displays, shopping carts, and pricing tables."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 3, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Premium Headphones", "className": "hover:shadow-xl transition-shadow" },
+            "children": [
+              { "type": "Text", "props": { "children": "Wireless noise-canceling headphones with 30-hour battery" } },
+              { "type": "Metric", "props": { "value": "$299", "label": "Price" } },
+              { "type": "Badge", "props": { "children": "Best Seller" } },
+              { "type": "Button", "props": { "children": "Add to Cart", "variant": "default", "className": "mt-4" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Smart Watch Pro", "className": "hover:shadow-xl transition-shadow" },
+            "children": [
+              { "type": "Text", "props": { "children": "Fitness tracking, heart rate monitoring, GPS enabled" } },
+              { "type": "Metric", "props": { "value": "$399", "label": "Price" } },
+              { "type": "Badge", "props": { "children": "New", "variant": "secondary" } },
+              { "type": "Button", "props": { "children": "Add to Cart", "variant": "default", "className": "mt-4" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Wireless Earbuds", "className": "hover:shadow-xl transition-shadow" },
+            "children": [
+              { "type": "Text", "props": { "children": "True wireless with active noise cancellation" } },
+              { "type": "Metric", "props": { "value": "$149", "label": "Price" } },
+              { "type": "Badge", "props": { "children": "20% Off", "variant": "destructive" } },
+              { "type": "Button", "props": { "children": "Add to Cart", "variant": "default", "className": "mt-4" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "4K Camera", "className": "hover:shadow-xl transition-shadow" },
+            "children": [
+              { "type": "Text", "props": { "children": "Professional 4K video recording with image stabilization" } },
+              { "type": "Metric", "props": { "value": "$899", "label": "Price" } },
+              { "type": "Badge", "props": { "children": "Pro" } },
+              { "type": "Button", "props": { "children": "Add to Cart", "variant": "default", "className": "mt-4" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Laptop Stand", "className": "hover:shadow-xl transition-shadow" },
+            "children": [
+              { "type": "Text", "props": { "children": "Ergonomic aluminum laptop stand with cable management" } },
+              { "type": "Metric", "props": { "value": "$79", "label": "Price" } },
+              { "type": "Badge", "props": { "children": "Popular", "variant": "outline" } },
+              { "type": "Button", "props": { "children": "Add to Cart", "variant": "default", "className": "mt-4" } }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Mechanical Keyboard", "className": "hover:shadow-xl transition-shadow" },
+            "children": [
+              { "type": "Text", "props": { "children": "RGB backlit mechanical keyboard with hot-swappable switches" } },
+              { "type": "Metric", "props": { "value": "$159", "label": "Price" } },
+              { "type": "Badge", "props": { "children": "Limited", "variant": "secondary" } },
+              { "type": "Button", "props": { "children": "Add to Cart", "variant": "default", "className": "mt-4" } }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Pricing Plans", "className": "mb-8" },
+        "children": [
+          {
+            "type": "Grid",
+            "props": { "cols": 3, "gap": 16 },
+            "children": [
+              {
+                "type": "Card",
+                "props": { "className": "border-2" },
+                "children": [
+                  { "type": "Heading", "props": { "level": 3, "children": "Starter" } },
+                  { "type": "Metric", "props": { "value": "$29", "label": "per month" } },
+                  {
+                    "type": "Checklist",
+                    "props": {
+                      "items": [
+                        { "id": "s1", "label": "5 users included", "checked": true },
+                        { "id": "s2", "label": "10 GB storage", "checked": true },
+                        { "id": "s3", "label": "Email support", "checked": true },
+                        { "id": "s4", "label": "Basic analytics", "checked": true }
+                      ]
+                    }
+                  },
+                  { "type": "Button", "props": { "children": "Get Started", "variant": "outline", "className": "mt-4 w-full" } }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": { "className": "border-2 border-blue-500 shadow-lg" },
+                "children": [
+                  { "type": "Heading", "props": { "level": 3, "children": "Professional" } },
+                  { "type": "Badge", "props": { "children": "Most Popular" } },
+                  { "type": "Metric", "props": { "value": "$79", "label": "per month" } },
+                  {
+                    "type": "Checklist",
+                    "props": {
+                      "items": [
+                        { "id": "p1", "label": "25 users included", "checked": true },
+                        { "id": "p2", "label": "100 GB storage", "checked": true },
+                        { "id": "p3", "label": "Priority support", "checked": true },
+                        { "id": "p4", "label": "Advanced analytics", "checked": true },
+                        { "id": "p5", "label": "API access", "checked": true }
+                      ]
+                    }
+                  },
+                  { "type": "Button", "props": { "children": "Get Started", "variant": "default", "className": "mt-4 w-full" } }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": { "className": "border-2" },
+                "children": [
+                  { "type": "Heading", "props": { "level": 3, "children": "Enterprise" } },
+                  { "type": "Metric", "props": { "value": "$199", "label": "per month" } },
+                  {
+                    "type": "Checklist",
+                    "props": {
+                      "items": [
+                        { "id": "e1", "label": "Unlimited users", "checked": true },
+                        { "id": "e2", "label": "Unlimited storage", "checked": true },
+                        { "id": "e3", "label": "24/7 phone support", "checked": true },
+                        { "id": "e4", "label": "Custom analytics", "checked": true },
+                        { "id": "e5", "label": "Full API access", "checked": true },
+                        { "id": "e6", "label": "Dedicated account manager", "checked": true }
+                      ]
+                    }
+                  },
+                  { "type": "Button", "props": { "children": "Contact Sales", "variant": "secondary", "className": "mt-4 w-full" } }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "user-profiles",
+          "content": "# User Profiles\n\nProfile cards, statistics, and user activity displays."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 2, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "User Profile" },
+            "children": [
+              { "type": "Heading", "props": { "level": 2, "children": "Sarah Chen" } },
+              { "type": "Text", "props": { "children": "Senior Software Engineer • San Francisco, CA" } },
+              { "type": "Text", "props": { "children": "Building scalable systems and mentoring junior developers. Passionate about clean code and user experience." } },
+              {
+                "type": "Grid",
+                "props": { "cols": 3, "gap": 12, "className": "mt-4" },
+                "children": [
+                  { "type": "Metric", "props": { "value": "156", "label": "Projects" } },
+                  { "type": "Metric", "props": { "value": "2.4k", "label": "Followers" } },
+                  { "type": "Metric", "props": { "value": "892", "label": "Following" } }
+                ]
+              },
+              {
+                "type": "Grid",
+                "props": { "cols": 2, "gap": 8, "className": "mt-4" },
+                "children": [
+                  { "type": "Button", "props": { "children": "Follow", "variant": "default" } },
+                  { "type": "Button", "props": { "children": "Message", "variant": "outline" } }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Activity Stats" },
+            "children": [
+              {
+                "type": "Grid",
+                "props": { "cols": 2, "gap": 12 },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-blue-50" },
+                    "children": [
+                      { "type": "Metric", "props": { "value": "342", "label": "Commits this month" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-green-50" },
+                    "children": [
+                      { "type": "Metric", "props": { "value": "28", "label": "Pull requests" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-purple-50" },
+                    "children": [
+                      { "type": "Metric", "props": { "value": "15", "label": "Code reviews" } }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": { "className": "bg-orange-50" },
+                    "children": [
+                      { "type": "Metric", "props": { "value": "92%", "label": "Response rate" } }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "documentation",
+          "content": "# Documentation Components\n\nMarkdown rendering with syntax highlighting for multiple languages."
+        }
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Code Examples", "className": "mb-8" },
+        "children": [
+          {
+            "type": "Markdown",
+            "props": {
+              "content": "## TypeScript Example\n\n```typescript\ninterface User {\n  id: string;\n  name: string;\n  email: string;\n}\n\nclass UserService {\n  private users: Map<string, User> = new Map();\n\n  async createUser(user: User): Promise<User> {\n    this.users.set(user.id, user);\n    return user;\n  }\n\n  async getUser(id: string): Promise<User | undefined> {\n    return this.users.get(id);\n  }\n}\n```"
+            }
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "React Component Example", "className": "mb-8" },
+        "children": [
+          {
+            "type": "Markdown",
+            "props": {
+              "content": "```jsx\nimport React, { useState } from 'react';\n\nfunction TodoList() {\n  const [todos, setTodos] = useState([]);\n  const [input, setInput] = useState('');\n\n  const addTodo = () => {\n    if (input.trim()) {\n      setTodos([...todos, { id: Date.now(), text: input }]);\n      setInput('');\n    }\n  };\n\n  return (\n    <div className=\"todo-list\">\n      <input\n        value={input}\n        onChange={(e) => setInput(e.target.value)}\n        placeholder=\"Add a todo...\"\n      />\n      <button onClick={addTodo}>Add</button>\n      <ul>\n        {todos.map(todo => (\n          <li key={todo.id}>{todo.text}</li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n\nexport default TodoList;\n```"
+            }
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "SQL Query Example", "className": "mb-8" },
+        "children": [
+          {
+            "type": "Markdown",
+            "props": {
+              "content": "```sql\n-- Find top customers by revenue\nSELECT \n  c.customer_id,\n  c.name,\n  c.email,\n  SUM(o.total_amount) as total_revenue,\n  COUNT(o.order_id) as order_count\nFROM customers c\nINNER JOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_date >= DATE_SUB(NOW(), INTERVAL 1 YEAR)\nGROUP BY c.customer_id, c.name, c.email\nHAVING total_revenue > 10000\nORDER BY total_revenue DESC\nLIMIT 10;\n```"
+            }
+          }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "onboarding",
+          "content": "# Onboarding Flows\n\nStep indicators and welcome screens for user onboarding."
+        }
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Welcome to the Platform!", "className": "mb-8 text-center" },
+        "children": [
+          { "type": "Heading", "props": { "level": 2, "children": "Get Started in 3 Easy Steps" } },
+          {
+            "type": "Grid",
+            "props": { "cols": 3, "gap": 16, "className": "mt-8" },
+            "children": [
+              {
+                "type": "Card",
+                "props": { "className": "text-center border-2 border-blue-500" },
+                "children": [
+                  { "type": "Badge", "props": { "children": "Step 1", "variant": "default", "className": "mb-4" } },
+                  { "type": "Heading", "props": { "level": 3, "children": "Create Account" } },
+                  { "type": "Text", "props": { "children": "Sign up with your email and set up your profile" } }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": { "className": "text-center border-2" },
+                "children": [
+                  { "type": "Badge", "props": { "children": "Step 2", "variant": "secondary", "className": "mb-4" } },
+                  { "type": "Heading", "props": { "level": 3, "children": "Configure Settings" } },
+                  { "type": "Text", "props": { "children": "Customize your workspace and preferences" } }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": { "className": "text-center border-2" },
+                "children": [
+                  { "type": "Badge", "props": { "children": "Step 3", "variant": "outline", "className": "mb-4" } },
+                  { "type": "Heading", "props": { "level": 3, "children": "Start Building" } },
+                  { "type": "Text", "props": { "children": "Create your first project and invite team members" } }
+                ]
+              }
+            ]
+          },
+          { "type": "Button", "props": { "children": "Get Started Now", "variant": "default", "size": "lg", "className": "mt-8" } }
+        ]
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "id": "settings",
+          "content": "# Settings Pages\n\nConfiguration options and preference management with checklists."
+        }
+      },
+      {
+        "type": "Grid",
+        "props": { "cols": 2, "gap": 16, "className": "mb-8" },
+        "children": [
+          {
+            "type": "Card",
+            "props": { "title": "Notification Preferences" },
+            "children": [
+              {
+                "type": "Checklist",
+                "props": {
+                  "items": [
+                    { "id": "n1", "label": "Email notifications", "checked": true },
+                    { "id": "n2", "label": "Push notifications", "checked": true },
+                    { "id": "n3", "label": "SMS alerts", "checked": false },
+                    { "id": "n4", "label": "Weekly digest", "checked": true },
+                    { "id": "n5", "label": "Product updates", "checked": true },
+                    { "id": "n6", "label": "Marketing emails", "checked": false },
+                    { "id": "n7", "label": "Security alerts", "checked": true }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": { "title": "Privacy Settings" },
+            "children": [
+              {
+                "type": "Checklist",
+                "props": {
+                  "items": [
+                    { "id": "p1", "label": "Profile visible to public", "checked": true },
+                    { "id": "p2", "label": "Show email address", "checked": false },
+                    { "id": "p3", "label": "Show activity status", "checked": true },
+                    { "id": "p4", "label": "Allow message requests", "checked": true },
+                    { "id": "p5", "label": "Show in search results", "checked": true },
+                    { "id": "p6", "label": "Analytics tracking", "checked": false }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Account Settings", "className": "mb-8" },
+        "children": [
+          {
+            "type": "Grid",
+            "props": { "cols": 1, "gap": 16 },
+            "children": [
+              {
+                "type": "Grid",
+                "props": { "cols": 2, "gap": 12 },
+                "children": [
+                  { "type": "Input", "props": { "label": "Full Name", "placeholder": "John Doe" } },
+                  { "type": "Input", "props": { "label": "Email", "placeholder": "john@example.com", "type": "email" } },
+                  { "type": "Input", "props": { "label": "Phone", "placeholder": "+1 (555) 000-0000", "type": "tel" } },
+                  { "type": "Input", "props": { "label": "Company", "placeholder": "Acme Inc." } }
+                ]
+              },
+              {
+                "type": "Grid",
+                "props": { "cols": 3, "gap": 8 },
+                "children": [
+                  { "type": "Button", "props": { "children": "Save Changes", "variant": "default" } },
+                  { "type": "Button", "props": { "children": "Cancel", "variant": "outline" } },
+                  { "type": "Button", "props": { "children": "Reset", "variant": "secondary" } }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": { "title": "Component Showcase Summary", "className": "mb-8 bg-gradient-to-br from-blue-50 to-purple-50" },
+        "children": [
+          { "type": "Heading", "props": { "level": 2, "children": "Component Count Summary" } },
+          {
+            "type": "Grid",
+            "props": { "cols": 4, "gap": 12, "className": "mt-4" },
+            "children": [
+              {
+                "type": "Card",
+                "props": { "className": "bg-white" },
+                "children": [
+                  { "type": "Metric", "props": { "value": "15", "label": "Sections" } }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": { "className": "bg-white" },
+                "children": [
+                  { "type": "Metric", "props": { "value": "50+", "label": "Cards" } }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": { "className": "bg-white" },
+                "children": [
+                  { "type": "Metric", "props": { "value": "30+", "label": "Buttons" } }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": { "className": "bg-white" },
+                "children": [
+                  { "type": "Metric", "props": { "value": "200+", "label": "Total Components" } }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Checklist",
+            "props": {
+              "items": [
+                { "id": "feat1", "label": "Sidebar navigation (15 sections)", "checked": true },
+                { "id": "feat2", "label": "Markdown content (15+ sections)", "checked": true },
+                { "id": "feat3", "label": "Checklists (5+ with 5-10 items each)", "checked": true },
+                { "id": "feat4", "label": "Calendars (3+ with different modes)", "checked": true },
+                { "id": "feat5", "label": "PhotoGrids (3+ with 6-12 images)", "checked": true },
+                { "id": "feat6", "label": "GanttCharts (2+ with 8-12 tasks)", "checked": true },
+                { "id": "feat7", "label": "SwipeCards (2+ with 5-10 cards)", "checked": true },
+                { "id": "feat8", "label": "Cards (50+ various layouts)", "checked": true },
+                { "id": "feat9", "label": "Buttons (30+ various actions)", "checked": true },
+                { "id": "feat10", "label": "Inputs (10+ form fields)", "checked": true }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "created_at": "2025-10-06T18:30:00.000Z",
+  "updated_at": "2025-10-06T18:30:00.000Z"
+}

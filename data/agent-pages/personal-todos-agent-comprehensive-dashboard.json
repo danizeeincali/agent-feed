@@ -1,9 +1,644 @@
 {
-  "id": "comprehensive-dashboard",
+  "id": "personal-todos-agent-comprehensive-dashboard",
   "agent_id": "personal-todos-agent",
-  "title": "Personal Todos - Comprehensive Task Management Dashboard",
-  "specification": "{\"id\":\"comprehensive-dashboard\",\"title\":\"Personal Todos Dashboard\",\"layout\":\"mobile-first\",\"responsive\":true,\"components\":[{\"type\":\"Container\",\"props\":{\"size\":\"lg\",\"className\":\"p-4 md:p-6\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"gap-6\"},\"children\":[{\"type\":\"Grid\",\"props\":{\"className\":\"grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4\"},\"children\":[{\"type\":\"DataCard\",\"props\":{\"title\":\"Total Tasks\",\"value\":\"{{stats.total_tasks}}\",\"subtitle\":\"Active items\",\"trend\":\"up\",\"className\":\"w-full\"}},{\"type\":\"DataCard\",\"props\":{\"title\":\"Completed\",\"value\":\"{{stats.completed_tasks}}\",\"subtitle\":\"This week\",\"trend\":\"up\",\"className\":\"w-full\"}},{\"type\":\"DataCard\",\"props\":{\"title\":\"In Progress\",\"value\":\"{{stats.in_progress_tasks}}\",\"subtitle\":\"Currently active\",\"className\":\"w-full\"}},{\"type\":\"DataCard\",\"props\":{\"title\":\"Pending\",\"value\":\"{{stats.pending_tasks}}\",\"subtitle\":\"Awaiting start\",\"className\":\"w-full\"}}]},{\"type\":\"Grid\",\"props\":{\"className\":\"grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6\"},\"children\":[{\"type\":\"Card\",\"props\":{\"title\":\"Priority Distribution\",\"description\":\"Fibonacci IMPACT Priorities (P0-P7)\",\"className\":\"w-full\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"gap-3\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center justify-between\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"destructive\",\"children\":\"P0 Critical\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{priorities.P0}}\",\"className\":\"text-lg\"}}]},{\"type\":\"Progress\",\"props\":{\"value\":\"{{priorities.P0_percent}}\",\"max\":100,\"variant\":\"error\",\"className\":\"h-2\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center justify-between\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"destructive\",\"children\":\"P1 High\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{priorities.P1}}\",\"className\":\"text-lg\"}}]},{\"type\":\"Progress\",\"props\":{\"value\":\"{{priorities.P1_percent}}\",\"max\":100,\"variant\":\"warning\",\"className\":\"h-2\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center justify-between\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"default\",\"children\":\"P2 Medium\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{priorities.P2}}\",\"className\":\"text-lg\"}}]},{\"type\":\"Progress\",\"props\":{\"value\":\"{{priorities.P2_percent}}\",\"max\":100,\"variant\":\"default\",\"className\":\"h-2\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center justify-between\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"secondary\",\"children\":\"P3 Normal\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{priorities.P3}}\",\"className\":\"text-lg\"}}]},{\"type\":\"Progress\",\"props\":{\"value\":\"{{priorities.P3_percent}}\",\"max\":100,\"variant\":\"default\",\"className\":\"h-2\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center justify-between\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"outline\",\"children\":\"P5 Low\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{priorities.P5}}\",\"className\":\"text-lg\"}}]},{\"type\":\"Progress\",\"props\":{\"value\":\"{{priorities.P5_percent}}\",\"max\":100,\"className\":\"h-2\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center justify-between\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"outline\",\"children\":\"P8 Minimal\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{priorities.P8}}\",\"className\":\"text-lg\"}}]},{\"type\":\"Progress\",\"props\":{\"value\":\"{{priorities.P8_percent}}\",\"max\":100,\"className\":\"h-2\"}}]}]},{\"type\":\"Card\",\"props\":{\"title\":\"Task Status Breakdown\",\"description\":\"Current task states\",\"className\":\"w-full\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"gap-4\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center gap-3\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"default\",\"dot\":true,\"children\":\"Completed\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{status.completed}}\",\"className\":\"text-lg font-bold\"}}]},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center gap-3\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"default\",\"dot\":true,\"children\":\"In Progress\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{status.in_progress}}\",\"className\":\"text-lg font-bold\"}}]},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center gap-3\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"secondary\",\"dot\":true,\"children\":\"Pending\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{status.pending}}\",\"className\":\"text-lg font-bold\"}}]},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-center gap-3\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"outline\",\"dot\":true,\"children\":\"Blocked\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"\",\"value\":\"{{status.blocked}}\",\"className\":\"text-lg font-bold\"}}]}]}]}]},{\"type\":\"Card\",\"props\":{\"title\":\"Recent Tasks\",\"description\":\"Latest task activity and updates\",\"className\":\"w-full\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"gap-3\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-start gap-3 p-3 rounded-lg bg-muted\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"destructive\",\"children\":\"P0\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-1\"},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"Fix production deployment\",\"value\":\"\",\"className\":\"text-sm font-semibold\"}},{\"type\":\"Badge\",\"props\":{\"variant\":\"default\",\"size\":\"sm\",\"children\":\"Completed\"}}]}]},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-start gap-3 p-3 rounded-lg bg-muted\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"destructive\",\"children\":\"P1\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-1\"},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"Client presentation prep\",\"value\":\"\",\"className\":\"text-sm font-semibold\"}},{\"type\":\"Badge\",\"props\":{\"variant\":\"default\",\"size\":\"sm\",\"children\":\"In Progress\"}}]}]},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-start gap-3 p-3 rounded-lg bg-muted\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"default\",\"children\":\"P2\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-1\"},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"Review architecture docs\",\"value\":\"\",\"className\":\"text-sm font-semibold\"}},{\"type\":\"Badge\",\"props\":{\"variant\":\"secondary\",\"size\":\"sm\",\"children\":\"Pending\"}}]}]},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-start gap-3 p-3 rounded-lg bg-muted\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"secondary\",\"children\":\"P3\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-1\"},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"Update task templates\",\"value\":\"\",\"className\":\"text-sm font-semibold\"}},{\"type\":\"Badge\",\"props\":{\"variant\":\"secondary\",\"size\":\"sm\",\"children\":\"Pending\"}}]}]},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-row items-start gap-3 p-3 rounded-lg bg-muted\"},\"children\":[{\"type\":\"Badge\",\"props\":{\"variant\":\"outline\",\"children\":\"P5\"}},{\"type\":\"Stack\",\"props\":{\"className\":\"flex-1\"},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"Research new tools\",\"value\":\"\",\"className\":\"text-sm font-semibold\"}},{\"type\":\"Badge\",\"props\":{\"variant\":\"outline\",\"size\":\"sm\",\"children\":\"Backlog\"}}]}]}]}]},{\"type\":\"Grid\",\"props\":{\"className\":\"grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4\"},\"children\":[{\"type\":\"Card\",\"props\":{\"title\":\"Quick Actions\",\"className\":\"w-full\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"gap-2\"},\"children\":[{\"type\":\"Button\",\"props\":{\"variant\":\"default\",\"fullWidth\":true,\"className\":\"justify-start\",\"children\":\"+ Create Task\"}},{\"type\":\"Button\",\"props\":{\"variant\":\"outline\",\"fullWidth\":true,\"className\":\"justify-start\",\"children\":\"View All Tasks\"}},{\"type\":\"Button\",\"props\":{\"variant\":\"outline\",\"fullWidth\":true,\"className\":\"justify-start\",\"children\":\"Filter by Priority\"}},{\"type\":\"Button\",\"props\":{\"variant\":\"outline\",\"fullWidth\":true,\"className\":\"justify-start\",\"children\":\"Export Report\"}}]}]},{\"type\":\"Card\",\"props\":{\"title\":\"Performance\",\"className\":\"w-full\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"gap-3\"},\"children\":[{\"type\":\"Stack\",\"props\":{},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"Completion Rate\",\"value\":\"{{performance.completion_rate}}\",\"format\":\"percentage\",\"className\":\"text-sm\"}},{\"type\":\"Progress\",\"props\":{\"value\":\"{{performance.completion_rate}}\",\"max\":100,\"variant\":\"default\",\"className\":\"h-2\"}}]},{\"type\":\"Stack\",\"props\":{},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"On-Time Delivery\",\"value\":\"{{performance.on_time_rate}}\",\"format\":\"percentage\",\"className\":\"text-sm\"}},{\"type\":\"Progress\",\"props\":{\"value\":\"{{performance.on_time_rate}}\",\"max\":100,\"variant\":\"default\",\"className\":\"h-2\"}}]},{\"type\":\"Metric\",\"props\":{\"label\":\"Avg Task Age\",\"value\":\"{{performance.avg_task_age}}\",\"className\":\"text-sm\"}}]}]},{\"type\":\"Card\",\"props\":{\"title\":\"Impact Metrics\",\"className\":\"w-full\"},\"children\":[{\"type\":\"Stack\",\"props\":{\"className\":\"gap-3\"},\"children\":[{\"type\":\"Metric\",\"props\":{\"label\":\"High Impact Tasks\",\"value\":\"{{impact.high_impact_count}}\",\"className\":\"text-sm\"}},{\"type\":\"Metric\",\"props\":{\"label\":\"Avg Impact Score\",\"value\":\"{{impact.avg_score}}\",\"className\":\"text-sm\"}},{\"type\":\"Badge\",\"props\":{\"variant\":\"default\",\"children\":\"Impact: {{impact.total_value}}\"}}]}]}]}]}]}]}",
+  "title": "Personal Todos Agent - Comprehensive Dashboard",
+  "specification": {
+    "id": "personal-todos-agent-comprehensive-dashboard",
+    "title": "Task Management Dashboard - Fibonacci Priority System",
+    "layout": "dashboard",
+    "components": [
+      {
+        "type": "header",
+        "props": {
+          "title": "Personal Todos Dashboard",
+          "level": 1,
+          "subtitle": "Fibonacci Priority System (P0-P7) - Strategic Task Management"
+        }
+      },
+      {
+        "type": "Grid",
+        "props": {
+          "cols": 4,
+          "gap": 16,
+          "className": "mb-6"
+        },
+        "children": [
+          {
+            "type": "Card",
+            "props": {
+              "title": "Total Tasks",
+              "className": "bg-gradient-to-br from-blue-50 to-blue-100"
+            },
+            "children": [
+              {
+                "type": "Metric",
+                "props": {
+                  "value": "127",
+                  "label": "Active Tasks",
+                  "description": "Across all priority levels"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "title": "Critical Priority",
+              "className": "bg-gradient-to-br from-red-50 to-red-100"
+            },
+            "children": [
+              {
+                "type": "Metric",
+                "props": {
+                  "value": "7",
+                  "label": "P0-P1 Tasks",
+                  "description": "Requires immediate attention"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "title": "Completed Today",
+              "className": "bg-gradient-to-br from-green-50 to-green-100"
+            },
+            "children": [
+              {
+                "type": "Metric",
+                "props": {
+                  "value": "12",
+                  "label": "Tasks Done",
+                  "description": "Great progress!"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "title": "Success Rate",
+              "className": "bg-gradient-to-br from-purple-50 to-purple-100"
+            },
+            "children": [
+              {
+                "type": "Metric",
+                "props": {
+                  "value": "94%",
+                  "label": "Completion Rate",
+                  "description": "Last 30 days"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Grid",
+        "props": {
+          "cols": 2,
+          "gap": 24,
+          "className": "mb-6"
+        },
+        "children": [
+          {
+            "type": "Card",
+            "props": {
+              "title": "Priority Distribution (Fibonacci P0-P7)",
+              "description": "Task breakdown across priority levels"
+            },
+            "children": [
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 2,
+                  "gap": 12
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "className": "border-l-4 border-l-red-500 bg-red-50"
+                    },
+                    "children": [
+                      {
+                        "type": "Grid",
+                        "props": {
+                          "cols": 2,
+                          "gap": 8
+                        },
+                        "children": [
+                          {
+                            "type": "Badge",
+                            "props": {
+                              "children": "P0 Critical",
+                              "variant": "destructive"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "2",
+                              "label": "Emergency Tasks"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "className": "border-l-4 border-l-orange-500 bg-orange-50"
+                    },
+                    "children": [
+                      {
+                        "type": "Grid",
+                        "props": {
+                          "cols": 2,
+                          "gap": 8
+                        },
+                        "children": [
+                          {
+                            "type": "Badge",
+                            "props": {
+                              "children": "P1 Urgent",
+                              "variant": "destructive"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "5",
+                              "label": "Due Today"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "className": "border-l-4 border-l-yellow-500 bg-yellow-50"
+                    },
+                    "children": [
+                      {
+                        "type": "Grid",
+                        "props": {
+                          "cols": 2,
+                          "gap": 8
+                        },
+                        "children": [
+                          {
+                            "type": "Badge",
+                            "props": {
+                              "children": "P2 High",
+                              "variant": "default"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "18",
+                              "label": "This Week"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "className": "border-l-4 border-l-blue-500 bg-blue-50"
+                    },
+                    "children": [
+                      {
+                        "type": "Grid",
+                        "props": {
+                          "cols": 2,
+                          "gap": 8
+                        },
+                        "children": [
+                          {
+                            "type": "Badge",
+                            "props": {
+                              "children": "P3 Normal",
+                              "variant": "secondary"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "24",
+                              "label": "This Month"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "className": "border-l-4 border-l-green-500 bg-green-50"
+                    },
+                    "children": [
+                      {
+                        "type": "Grid",
+                        "props": {
+                          "cols": 2,
+                          "gap": 8
+                        },
+                        "children": [
+                          {
+                            "type": "Badge",
+                            "props": {
+                              "children": "P5 Low",
+                              "variant": "outline"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "32",
+                              "label": "This Quarter"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "className": "border-l-4 border-l-gray-500 bg-gray-50"
+                    },
+                    "children": [
+                      {
+                        "type": "Grid",
+                        "props": {
+                          "cols": 2,
+                          "gap": 8
+                        },
+                        "children": [
+                          {
+                            "type": "Badge",
+                            "props": {
+                              "children": "P8+ Future",
+                              "variant": "outline"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "46",
+                              "label": "Backlog"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "title": "Performance Metrics",
+              "description": "Task completion and efficiency tracking"
+            },
+            "children": [
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 1,
+                  "gap": 16
+                },
+                "children": [
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "98%",
+                      "label": "P0-P2 Completion Rate",
+                      "description": "Critical tasks completion"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "3.2 days",
+                      "label": "Average Task Age",
+                      "description": "Time from creation to completion"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "24",
+                      "label": "Feed Posts This Week",
+                      "description": "Agent feed activity"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "156",
+                      "label": "Cross-Session Tasks",
+                      "description": "Persistent task tracking"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": {
+          "title": "Today's Priorities",
+          "description": "Focus on these high-impact tasks",
+          "className": "mb-6"
+        },
+        "children": [
+          {
+            "type": "Grid",
+            "props": {
+              "cols": 1,
+              "gap": 8
+            },
+            "children": [
+              {
+                "type": "Card",
+                "props": {
+                  "className": "border-l-4 border-l-red-600 hover:shadow-lg transition-shadow"
+                },
+                "children": [
+                  {
+                    "type": "Grid",
+                    "props": {
+                      "cols": 4,
+                      "gap": 12
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "P0",
+                          "variant": "destructive"
+                        }
+                      },
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "Fix production deployment",
+                          "label": "Critical Task"
+                        }
+                      },
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "In Progress",
+                          "variant": "default"
+                        }
+                      },
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "2h ago",
+                          "label": "Created"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": {
+                  "className": "border-l-4 border-l-orange-600 hover:shadow-lg transition-shadow"
+                },
+                "children": [
+                  {
+                    "type": "Grid",
+                    "props": {
+                      "cols": 4,
+                      "gap": 12
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "P1",
+                          "variant": "destructive"
+                        }
+                      },
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "Client presentation review",
+                          "label": "Urgent Task"
+                        }
+                      },
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "Pending",
+                          "variant": "secondary"
+                        }
+                      },
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "Due 6pm",
+                          "label": "Deadline"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Card",
+                "props": {
+                  "className": "border-l-4 border-l-yellow-600 hover:shadow-lg transition-shadow"
+                },
+                "children": [
+                  {
+                    "type": "Grid",
+                    "props": {
+                      "cols": 4,
+                      "gap": 12
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "P2",
+                          "variant": "default"
+                        }
+                      },
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "Review agent architecture",
+                          "label": "High Priority"
+                        }
+                      },
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "Scheduled",
+                          "variant": "outline"
+                        }
+                      },
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "This week",
+                          "label": "Timeline"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Grid",
+        "props": {
+          "cols": 3,
+          "gap": 16,
+          "className": "mb-6"
+        },
+        "children": [
+          {
+            "type": "Card",
+            "props": {
+              "title": "Strategic Alignment"
+            },
+            "children": [
+              {
+                "type": "Metric",
+                "props": {
+                  "value": "89%",
+                  "label": "Goal Alignment",
+                  "description": "Tasks aligned with business goals"
+                }
+              },
+              {
+                "type": "Badge",
+                "props": {
+                  "children": "On Track",
+                  "variant": "default"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "title": "Persistence"
+            },
+            "children": [
+              {
+                "type": "Metric",
+                "props": {
+                  "value": "100%",
+                  "label": "Data Retention",
+                  "description": "Cross-session task tracking"
+                }
+              },
+              {
+                "type": "Badge",
+                "props": {
+                  "children": "Active",
+                  "variant": "default"
+                }
+              }
+            ]
+          },
+          {
+            "type": "Card",
+            "props": {
+              "title": "User Engagement"
+            },
+            "children": [
+              {
+                "type": "Metric",
+                "props": {
+                  "value": "342",
+                  "label": "Feed Interactions",
+                  "description": "Views and responses"
+                }
+              },
+              {
+                "type": "Badge",
+                "props": {
+                  "children": "High Interest",
+                  "variant": "default"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "props": {
+          "title": "Quick Actions",
+          "description": "Common task management operations"
+        },
+        "children": [
+          {
+            "type": "Grid",
+            "props": {
+              "cols": 4,
+              "gap": 12
+            },
+            "children": [
+              {
+                "type": "Button",
+                "props": {
+                  "children": "Create Task",
+                  "variant": "default"
+                }
+              },
+              {
+                "type": "Button",
+                "props": {
+                  "children": "View All Tasks",
+                  "variant": "outline"
+                }
+              },
+              {
+                "type": "Button",
+                "props": {
+                  "children": "Filter by Priority",
+                  "variant": "outline"
+                }
+              },
+              {
+                "type": "Button",
+                "props": {
+                  "children": "Export Report",
+                  "variant": "secondary"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "version": 1,
-  "created_at": "2025-10-04T00:00:00.000Z",
+  "created_at": "2025-10-05T00:00:00.000Z",
   "updated_at": "2025-10-05T00:00:00.000Z"
 }

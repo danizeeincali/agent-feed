@@ -1,0 +1,10 @@
+{
+  "id": "test-page-list-0-11c28f84-37ca-4779-a417-931009fe9483",
+  "agent_id": "test-agent-fa274077-b766-4126-98ac-bd213caf005b",
+  "title": "List Test Page 0",
+  "page_type": "dynamic",
+  "content_type": "text",
+  "content_value": "Content for page 0",
+  "status": "published",
+  "version": 1
+}

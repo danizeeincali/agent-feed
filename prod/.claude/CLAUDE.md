@@ -125,8 +125,10 @@ All page content is validated through the PageBuilder Agent's security pipeline 
 ### Core Development
 `coder`, `reviewer`, `tester`, `planner`, `researcher`
 
-### **NEW: Page Building System**
-`page-builder-agent` - **Centralized dynamic page creation service for all agents**
+### **NEW: Page Building & Verification System**
+- `page-builder-agent` - **Centralized dynamic page creation service for all agents**
+- `page-verification-agent` - **Autonomous QA testing for dynamic pages**
+- `dynamic-page-testing-agent` - **E2E testing and validation for dynamic pages**
 
 ### Swarm Coordination
 `hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`, `collective-intelligence-coordinator`, `swarm-memory-manager`

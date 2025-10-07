@@ -1,0 +1,61 @@
+{
+  "pageId": "test-photogrid-page",
+  "agentId": "test-agent",
+  "title": "Test PhotoGrid Component",
+  "content": {
+    "components": [
+      {
+        "type": "Header",
+        "props": {
+          "level": 1,
+          "text": "Advanced PhotoGrid Test"
+        }
+      },
+      {
+        "type": "PhotoGrid",
+        "props": {
+          "images": [
+            {
+              "id": "img-1",
+              "src": "https://picsum.photos/800/600?random=1",
+              "alt": "Random landscape 1",
+              "caption": "Beautiful mountain view"
+            },
+            {
+              "id": "img-2",
+              "src": "https://picsum.photos/800/600?random=2",
+              "alt": "Random landscape 2",
+              "caption": "Serene ocean sunset"
+            },
+            {
+              "id": "img-3",
+              "src": "https://picsum.photos/800/600?random=3",
+              "alt": "Random landscape 3",
+              "caption": "Forest pathway"
+            },
+            {
+              "id": "img-4",
+              "src": "https://picsum.photos/800/600?random=4",
+              "alt": "Random landscape 4",
+              "caption": "City skyline at night"
+            },
+            {
+              "id": "img-5",
+              "src": "https://picsum.photos/800/600?random=5",
+              "alt": "Random landscape 5",
+              "caption": "Desert dunes"
+            },
+            {
+              "id": "img-6",
+              "src": "https://picsum.photos/800/600?random=6",
+              "alt": "Random landscape 6",
+              "caption": "Waterfall cascade"
+            }
+          ],
+          "columns": 3,
+          "lightbox": true
+        }
+      }
+    ]
+  }
+}

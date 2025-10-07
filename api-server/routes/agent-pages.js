@@ -5,8 +5,15 @@
 
 import express from 'express';
 import crypto from 'crypto';
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { validatePageMiddleware } from '../middleware/page-validation.js';
+import feedbackLoop from '../services/feedback-loop.js';
 
 const router = express.Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let db = null;
 
@@ -79,6 +86,38 @@ function transformPageForFrontend(page) {
   }
 
   return transformedPage;
+}
+
+/**
+ * Trigger page-verification-agent asynchronously
+ * @param {string} agentId - Agent ID
+ * @param {string} pageId - Page ID
+ * @returns {Promise<void>}
+ */
+async function triggerPageVerification(agentId, pageId) {
+  return new Promise((resolve, reject) => {
+    const scriptPath = path.resolve(__dirname, '../../prod/agent_workspace/page-verification-agent/verify-page.sh');
+
+    console.log(`🔍 Triggering page verification for ${agentId}/${pageId}...`);
+
+    // Spawn verification script in background
+    const verificationProcess = spawn(scriptPath, [agentId, pageId], {
+      detached: true,
+      stdio: 'ignore',
+      env: {
+        ...process.env,
+        API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3001',
+        FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
+        HEADLESS: 'true'
+      }
+    });
+
+    // Detach so it runs independently
+    verificationProcess.unref();
+
+    console.log(`✅ Page verification triggered for ${agentId}/${pageId} (PID: ${verificationProcess.pid})`);
+    resolve();
+  });
 }
 
 /**
@@ -267,9 +306,9 @@ router.get('/agents/:agentId/pages/:pageId', (req, res) => {
 
 /**
  * POST /api/agent-pages/agents/:agentId/pages
- * Create a new page
+ * Create a new page with feedback loop integration
  */
-router.post('/agents/:agentId/pages', (req, res) => {
+router.post('/agents/:agentId/pages', validatePageMiddleware, async (req, res) => {
   try {
     if (!db) {
       return res.status(500).json({
@@ -312,6 +351,45 @@ router.post('/agents/:agentId/pages', (req, res) => {
     const pageId = id || crypto.randomUUID();
     const now = new Date().toISOString();
 
+    // Check if validation passed (from middleware)
+    // If req.validationErrors exists, we had validation failures
+    if (req.validationErrors && req.validationErrors.length > 0) {
+      console.log(`⚠️ Validation failed for page ${pageId}, recording in feedback loop`);
+
+      // Record each validation failure in the feedback system
+      for (const error of req.validationErrors) {
+        await feedbackLoop.recordFailure(pageId, agentId, {
+          type: error.type || 'validation_error',
+          message: error.message,
+          details: error.details,
+          componentType: error.component?.type,
+          validationRule: error.rule,
+          pageConfig: content_value,
+          stackTrace: error.stack
+        });
+      }
+
+      // Return validation errors with feedback suggestions
+      // Transform errors back to simpler format for API response
+      const simpleErrors = req.validation.errors.map(err => ({
+        path: err.path,
+        field: err.field,
+        message: err.message,
+        code: err.code,
+        severity: err.severity,
+        suggestion: err.suggestion
+      }));
+
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        message: 'Page validation failed',
+        errors: simpleErrors,
+        pageId,
+        feedbackRecorded: true
+      });
+    }
+
     // Insert page
     db.prepare(`
       INSERT INTO agent_pages (
@@ -332,6 +410,9 @@ router.post('/agents/:agentId/pages', (req, res) => {
       1
     );
 
+    // Record success in feedback system
+    await feedbackLoop.recordSuccess(pageId, agentId, content_value);
+
     // Fetch the created page
     const createdPage = db.prepare(
       'SELECT * FROM agent_pages WHERE id = ?'
@@ -344,6 +425,12 @@ router.post('/agents/:agentId/pages', (req, res) => {
     };
 
     console.log(`✅ Created page ${pageId} for agent ${agentId} (in database)`);
+
+    // Trigger page-verification-agent asynchronously (don't block response)
+    triggerPageVerification(agentId, pageId).catch(error => {
+      console.error(`⚠️ Page verification trigger failed for ${pageId}:`, error.message);
+      // Don't fail the request - verification is async
+    });
 
     res.status(201).json({
       success: true,

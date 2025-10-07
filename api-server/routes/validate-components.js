@@ -1,7 +1,15 @@
 import express from 'express';
 import { z } from 'zod';
+import { applyValidationRules } from '../middleware/validation-rules.js';
 
 const router = express.Router();
+
+// Helper for validating template variables (strings starting with {{)
+const templateVariableOrString = (schema) =>
+  z.union([
+    z.string().regex(/^\{\{.+\}\}$/),
+    schema
+  ]);
 
 // Component schema registry - mirrors frontend schemas
 const ComponentSchemas = {
@@ -103,6 +111,103 @@ const ComponentSchemas = {
     variant: z.enum(['default', 'destructive', 'outline', 'secondary']).optional(),
     children: z.string(),
     className: z.string().optional()
+  }),
+
+  // 1. Checklist - interactive checklist with editable items
+  Checklist: z.object({
+    items: z.array(z.object({
+      id: z.union([z.string(), z.number()]),
+      text: z.string().min(1, "Item text is required"),
+      checked: z.boolean()
+    })).min(1, "At least one item is required"),
+    allowEdit: z.boolean().optional().default(false),
+    onChange: templateVariableOrString(z.string().url()).optional()
+  }),
+
+  // 2. Calendar - date picker with events
+  Calendar: z.object({
+    mode: z.enum(['single', 'multiple', 'range']).default('single'),
+    selectedDate: z.union([
+      z.string().datetime(),
+      z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      templateVariableOrString(z.string())
+    ]).optional(),
+    events: z.array(z.object({
+      id: z.union([z.string(), z.number()]),
+      date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      title: z.string(),
+      description: z.string().optional(),
+      color: z.string().optional()
+    })).optional(),
+    onDateSelect: templateVariableOrString(z.string().url()).optional()
+  }),
+
+  // 3. PhotoGrid - responsive image grid with lightbox
+  PhotoGrid: z.object({
+    images: z.array(z.object({
+      url: templateVariableOrString(z.string().url()),
+      alt: z.string().optional(),
+      caption: z.string().optional()
+    })).min(1, "At least one image is required"),
+    columns: z.number().min(1).max(6).optional().default(3),
+    enableLightbox: z.boolean().optional().default(true),
+    aspectRatio: z.enum(['square', '4:3', '16:9', 'auto']).optional().default('auto')
+  }),
+
+  // 4. Markdown - markdown renderer with sanitization
+  Markdown: z.object({
+    content: z.string().min(1, "Content is required"),
+    sanitize: z.boolean().optional().default(true),
+    className: z.string().optional()
+  }),
+
+  // 5. Sidebar - navigation sidebar with collapsible sections
+  Sidebar: z.object({
+    items: z.array(z.object({
+      id: z.string(),
+      label: z.string().min(1, "Label is required"),
+      icon: z.string().optional(),
+      href: templateVariableOrString(z.string()).optional(),
+      children: z.array(z.lazy(() => z.object({
+        id: z.string(),
+        label: z.string(),
+        icon: z.string().optional(),
+        href: templateVariableOrString(z.string()).optional()
+      }))).optional()
+    })).min(1, "At least one item is required"),
+    activeItem: z.string().optional(),
+    position: z.enum(['left', 'right']).optional().default('left'),
+    collapsible: z.boolean().optional().default(true)
+  }),
+
+  // 6. SwipeCard - swipeable cards with callbacks
+  SwipeCard: z.object({
+    cards: z.array(z.object({
+      id: z.string(),
+      image: templateVariableOrString(z.string().url()).optional(),
+      title: z.string().min(1, "Title is required"),
+      description: z.string().optional(),
+      metadata: z.record(z.any()).optional()
+    })).min(1, "At least one card is required"),
+    onSwipeLeft: templateVariableOrString(z.string().url()).optional(),
+    onSwipeRight: templateVariableOrString(z.string().url()).optional(),
+    showControls: z.boolean().optional().default(true),
+    className: z.string().optional()
+  }),
+
+  // 7. GanttChart - project timeline visualization
+  GanttChart: z.object({
+    tasks: z.array(z.object({
+      id: z.union([z.string(), z.number()]),
+      name: z.string().min(1, "Task name is required"),
+      startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Start date must be in YYYY-MM-DD format"),
+      endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "End date must be in YYYY-MM-DD format"),
+      progress: z.number().min(0).max(100).optional().default(0),
+      dependencies: z.array(z.union([z.string(), z.number()])).optional(),
+      assignee: z.string().optional(),
+      color: z.string().optional()
+    })).min(1, "At least one task is required"),
+    viewMode: z.enum(['day', 'week', 'month', 'quarter', 'year']).optional().default('week')
   })
 };
 
@@ -177,6 +282,12 @@ router.post('/', (req, res) => {
           }))
         });
       }
+    }
+
+    // Apply component-specific validation rules (e.g., Sidebar navigation)
+    const rulesResult = applyValidationRules(type, props, path);
+    if (rulesResult.errors.length > 0) {
+      errors.push(...rulesResult.errors);
     }
 
     // Recursively validate children

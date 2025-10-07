@@ -4,7 +4,7 @@ import {
   ArrowLeft,
   Loader2,
   AlertCircle,
-  Calendar,
+  Calendar as CalendarIcon,
   User,
   Tag,
   Settings,
@@ -13,6 +13,90 @@ import {
 import { ComponentSchemas } from '../schemas/componentSchemas';
 import { ZodError } from 'zod';
 import { ValidationError } from './ValidationError';
+import PhotoGrid from './dynamic-page/PhotoGrid';
+import SwipeCard from './dynamic-page/SwipeCard';
+import Checklist from './dynamic-page/Checklist';
+import Calendar from './dynamic-page/Calendar';
+import MarkdownRenderer from './dynamic-page/MarkdownRenderer';
+import Sidebar from './dynamic-page/Sidebar';
+import GanttChart from './dynamic-page/GanttChart';
+
+/**
+ * Generate a kebab-case ID from a title string
+ * Handles special characters, numbers, Unicode
+ * @param title - The header title text
+ * @param fallback - Fallback ID if title is invalid
+ * @returns A URL-safe kebab-case ID
+ */
+const generateIdFromTitle = (title: string, fallback: string = 'header'): string => {
+  if (!title || typeof title !== 'string') return fallback;
+
+  return title
+    .toLowerCase()
+    .trim()
+    // Normalize Unicode (é → e, ñ → n)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    // Replace special chars and spaces with hyphens
+    .replace(/[^a-z0-9]+/g, '-')
+    // Remove leading/trailing hyphens
+    .replace(/^-+|-+$/g, '')
+    // Truncate to reasonable length
+    .substring(0, 50)
+    // Fallback if empty after processing
+    || fallback;
+};
+
+/**
+ * TabsComponent - Separate component to properly use React hooks
+ * Fixes hooks violation by moving useState to component top level
+ */
+interface TabsComponentProps {
+  id?: string;
+  tabs?: Array<{ label: string; content: string }>;
+  className?: string;
+}
+
+const TabsComponent: React.FC<TabsComponentProps> = ({ id, tabs, className }) => {
+  const [activeTab, setActiveTab] = useState(0);
+
+  const tabsData = tabs || [
+    { label: "Tab 1", content: "Content 1" },
+    { label: "Tab 2", content: "Content 2" }
+  ];
+
+  return (
+    <div id={id} className={`bg-white rounded-lg border border-gray-200 ${className || ''}`}>
+      <div role="tablist" className="flex border-b">
+        {tabsData.map((tab, idx) => (
+          <button
+            key={idx}
+            role="tab"
+            aria-selected={activeTab === idx}
+            aria-controls={`tabpanel-${id || 'tabs'}-${idx}`}
+            id={`tab-${id || 'tabs'}-${idx}`}
+            onClick={() => setActiveTab(idx)}
+            className={`px-6 py-3 text-sm font-medium ${
+              activeTab === idx
+                ? 'text-blue-600 border-b-2 border-blue-600'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div
+        role="tabpanel"
+        id={`tabpanel-${id || 'tabs'}-${activeTab}`}
+        aria-labelledby={`tab-${id || 'tabs'}-${activeTab}`}
+        className="p-6"
+      >
+        {tabsData[activeTab]?.content}
+      </div>
+    </div>
+  );
+};
 
 interface ComponentConfig {
   type: string;
@@ -26,7 +110,7 @@ interface DynamicPageData {
   agent_id?: string;
   title: string;
   version?: string | number;
-  layout?: any[];
+  layout?: "sidebar" | "single-column" | "two-column" | any[];
   components?: ComponentConfig[];
   specification?: string | any;
   metadata?: {
@@ -55,9 +139,9 @@ const DynamicPageRenderer: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const response = await fetch(`/api/agent-pages/agents/${agentId}/pages/${pageId}`);
-        
+
         if (response.ok) {
           const data = await response.json();
           if (data.success) {
@@ -81,22 +165,172 @@ const DynamicPageRenderer: React.FC = () => {
     fetchPageData();
   }, [agentId, pageId]);
 
-  const renderComponent = (config: ComponentConfig): React.ReactNode => {
+  /**
+   * Generates a stable React key for a component
+   * Avoids Math.random() to prevent unnecessary re-renders
+   */
+  const generateComponentKey = (type: string, index: number, props: any): string => {
+    // Priority 1: Explicit key prop
+    if (props?.key) return props.key;
+
+    // Priority 2: ID prop
+    if (props?.id) return `${type}-${props.id}`;
+
+    // Priority 3: Index-based key (stable across renders)
+    return `${type}-${index}`;
+  };
+
+  /**
+   * Extracts components array from various data sources with priority fallback
+   */
+  const extractComponentsArray = (pageData: DynamicPageData): ComponentConfig[] | null => {
+    if (!pageData) return null;
+
+    // Priority 1: Check specification field (new format)
+    if (pageData.specification !== null && pageData.specification !== undefined) {
+      try {
+        const spec = typeof pageData.specification === 'string'
+          ? JSON.parse(pageData.specification)
+          : pageData.specification;
+
+        if (spec && typeof spec === 'object' && Array.isArray(spec.components) && spec.components.length > 0) {
+          return spec.components;
+        }
+      } catch (parseError) {
+        console.warn('Failed to parse specification field:', parseError);
+        // Continue to fallback options
+      }
+    }
+
+    // Priority 2: Check direct components array
+    if (Array.isArray(pageData.components) && pageData.components.length > 0) {
+      return pageData.components;
+    }
+
+    // Priority 3: Check legacy layout format
+    if (Array.isArray(pageData.layout) && pageData.layout.length > 0) {
+      // Convert layout format to components format
+      return pageData.layout.map((layoutItem: any) => ({
+        type: layoutItem.type,
+        props: layoutItem.config || {},
+        children: []
+      }));
+    }
+
+    // No components found
+    return null;
+  };
+
+  /**
+   * Renders error UI for a failed component
+   */
+  const renderComponentError = (component: ComponentConfig, error: any, index: number): React.ReactNode => {
+    return (
+      <div key={`error-${index}`} className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="flex items-center gap-2 text-red-800">
+          <AlertCircle className="w-5 h-5" />
+          <span className="font-medium">Component Error</span>
+        </div>
+        <div className="text-sm text-red-700 mt-2">
+          <div>Type: {component.type}</div>
+          <div>Error: {error.message || 'Unknown error'}</div>
+        </div>
+        <details className="mt-2">
+          <summary className="text-xs cursor-pointer text-red-600 hover:text-red-700">View Details</summary>
+          <pre className="text-xs mt-2 bg-red-100 p-2 rounded overflow-auto max-h-40">
+            {JSON.stringify(component, null, 2)}
+          </pre>
+        </details>
+      </div>
+    );
+  };
+
+  /**
+   * Renders empty state when no components are configured
+   */
+  const renderEmptyState = (): React.ReactNode => {
+    return (
+      <>
+        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+          <Eye className="mx-auto h-12 w-12 text-gray-300 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No Components Configured
+          </h3>
+          <p className="text-gray-500 mb-4">
+            This page doesn't have any components yet.
+          </p>
+          <button
+            onClick={() => navigate(`/agents/${agentId}/pages/${pageId}/edit`)}
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Add Components
+          </button>
+        </div>
+
+        {pageData?.metadata?.description && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+            <h3 className="text-lg font-semibold mb-2">Description</h3>
+            <p className="text-gray-600">{pageData.metadata.description}</p>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  /**
+   * Main component rendering function with validation
+   * Handles depth limiting and circular reference detection
+   */
+  const renderComponent = (
+    config: ComponentConfig,
+    index: number,
+    depth: number = 0,
+    visited: Set<string> = new Set()
+  ): React.ReactNode => {
+    // Add null/undefined check at the very start
+    if (!config || config === null || config === undefined) {
+      return null;
+    }
+
+    // Prevent infinite recursion
+    const MAX_DEPTH = 10;
+    if (depth > MAX_DEPTH) {
+      console.warn('Max component nesting depth exceeded');
+      return null;
+    }
+
     const { type, props = {}, children = [] } = config;
 
-    // Validate component props
+    // Sanitize props - ensure it's an object
+    let sanitizedProps = props;
+    if (typeof props !== 'object' || Array.isArray(props)) {
+      console.warn(`Invalid props for component ${type}:`, props);
+      sanitizedProps = {};
+    }
+
+    // Detect circular references
+    const componentId = `${type}-${index}-${depth}`;
+    if (visited.has(componentId)) {
+      console.warn('Circular component reference detected');
+      return null;
+    }
+
+    const newVisited = new Set(visited);
+    newVisited.add(componentId);
+
+    // Validate component props with Zod schema
     const schema = ComponentSchemas[type as keyof typeof ComponentSchemas];
 
     if (schema) {
       try {
         // Validate props with Zod
-        const validatedProps = schema.parse(props);
+        const validatedProps = schema.parse(sanitizedProps);
 
         // Use validatedProps for rendering
-        return renderValidatedComponent(type, validatedProps, children);
+        return renderValidatedComponent(type, validatedProps, children, index, depth, newVisited);
       } catch (error) {
         if (error instanceof ZodError) {
-          return <ValidationError componentType={type} errors={error} />;
+          return <ValidationError key={generateComponentKey(type, index, sanitizedProps)} componentType={type} errors={error} />;
         }
         // Re-throw non-Zod errors
         throw error;
@@ -104,25 +338,53 @@ const DynamicPageRenderer: React.FC = () => {
     }
 
     // For components without schemas, proceed with original rendering
-    return renderValidatedComponent(type, props, children);
+    return renderValidatedComponent(type, sanitizedProps, children, index, depth, newVisited);
   };
 
-  const renderValidatedComponent = (type: string, props: any, children: ComponentConfig[]): React.ReactNode => {
-    // Basic component rendering - can be expanded with more complex components
+  /**
+   * Renders a validated component with proper children handling
+   */
+  const renderValidatedComponent = (
+    type: string,
+    props: any,
+    children: ComponentConfig[],
+    index: number,
+    depth: number = 0,
+    visited: Set<string> = new Set()
+  ): React.ReactNode => {
+    const key = generateComponentKey(type, index, props);
+
+    // Recursively render children
+    const renderedChildren = children.map((child, childIndex) =>
+      renderComponent(child, childIndex, depth + 1, visited)
+    );
+
+    // Component rendering logic
     switch (type) {
       case 'header':
         const HeaderTag = `h${props.level || 1}` as keyof JSX.IntrinsicElements;
+        // Auto-generate ID from title if not provided
+        const headerId = props.id || generateIdFromTitle(props.title, `header-${index}`);
+
         return (
-          <HeaderTag key={Math.random()} className={`font-bold text-gray-900 mb-4 ${
-            props.level === 1 ? 'text-3xl' :
-            props.level === 2 ? 'text-2xl' :
-            props.level === 3 ? 'text-xl' :
-            props.level === 4 ? 'text-lg' :
-            props.level === 5 ? 'text-base' :
-            'text-sm'
-          }`}>
+          <HeaderTag
+            key={key}
+            id={headerId}  // Use generated or explicit ID
+            className={`font-bold text-gray-900 mb-4 ${
+              props.level === 1 ? 'text-3xl' :
+              props.level === 2 ? 'text-2xl' :
+              props.level === 3 ? 'text-xl' :
+              props.level === 4 ? 'text-lg' :
+              props.level === 5 ? 'text-base' :
+              'text-sm'
+            } ${props.className || ''}`}
+          >
             {props.title}
-            {props.subtitle && <span className="block text-sm font-normal text-gray-600 mt-1">{props.subtitle}</span>}
+            {props.subtitle && (
+              <span className="block text-base font-normal text-gray-500 mt-2">
+                {props.subtitle}
+              </span>
+            )}
           </HeaderTag>
         );
 
@@ -134,7 +396,7 @@ const DynamicPageRenderer: React.FC = () => {
         ];
 
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">Tasks</h3>
               <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -180,7 +442,7 @@ const DynamicPageRenderer: React.FC = () => {
         ];
 
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -204,7 +466,7 @@ const DynamicPageRenderer: React.FC = () => {
 
       case 'stat':
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">{props.label}</p>
@@ -226,10 +488,10 @@ const DynamicPageRenderer: React.FC = () => {
         const ListTag = props.ordered ? 'ol' : 'ul';
 
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-6">
             <ListTag className={`space-y-2 ${props.ordered ? 'list-decimal list-inside' : 'list-disc list-inside'}`}>
-              {demoItems.map((item: string, index: number) => (
-                <li key={index} className="text-gray-700">
+              {demoItems.map((item: string, idx: number) => (
+                <li key={idx} className="text-gray-700">
                   {props.icon && <span className="mr-2">{props.icon}</span>}
                   {item}
                 </li>
@@ -240,10 +502,10 @@ const DynamicPageRenderer: React.FC = () => {
 
       case 'form':
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-6">
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              {props.fields?.map((field: any, index: number) => (
-                <div key={index}>
+              {props.fields?.map((field: any, idx: number) => (
+                <div key={idx}>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
                   <input
                     type={field.type || 'text'}
@@ -264,32 +526,7 @@ const DynamicPageRenderer: React.FC = () => {
         );
 
       case 'tabs':
-        const [activeTab, setActiveTab] = React.useState(0);
-        const tabs = props.tabs || [
-          { label: "Tab 1", content: "Content 1" },
-          { label: "Tab 2", content: "Content 2" }
-        ];
-
-        return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200">
-            <div className="flex border-b">
-              {tabs.map((tab: any, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveTab(index)}
-                  className={`px-6 py-3 text-sm font-medium ${
-                    activeTab === index
-                      ? 'text-blue-600 border-b-2 border-blue-600'
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-            <div className="p-6">{tabs[activeTab]?.content}</div>
-          </div>
-        );
+        return <TabsComponent key={key} id={props.id} tabs={props.tabs} className={props.className} />;
 
       case 'timeline':
         const demoEvents = props.events || [
@@ -299,13 +536,13 @@ const DynamicPageRenderer: React.FC = () => {
         ];
 
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="space-y-4">
-              {demoEvents.map((event: any, index: number) => (
+              {demoEvents.map((event: any, idx: number) => (
                 <div key={event.id} className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
-                    {index < demoEvents.length - 1 && <div className="w-0.5 h-full bg-gray-300 my-1"></div>}
+                    {idx < demoEvents.length - 1 && <div className="w-0.5 h-full bg-gray-300 my-1"></div>}
                   </div>
                   <div className="flex-1 pb-4">
                     <p className="font-semibold text-gray-900">{event.title}</p>
@@ -320,20 +557,25 @@ const DynamicPageRenderer: React.FC = () => {
 
       case 'Card':
         return (
-          <div key={Math.random()} className={`bg-white rounded-lg border border-gray-200 p-4 ${props.className || ''}`}>
+          <div
+            key={key}
+            id={props.id}
+            className={`bg-white rounded-lg border border-gray-200 p-4 ${props.className || ''}`}
+          >
             {props.title && <h3 className="text-lg font-semibold mb-2">{props.title}</h3>}
             {props.description && <p className="text-gray-600 mb-4">{props.description}</p>}
-            {children.map(child => renderComponent(child))}
+            {renderedChildren}
           </div>
         );
-      
+
       case 'Grid':
+        const gridCols = props.cols || 2;
         return (
-          <div key={Math.random()} className={`grid ${props.className || ''}`}>
-            {children.map(child => renderComponent(child))}
+          <div key={key} id={props.id} className={`grid grid-cols-${gridCols} gap-4 ${props.className || ''}`}>
+            {renderedChildren}
           </div>
         );
-      
+
       case 'Badge':
         const variants = {
           default: 'bg-blue-100 text-blue-800',
@@ -342,23 +584,23 @@ const DynamicPageRenderer: React.FC = () => {
           outline: 'bg-transparent border border-gray-300 text-gray-700'
         };
         return (
-          <span key={Math.random()} className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${variants[props.variant] || variants.default}`}>
+          <span key={key} className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${variants[props.variant as keyof typeof variants] || variants.default}`}>
             {props.children}
           </span>
         );
-      
+
       case 'Metric':
         return (
-          <div key={Math.random()} className="text-center">
+          <div key={key} className="text-center">
             <div className="text-2xl font-bold text-gray-900">{props.value}</div>
             <div className="text-sm text-gray-600">{props.label}</div>
             {props.description && <div className="text-xs text-gray-500 mt-1">{props.description}</div>}
           </div>
         );
-      
+
       case 'ProfileHeader':
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl" style={{backgroundColor: props.avatar_color || '#3B82F6'}}>
                 {props.name?.charAt(0) || 'A'}
@@ -380,14 +622,14 @@ const DynamicPageRenderer: React.FC = () => {
             </div>
           </div>
         );
-      
+
       case 'CapabilityList':
         return (
-          <div key={Math.random()} className="bg-white rounded-lg border border-gray-200 p-4">
+          <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-4">
             <h3 className="text-lg font-semibold mb-4">{props.title}</h3>
             <div className="space-y-2">
-              {props.capabilities?.map((capability: string, index: number) => (
-                <div key={index} className="flex items-center gap-2">
+              {props.capabilities?.map((capability: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <span className="text-sm text-gray-700">{capability}</span>
                 </div>
@@ -395,7 +637,7 @@ const DynamicPageRenderer: React.FC = () => {
             </div>
           </div>
         );
-      
+
       case 'Button':
         const buttonVariants = {
           default: 'bg-blue-600 text-white hover:bg-blue-700',
@@ -404,7 +646,7 @@ const DynamicPageRenderer: React.FC = () => {
           secondary: 'bg-gray-600 text-white hover:bg-gray-700'
         };
         return (
-          <button key={Math.random()} className={`inline-flex items-center px-4 py-2 rounded-md font-medium ${buttonVariants[props.variant] || buttonVariants.default} ${props.className || ''}`}>
+          <button key={key} className={`inline-flex items-center px-4 py-2 rounded-md font-medium ${buttonVariants[props.variant as keyof typeof buttonVariants] || buttonVariants.default} ${props.className || ''}`}>
             {props.children}
           </button>
         );
@@ -418,8 +660,8 @@ const DynamicPageRenderer: React.FC = () => {
           full: 'max-w-full'
         };
         return (
-          <div key={Math.random()} className={`mx-auto px-4 ${sizeClasses[props.size || 'md']} ${props.className || ''}`}>
-            {children.map(child => renderComponent(child))}
+          <div key={key} id={props.id} className={`mx-auto px-4 ${sizeClasses[props.size as keyof typeof sizeClasses || 'md']} ${props.className || ''}`}>
+            {renderedChildren}
           </div>
         );
 
@@ -427,14 +669,14 @@ const DynamicPageRenderer: React.FC = () => {
         const direction = props.direction === 'horizontal' ? 'flex-row' : 'flex-col';
         const spacing = props.spacing || 4;
         return (
-          <div key={Math.random()} className={`flex ${direction} gap-${spacing} ${props.className || ''}`}>
-            {children.map(child => renderComponent(child))}
+          <div key={key} id={props.id} className={`flex ${direction} gap-${spacing} ${props.className || ''}`}>
+            {renderedChildren}
           </div>
         );
 
       case 'DataCard':
         return (
-          <div key={Math.random()} className={`bg-white rounded-lg border border-gray-200 p-6 ${props.className || ''}`}>
+          <div key={key} id={props.id} className={`bg-white rounded-lg border border-gray-200 p-6 ${props.className || ''}`}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-600">{props.title}</h3>
               {props.icon && <span className="text-xl">{props.icon}</span>}
@@ -460,7 +702,7 @@ const DynamicPageRenderer: React.FC = () => {
           danger: 'bg-red-600'
         };
         return (
-          <div key={Math.random()} className={`w-full ${props.className || ''}`}>
+          <div key={key} id={props.id} className={`w-full ${props.className || ''}`}>
             {props.label && <p className="text-sm font-medium text-gray-700 mb-2">{props.label}</p>}
             <div
               className="w-full bg-gray-200 rounded-full overflow-hidden"
@@ -470,7 +712,7 @@ const DynamicPageRenderer: React.FC = () => {
               aria-valuemax={progressMax}
             >
               <div
-                className={`h-full rounded-full ${progressVariants[props.variant || 'default']}`}
+                className={`h-full rounded-full ${progressVariants[props.variant as keyof typeof progressVariants || 'default']}`}
                 style={{ width: `${percentage}%` }}
               ></div>
             </div>
@@ -480,115 +722,210 @@ const DynamicPageRenderer: React.FC = () => {
           </div>
         );
 
-      default:
-        // For unknown components, render as a simple div with content
+      case 'PhotoGrid':
         return (
-          <div key={Math.random()} className="p-2 border border-gray-200 rounded">
-            <div className="text-xs text-gray-500 mb-1">Component: {type}</div>
-            {props.children && <div className="text-sm">{props.children}</div>}
-            {children.map(child => renderComponent(child))}
+          <PhotoGrid
+            key={key}
+            images={props.images || []}
+            columns={props.columns}
+            enableLightbox={props.enableLightbox}
+            aspectRatio={props.aspectRatio}
+            className={props.className}
+          />
+        );
+
+      case 'SwipeCard':
+        return (
+          <SwipeCard
+            key={key}
+            cards={props.cards || []}
+            onSwipeLeft={props.onSwipeLeft}
+            onSwipeRight={props.onSwipeRight}
+            showControls={props.showControls}
+            className={props.className}
+          />
+        );
+
+      case 'Checklist':
+        return (
+          <Checklist
+            key={key}
+            items={props.items || []}
+            allowEdit={props.allowEdit}
+            onChange={props.onChange}
+            className={props.className}
+          />
+        );
+
+      case 'Calendar':
+        return (
+          <Calendar
+            key={key}
+            mode={props.mode}
+            selectedDate={props.selectedDate}
+            events={props.events}
+            className={props.className}
+          />
+        );
+
+      case 'Markdown':
+        return (
+          <MarkdownRenderer
+            key={key}
+            content={props.content || ''}
+            className={props.className}
+          />
+        );
+
+      case 'Sidebar':
+        return (
+          <Sidebar
+            key={key}
+            items={props.items || []}
+            activeItem={props.activeItem}
+            position={props.position}
+            collapsible={props.collapsible}
+            defaultCollapsed={props.defaultCollapsed}
+            className={props.className}
+          />
+        );
+
+      case 'GanttChart':
+        return (
+          <GanttChart
+            key={key}
+            tasks={props.tasks || []}
+            viewMode={props.viewMode}
+            className={props.className}
+          />
+        );
+
+      default:
+        // For unknown components, render as a placeholder with warning
+        return (
+          <div key={key} className="p-4 border border-dashed border-yellow-300 rounded-lg bg-yellow-50">
+            <div className="text-sm font-medium text-yellow-800 mb-1">
+              Unknown Component: {type}
+            </div>
+            <div className="text-xs text-yellow-600">
+              This component type is not registered. Contact support.
+            </div>
+            {renderedChildren.length > 0 && (
+              <div className="mt-3 space-y-2">
+                {renderedChildren}
+              </div>
+            )}
           </div>
         );
     }
   };
 
+  /**
+   * Returns layout wrapper function based on layout type
+   */
+  const getLayoutWrapper = (layoutType: string) => {
+    switch (layoutType) {
+      case 'sidebar':
+        return (components: React.ReactNode[]) => {
+          // Find Sidebar component(s)
+          const sidebarIndex = components.findIndex((c: any) =>
+            c?.type?.displayName === 'Sidebar' || c?.key?.includes('Sidebar')
+          );
+
+          if (sidebarIndex === -1) {
+            // No sidebar found, fallback to single column
+            return <div className="space-y-6">{components}</div>;
+          }
+
+          const sidebar = components[sidebarIndex];
+          const content = components.filter((_, i) => i !== sidebarIndex);
+
+          return (
+            <div className="flex gap-6">
+              <aside className="w-64 flex-shrink-0">{sidebar}</aside>
+              <main className="flex-1 space-y-6">{content}</main>
+            </div>
+          );
+        };
+
+      case 'two-column':
+        return (components: React.ReactNode[]) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {components}
+          </div>
+        );
+
+      case 'single-column':
+      default:
+        return (components: React.ReactNode[]) => (
+          <div className="space-y-6">
+            {components}
+          </div>
+        );
+    }
+  };
+
+  /**
+   * Main content rendering function
+   * Orchestrates component extraction, validation, and layout application
+   */
   const renderPageContent = () => {
     if (!pageData) return null;
 
     try {
-      let componentsToRender = null;
+      // Step 1: Extract components array from various sources
+      const componentsArray = extractComponentsArray(pageData);
 
-      // Try to parse specification field first (new format)
-      // Only try to parse if specification exists and is not null/undefined
-      if (pageData.specification !== null && pageData.specification !== undefined) {
+      // Step 2: Handle empty state
+      if (!componentsArray || componentsArray.length === 0) {
+        return renderEmptyState();
+      }
+
+      // Step 3: Performance warning for large arrays
+      if (componentsArray.length > 50) {
+        console.warn(
+          `Page has ${componentsArray.length} components. ` +
+          'Consider splitting into multiple pages for better performance.'
+        );
+      }
+
+      // Step 4: Render all components with error boundaries
+      const renderedComponents: React.ReactNode[] = [];
+
+      componentsArray.forEach((component, index) => {
         try {
-          const spec = typeof pageData.specification === 'string'
-            ? JSON.parse(pageData.specification)
-            : pageData.specification;
-
-          if (spec && typeof spec === 'object' && spec.components && Array.isArray(spec.components)) {
-            componentsToRender = spec.components;
+          const rendered = renderComponent(component, index);
+          if (rendered) {
+            renderedComponents.push(rendered);
           }
-        } catch (parseError) {
-          console.warn('Failed to parse specification field:', parseError);
-          // Continue to fallback options
+        } catch (error) {
+          console.error(`Failed to render component ${index}:`, error);
+          renderedComponents.push(renderComponentError(component, error, index));
         }
-      }
+      });
 
-      // Fallback to direct components array
-      if (!componentsToRender && pageData.components && Array.isArray(pageData.components)) {
-        componentsToRender = pageData.components;
-      }
+      // Step 5: Determine layout type
+      const layoutType = typeof pageData.layout === 'string' ? pageData.layout : 'single-column';
 
-      // Render components array (new format with nested children)
-      if (componentsToRender && componentsToRender.length > 0) {
-        return (
-          <div className="space-y-6">
-            {componentsToRender.map((component: any, index: number) => {
-              // Handle component with type and props structure
-              if (component.type) {
-                return (
-                  <div key={index}>
-                    {renderComponent({
-                      type: component.type,
-                      props: component.props || {},
-                      children: component.children || []
-                    })}
-                  </div>
-                );
-              }
-              return null;
-            })}
+      // Step 6: Apply layout wrapper
+      const layoutWrapper = getLayoutWrapper(layoutType);
+      const layoutContent = layoutWrapper(renderedComponents);
 
-            {pageData.metadata?.description && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold mb-2">Description</h3>
-                <p className="text-gray-600">{pageData.metadata.description}</p>
-              </div>
-            )}
-          </div>
-        );
-      }
-
-      // Handle layout-based structure (backward compatibility)
-      if (pageData.layout && Array.isArray(pageData.layout)) {
-        return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">Page Components</h3>
-              <div className="space-y-4">
-                {pageData.layout.map((layoutItem: any, index: number) =>
-                  <div key={index}>
-                    {renderComponent({
-                      type: layoutItem.type,
-                      props: layoutItem.config || {},
-                      children: []
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {pageData.metadata?.description && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold mb-2">Description</h3>
-                <p className="text-gray-600">{pageData.metadata.description}</p>
-              </div>
-            )}
-          </div>
-        );
-      }
-
-      // Fallback: Display as JSON
+      // Step 7: Return wrapped content with metadata
       return (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold mb-4">Page Data</h3>
-          <pre className="text-sm text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded">
-            {JSON.stringify(pageData, null, 2)}
-          </pre>
-        </div>
+        <>
+          {layoutContent}
+
+          {pageData.metadata?.description && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+              <h3 className="text-lg font-semibold mb-2">Description</h3>
+              <p className="text-gray-600">{pageData.metadata.description}</p>
+            </div>
+          )}
+        </>
       );
     } catch (err) {
+      console.error('Error rendering page content:', err);
       return (
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="text-center py-8">
@@ -653,15 +990,12 @@ const DynamicPageRenderer: React.FC = () => {
               }`}>
                 {pageData.status}
               </span>
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                {pageData.components?.join(', ') || 'custom'}
-              </span>
               <span className="text-xs text-gray-500">v{pageData.version}</span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={() => navigate(`/agents/${agentId}/pages/${pageId}/edit`)}
             className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
           >
@@ -681,7 +1015,7 @@ const DynamicPageRenderer: React.FC = () => {
         <div className="flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
+              <CalendarIcon className="w-3 h-3" />
               Created {new Date(pageData.createdAt || pageData.created_at || '').toLocaleDateString()}
             </div>
             <div className="flex items-center gap-1">
@@ -692,8 +1026,8 @@ const DynamicPageRenderer: React.FC = () => {
           {pageData.metadata?.tags && pageData.metadata.tags.length > 0 && (
             <div className="flex items-center gap-2">
               <Tag className="w-3 h-3" />
-              {pageData.metadata.tags.map((tag, index) => (
-                <span key={index} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+              {pageData.metadata.tags.map((tag, idx) => (
+                <span key={idx} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                   {tag}
                 </span>
               ))}

@@ -1,0 +1,57 @@
+{
+  "pageId": "test-checklist-page",
+  "agentId": "test-agent",
+  "title": "Test Checklist Component",
+  "content": {
+    "components": [
+      {
+        "type": "Header",
+        "props": {
+          "level": 1,
+          "text": "Advanced Checklist Test"
+        }
+      },
+      {
+        "type": "Checklist",
+        "props": {
+          "items": [
+            {
+              "id": "item-1",
+              "text": "Review pull request #123",
+              "checked": false,
+              "priority": "high"
+            },
+            {
+              "id": "item-2",
+              "text": "Deploy to production",
+              "checked": false,
+              "priority": "medium"
+            },
+            {
+              "id": "item-3",
+              "text": "Update documentation",
+              "checked": true,
+              "priority": "low"
+            },
+            {
+              "id": "item-4",
+              "text": "Code review feedback addressed",
+              "checked": true,
+              "priority": "high"
+            },
+            {
+              "id": "item-5",
+              "text": "Run integration tests",
+              "checked": false,
+              "priority": "high"
+            }
+          ],
+          "onChange": {
+            "endpoint": "/api/checklist-update",
+            "method": "POST"
+          }
+        }
+      }
+    ]
+  }
+}
