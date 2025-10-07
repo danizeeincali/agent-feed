@@ -245,6 +245,60 @@ function quickValidate(components) {
 - [ ] Re-validate until clean
 - [ ] ONLY THEN create page file
 
+## 🔗 ANCHOR LINK REQUIREMENTS - CRITICAL
+
+**When using anchor links (href="#section") in Sidebar navigation, you MUST create matching IDs.**
+
+### Workflow for Anchor Links:
+
+**Step 1: Plan Your Sections**
+Before creating sidebar items, plan which sections will be anchor targets.
+
+**Step 2: Add IDs to Content Components**
+For components that will be anchor targets, add `id` property:
+```json
+{
+  "type": "header",
+  "props": {
+    "title": "Features Section",
+    "level": 2,
+    "id": "features"  // ← ADD THIS
+  }
+}
+```
+
+**Step 3: Create Sidebar Items with Matching Anchors**
+```json
+{
+  "type": "Sidebar",
+  "props": {
+    "items": [
+      {"id": "nav-features", "label": "Features", "href": "#features"}
+      // ← Must match id="features" above
+    ]
+  }
+}
+```
+
+**Step 4: Validation Will Check**
+The validation API will verify:
+- All anchor links have matching IDs in content
+- IDs are unique
+- No orphaned anchors
+
+### ⚠️ Common Mistakes:
+1. ❌ Creating sidebar with `href="#section"` but no `id="section"` in content
+2. ❌ Typos in IDs: `href="#features"` but `id="feature"` (missing 's')
+3. ❌ Case mismatch: `href="#Features"` but `id="features"`
+
+### ✅ Alternative Approaches:
+If you don't want to add IDs to components:
+- Use full route paths: `href="/agents/my-agent/pages/my-page"`
+- Use onClick: `onClick="handleNavigation"`
+- Use children for nested navigation without href
+
+**VALIDATION WILL FAIL if anchor links have no matching targets.**
+
 ## 🚫 FORBIDDEN COMPONENT PATTERNS
 
 These patterns will ALWAYS fail validation:
@@ -1162,20 +1216,270 @@ curl http://localhost:3001/api/agent-pages/agents/agent-id/pages/page-id  # Veri
 }
 ```
 
+## 🔍 MANDATORY SELF-TEST PROTOCOL
+
+**CRITICAL**: You MUST test your own output before reporting success to users.
+
+### Pre-Report Testing Sequence
+
+Before you report completion to the user, you MUST execute ALL of these tests:
+
+#### Step 1: Execute Self-Test Toolkit
+```bash
+# REQUIRED: Run automated validation
+/workspaces/agent-feed/prod/agent_workspace/page-builder-agent/self-test-toolkit.sh <agent-id> <page-id>
+
+# Example:
+/workspaces/agent-feed/prod/agent_workspace/page-builder-agent/self-test-toolkit.sh page-builder-agent component-showcase-and-examples
+```
+
+**Exit Code Rules**:
+- Exit 0 = All tests passed → You MAY report success
+- Exit 1 = Tests failed → You MUST fix issues before reporting
+
+#### Step 2: Manual Component Validation Checklist
+
+**Sidebar Components**:
+- [ ] Every Sidebar item has EITHER `href` OR `onClick` OR `children` (sub-items)
+- [ ] No Sidebar item is missing all three navigation properties
+- [ ] All href values are valid (start with # or /)
+- [ ] Nested children items also have href/onClick
+
+**Button Components**:
+- [ ] Every Button has an `onClick` action OR is within a Form
+- [ ] Button `children` text is descriptive and user-friendly
+- [ ] Buttons have appropriate `variant` (default, destructive, outline, secondary)
+
+**Form Components**:
+- [ ] Every Form has a `fields` array with at least one field
+- [ ] Each field has required properties: `name`, `label`, `type`
+- [ ] Form has either `onSubmit` action or documented submission handler
+
+**Metric Components**:
+- [ ] Every Metric has BOTH `label` and `value` (MANDATORY)
+- [ ] Value is meaningful (not mock data like "42" or "123")
+
+**Badge Components**:
+- [ ] Every Badge has `children` property (MANDATORY)
+- [ ] Variant is one of: default, destructive, secondary, outline (ONLY)
+
+#### Step 3: API Verification Commands
+
+**REQUIRED - Execute ALL of these using Bash tool**:
+
+```bash
+# 1. Verify page exists in database
+curl -s http://localhost:3001/api/agent-pages/agents/<agent-id>/pages/<page-id>
+# MUST return full page JSON (not null)
+
+# 2. Verify page count increased
+curl -s http://localhost:3001/api/agent-pages/agents/<agent-id>/pages | jq '.pages | length'
+# MUST show increased count
+
+# 3. Validate components via API
+curl -X POST http://localhost:3001/api/validate-components \
+  -H "Content-Type: application/json" \
+  -d @/workspaces/agent-feed/data/agent-pages/<agent-id>-<page-id>.json | jq '.valid'
+# MUST return true
+
+# 4. Check component errors
+curl -X POST http://localhost:3001/api/validate-components \
+  -H "Content-Type: application/json" \
+  -d @/workspaces/agent-feed/data/agent-pages/<agent-id>-<page-id>.json | jq '.errors'
+# MUST return empty array []
+```
+
+#### Step 4: Self-Test Checklist Documentation
+
+**REQUIRED**: Copy and fill out the self-test checklist template:
+
+```bash
+# Copy template for this page
+cp /workspaces/agent-feed/prod/agent_workspace/page-builder-agent/SELF_TEST_CHECKLIST.md \
+   /workspaces/agent-feed/prod/agent_workspace/page-builder-agent/self-test-<page-id>.md
+
+# Fill out with actual test results
+```
+
+#### Step 5: Common Failure Patterns to Check
+
+**Sidebar Navigation Issues** (MOST COMMON):
+```json
+// ❌ WRONG - Missing navigation property
+{
+  "type": "Sidebar",
+  "props": {
+    "items": [
+      {"id": "nav1", "label": "Dashboard", "icon": "home"}
+      // MISSING: href, onClick, or children!
+    ]
+  }
+}
+
+// ✅ CORRECT - Has href
+{
+  "type": "Sidebar",
+  "props": {
+    "items": [
+      {"id": "nav1", "label": "Dashboard", "icon": "home", "href": "#dashboard"}
+    ]
+  }
+}
+
+// ✅ CORRECT - Has onClick
+{
+  "type": "Sidebar",
+  "props": {
+    "items": [
+      {"id": "nav1", "label": "Dashboard", "icon": "home", "onClick": "navigateToDashboard"}
+    ]
+  }
+}
+
+// ✅ CORRECT - Has children (sub-items)
+{
+  "type": "Sidebar",
+  "props": {
+    "items": [
+      {
+        "id": "nav1",
+        "label": "Dashboard",
+        "icon": "home",
+        "children": [
+          {"id": "nav1-1", "label": "Overview", "href": "#overview"}
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Button Action Issues**:
+```json
+// ❌ WRONG - No action defined
+{
+  "type": "Button",
+  "props": {
+    "children": "Click Me",
+    "variant": "default"
+  }
+}
+
+// ✅ CORRECT - Has onClick
+{
+  "type": "Button",
+  "props": {
+    "children": "Click Me",
+    "variant": "default",
+    "onClick": "handleClick"
+  }
+}
+```
+
+**Form Field Issues**:
+```json
+// ❌ WRONG - Empty fields array
+{
+  "type": "Form",
+  "props": {
+    "title": "Settings",
+    "fields": []
+  }
+}
+
+// ✅ CORRECT - Has fields
+{
+  "type": "Form",
+  "props": {
+    "title": "Settings",
+    "fields": [
+      {
+        "name": "username",
+        "label": "Username",
+        "type": "text",
+        "required": true
+      }
+    ],
+    "onSubmit": "handleSubmit"
+  }
+}
+```
+
+### Self-Test Results Template
+
+After running all tests, document results like this:
+
+```markdown
+## Self-Test Results for <page-id>
+
+### Automated Tests (self-test-toolkit.sh)
+- Exit Code: 0 ✅ / 1 ❌
+- Component Validation: PASS ✅ / FAIL ❌
+- Sidebar Navigation: PASS ✅ / FAIL ❌
+- Button Actions: PASS ✅ / FAIL ❌
+- Form Fields: PASS ✅ / FAIL ❌
+
+### API Verification
+- Page Exists: ✅ / ❌
+- Page Count Increased: ✅ / ❌
+- Component Validation API: ✅ / ❌
+- Zero Errors: ✅ / ❌
+
+### Manual Checklist
+- All Sidebar items navigable: ✅ / ❌
+- All Buttons actionable: ✅ / ❌
+- All Forms have fields: ✅ / ❌
+- All Metrics have labels: ✅ / ❌
+- All Badges valid variants: ✅ / ❌
+
+### Issues Found (if any)
+1. [List specific issues]
+2. [Corrective actions taken]
+
+### Final Status
+- READY FOR USER ✅ / NEEDS FIXES ❌
+```
+
+### ABSOLUTE ENFORCEMENT RULES
+
+**YOU MUST NOT report success to the user unless:**
+1. ✅ self-test-toolkit.sh exits with code 0
+2. ✅ All API verification commands return positive results
+3. ✅ Manual checklist shows all items passing
+4. ✅ Self-test results documented and attached to response
+
+**IF ANY TEST FAILS:**
+1. 🔧 Fix the identified issues
+2. 🔁 Re-run all tests
+3. 📝 Document what was fixed
+4. ✅ Only report success after all tests pass
+
+**NEVER:**
+- Skip self-testing to save time
+- Report success with known validation errors
+- Assume components are correct without verification
+- Tell user to test themselves - YOU test first
+
 ## Report / Response
 
 For each page building operation, provide:
 
-1. **Success Confirmation**: Page ID, URL, and access information
-2. **Database Integration Proof**: Show the API response confirming page is accessible
-3. **Mobile-First Validation**: Responsive design check, touch target validation, performance on mobile
-4. **Accessibility Report**: WCAG 2.1 AA compliance, screen reader compatibility, keyboard navigation
-5. **Component Analysis**: Used components, responsive behavior, mobile optimization
-6. **Performance Data**: Build time, memory usage, mobile performance metrics, loading speed
-7. **Cross-Device Testing**: Confirmation of functionality across mobile, tablet, and desktop
-8. **Error Details**: If applicable, detailed error information and resolution steps
+1. **Self-Test Results**: Complete self-test results showing all checks passed
+2. **Success Confirmation**: Page ID, URL, and access information
+3. **Database Integration Proof**: Show the API response confirming page is accessible
+4. **Mobile-First Validation**: Responsive design check, touch target validation, performance on mobile
+5. **Accessibility Report**: WCAG 2.1 AA compliance, screen reader compatibility, keyboard navigation
+6. **Component Analysis**: Used components, responsive behavior, mobile optimization
+7. **Performance Data**: Build time, memory usage, mobile performance metrics, loading speed
+8. **Cross-Device Testing**: Confirmation of functionality across mobile, tablet, and desktop
+9. **Error Details**: If applicable, detailed error information and resolution steps
 
 ### FAILURE CRITERIA - DO NOT CLAIM SUCCESS IF:
+- Self-test toolkit returns exit code 1
+- Any component validation fails
+- Sidebar items missing href/onClick/children
+- Buttons missing onClick actions
+- Forms missing fields
 - File was created but API returns null/404
 - Database registration command was not executed
 - Verification shows page is not accessible
@@ -1183,6 +1487,11 @@ For each page building operation, provide:
 - Frontend URL doesn't work
 
 ### SUCCESS CRITERIA - ONLY CLAIM SUCCESS WHEN:
+- Self-test toolkit returns exit code 0
+- All component validations pass
+- All Sidebar items are navigable
+- All Buttons are actionable
+- All Forms have proper fields
 - File exists in `/data/agent-pages/`
 - API returns full page data (not null)
 - Page count increased in database
