@@ -30,10 +30,13 @@ interface MarkdownRendererProps {
  */
 const createMarkdownComponents = (): Components => ({
   // SPARC SPEC: Delegate code rendering to CodeBlock
-  code: ({ inline, className, children, ...props }) => {
+  code: ({ className, children, ...props }) => {
+    // Detect if code is inline (no className means inline)
+    const isInline = !className;
+
     return (
       <CodeBlock
-        inline={inline}
+        inline={isInline}
         className={className}
         {...props}
       >

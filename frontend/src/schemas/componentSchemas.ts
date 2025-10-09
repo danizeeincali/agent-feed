@@ -214,6 +214,75 @@ export const GanttChartSchema = z.object({
   viewMode: z.enum(['day', 'week', 'month', 'quarter', 'year']).optional().default('week')
 })
 
+// 8. LineChartSchema - line chart for time series data
+export const LineChartSchema = z.object({
+  data: z.array(z.object({
+    timestamp: z.string(),
+    value: z.number(),
+    label: z.string().optional(),
+    metadata: z.record(z.any()).optional()
+  })).min(1, "At least one data point is required"),
+  config: z.object({
+    type: z.literal('line').optional(),
+    title: z.string().min(1, "Title is required"),
+    xAxis: z.string().optional().default('Time'),
+    yAxis: z.string().optional().default('Value'),
+    colors: z.array(z.string()).min(1).optional().default(['#3B82F6']),
+    showGrid: z.boolean().optional().default(true),
+    showLegend: z.boolean().optional().default(false)
+  }),
+  height: z.number().min(100).max(1000).optional().default(300),
+  showTrend: z.boolean().optional().default(false),
+  gradient: z.boolean().optional().default(false),
+  className: z.string().optional()
+})
+
+// 9. BarChartSchema - bar chart for categorical data comparison
+export const BarChartSchema = z.object({
+  data: z.array(z.object({
+    timestamp: z.string(),
+    value: z.number(),
+    label: z.string().optional(),
+    metadata: z.record(z.any()).optional()
+  })).min(1, "At least one data point is required"),
+  config: z.object({
+    type: z.literal('bar').optional(),
+    title: z.string().min(1, "Title is required"),
+    xAxis: z.string().optional().default('Category'),
+    yAxis: z.string().optional().default('Value'),
+    colors: z.array(z.string()).min(1).optional().default(['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6']),
+    showGrid: z.boolean().optional().default(true),
+    showLegend: z.boolean().optional().default(true)
+  }),
+  height: z.number().min(100).max(1000).optional().default(300),
+  showValues: z.boolean().optional().default(false),
+  horizontal: z.boolean().optional().default(false),
+  className: z.string().optional()
+})
+
+// 10. PieChartSchema - pie/donut chart for proportional data
+export const PieChartSchema = z.object({
+  data: z.array(z.object({
+    timestamp: z.string(),
+    value: z.number().min(0, "Value must be non-negative"),
+    label: z.string().optional(),
+    metadata: z.record(z.any()).optional()
+  })).min(1, "At least one data point is required"),
+  config: z.object({
+    type: z.literal('pie').optional(),
+    title: z.string().min(1, "Title is required"),
+    xAxis: z.string().optional().default(''),
+    yAxis: z.string().optional().default(''),
+    colors: z.array(z.string()).min(1).optional().default(['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316']),
+    showGrid: z.boolean().optional().default(false),
+    showLegend: z.boolean().optional().default(true)
+  }),
+  height: z.number().min(100).max(1000).optional().default(300),
+  donut: z.boolean().optional().default(false),
+  showTotal: z.boolean().optional().default(false),
+  className: z.string().optional()
+})
+
 // Component schema registry
 export const ComponentSchemas = {
   header: HeaderSchema,
@@ -237,7 +306,10 @@ export const ComponentSchemas = {
   Markdown: MarkdownSchema,
   Sidebar: SidebarSchema,
   SwipeCard: SwipeCardSchema,
-  GanttChart: GanttChartSchema
+  GanttChart: GanttChartSchema,
+  LineChart: LineChartSchema,
+  BarChart: BarChartSchema,
+  PieChart: PieChartSchema
 }
 
 // Type inference

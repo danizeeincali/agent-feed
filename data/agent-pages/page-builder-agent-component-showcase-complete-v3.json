@@ -1,0 +1,1844 @@
+{
+  "id": "component-showcase-complete-v3",
+  "agent_id": "page-builder-agent",
+  "title": "Complete Component Showcase with Data Visualization",
+  "description": "Comprehensive demonstration of all available components including charts and diagrams",
+  "specification": {
+    "id": "component-showcase-complete-v3",
+    "title": "Complete Component Showcase with Data Visualization",
+    "layout": "sidebar-tabs",
+    "components": [
+      {
+        "type": "Grid",
+        "props": {
+          "cols": 2,
+          "gap": 24,
+          "className": "min-h-screen"
+        },
+        "children": [
+          {
+            "type": "Sidebar",
+            "props": {
+              "items": [
+                {"id": "nav-overview", "label": "Overview & Introduction", "icon": "home", "href": "#overview"},
+                {"id": "nav-typography", "label": "Text & Typography", "icon": "type", "href": "#typography"},
+                {"id": "nav-forms", "label": "Interactive Forms", "icon": "edit", "href": "#forms"},
+                {"id": "nav-cards", "label": "Data Display & Cards", "icon": "layout", "href": "#cards"},
+                {"id": "nav-tables", "label": "Tables & Lists", "icon": "list", "href": "#tables"},
+                {"id": "nav-charts", "label": "Data Visualization - Charts", "icon": "trending-up", "href": "#charts"},
+                {"id": "nav-diagrams", "label": "Data Visualization - Diagrams", "icon": "git-branch", "href": "#diagrams"},
+                {"id": "nav-media", "label": "Media & Images", "icon": "image", "href": "#media"},
+                {"id": "nav-navigation", "label": "Navigation Components", "icon": "navigation", "href": "#navigation"},
+                {"id": "nav-datetime", "label": "Date & Time", "icon": "calendar", "href": "#datetime"},
+                {"id": "nav-project", "label": "Project Management", "icon": "clipboard", "href": "#project"},
+                {"id": "nav-social", "label": "Social & Interactive", "icon": "heart", "href": "#social"},
+                {"id": "nav-dashboards", "label": "Dashboards & Metrics", "icon": "bar-chart", "href": "#dashboards"},
+                {"id": "nav-profiles", "label": "User Profiles & Identity", "icon": "user", "href": "#profiles"},
+                {"id": "nav-layouts", "label": "Advanced Layouts", "icon": "grid", "href": "#layouts"},
+                {"id": "nav-settings", "label": "Settings & Configuration", "icon": "settings", "href": "#settings"}
+              ],
+              "position": "left",
+              "collapsible": true
+            }
+          },
+          {
+            "type": "Card",
+            "props": {
+              "className": "flex-1 p-6"
+            },
+            "children": [
+              {
+                "type": "header",
+                "props": {
+                  "title": "Complete Component Showcase with Data Visualization",
+                  "level": 1,
+                  "id": "overview",
+                  "subtitle": "Explore all 28+ available components in an organized, paginated interface"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 1: Overview & Introduction\n\nWelcome to the comprehensive component showcase! This demonstration page includes **all available components** organized across 16 navigable tabs.\n\n### Key Features:\n- ✅ Complete component library coverage\n- ✅ Real working implementations\n- ✅ Mobile-responsive design\n- ✅ Professional examples and use cases\n- ✅ New data visualization components (Charts & Diagrams)"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 4,
+                  "gap": 16,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "28+",
+                      "label": "Total Components",
+                      "description": "Fully documented and validated"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "16",
+                      "label": "Organized Tabs",
+                      "description": "Easy navigation structure"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "100%",
+                      "label": "Component Coverage",
+                      "description": "Every component demonstrated"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "4",
+                      "label": "Visualization Types",
+                      "description": "Charts and diagrams included"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Getting Started\n\nUse the **sidebar navigation** on the left to jump to any section, or scroll through each tab to explore all components.\n\n**Component Categories:**\n1. **Layout Components** - Card, Grid, Sidebar\n2. **UI Components** - Badge, Button\n3. **Data Display** - Metric, Stat, ProfileHeader, CapabilityList\n4. **Content** - Header, List, Markdown\n5. **Interactive** - TodoList, DataTable, Form, Tabs, Checklist, Calendar, SwipeCard\n6. **Media** - PhotoGrid\n7. **Timeline** - Timeline, GanttChart\n8. **Data Visualization** - LineChart, BarChart, PieChart, Mermaid"
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Text & Typography",
+                  "level": 2,
+                  "id": "typography"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 2: Text & Typography\n\nDemonstration of heading hierarchy, text formatting, code blocks, and lists.\n\n# Heading Level 1 - Main Page Title\n## Heading Level 2 - Major Sections\n### Heading Level 3 - Subsections\n#### Heading Level 4 - Minor Sections\n##### Heading Level 5 - Detail Headers\n###### Heading Level 6 - Smallest Headers\n\n---\n\n### Paragraph Formatting\n\nThis is a **bold statement** that emphasizes important information. You can also use *italic text* for subtle emphasis. For inline code references, use `backticks` like this: `const variable = 'value';`.\n\n> \"Blockquotes are perfect for highlighting important quotes or key takeaways from documentation.\"\n>\n> — Component Showcase Author\n\n### Code Blocks with Syntax Highlighting\n\n**JavaScript Example:**\n```javascript\nconst pageBuilder = {\n  name: 'Page Builder Agent',\n  version: '3.0',\n  components: ['Card', 'Grid', 'Sidebar', 'Tabs'],\n  capabilities: {\n    create: true,\n    validate: true,\n    render: true\n  },\n  \n  buildPage(spec) {\n    console.log('Building page:', spec.title);\n    return this.validateComponents(spec.components);\n  }\n};\n```\n\n**Python Example:**\n```python\nclass ComponentValidator:\n    def __init__(self, schemas):\n        self.schemas = schemas\n        self.errors = []\n    \n    def validate(self, component):\n        \"\"\"Validate component against schema\"\"\"\n        schema = self.schemas.get(component['type'])\n        if not schema:\n            self.errors.append(f\"Unknown type: {component['type']}\")\n            return False\n        return True\n```\n\n**SQL Example:**\n```sql\nSELECT \n  agent_id,\n  page_id,\n  title,\n  created_at,\n  COUNT(*) as component_count\nFROM agent_pages\nWHERE status = 'published'\nGROUP BY agent_id, page_id, title, created_at\nORDER BY created_at DESC\nLIMIT 10;\n```\n\n### Lists and Organization\n\n**Unordered List:**\n- First major point\n- Second major point\n  - Nested sub-point A\n  - Nested sub-point B\n    - Deeply nested item\n- Third major point\n- Fourth major point\n\n**Ordered List:**\n1. Initial setup and configuration\n2. Design component structure\n3. Implement validation logic\n4. Test component rendering\n5. Deploy to production\n6. Monitor performance metrics\n\n**Mixed List:**\n1. **Phase 1: Planning**\n   - Define requirements\n   - Create specifications\n   - Review with stakeholders\n2. **Phase 2: Development**\n   - Build components\n   - Write tests\n   - Code review\n3. **Phase 3: Deployment**\n   - Staging environment\n   - Production rollout\n   - Monitoring setup"
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Interactive Forms",
+                  "level": 2,
+                  "id": "forms"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 3: Interactive Forms\n\nComplete form examples with checklists, buttons, and input fields.\n\n### Task Completion Checklist"
+                }
+              },
+              {
+                "type": "Checklist",
+                "props": {
+                  "items": [
+                    {"id": 1, "text": "Set up development environment", "checked": true},
+                    {"id": 2, "text": "Install required dependencies", "checked": true},
+                    {"id": 3, "text": "Configure component schemas", "checked": true},
+                    {"id": 4, "text": "Build initial page template", "checked": true},
+                    {"id": 5, "text": "Implement validation system", "checked": false},
+                    {"id": 6, "text": "Add data visualization components", "checked": false},
+                    {"id": 7, "text": "Complete accessibility testing", "checked": false},
+                    {"id": 8, "text": "Deploy to production environment", "checked": false}
+                  ],
+                  "allowEdit": false
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Button Variations\n\nDifferent button styles for various use cases:"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 4,
+                  "gap": 12,
+                  "className": "my-4"
+                },
+                "children": [
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Default Primary",
+                      "variant": "default"
+                    }
+                  },
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Destructive Action",
+                      "variant": "destructive"
+                    }
+                  },
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Outline Style",
+                      "variant": "outline"
+                    }
+                  },
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Secondary Option",
+                      "variant": "secondary"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Contact Form Example"
+                }
+              },
+              {
+                "type": "form",
+                "props": {
+                  "fields": [
+                    {
+                      "label": "Full Name",
+                      "type": "text",
+                      "placeholder": "Enter your full name",
+                      "required": true
+                    },
+                    {
+                      "label": "Email Address",
+                      "type": "email",
+                      "placeholder": "your@email.com",
+                      "required": true
+                    },
+                    {
+                      "label": "Phone Number",
+                      "type": "tel",
+                      "placeholder": "(555) 123-4567",
+                      "required": false
+                    },
+                    {
+                      "label": "Subject",
+                      "type": "text",
+                      "placeholder": "What is this regarding?",
+                      "required": true
+                    },
+                    {
+                      "label": "Message",
+                      "type": "textarea",
+                      "placeholder": "Enter your message here...",
+                      "required": true
+                    }
+                  ],
+                  "submitLabel": "Send Message"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 2,
+                  "gap": 12,
+                  "className": "mt-4"
+                },
+                "children": [
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Submit Form",
+                      "variant": "default"
+                    }
+                  },
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Reset All Fields",
+                      "variant": "outline"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Data Display & Cards",
+                  "level": 2,
+                  "id": "cards"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 4: Data Display & Cards\n\nShowcase of card layouts, profile headers, and capability lists.\n\n### Component Library Cards"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 3,
+                  "gap": 16,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Layout Components",
+                      "description": "Foundation elements for page structure"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "3 Components",
+                          "variant": "default"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "UI Components",
+                      "description": "Interactive user interface elements"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "2 Components",
+                          "variant": "secondary"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Data Display",
+                      "description": "Components for showing information"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "5 Components",
+                          "variant": "default"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Content Components",
+                      "description": "Text and media content display"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "3 Components",
+                          "variant": "outline"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Interactive Forms",
+                      "description": "User input and data collection"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "7 Components",
+                          "variant": "default"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Data Visualization",
+                      "description": "Charts, graphs, and diagrams"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "4 Components",
+                          "variant": "destructive"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Agent Profile Example"
+                }
+              },
+              {
+                "type": "ProfileHeader",
+                "props": {
+                  "name": "Page Builder Agent",
+                  "description": "Centralized dynamic page creation service for all agents in the ecosystem",
+                  "avatar_color": "#3b82f6",
+                  "status": "Active",
+                  "specialization": "UI Generation & Component Validation"
+                }
+              },
+              {
+                "type": "CapabilityList",
+                "props": {
+                  "title": "Core Capabilities",
+                  "capabilities": [
+                    "Dynamic page generation from JSON specifications",
+                    "Component schema validation and security checking",
+                    "Template management for different page types",
+                    "Real-time page updates via WebSocket",
+                    "Cross-agent page building coordination",
+                    "Mobile-first responsive design",
+                    "Accessibility compliance (WCAG 2.1 AA)",
+                    "Data visualization integration"
+                  ]
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Tables & Lists",
+                  "level": 2,
+                  "id": "tables"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 5: Tables & Lists\n\nData tables, lists, and grid layouts for organizing information.\n\n### Component Comparison Table"
+                }
+              },
+              {
+                "type": "dataTable",
+                "props": {
+                  "columns": ["Component", "Type", "Required Fields", "Optional Fields", "Use Case"],
+                  "sortable": true,
+                  "filterable": true
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Feature Checklist"
+                }
+              },
+              {
+                "type": "list",
+                "props": {
+                  "items": [
+                    "Complete component library with 28+ components",
+                    "Schema validation for all component types",
+                    "XSS prevention and security hardening",
+                    "Mobile-first responsive design patterns",
+                    "Accessibility compliance built-in",
+                    "Real-time updates via WebSocket",
+                    "Template-based page generation",
+                    "Cross-agent coordination support",
+                    "Memory-safe operations with cleanup",
+                    "Performance monitoring and optimization"
+                  ],
+                  "ordered": false,
+                  "icon": "check"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Development Workflow Steps"
+                }
+              },
+              {
+                "type": "list",
+                "props": {
+                  "items": [
+                    "Analyze page requirements and component needs",
+                    "Design component structure and layout",
+                    "Validate against component schemas",
+                    "Generate JSON page specification",
+                    "Test component rendering",
+                    "Apply security and accessibility checks",
+                    "Deploy to production environment",
+                    "Monitor performance metrics",
+                    "Collect user feedback",
+                    "Iterate and improve design"
+                  ],
+                  "ordered": true
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Component Grid Layout"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 4,
+                  "gap": 12
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Card"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "Layout",
+                          "variant": "default"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Grid"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "Layout",
+                          "variant": "default"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Sidebar"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "Layout",
+                          "variant": "default"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Badge"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "UI",
+                          "variant": "secondary"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Button"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "UI",
+                          "variant": "secondary"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Metric"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "Data Display",
+                          "variant": "outline"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Data Visualization - Charts",
+                  "level": 2,
+                  "id": "charts"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 6: Data Visualization - Charts\n\nNew data visualization components including LineChart, BarChart, and PieChart.\n\n### Performance Trends - Line Chart"
+                }
+              },
+              {
+                "type": "LineChart",
+                "props": {
+                  "data": [
+                    {"timestamp": "Jan 2025", "value": 42, "label": "January"},
+                    {"timestamp": "Feb 2025", "value": 58, "label": "February"},
+                    {"timestamp": "Mar 2025", "value": 67, "label": "March"},
+                    {"timestamp": "Apr 2025", "value": 54, "label": "April"},
+                    {"timestamp": "May 2025", "value": 73, "label": "May"},
+                    {"timestamp": "Jun 2025", "value": 81, "label": "June"},
+                    {"timestamp": "Jul 2025", "value": 76, "label": "July"},
+                    {"timestamp": "Aug 2025", "value": 89, "label": "August"},
+                    {"timestamp": "Sep 2025", "value": 95, "label": "September"},
+                    {"timestamp": "Oct 2025", "value": 88, "label": "October"},
+                    {"timestamp": "Nov 2025", "value": 102, "label": "November"},
+                    {"timestamp": "Dec 2025", "value": 110, "label": "December"}
+                  ],
+                  "config": {
+                    "title": "Performance Trends 2025",
+                    "xAxis": "Month",
+                    "yAxis": "Performance Score",
+                    "colors": ["#3B82F6"],
+                    "showGrid": true,
+                    "showLegend": false
+                  },
+                  "height": 300,
+                  "showTrend": true,
+                  "gradient": true
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Category Performance - Bar Chart"
+                }
+              },
+              {
+                "type": "BarChart",
+                "props": {
+                  "data": [
+                    {"timestamp": "Research", "value": 120, "label": "Research Tasks"},
+                    {"timestamp": "Development", "value": 150, "label": "Development Tasks"},
+                    {"timestamp": "Testing", "value": 90, "label": "Testing Tasks"},
+                    {"timestamp": "Documentation", "value": 75, "label": "Documentation Tasks"},
+                    {"timestamp": "Marketing", "value": 65, "label": "Marketing Tasks"},
+                    {"timestamp": "Sales", "value": 135, "label": "Sales Tasks"}
+                  ],
+                  "config": {
+                    "title": "Category Performance",
+                    "xAxis": "Task Category",
+                    "yAxis": "Tasks Completed",
+                    "colors": ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"],
+                    "showGrid": true,
+                    "showLegend": true
+                  },
+                  "height": 300,
+                  "showValues": true,
+                  "horizontal": false
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Market Distribution - Pie Chart"
+                }
+              },
+              {
+                "type": "PieChart",
+                "props": {
+                  "data": [
+                    {"timestamp": "Enterprise", "value": 35, "label": "Enterprise Customers"},
+                    {"timestamp": "SMB", "value": 28, "label": "Small-Medium Business"},
+                    {"timestamp": "Startup", "value": 22, "label": "Startup Companies"},
+                    {"timestamp": "Individual", "value": 10, "label": "Individual Users"},
+                    {"timestamp": "Other", "value": 5, "label": "Other Categories"}
+                  ],
+                  "config": {
+                    "title": "Market Distribution",
+                    "colors": ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"],
+                    "showLegend": true
+                  },
+                  "height": 300,
+                  "donut": true,
+                  "showTotal": true
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Key Performance Metrics"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 4,
+                  "gap": 16,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "$1.2M",
+                      "label": "Total Revenue",
+                      "description": "Increased by 15% this quarter"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "8,450",
+                      "label": "Active Users",
+                      "description": "Up 8% from last month"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "3.2%",
+                      "label": "Conversion Rate",
+                      "description": "Improved by 0.5% this week"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "1.2s",
+                      "label": "Avg Response Time",
+                      "description": "Decreased by 20% after optimization"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Data Visualization - Diagrams",
+                  "level": 2,
+                  "id": "diagrams"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 7: Data Visualization - Diagrams\n\nMermaid diagrams for system architecture, workflows, and data models.\n\n### System Architecture Flowchart"
+                }
+              },
+              {
+                "type": "Mermaid",
+                "props": {
+                  "chart": "graph TD\n  A[User Request] --> B[API Gateway]\n  B --> C[Load Balancer]\n  C --> D[Service Layer]\n  D --> E[Database]\n  D --> F[Cache]\n  F --> E\n  D --> G[Message Queue]\n  G --> H[Workers]",
+                  "id": "system-architecture-diagram"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### API Interaction Sequence Diagram"
+                }
+              },
+              {
+                "type": "Mermaid",
+                "props": {
+                  "chart": "sequenceDiagram\n  participant Client\n  participant API\n  participant Auth\n  participant Database\n  Client->>API: POST /login\n  API->>Auth: Verify credentials\n  Auth->>Database: Check user\n  Database-->>Auth: User data\n  Auth-->>API: JWT token\n  API-->>Client: 200 OK + token",
+                  "id": "api-sequence-diagram"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Data Model Class Diagram"
+                }
+              },
+              {
+                "type": "Mermaid",
+                "props": {
+                  "chart": "classDiagram\n  class User {\n    +String id\n    +String name\n    +String email\n    +login()\n    +logout()\n  }\n  class Post {\n    +String id\n    +String title\n    +String content\n    +publish()\n  }\n  class Comment {\n    +String id\n    +String text\n    +Date created\n  }\n  User \"1\" --> \"*\" Post\n  Post \"1\" --> \"*\" Comment\n  User \"1\" --> \"*\" Comment",
+                  "id": "data-model-class-diagram"
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Media & Images",
+                  "level": 2,
+                  "id": "media"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 8: Media & Images\n\nPhoto grid layouts with different aspect ratios and configurations.\n\n### Square Photo Grid (3x3)"
+                }
+              },
+              {
+                "type": "PhotoGrid",
+                "props": {
+                  "images": [
+                    {"url": "https://picsum.photos/400/400?random=1", "alt": "Random Image 1", "caption": "Photo 1"},
+                    {"url": "https://picsum.photos/400/400?random=2", "alt": "Random Image 2", "caption": "Photo 2"},
+                    {"url": "https://picsum.photos/400/400?random=3", "alt": "Random Image 3", "caption": "Photo 3"},
+                    {"url": "https://picsum.photos/400/400?random=4", "alt": "Random Image 4", "caption": "Photo 4"},
+                    {"url": "https://picsum.photos/400/400?random=5", "alt": "Random Image 5", "caption": "Photo 5"},
+                    {"url": "https://picsum.photos/400/400?random=6", "alt": "Random Image 6", "caption": "Photo 6"},
+                    {"url": "https://picsum.photos/400/400?random=7", "alt": "Random Image 7", "caption": "Photo 7"},
+                    {"url": "https://picsum.photos/400/400?random=8", "alt": "Random Image 8", "caption": "Photo 8"},
+                    {"url": "https://picsum.photos/400/400?random=9", "alt": "Random Image 9", "caption": "Photo 9"}
+                  ],
+                  "columns": 3,
+                  "enableLightbox": true,
+                  "aspectRatio": "square"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Widescreen Photo Grid (16:9 Aspect Ratio)"
+                }
+              },
+              {
+                "type": "PhotoGrid",
+                "props": {
+                  "images": [
+                    {"url": "https://picsum.photos/800/450?random=10", "alt": "Landscape 1", "caption": "Widescreen 1"},
+                    {"url": "https://picsum.photos/800/450?random=11", "alt": "Landscape 2", "caption": "Widescreen 2"},
+                    {"url": "https://picsum.photos/800/450?random=12", "alt": "Landscape 3", "caption": "Widescreen 3"},
+                    {"url": "https://picsum.photos/800/450?random=13", "alt": "Landscape 4", "caption": "Widescreen 4"},
+                    {"url": "https://picsum.photos/800/450?random=14", "alt": "Landscape 5", "caption": "Widescreen 5"},
+                    {"url": "https://picsum.photos/800/450?random=15", "alt": "Landscape 6", "caption": "Widescreen 6"}
+                  ],
+                  "columns": 2,
+                  "enableLightbox": true,
+                  "aspectRatio": "16:9"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Featured Image with Caption"
+                }
+              },
+              {
+                "type": "PhotoGrid",
+                "props": {
+                  "images": [
+                    {"url": "https://picsum.photos/1200/600?random=16", "alt": "Featured Image", "caption": "Featured: Beautiful landscape with mountains and lakes"}
+                  ],
+                  "columns": 1,
+                  "enableLightbox": true,
+                  "aspectRatio": "auto"
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Navigation Components",
+                  "level": 2,
+                  "id": "navigation"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 9: Navigation Components\n\nTabs, sidebars, breadcrumbs, and navigation patterns.\n\n### Nested Tabs Example\n\n(This page itself demonstrates Sidebar navigation - see the left panel)"
+                }
+              },
+              {
+                "type": "tabs",
+                "props": {
+                  "tabs": [
+                    {
+                      "label": "Getting Started",
+                      "content": "# Getting Started\n\nWelcome to the component showcase. This tab demonstrates nested tab navigation within the main page structure.\n\n## Quick Start Guide\n\n1. Explore the sidebar navigation\n2. Review each component section\n3. Test interactive elements\n4. Study the code examples"
+                    },
+                    {
+                      "label": "Documentation",
+                      "content": "# Documentation\n\n## Component Library\n\nAll components are fully documented with:\n- Required and optional fields\n- Schema validation rules\n- Usage examples\n- Best practices\n- Common mistakes to avoid"
+                    },
+                    {
+                      "label": "API Reference",
+                      "content": "# API Reference\n\n## Endpoints\n\n- `POST /api/agent-pages/:agentId/pages` - Create new page\n- `GET /api/agent-pages/:agentId/pages/:pageId` - Get page\n- `PUT /api/agent-pages/:agentId/pages/:pageId` - Update page\n- `DELETE /api/agent-pages/:agentId/pages/:pageId` - Delete page"
+                    },
+                    {
+                      "label": "Examples",
+                      "content": "# Examples\n\n## Code Samples\n\nCheck out the various component examples throughout this showcase page. Each tab demonstrates different use cases and patterns."
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Navigation Links\n\nUse the sidebar on the left to navigate between sections. Each section is linked with anchor navigation for smooth scrolling."
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Date & Time",
+                  "level": 2,
+                  "id": "datetime"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 10: Date & Time\n\nCalendar components with different selection modes.\n\n### Single Date Selection"
+                }
+              },
+              {
+                "type": "Calendar",
+                "props": {
+                  "mode": "single",
+                  "selectedDate": "2025-10-15",
+                  "events": [
+                    {"id": 1, "date": "2025-10-15", "title": "Team Meeting", "description": "Weekly standup at 10 AM", "color": "#3b82f6"},
+                    {"id": 2, "date": "2025-10-20", "title": "Project Deadline", "description": "Final submission due", "color": "#ef4444"},
+                    {"id": 3, "date": "2025-10-22", "title": "Code Review", "description": "PR review session", "color": "#10b981"},
+                    {"id": 4, "date": "2025-10-25", "title": "Sprint Planning", "description": "Q4 sprint planning", "color": "#f59e0b"},
+                    {"id": 5, "date": "2025-10-28", "title": "Demo Day", "description": "Product demonstration", "color": "#8b5cf6"}
+                  ]
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Range Selection Mode"
+                }
+              },
+              {
+                "type": "Calendar",
+                "props": {
+                  "mode": "range"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Multiple Date Selection"
+                }
+              },
+              {
+                "type": "Calendar",
+                "props": {
+                  "mode": "multiple"
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Project Management",
+                  "level": 2,
+                  "id": "project"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 11: Project Management\n\nGantt charts and timelines for project planning.\n\n### Monthly Project View"
+                }
+              },
+              {
+                "type": "GanttChart",
+                "props": {
+                  "tasks": [
+                    {"id": 1, "name": "Project Planning", "startDate": "2025-10-01", "endDate": "2025-10-15", "progress": 100, "assignee": "John Doe", "color": "#3b82f6"},
+                    {"id": 2, "name": "Requirements Gathering", "startDate": "2025-10-08", "endDate": "2025-10-22", "progress": 80, "dependencies": [1], "assignee": "Jane Smith", "color": "#10b981"},
+                    {"id": 3, "name": "Design Phase", "startDate": "2025-10-16", "endDate": "2025-11-05", "progress": 60, "dependencies": [2], "assignee": "Bob Johnson", "color": "#f59e0b"},
+                    {"id": 4, "name": "Development Sprint 1", "startDate": "2025-10-23", "endDate": "2025-11-12", "progress": 45, "dependencies": [3], "assignee": "Alice Brown", "color": "#ef4444"},
+                    {"id": 5, "name": "Development Sprint 2", "startDate": "2025-11-06", "endDate": "2025-11-26", "progress": 20, "dependencies": [4], "assignee": "Charlie Davis", "color": "#8b5cf6"},
+                    {"id": 6, "name": "Testing Phase", "startDate": "2025-11-13", "endDate": "2025-12-03", "progress": 10, "dependencies": [5], "assignee": "Eve Wilson", "color": "#ec4899"},
+                    {"id": 7, "name": "Bug Fixes", "startDate": "2025-11-27", "endDate": "2025-12-10", "progress": 5, "dependencies": [6], "assignee": "Frank Miller", "color": "#f97316"},
+                    {"id": 8, "name": "Documentation", "startDate": "2025-11-20", "endDate": "2025-12-15", "progress": 15, "dependencies": [5], "assignee": "Grace Lee", "color": "#06b6d4"},
+                    {"id": 9, "name": "User Acceptance Testing", "startDate": "2025-12-04", "endDate": "2025-12-18", "progress": 0, "dependencies": [7], "assignee": "Henry Taylor", "color": "#84cc16"},
+                    {"id": 10, "name": "Production Deployment", "startDate": "2025-12-16", "endDate": "2025-12-20", "progress": 0, "dependencies": [9], "assignee": "Ivy Anderson", "color": "#14b8a6"}
+                  ],
+                  "viewMode": "month"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Weekly Sprint View"
+                }
+              },
+              {
+                "type": "GanttChart",
+                "props": {
+                  "tasks": [
+                    {"id": 1, "name": "Sprint Planning", "startDate": "2025-10-07", "endDate": "2025-10-07", "progress": 100, "assignee": "Team Lead"},
+                    {"id": 2, "name": "Feature A Development", "startDate": "2025-10-08", "endDate": "2025-10-14", "progress": 70, "assignee": "Dev Team 1"},
+                    {"id": 3, "name": "Feature B Development", "startDate": "2025-10-08", "endDate": "2025-10-14", "progress": 65, "assignee": "Dev Team 2"},
+                    {"id": 4, "name": "Code Review", "startDate": "2025-10-14", "endDate": "2025-10-15", "progress": 40, "dependencies": [2, 3], "assignee": "Senior Dev"},
+                    {"id": 5, "name": "Integration Testing", "startDate": "2025-10-15", "endDate": "2025-10-17", "progress": 30, "dependencies": [4], "assignee": "QA Team"},
+                    {"id": 6, "name": "Bug Fixes", "startDate": "2025-10-17", "endDate": "2025-10-18", "progress": 20, "dependencies": [5], "assignee": "Dev Team"},
+                    {"id": 7, "name": "Sprint Demo", "startDate": "2025-10-18", "endDate": "2025-10-18", "progress": 0, "dependencies": [6], "assignee": "Team Lead"},
+                    {"id": 8, "name": "Sprint Retrospective", "startDate": "2025-10-18", "endDate": "2025-10-18", "progress": 0, "dependencies": [7], "assignee": "Scrum Master"}
+                  ],
+                  "viewMode": "week"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Project Timeline"
+                }
+              },
+              {
+                "type": "timeline",
+                "props": {
+                  "events": [
+                    {"id": 1, "title": "Project Kickoff", "date": "2025-10-01", "description": "Initial project kickoff meeting with all stakeholders"},
+                    {"id": 2, "title": "Requirements Finalized", "date": "2025-10-15", "description": "All requirements documented and approved"},
+                    {"id": 3, "title": "Design Review", "date": "2025-10-30", "description": "Design phase completed and reviewed"},
+                    {"id": 4, "title": "Development Milestone 1", "date": "2025-11-15", "description": "First major development milestone achieved"},
+                    {"id": 5, "title": "Alpha Release", "date": "2025-11-30", "description": "Alpha version released for internal testing"},
+                    {"id": 6, "title": "Beta Release", "date": "2025-12-10", "description": "Beta version released to select users"},
+                    {"id": 7, "title": "Final Testing", "date": "2025-12-18", "description": "Final round of testing completed"},
+                    {"id": 8, "title": "Production Launch", "date": "2025-12-20", "description": "Official production launch"}
+                  ],
+                  "orientation": "vertical"
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Social & Interactive",
+                  "level": 2,
+                  "id": "social"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 12: Social & Interactive\n\nSwipeable cards and social engagement components.\n\n### Feature Showcase Cards"
+                }
+              },
+              {
+                "type": "SwipeCard",
+                "props": {
+                  "cards": [
+                    {
+                      "id": "card-1",
+                      "image": "https://picsum.photos/600/400?random=20",
+                      "title": "Dynamic Page Generation",
+                      "description": "Create beautiful, responsive pages from JSON specifications with real-time validation and security checks.",
+                      "metadata": {"category": "features", "priority": "high"}
+                    },
+                    {
+                      "id": "card-2",
+                      "image": "https://picsum.photos/600/400?random=21",
+                      "title": "Component Validation",
+                      "description": "Automatic schema validation ensures all components meet security and accessibility standards.",
+                      "metadata": {"category": "features", "priority": "high"}
+                    },
+                    {
+                      "id": "card-3",
+                      "image": "https://picsum.photos/600/400?random=22",
+                      "title": "Real-time Updates",
+                      "description": "WebSocket integration provides instant page updates without manual refresh.",
+                      "metadata": {"category": "features", "priority": "medium"}
+                    },
+                    {
+                      "id": "card-4",
+                      "image": "https://picsum.photos/600/400?random=23",
+                      "title": "Mobile-First Design",
+                      "description": "All components are optimized for mobile devices with responsive layouts and touch interactions.",
+                      "metadata": {"category": "features", "priority": "high"}
+                    },
+                    {
+                      "id": "card-5",
+                      "image": "https://picsum.photos/600/400?random=24",
+                      "title": "Accessibility Built-in",
+                      "description": "WCAG 2.1 AA compliance is standard across all components with screen reader support.",
+                      "metadata": {"category": "features", "priority": "high"}
+                    },
+                    {
+                      "id": "card-6",
+                      "image": "https://picsum.photos/600/400?random=25",
+                      "title": "Data Visualization",
+                      "description": "Powerful charts and diagrams for presenting complex data in visual formats.",
+                      "metadata": {"category": "features", "priority": "medium"}
+                    },
+                    {
+                      "id": "card-7",
+                      "image": "https://picsum.photos/600/400?random=26",
+                      "title": "Template System",
+                      "description": "Reusable templates for common page types speed up development and ensure consistency.",
+                      "metadata": {"category": "features", "priority": "medium"}
+                    },
+                    {
+                      "id": "card-8",
+                      "image": "https://picsum.photos/600/400?random=27",
+                      "title": "Cross-Agent Integration",
+                      "description": "Seamless integration with all agents in the ecosystem for coordinated page building.",
+                      "metadata": {"category": "features", "priority": "low"}
+                    }
+                  ],
+                  "showControls": true
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Engagement Statistics"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 4,
+                  "gap": 16
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Total Likes"
+                    },
+                    "children": [
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "2,847",
+                          "label": "Engagement"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Comments"
+                    },
+                    "children": [
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "482",
+                          "label": "Discussions"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Shares"
+                    },
+                    "children": [
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "1,234",
+                          "label": "Reach"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Saves"
+                    },
+                    "children": [
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "756",
+                          "label": "Bookmarks"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Dashboards & Metrics",
+                  "level": 2,
+                  "id": "dashboards"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 13: Dashboards & Metrics\n\nKPI tracking and performance monitoring components.\n\n### Business Metrics Dashboard"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 4,
+                  "gap": 16,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "$1.2M",
+                      "label": "Monthly Revenue",
+                      "description": "Up 15% from last month"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "8,450",
+                      "label": "Active Users",
+                      "description": "Growing by 8% weekly"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "94.2%",
+                      "label": "Customer Satisfaction",
+                      "description": "Based on 1,200 surveys"
+                    }
+                  },
+                  {
+                    "type": "Metric",
+                    "props": {
+                      "value": "3.2%",
+                      "label": "Conversion Rate",
+                      "description": "Improved 0.5% this week"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Performance Statistics"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 3,
+                  "gap": 16,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "stat",
+                    "props": {
+                      "label": "Pages Generated",
+                      "value": 1247,
+                      "change": 18.5,
+                      "icon": "file-text",
+                      "description": "Total dynamic pages created"
+                    }
+                  },
+                  {
+                    "type": "stat",
+                    "props": {
+                      "label": "Components Used",
+                      "value": 15832,
+                      "change": 23.2,
+                      "icon": "box",
+                      "description": "Total component instances"
+                    }
+                  },
+                  {
+                    "type": "stat",
+                    "props": {
+                      "label": "Validation Success",
+                      "value": "98.7%",
+                      "change": 2.1,
+                      "icon": "check-circle",
+                      "description": "Schema validation pass rate"
+                    }
+                  },
+                  {
+                    "type": "stat",
+                    "props": {
+                      "label": "Avg Build Time",
+                      "value": "1.2s",
+                      "change": -12.3,
+                      "icon": "clock",
+                      "description": "Average page generation time"
+                    }
+                  },
+                  {
+                    "type": "stat",
+                    "props": {
+                      "label": "Active Agents",
+                      "value": 12,
+                      "change": 0,
+                      "icon": "users",
+                      "description": "Agents using page builder"
+                    }
+                  },
+                  {
+                    "type": "stat",
+                    "props": {
+                      "label": "Template Usage",
+                      "value": 842,
+                      "change": 15.7,
+                      "icon": "layout",
+                      "description": "Template-based pages"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Activity Feed"
+                }
+              },
+              {
+                "type": "timeline",
+                "props": {
+                  "events": [
+                    {"id": 1, "title": "New page created", "date": "2025-10-07 14:32", "description": "agent-profile page created by page-builder-agent"},
+                    {"id": 2, "title": "Component validation", "date": "2025-10-07 14:30", "description": "15 components validated successfully"},
+                    {"id": 3, "title": "Template updated", "date": "2025-10-07 13:45", "description": "Dashboard template version 2.1 released"},
+                    {"id": 4, "title": "Security scan", "date": "2025-10-07 12:15", "description": "All pages passed security validation"},
+                    {"id": 5, "title": "Performance optimization", "date": "2025-10-07 11:00", "description": "Build time reduced by 18%"}
+                  ],
+                  "orientation": "vertical"
+                }
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "User Profiles & Identity",
+                  "level": 2,
+                  "id": "profiles"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 14: User Profiles & Identity\n\nProfile headers, capability lists, and user information display.\n\n### Agent Profile Example"
+                }
+              },
+              {
+                "type": "ProfileHeader",
+                "props": {
+                  "name": "Data Visualization Agent",
+                  "description": "Specialized in creating charts, graphs, and visual data representations for analytics and reporting",
+                  "avatar_color": "#10b981",
+                  "status": "Active",
+                  "specialization": "Data Visualization & Analytics"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 2,
+                  "gap": 24,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "CapabilityList",
+                    "props": {
+                      "title": "Technical Capabilities",
+                      "capabilities": [
+                        "Line chart generation with trend analysis",
+                        "Bar chart creation with multi-series support",
+                        "Pie chart and donut chart rendering",
+                        "Mermaid diagram integration",
+                        "Real-time data updates",
+                        "Custom color scheme configuration",
+                        "Responsive chart sizing",
+                        "Interactive tooltips and legends"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Performance Metrics"
+                    },
+                    "children": [
+                      {
+                        "type": "Grid",
+                        "props": {
+                          "cols": 2,
+                          "gap": 12
+                        },
+                        "children": [
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "847",
+                              "label": "Charts Created"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "99.2%",
+                              "label": "Render Success"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "0.8s",
+                              "label": "Avg Render Time"
+                            }
+                          },
+                          {
+                            "type": "Metric",
+                            "props": {
+                              "value": "5",
+                              "label": "Active Projects"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Contact Information"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 3,
+                  "gap": 16
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Email"
+                    },
+                    "children": [
+                      {
+                        "type": "Markdown",
+                        "props": {
+                          "content": "data-viz@agents.local"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Status"
+                    },
+                    "children": [
+                      {
+                        "type": "Badge",
+                        "props": {
+                          "children": "Active",
+                          "variant": "default"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Last Active"
+                    },
+                    "children": [
+                      {
+                        "type": "Markdown",
+                        "props": {
+                          "content": "2 minutes ago"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Advanced Layouts",
+                  "level": 2,
+                  "id": "layouts"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 15: Advanced Layouts\n\nComplex grid systems, nested components, and responsive layouts.\n\n### Mixed Content Layout"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 2,
+                  "gap": 24,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Performance Overview"
+                    },
+                    "children": [
+                      {
+                        "type": "LineChart",
+                        "props": {
+                          "data": [
+                            {"timestamp": "Week 1", "value": 42},
+                            {"timestamp": "Week 2", "value": 58},
+                            {"timestamp": "Week 3", "value": 67},
+                            {"timestamp": "Week 4", "value": 73}
+                          ],
+                          "config": {
+                            "title": "Weekly Performance",
+                            "xAxis": "Week",
+                            "yAxis": "Score",
+                            "colors": ["#3B82F6"],
+                            "showGrid": true
+                          },
+                          "height": 250,
+                          "showTrend": true
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Distribution Analysis"
+                    },
+                    "children": [
+                      {
+                        "type": "PieChart",
+                        "props": {
+                          "data": [
+                            {"timestamp": "Type A", "value": 35},
+                            {"timestamp": "Type B", "value": 25},
+                            {"timestamp": "Type C", "value": 20},
+                            {"timestamp": "Type D", "value": 20}
+                          ],
+                          "config": {
+                            "title": "Category Distribution",
+                            "colors": ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"],
+                            "showLegend": true
+                          },
+                          "height": 250,
+                          "donut": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Three Column Grid"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 3,
+                  "gap": 16,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Column 1"
+                    },
+                    "children": [
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "1,234",
+                          "label": "Metric A"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Column 2"
+                    },
+                    "children": [
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "5,678",
+                          "label": "Metric B"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Column 3"
+                    },
+                    "children": [
+                      {
+                        "type": "Metric",
+                        "props": {
+                          "value": "9,012",
+                          "label": "Metric C"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Complex Nested Structure"
+                }
+              },
+              {
+                "type": "Card",
+                "props": {
+                  "title": "Dashboard Container",
+                  "className": "p-6"
+                },
+                "children": [
+                  {
+                    "type": "Grid",
+                    "props": {
+                      "cols": 2,
+                      "gap": 16
+                    },
+                    "children": [
+                      {
+                        "type": "Card",
+                        "props": {
+                          "title": "Nested Section 1"
+                        },
+                        "children": [
+                          {
+                            "type": "Grid",
+                            "props": {
+                              "cols": 2,
+                              "gap": 8
+                            },
+                            "children": [
+                              {
+                                "type": "Metric",
+                                "props": {
+                                  "value": "123",
+                                  "label": "Sub Metric 1"
+                                }
+                              },
+                              {
+                                "type": "Metric",
+                                "props": {
+                                  "value": "456",
+                                  "label": "Sub Metric 2"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Card",
+                        "props": {
+                          "title": "Nested Section 2"
+                        },
+                        "children": [
+                          {
+                            "type": "list",
+                            "props": {
+                              "items": ["Feature Alpha", "Feature Beta", "Feature Gamma", "Feature Delta"],
+                              "ordered": false,
+                              "icon": "check"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Settings & Configuration",
+                  "level": 2,
+                  "id": "settings"
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "## Tab 16: Settings & Configuration\n\nConfiguration panels, preference checklists, and settings management.\n\n### User Preferences"
+                }
+              },
+              {
+                "type": "Checklist",
+                "props": {
+                  "items": [
+                    {"id": "pref-1", "text": "Enable email notifications", "checked": true},
+                    {"id": "pref-2", "text": "Show desktop notifications", "checked": true},
+                    {"id": "pref-3", "text": "Enable dark mode", "checked": false},
+                    {"id": "pref-4", "text": "Auto-save drafts", "checked": true},
+                    {"id": "pref-5", "text": "Show advanced features", "checked": false},
+                    {"id": "pref-6", "text": "Enable analytics tracking", "checked": true},
+                    {"id": "pref-7", "text": "Compact view mode", "checked": false},
+                    {"id": "pref-8", "text": "Keyboard shortcuts enabled", "checked": true},
+                    {"id": "pref-9", "text": "Show tooltips and hints", "checked": true},
+                    {"id": "pref-10", "text": "Enable experimental features", "checked": false}
+                  ],
+                  "allowEdit": false
+                }
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Display Settings"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 2,
+                  "gap": 24,
+                  "className": "my-6"
+                },
+                "children": [
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Appearance"
+                    },
+                    "children": [
+                      {
+                        "type": "Checklist",
+                        "props": {
+                          "items": [
+                            {"id": "app-1", "text": "Use system theme", "checked": true},
+                            {"id": "app-2", "text": "High contrast mode", "checked": false},
+                            {"id": "app-3", "text": "Reduce animations", "checked": false},
+                            {"id": "app-4", "text": "Large text size", "checked": false},
+                            {"id": "app-5", "text": "Show grid lines", "checked": true}
+                          ],
+                          "allowEdit": false
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Card",
+                    "props": {
+                      "title": "Privacy"
+                    },
+                    "children": [
+                      {
+                        "type": "Checklist",
+                        "props": {
+                          "items": [
+                            {"id": "priv-1", "text": "Allow cookies", "checked": true},
+                            {"id": "priv-2", "text": "Share usage data", "checked": false},
+                            {"id": "priv-3", "text": "Public profile", "checked": false},
+                            {"id": "priv-4", "text": "Activity tracking", "checked": true},
+                            {"id": "priv-5", "text": "Third-party integrations", "checked": true}
+                          ],
+                          "allowEdit": false
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "### Save Configuration"
+                }
+              },
+              {
+                "type": "Grid",
+                "props": {
+                  "cols": 3,
+                  "gap": 12,
+                  "className": "mt-6"
+                },
+                "children": [
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Save All Settings",
+                      "variant": "default"
+                    }
+                  },
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Reset to Defaults",
+                      "variant": "outline"
+                    }
+                  },
+                  {
+                    "type": "Button",
+                    "props": {
+                      "children": "Cancel Changes",
+                      "variant": "secondary"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Markdown",
+                "props": {
+                  "content": "---\n\n## Showcase Complete\n\nYou've explored all 16 tabs showcasing the complete component library. Use the sidebar navigation to revisit any section.\n\n### Component Summary\n\n- **28+ Total Components** demonstrated\n- **16 Organized Tabs** for easy navigation\n- **Real Working Examples** with actual data\n- **Mobile-Responsive** design throughout\n- **Accessibility Compliant** (WCAG 2.1 AA)\n- **Security Validated** component schemas\n- **Data Visualization** charts and diagrams included\n\n**Ready to build your own dynamic pages!**"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "version": 1,
+  "created_at": "2025-10-07T00:00:00.000Z",
+  "updated_at": "2025-10-07T00:00:00.000Z"
+}

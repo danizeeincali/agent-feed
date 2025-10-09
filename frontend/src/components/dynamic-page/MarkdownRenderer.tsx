@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeSanitize from 'rehype-sanitize';
 import rehypeHighlight from 'rehype-highlight';
+import mermaid from 'mermaid';
 import 'highlight.js/styles/github-dark.css';
 import type { Components } from 'react-markdown';
 
@@ -19,22 +20,224 @@ interface MarkdownProps {
 }
 
 /**
- * Production-ready Markdown renderer component with XSS protection
+ * Error boundary component for Mermaid diagrams
+ */
+interface MermaidErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+interface MermaidErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+class MermaidErrorBoundary extends React.Component<
+  MermaidErrorBoundaryProps,
+  MermaidErrorBoundaryState
+> {
+  constructor(props: MermaidErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error): MermaidErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Mermaid rendering error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        this.props.fallback || (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 my-4">
+            <p className="text-red-800 dark:text-red-200 font-semibold mb-2">
+              Mermaid Diagram Error
+            </p>
+            <p className="text-red-600 dark:text-red-300 text-sm font-mono">
+              {this.state.error?.message || 'Failed to render diagram'}
+            </p>
+          </div>
+        )
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+/**
+ * Mermaid diagram renderer component with error handling
+ */
+interface MermaidDiagramProps {
+  chart: string;
+  id?: string;
+}
+
+const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, id }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isRendering, setIsRendering] = useState(true);
+  const [svgContent, setSvgContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    // SPARC FIX: Track if component is mounted to prevent state updates after unmount
+    let isMounted = true;
+
+    const renderDiagram = async () => {
+      if (!containerRef.current) return;
+
+      try {
+        if (isMounted) {
+          setIsRendering(true);
+          setError(null);
+        }
+
+        // Initialize mermaid with configuration
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'default',
+          securityLevel: 'strict',
+          flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            curve: 'basis',
+          },
+          sequence: {
+            useMaxWidth: true,
+            wrap: true,
+          },
+          gantt: {
+            useMaxWidth: true,
+          },
+          er: {
+            useMaxWidth: true,
+          },
+          pie: {
+            useMaxWidth: true,
+          },
+        });
+
+        // Generate unique ID for this diagram
+        const diagramId = id || `mermaid-${Math.random().toString(36).substr(2, 9)}`;
+
+        // Validate chart syntax
+        const isValid = await mermaid.parse(chart.trim());
+
+        if (!isValid) {
+          throw new Error('Invalid Mermaid syntax');
+        }
+
+        // Render the diagram
+        const { svg } = await mermaid.render(diagramId, chart.trim());
+
+        // SPARC REAL FIX: Store SVG in React state instead of manual DOM manipulation
+        // This prevents removeChild errors by letting React manage all children
+        if (isMounted) {
+          setSvgContent(svg);  // React will handle rendering
+          setIsRendering(false);
+        }
+      } catch (err) {
+        console.error('Mermaid rendering error:', err);
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : 'Unknown error rendering diagram');
+          setIsRendering(false);
+        }
+      }
+    };
+
+    renderDiagram();
+
+    // Cleanup: Prevent state updates after unmount
+    return () => {
+      isMounted = false;
+    };
+  }, [chart, id]);
+
+  if (error) {
+    return (
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 my-4">
+        <p className="text-red-800 dark:text-red-200 font-semibold mb-2">
+          Invalid Mermaid Syntax
+        </p>
+        <p className="text-red-600 dark:text-red-300 text-sm mb-3">{error}</p>
+        <details className="text-xs">
+          <summary className="cursor-pointer text-red-700 dark:text-red-400 hover:text-red-900 dark:hover:text-red-200">
+            Show diagram code
+          </summary>
+          <pre className="mt-2 p-2 bg-red-100 dark:bg-red-900/30 rounded overflow-x-auto">
+            <code className="text-red-800 dark:text-red-300">{chart}</code>
+          </pre>
+        </details>
+      </div>
+    );
+  }
+
+  // SPARC REAL FIX: Pure React solution - no manual DOM manipulation
+  // React manages both loading spinner and SVG content via state
+  return (
+    <div
+      ref={containerRef}
+      className="mermaid-diagram flex justify-center items-center my-6 p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm overflow-x-auto"
+      style={{ maxWidth: '100%', minHeight: isRendering ? '120px' : undefined }}
+    >
+      {isRendering && (
+        <div className="flex items-center gap-2">
+          <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 dark:border-gray-600 border-t-gray-600 dark:border-t-gray-300"></div>
+          <span className="text-gray-700 dark:text-gray-300 text-sm">
+            Rendering diagram...
+          </span>
+        </div>
+      )}
+      {svgContent && !isRendering && (
+        <div dangerouslySetInnerHTML={{ __html: svgContent }} />
+      )}
+    </div>
+  );
+};
+
+/**
+ * Production-ready Markdown renderer component with XSS protection and Mermaid support
  *
  * Features:
  * - GitHub-flavored markdown (tables, strikethrough, task lists, etc.)
  * - XSS protection using rehype-sanitize
  * - Code syntax highlighting with rehype-highlight
+ * - Mermaid diagram support (flowcharts, sequence diagrams, gantt charts, etc.)
  * - Custom styled components with Tailwind CSS
  * - Responsive design
  * - Safe link handling (external links open in new tab)
  * - Image rendering with alt text
  * - Template variable support
+ * - Error boundaries for robust diagram rendering
+ *
+ * Supported Mermaid diagram types:
+ * - Flowcharts (graph)
+ * - Sequence diagrams
+ * - Class diagrams
+ * - State diagrams
+ * - Entity Relationship diagrams
+ * - User Journey diagrams
+ * - Gantt charts
+ * - Pie charts
+ * - Git graphs
  *
  * @example
  * ```tsx
  * <MarkdownRenderer
- *   content="# Hello World\n\nThis is **bold** text"
+ *   content={`
+ *     # Project Flow
+ *
+ *     \`\`\`mermaid
+ *     graph TD
+ *         A[Start] --> B{Decision}
+ *         B -->|Yes| C[Success]
+ *         B -->|No| D[Try Again]
+ *     \`\`\`
+ *   `}
  *   sanitize={true}
  * />
  * ```
@@ -81,9 +284,9 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
       </h6>
     ),
 
-    // Paragraphs with proper spacing
+    // Paragraphs with proper spacing and WCAG AA contrast
     p: ({ children, ...props }) => (
-      <p className="mb-4 text-gray-700 dark:text-gray-300 leading-relaxed" {...props}>
+      <p className="mb-4 text-gray-900 dark:text-gray-200 leading-relaxed" {...props}>
         {children}
       </p>
     ),
@@ -117,14 +320,14 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
       />
     ),
 
-    // Lists with proper styling
+    // Lists with proper styling and WCAG AA contrast
     ul: ({ children, ...props }) => (
-      <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700 dark:text-gray-300" {...props}>
+      <ul className="list-disc list-inside mb-4 space-y-2 text-gray-900 dark:text-gray-200" {...props}>
         {children}
       </ul>
     ),
     ol: ({ children, ...props }) => (
-      <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-700 dark:text-gray-300" {...props}>
+      <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-900 dark:text-gray-200" {...props}>
         {children}
       </ol>
     ),
@@ -134,19 +337,21 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
       </li>
     ),
 
-    // Blockquotes with border and background
+    // Blockquotes with border, background, and WCAG AA contrast
     blockquote: ({ children, ...props }) => (
       <blockquote
-        className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 py-2 my-4 bg-gray-50 dark:bg-gray-800 italic text-gray-700 dark:text-gray-300"
+        className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 py-2 my-4 bg-gray-50 dark:bg-gray-800 italic text-gray-900 dark:text-gray-200"
         {...props}
       >
         {children}
       </blockquote>
     ),
 
-    // Code blocks with syntax highlighting
+    // Code blocks with syntax highlighting and Mermaid support
     code: ({ className, children, ...props }) => {
       const isInline = !className;
+      const match = /language-(\w+)/.exec(className || '');
+      const language = match?.[1];
 
       if (isInline) {
         // Inline code
@@ -160,6 +365,16 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
         );
       }
 
+      // Check if this is a mermaid code block
+      if (language === 'mermaid') {
+        const chartCode = String(children).replace(/\n$/, '');
+        return (
+          <MermaidErrorBoundary>
+            <MermaidDiagram chart={chartCode} />
+          </MermaidErrorBoundary>
+        );
+      }
+
       // Block code (syntax highlighting handled by rehype-highlight)
       return (
         <code className={className} {...props}>
@@ -167,14 +382,27 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
         </code>
       );
     },
-    pre: ({ children, ...props }) => (
-      <pre
-        className="bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-lg overflow-x-auto my-4 shadow-lg"
-        {...props}
-      >
-        {children}
-      </pre>
-    ),
+    pre: ({ children, ...props }) => {
+      // Check if the pre contains a mermaid code block
+      const childIsCodeElement = React.isValidElement(children) && children.type === 'code';
+      if (childIsCodeElement) {
+        const codeProps = children.props as any;
+        const className = codeProps?.className || '';
+        if (className.includes('language-mermaid')) {
+          // Return just the code element, which will be handled by the code renderer above
+          return <>{children}</>;
+        }
+      }
+
+      return (
+        <pre
+          className="bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-lg overflow-x-auto my-4 shadow-lg"
+          {...props}
+        >
+          {children}
+        </pre>
+      );
+    },
 
     // Horizontal rules
     hr: (props) => (
@@ -214,7 +442,7 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
     ),
     td: ({ children, ...props }) => (
       <td
-        className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300"
+        className="px-4 py-3 text-sm text-gray-900 dark:text-gray-200"
         {...props}
       >
         {children}
@@ -233,9 +461,9 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
       </em>
     ),
 
-    // Strikethrough (GFM)
+    // Strikethrough (GFM) with improved contrast
     del: ({ children, ...props }) => (
-      <del className="line-through text-gray-500 dark:text-gray-400" {...props}>
+      <del className="line-through text-gray-600 dark:text-gray-400" {...props}>
         {children}
       </del>
     ),
@@ -267,7 +495,7 @@ export const MarkdownRenderer: React.FC<MarkdownProps> = ({
   ];
 
   return (
-    <div className={`markdown-renderer prose prose-sm sm:prose lg:prose-lg max-w-none ${className}`}>
+    <div className={`markdown-renderer max-w-none ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]} // GitHub-flavored markdown
         rehypePlugins={rehypePlugins}

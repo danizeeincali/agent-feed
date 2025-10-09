@@ -8,7 +8,35 @@ import {
   User,
   Tag,
   Settings,
-  Eye
+  Eye,
+  // Icons for dynamic rendering
+  FileText,
+  Box,
+  CheckCircle,
+  Clock,
+  Users,
+  LayoutDashboard,
+  Menu,
+  MessageCircle,
+  Rocket,
+  ShoppingCart,
+  Table as TableIcon,
+  Type,
+  Heart,
+  Image as ImageIcon,
+  FormInput,
+  BarChart3,
+  TrendingUp,
+  Folder,
+  GitBranch,
+  Grid,
+  Home,
+  List,
+  Navigation,
+  Edit,
+  Clipboard,
+  Circle,
+  Check
 } from 'lucide-react';
 import { ComponentSchemas } from '../schemas/componentSchemas';
 import { ZodError } from 'zod';
@@ -20,6 +48,107 @@ import Calendar from './dynamic-page/Calendar';
 import MarkdownRenderer from './dynamic-page/MarkdownRenderer';
 import Sidebar from './dynamic-page/Sidebar';
 import GanttChart from './dynamic-page/GanttChart';
+import LineChart from './charts/LineChart';
+import BarChart from './charts/BarChart';
+import PieChart from './charts/PieChart';
+import MermaidDiagram from './markdown/MermaidDiagram';
+
+/**
+ * Icon mapping for dynamic icon rendering
+ * Maps string icon names from JSON to Lucide React components
+ */
+const iconMap: Record<string, React.ComponentType<any>> = {
+  // Kebab-case names (from JSON data)
+  'file-text': FileText,
+  'box': Box,
+  'check-circle': CheckCircle,
+  'clock': Clock,
+  'users': Users,
+  'layout': LayoutDashboard,
+  'menu': Menu,
+  'message-circle': MessageCircle,
+  'rocket': Rocket,
+  'shopping-cart': ShoppingCart,
+  'table': TableIcon,
+  'type': Type,
+  'heart': Heart,
+  'image': ImageIcon,
+  'form-input': FormInput,
+  'bar-chart': BarChart3,
+  'trending-up': TrendingUp,
+  'folder': Folder,
+  'git-branch': GitBranch,
+  'grid': Grid,
+  'home': Home,
+  'list': List,
+  'navigation': Navigation,
+  'edit': Edit,
+  'clipboard': Clipboard,
+  'check': Check,
+  'calendar': CalendarIcon,
+  'user': User,
+  'settings': Settings,
+  // PascalCase names (alternative format)
+  'FileText': FileText,
+  'Box': Box,
+  'CheckCircle': CheckCircle,
+  'Clock': Clock,
+  'Users': Users,
+  'LayoutDashboard': LayoutDashboard,
+  'Menu': Menu,
+  'MessageCircle': MessageCircle,
+  'Rocket': Rocket,
+  'ShoppingCart': ShoppingCart,
+  'Table': TableIcon,
+  'Type': Type,
+  'Heart': Heart,
+  'Image': ImageIcon,
+  'FormInput': FormInput,
+  'BarChart3': BarChart3,
+  'TrendingUp': TrendingUp,
+  'Folder': Folder,
+  'GitBranch': GitBranch,
+  'Grid': Grid,
+  'Home': Home,
+  'List': List,
+  'Navigation': Navigation,
+  'Edit': Edit,
+  'Clipboard': Clipboard,
+  'Check': Check,
+  'Calendar': CalendarIcon,
+  'User': User,
+  'Settings': Settings,
+  // Common aliases
+  'chart': BarChart3,
+  'Gantt': BarChart3,
+};
+
+/**
+ * Get icon component from icon name string
+ * Handles various naming conventions and returns fallback for unknown icons
+ */
+const getIconComponent = (iconName: string | undefined, props?: any): React.ReactElement | null => {
+  if (!iconName) return null;
+
+  // Normalize icon name (trim, lowercase for lookup)
+  const normalizedName = iconName.trim();
+
+  // Try exact match first
+  let IconComponent = iconMap[normalizedName];
+
+  // Try lowercase match if exact match fails
+  if (!IconComponent) {
+    IconComponent = iconMap[normalizedName.toLowerCase()];
+  }
+
+  if (IconComponent) {
+    return <IconComponent {...props} />;
+  }
+
+  // Fallback for unknown icons
+  console.warn(`[DynamicPageRenderer] Unknown icon: "${iconName}"`);
+  return <Circle {...props} />;
+};
 
 /**
  * Generate a kebab-case ID from a title string
@@ -477,7 +606,11 @@ const DynamicPageRenderer: React.FC = () => {
                   </p>
                 )}
               </div>
-              {props.icon && <span className="text-4xl">{props.icon}</span>}
+              {props.icon && (
+                <div className="text-gray-400" aria-hidden="true">
+                  {getIconComponent(props.icon, { size: 40, strokeWidth: 1.5 })}
+                </div>
+              )}
             </div>
             {props.description && <p className="text-xs text-gray-500 mt-3">{props.description}</p>}
           </div>
@@ -491,8 +624,12 @@ const DynamicPageRenderer: React.FC = () => {
           <div key={key} id={props.id} className="bg-white rounded-lg border border-gray-200 p-6">
             <ListTag className={`space-y-2 ${props.ordered ? 'list-decimal list-inside' : 'list-disc list-inside'}`}>
               {demoItems.map((item: string, idx: number) => (
-                <li key={idx} className="text-gray-700">
-                  {props.icon && <span className="mr-2">{props.icon}</span>}
+                <li key={idx} className="text-gray-700 flex items-center gap-2">
+                  {props.icon && (
+                    <span className="inline-flex text-gray-400" aria-hidden="true">
+                      {getIconComponent(props.icon, { size: 16, strokeWidth: 2 })}
+                    </span>
+                  )}
                   {item}
                 </li>
               ))}
@@ -679,7 +816,11 @@ const DynamicPageRenderer: React.FC = () => {
           <div key={key} id={props.id} className={`bg-white rounded-lg border border-gray-200 p-6 ${props.className || ''}`}>
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-medium text-gray-600">{props.title}</h3>
-              {props.icon && <span className="text-xl">{props.icon}</span>}
+              {props.icon && (
+                <span className="text-xl text-gray-400" aria-hidden="true">
+                  {getIconComponent(props.icon, { size: 20, strokeWidth: 2 })}
+                </span>
+              )}
             </div>
             <p className="text-2xl font-bold text-gray-900">{props.value || '0'}</p>
             {props.subtitle && <p className="text-sm text-gray-500 mt-1">{props.subtitle}</p>}
@@ -800,6 +941,56 @@ const DynamicPageRenderer: React.FC = () => {
           />
         );
 
+      case 'LineChart':
+        return (
+          <LineChart
+            key={key}
+            data={props.data || []}
+            config={props.config}
+            height={props.height}
+            showTrend={props.showTrend}
+            gradient={props.gradient}
+            className={props.className}
+          />
+        );
+
+      case 'BarChart':
+        return (
+          <BarChart
+            key={key}
+            data={props.data || []}
+            config={props.config}
+            height={props.height}
+            showValues={props.showValues}
+            horizontal={props.horizontal}
+            className={props.className}
+          />
+        );
+
+      case 'PieChart':
+        return (
+          <PieChart
+            key={key}
+            data={props.data || []}
+            config={props.config}
+            height={props.height}
+            donut={props.donut}
+            showTotal={props.showTotal}
+            className={props.className}
+          />
+        );
+
+      case 'Mermaid':
+      case 'MermaidDiagram':
+        return (
+          <MermaidDiagram
+            key={key}
+            chart={props.chart || props.code || ''}
+            id={props.id}
+            {...(props.className !== undefined && { className: props.className })}
+          />
+        );
+
       default:
         // For unknown components, render as a placeholder with warning
         return (
@@ -886,6 +1077,17 @@ const DynamicPageRenderer: React.FC = () => {
         console.warn(
           `Page has ${componentsArray.length} components. ` +
           'Consider splitting into multiple pages for better performance.'
+        );
+      }
+
+      // Additional warning for Mermaid-heavy pages (Mermaid diagrams are resource-intensive)
+      const mermaidCount = componentsArray.filter(c =>
+        c.type === 'Mermaid' || c.type === 'MermaidDiagram'
+      ).length;
+      if (mermaidCount > 20) {
+        console.warn(
+          `Page has ${componentsArray.length} components with ${mermaidCount} Mermaid diagrams. ` +
+          'Mermaid diagrams are resource-intensive. Consider reducing the number or splitting into multiple pages.'
         );
       }
 

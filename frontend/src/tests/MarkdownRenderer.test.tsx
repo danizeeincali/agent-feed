@@ -401,10 +401,13 @@ describe('MarkdownRenderer Component', () => {
   });
 
   describe('Styling', () => {
-    it('applies Tailwind prose classes', () => {
+    it('applies markdown-renderer wrapper class', () => {
       const { container } = render(<MarkdownRenderer content="# Test" />);
 
-      expect(container.firstChild).toHaveClass('prose');
+      expect(container.firstChild).toHaveClass('markdown-renderer');
+      expect(container.firstChild).toHaveClass('max-w-none');
+      // Should NOT have prose classes (removed in favor of explicit colors)
+      expect(container.firstChild).not.toHaveClass('prose');
     });
 
     it('applies custom classes alongside default ones', () => {
@@ -413,8 +416,34 @@ describe('MarkdownRenderer Component', () => {
       );
 
       const element = container.firstChild as HTMLElement;
-      expect(element).toHaveClass('prose');
+      expect(element).toHaveClass('markdown-renderer');
       expect(element).toHaveClass('my-custom-class');
+      expect(element).toHaveClass('max-w-none');
+      // Should NOT have prose classes
+      expect(element).not.toHaveClass('prose');
+    });
+
+    it('applies explicit text color classes to elements', () => {
+      const content = `
+# Heading
+Paragraph text
+- List item
+      `;
+
+      const { container } = render(<MarkdownRenderer content={content} />);
+
+      // Verify explicit color classes are applied
+      const h1 = container.querySelector('h1');
+      expect(h1).toHaveClass('text-gray-900');
+      expect(h1).toHaveClass('dark:text-gray-100');
+
+      const p = container.querySelector('p');
+      expect(p).toHaveClass('text-gray-900');
+      expect(p).toHaveClass('dark:text-gray-200');
+
+      const ul = container.querySelector('ul');
+      expect(ul).toHaveClass('text-gray-900');
+      expect(ul).toHaveClass('dark:text-gray-200');
     });
   });
 });

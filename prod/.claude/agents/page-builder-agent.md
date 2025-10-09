@@ -938,6 +938,202 @@ curl http://localhost:3001/api/agent-pages/agents/agent-id/pages/page-id  # Veri
 }
 ```
 
+#### 3. Analytics Dashboard Template
+```json
+{
+  "id": "analytics-dashboard",
+  "title": "Performance Analytics Dashboard",
+  "layout": "mobile-first",
+  "responsive": true,
+  "components": [
+    {
+      "type": "Container",
+      "props": { "size": "xl", "className": "p-4 md:p-6 space-y-6" },
+      "children": [
+        {
+          "type": "Header",
+          "props": {
+            "title": "Performance Analytics",
+            "level": 2,
+            "className": "mb-6"
+          }
+        },
+        {
+          "type": "Grid",
+          "props": { "columns": 2, "gap": 4, "responsive": true, "className": "mb-6" },
+          "children": [
+            {
+              "type": "Card",
+              "props": { "className": "p-4" },
+              "children": [
+                {
+                  "type": "LineChart",
+                  "props": {
+                    "data": [
+                      {"timestamp": "2025-10-01", "value": 42, "label": "Week 1"},
+                      {"timestamp": "2025-10-02", "value": 58, "label": "Week 2"},
+                      {"timestamp": "2025-10-03", "value": 67, "label": "Week 3"},
+                      {"timestamp": "2025-10-04", "value": 54, "label": "Week 4"},
+                      {"timestamp": "2025-10-05", "value": 73, "label": "Week 5"}
+                    ],
+                    "config": {
+                      "title": "Tasks Completed Over Time",
+                      "xAxis": "Week",
+                      "yAxis": "Tasks",
+                      "colors": ["#3B82F6"],
+                      "showGrid": true,
+                      "showLegend": false
+                    },
+                    "height": 300,
+                    "showTrend": true,
+                    "gradient": true
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Card",
+              "props": { "className": "p-4" },
+              "children": [
+                {
+                  "type": "BarChart",
+                  "props": {
+                    "data": [
+                      {"timestamp": "Research", "value": 120, "label": "Research Tasks"},
+                      {"timestamp": "Development", "value": 150, "label": "Dev Tasks"},
+                      {"timestamp": "Testing", "value": 90, "label": "Test Tasks"},
+                      {"timestamp": "Documentation", "value": 75, "label": "Doc Tasks"}
+                    ],
+                    "config": {
+                      "title": "Tasks by Category",
+                      "xAxis": "Category",
+                      "yAxis": "Count",
+                      "colors": ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"],
+                      "showGrid": true,
+                      "showLegend": true
+                    },
+                    "height": 300,
+                    "showValues": true,
+                    "horizontal": false
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Grid",
+          "props": { "columns": 2, "gap": 4, "responsive": true, "className": "mb-6" },
+          "children": [
+            {
+              "type": "Card",
+              "props": { "className": "p-4" },
+              "children": [
+                {
+                  "type": "PieChart",
+                  "props": {
+                    "data": [
+                      {"timestamp": "Completed", "value": 65, "label": "Completed"},
+                      {"timestamp": "In Progress", "value": 25, "label": "In Progress"},
+                      {"timestamp": "Pending", "value": 10, "label": "Pending"}
+                    ],
+                    "config": {
+                      "title": "Task Status Distribution",
+                      "colors": ["#10B981", "#F59E0B", "#EF4444"],
+                      "showLegend": true
+                    },
+                    "height": 300,
+                    "donut": true,
+                    "showTotal": true
+                  }
+                }
+              ]
+            },
+            {
+              "type": "Card",
+              "props": { "className": "p-4" },
+              "children": [
+                {
+                  "type": "Mermaid",
+                  "props": {
+                    "chart": "graph TD\n  A[Task Intake] --> B[Processing]\n  B --> C{Quality Check}\n  C -->|Pass| D[Complete]\n  C -->|Fail| B\n  D --> E[Archive]",
+                    "id": "workflow-diagram"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Grid",
+          "props": { "columns": 4, "gap": 4, "responsive": true },
+          "children": [
+            {
+              "type": "Metric",
+              "props": {
+                "label": "Total Tasks",
+                "value": "435",
+                "trend": "up",
+                "change": "+12%",
+                "className": "bg-blue-50 dark:bg-blue-900/20"
+              }
+            },
+            {
+              "type": "Metric",
+              "props": {
+                "label": "Completion Rate",
+                "value": "87%",
+                "trend": "up",
+                "change": "+5%",
+                "className": "bg-green-50 dark:bg-green-900/20"
+              }
+            },
+            {
+              "type": "Metric",
+              "props": {
+                "label": "Avg Time",
+                "value": "2.3h",
+                "trend": "down",
+                "change": "-15%",
+                "className": "bg-orange-50 dark:bg-orange-900/20"
+              }
+            },
+            {
+              "type": "Metric",
+              "props": {
+                "label": "Active Agents",
+                "value": "8",
+                "trend": "neutral",
+                "change": "0%",
+                "className": "bg-purple-50 dark:bg-purple-900/20"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Use Cases for Analytics Dashboard:**
+- Performance monitoring and KPI tracking
+- Data visualization for reports and presentations
+- Real-time metrics display for agent activities
+- Workflow visualization with Mermaid diagrams
+- Trend analysis with time-series line charts
+- Category comparison with bar charts
+- Distribution analysis with pie/donut charts
+- Mobile-responsive layout with grid system
+
+**Key Features:**
+- All 4 data visualization components (LineChart, BarChart, PieChart, Mermaid)
+- Responsive grid layout (2 columns on desktop, 1 on mobile)
+- Metric cards for quick KPI overview
+- Workflow diagram showing process flow
+- Professional color palette with dark mode support
+- Real data examples (no mocks or placeholders)
+
 ### Layout System Guidelines
 
 #### Mobile-First Responsive Patterns
@@ -1110,6 +1306,9 @@ curl http://localhost:3001/api/agent-pages/agents/agent-id/pages/page-id  # Veri
 
 **Data Display:**
 - Badge, Avatar, Metric, Stats, Timeline, Table, DataCard, AlertBox
+
+**Data Visualization:**
+- LineChart, BarChart, PieChart, Mermaid
 
 **Navigation:**
 - Breadcrumb, Pagination, Menu, BottomNavigation

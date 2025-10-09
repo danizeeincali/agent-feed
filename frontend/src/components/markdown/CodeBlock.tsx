@@ -2,12 +2,14 @@ import React, { useState, memo, useCallback } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Copy, Check } from 'lucide-react';
+import MermaidDiagram from './MermaidDiagram';
 
 /**
  * CodeBlock Component
  *
  * Renders inline and block code with:
  * - Syntax highlighting (Prism with 10 languages)
+ * - Mermaid diagram support (flowcharts, sequence diagrams, etc.)
  * - Line numbers (auto-show for >10 lines)
  * - Copy button with visual feedback
  * - Inline vs block detection
@@ -28,7 +30,8 @@ interface CodeBlockProps {
 // SPARC SPEC: Supported languages for syntax highlighting
 const SUPPORTED_LANGUAGES = [
   'javascript', 'typescript', 'python', 'bash', 'shell',
-  'json', 'sql', 'markdown', 'html', 'css', 'jsx', 'tsx'
+  'json', 'sql', 'markdown', 'html', 'css', 'jsx', 'tsx',
+  'mermaid' // Special: renders as diagram, not code
 ];
 
 /**
@@ -109,6 +112,11 @@ const CodeBlock: React.FC<CodeBlockProps> = memo(({
         {code}
       </code>
     );
+  }
+
+  // SPARC SPEC: Mermaid diagram rendering
+  if (lang === 'mermaid') {
+    return <MermaidDiagram chart={code} />;
   }
 
   // SPARC SPEC: Block code (syntax highlighted with copy button)
