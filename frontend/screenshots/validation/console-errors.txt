@@ -1,0 +1,13 @@
+WebSocket connection to 'ws://localhost:443/?token=gEm_xIU8YcT4' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED
+
+Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404
+
+❌ WebSocket error: Event
+
+Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+Failed to load resource: net::ERR_CONNECTION_REFUSED

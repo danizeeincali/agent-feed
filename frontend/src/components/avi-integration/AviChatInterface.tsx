@@ -237,7 +237,13 @@ export const AviChatInterface: React.FC<AviChatInterfaceProps> = ({
       return (
         <div className="space-y-2">
           {content.split('```').map((part, index) => (
-            <div key={index} className={index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-800 p-3 rounded font-mono text-sm overflow-x-auto' : ''}>
+            <div
+              key={index}
+              className={index % 2 === 1
+                ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-3 rounded font-mono text-sm overflow-x-auto'
+                : 'text-gray-900 dark:text-gray-100'
+              }
+            >
               {part}
             </div>
           ))}
@@ -245,18 +251,18 @@ export const AviChatInterface: React.FC<AviChatInterfaceProps> = ({
       );
     }
 
-    return <div className="whitespace-pre-wrap">{content}</div>;
+    return <div className="whitespace-pre-wrap text-gray-900 dark:text-gray-100">{content}</div>;
   }, []);
 
   // Get emotional tone color
   const getEmotionalToneColor = useCallback((tone: AviEmotionalTone) => {
     switch (tone) {
-      case 'encouraging': return 'text-green-600';
-      case 'empathetic': return 'text-purple-600';
-      case 'confident': return 'text-blue-600';
-      case 'curious': return 'text-yellow-600';
-      case 'patient': return 'text-indigo-600';
-      default: return 'text-gray-600';
+      case 'encouraging': return 'text-green-600 dark:text-green-400';
+      case 'empathetic': return 'text-purple-600 dark:text-purple-400';
+      case 'confident': return 'text-blue-600 dark:text-blue-400';
+      case 'curious': return 'text-yellow-600 dark:text-yellow-400';
+      case 'patient': return 'text-indigo-600 dark:text-indigo-400';
+      default: return 'text-gray-600 dark:text-gray-400';
     }
   }, []);
 
@@ -385,7 +391,7 @@ export const AviChatInterface: React.FC<AviChatInterfaceProps> = ({
                 'text-sm',
                 message.isLocal
                   ? 'text-white'
-                  : 'text-gray-900 dark:text-white'
+                  : 'text-gray-900 dark:text-gray-100'
               )}>
                 {formatMessageContent(
                   message.content,
@@ -425,13 +431,13 @@ export const AviChatInterface: React.FC<AviChatInterfaceProps> = ({
               {/* Message indicators */}
               <div className="flex items-center space-x-1 mt-1">
                 {message.aviMetadata?.formatting?.hasCodeBlocks && (
-                  <Code className="w-3 h-3 text-gray-400" />
+                  <Code className="w-3 h-3 text-gray-400 dark:text-gray-500" />
                 )}
                 {message.aviMetadata?.formatting?.hasLinks && (
-                  <Link className="w-3 h-3 text-gray-400" />
+                  <Link className="w-3 h-3 text-gray-400 dark:text-gray-500" />
                 )}
                 {message.aviMetadata?.formatting?.hasImages && (
-                  <ImageIcon className="w-3 h-3 text-gray-400" />
+                  <ImageIcon className="w-3 h-3 text-gray-400 dark:text-gray-500" />
                 )}
               </div>
             </div>

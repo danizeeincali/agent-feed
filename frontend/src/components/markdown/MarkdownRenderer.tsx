@@ -62,7 +62,7 @@ const createMarkdownComponents = (): Components => ({
   table: ({ children, ...props }) => (
     <div className="overflow-x-auto my-4">
       <table
-        className="min-w-full divide-y divide-gray-300 border border-gray-300"
+        className="min-w-full divide-y divide-gray-300 dark:divide-gray-700 border border-gray-300 dark:border-gray-700"
         {...props}
       >
         {children}
@@ -71,13 +71,13 @@ const createMarkdownComponents = (): Components => ({
   ),
 
   thead: ({ children, ...props }) => (
-    <thead className="bg-gray-50" {...props}>
+    <thead className="bg-gray-50 dark:bg-gray-800" {...props}>
       {children}
     </thead>
   ),
 
   tbody: ({ children, ...props }) => (
-    <tbody className="bg-white divide-y divide-gray-200" {...props}>
+    <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700" {...props}>
       {children}
     </tbody>
   ),
@@ -90,7 +90,7 @@ const createMarkdownComponents = (): Components => ({
 
   th: ({ children, ...props }) => (
     <th
-      className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"
+      className="px-4 py-2 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider"
       {...props}
     >
       {children}
@@ -99,7 +99,7 @@ const createMarkdownComponents = (): Components => ({
 
   td: ({ children, ...props }) => (
     <td
-      className="px-4 py-2 text-sm text-gray-900"
+      className="px-4 py-2 text-sm text-gray-900 dark:text-gray-100"
       {...props}
     >
       {children}
@@ -109,7 +109,7 @@ const createMarkdownComponents = (): Components => ({
   // SPARC SPEC: Blockquote styling
   blockquote: ({ children, ...props }) => (
     <blockquote
-      className="border-l-4 border-gray-300 pl-4 py-2 my-4 italic text-gray-700 bg-gray-50"
+      className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 py-2 my-4 italic text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800"
       {...props}
     >
       {children}
@@ -118,89 +118,89 @@ const createMarkdownComponents = (): Components => ({
 
   // SPARC SPEC: Heading styling with proper hierarchy
   h1: ({ children, ...props }) => (
-    <h1 className="text-2xl font-bold mt-6 mb-4 text-gray-900" {...props}>
+    <h1 className="text-2xl font-bold mt-6 mb-4 text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </h1>
   ),
 
   h2: ({ children, ...props }) => (
-    <h2 className="text-xl font-bold mt-5 mb-3 text-gray-900" {...props}>
+    <h2 className="text-xl font-bold mt-5 mb-3 text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </h2>
   ),
 
-  h3: ({ children, ...props }) => (
-    <h3 className="text-lg font-semibold mt-4 mb-2 text-gray-900" {...props}>
+  h3: ({ children, ...props}) => (
+    <h3 className="text-lg font-semibold mt-4 mb-2 text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </h3>
   ),
 
   h4: ({ children, ...props }) => (
-    <h4 className="text-base font-semibold mt-3 mb-2 text-gray-900" {...props}>
+    <h4 className="text-base font-semibold mt-3 mb-2 text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </h4>
   ),
 
   h5: ({ children, ...props }) => (
-    <h5 className="text-sm font-semibold mt-2 mb-1 text-gray-900" {...props}>
+    <h5 className="text-sm font-semibold mt-2 mb-1 text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </h5>
   ),
 
   h6: ({ children, ...props }) => (
-    <h6 className="text-xs font-semibold mt-2 mb-1 text-gray-700" {...props}>
+    <h6 className="text-xs font-semibold mt-2 mb-1 text-gray-700 dark:text-gray-300" {...props}>
       {children}
     </h6>
   ),
 
   // SPARC SPEC: List styling
   ul: ({ children, ...props }) => (
-    <ul className="list-disc list-inside my-4 space-y-2 text-gray-900" {...props}>
+    <ul className="list-disc list-inside my-4 space-y-2 text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </ul>
   ),
 
   ol: ({ children, ...props }) => (
-    <ol className="list-decimal list-inside my-4 space-y-2 text-gray-900" {...props}>
+    <ol className="list-decimal list-inside my-4 space-y-2 text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </ol>
   ),
 
   li: ({ children, ...props }) => (
-    <li className="text-gray-900" {...props}>
+    <li className="text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </li>
   ),
 
   // SPARC SPEC: Paragraph styling
   p: ({ children, ...props }) => (
-    <p className="my-2 text-gray-900 leading-relaxed" {...props}>
+    <p className="my-2 text-gray-900 dark:text-gray-100 leading-relaxed" {...props}>
       {children}
     </p>
   ),
 
   // SPARC SPEC: Emphasis styling
   strong: ({ children, ...props }) => (
-    <strong className="font-bold text-gray-900" {...props}>
+    <strong className="font-bold text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </strong>
   ),
 
   em: ({ children, ...props }) => (
-    <em className="italic text-gray-900" {...props}>
+    <em className="italic text-gray-900 dark:text-gray-100" {...props}>
       {children}
     </em>
   ),
 
   del: ({ children, ...props }) => (
-    <del className="line-through text-gray-600" {...props}>
+    <del className="line-through text-gray-600 dark:text-gray-400" {...props}>
       {children}
     </del>
   ),
 
   // SPARC SPEC: Horizontal rule
   hr: ({ ...props }) => (
-    <hr className="my-6 border-t border-gray-300" {...props} />
+    <hr className="my-6 border-t border-gray-300 dark:border-gray-700" {...props} />
   ),
 
   // SPARC SPEC: Image styling (responsive)

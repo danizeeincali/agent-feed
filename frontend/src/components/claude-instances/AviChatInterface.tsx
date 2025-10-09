@@ -110,7 +110,7 @@ const AviMessage: React.FC<AviMessageProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-900 dark:text-white">
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
               {isUser ? 'You' : isSystem ? 'System' : 'Avi'}
             </span>
             {isAvi && message.aviMetadata?.personalityVersion && (
@@ -189,16 +189,16 @@ const AviMessage: React.FC<AviMessageProps> = ({
               <div key={index} className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
                 <div className="flex items-center gap-2 mb-2">
                   <Code className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     {ref.filePath}
                   </span>
                   {ref.lineRange && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
                       Lines {ref.lineRange[0]}-{ref.lineRange[1]}
                     </span>
                   )}
                 </div>
-                <pre className="text-sm bg-gray-50 dark:bg-gray-900 p-2 rounded overflow-x-auto">
+                <pre className="text-sm bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-2 rounded overflow-x-auto">
                   <code>{ref.snippet}</code>
                 </pre>
               </div>
@@ -207,14 +207,14 @@ const AviMessage: React.FC<AviMessageProps> = ({
         )}
 
         {/* Content */}
-        <div className="prose prose-sm dark:prose-dark max-w-none">
+        <div className="prose-sm max-w-none">
           {message.isStreaming && !message.streamingComplete ? (
             <div className="flex items-center">
-              <span className="text-gray-700 dark:text-gray-300">{message.content}</span>
+              <span className="text-gray-900 dark:text-gray-100">{message.content}</span>
               <div className="ml-2 w-2 h-4 bg-gradient-to-r from-purple-400 to-pink-400 animate-pulse rounded" />
             </div>
           ) : (
-            <pre className="whitespace-pre-wrap text-gray-700 dark:text-gray-300 font-sans">
+            <pre className="whitespace-pre-wrap text-gray-900 dark:text-gray-100 font-sans">
               {message.content}
             </pre>
           )}
@@ -234,7 +234,7 @@ const AviMessage: React.FC<AviMessageProps> = ({
                   onClick={() => handleActionClick(action)}
                   className="block w-full text-left p-2 bg-white dark:bg-gray-800 rounded border border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600 transition-colors"
                 >
-                  <div className="font-medium text-sm text-gray-900 dark:text-white">
+                  <div className="font-medium text-sm text-gray-900 dark:text-gray-100">
                     {action.title}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -425,7 +425,7 @@ export const AviChatInterface: React.FC<AviChatInterfaceProps> = ({
             size="md"
           />
           <div>
-            <h3 className="font-medium text-gray-900 dark:text-white flex items-center gap-2">
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
               <span className="text-2xl">🤖</span>
               Avi - {instance.name}
             </h3>
@@ -663,7 +663,7 @@ export const AviChatInterface: React.FC<AviChatInterfaceProps> = ({
                 'focus:ring-2 focus:ring-purple-500 focus:border-purple-500',
                 'disabled:opacity-50 disabled:cursor-not-allowed',
                 'resize-none overflow-hidden',
-                'text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
+                'text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400'
               )}
               rows={1}
             />
