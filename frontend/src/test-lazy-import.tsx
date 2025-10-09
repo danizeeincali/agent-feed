@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Test React.lazy() like in RealAnalytics.tsx
-const TokenAnalyticsDashboard = React.lazy(() => import('./TokenAnalyticsDashboard'));
+const TokenAnalyticsDashboard = React.lazy(() => import('./TokenAnalyticsDashboard.tsx'));
 
 const queryClient = new QueryClient({
   defaultOptions: {

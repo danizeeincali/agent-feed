@@ -11,6 +11,7 @@ import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import AsyncErrorBoundary from './components/AsyncErrorBoundary';
 import { VideoPlaybackProvider } from './contexts/VideoPlaybackContext';
+import { useDarkMode } from './hooks/useDarkMode';
 
 // Import components directly to fix loading issue - with error handling
 try {
@@ -114,20 +115,20 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+        "fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-900 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <Zap className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-semibold text-gray-900">AgentLink</span>
+            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">AgentLink</span>
           </div>
-          
+
           <button
             onClick={() => setIsSidebarOpen(false)}
-            className="p-1 text-gray-400 hover:text-gray-600 lg:hidden"
+            className="p-1 text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 lg:hidden"
           >
             <X className="w-5 h-5" />
           </button>
@@ -142,9 +143,9 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
                 to={item.href}
                 className={cn(
                   "flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors",
-                  isActive 
-                    ? "bg-blue-100 text-blue-700 border-r-2 border-blue-700" 
-                    : "text-gray-700 hover:bg-gray-100"
+                  isActive
+                    ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-r-2 border-blue-700 dark:border-blue-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 )}
                 onClick={() => setIsSidebarOpen(false)}
               >
@@ -162,17 +163,17 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden" data-testid="main-content">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200" data-testid="header">
+        <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700" data-testid="header">
           <div className="flex items-center justify-between h-16 px-4 lg:px-6">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setIsSidebarOpen(true)}
-                className="p-2 text-gray-400 hover:text-gray-600 lg:hidden"
+                className="p-2 text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 lg:hidden"
               >
                 <Menu className="w-5 h-5" />
               </button>
-              
-              <h1 className="text-xl font-semibold text-gray-900">
+
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 AgentLink - Claude Instance Manager
               </h1>
             </div>
@@ -180,13 +181,13 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
             <div className="flex items-center space-x-4">
               {/* Search */}
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search posts..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+                  className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
                 />
               </div>
 
@@ -195,9 +196,9 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6" data-testid="app-container">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6 bg-white dark:bg-gray-900" data-testid="app-container">
           <ErrorBoundary fallbackRender={({ error }) => (
-            <div className="p-4 border border-red-200 bg-red-50 text-red-700 rounded-md">
+            <div className="p-4 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-md">
               <h2>Something went wrong</h2>
               <p>{error?.message}</p>
             </div>
@@ -216,6 +217,9 @@ Layout.displayName = 'Layout';
 
 const App: React.FC = () => {
   console.log('DEBUG: App component rendering...');
+
+  // Enable automatic dark mode detection
+  useDarkMode();
 
   useEffect(() => {
     console.log('DEBUG: App component mounted!');

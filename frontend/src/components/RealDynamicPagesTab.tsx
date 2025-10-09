@@ -109,10 +109,10 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-6 h-6 animate-spin text-blue-600 mr-3" data-testid="loading-spinner" />
-          <span className="text-gray-600">Loading dynamic pages...</span>
+          <span className="text-gray-600 dark:text-gray-400">Loading dynamic pages...</span>
         </div>
       </div>
     );
@@ -120,11 +120,11 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
         <div className="text-center py-12">
           <AlertCircle className="mx-auto h-12 w-12 text-red-300 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Pages</h3>
-          <p className="text-gray-500 mb-4">{error}</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Error Loading Pages</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">{error}</p>
           <button
             onClick={fetchPages}
             className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
@@ -137,13 +137,13 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Dynamic Pages</h3>
-        <button 
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Dynamic Pages</h3>
+        <button
           onClick={handleCreatePage}
           disabled={creating}
-          className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+          className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50"
         >
           {creating ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -157,26 +157,26 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
       {pages.length > 0 ? (
         <div className="space-y-4">
           {pages.map((page) => (
-            <div key={page.id} className="border border-gray-200 rounded-lg p-4">
+            <div key={page.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-medium text-gray-900">{page.title}</h4>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">{page.title}</h4>
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      page.status === 'published' ? 'bg-green-100 text-green-800' :
-                      page.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-gray-100 text-gray-800'
+                      page.status === 'published' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
+                      page.status === 'draft' ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' :
+                      'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'
                     }`}>
                       {page.status}
                     </span>
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                       {page.page_type}
                     </span>
                   </div>
                   {page.description && (
-                    <p className="text-sm text-gray-600 mb-2">{page.description}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{page.description}</p>
                   )}
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                  <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
                       Created {new Date(page.created_at).toLocaleDateString()}
@@ -188,16 +188,16 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 ml-4">
-                  <button 
+                  <button
                     onClick={() => navigate(`/agents/${agentId}/pages/${page.id}`)}
-                    className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                    className="inline-flex items-center px-3 py-1 border border-gray-300 dark:border-gray-700 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
                     <Eye className="w-4 h-4 mr-1" />
                     View
                   </button>
-                  <button 
+                  <button
                     onClick={() => navigate(`/agents/${agentId}/pages/${page.id}/edit`)}
-                    className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                    className="inline-flex items-center px-3 py-1 border border-gray-300 dark:border-gray-700 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
                     <Settings className="w-4 h-4 mr-1" />
                     Edit
@@ -210,8 +210,8 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
       ) : (
         <div className="text-center py-12">
           <FileText className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Dynamic Pages Yet</h3>
-          <p className="text-gray-500 mb-6">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Dynamic Pages Yet</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-6">
             Create dynamic pages for this agent to enhance functionality and provide custom interfaces.
           </p>
           <button
@@ -230,8 +230,8 @@ const RealDynamicPagesTab: React.FC<RealDynamicPagesTabProps> = ({ agentId }) =>
       )}
 
       {pages.length > 0 && (
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          <div className="flex items-center justify-between text-sm text-gray-500">
+        <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
             <div>
               {pages.length} page{pages.length !== 1 ? 's' : ''} total
             </div>

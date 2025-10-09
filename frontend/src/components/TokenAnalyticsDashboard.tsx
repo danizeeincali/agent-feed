@@ -416,11 +416,11 @@ interface SummaryCardProps {
 }
 
 const SummaryCard = ({ title, value, icon, trend, color }: SummaryCardProps) => (
-  <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+  <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-gray-600">{title}</p>
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
+        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
         {trend && (
           <p className="text-sm text-green-600 flex items-center mt-1">
             <TrendingUp className="w-4 h-4 mr-1" />
@@ -455,10 +455,10 @@ const MessageList = ({ messages, searchTerm, onSearchChange }: MessageListProps)
   }, [messages, searchTerm]);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-      <div className="p-4 border-b border-gray-200">
+    <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">Recent Messages</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Messages</h3>
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
@@ -466,7 +466,7 @@ const MessageList = ({ messages, searchTerm, onSearchChange }: MessageListProps)
               placeholder="Search messages..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
             />
           </div>
         </div>
@@ -474,39 +474,39 @@ const MessageList = ({ messages, searchTerm, onSearchChange }: MessageListProps)
 
       <div className="max-h-96 overflow-y-auto">
         {filteredMessages.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
             {searchTerm ? 'No messages match your search.' : 'No messages found.'}
           </div>
         ) : (
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {filteredMessages.map((message) => (
-              <div key={message.id} className="p-4 hover:bg-gray-50">
+              <div key={message.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
                         {message.provider}
                       </span>
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300">
                         {message.model}
                       </span>
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
                         {message.request_type}
                       </span>
                       {message.component && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
                           {message.component}
                         </span>
                       )}
                       {message.message_id && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800" title="Unique Message ID">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300" title="Unique Message ID">
                           ID: {message.message_id.split('-').pop()?.substring(0, 6)}...
                         </span>
                       )}
                     </div>
 
                     {message.message_preview && message.message_preview.trim() && (
-                      <p className="text-sm text-gray-900 mb-1">
+                      <p className="text-sm text-gray-900 dark:text-gray-100 mb-1">
                         <strong>Input:</strong> <span className="font-mono text-xs">{message.message_preview.substring(0, 200)}{message.message_preview.length > 200 ? '...' : ''}</span>
                       </p>
                     )}
@@ -620,8 +620,8 @@ export const TokenAnalyticsDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Token Analytics</h1>
-          <p className="text-gray-600">Monitor your Claude API usage and costs in real-time</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Token Analytics</h1>
+          <p className="text-gray-600 dark:text-gray-400">Monitor your Claude API usage and costs in real-time</p>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -677,9 +677,9 @@ export const TokenAnalyticsDashboard = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Hourly Chart */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center">
               <Clock className="w-5 h-5 mr-2" />
               Hourly Usage (Last 24 Hours)
             </h3>
@@ -702,9 +702,9 @@ export const TokenAnalyticsDashboard = () => {
         </div>
 
         {/* Daily Chart */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center">
               <Calendar className="w-5 h-5 mr-2" />
               Daily Usage (Last 30 Days)
             </h3>
@@ -732,23 +732,23 @@ export const TokenAnalyticsDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* By Provider */}
           {byProvider.length > 0 && (
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Usage by Provider</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Usage by Provider</h3>
               </div>
               <div className="p-4">
                 <div className="space-y-3">
                   {byProvider.map((provider: ProviderStats, index: number) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div>
-                        <h4 className="font-medium text-gray-900">{provider.provider}</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100">{provider.provider}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                           {formatNumber(provider.requests)} requests • {formatNumber(provider.tokens)} tokens
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">{formatCurrency(provider.cost)}</p>
-                        <p className="text-sm text-gray-600">{Math.round(provider.avg_time)}ms avg</p>
+                        <p className="font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(provider.cost)}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{Math.round(provider.avg_time)}ms avg</p>
                       </div>
                     </div>
                   ))}
@@ -759,23 +759,23 @@ export const TokenAnalyticsDashboard = () => {
 
           {/* By Model */}
           {byModel.length > 0 && (
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Usage by Model</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Usage by Model</h3>
               </div>
               <div className="p-4">
                 <div className="space-y-3">
                   {byModel.slice(0, 5).map((model: ModelStats, index: number) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div>
-                        <h4 className="font-medium text-gray-900">{model.model}</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100">{model.model}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                           {model.provider} • {formatNumber(model.requests)} requests
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">{formatCurrency(model.cost)}</p>
-                        <p className="text-sm text-gray-600">{formatNumber(model.tokens)} tokens</p>
+                        <p className="font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(model.cost)}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{formatNumber(model.tokens)} tokens</p>
                       </div>
                     </div>
                   ))}

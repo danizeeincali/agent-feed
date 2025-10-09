@@ -21,10 +21,10 @@ const LineChart: React.FC<LineChartProps> = ({
 }) => {
   if (!data || data.length === 0) {
     return (
-      <div className={cn('bg-white rounded-lg border border-gray-200 p-6', className)}>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">{config.title}</h3>
+      <div className={cn('bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6', className)}>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{config.title}</h3>
         <div
-          className="flex items-center justify-center text-gray-500"
+          className="flex items-center justify-center text-gray-500 dark:text-gray-400"
           style={{ height: `${height}px` }}
         >
           No data available
@@ -73,9 +73,9 @@ const LineChart: React.FC<LineChartProps> = ({
   const gradientPath = gradient ? createGradientPath(data) : '';
 
   return (
-    <div className={cn('bg-white rounded-lg border border-gray-200 p-6', className)}>
+    <div className={cn('bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6', className)}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">{config.title}</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{config.title}</h3>
         {showTrend && data.length > 1 && (
           <div className="text-sm">
             {data[data.length - 1].value > data[0].value ? (
@@ -187,7 +187,7 @@ const LineChart: React.FC<LineChartProps> = ({
                 x={padding - 10}
                 y={y + 4}
                 textAnchor="end"
-                className="text-xs fill-gray-500"
+                className="text-xs fill-gray-500 dark:fill-gray-400"
               >
                 {typeof value === 'number' ? value.toFixed(0) : value}
               </text>
@@ -204,7 +204,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   x={x}
                   y={padding + chartHeight + 20}
                   textAnchor="middle"
-                  className="text-xs fill-gray-500"
+                  className="text-xs fill-gray-500 dark:fill-gray-400"
                 >
                   {point.label || new Date(point.timestamp).toLocaleTimeString()}
                 </text>
@@ -217,8 +217,8 @@ const LineChart: React.FC<LineChartProps> = ({
 
       {/* X and Y axis labels */}
       <div className="mt-4 flex justify-between items-end">
-        <div className="text-xs text-gray-500">{config.xAxis}</div>
-        <div className="text-xs text-gray-500 transform -rotate-90 origin-center">{config.yAxis}</div>
+        <div className="text-xs text-gray-500 dark:text-gray-400">{config.xAxis}</div>
+        <div className="text-xs text-gray-500 dark:text-gray-400 transform -rotate-90 origin-center">{config.yAxis}</div>
       </div>
     </div>
   );

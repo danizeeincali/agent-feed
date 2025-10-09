@@ -29,9 +29,9 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
   ];
 
   return (
-    <div className={cn('bg-white rounded-lg border border-gray-200 shadow-sm', className)}>
+    <div className={cn('bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm', className)}>
       {/* Tab Navigation */}
-      <div className="border-b border-gray-100">
+      <div className="border-b border-gray-100 dark:border-gray-800">
         <nav className="flex space-x-8 px-4" aria-label="Posting tabs">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
@@ -43,7 +43,7 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
                   'flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors',
                   isActive
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
                 )}
                 aria-selected={isActive}
               >
@@ -128,7 +128,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Quick Post</h3>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Quick Post</h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,7 +138,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
             onChange={setContent}
             onMentionSelect={handleMentionSelect}
             placeholder="What's on your mind? Write as much as you need!"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             rows={6}
             maxLength={10000}
             mentionContext="quick-post"
@@ -146,9 +146,9 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
           {content.length >= 9500 && (
             <div className={cn(
               "text-xs mt-1 font-medium transition-colors",
-              content.length >= 9900 ? "text-red-600" :
-              content.length >= 9700 ? "text-orange-600" :
-              "text-gray-600"
+              content.length >= 9900 ? "text-red-600 dark:text-red-400" :
+              content.length >= 9700 ? "text-orange-600 dark:text-orange-400" :
+              "text-gray-600 dark:text-gray-400"
             )}>
               {content.length.toLocaleString()}/10,000 characters
             </div>
@@ -162,7 +162,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
             'px-4 py-2 rounded-lg font-medium transition-colors',
             content.trim() && !isSubmitting
               ? 'bg-blue-600 text-white hover:bg-blue-700'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
           )}
         >
           {isSubmitting ? 'Posting...' : 'Quick Post'}
@@ -354,14 +354,14 @@ const AviChatSection: React.FC<{
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Chat with Λvi</h3>
-        <p className="text-sm text-gray-600">Direct message with your Chief of Staff</p>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Chat with Λvi</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Direct message with your Chief of Staff</p>
       </div>
 
       {/* Chat History */}
-      <div className="h-64 border border-gray-200 rounded-lg p-4 overflow-y-auto bg-gray-50">
+      <div className="h-64 border border-gray-200 dark:border-gray-700 rounded-lg p-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
         {chatHistory.length === 0 ? (
-          <div className="text-center text-gray-500 mt-8">
+          <div className="text-center text-gray-500 dark:text-gray-400 mt-8">
             <Bot className="w-8 h-8 mx-auto mb-2" />
             <p>Λvi is ready to assist. What can I help you with?</p>
           </div>
@@ -371,10 +371,10 @@ const AviChatSection: React.FC<{
               <div key={msg.id} className={cn(
                 'p-3 rounded-lg',
                 msg.sender === 'user'
-                  ? 'bg-blue-100 text-blue-900 ml-auto max-w-xs'
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100 ml-auto max-w-xs'
                   : msg.sender === 'typing'
-                  ? 'bg-white text-gray-900 border border-gray-200 max-w-full'
-                  : 'bg-white text-gray-900 max-w-full'
+                  ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 max-w-full'
+                  : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 max-w-full'
               )}>
                 {/* SPARC MARKDOWN FIX: Render markdown for Avi responses */}
                 {msg.sender === 'typing' ? (
@@ -388,7 +388,7 @@ const AviChatSection: React.FC<{
                   <p className="text-sm">{msg.content}</p>
                 )}
                 {msg.sender !== 'typing' && (
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {msg.timestamp.toLocaleTimeString()}
                   </p>
                 )}
@@ -406,7 +406,7 @@ const AviChatSection: React.FC<{
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message to Λvi..."
             disabled={isSubmitting || isLoading}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
           />
           <button
             type="submit"
@@ -415,7 +415,7 @@ const AviChatSection: React.FC<{
               'px-4 py-2 rounded-lg font-medium transition-colors',
               message.trim() && !isSubmitting && !isLoading
                 ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
             )}
           >
             {isSubmitting ? 'Sending...' : 'Send'}

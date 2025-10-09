@@ -275,24 +275,24 @@ const generateSafeMockAlerts = (): SafeSystemAlert[] => {
 // Loading skeleton components
 const ActivitySkeleton: React.FC = () => (
   <div className="animate-pulse">
-    <div className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg">
-      <div className="w-4 h-4 bg-gray-200 rounded-full mt-1"></div>
+    <div className="flex items-start gap-3 p-3 border border-gray-100 dark:border-gray-700 rounded-lg">
+      <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded-full mt-1"></div>
       <div className="flex-1 space-y-2">
         <div className="flex justify-between">
           <div className="space-y-1">
-            <div className="h-4 w-32 bg-gray-200 rounded"></div>
-            <div className="h-3 w-48 bg-gray-200 rounded"></div>
+            <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-3 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
           <div className="space-y-1">
-            <div className="h-5 w-16 bg-gray-200 rounded-full"></div>
-            <div className="h-3 w-12 bg-gray-200 rounded"></div>
+            <div className="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+            <div className="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
         </div>
         <div className="flex justify-between">
-          <div className="h-3 w-24 bg-gray-200 rounded"></div>
+          <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
           <div className="flex items-center gap-2">
-            <div className="h-3 w-8 bg-gray-200 rounded"></div>
-            <div className="h-1 w-16 bg-gray-200 rounded-full"></div>
+            <div className="h-3 w-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-1 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
           </div>
         </div>
       </div>
@@ -301,21 +301,21 @@ const ActivitySkeleton: React.FC = () => (
 );
 
 const TaskQueueSkeleton: React.FC = () => (
-  <div className="bg-gray-50 rounded-lg p-3 animate-pulse">
+  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 animate-pulse">
     <div className="flex items-center justify-between mb-2">
-      <div className="h-4 w-24 bg-gray-200 rounded"></div>
-      <div className="h-3 w-12 bg-gray-200 rounded"></div>
+      <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+      <div className="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
     </div>
     <div className="space-y-1">
       {Array.from({ length: 2 }).map((_, index) => (
         <div key={index} className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-gray-200 rounded-full"></div>
-            <div className="h-3 w-20 bg-gray-200 rounded"></div>
+            <div className="w-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+            <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-4 w-12 bg-gray-200 rounded"></div>
-            <div className="h-3 w-8 bg-gray-200 rounded"></div>
+            <div className="h-4 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-3 w-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
         </div>
       ))}
@@ -626,19 +626,19 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
   if (isMinimized) {
     return (
       <ErrorBoundary fallback={<div className="fixed bottom-4 right-4 bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm">Panel Error</div>}>
-        <div className={`fixed bottom-4 right-4 bg-white rounded-lg border border-gray-200 shadow-lg p-3 ${className}`}>
+        <div className={`fixed bottom-4 right-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg p-3 ${className}`}>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
               <div className={cn(
                 'w-2 h-2 rounded-full',
                 isConnected ? 'bg-green-500' : 'bg-red-500'
               )}></div>
-              <Activity className="w-4 h-4 text-gray-600" />
+              <Activity className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </div>
-            <span className="text-sm font-medium text-gray-700">Activity Panel</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Activity Panel</span>
             <button
               onClick={() => setIsMinimized(false)}
-              className="p-1 text-gray-400 hover:text-gray-600"
+              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
               <Eye className="w-4 h-4" />
             </button>
@@ -653,17 +653,17 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
       fallback={<PanelError retry={() => window.location.reload()} />}
       onError={(error) => handleError(error, 'boundary')}
     >
-      <div className={`bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
+      <div className={`bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm ${className}`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <div className={cn(
                 'w-2 h-2 rounded-full',
                 isConnected ? 'bg-green-500' : 'bg-red-500'
               )}></div>
-              <Activity className="w-5 h-5 text-gray-600" />
-              <h2 className="text-lg font-semibold text-gray-900">Live Activity</h2>
+              <Activity className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Live Activity</h2>
             </div>
             
             <div className="flex items-center gap-1">
@@ -684,7 +684,7 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
             <select
               value={filterType}
               onChange={(e) => setFilterType(safeString(e.target.value, 'all'))}
-              className="text-xs border border-gray-300 rounded px-2 py-1"
+              className="text-xs border border-gray-300 dark:border-gray-700 rounded px-2 py-1 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             >
               <option value="all">All Types</option>
               <option value="task_start">Task Start</option>
@@ -697,7 +697,7 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
               className={cn(
-                'p-1 rounded text-gray-400 hover:text-gray-600',
+                'p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300',
                 soundEnabled ? 'text-blue-500' : ''
               )}
             >
@@ -707,7 +707,7 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
             <button
               onClick={() => setIsPaused(!isPaused)}
               className={cn(
-                'p-1 rounded text-gray-400 hover:text-gray-600',
+                'p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300',
                 isPaused ? 'text-yellow-500' : ''
               )}
             >
@@ -716,7 +716,7 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
 
             <button
               onClick={() => setIsMinimized(true)}
-              className="p-1 text-gray-400 hover:text-gray-600"
+              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
               <EyeOff className="w-4 h-4" />
             </button>
@@ -745,28 +745,28 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
         {/* System Alerts */}
         {activeAlerts.length > 0 && (
           <ErrorBoundary fallback={<div className="p-4 bg-red-50 text-red-700 text-sm">Alerts unavailable</div>}>
-            <div className="p-4 border-b border-gray-200 bg-gray-50">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">System Alerts</h3>
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">System Alerts</h3>
               <div className="space-y-2">
                 {activeAlerts.slice(0, 3).map((alert) => (
                   <div
                     key={alert.id}
                     className={cn(
                       'flex items-start gap-3 p-3 rounded-lg border',
-                      alert.type === 'error' ? 'bg-red-50 border-red-200' :
-                      alert.type === 'warning' ? 'bg-yellow-50 border-yellow-200' :
-                      alert.type === 'success' ? 'bg-green-50 border-green-200' :
-                      'bg-blue-50 border-blue-200'
+                      alert.type === 'error' ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' :
+                      alert.type === 'warning' ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800' :
+                      alert.type === 'success' ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' :
+                      'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
                     )}
                   >
                     {getAlertIcon(alert.type)}
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-gray-900">{alert.title}</h4>
-                      <p className="text-xs text-gray-600">{alert.message}</p>
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">{alert.title}</h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{alert.message}</p>
                     </div>
                     <button
                       onClick={() => dismissAlert(alert.id)}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                     >
                       <AlertCircle className="w-4 h-4" />
                     </button>
@@ -779,18 +779,18 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
 
         {/* Task Queues */}
         <ErrorBoundary fallback={<div className="p-4 text-red-700 text-sm">Task queues unavailable</div>}>
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
               <Clock className="w-4 h-4" />
               Task Queues
             </h3>
             <Suspense fallback={<TaskQueueSkeleton />}>
               <div className="space-y-3 max-h-48 overflow-y-auto">
                 {safeTaskQueues.map((queue) => (
-                  <div key={queue.agentId} className="bg-gray-50 rounded-lg p-3">
+                  <div key={queue.agentId} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-medium text-gray-900">{queue.agentName}</h4>
-                      <span className="text-xs text-gray-500">{queue.tasks.length} tasks</span>
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">{queue.agentName}</h4>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{queue.tasks.length} tasks</span>
                     </div>
                     <div className="space-y-1">
                       {queue.tasks.slice(0, 2).map((task) => (
@@ -802,7 +802,7 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
                               task.status === 'paused' ? 'bg-yellow-500' :
                               'bg-gray-400'
                             )}></div>
-                            <span className="text-gray-700">{task.title}</span>
+                            <span className="text-gray-700 dark:text-gray-300">{task.title}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className={cn(
@@ -811,12 +811,12 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
                             )}>
                               {task.priority}
                             </span>
-                            <span className="text-gray-500">{task.estimatedDuration}m</span>
+                            <span className="text-gray-500 dark:text-gray-400">{task.estimatedDuration}m</span>
                           </div>
                         </div>
                       ))}
                       {queue.tasks.length > 2 && (
-                        <div className="text-xs text-gray-500 pt-1">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 pt-1">
                           +{queue.tasks.length - 2} more tasks
                         </div>
                       )}
@@ -824,8 +824,8 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
                   </div>
                 ))}
                 {safeTaskQueues.length === 0 && (
-                  <div className="text-center py-4 text-gray-500">
-                    <Clock className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                  <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                    <Clock className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-gray-600" />
                     <p className="text-sm">No active task queues</p>
                   </div>
                 )}
@@ -838,7 +838,7 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
         <ErrorBoundary fallback={<ActivityError />}>
           <div className="p-4">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                 <Zap className="w-4 h-4" />
                 Live Activities ({filteredActivities.length})
               </h3>
@@ -852,15 +852,15 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
             <Suspense fallback={<ActivitySkeleton />}>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {filteredActivities.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <Activity className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <Activity className="w-8 h-8 mx-auto mb-2 text-gray-300 dark:text-gray-600" />
                     <p className="text-sm">No recent activities</p>
                   </div>
                 ) : (
                   filteredActivities.map((activity) => (
                     <div
                       key={activity.id}
-                      className="flex items-start gap-3 p-3 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-start gap-3 p-3 border border-gray-100 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                     >
                       <div className="flex-shrink-0 mt-1">
                         {getActivityIcon(activity.type)}
@@ -869,8 +869,8 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between mb-1">
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">{activity.title}</h4>
-                            <p className="text-xs text-gray-600">{activity.description}</p>
+                            <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">{activity.title}</h4>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">{activity.description}</p>
                           </div>
                           <div className="flex flex-col items-end gap-1">
                             <span className={cn(
@@ -879,18 +879,18 @@ export const BulletproofActivityPanel: React.FC<BulletproofActivityPanelProps> =
                             )}>
                               {activity.priority}
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                               {new Date(activity.timestamp).toLocaleTimeString()}
                             </span>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center justify-between text-xs text-gray-500">
+
+                        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                           <span className="font-medium">{activity.agentName}</span>
                           {activity.metadata?.progress !== undefined && (
                             <div className="flex items-center gap-2">
                               <span>{activity.metadata.progress}%</span>
-                              <div className="w-16 bg-gray-200 rounded-full h-1">
+                              <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-1">
                                 <div
                                   className="bg-blue-500 h-1 rounded-full"
                                   style={{ width: `${Math.max(0, Math.min(100, activity.metadata.progress))}%` }}

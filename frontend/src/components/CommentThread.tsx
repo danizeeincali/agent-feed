@@ -185,39 +185,39 @@ const CommentItem: React.FC<CommentItemProps> = ({
       ref={commentRef}
       className={cn(
         'relative transition-all duration-200',
-        shouldIndent && depth > 0 && 'ml-6 border-l border-gray-200',
+        shouldIndent && depth > 0 && 'ml-6 border-l border-gray-200 dark:border-gray-700',
         `comment-level-${Math.min(depth, maxDepth)}`,
         isHighlighted && 'ring-2 ring-blue-500 ring-opacity-50',
-        comment.isModerated && 'bg-red-50 border-red-200 opacity-75'
+        comment.isModerated && 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 opacity-75'
       )}
     >
       {/* Comment Content */}
       <div className={cn(
         'p-3 rounded-lg transition-colors relative group',
         shouldIndent && depth > 0 && 'ml-4',
-        comment.isDeleted ? 'bg-gray-50' : 'bg-white hover:bg-gray-50',
-        isHighlighted && 'bg-blue-50'
+        comment.isDeleted ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800',
+        isHighlighted && 'bg-blue-50 dark:bg-blue-900/30'
       )}>
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
-            <span className="font-medium text-sm text-gray-900">
+            <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
               {comment.author}
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {formatTimestamp(comment.createdAt)}
             </span>
             {comment.isEdited && (
               <button
                 onClick={() => setShowEditHistory(!showEditHistory)}
-                className="text-xs text-gray-400 hover:text-gray-600 cursor-pointer"
+                className="text-xs text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-400 cursor-pointer"
                 title="View edit history"
               >
                 (edited)
               </button>
             )}
             {depth > 0 && (
-              <span className="text-xs text-gray-400 font-mono">
+              <span className="text-xs text-gray-400 dark:text-gray-400 font-mono">
                 L{depth}
               </span>
             )}
@@ -228,7 +228,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center space-x-1">
               <button
                 onClick={handlePermalinkClick}
-                className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                className="p-1 text-gray-400 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 title="Copy permalink"
               >
                 <Link className="w-3 h-3" />
@@ -236,7 +236,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               {comment.parentId && (
                 <button
                   onClick={() => handleNavigationClick('parent')}
-                  className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                  className="p-1 text-gray-400 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   title="Go to parent"
                 >
                   <ArrowUp className="w-3 h-3" />
@@ -248,11 +248,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
         
         {/* Edit history */}
         {showEditHistory && comment.editHistory && comment.editHistory.length > 0 && (
-          <div className="mb-2 p-2 bg-gray-50 rounded text-xs">
-            <div className="font-medium text-gray-700 mb-1">Edit History:</div>
+          <div className="mb-2 p-2 bg-gray-50 dark:bg-gray-800 rounded text-xs">
+            <div className="font-medium text-gray-700 dark:text-gray-300 mb-1">Edit History:</div>
             {comment.editHistory.map((edit, index) => (
-              <div key={index} className="text-gray-600 mb-1">
-                <span className="text-gray-500">{formatTimestamp(edit.editedAt)}:</span>
+              <div key={index} className="text-gray-600 dark:text-gray-400 mb-1">
+                <span className="text-gray-500 dark:text-gray-400">{formatTimestamp(edit.editedAt)}:</span>
                 <div className="mt-1 italic">"{edit.content.slice(0, 100)}..."</div>
               </div>
             ))}
@@ -260,9 +260,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
         )}
 
         {/* Content */}
-        <div className="text-sm text-gray-700 mb-3 whitespace-pre-wrap leading-relaxed">
+        <div className="text-sm text-gray-700 dark:text-gray-300 mb-3 whitespace-pre-wrap leading-relaxed">
           {comment.isDeleted ? (
-            <span className="italic text-gray-500">[This comment has been deleted]</span>
+            <span className="italic text-gray-500 dark:text-gray-400">[This comment has been deleted]</span>
           ) : (
             renderMentions(comment.content)
           )}
@@ -279,7 +279,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     console.log('🔥 COMMENT THREAD: Reply button clicked for comment', comment.id);
                     setIsReplying(!isReplying);
                   }}
-                  className="flex items-center space-x-1 text-xs text-gray-500 hover:text-blue-600 transition-colors"
+                  className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   <Reply className="w-3 h-3" />
                   <span>Reply</span>
@@ -289,7 +289,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               {hasReplies && (
                 <button
                   onClick={handleToggleCollapse}
-                  className="flex items-center space-x-1 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+                  className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                 >
                   {isCollapsed ? (
                     <ChevronRight className="w-3 h-3" />
@@ -304,18 +304,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
               
               {/* Thread navigation helpers */}
               {depth > 0 && (
-                <div className="flex items-center space-x-2 text-xs text-gray-400">
+                <div className="flex items-center space-x-2 text-xs text-gray-400 dark:text-gray-400">
                   <span>•</span>
                   <button
                     onClick={() => handleNavigationClick('prev')}
-                    className="hover:text-gray-600 transition-colors"
+                    className="hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
                     title="Previous sibling"
                   >
                     ←
                   </button>
                   <button
                     onClick={() => handleNavigationClick('next')}
-                    className="hover:text-gray-600 transition-colors"
+                    className="hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
                     title="Next sibling"
                   >
                     →
@@ -325,7 +325,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             </div>
             
             {/* Comment metadata */}
-            <div className="flex items-center space-x-2 text-xs text-gray-400">
+            <div className="flex items-center space-x-2 text-xs text-gray-400 dark:text-gray-400">
               {comment.authorType === 'agent' && (
                 <div className="flex items-center space-x-1">
                   <Bot className="w-3 h-3" />
@@ -336,7 +336,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 <span>{comment.repliesCount} replies</span>
               )}
               {comment.reportedCount && comment.reportedCount > 0 && showModeration && (
-                <span className="text-red-500">{comment.reportedCount} reports</span>
+                <span className="text-red-500 dark:text-red-400">{comment.reportedCount} reports</span>
               )}
             </div>
           </div>
@@ -356,7 +356,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               onMentionSelect={(mention) => {
                 console.log('🎯 COMMENT THREAD: Mention selected in reply:', mention);
               }}
-              className="w-full p-2 text-sm border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 text-sm border border-gray-300 dark:border-gray-700 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
               maxLength={2000}
               placeholder="Write a reply... Use @ to mention agents or users"
@@ -367,7 +367,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               <p className="text-xs text-red-600">{replyError}</p>
             )}
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
                 {replyContent.length}/2000 characters
               </span>
               <div className="flex space-x-2">
@@ -377,7 +377,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                     setReplyContent('');
                     setReplyError('');
                   }}
-                  className="px-3 py-1 text-xs text-gray-600 hover:text-gray-800 transition-colors"
+                  className="px-3 py-1 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
                 >
                   Cancel
                 </button>
@@ -687,7 +687,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   if (processedComments.length === 0) {
     return (
       <div className={cn('space-y-4', className)}>
-        <div className={cn('p-6 text-center text-gray-500')}>
+        <div className={cn('p-6 text-center text-gray-500 dark:text-gray-400')}>
           <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
           <p className="text-sm">No comments yet</p>
         </div>
@@ -742,9 +742,9 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
                   {/* Render children with proper threading indentation */}
                   {isExpanded && hasChildren && (
                     <div className={`ml-6 border-l-2 ${
-                      threadState.highlighted && node.children.some(child => 
+                      threadState.highlighted && node.children.some(child =>
                         child.comment.id === threadState.highlighted
-                      ) ? 'border-blue-300' : 'border-gray-200'
+                      ) ? 'border-blue-300 dark:border-blue-600' : 'border-gray-200 dark:border-gray-700'
                     } pl-4 mt-2 transition-colors duration-200`}>
                       {renderCommentTree(node.children, depth + 1)}
                     </div>
@@ -760,8 +760,8 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
       
       {isLoading && (
         <div className="flex items-center justify-center py-4">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-          <span className="ml-2 text-sm text-gray-600">Updating...</span>
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 dark:border-blue-400"></div>
+          <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Updating...</span>
         </div>
       )}
     </div>

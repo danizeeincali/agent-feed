@@ -156,8 +156,8 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
     return (
       <div className={`comment-system ${className}`}>
         <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
-          <span className="text-gray-600">Loading comments...</span>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 dark:border-blue-400 mr-3"></div>
+          <span className="text-gray-600 dark:text-gray-400">Loading comments...</span>
         </div>
       </div>
     );
@@ -166,17 +166,17 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
   if (error) {
     return (
       <div className={`comment-system ${className}`}>
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
           <div className="flex items-center">
-            <div className="text-red-600 font-medium">Error loading comments</div>
+            <div className="text-red-600 dark:text-red-400 font-medium">Error loading comments</div>
             <button
               onClick={refreshComments}
-              className="ml-auto text-red-600 hover:text-red-800 underline"
+              className="ml-auto text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 underline"
             >
               Retry
             </button>
           </div>
-          <div className="text-red-500 text-sm mt-1">{error}</div>
+          <div className="text-red-500 dark:text-red-400 text-sm mt-1">{error}</div>
         </div>
       </div>
     );
@@ -185,18 +185,18 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
   return (
     <div className={`comment-system ${className}`}>
       {/* Comment System Header */}
-      <div className="comment-system-header bg-white border-b border-gray-200 p-4">
+      <div className="comment-system-header bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <MessageCircle className="w-5 h-5 text-gray-600" />
-              <h3 className="text-lg font-semibold text-gray-900">
+              <MessageCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                 Comments ({stats?.totalComments || 0})
               </h3>
             </div>
-            
+
             {stats && (
-              <div className="flex items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
                 <span>{stats.rootThreads} threads</span>
                 {stats.maxDepth > 0 && (
                   <span>Max depth: {stats.maxDepth}</span>
@@ -214,16 +214,16 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
                 onClick={() => setSelectedAgentConversation(
                   selectedAgentConversation ? null : agentConversations[0]?.id
                 )}
-                className="flex items-center space-x-2 px-3 py-2 bg-purple-100 text-purple-700 rounded-md hover:bg-purple-200 transition-colors"
+                className="flex items-center space-x-2 px-3 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-md hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
               >
                 <Users className="w-4 h-4" />
                 <span>Agent Conversations ({agentConversations.length})</span>
               </button>
             )}
-            
+
             <button
               onClick={() => setShowCommentForm(true)}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               <Plus className="w-4 h-4" />
               <span>Add Comment</span>
@@ -233,17 +233,17 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
         
         {/* Agent Conversation Filter */}
         {selectedAgentConversation && agentConversations.length > 0 && (
-          <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+          <div className="mt-4 p-3 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 rounded-lg">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="font-medium text-purple-900">Agent Conversation</h4>
-                <p className="text-sm text-purple-700">
+                <h4 className="font-medium text-purple-900 dark:text-purple-100">Agent Conversation</h4>
+                <p className="text-sm text-purple-700 dark:text-purple-300">
                   {agentConversations.find(c => c.id === selectedAgentConversation)?.topic || 'Active Discussion'}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedAgentConversation(null)}
-                className="text-purple-600 hover:text-purple-800"
+                className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300"
               >
                 Show All Comments
               </button>
@@ -254,7 +254,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
 
       {/* New Comment Form */}
       {showCommentForm && (
-        <div className="new-comment-form border-b border-gray-200 p-4">
+        <div className="new-comment-form border-b border-gray-200 dark:border-gray-700 p-4">
           <CommentForm
             onSubmit={(content) => handleAddComment(content)}
             onCancel={() => setShowCommentForm(false)}
@@ -268,12 +268,12 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
       <div className="comment-threads">
         {rootComments.length === 0 ? (
           <div className="empty-state text-center py-12">
-            <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No comments yet</h3>
-            <p className="text-gray-500 mb-4">Be the first to share your thoughts on this post.</p>
+            <MessageCircle className="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No comments yet</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">Be the first to share your thoughts on this post.</p>
             <button
               onClick={() => setShowCommentForm(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
             >
               Start the discussion
             </button>
@@ -300,11 +300,11 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
 
       {/* Load More Comments */}
       {stats && stats.totalComments > comments.length && (
-        <div className="load-more-section border-t border-gray-200 p-4 text-center">
+        <div className="load-more-section border-t border-gray-200 dark:border-gray-700 p-4 text-center">
           <button
             onClick={loadMoreComments}
             disabled={loading}
-            className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+            className="px-6 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
           >
             {loading ? 'Loading...' : `Load More Comments (${stats.totalComments - comments.length} remaining)`}
           </button>

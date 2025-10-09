@@ -182,7 +182,7 @@ const DynamicPageWithData: React.FC<DynamicPageWithDataProps> = ({
       <div className="p-6">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-6 h-6 animate-spin text-blue-600 mr-3" />
-          <span className="text-gray-600">Loading page...</span>
+          <span className="text-gray-600 dark:text-gray-400">Loading page...</span>
         </div>
       </div>
     );
@@ -195,15 +195,15 @@ const DynamicPageWithData: React.FC<DynamicPageWithDataProps> = ({
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={handleBack}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
         </div>
         <div className="text-center py-12">
           <AlertCircle className="mx-auto h-12 w-12 text-red-300 mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Page</h2>
-          <p className="text-gray-500">{pageError || 'Page not found'}</p>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Error Loading Page</h2>
+          <p className="text-gray-500 dark:text-gray-400">{pageError || 'Page not found'}</p>
         </div>
       </div>
     );
@@ -216,15 +216,15 @@ const DynamicPageWithData: React.FC<DynamicPageWithDataProps> = ({
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={handleBack}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">{pageSpec.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{pageSpec.title}</h1>
         </div>
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-6 h-6 animate-spin text-blue-600 mr-3" />
-          <span className="text-gray-600">Loading data...</span>
+          <span className="text-gray-600 dark:text-gray-400">Loading data...</span>
         </div>
       </div>
     );
@@ -237,16 +237,16 @@ const DynamicPageWithData: React.FC<DynamicPageWithDataProps> = ({
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={handleBack}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">{pageSpec.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{pageSpec.title}</h1>
         </div>
         <div className="text-center py-12">
           <AlertCircle className="mx-auto h-12 w-12 text-yellow-300 mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error Loading Data</h2>
-          <p className="text-gray-500">{dataError}</p>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Error Loading Data</h2>
+          <p className="text-gray-500 dark:text-gray-400">{dataError}</p>
         </div>
       </div>
     );
@@ -260,12 +260,12 @@ const DynamicPageWithData: React.FC<DynamicPageWithDataProps> = ({
         <div className="flex items-center gap-4">
           <button
             onClick={handleBack}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{pageSpec.title}</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{pageSpec.title}</h1>
             <div className="flex items-center gap-2 mt-1">
               <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                 pageSpec.status === 'published' ? 'bg-green-100 text-green-800' :
@@ -274,7 +274,7 @@ const DynamicPageWithData: React.FC<DynamicPageWithDataProps> = ({
               }`}>
                 {pageSpec.status}
               </span>
-              <span className="text-xs text-gray-500">v{pageSpec.version}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">v{pageSpec.version}</span>
               {pageSpec.dataSource && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                   Data-driven
@@ -292,20 +292,20 @@ const DynamicPageWithData: React.FC<DynamicPageWithDataProps> = ({
           <DynamicPageRendererContent layout={resolvedLayout} />
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           <div className="text-center py-8">
             <AlertCircle className="mx-auto h-12 w-12 text-yellow-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Content</h3>
-            <p className="text-gray-500">This page has no layout defined</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Content</h3>
+            <p className="text-gray-500 dark:text-gray-400">This page has no layout defined</p>
           </div>
         </div>
       )}
 
       {/* Debug info in development */}
       {process.env.NODE_ENV === 'development' && pageData && (
-        <details className="bg-gray-50 rounded-lg border border-gray-200 p-4">
-          <summary className="cursor-pointer text-sm font-medium text-gray-700">Debug: Page Data</summary>
-          <pre className="mt-2 text-xs text-gray-600 overflow-auto max-h-96">
+        <details className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+          <summary className="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">Debug: Page Data</summary>
+          <pre className="mt-2 text-xs text-gray-600 dark:text-gray-400 overflow-auto max-h-96">
             {JSON.stringify({ pageSpec, pageData, resolvedLayout }, null, 2)}
           </pre>
         </details>
@@ -328,7 +328,7 @@ const DynamicPageRendererContent: React.FC<{ layout: any[] }> = ({ layout }) => 
       case 'header':
         const HeaderTag = `h${componentProps.level || 1}` as keyof JSX.IntrinsicElements;
         return (
-          <HeaderTag key={index} className={`font-bold text-gray-900 mb-4 ${
+          <HeaderTag key={index} className={`font-bold text-gray-900 dark:text-gray-100 mb-4 ${
             componentProps.level === 1 ? 'text-3xl' :
             componentProps.level === 2 ? 'text-2xl' :
             componentProps.level === 3 ? 'text-xl' :
@@ -340,25 +340,25 @@ const DynamicPageRendererContent: React.FC<{ layout: any[] }> = ({ layout }) => 
 
       case 'text':
         return (
-          <p key={index} className="text-gray-700">
+          <p key={index} className="text-gray-700 dark:text-gray-300">
             {componentProps.content || componentProps.children}
           </p>
         );
 
       case 'Card':
         return (
-          <div key={index} className="bg-white rounded-lg border border-gray-200 p-6">
-            {componentProps.title && <h3 className="text-lg font-semibold mb-2">{componentProps.title}</h3>}
-            {componentProps.description && <p className="text-gray-600">{componentProps.description}</p>}
+          <div key={index} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            {componentProps.title && <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{componentProps.title}</h3>}
+            {componentProps.description && <p className="text-gray-600 dark:text-gray-400">{componentProps.description}</p>}
           </div>
         );
 
       default:
         // Generic rendering
         return (
-          <div key={index} className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="text-xs text-gray-500 mb-2">Component: {type}</div>
-            <pre className="text-sm text-gray-700 overflow-auto">
+          <div key={index} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+            <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">Component: {type}</div>
+            <pre className="text-sm text-gray-700 dark:text-gray-300 overflow-auto">
               {JSON.stringify(componentProps, null, 2)}
             </pre>
           </div>

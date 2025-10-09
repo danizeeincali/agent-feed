@@ -8,16 +8,16 @@ import { ErrorBoundary, TokenAnalyticsLoadingFallback } from './ErrorBoundary';
 
 // Dynamic import with retry logic
 const TokenAnalyticsDashboard = lazy(() =>
-  import('./TokenAnalyticsDashboard')
-    .then(module => ({ default: module.TokenAnalyticsDashboard }))
+  import('./TokenAnalyticsDashboard.tsx')
+    .then(module => ({ default: module.default }))
     .catch(error => {
       console.error('Failed to load TokenAnalyticsDashboard:', error);
 
       // Retry logic for failed imports
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          import('./TokenAnalyticsDashboard')
-            .then(module => resolve({ default: module.TokenAnalyticsDashboard }))
+          import('./TokenAnalyticsDashboard.tsx')
+            .then(module => resolve({ default: module.default }))
             .catch(retryError => {
               console.error('Retry failed for TokenAnalyticsDashboard:', retryError);
 

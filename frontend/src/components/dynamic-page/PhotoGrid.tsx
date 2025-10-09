@@ -77,9 +77,9 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({
   // If no images, show empty state
   if (!images || images.length === 0) {
     return (
-      <div className={`bg-white rounded-lg border border-gray-200 p-8 ${className}`}>
+      <div className={`bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-8 ${className}`}>
         <div className="text-center py-8">
-          <ImageOff className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <ImageOff className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No Images</h3>
           <p className="text-gray-500">No images to display</p>
         </div>
@@ -118,7 +118,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({
     return (
       <div
         key={index}
-        className={`relative overflow-hidden rounded-lg bg-gray-100 ${
+        className={`relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 ${
           enableLightbox ? 'cursor-pointer hover:opacity-90 transition-opacity' : ''
         }`}
         style={aspectRatio !== 'auto' ? { paddingBottom: padding } : {}}
@@ -129,17 +129,17 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({
             className="absolute inset-0 flex items-center justify-center"
             style={aspectRatio === 'auto' ? { minHeight: '200px' } : {}}
           >
-            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+            <Loader2 className="w-8 h-8 animate-spin text-gray-400 dark:text-gray-400" />
           </div>
         )}
 
         {/* Error state */}
         {hasFailed && (
           <div
-            className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50"
+            className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800"
             style={aspectRatio === 'auto' ? { minHeight: '200px' } : {}}
           >
-            <ImageOff className="w-12 h-12 text-gray-400 mb-2" />
+            <ImageOff className="w-12 h-12 text-gray-400 dark:text-gray-400 mb-2" />
             <p className="text-sm text-gray-500">Failed to load image</p>
           </div>
         )}

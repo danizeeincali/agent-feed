@@ -90,18 +90,18 @@ const transformToSafePost = (post: any): AgentPost | null => {
 
 // Skeleton component for loading states
 const PostSkeleton: React.FC = memo(() => (
-  <div className="bg-white rounded-lg border border-gray-200 p-6">
+  <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
     <div className="animate-pulse">
       <div className="flex space-x-3">
-        <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
+        <div className="w-10 h-10 bg-gray-200 dark:bg-gray-800 rounded-full"></div>
         <div className="flex-1 space-y-2">
-          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/6"></div>
+          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/4"></div>
+          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/6"></div>
         </div>
       </div>
       <div className="mt-4 space-y-3">
-        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-        <div className="h-20 bg-gray-200 rounded"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
+        <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded"></div>
       </div>
     </div>
   </div>
@@ -113,17 +113,17 @@ PostSkeleton.displayName = 'PostSkeleton';
 const PostErrorBoundary: React.FC<{ children: React.ReactNode; postId?: string }> = ({ children, postId }) => (
   <ErrorBoundary
     FallbackComponent={({ error, resetErrorBoundary }) => (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-2">
-        <div className="flex items-center text-red-700 mb-2">
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 my-2">
+        <div className="flex items-center text-red-700 dark:text-red-400 mb-2">
           <AlertTriangle className="w-4 h-4 mr-2" />
           <span className="font-medium">Post Error</span>
         </div>
-        <p className="text-red-600 text-sm mb-3">
+        <p className="text-red-600 dark:text-red-400 text-sm mb-3">
           Failed to load post {postId ? `(ID: ${postId})` : ''}. The post may contain invalid data.
         </p>
         <button
           onClick={resetErrorBoundary}
-          className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition-colors"
+          className="bg-red-600 dark:bg-red-700 text-white px-3 py-1 rounded text-sm hover:bg-red-700 dark:hover:bg-red-600 transition-colors"
         >
           Retry
         </button>
@@ -520,12 +520,12 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
   if (error && posts.length === 0) {
     return (
       <div className={`max-w-2xl mx-auto ${className}`} data-testid="error-fallback">
-        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-8 text-center">
           <div className="text-gray-400 mb-4">
             <TrendingUp className="mx-auto h-12 w-12" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Unable to load feed</h3>
-          <p className="text-gray-500 mb-4">{error}</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Unable to load feed</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">{error}</p>
           {retryable && (
             <div className="space-y-2">
               <button 
@@ -566,11 +566,11 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
     >
       <div className={`max-w-2xl mx-auto ${className}`}>
         {/* Feed Header */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Agent Feed</h2>
-              <p className="text-sm text-gray-500">Real-time updates from your Claude Code agents</p>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Agent Feed</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Real-time updates from your Claude Code agents</p>
             </div>
             
             <div className="flex items-center space-x-2">
@@ -587,7 +587,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                 <select
                   value={filter}
                   onChange={(e) => setFilter(safeString(e.target.value, 'all'))}
-                  className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-sm border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="all">All Posts</option>
                   <option value="high-impact">High Impact</option>
@@ -596,7 +596,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                   <option value="productivity">Productivity</option>
                 </select>
                 
-                <Suspense fallback={<div className="w-4 h-4 bg-gray-200 rounded animate-pulse" />}>
+                <Suspense fallback={<div className="w-4 h-4 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />}>
                   <LiveActivityIndicator />
                 </Suspense>
               </div>
@@ -606,7 +606,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
 
         {/* Post Creator with Error Boundary */}
         <div className="mb-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
             {!showPostCreator ? (
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-medium">
@@ -615,13 +615,13 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                 <button
                   data-testid="start-post-button"
                   onClick={() => setShowPostCreator(true)}
-                  className="flex-1 text-left px-4 py-3 border border-gray-300 rounded-full text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 text-left px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   Start a post...
                 </button>
                 <button
                   onClick={() => setShowPostCreator(true)}
-                  className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                  className="p-2 text-gray-400 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition-colors"
                   title="Create post"
                 >
                   <Edit3 className="w-5 h-5" />
@@ -630,13 +630,13 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
             ) : (
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 flex items-center">
                     <Edit3 className="w-5 h-5 mr-2 text-blue-600" />
                     Create New Post
                   </h3>
                   <button
                     onClick={() => setShowPostCreator(false)}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                    className="text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     title="Close"
                   >
                     <X className="w-5 h-5" />
@@ -644,11 +644,11 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                 </div>
                 <ErrorBoundary
                   FallbackComponent={({ resetErrorBoundary }) => (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-red-600 text-sm mb-2">Failed to load post creator</p>
+                    <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                      <p className="text-red-600 dark:text-red-400 text-sm mb-2">Failed to load post creator</p>
                       <button
                         onClick={resetErrorBoundary}
-                        className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
+                        className="bg-red-600 dark:bg-red-700 text-white px-3 py-1 rounded text-sm hover:bg-red-700 dark:hover:bg-red-600"
                       >
                         Retry
                       </button>
@@ -666,16 +666,16 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
         </div>
 
         {/* Posts Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Agent Posts Archive</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Agent Posts Archive</h2>
           
           {filteredPosts.length === 0 ? (
             <div className="text-center py-8" data-testid="empty-state">
               <div className="text-gray-400 mb-4">
                 <MessageCircle className="mx-auto h-12 w-12" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
-              <p className="text-gray-500">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No posts yet</h3>
+              <p className="text-gray-500 dark:text-gray-400">
                 Agent activity will appear here when Claude Code agents complete tasks
               </p>
             </div>
@@ -684,20 +684,20 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
               {filteredPosts.map((post) => (
                 <PostErrorBoundary key={post.id} postId={post.id}>
                   <article
-                    className="bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
+                    className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow"
                   >
                     {/* Post Header */}
-                    <div className="p-4 border-b border-gray-100">
+                    <div className="p-4 border-b border-gray-100 dark:border-gray-800">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-lg">
                             {getAgentEmoji(post.authorAgent)}
                           </div>
                           <div>
-                            <h3 className="font-semibold text-gray-900">
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                               {formatAgentName(post.authorAgent)}
                             </h3>
-                            <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                               <Clock className="h-3 w-3" />
                               <span>{formatTimeAgo(post.publishedAt)}</span>
                               <span>•</span>
@@ -711,7 +711,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                           </div>
                         </div>
                         
-                        <button className="p-1 text-gray-400 hover:text-gray-600">
+                        <button className="p-1 text-gray-400 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                           <MoreHorizontal className="h-5 w-5" />
                         </button>
                       </div>
@@ -719,22 +719,22 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
 
                     {/* Post Content */}
                     <div className="p-4">
-                      <h4 className="text-lg font-medium text-gray-900 mb-3">
+                      <h4 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
                         {safeString(post.title, 'Untitled Post')}
                       </h4>
-                      <p className="text-gray-700 leading-relaxed mb-4">
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                         {safeString(post.content, 'No content available')}
                       </p>
                       
                       {/* Tags */}
                       {safeArray(post.metadata?.tags).length > 0 && (
                         <div className="flex items-center space-x-2 mb-4">
-                          <Tag className="h-4 w-4 text-gray-400" />
+                          <Tag className="h-4 w-4 text-gray-400 dark:text-gray-400" />
                           <div className="flex flex-wrap gap-2">
                             {safeArray(post.metadata.tags).map((tag, index) => (
                               <span
                                 key={`${post.id}-tag-${index}`}
-                                className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
+                                className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer transition-colors"
                               >
                                 #{safeString(tag)}
                               </span>
@@ -745,8 +745,8 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                     </div>
 
                     {/* Post Actions */}
-                    <div className="border-t border-gray-100">
-                      <Suspense fallback={<div className="h-4 bg-gray-100 animate-pulse mx-4 mt-3 rounded" />}>
+                    <div className="border-t border-gray-100 dark:border-gray-800">
+                      <Suspense fallback={<div className="h-4 bg-gray-100 dark:bg-gray-800 animate-pulse mx-4 mt-3 rounded" />}>
                         <TypingIndicator postId={post.id} className="mx-4 mt-3" />
                       </Suspense>
                       
@@ -756,31 +756,31 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                             <button 
                               className={`flex items-center space-x-2 transition-colors ${
                                 isConnected
-                                  ? 'text-gray-500 hover:text-red-500'
-                                  : 'text-gray-400 cursor-not-allowed opacity-50'
+                                  ? 'text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400'
+                                  : 'text-gray-400 dark:text-gray-600 cursor-not-allowed opacity-50'
                               }`}
                             >
                               <Heart className="h-5 w-5" />
                               <span className="text-sm">{safeNumber(post.likes, 0)}</span>
                             </button>
                             
-                            <button 
-                              className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 transition-colors"
+                            <button
+                              className="flex items-center space-x-2 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
                               onClick={() => subscribePost(post.id)}
                             >
                               <MessageCircle className="h-5 w-5" />
                               <span className="text-sm">{safeNumber(post.comments, 0)}</span>
                             </button>
-                            
-                            <button className="flex items-center space-x-2 text-gray-500 hover:text-green-500 transition-colors">
+
+                            <button className="flex items-center space-x-2 text-gray-500 dark:text-gray-400 hover:text-green-500 dark:hover:text-green-400 transition-colors">
                               <Share2 className="h-5 w-5" />
                               <span className="text-sm">{safeNumber(post.shares, 0)}</span>
                             </button>
                           </div>
                           
-                          <div className="flex items-center space-x-2 text-xs text-gray-400">
+                          <div className="flex items-center space-x-2 text-xs text-gray-400 dark:text-gray-400">
                             {!isConnected && (
-                              <span className="text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                              <span className="text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded">
                                 Offline
                               </span>
                             )}
@@ -790,7 +790,7 @@ const BulletproofSocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({
                         
                         {/* Connection Status */}
                         {!isConnected && (
-                          <div className="mt-2 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                          <div className="mt-2 text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-2 py-1 rounded">
                             Real-time features unavailable - interactions will sync when reconnected
                           </div>
                         )}

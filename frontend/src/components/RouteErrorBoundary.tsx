@@ -116,32 +116,32 @@ class RouteErrorBoundary extends Component<Props, State> {
 
       // Default route error UI
       return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-          <div className="max-w-lg w-full bg-white rounded-lg shadow-lg p-8 text-center border border-orange-200">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+          <div className="max-w-lg w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center border border-orange-200 dark:border-orange-700">
             {/* Error Icon */}
             <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-8 h-8 text-orange-600" />
             </div>
 
             {/* Error Title */}
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               Page Error
             </h2>
-            
-            <h3 className="text-lg font-semibold text-orange-700 mb-4">
+
+            <h3 className="text-lg font-semibold text-orange-700 dark:text-orange-400 mb-4">
               {this.props.routeName}
             </h3>
 
-            <p className="text-gray-600 leading-relaxed mb-6">
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
               This page encountered an error and couldn't load properly. 
               You can try refreshing or go back to continue using the app.
             </p>
 
             {/* Error Details (Development) */}
             {process.env.NODE_ENV === 'development' && this.state.error && (
-              <div className="mb-6 p-3 bg-orange-50 rounded border border-orange-200 text-left">
-                <p className="font-semibold text-orange-800 text-sm mb-1">Development Error:</p>
-                <pre className="text-xs text-orange-700 whitespace-pre-wrap overflow-auto max-h-20 font-mono">
+              <div className="mb-6 p-3 bg-orange-50 dark:bg-orange-900/20 rounded border border-orange-200 dark:border-orange-800 text-left">
+                <p className="font-semibold text-orange-800 dark:text-orange-400 text-sm mb-1">Development Error:</p>
+                <pre className="text-xs text-orange-700 dark:text-orange-300 whitespace-pre-wrap overflow-auto max-h-20 font-mono">
                   {this.state.error.message}
                 </pre>
               </div>
@@ -163,7 +163,7 @@ class RouteErrorBoundary extends Component<Props, State> {
               {/* Go Back Button */}
               <button
                 onClick={this.handleGoBack}
-                className="w-full border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center font-medium"
+                className="w-full border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center font-medium"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Go Back
@@ -181,7 +181,7 @@ class RouteErrorBoundary extends Component<Props, State> {
 
             {/* Retry Count Info */}
             {this.state.retryCount > 0 && (
-              <div className="mt-6 p-2 bg-gray-100 rounded text-xs text-gray-600">
+              <div className="mt-6 p-2 bg-gray-100 dark:bg-gray-700 rounded text-xs text-gray-600 dark:text-gray-400">
                 Retry attempts: {this.state.retryCount}/{this.maxRetries}
               </div>
             )}

@@ -639,7 +639,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       <div className={`p-6 ${className}`}>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
-          <span className="text-gray-600">Loading real post data...</span>
+          <span className="text-gray-600 dark:text-gray-400">Loading real post data...</span>
         </div>
       </div>
     );
@@ -652,19 +652,19 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       {/* Main Feed - Left Column */}
       <div className={`lg:col-span-2 ${className}`} data-testid="real-social-media-feed">
         {/* RESTRUCTURED HEADER WITH SEARCH */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
           {/* Row 1: Title/Description + Refresh Button */}
           <div className="flex items-center justify-between mb-4">
             {/* Left: Title */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Agent Feed</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Agent Feed</h2>
             </div>
 
             {/* Right: Refresh Button */}
             <button
               onClick={handleRefresh}
               disabled={refreshing}
-              className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              className="flex items-center px-4 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 transition-colors"
               title="Refresh feed"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
@@ -682,7 +682,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                 placeholder="Search posts by title, content, or author..."
                 value={search.query}
                 onChange={(e) => setSearch(prev => ({ ...prev, query: e.target.value }))}
-                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-10 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 data-testid="search-input"
               />
               {search.loading && (
@@ -695,7 +695,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
           {/* Search Results Info */}
           {isSearching && search.query && (
-            <div className="mt-3 text-sm text-gray-600" data-testid="search-results-info">
+            <div className="mt-3 text-sm text-gray-600 dark:text-gray-400" data-testid="search-results-info">
               {search.loading ? (
                 'Searching...'
               ) : search.hasResults ? (
@@ -764,7 +764,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
             const { truncated, isTruncated } = truncateContent(post.content || '');
             
             return (
-          <article key={post.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden" data-testid="post-card">
+          <article key={post.id} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden" data-testid="post-card">
             <div className="p-6">
               {!isExpanded ? (
                 // Collapsed View - Multi-line layout
@@ -775,12 +775,12 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       {getAuthorAgentName(post.authorAgent).charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-grow min-w-0">
-                      <h2 className="text-lg font-bold text-gray-900 leading-tight">{post.title}</h2>
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{post.title}</h2>
                     </div>
                     {/* Expand Button - Always show */}
-                    <button 
+                    <button
                       onClick={() => togglePostExpansion(post.id)}
-                      className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors flex-shrink-0"
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex-shrink-0"
                       aria-label="Expand post"
                     >
                       <ChevronDown className="w-4 h-4" />
@@ -789,7 +789,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   
                   {/* Line 2: Full Hook with Parsing */}
                   <div className="pl-14">
-                    <div className="text-sm text-gray-600 leading-relaxed">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                       {renderParsedContent(parseContent(getHookContent(post.content)), {
                         onMentionClick: handleMentionClick,
                         onHashtagClick: handleHashtagClick,
@@ -804,7 +804,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Line 3: Metrics */}
                   <div className="pl-14 flex items-center space-x-6">
                     {/* Time (Relative with Tooltip) */}
-                    <div className="flex items-center space-x-1 text-xs text-gray-500">
+                    <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                       <svg className="w-3 h-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -817,7 +817,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     </div>
 
                     {/* Reading Time */}
-                    <div className="flex items-center space-x-1 text-xs text-gray-500">
+                    <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                       <span>•</span>
                       <span>{postMetrics.readingTime} min read</span>
                     </div>
@@ -825,7 +825,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     {/* Business Impact */}
                     {post.metadata?.businessImpact && (
                       <>
-                        <div className="flex items-center space-x-1 text-xs text-gray-500">
+                        <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                           <span>•</span>
                           <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -838,7 +838,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     )}
 
                     {/* Agent */}
-                    <div className="flex items-center space-x-1 text-xs text-gray-500">
+                    <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                       <span>•</span>
                       <span>by {getAuthorAgentName(post.authorAgent)}</span>
                     </div>
@@ -854,8 +854,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         {getAuthorAgentName(post.authorAgent).charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-lg">{getAuthorAgentName(post.authorAgent)}</h3>
-                        <div className="flex items-center text-gray-500 text-sm space-x-2">
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg">{getAuthorAgentName(post.authorAgent)}</h3>
+                        <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm space-x-2">
                           <span
                             className="cursor-help"
                             title={formatExactDateTime(post.created_at || post.publishedAt)}
@@ -867,9 +867,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         </div>
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => togglePostExpansion(post.id)}
-                      className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                       aria-label="Collapse post"
                     >
                       <ChevronUp className="w-5 h-5" />
@@ -877,11 +877,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   </div>
 
                   {/* Post Title */}
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">{post.title}</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 leading-tight">{post.title}</h2>
 
                   {/* Post Content with Parsing */}
                   <div className="prose prose-sm max-w-none mb-4">
-                    <div className="text-gray-700 leading-relaxed">
+                    <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
                       {renderParsedContent(parseContent(post.content), {
                         onMentionClick: handleMentionClick,
                         onHashtagClick: handleHashtagClick,
@@ -895,37 +895,37 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   </div>
 
                   {/* Full Metrics Container */}
-                  <div className="mb-4 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200">
+                  <div className="mb-4 p-4 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-blue-900 rounded-lg border border-gray-200 dark:border-gray-700">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                       {/* Characters */}
-                      <div className="flex items-center space-x-2 text-gray-700">
+                      <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                         <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         <span className="font-medium">{postMetrics.characterCount}</span>
-                        <span className="text-gray-500">chars</span>
+                        <span className="text-gray-500 dark:text-gray-400">chars</span>
                       </div>
                       
                       {/* Words */}
-                      <div className="flex items-center space-x-2 text-gray-700">
+                      <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                         <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                         </svg>
                         <span className="font-medium">{postMetrics.wordCount}</span>
-                        <span className="text-gray-500">words</span>
+                        <span className="text-gray-500 dark:text-gray-400">words</span>
                       </div>
                       
                       {/* Reading Time */}
-                      <div className="flex items-center space-x-2 text-gray-700">
+                      <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                         <svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <span className="font-medium">{postMetrics.readingTime}</span>
-                        <span className="text-gray-500">min read</span>
+                        <span className="text-gray-500 dark:text-gray-400">min read</span>
                       </div>
                       
                       {/* Length */}
-                      <div className="flex items-center space-x-2 text-gray-700">
+                      <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                         <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
@@ -942,24 +942,24 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       
                       {/* Business Impact */}
                       {post.metadata?.businessImpact && (
-                        <div className="flex items-center space-x-2 text-gray-700">
+                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                           <svg className="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                           </svg>
                           <span className={`font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
                             {post.metadata.businessImpact}%
                           </span>
-                          <span className="text-gray-500">impact</span>
+                          <span className="text-gray-500 dark:text-gray-400">impact</span>
                         </div>
                       )}
                       
                       {/* Who Responded */}
-                      <div className="flex items-center space-x-2 text-gray-700">
+                      <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                         <svg className="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         <span className="font-medium">{getAuthorAgentName(post.authorAgent)}</span>
-                        <span className="text-gray-500">agent</span>
+                        <span className="text-gray-500 dark:text-gray-400">agent</span>
                       </div>
                     </div>
                   </div>
@@ -967,14 +967,14 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
               )}
 
               {/* Post Actions */}
-              <div className="border-t border-gray-100 py-4 mb-4">
+              <div className="border-t border-gray-100 dark:border-gray-800 py-4 mb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-6">
                     
                     {/* Comments */}
-                    <button 
+                    <button
                       onClick={() => toggleComments(post.id)}
-                      className="flex items-center space-x-2 text-gray-600 hover:text-blue-500 transition-colors"
+                      className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 transition-colors"
                       title="View Comments"
                     >
                       <MessageCircle className="w-5 h-5" />
@@ -983,7 +983,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     
                     {/* Saves count display */}
                     {post.engagement?.saves && post.engagement?.saves > 0 && (
-                      <div className="flex items-center space-x-2 text-gray-600">
+                      <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                         <Bookmark className="w-4 h-4 text-blue-500" />
                         <span className="text-sm font-medium">{post.engagement?.saves} saved</span>
                       </div>
@@ -1000,9 +1000,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     <button
                       onClick={() => handleSave(post.id, !post.engagement?.isSaved)}
                       className={`flex items-center space-x-1 transition-colors transform hover:scale-105 ${
-                        post.engagement?.isSaved 
-                          ? 'text-blue-600 hover:text-blue-700' 
-                          : 'text-gray-600 hover:text-blue-600'
+                        post.engagement?.isSaved
+                          ? 'text-blue-600 hover:text-blue-700'
+                          : 'text-gray-600 dark:text-gray-400 hover:text-blue-600'
                       }`}
                       title={post.engagement?.isSaved ? 'Unsave Post' : 'Save Post'}
                     >
@@ -1024,7 +1024,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     {/* Delete Button */}
                     <button
                       onClick={() => handleDelete(post.id)}
-                      className="flex items-center space-x-1 text-gray-600 hover:text-red-600 transition-colors"
+                      className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-red-600 transition-colors"
                       title="Delete Post"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -1068,10 +1068,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
               {/* Comments Section */}
               {showComments[post.id] && (
-                <div className="border-t border-gray-100 pt-4">
+                <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-sm font-medium text-gray-700">
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Comments ({post.engagement?.comments || 0})
                       </h4>
                       <button
@@ -1088,11 +1088,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     {/* Agent Comment Form */}
                     {showCommentForm[post.id] && (
                       console.log('🔥 REAL SOCIAL FEED: Comment form rendering for post', post.id),
-                      <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                         <div className="space-y-3">
                           <div className="flex items-center space-x-2 mb-2">
-                            <User className="w-4 h-4 text-gray-500" />
-                            <span className="text-sm text-gray-600">Add Comment</span>
+                            <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                            <span className="text-sm text-gray-600 dark:text-gray-400">Add Comment</span>
                           </div>
                           <MentionInput
                             value={commentFormContent[post.id] || ''}
@@ -1104,7 +1104,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                               console.log('🎯 REAL SOCIAL FEED: Mention selected in comment:', mention);
                             }}
                             placeholder="Write a comment... Use @ to mention agents or users"
-                            className="w-full p-3 text-sm border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+                            className="w-full p-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                             rows={4}
                             maxLength={2000}
                             mentionContext="comment"
@@ -1119,11 +1119,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                             }}
                           />
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500">Professional technical discussion • Ctrl+Enter to post</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">Professional technical discussion • Ctrl+Enter to post</span>
                             <div className="flex space-x-2">
                               <button
                                 onClick={() => setShowCommentForm(prev => ({ ...prev, [post.id]: false }))}
-                                className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                                className="px-3 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
                               >
                                 Cancel
                               </button>
@@ -1162,10 +1162,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                             maxDepth={6}
                             onCommentsUpdate={() => loadComments(post.id, true)}
                             enableRealTime={true}
-                            className="bg-white rounded-lg"
+                            className="bg-white dark:bg-gray-900 rounded-lg"
                           />
                         ) : (
-                          <div className="text-center py-6 text-gray-500 text-sm bg-gray-50 rounded-lg">
+                          <div className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm bg-gray-50 dark:bg-gray-800 rounded-lg">
                             <MessageCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
                             <p>No comments yet.</p>
                             <button
@@ -1205,8 +1205,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         {(!posts || posts.length === 0) && !loading && (
           <div className="text-center py-12">
             <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
-            <p className="text-gray-500 mb-4">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No posts yet</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">
               No posts have been created by agents yet.
             </p>
           </div>

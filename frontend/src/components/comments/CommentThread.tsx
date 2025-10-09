@@ -108,11 +108,11 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   return (
     <div className={`comment-thread ${className}`} data-comment-id={comment.id}>
       {/* Comment Card */}
-      <div 
-        className={`comment-card bg-white border rounded-lg mb-2 transition-all duration-200 hover:shadow-md ${
+      <div
+        className={`comment-card bg-white dark:bg-gray-900 border rounded-lg mb-2 transition-all duration-200 hover:shadow-md ${
           depth > 0 ? indentationClass : ''
         } ${
-          comment.metadata.isAgentResponse ? 'border-blue-200 bg-blue-50/30' : 'border-gray-200'
+          comment.metadata.isAgentResponse ? 'border-blue-200 dark:border-blue-700 bg-blue-50/30 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'
         }`}
       >
         {/* Comment Header */}
@@ -129,7 +129,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
           {/* Author Info */}
           <div className="flex-grow min-w-0">
             <div className="flex items-center space-x-2">
-              <span className="font-semibold text-gray-900 text-sm">
+              <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
                 {comment.author.name}
               </span>
               
@@ -141,28 +141,28 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
               )}
               
               {comment.metadata.responseToAgent && (
-                <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                <span className="text-xs text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-full">
                   → {comment.metadata.responseToAgent}
                 </span>
               )}
             </div>
             
-            <div className="flex items-center space-x-2 text-xs text-gray-500 mt-1">
+            <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
               <Clock className="w-3 h-3" />
               <time dateTime={comment.createdAt}>
                 {formatTimeAgo(comment.createdAt)}
               </time>
-              
+
               {comment.updatedAt !== comment.createdAt && (
                 <span>(edited)</span>
               )}
-              
+
               {comment.metadata.threadDepth > 0 && (
                 <span>• Depth {comment.metadata.threadDepth}</span>
               )}
-              
+
               {comment.metadata.qualityScore && comment.metadata.qualityScore > 0.8 && (
-                <span className="text-green-600 font-medium">High Quality</span>
+                <span className="text-green-600 dark:text-green-400 font-medium">High Quality</span>
               )}
             </div>
           </div>
@@ -172,25 +172,25 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
             {hasFilteredChildren && (
               <button
                 onClick={onToggleExpansion}
-                className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 aria-label={expanded ? 'Collapse replies' : 'Expand replies'}
               >
-                {expanded ? 
-                  <ChevronDown className="w-4 h-4 text-gray-600" /> :
-                  <ChevronRight className="w-4 h-4 text-gray-600" />
+                {expanded ?
+                  <ChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400" /> :
+                  <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                 }
               </button>
             )}
-            
-            <button className="p-1 rounded-full hover:bg-gray-100 transition-colors">
-              <MoreHorizontal className="w-4 h-4 text-gray-600" />
+
+            <button className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <MoreHorizontal className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             </button>
           </div>
         </div>
         
         {/* Comment Content */}
         <div className="comment-content px-4 pb-3">
-          <div className="prose prose-sm max-w-none text-gray-800 leading-relaxed">
+          <div className="prose prose-sm max-w-none text-gray-800 dark:text-gray-200 leading-relaxed">
             {comment.contentType === 'markdown' ? (
               renderParsedContent(parseContent(displayContent), {
                 className: 'comment-parsed-content'
@@ -203,7 +203,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
           {shouldTruncateContent && (
             <button
               onClick={() => setShowMore(true)}
-              className="text-blue-600 hover:text-blue-800 text-sm mt-2 font-medium"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm mt-2 font-medium"
             >
               Show more
             </button>
@@ -211,7 +211,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
         </div>
         
         {/* Comment Actions */}
-        <div className="comment-actions border-t border-gray-100 px-4 py-3">
+        <div className="comment-actions border-t border-gray-100 dark:border-gray-800 px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               {/* Like Button */}
@@ -219,8 +219,8 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
                 onClick={() => handleReaction('like')}
                 className={`flex items-center space-x-1 text-sm transition-colors ${
                   comment.engagement.userReacted && comment.engagement.userReactionType === 'like'
-                    ? 'text-red-600'
-                    : 'text-gray-600 hover:text-red-600'
+                    ? 'text-red-600 dark:text-red-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400'
                 }`}
               >
                 <Heart className={`w-4 h-4 ${
@@ -234,26 +234,26 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
               {/* Reply Button */}
               <button
                 onClick={() => setIsReplying(!isReplying)}
-                className="flex items-center space-x-1 text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                className="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
               >
                 <Reply className="w-4 h-4" />
                 <span>Reply</span>
               </button>
-              
+
               {/* Reactions Button */}
               {Object.keys(comment.engagement.reactions).length > 0 && (
                 <button
                   onClick={() => setShowReactions(!showReactions)}
-                  className="flex items-center space-x-1 text-sm text-gray-600 hover:text-purple-600 transition-colors"
+                  className="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                 >
                   <ThumbsUp className="w-4 h-4" />
                   <span>{comment.metadata.reactionCount}</span>
                 </button>
               )}
-              
+
               {/* Reply Count */}
               {comment.metadata.replyCount > 0 && (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
                   {comment.metadata.replyCount} {comment.metadata.replyCount === 1 ? 'reply' : 'replies'}
                 </span>
               )}
@@ -263,7 +263,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
             {onAgentResponse && !isAgentComment && (
               <button
                 onClick={() => handleAgentResponse('TechReviewer')}
-                className="flex items-center space-x-1 text-sm text-purple-600 hover:text-purple-800 transition-colors"
+                className="flex items-center space-x-1 text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors"
               >
                 <Zap className="w-4 h-4" />
                 <span>Get Agent Response</span>
@@ -318,7 +318,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
       {/* Load More Deep Comments */}
       {expanded && hasFilteredChildren && isDeepThread && (
         <div className={`load-more-deep ml-${Math.min(depth + 1, 6) * 4} mb-3`}>
-          <button className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200 transition-colors">
+          <button className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-3 py-2 rounded-lg border border-blue-200 dark:border-blue-700 transition-colors">
             <MessageCircle className="w-4 h-4" />
             <span>Continue this thread ({filteredChildren.length} more replies)</span>
           </button>

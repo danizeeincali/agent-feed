@@ -244,9 +244,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           onClick={() => setIsOpen(!isOpen)}
           className={`
             flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors
-            ${isFiltered 
-              ? 'bg-blue-50 border-blue-200 text-blue-700' 
-              : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+            ${isFiltered
+              ? 'bg-blue-50 border-blue-200 text-blue-700'
+              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
             }
           `}
         >
@@ -277,7 +277,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       {showMultiSelect && (
         <>
           <div className="fixed inset-0 z-10" onClick={cancelMultiSelect}></div>
-          <div className="absolute top-full left-0 mt-2 w-96 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4" data-testid="advanced-filter-panel">
+          <div className="absolute top-full left-0 mt-2 w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 p-4" data-testid="advanced-filter-panel">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-medium text-gray-900">Advanced Filter</h3>
               <button
@@ -348,7 +348,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                       checked={tempFilter.savedPostsEnabled || false}
                       onChange={(e) => setTempFilter({...tempFilter, savedPostsEnabled: e.target.checked})}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:after:bg-gray-700 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
                 
@@ -372,7 +372,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                       checked={tempFilter.myPostsEnabled || false}
                       onChange={(e) => setTempFilter({...tempFilter, myPostsEnabled: e.target.checked})}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:after:bg-gray-700 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                   </label>
                 </div>
               </div>
@@ -387,7 +387,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                   className={`px-3 py-2 text-sm rounded-md border transition-colors ${
                     tempFilter.combinationMode === 'AND'
                       ? 'bg-blue-50 border-blue-200 text-blue-700'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
                   AND - Match all selected
@@ -397,7 +397,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                   className={`px-3 py-2 text-sm rounded-md border transition-colors ${
                     tempFilter.combinationMode === 'OR'
                       ? 'bg-blue-50 border-blue-200 text-blue-700'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
                   OR - Match any selected
@@ -431,7 +431,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       {isOpen && !showAgentDropdown && !showHashtagDropdown && !showMultiSelect && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)}></div>
-          <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+          <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20">
             <div className="py-2">
               {filterOptions.map((option) => {
                 const Icon = option.icon;
@@ -461,7 +461,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       {showAgentDropdown && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setShowAgentDropdown(false)}></div>
-          <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-64 overflow-y-auto">
+          <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 max-h-64 overflow-y-auto">
             <div className="p-3 border-b border-gray-200">
               <h3 className="font-medium text-gray-900">Select Agent</h3>
             </div>
@@ -487,7 +487,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       {showHashtagDropdown && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setShowHashtagDropdown(false)}></div>
-          <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-64 overflow-y-auto">
+          <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 max-h-64 overflow-y-auto">
             <div className="p-3 border-b border-gray-200">
               <h3 className="font-medium text-gray-900">Select Hashtag</h3>
             </div>

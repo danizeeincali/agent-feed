@@ -75,16 +75,16 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
   // Empty state check
   if (!agent.profile) {
     return (
-      <div 
+      <div
         data-testid="empty-profile-state"
         className={cn('flex flex-col items-center justify-center py-12 text-center', className)}
       >
         <User className="w-16 h-16 text-gray-300 mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
           No profile information available
         </h3>
-        <p className="text-gray-600 max-w-md">
-          This agent doesn't have profile information configured yet. 
+        <p className="text-gray-600 dark:text-gray-400 max-w-md">
+          This agent doesn't have profile information configured yet.
           Profile data includes strengths, use cases, limitations, and technical details.
         </p>
       </div>
@@ -198,11 +198,11 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
             <User className="w-6 h-6 text-blue-600" />
             Profile
           </h2>
-          <p className="text-gray-600">Comprehensive overview of capabilities and performance</p>
+          <p className="text-gray-600 dark:text-gray-400">Comprehensive overview of capabilities and performance</p>
         </div>
         
         <div className="flex items-center gap-2">
@@ -215,13 +215,13 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
               placeholder="Search capabilities..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             />
             {searchTerm && (
               <button
                 data-testid="clear-search"
                 onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -233,7 +233,7 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
             data-testid="use-case-filter"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
           >
             <option value="all">All Use Cases</option>
             <option value="data">Data Analysis</option>
@@ -245,7 +245,7 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
           <button
             data-testid="share-profile"
             onClick={handleShareProfile}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+            className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             <Share2 className="w-4 h-4 mr-2" />
             Share
@@ -255,7 +255,7 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
           <button
             data-testid="export-profile"
             onClick={handleExportProfile}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+            className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             <Download className="w-4 h-4 mr-2" />
             Export
@@ -274,29 +274,29 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
       </div>
 
       {/* Strengths Section */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-        <div 
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div
           data-testid="strengths-section"
           className="space-y-4"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-semibold text-gray-900">Key Strengths</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Key Strengths</h3>
           </div>
-          <div 
+          <div
             aria-label="Strengths list"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
           >
             {(agent.profile?.strengths || []).length === 0 ? (
-              <p className="text-gray-500 col-span-3">No strengths specified</p>
+              <p className="text-gray-500 dark:text-gray-400 col-span-3">No strengths specified</p>
             ) : (
               (agent.profile?.strengths || []).map((strength, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   data-testid="strength-card"
-                  className="flex items-center gap-3 p-3 bg-green-50 rounded-lg"
+                  className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg"
                 >
-                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span className="text-green-800 font-medium">{strength}</span>
+                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+                  <span className="text-green-800 dark:text-green-300 font-medium">{strength}</span>
                 </div>
               ))
             )}
@@ -305,30 +305,30 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
       </div>
 
       {/* Use Cases Section */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-        <div 
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div
           data-testid="use-cases-section"
           className="space-y-4"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-semibold text-gray-900">Primary Use Cases</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Primary Use Cases</h3>
           </div>
-          <div 
+          <div
             aria-label="Use cases list"
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
             {filteredUseCases.map((useCase, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 data-testid="use-case-item"
-                className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50"
+                className="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
                 onClick={() => {
                   // Expand to show use case details
                 }}
               >
                 <Target className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <span className="text-gray-900 font-medium">{useCase}</span>
+                  <span className="text-gray-900 dark:text-gray-100 font-medium">{useCase}</span>
                 </div>
               </div>
             ))}
@@ -337,26 +337,26 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
       </div>
 
       {/* Limitations Section */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-        <div 
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div
           data-testid="limitations-section"
           className="space-y-4 limitations-section"
         >
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-semibold text-gray-900">Known Limitations</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Known Limitations</h3>
           </div>
-          <div 
+          <div
             aria-label="Limitations list"
             className="space-y-3"
           >
             {(agent.profile?.limitations || []).length === 0 ? (
-              <p className="text-gray-500">No limitations specified</p>
+              <p className="text-gray-500 dark:text-gray-400">No limitations specified</p>
             ) : (
               (agent.profile?.limitations || []).map((limitation, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg">
-                  <AlertTriangle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                <div key={index} className="flex items-start gap-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                  <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
-                    <span className="text-orange-800">{limitation}</span>
+                    <span className="text-orange-800 dark:text-orange-300">{limitation}</span>
                   </div>
                 </div>
               ))
@@ -367,33 +367,33 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
 
       {/* Technical Details Section */}
       {agent.metadata && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <div 
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+          <div
             data-testid="metadata-section"
             className="space-y-4"
           >
-            <h3 className="text-lg font-semibold text-gray-900">Technical Details</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Technical Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-3">Development Info</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Development Info</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Version:</span>
-                    <span className="font-mono text-sm">{agent.version || 'v1.0.0'}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Version:</span>
+                    <span className="font-mono text-sm text-gray-900 dark:text-gray-100">{agent.version || 'v1.0.0'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Author:</span>
-                    <span className="text-sm">{agent.metadata?.author || 'AI System'}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Author:</span>
+                    <span className="text-sm text-gray-900 dark:text-gray-100">{agent.metadata?.author || 'AI System'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">License:</span>
-                    <span className="text-sm">{agent.metadata?.license || 'MIT'}</span>
+                    <span className="text-gray-600 dark:text-gray-400">License:</span>
+                    <span className="text-sm text-gray-900 dark:text-gray-100">{agent.metadata?.license || 'MIT'}</span>
                   </div>
                 </div>
               </div>
-              
+
               <div>
-                <h4 className="font-semibold text-gray-900 mb-3">Resources</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Resources</h4>
                 <div className="space-y-2">
                   {agent.metadata?.repository && (
                     <a
@@ -428,7 +428,7 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
             {/* Expertise Section */}
             {agent.profile?.expertise && (
               <div data-testid="expertise-section">
-                <h4 className="font-semibold text-gray-900 mb-3">Expertise Areas</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Expertise Areas</h4>
                 <div className="flex flex-wrap gap-2">
                   {agent.profile.expertise.map((area: string, index: number) => (
                     <span
@@ -446,7 +446,7 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
             {/* Certifications Section */}
             {agent.profile?.certifications && (
               <div data-testid="certifications-section">
-                <h4 className="font-semibold text-gray-900 mb-3">Certifications</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Certifications</h4>
                 <div className="flex flex-wrap gap-2">
                   {agent.profile.certifications.map((cert: string, index: number) => (
                     <span
@@ -464,7 +464,7 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
             {/* Languages Section */}
             {agent.profile?.languages && (
               <div data-testid="languages-section">
-                <h4 className="font-semibold text-gray-900 mb-3">Supported Languages</h4>
+                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">Supported Languages</h4>
                 <div className="flex flex-wrap gap-2">
                   {agent.profile.languages.map((language: string, index: number) => (
                     <span
@@ -484,14 +484,14 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {agent.profile?.availability && (
                   <div>
-                    <span className="text-gray-600">Availability:</span>
-                    <span className="ml-2 font-medium">{agent.profile.availability}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Availability:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-gray-100">{agent.profile.availability}</span>
                   </div>
                 )}
                 {agent.profile?.responseTime && (
                   <div>
-                    <span className="text-gray-600">Response Time:</span>
-                    <span className="ml-2 font-medium">{agent.profile.responseTime}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Response Time:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-gray-100">{agent.profile.responseTime}</span>
                   </div>
                 )}
               </div>
@@ -502,13 +502,13 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
 
       {/* Share Fallback Modal */}
       {showShareFallback && (
-        <div 
+        <div
           data-testid="share-fallback"
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
-          <div className="bg-white rounded-lg p-6 max-w-md mx-4">
-            <h3 className="text-lg font-semibold mb-4">Share Profile</h3>
-            <p className="text-gray-600 mb-4">Link copied to clipboard!</p>
+          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 max-w-md mx-4 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Share Profile</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">Link copied to clipboard!</p>
             <button
               onClick={() => setShowShareFallback(false)}
               className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -521,17 +521,17 @@ const AgentProfileTab: React.FC<AgentProfileTabProps> = ({ agent, className = ''
 
       {/* Contact Modal */}
       {showContactModal && (
-        <div 
+        <div
           data-testid="contact-modal"
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
-          <div className="bg-white rounded-lg p-6 max-w-md mx-4">
-            <h3 className="text-lg font-semibold mb-4">Contact Agent</h3>
-            <p className="text-gray-600 mb-4">Get in touch with this agent for collaboration opportunities.</p>
+          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 max-w-md mx-4 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Contact Agent</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">Get in touch with this agent for collaboration opportunities.</p>
             <div className="flex gap-2">
               <button
                 onClick={() => setShowContactModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 Cancel
               </button>

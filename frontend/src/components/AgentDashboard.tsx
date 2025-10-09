@@ -255,14 +255,14 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Agent Dashboard</h1>
-          <p className="text-gray-600">Monitor and manage your Claude Code agents</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Agent Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-400">Monitor and manage your Claude Code agents</p>
         </div>
         
         <div className="flex items-center gap-2">
           <button
             onClick={() => window.location.reload()}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
@@ -272,50 +272,50 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Users className="h-8 w-8 text-blue-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Active Agents</p>
-              <p className="text-2xl font-semibold text-gray-900">{stats.activeAgents}</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Agents</p>
+              <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{stats.activeAgents}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Activity className="h-8 w-8 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Busy Agents</p>
-              <p className="text-2xl font-semibold text-gray-900">{stats.busyAgents}</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Busy Agents</p>
+              <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{stats.busyAgents}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <TrendingUp className="h-8 w-8 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Tasks</p>
-              <p className="text-2xl font-semibold text-gray-900">{stats.totalTasks.toLocaleString()}</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Tasks</p>
+              <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{stats.totalTasks.toLocaleString()}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <Zap className="h-8 w-8 text-orange-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Avg Success Rate</p>
-              <p className="text-2xl font-semibold text-gray-900">{stats.avgSuccessRate.toFixed(1)}%</p>
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Avg Success Rate</p>
+              <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{stats.avgSuccessRate.toFixed(1)}%</p>
             </div>
           </div>
         </div>
@@ -332,7 +332,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
               placeholder="Search agents..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
 
@@ -340,7 +340,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
@@ -353,7 +353,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
           >
             <option value="name">Sort by Name</option>
             <option value="status">Sort by Status</option>
@@ -362,23 +362,23 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
         </div>
 
         {/* View Mode */}
-        <div className="flex items-center border border-gray-300 rounded-lg">
+        <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg">
           <button
             onClick={() => setViewMode('grid')}
             className={`px-3 py-2 text-sm font-medium rounded-l-lg ${
               viewMode === 'grid'
                 ? 'bg-blue-500 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
           >
             <Grid3X3 className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={`px-3 py-2 text-sm font-medium rounded-r-lg border-l border-gray-300 ${
+            className={`px-3 py-2 text-sm font-medium rounded-r-lg border-l border-gray-300 dark:border-gray-700 ${
               viewMode === 'list'
                 ? 'bg-blue-500 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
             }`}
           >
             <List className="w-4 h-4" />
@@ -392,15 +392,15 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
           {filteredAndSortedAgents.map((agent) => (
             <div
               key={agent.id}
-              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow cursor-pointer"
             >
               {/* Agent Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{getTypeIcon(agent.type)}</span>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{agent.name}</h3>
-                    <p className="text-sm text-gray-500 capitalize">{agent.type}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-100">{agent.name}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">{agent.type}</p>
                   </div>
                 </div>
                 <div className={`px-2 py-1 rounded-full border text-xs font-medium flex items-center gap-1 ${getStatusColor(agent.status)}`}>
@@ -412,7 +412,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
               {/* Current Task */}
               {agent.currentTask && (
                 <div className="mb-4">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     <span className="font-medium">Current Task:</span> {agent.currentTask}
                   </p>
                 </div>
@@ -421,20 +421,20 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
               {/* Metrics */}
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <p className="text-xs text-gray-500">Tasks Completed</p>
-                  <p className="text-lg font-semibold text-gray-900">{agent.metrics.tasksCompleted}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Tasks Completed</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{agent.metrics.tasksCompleted}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Success Rate</p>
-                  <p className="text-lg font-semibold text-gray-900">{agent.metrics.successRate}%</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Success Rate</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{agent.metrics.successRate}%</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Response Time</p>
-                  <p className="text-lg font-semibold text-gray-900">{agent.metrics.responseTime}s</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Response Time</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{agent.metrics.responseTime}s</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Last Active</p>
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Last Active</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     {new Date(agent.metrics.lastActive).toLocaleTimeString()}
                   </p>
@@ -443,18 +443,18 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
 
               {/* Capabilities */}
               <div>
-                <p className="text-xs text-gray-500 mb-2">Capabilities</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Capabilities</p>
                 <div className="flex flex-wrap gap-1">
                   {agent.capabilities.slice(0, 3).map((capability, index) => (
                     <span
                       key={index}
-                      className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full"
+                      className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs rounded-full"
                     >
                       {capability}
                     </span>
                   ))}
                   {agent.capabilities.length > 3 && (
-                    <span className="px-2 py-1 bg-gray-50 text-gray-500 text-xs rounded-full">
+                    <span className="px-2 py-1 bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs rounded-full">
                       +{agent.capabilities.length - 3} more
                     </span>
                   )}
@@ -464,9 +464,9 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="px-6 py-3 border-b border-gray-200 bg-gray-50">
-            <div className="grid grid-cols-6 gap-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div className="grid grid-cols-6 gap-4 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               <div className="col-span-2">Agent</div>
               <div>Status</div>
               <div>Tasks</div>
@@ -474,18 +474,18 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
               <div>Response Time</div>
             </div>
           </div>
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {filteredAndSortedAgents.map((agent) => (
               <div
                 key={agent.id}
-                className="px-6 py-4 hover:bg-gray-50 cursor-pointer"
+                className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
               >
                 <div className="grid grid-cols-6 gap-4 items-center">
                   <div className="col-span-2 flex items-center gap-3">
                     <span className="text-xl">{getTypeIcon(agent.type)}</span>
                     <div>
-                      <h3 className="font-medium text-gray-900">{agent.name}</h3>
-                      <p className="text-sm text-gray-500">{agent.specialization}</p>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100">{agent.name}</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{agent.specialization}</p>
                     </div>
                   </div>
                   <div>
@@ -494,18 +494,18 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
                       {agent.status}
                     </div>
                   </div>
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-gray-900 dark:text-gray-100">
                     {agent.metrics.tasksCompleted}
                   </div>
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-gray-900 dark:text-gray-100">
                     {agent.metrics.successRate}%
                   </div>
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-gray-900 dark:text-gray-100">
                     {agent.metrics.responseTime}s
                   </div>
                 </div>
                 {agent.currentTask && (
-                  <div className="mt-2 text-sm text-gray-600">
+                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                     <span className="font-medium">Current:</span> {agent.currentTask}
                   </div>
                 )}
@@ -518,7 +518,7 @@ const AgentDashboard: React.FC<AgentDashboardProps> = memo(({ className = '' }) 
       {filteredAndSortedAgents.length === 0 && (
         <div className="text-center py-12">
           <Users className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-          <p className="text-gray-500">No agents found matching your criteria</p>
+          <p className="text-gray-500 dark:text-gray-400">No agents found matching your criteria</p>
         </div>
       )}
     </div>

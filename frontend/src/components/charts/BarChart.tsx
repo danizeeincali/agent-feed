@@ -21,10 +21,10 @@ const BarChart: React.FC<BarChartProps> = ({
 }) => {
   if (!data || data.length === 0) {
     return (
-      <div className={cn('bg-white rounded-lg border border-gray-200 p-6', className)}>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">{config.title}</h3>
+      <div className={cn('bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6', className)}>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{config.title}</h3>
         <div
-          className="flex items-center justify-center text-gray-500"
+          className="flex items-center justify-center text-gray-500 dark:text-gray-400"
           style={{ height: `${height}px` }}
         >
           No data available
@@ -50,9 +50,9 @@ const BarChart: React.FC<BarChartProps> = ({
     : chartWidth / data.length * 0.2;
 
   return (
-    <div className={cn('bg-white rounded-lg border border-gray-200 p-6', className)}>
+    <div className={cn('bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6', className)}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">{config.title}</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{config.title}</h3>
       </div>
 
       <div className="relative">
@@ -123,7 +123,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     <text
                       x={x + barLength + 5}
                       y={y + barHeight / 2 + 4}
-                      className="text-xs fill-gray-700"
+                      className="text-xs fill-gray-700 dark:fill-gray-300"
                       textAnchor="start"
                     >
                       {point.value}
@@ -152,7 +152,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     <text
                       x={x + barWidth / 2}
                       y={y - 5}
-                      className="text-xs fill-gray-700"
+                      className="text-xs fill-gray-700 dark:fill-gray-300"
                       textAnchor="middle"
                     >
                       {point.value}
@@ -175,7 +175,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     x={padding - 10}
                     y={y + 4}
                     textAnchor="end"
-                    className="text-xs fill-gray-500"
+                    className="text-xs fill-gray-500 dark:fill-gray-400"
                   >
                     {point.label || `Item ${index + 1}`}
                   </text>
@@ -192,7 +192,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     x={x}
                     y={padding + chartHeight + 20}
                     textAnchor="middle"
-                    className="text-xs fill-gray-500"
+                    className="text-xs fill-gray-500 dark:fill-gray-400"
                   >
                     {value.toFixed(0)}
                   </text>
@@ -210,7 +210,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     x={x}
                     y={padding + chartHeight + 20}
                     textAnchor="middle"
-                    className="text-xs fill-gray-500"
+                    className="text-xs fill-gray-500 dark:fill-gray-400"
                   >
                     {point.label || `Item ${index + 1}`}
                   </text>
@@ -227,7 +227,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     x={padding - 10}
                     y={y + 4}
                     textAnchor="end"
-                    className="text-xs fill-gray-500"
+                    className="text-xs fill-gray-500 dark:fill-gray-400"
                   >
                     {value.toFixed(0)}
                   </text>
@@ -240,9 +240,9 @@ const BarChart: React.FC<BarChartProps> = ({
 
       {/* Axis titles */}
       <div className="mt-4 flex justify-between items-end">
-        <div className="text-xs text-gray-500">{config.xAxis}</div>
+        <div className="text-xs text-gray-500 dark:text-gray-400">{config.xAxis}</div>
         {!horizontal && (
-          <div className="text-xs text-gray-500 transform -rotate-90 origin-center">{config.yAxis}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400 transform -rotate-90 origin-center">{config.yAxis}</div>
         )}
       </div>
 
@@ -258,7 +258,7 @@ const BarChart: React.FC<BarChartProps> = ({
                   className="w-3 h-3 rounded"
                   style={{ backgroundColor: color }}
                 />
-                <span className="text-xs text-gray-600">
+                <span className="text-xs text-gray-600 dark:text-gray-400">
                   {point.label || `Series ${index + 1}`}
                 </span>
               </div>

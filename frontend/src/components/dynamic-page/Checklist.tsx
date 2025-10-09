@@ -259,7 +259,7 @@ export const Checklist: React.FC<ChecklistProps> = ({
     return (
       <div className={cn(
         'flex items-center justify-center py-8 px-4',
-        'text-gray-500 text-sm',
+        'text-gray-600 dark:text-gray-400 text-sm',
         className
       )}>
         <CheckSquare className="w-5 h-5 mr-2 opacity-50" />
@@ -280,14 +280,14 @@ export const Checklist: React.FC<ChecklistProps> = ({
       {/* Progress bar */}
       <div className="mb-4 px-1">
         <div className="flex items-center justify-between mb-2 text-sm">
-          <span className="font-medium text-gray-700">
+          <span className="font-medium text-gray-700 dark:text-gray-300">
             Progress
           </span>
-          <span className="text-gray-600">
+          <span className="text-gray-600 dark:text-gray-400">
             {progress.completed} / {progress.total} ({progress.percentage}%)
           </span>
         </div>
-        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-blue-600 transition-all duration-300 ease-in-out"
             style={{ width: `${progress.percentage}%` }}
@@ -315,10 +315,10 @@ export const Checklist: React.FC<ChecklistProps> = ({
                 'group relative',
                 'rounded-lg border transition-all duration-200',
                 hasError
-                  ? 'border-red-300 bg-red-50'
+                  ? 'border-red-300 bg-red-50 dark:bg-gray-800 dark:border-gray-700'
                   : item.checked
-                    ? 'border-green-200 bg-green-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-green-200 bg-green-50 dark:bg-gray-800 dark:border-gray-700'
+                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
               )}
             >
               <button
@@ -353,7 +353,7 @@ export const Checklist: React.FC<ChecklistProps> = ({
                   ) : item.checked ? (
                     <CheckSquare className="w-5 h-5 text-green-600" />
                   ) : (
-                    <Square className="w-5 h-5 text-gray-400 group-hover:text-gray-600" />
+                    <Square className="w-5 h-5 text-gray-400 dark:text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-400" />
                   )}
                 </div>
 
@@ -411,8 +411,8 @@ export const Checklist: React.FC<ChecklistProps> = ({
       </div>
 
       {/* Summary footer */}
-      <div className="mt-4 pt-4 border-t border-gray-200">
-        <div className="flex items-center justify-between text-xs text-gray-600 px-1">
+      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 px-1">
           <span>
             {progress.completed === progress.total && progress.total > 0
               ? 'All tasks completed!'

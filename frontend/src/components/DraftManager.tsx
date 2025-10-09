@@ -237,7 +237,7 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
       <div className={cn('p-8', className)}>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600">Loading drafts...</span>
+          <span className="ml-3 text-gray-600 dark:text-gray-400">Loading drafts...</span>
         </div>
       </div>
     );
@@ -249,8 +249,8 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Draft Manager</h1>
-            <p className="text-gray-600">Manage your post drafts</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Draft Manager</h1>
+            <p className="text-gray-600 dark:text-gray-400">Manage your post drafts</p>
           </div>
           <button
             onClick={handleCreateNewDraft}
@@ -263,31 +263,31 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
 
         {/* Statistics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-lg border">
+          <div className="bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-2">
-              <FileText className="w-5 h-5 text-gray-500" />
-              <span className="text-sm text-gray-600">Total Drafts</span>
+              <FileText className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              <span className="text-sm text-gray-600 dark:text-gray-400">Total Drafts</span>
             </div>
-            <div className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</div>
+            <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">{stats.total}</div>
           </div>
-          <div className="bg-white p-4 rounded-lg border">
+          <div className="bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-2">
               <Edit3 className="w-5 h-5 text-blue-500" />
-              <span className="text-sm text-gray-600">Draft</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Draft</span>
             </div>
             <div className="text-2xl font-bold text-blue-600 mt-1">{stats.draft}</div>
           </div>
-          <div className="bg-white p-4 rounded-lg border">
+          <div className="bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-2">
               <Eye className="w-5 h-5 text-green-500" />
-              <span className="text-sm text-gray-600">Published</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Published</span>
             </div>
             <div className="text-2xl font-bold text-green-600 mt-1">{stats.published}</div>
           </div>
-          <div className="bg-white p-4 rounded-lg border">
+          <div className="bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-2">
               <Archive className="w-5 h-5 text-orange-500" />
-              <span className="text-sm text-gray-600">Archived</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Archived</span>
             </div>
             <div className="text-2xl font-bold text-orange-600 mt-1">{stats.archived}</div>
           </div>
@@ -305,14 +305,14 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search drafts..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as DraftStatus | 'all')}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
           >
             <option value="all">All Status</option>
             <option value="draft">Draft</option>
@@ -328,7 +328,7 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
                 'p-2 border rounded-lg',
                 viewMode === 'grid'
                   ? 'bg-blue-50 border-blue-300 text-blue-600'
-                  : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                  : 'border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
               )}
             >
               <Grid className="w-4 h-4" />
@@ -339,7 +339,7 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
                 'p-2 border rounded-lg',
                 viewMode === 'list'
                   ? 'bg-blue-50 border-blue-300 text-blue-600'
-                  : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                  : 'border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
               )}
             >
               <List className="w-4 h-4" />
@@ -358,7 +358,7 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
                 'px-3 py-1 text-sm border rounded-lg flex items-center space-x-1',
                 sortField === field
                   ? 'bg-blue-50 border-blue-300 text-blue-600'
-                  : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                  : 'border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
               )}
             >
               <span className="capitalize">{field.replace(/([A-Z])/g, ' $1').toLowerCase()}</span>
@@ -399,8 +399,8 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
       {filteredAndSortedDrafts.length === 0 ? (
         <div className="text-center py-12">
           <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No drafts found</h3>
-          <p className="text-gray-600 mb-6">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No drafts found</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             {searchQuery || statusFilter !== 'all'
               ? 'Try adjusting your search or filters'
               : 'Create your first draft to get started'}
@@ -419,7 +419,7 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
               key={draft.id}
               data-testid="draft-item"
               data-draft-id={draft.id}
-              className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow"
             >
               {/* Draft Header */}
               <div className="flex items-start justify-between mb-3">
@@ -431,10 +431,10 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
                     className="mt-1"
                   />
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900 line-clamp-2 mb-1" data-testid="draft-title">
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2 mb-1" data-testid="draft-title">
                       {draft.title || 'Untitled Draft'}
                     </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                       {draft.hook || draft.content || 'No content'}
                     </p>
                   </div>
@@ -466,7 +466,7 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
               </div>
 
               {/* Draft Metadata */}
-              <div className="space-y-2 text-xs text-gray-500">
+              <div className="space-y-2 text-xs text-gray-500 dark:text-gray-400">
                 <div className="flex items-center justify-between">
                   <span className={cn(
                     'px-2 py-1 rounded-full text-xs font-medium',
@@ -506,14 +506,14 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
               <div className="mt-4 flex items-center space-x-2">
                 <button
                   onClick={() => handleEditDraft(draft)}
-                  className="flex-1 px-3 py-2 text-sm bg-blue-50 text-blue-700 rounded hover:bg-blue-100"
+                  className="flex-1 px-3 py-2 text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50"
                 >
                   Edit Draft
                 </button>
                 {draft.status === 'draft' && onCreatePost && (
                   <button
                     onClick={() => onCreatePost(draft)}
-                    className="flex-1 px-3 py-2 text-sm bg-green-50 text-green-700 rounded hover:bg-green-100"
+                    className="flex-1 px-3 py-2 text-sm bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded hover:bg-green-100 dark:hover:bg-green-900/50"
                   >
                     Publish
                   </button>
@@ -523,9 +523,9 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
           ))}
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
                 <th className="px-4 py-3 text-left">
                   <input
@@ -540,26 +540,26 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
                     }}
                   />
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Title
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Updated
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Words
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredAndSortedDrafts.map((draft) => (
-                <tr key={draft.id} data-testid="draft-item" data-draft-id={draft.id} className="hover:bg-gray-50">
+                <tr key={draft.id} data-testid="draft-item" data-draft-id={draft.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                   <td className="px-4 py-4">
                     <input
                       type="checkbox"
@@ -569,10 +569,10 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
                   </td>
                   <td className="px-4 py-4">
                     <div>
-                      <div className="font-medium text-gray-900" data-testid="draft-title">
+                      <div className="font-medium text-gray-900 dark:text-gray-100" data-testid="draft-title">
                         {draft.title || 'Untitled Draft'}
                       </div>
-                      <div className="text-sm text-gray-500 truncate max-w-xs">
+                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
                         {draft.hook || draft.content || 'No content'}
                       </div>
                     </div>
@@ -588,13 +588,13 @@ export const DraftManager: React.FC<DraftManagerProps> = ({
                       {draft.status}
                     </span>
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
                     <div>{new Date(draft.updatedAt).toLocaleDateString()}</div>
                     <div className="text-xs">
                       {new Date(draft.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-500">
+                  <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
                     {draft.wordCount || 0}
                   </td>
                   <td className="px-4 py-4 text-right">

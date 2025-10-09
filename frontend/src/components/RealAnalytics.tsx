@@ -7,7 +7,7 @@ import type { SystemMetrics as ApiSystemMetrics, AnalyticsData as ApiAnalyticsDa
 
 // Lazy load Claude SDK Analytics for better performance
 const EnhancedAnalyticsPage = lazy(() => import('./analytics/EnhancedAnalyticsPage'));
-const TokenAnalyticsDashboard = lazy(() => import('./TokenAnalyticsDashboard'));
+const TokenAnalyticsDashboard = lazy(() => import('./TokenAnalyticsDashboard.tsx'));
 
 // Import EnhancedPerformanceMetrics for the performance tab
 import EnhancedPerformanceMetrics from './EnhancedPerformanceMetrics';
@@ -54,16 +54,16 @@ const ClaudeSDKAnalyticsLoading = ({ timeout = 30000 }: { timeout?: number }) =>
 
   if (showTimeoutWarning) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-yellow-50 border border-yellow-200 rounded-lg">
-        <AlertCircle className="w-8 h-8 text-yellow-600 mb-4" />
-        <span className="text-yellow-800 mb-2 font-medium">Loading Taking Longer Than Expected</span>
-        <div className="text-sm text-yellow-700 text-center mb-4">
+      <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+        <AlertCircle className="w-8 h-8 text-yellow-600 dark:text-yellow-400 mb-4" />
+        <span className="text-yellow-800 dark:text-yellow-200 mb-2 font-medium">Loading Taking Longer Than Expected</span>
+        <div className="text-sm text-yellow-700 dark:text-yellow-300 text-center mb-4">
           The Claude SDK Analytics component is taking longer than usual to load.
           This might indicate a network or performance issue.
         </div>
         <button
           onClick={() => window.location.reload()}
-          className="flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg hover:bg-yellow-200 transition-colors"
+          className="flex items-center px-4 py-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 rounded-lg hover:bg-yellow-200 transition-colors"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Refresh Page
@@ -73,15 +73,15 @@ const ClaudeSDKAnalyticsLoading = ({ timeout = 30000 }: { timeout?: number }) =>
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-white border border-gray-200 rounded-lg" data-testid="claude-sdk-loading">
+    <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg" data-testid="claude-sdk-loading">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-      <span className="text-gray-600 mb-2">Loading Claude SDK Analytics...</span>
-      <div className="text-xs text-gray-500 text-center">
+      <span className="text-gray-600 dark:text-gray-400 mb-2">Loading Claude SDK Analytics...</span>
+      <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
         Initializing cost tracking and performance monitoring
         {Math.round(loadingTime / 1000)}s elapsed
       </div>
       {loadingTime > 10000 && (
-        <div className="mt-2 text-xs text-yellow-600">
+        <div className="mt-2 text-xs text-yellow-600 dark:text-yellow-400">
           Loading is taking longer than usual...
         </div>
       )}
@@ -91,15 +91,15 @@ const ClaudeSDKAnalyticsLoading = ({ timeout = 30000 }: { timeout?: number }) =>
 
 // Error boundary fallback for Claude SDK Analytics
 const ClaudeSDKAnalyticsError = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => (
-  <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-red-50 border border-red-200 rounded-lg">
-    <AlertCircle className="w-8 h-8 text-red-600 mb-4" />
-    <h3 className="text-lg font-semibold text-red-800 mb-2">Analytics Unavailable</h3>
-    <p className="text-sm text-red-700 text-center mb-4">
+  <div className="flex flex-col items-center justify-center p-8 min-h-[400px] bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg">
+    <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400 mb-4" />
+    <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">Analytics Unavailable</h3>
+    <p className="text-sm text-red-700 dark:text-red-300 text-center mb-4">
       Failed to load Claude SDK Analytics: {error.message}
     </p>
     <button
       onClick={resetErrorBoundary}
-      className="flex items-center px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+      className="flex items-center px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-lg hover:bg-red-200 transition-colors"
     >
       <RefreshCw className="w-4 h-4 mr-2" />
       Try Again
@@ -109,12 +109,12 @@ const ClaudeSDKAnalyticsError = ({ error, resetErrorBoundary }: { error: Error; 
 
 // Generic error fallback
 const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => (
-  <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
+  <div className="p-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg">
     <div className="flex items-center mb-4">
       <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
       <h3 className="text-lg font-semibold text-red-800">Something went wrong</h3>
     </div>
-    <p className="text-red-700 mb-4">{error.message}</p>
+    <p className="text-red-700 dark:text-red-300 mb-4">{error.message}</p>
     <button
       onClick={resetErrorBoundary}
       className="flex items-center px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
@@ -284,12 +284,12 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
 
   if (error) {
     return (
-      <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
+      <div className="p-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg">
         <div className="flex items-center mb-4">
           <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
           <h3 className="text-lg font-semibold text-red-800">Analytics Error</h3>
         </div>
-        <p className="text-red-700 mb-4">{error}</p>
+        <p className="text-red-700 dark:text-red-300 mb-4">{error}</p>
         <button
           onClick={refresh}
           className="flex items-center px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
@@ -305,24 +305,24 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
   const ApplicationPerformanceMetrics = () => (
     <div className="space-y-6" data-testid="performance-metrics">
       {/* Application Performance Overview */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Application Performance</h3>
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Application Performance</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="text-center">
             <p className="text-2xl font-bold text-green-600">{analytics?.performance?.avgLoadTime || 0}ms</p>
-            <p className="text-sm text-gray-600">Average Load Time</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Average Load Time</p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-bold text-blue-600">{analytics?.performance?.errorRate || 0}%</p>
-            <p className="text-sm text-gray-600">Error Rate</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Error Rate</p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-bold text-purple-600">{metrics[0]?.active_agents || 0}</p>
-            <p className="text-sm text-gray-600">Active Agents</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Active Agents</p>
           </div>
           <div className="text-center">
             <p className="text-2xl font-bold text-orange-600">{feedStats?.todayPosts || 0}</p>
-            <p className="text-sm text-gray-600">Posts Today</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Posts Today</p>
           </div>
         </div>
       </div>
@@ -331,13 +331,13 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
       <EnhancedPerformanceMetrics showMiniIndicator={false} />
 
       {/* Resource Usage */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">System Resource Usage</h3>
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">System Resource Usage</h3>
         <div className="space-y-4">
           <div>
             <div className="flex justify-between mb-1">
-              <span className="text-sm text-gray-600">CPU Usage</span>
-              <span className="text-sm font-medium">{metrics[0]?.cpu_usage || 0}%</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">CPU Usage</span>
+              <span className="text-sm font-medium dark:text-gray-100">{metrics[0]?.cpu_usage || 0}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
@@ -348,8 +348,8 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
           </div>
           <div>
             <div className="flex justify-between mb-1">
-              <span className="text-sm text-gray-600">System Memory</span>
-              <span className="text-sm font-medium">{metrics[0]?.memory_usage || 0}%</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">System Memory</span>
+              <span className="text-sm font-medium dark:text-gray-100">{metrics[0]?.memory_usage || 0}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
@@ -360,8 +360,8 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
           </div>
           <div>
             <div className="flex justify-between mb-1">
-              <span className="text-sm text-gray-600">Disk Usage</span>
-              <span className="text-sm font-medium">{metrics[0]?.disk_usage || 0}%</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Disk Usage</span>
+              <span className="text-sm font-medium dark:text-gray-100">{metrics[0]?.disk_usage || 0}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
@@ -374,20 +374,20 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
       </div>
 
       {/* Engagement Metrics */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Engagement Statistics</h3>
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Engagement Statistics</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-blue-50 rounded-lg">
             <p className="text-2xl font-bold text-blue-600">{analytics?.engagement?.toFixed(1) || '0.0'}%</p>
-            <p className="text-sm text-gray-600">Overall Engagement</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Overall Engagement</p>
           </div>
           <div className="text-center p-4 bg-green-50 rounded-lg">
             <p className="text-2xl font-bold text-green-600">{feedStats?.avgEngagement?.toFixed(1) || '0.0'}</p>
-            <p className="text-sm text-gray-600">Avg. Interactions</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Avg. Interactions</p>
           </div>
           <div className="text-center p-4 bg-purple-50 rounded-lg">
             <p className="text-2xl font-bold text-purple-600">{feedStats?.topCategories?.length || 0}</p>
-            <p className="text-sm text-gray-600">Active Categories</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Active Categories</p>
           </div>
         </div>
       </div>

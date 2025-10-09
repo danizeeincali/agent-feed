@@ -363,8 +363,8 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
             </button>
           </div>
           <User className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Agent Not Found</h2>
-          <p className="text-gray-500">{error || `Agent "${agentId}" not found`}</p>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Agent Not Found</h2>
+          <p className="text-gray-500 dark:text-gray-400">{error || `Agent "${agentId}" not found`}</p>
         </div>
       </div>
     );
@@ -381,7 +381,7 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
         <div className="flex items-center gap-4">
           <button
             onClick={() => onBack ? onBack() : navigate('/agents')}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+            className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -390,8 +390,8 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
               {agentData.avatar}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{agentData.name}</h1>
-              <p className="text-gray-600">{agentData.specialization}</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.name}</h1>
+              <p className="text-gray-600 dark:text-gray-400">{agentData.specialization}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className={cn(
                   'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
@@ -403,18 +403,18 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
                   <Activity className="w-3 h-3 mr-1" />
                   {agentData.status}
                 </span>
-                <span className="text-xs text-gray-500">ID: {agentData.id}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">ID: {agentData.id}</span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+          <button className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
             <Download className="w-4 h-4 mr-2" />
             Export Data
           </button>
-          <button className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+          <button className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-700 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
           </button>
@@ -423,57 +423,57 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
 
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-4 h-4 text-blue-500" />
-            <span className="text-sm font-medium text-gray-600">Total Tasks</span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Tasks</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{agentData.metrics.tasksCompleted.toLocaleString()}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.tasksCompleted.toLocaleString()}</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle className="w-4 h-4 text-green-500" />
-            <span className="text-sm font-medium text-gray-600">Success Rate</span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Success Rate</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{agentData.metrics.successRate}%</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.successRate}%</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 mb-2">
             <Zap className="w-4 h-4 text-orange-500" />
-            <span className="text-sm font-medium text-gray-600">Response Time</span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Response Time</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{agentData.metrics.averageResponseTime}s</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.averageResponseTime}s</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 mb-2">
             <Clock className="w-4 h-4 text-purple-500" />
-            <span className="text-sm font-medium text-gray-600">Uptime</span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Uptime</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{agentData.metrics.totalUptime}%</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.totalUptime}%</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 mb-2">
             <Calendar className="w-4 h-4 text-indigo-500" />
-            <span className="text-sm font-medium text-gray-600">Today</span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Today</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{agentData.metrics.todayTasks}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.todayTasks}</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-teal-500" />
-            <span className="text-sm font-medium text-gray-600">This Week</span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">This Week</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{agentData.metrics.weeklyTasks}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.weeklyTasks}</p>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 dark:border-gray-700">
         <nav className="-mb-px flex space-x-8">
           {[
             { id: 'overview', name: 'Overview', icon: User },
@@ -488,7 +488,7 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
                 'flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm',
                 activeTab === tab.id
                   ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
               )}
             >
               <tab.icon className="w-4 h-4" />
@@ -503,33 +503,33 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Description */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">About</h3>
-              <p className="text-gray-600 leading-relaxed">{agentData.description}</p>
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">About</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{agentData.description}</p>
             </div>
 
             {/* Current Workload */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Workload</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Current Workload</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Active Tasks</span>
-                  <span className="font-semibold text-gray-900">{agentData.currentWorkload.activeTasks}</span>
+                  <span className="text-gray-600 dark:text-gray-400">Active Tasks</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100">{agentData.currentWorkload.activeTasks}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Queued Tasks</span>
-                  <span className="font-semibold text-gray-900">{agentData.currentWorkload.queuedTasks}</span>
+                  <span className="text-gray-600 dark:text-gray-400">Queued Tasks</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100">{agentData.currentWorkload.queuedTasks}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Est. Completion</span>
-                  <span className="font-semibold text-gray-900">{agentData.currentWorkload.estimatedCompletion}</span>
+                  <span className="text-gray-600 dark:text-gray-400">Est. Completion</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100">{agentData.currentWorkload.estimatedCompletion}</span>
                 </div>
               </div>
             </div>
 
             {/* Achievements */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                 <Award className="w-5 h-5 text-yellow-500" />
                 Achievements
               </h3>
@@ -547,16 +547,16 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
             </div>
 
             {/* Performance Overview */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Overview</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Performance Overview</h3>
               <div className="space-y-4">
                 {Object.entries(agentData.performance).map(([key, value]) => (
                   <div key={key}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600 capitalize">{key}</span>
-                      <span className="font-medium text-gray-900">{value}%</span>
+                      <span className="text-gray-600 dark:text-gray-400 capitalize">{key}</span>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">{value}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                       <div
                         className="bg-blue-500 h-2 rounded-full"
                         style={{ width: `${value}%` }}
@@ -570,28 +570,28 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
         )}
 
         {activeTab === 'activities' && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activities</h3>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Activities</h3>
             <div className="space-y-4">
               {agentData.recentActivities.map((activity) => (
-                <div key={activity.id} className="flex items-start gap-4 p-4 border border-gray-100 rounded-lg">
+                <div key={activity.id} className="flex items-start gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
                   <div className="flex-shrink-0 mt-1">
                     {getActivityIcon(activity.type)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h4 className="font-medium text-gray-900">{activity.title}</h4>
-                        <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
+                        <h4 className="font-medium text-gray-900 dark:text-gray-100">{activity.title}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{activity.description}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
                           {new Date(activity.timestamp).toLocaleTimeString()}
                         </p>
                         {activity.metadata?.impact_score && (
                           <div className="flex items-center gap-1 mt-1">
                             <Star className="w-3 h-3 text-yellow-500" />
-                            <span className="text-xs text-gray-600">
+                            <span className="text-xs text-gray-600 dark:text-gray-400">
                               {activity.metadata.impact_score}/10
                             </span>
                           </div>
@@ -599,7 +599,7 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
                       </div>
                     </div>
                     {activity.metadata?.duration && (
-                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
                         <span className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           {activity.metadata.duration}m
@@ -621,16 +621,16 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
 
         {activeTab === 'performance' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Metrics</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Performance Metrics</h3>
               <div className="space-y-6">
                 {Object.entries(agentData.performance).map(([key, value]) => (
                   <div key={key}>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-700 capitalize">{key}</span>
-                      <span className="text-lg font-bold text-gray-900">{value}%</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">{key}</span>
+                      <span className="text-lg font-bold text-gray-900 dark:text-gray-100">{value}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3">
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                       <div
                         className={cn(
                           'h-3 rounded-full transition-all duration-300',
@@ -647,25 +647,25 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
               </div>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Task Statistics</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Task Statistics</h3>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-900">{agentData.metrics.todayTasks}</p>
-                    <p className="text-sm text-gray-600">Today</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.todayTasks}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Today</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-900">{agentData.metrics.weeklyTasks}</p>
-                    <p className="text-sm text-gray-600">This Week</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.weeklyTasks}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">This Week</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-900">{agentData.metrics.monthlyTasks}</p>
-                    <p className="text-sm text-gray-600">This Month</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.monthlyTasks}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">This Month</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-gray-900">{agentData.metrics.tasksCompleted}</p>
-                    <p className="text-sm text-gray-600">Total</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agentData.metrics.tasksCompleted}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
                   </div>
                 </div>
               </div>
@@ -674,25 +674,25 @@ const AgentProfile: React.FC<AgentProfileProps> = ({
         )}
 
         {activeTab === 'capabilities' && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Capabilities & Skills</h3>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Capabilities & Skills</h3>
             <div className="space-y-6">
               {agentData.capabilities.map((capability) => (
-                <div key={capability.name} className="border border-gray-100 rounded-lg p-4">
+                <div key={capability.name} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-medium text-gray-900">{capability.name}</h4>
+                    <h4 className="font-medium text-gray-900 dark:text-gray-100">{capability.name}</h4>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">Level {capability.level}/10</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Level {capability.level}/10</span>
                       <div className={cn(
                         'w-3 h-3 rounded-full',
                         getCapabilityColor(capability.level)
                       )}></div>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">{capability.description}</p>
-                  <div className="flex items-center justify-between text-xs text-gray-500">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{capability.description}</p>
+                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                     <span>Experience: {capability.experience_hours.toLocaleString()} hours</span>
-                    <div className="w-32 bg-gray-200 rounded-full h-2">
+                    <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                       <div
                         className={cn('h-2 rounded-full', getCapabilityColor(capability.level))}
                         style={{ width: `${capability.level * 10}%` }}

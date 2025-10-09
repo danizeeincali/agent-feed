@@ -191,10 +191,10 @@ const Calendar: React.FC<CalendarProps> = ({
 
   return (
     <div className={`calendar-container ${className}`}>
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         {/* Calendar Header */}
-        <div className="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-primary-100">
-          <div className="flex items-center gap-2 text-primary-700">
+        <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-gray-800 dark:to-gray-800">
+          <div className="flex items-center gap-2 text-primary-700 dark:text-gray-300">
             <CalendarIcon className="w-5 h-5" />
             <h3 className="font-semibold text-sm">
               {mode === 'single' && 'Select a date'}
@@ -220,20 +220,19 @@ const Calendar: React.FC<CalendarProps> = ({
               caption: 'flex justify-center pt-1 relative items-center',
               caption_label: 'text-sm font-medium text-gray-900',
               nav: 'space-x-1 flex items-center',
-              nav_button: 'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-gray-100 rounded-md transition-colors inline-flex items-center justify-center',
+              nav_button: 'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors inline-flex items-center justify-center',
               nav_button_previous: 'absolute left-1',
               nav_button_next: 'absolute right-1',
               table: 'w-full border-collapse space-y-1',
-              head_row: 'flex',
-              head_cell: 'text-gray-500 rounded-md w-9 font-normal text-[0.8rem]',
+              head_cell: 'text-gray-600 dark:text-gray-400 rounded-md w-9 font-normal text-[0.8rem]',
               row: 'flex w-full mt-2',
-              cell: 'text-center text-sm p-0 relative [&:has([aria-selected])]:bg-primary-100 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-              day: 'h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-gray-100 rounded-md transition-colors inline-flex items-center justify-center',
+              cell: 'text-center text-sm p-0 relative [&:has([aria-selected])]:bg-primary-100 dark:[&:has([aria-selected])]:bg-gray-800 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
+              day: 'h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors inline-flex items-center justify-center',
               day_selected: 'bg-primary-600 text-white hover:bg-primary-700 hover:text-white focus:bg-primary-700 focus:text-white',
-              day_today: 'bg-gray-100 text-gray-900 font-semibold',
-              day_outside: 'text-gray-400 opacity-50',
-              day_disabled: 'text-gray-400 opacity-50 cursor-not-allowed',
-              day_range_middle: 'aria-selected:bg-primary-100 aria-selected:text-gray-900',
+              day_today: 'bg-gray-100 dark:bg-gray-800 text-gray-900 font-semibold',
+              day_outside: 'text-gray-400 dark:text-gray-400 opacity-50',
+              day_disabled: 'text-gray-400 dark:text-gray-400 opacity-50 cursor-not-allowed',
+              day_range_middle: 'aria-selected:bg-primary-100 dark:aria-selected:bg-gray-800 aria-selected:text-gray-900 dark:aria-selected:text-gray-300',
               day_hidden: 'invisible',
             }}
             components={{
@@ -247,9 +246,9 @@ const Calendar: React.FC<CalendarProps> = ({
 
         {/* Selected Date Display */}
         {selected && (
-          <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+          <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <div className="text-sm">
-              <span className="text-gray-600 font-medium">Selected: </span>
+              <span className="text-gray-600 dark:text-gray-400 font-medium">Selected: </span>
               <span className="text-gray-900">
                 {mode === 'single' && selected instanceof Date && format(selected, 'PPP')}
                 {mode === 'multiple' && Array.isArray(selected) &&
@@ -267,19 +266,19 @@ const Calendar: React.FC<CalendarProps> = ({
 
         {/* Event List for Selected Date */}
         {mode === 'single' && selected instanceof Date && getEventsForDate(selected).length > 0 && (
-          <div className="px-4 py-3 border-t border-gray-200">
-            <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">
+          <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+            <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-2">
               Events on this date
             </h4>
             <div className="space-y-2">
               {getEventsForDate(selected).map((event, index) => (
                 <div
                   key={index}
-                  className="bg-primary-50 border border-primary-200 rounded-md p-2"
+                  className="bg-primary-50 dark:bg-gray-800 border border-primary-200 dark:border-gray-700 rounded-md p-2"
                 >
                   <div className="font-medium text-sm text-primary-900">{event.title}</div>
                   {event.description && (
-                    <div className="text-xs text-primary-700 mt-1">{event.description}</div>
+                    <div className="text-xs text-primary-700 dark:text-gray-300 mt-1">{event.description}</div>
                   )}
                 </div>
               ))}
@@ -289,7 +288,7 @@ const Calendar: React.FC<CalendarProps> = ({
 
         {/* Loading State */}
         {isLoading && (
-          <div className="px-4 py-2 border-t border-gray-200 bg-blue-50">
+          <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-gray-800">
             <div className="flex items-center gap-2 text-sm text-blue-700">
               <div className="w-4 h-4 border-2 border-blue-700 border-t-transparent rounded-full animate-spin" />
               <span>Saving selection...</span>
@@ -299,7 +298,7 @@ const Calendar: React.FC<CalendarProps> = ({
 
         {/* Error State */}
         {error && (
-          <div className="px-4 py-2 border-t border-gray-200 bg-red-50">
+          <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-red-50 dark:bg-gray-800">
             <div className="text-sm text-red-700">
               <span className="font-medium">Error: </span>
               {error}

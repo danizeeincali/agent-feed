@@ -124,8 +124,8 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
       <div className={`p-6 ${className}`}>
         <div className="text-center py-12">
           <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Route Disconnected</h3>
-          <p className="text-gray-500">This component has been cleaned up.</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Route Disconnected</h3>
+          <p className="text-gray-500 dark:text-gray-400">This component has been cleaned up.</p>
         </div>
       </div>
     );
@@ -140,7 +140,7 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
         <div className="flex items-center justify-center w-full">
           <div className="flex flex-col items-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-3"></div>
-            <span className="text-gray-600">Loading isolated agent data...</span>
+            <span className="text-gray-600 dark:text-gray-400">Loading isolated agent data...</span>
           </div>
         </div>
       </div>
@@ -160,20 +160,20 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
       />
 
       {/* Detail Panel */}
-      <div className="flex-1 overflow-y-auto bg-white">
+      <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
         {/* Header with Refresh */}
-        <div className="border-b border-gray-200 bg-white px-6 py-4 sticky top-0 z-10">
+        <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 py-4 sticky top-0 z-10">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Agent Manager</h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Agent Manager</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                 Route: {routeKey} | API Status: {apiService.getStatus().isDestroyed ? 'Destroyed' : 'Active'}
               </p>
             </div>
             <button
               onClick={handleRefresh}
               disabled={refreshing}
-              className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              className="flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors text-gray-900 dark:text-gray-100"
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
               Refresh
@@ -205,10 +205,10 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
           <div className="flex items-center justify-center h-[calc(100vh-120px)]">
             <div className="text-center py-12 px-6">
               <Bot className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-900 mb-2">
+              <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-2">
                 {agents.length === 0 ? 'No agents available' : 'Select an agent'}
               </h3>
-              <p className="text-gray-500 max-w-md">
+              <p className="text-gray-500 dark:text-gray-400 max-w-md">
                 {agents.length === 0
                   ? 'No agents have been created yet.'
                   : 'Choose an agent from the sidebar to view details and manage their configuration.'}
@@ -218,7 +218,7 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
         )}
 
         {/* Debug Status Bar */}
-        <div className="border-t border-gray-200 px-6 py-3 bg-gray-50">
+        <div className="border-t border-gray-200 dark:border-gray-700 px-6 py-3 bg-gray-50 dark:bg-gray-800">
           <div className="flex items-center justify-center">
             <div className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
               <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>

@@ -223,9 +223,9 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   // Empty state
   if (cards.length === 0) {
     return (
-      <div className={`flex items-center justify-center min-h-[400px] bg-white rounded-lg border border-gray-200 ${className}`}>
+      <div className={`flex items-center justify-center min-h-[400px] bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 ${className}`}>
         <div className="text-center py-8">
-          <Heart className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <Heart className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No Cards Available</h3>
           <p className="text-gray-500">Add cards to start swiping</p>
         </div>
@@ -236,7 +236,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   // All cards swiped
   if (currentIndex >= cards.length) {
     return (
-      <div className={`flex items-center justify-center min-h-[400px] bg-white rounded-lg border border-gray-200 ${className}`}>
+      <div className={`flex items-center justify-center min-h-[400px] bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 ${className}`}>
         <div className="text-center py-8">
           <Heart className="mx-auto h-12 w-12 text-green-500 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">All Done!</h3>
@@ -318,12 +318,12 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           <button
             onClick={handleDislike}
             disabled={isLoading}
-            className="group relative flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-red-500 text-red-500 shadow-lg hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-110 active:scale-95"
+            className="group relative flex items-center justify-center w-16 h-16 rounded-full bg-white dark:bg-gray-800 border-2 border-red-500 text-red-500 shadow-lg hover:bg-red-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-110 active:scale-95"
             aria-label="Dislike (Left Arrow)"
           >
             <X className="w-8 h-8" />
             {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/90 rounded-full">
+              <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-gray-800/90 rounded-full">
                 <Loader2 className="w-6 h-6 animate-spin text-red-500" />
               </div>
             )}
@@ -332,12 +332,12 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
           <button
             onClick={handleLike}
             disabled={isLoading}
-            className="group relative flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-green-500 text-green-500 shadow-lg hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-110 active:scale-95"
+            className="group relative flex items-center justify-center w-16 h-16 rounded-full bg-white dark:bg-gray-800 border-2 border-green-500 text-green-500 shadow-lg hover:bg-green-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-110 active:scale-95"
             aria-label="Like (Right Arrow or Enter)"
           >
             <Heart className="w-8 h-8" />
             {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white/90 rounded-full">
+              <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-gray-800/90 rounded-full">
                 <Loader2 className="w-6 h-6 animate-spin text-green-500" />
               </div>
             )}
@@ -347,14 +347,14 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
 
       {/* Progress Indicator */}
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           {currentIndex + 1} / {cards.length}
         </p>
       </div>
 
       {/* Error Display */}
       {error && (
-        <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="mt-4 p-4 bg-red-50 dark:bg-gray-800 border border-red-200 dark:border-gray-700 rounded-lg">
           <p className="text-sm text-red-800">Error: {error}</p>
         </div>
       )}
@@ -386,20 +386,20 @@ const CardContent: React.FC<CardContentProps> = ({ card, isLoading, error, isSta
   const dislikeOpacity = x ? useTransform(x, [-100, 0], [1, 0]) : 0;
 
   return (
-    <div className="w-full h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div className="w-full h-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
       {/* Image */}
       {card.image && (
-        <div className="relative h-3/5 bg-gray-100">
+        <div className="relative h-3/5 bg-gray-100 dark:bg-gray-800">
           {!imageLoaded && !imageError && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <Loader2 className="w-12 h-12 animate-spin text-gray-400" />
+              <Loader2 className="w-12 h-12 animate-spin text-gray-400 dark:text-gray-400" />
             </div>
           )}
 
           {imageError ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-800">
               <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gray-200 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <span className="text-2xl">📷</span>
                 </div>
                 <p className="text-sm text-gray-500">Image not available</p>
@@ -457,7 +457,7 @@ const CardContent: React.FC<CardContentProps> = ({ card, isLoading, error, isSta
             {card.title}
           </h3>
           {card.description && (
-            <p className="text-gray-600 line-clamp-3">
+            <p className="text-gray-600 dark:text-gray-400 line-clamp-3">
               {card.description}
             </p>
           )}

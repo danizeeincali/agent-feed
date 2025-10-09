@@ -581,12 +581,12 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
   if (!agentId) {
     return (
       <div className={`p-6 ${className}`}>
-        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-8 text-center">
           <div className="text-gray-400 mb-4">
             <Users className="mx-auto h-12 w-12" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Agent Selected</h3>
-          <p className="text-gray-500 mb-4">Please provide a valid agent ID to view the profile.</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Agent Selected</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">Please provide a valid agent ID to view the profile.</p>
           <button 
             onClick={handleBack}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -611,12 +611,12 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
   if (error || !agent) {
     return (
       <div className={`p-6 ${className}`}>
-        <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-8 text-center">
           <div className="text-gray-400 mb-4">
             <AlertTriangle className="mx-auto h-12 w-12" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Unable to Load Agent</h3>
-          <p className="text-gray-500 mb-4">{error || 'Agent not found'}</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Unable to Load Agent</h3>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">{error || 'Agent not found'}</p>
           {retryable && (
             <div className="space-y-2">
               <button 
@@ -640,9 +640,9 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
               )}
             </div>
           )}
-          <button 
+          <button
             onClick={handleBack}
-            className="mt-4 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="mt-4 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             Back to Agents
           </button>
@@ -667,7 +667,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
           <div className="flex items-center gap-4">
             <button
               onClick={handleBack}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -680,8 +680,8 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                 {safeString(agent.display_name).charAt(0).toUpperCase()}
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{agent.display_name}</h1>
-                <p className="text-gray-600">{agent.name}</p>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{agent.display_name}</h1>
+                <p className="text-gray-600 dark:text-gray-400">{agent.name}</p>
               </div>
             </div>
           </div>
@@ -698,7 +698,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
             <button
               onClick={handleRefresh}
               disabled={loading}
-              className="p-2 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
             </button>
@@ -708,7 +708,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
               className={cn(
                 'px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                 editing
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                   : 'bg-blue-600 text-white hover:bg-blue-700'
               )}
             >
@@ -728,12 +728,12 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
         </div>
 
         {/* Agent Overview Card */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
           {editing ? (
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Display Name
                   </label>
                   <input
@@ -741,8 +741,8 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                     value={editForm.display_name}
                     onChange={(e) => setEditForm(prev => ({ ...prev, display_name: safeString(e.target.value) }))}
                     className={cn(
-                      'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                      editErrors.display_name ? 'border-red-300' : 'border-gray-300'
+                      'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100',
+                      editErrors.display_name ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-700'
                     )}
                     disabled={saving}
                   />
@@ -752,7 +752,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Avatar Color
                   </label>
                   <div className="flex items-center gap-2">
@@ -760,14 +760,14 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                       type="color"
                       value={editForm.avatar_color}
                       onChange={(e) => setEditForm(prev => ({ ...prev, avatar_color: safeString(e.target.value) }))}
-                      className="w-10 h-10 border border-gray-300 rounded"
+                      className="w-10 h-10 border border-gray-300 dark:border-gray-700 rounded"
                       disabled={saving}
                     />
                     <input
                       type="text"
                       value={editForm.avatar_color}
                       onChange={(e) => setEditForm(prev => ({ ...prev, avatar_color: safeString(e.target.value) }))}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
                       disabled={saving}
                     />
                   </div>
@@ -775,7 +775,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Description
                 </label>
                 <textarea
@@ -783,8 +783,8 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                   onChange={(e) => setEditForm(prev => ({ ...prev, description: safeString(e.target.value) }))}
                   rows={3}
                   className={cn(
-                    'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                    editErrors.description ? 'border-red-300' : 'border-gray-300'
+                    'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100',
+                    editErrors.description ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-700'
                   )}
                   disabled={saving}
                 />
@@ -794,7 +794,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   System Prompt
                 </label>
                 <textarea
@@ -802,8 +802,8 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                   onChange={(e) => setEditForm(prev => ({ ...prev, system_prompt: safeString(e.target.value) }))}
                   rows={4}
                   className={cn(
-                    'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                    editErrors.system_prompt ? 'border-red-300' : 'border-gray-300'
+                    'w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100',
+                    editErrors.system_prompt ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-700'
                   )}
                   disabled={saving}
                 />
@@ -812,14 +812,14 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                 )}
               </div>
               
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => {
                     setEditing(false);
                     setEditErrors({});
                   }}
                   disabled={saving}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
@@ -836,28 +836,28 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
             </div>
           ) : (
             <div>
-              <p className="text-gray-700 mb-4">{agent.description}</p>
-              
+              <p className="text-gray-700 dark:text-gray-300 mb-4">{agent.description}</p>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Created</p>
-                  <p className="text-gray-900">{safeDate(agent.created_at).toLocaleDateString()}</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Created</p>
+                  <p className="text-gray-900 dark:text-gray-100">{safeDate(agent.created_at).toLocaleDateString()}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Last Used</p>
-                  <p className="text-gray-900">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Last Used</p>
+                  <p className="text-gray-900 dark:text-gray-100">
                     {agent.last_used ? formatTimeAgo(agent.last_used) : 'Never'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">Usage Count</p>
-                  <p className="text-gray-900">{safeNumber(agent.usage_count, 0).toLocaleString()}</p>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Usage Count</p>
+                  <p className="text-gray-900 dark:text-gray-100">{safeNumber(agent.usage_count, 0).toLocaleString()}</p>
                 </div>
               </div>
-              
+
               {/* Capabilities */}
               <div className="mb-6">
-                <p className="text-sm font-medium text-gray-500 mb-2">Capabilities</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Capabilities</p>
                 <div className="flex flex-wrap gap-2">
                   {safeArray(agent.capabilities).map((capability, index) => (
                     <span
@@ -869,9 +869,9 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                   ))}
                 </div>
               </div>
-              
+
               {/* Actions */}
-              <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                 {agent.status === 'active' ? (
                   <button
                     onClick={() => handleAgentAction('deactivate')}
@@ -941,7 +941,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="-mb-px flex space-x-8">
             {[
               { id: 'overview', name: 'Overview', icon: Activity },
@@ -959,7 +959,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                     'flex items-center py-2 px-1 border-b-2 font-medium text-sm transition-colors',
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700'
                   )}
                 >
                   <Icon className="w-4 h-4 mr-2" />
@@ -971,17 +971,17 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white rounded-lg border border-gray-200">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
           {activeTab === 'overview' && (
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">System Prompt</h3>
-              <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                <pre className="whitespace-pre-wrap text-sm text-gray-700 font-mono">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">System Prompt</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-6">
+                <pre className="whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300 font-mono">
                   {safeString(agent.system_prompt)}
                 </pre>
               </div>
               
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Quick Stats</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-center justify-between">
@@ -1040,64 +1040,64 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
 
           {activeTab === 'performance' && agent.performance && (
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Performance Metrics</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Performance Metrics</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-700">Tasks Completed</h4>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Tasks Completed</h4>
                     <CheckCircle className="w-5 h-5 text-green-500" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     {safeNumber(agent.performance.tasks_completed, 0).toLocaleString()}
                   </p>
                 </div>
-                
-                <div className="bg-gray-50 rounded-lg p-4">
+
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-700">Conversations</h4>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Conversations</h4>
                     <MessageSquare className="w-5 h-5 text-blue-500" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     {safeNumber(agent.performance.conversations, 0).toLocaleString()}
                   </p>
                 </div>
-                
-                <div className="bg-gray-50 rounded-lg p-4">
+
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-700">Tokens Used</h4>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Tokens Used</h4>
                     <FileText className="w-5 h-5 text-purple-500" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     {safeNumber(agent.performance.total_tokens_used, 0).toLocaleString()}
                   </p>
                 </div>
-                
-                <div className="bg-gray-50 rounded-lg p-4">
+
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-700">Error Count</h4>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Error Count</h4>
                     <AlertTriangle className="w-5 h-5 text-red-500" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     {safeNumber(agent.performance.error_count, 0)}
                   </p>
                 </div>
-                
-                <div className="bg-gray-50 rounded-lg p-4">
+
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-700">Success Rate</h4>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Success Rate</h4>
                     <TrendingUp className="w-5 h-5 text-green-500" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     {safeNumber(agent.performance.success_rate, 0).toFixed(2)}%
                   </p>
                 </div>
-                
-                <div className="bg-gray-50 rounded-lg p-4">
+
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-medium text-gray-700">Avg Response Time</h4>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Avg Response Time</h4>
                     <Clock className="w-5 h-5 text-orange-500" />
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     {safeNumber(agent.performance.average_response_time, 0).toFixed(2)}s
                   </p>
                 </div>
@@ -1107,48 +1107,48 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
 
           {activeTab === 'configuration' && (
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Configuration Settings</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Configuration Settings</h3>
               
               {agent.configuration ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Temperature</h4>
-                    <p className="text-xl font-semibold text-gray-900">
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Temperature</h4>
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                       {safeNumber(agent.configuration.temperature, 0.7)}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Controls randomness in responses</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Controls randomness in responses</p>
                   </div>
-                  
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Max Tokens</h4>
-                    <p className="text-xl font-semibold text-gray-900">
+
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Tokens</h4>
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                       {safeNumber(agent.configuration.max_tokens, 2048).toLocaleString()}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Maximum response length</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Maximum response length</p>
                   </div>
-                  
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Timeout</h4>
-                    <p className="text-xl font-semibold text-gray-900">
+
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timeout</h4>
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                       {safeNumber(agent.configuration.timeout, 30)}s
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Request timeout duration</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Request timeout duration</p>
                   </div>
-                  
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Retry Attempts</h4>
-                    <p className="text-xl font-semibold text-gray-900">
+
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Retry Attempts</h4>
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                       {safeNumber(agent.configuration.retry_attempts, 3)}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Number of retry attempts</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Number of retry attempts</p>
                   </div>
-                  
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Rate Limit</h4>
-                    <p className="text-xl font-semibold text-gray-900">
+
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Limit</h4>
+                    <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                       {safeNumber(agent.configuration.rate_limit, 60)}/min
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Maximum requests per minute</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Maximum requests per minute</p>
                   </div>
                 </div>
               ) : (
@@ -1162,26 +1162,26 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
 
           {activeTab === 'activity' && (
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Recent Activity</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">Recent Activity</h3>
               
               {activityLogs.length > 0 ? (
                 <div className="space-y-4">
                   {activityLogs.slice(0, 20).map((activity) => (
-                    <div key={activity.id} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                    <div key={activity.id} className="flex items-start gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div className="flex-shrink-0 mt-1">
                         {getActivityIcon(activity.type)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {safeString(activity.message)}
                           </p>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
                             {formatTimeAgo(activity.timestamp)}
                           </span>
                         </div>
-                        
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
+
+                        <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                           <span className="capitalize">{activity.type.replace('_', ' ')}</span>
                           {activity.duration && (
                             <span>{activity.duration}s duration</span>
@@ -1195,8 +1195,8 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                         
                         {activity.metadata && Object.keys(activity.metadata).length > 0 && (
                           <details className="mt-2">
-                            <summary className="text-xs text-gray-500 cursor-pointer">Show metadata</summary>
-                            <pre className="text-xs text-gray-600 mt-1 p-2 bg-white rounded border">
+                            <summary className="text-xs text-gray-500 dark:text-gray-400 cursor-pointer">Show metadata</summary>
+                            <pre className="text-xs text-gray-600 dark:text-gray-400 mt-1 p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
                               {JSON.stringify(activity.metadata, null, 2)}
                             </pre>
                           </details>
@@ -1216,13 +1216,13 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
 
           {activeTab === 'logs' && (
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">System Logs</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">System Logs</h3>
               
               {agent.logs && agent.logs.length > 0 ? (
                 <div className="space-y-2">
                   {agent.logs.slice(0, 50).map((log) => (
-                    <div key={log.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded font-mono text-sm">
-                      <span className="flex-shrink-0 text-gray-500">
+                    <div key={log.id} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded font-mono text-sm">
+                      <span className="flex-shrink-0 text-gray-500 dark:text-gray-400">
                         {safeDate(log.timestamp).toLocaleTimeString()}
                       </span>
                       <span className={cn(
@@ -1234,7 +1234,7 @@ const BulletproofAgentProfile: React.FC<AgentProfileProps> = memo(({
                       )}>
                         {log.level.toUpperCase()}
                       </span>
-                      <span className="flex-1 text-gray-900">
+                      <span className="flex-1 text-gray-900 dark:text-gray-100">
                         {safeString(log.message)}
                       </span>
                     </div>
