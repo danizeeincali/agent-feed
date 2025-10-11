@@ -20,7 +20,7 @@ class MockClaudeProcess extends EventEmitter {
         this.options = {
             responseDelay: options.responseDelay || 1000, // 1 second response time
             startupDelay: options.startupDelay || 500,    // 500ms startup
-            workingDirectory: options.cwd || process.cwd(),
+            workingDirectory: options.cwd || process.env.WORKSPACE_ROOT || process.cwd(),
             verbose: options.verbose || false,
             ...options
         };

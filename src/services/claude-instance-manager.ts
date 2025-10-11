@@ -109,7 +109,8 @@ export class ClaudeInstanceManager extends EventEmitter {
   }
 
   /**
-   * Launch a new Claude instance
+   * Launch a new Claude instance with environment-aware working directory
+   * workDir resolves from: options > WORKSPACE_ROOT/prod > cwd/prod
    */
   async launchInstance(options: LaunchOptions): Promise<string> {
     try {
@@ -121,7 +122,10 @@ export class ClaudeInstanceManager extends EventEmitter {
       // Generate instance details
       const instanceId = this.generateInstanceId();
       const instanceName = options.name || this.generateInstanceName(options);
-      const workDir = options.workingDirectory || '/workspaces/agent-feed/prod';
+      const workDir = options.workingDirectory ||
+        (process.env.WORKSPACE_ROOT
+          ? path.join(process.env.WORKSPACE_ROOT, 'prod')
+          : path.join(process.cwd(), 'prod'));
 
       // Ensure working directory exists
       await this.ensureWorkingDirectory(workDir);
@@ -354,10 +358,16 @@ export class ClaudeInstanceManager extends EventEmitter {
     return `claude-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
+  /**
+   * Generate instance name with environment-aware path resolution
+   */
   private generateInstanceName(options: LaunchOptions): string {
     try {
-      // Try to read from CLAUDE.md
-      const claudeConfigPath = path.join(options.workingDirectory || '/workspaces/agent-feed/prod', 'CLAUDE.md');
+      // Try to read from CLAUDE.md with dynamic path resolution
+      const defaultWorkDir = process.env.WORKSPACE_ROOT
+        ? path.join(process.env.WORKSPACE_ROOT, 'prod')
+        : path.join(process.cwd(), 'prod');
+      const claudeConfigPath = path.join(options.workingDirectory || defaultWorkDir, 'CLAUDE.md');
       // This would need to be implemented to read the actual file
       const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
       return `Claude-${options.type}-${timestamp}`;
@@ -436,15 +446,22 @@ export class ClaudeInstanceManager extends EventEmitter {
     });
   }
 
+  /**
+   * Create terminal session with environment-aware working directory
+   */
   private async createTerminalSession(instanceId: string): Promise<void> {
     const sessionId = `terminal-${instanceId}`;
-    
+
+    const defaultWorkDir = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, 'prod')
+      : path.join(process.cwd(), 'prod');
+
     // Create PTY session
     const ptyProcess = pty.spawn('bash', [], {
       name: 'xterm-color',
       cols: 80,
       rows: 24,
-      cwd: this.instances.get(instanceId)?.config.workingDirectory || '/workspaces/agent-feed/prod',
+      cwd: this.instances.get(instanceId)?.config.workingDirectory || defaultWorkDir,
       env: process.env
     });
 

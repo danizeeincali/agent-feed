@@ -182,7 +182,7 @@ export class ClaudeProcessManager extends EventEmitter {
       command: Array.isArray(config.command) ? config.command.slice(0, 10) : ['claude'], // Limit command length
       workingDirectory: typeof config.workingDirectory === 'string'
         ? config.workingDirectory.substring(0, 500) // Limit path length
-        : process.cwd(),
+        : process.env.WORKSPACE_ROOT || process.cwd(),
       environment: config.environment && typeof config.environment === 'object'
         ? config.environment
         : {},
@@ -429,7 +429,7 @@ class ClaudeInstance extends EventEmitter {
     this.id = id;
     this.config = {
       command: ['claude', 'chat'],
-      workingDirectory: process.cwd(),
+      workingDirectory: process.env.WORKSPACE_ROOT || process.cwd(),
       timeout: 300000, // 5 minutes
       maxMemory: 1024 * 1024 * 1024, // 1GB
       maxCpu: 80, // 80%

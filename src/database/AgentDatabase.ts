@@ -20,7 +20,7 @@ export class AgentDatabase {
 
   constructor(config: DatabaseConfig = {}) {
     this.config = {
-      path: config.path || path.join(process.cwd(), 'agents.db'),
+      path: config.path || path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'agents.db'),
       memory: config.memory || false,
       timeout: config.timeout || 5000,
       verbose: config.verbose || false,

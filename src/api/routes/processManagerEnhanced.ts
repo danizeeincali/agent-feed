@@ -54,7 +54,7 @@ router.post('/launch', async (req, res) => {
     const config: ProcessConfig = {
       command,
       args: instanceType === 'skip-permissions' ? ['--dangerously-skip-permissions', ...args] : args,
-      cwd: cwd || process.cwd(),
+      cwd: cwd || process.env.WORKSPACE_ROOT || process.cwd(),
       env: {
         ...process.env,
         TERM: 'xterm-256color',

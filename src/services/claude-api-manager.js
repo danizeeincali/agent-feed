@@ -18,7 +18,7 @@ class ClaudeAPIManager {
       timeout: options.timeout || 60000, // 60 seconds default
       maxRetries: options.maxRetries || 3,
       debug: options.debug || false,
-      workingDirectory: options.workingDirectory || process.cwd(),
+      workingDirectory: options.workingDirectory || process.env.WORKSPACE_ROOT || process.cwd(),
       tempDir: options.tempDir || '/tmp',
       ...options
     };

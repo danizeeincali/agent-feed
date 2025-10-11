@@ -113,7 +113,7 @@ function shellEscape(arg) {
 function validateSpawnOptions(options = {}) {
   const defaults = {
     stdio: ['pipe', 'pipe', 'pipe'],
-    cwd: process.cwd(),
+    cwd: process.env.WORKSPACE_ROOT || process.cwd(),
     env: process.env
   };
   

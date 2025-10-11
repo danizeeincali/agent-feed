@@ -361,7 +361,7 @@ export class EnhancedProcessManager extends EventEmitter {
     
     try {
       // Use PTY for terminal applications, regular spawn for others
-      const currentDir = config.cwd || process.cwd();
+      const currentDir = config.cwd || process.env.WORKSPACE_ROOT || process.cwd();
       const currentEnv = {
         ...process.env,
         TERM: 'xterm-256color',

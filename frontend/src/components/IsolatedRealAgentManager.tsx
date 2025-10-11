@@ -6,6 +6,7 @@ import { useRoute } from './RouteWrapper';
 import { createApiService } from '../services/apiServiceIsolated';
 import AgentListSidebar from './AgentListSidebar';
 import WorkingAgentProfile from './WorkingAgentProfile';
+import { generateSlug } from '@/utils/slugify';
 
 interface IsolatedRealAgentManagerProps {
   className?: string;
@@ -64,7 +65,9 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
       // Auto-select first agent if no slug in URL
       const firstAgent = agents[0];
       setSelectedAgentId(firstAgent.id);
-      navigate(`/agents/${firstAgent.slug}`, { replace: true });
+      // UPDATED: Use agent.slug if available, otherwise generate from agent.name
+      const slug = firstAgent.slug || generateSlug(firstAgent.name);
+      navigate(`/agents/${slug}`, { replace: true });
     }
   }, [agentSlug, agents, selectedAgentId, navigate]);
 
@@ -115,7 +118,9 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
   // Selection handler
   const handleSelectAgent = (agent: Agent) => {
     setSelectedAgentId(agent.id);
-    navigate(`/agents/${agent.slug}`);
+    // UPDATED: Use agent.slug if available, otherwise generate from agent.name
+    const slug = agent.slug || generateSlug(agent.name);
+    navigate(`/agents/${slug}`);
   };
 
   // Check if service is destroyed

@@ -79,7 +79,7 @@ export class DatabaseError extends APIError {
 // Logger class
 class Logger {
   constructor() {
-    this.logDir = path.join(process.cwd(), 'logs');
+    this.logDir = path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'logs');
     this.ensureLogDirectory();
   }
 

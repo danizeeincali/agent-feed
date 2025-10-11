@@ -1,0 +1,196 @@
+# ==============================================================================
+# Phase 1: Docker Compose Configuration
+# ==============================================================================
+# PostgreSQL 16 Alpine with Phase 1 schema initialization
+# - Read-only system configuration volume
+# - Persistent user data volumes (postgres_data, agent_workspaces)
+# - Auto-initialization via /docker-entrypoint-initdb.d/
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: agent-feed-postgres-phase1
+    restart: unless-stopped
+
+    environment:
+      # Required PostgreSQL settings
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-avidm_dev}
+
+      # Performance tuning for development (SSD-optimized)
+      POSTGRES_SHARED_BUFFERS: 256MB
+      POSTGRES_EFFECTIVE_CACHE_SIZE: 1GB
+      POSTGRES_MAINTENANCE_WORK_MEM: 64MB
+      POSTGRES_CHECKPOINT_COMPLETION_TARGET: 0.9
+      POSTGRES_WAL_BUFFERS: 16MB
+      POSTGRES_DEFAULT_STATISTICS_TARGET: 100
+      POSTGRES_RANDOM_PAGE_COST: 1.1  # SSD-optimized (default 4.0 for HDD)
+      POSTGRES_EFFECTIVE_IO_CONCURRENCY: 200
+      POSTGRES_WORK_MEM: 4MB
+      POSTGRES_MIN_WAL_SIZE: 1GB
+      POSTGRES_MAX_WAL_SIZE: 4GB
+
+      # Application user credentials (for non-superuser access)
+      APP_USER_PASSWORD: ${APP_USER_PASSWORD:-app_password_change_in_production}
+
+    volumes:
+      # TIER 1: System Configuration (READ-ONLY)
+      # System agent templates are immutable and version-controlled
+      - ./config/system:/app/config/system:ro
+
+      # TIER 3: Persistent User Data (Named Volumes)
+      # These volumes persist across container restarts and updates
+      - postgres_data:/var/lib/postgresql/data
+      - agent_workspaces:/app/data/workspaces
+
+      # Database Initialization Scripts (READ-ONLY)
+      # Scripts run in alphabetical order on first startup (empty data dir only)
+      # Naming convention: 01-, 02-, 03- ensures correct execution order
+      - ./src/database/schema/001_initial_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./src/database/schema/indexes.sql:/docker-entrypoint-initdb.d/02-indexes.sql:ro
+      - ./src/database/schema/seed.sql:/docker-entrypoint-initdb.d/03-seed.sql:ro
+      - ./scripts/init-db.sh:/docker-entrypoint-initdb.d/04-extensions.sh:ro
+
+      # Backup Directory (Bind Mount for easy access)
+      - ./backups:/backups
+
+    ports:
+      - "${DB_PORT:-5432}:5432"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-avidm_dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    # Resource limits (adjust based on development environment)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+    networks:
+      - phase1-network
+
+  # ==============================================================================
+  # Optional: PgBouncer Connection Pooling (Production)
+  # ==============================================================================
+  # Uncomment for production deployment with connection pooling
+  # PgBouncer provides transaction-level pooling for maximum efficiency
+  # ==============================================================================
+
+  # pgbouncer:
+  #   image: edoburu/pgbouncer:latest
+  #   container_name: agent-feed-pgbouncer-phase1
+  #   restart: unless-stopped
+  #
+  #   environment:
+  #     DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-avidm_dev}
+  #     POOL_MODE: transaction  # Best balance of performance and compatibility
+  #     MAX_CLIENT_CONN: 200
+  #     DEFAULT_POOL_SIZE: 50
+  #     AUTH_TYPE: scram-sha-256  # Match PostgreSQL 16 default
+  #     IGNORE_STARTUP_PARAMETERS: extra_float_digits
+  #
+  #   ports:
+  #     - "6432:6432"
+  #
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #
+  #   networks:
+  #     - phase1-network
+
+  # ==============================================================================
+  # Optional: Automated Backup Service (Production)
+  # ==============================================================================
+  # Uncomment for automated daily backups with retention policy
+  # ==============================================================================
+
+  # postgres-backup:
+  #   image: prodrigestivill/postgres-backup-local:16-alpine
+  #   container_name: agent-feed-backup-phase1
+  #   restart: unless-stopped
+  #
+  #   environment:
+  #     POSTGRES_HOST: postgres
+  #     POSTGRES_DB: ${POSTGRES_DB:-avidm_dev}
+  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     SCHEDULE: "${BACKUP_SCHEDULE:-0 2 * * *}"  # Daily at 2 AM
+  #     BACKUP_KEEP_DAYS: ${BACKUP_RETENTION_DAYS:-7}
+  #     BACKUP_KEEP_WEEKS: 4
+  #     BACKUP_KEEP_MONTHS: 6
+  #     HEALTHCHECK_PORT: 8080
+  #
+  #   volumes:
+  #     - ./backups:/backups
+  #
+  #   depends_on:
+  #     - postgres
+  #
+  #   networks:
+  #     - phase1-network
+
+# ==============================================================================
+# Named Volumes (Persistent Data)
+# ==============================================================================
+
+volumes:
+  # PostgreSQL data volume (TIER 3: User data persistence)
+  postgres_data:
+    driver: local
+    # For production with specific storage location, use bind mount:
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /opt/agent-feed/data/postgres
+
+  # Agent workspace volume (TIER 3: Agent-generated files)
+  agent_workspaces:
+    driver: local
+
+# ==============================================================================
+# Networks
+# ==============================================================================
+
+networks:
+  phase1-network:
+    driver: bridge
+
+# ==============================================================================
+# Usage Instructions
+# ==============================================================================
+#
+# Start the database:
+#   docker-compose -f docker-compose.phase1.yml up -d
+#
+# View logs:
+#   docker-compose -f docker-compose.phase1.yml logs -f postgres
+#
+# Check health:
+#   docker-compose -f docker-compose.phase1.yml ps
+#
+# Stop the database:
+#   docker-compose -f docker-compose.phase1.yml down
+#
+# Reset database (WARNING: Deletes all data):
+#   docker-compose -f docker-compose.phase1.yml down --volumes
+#
+# Backup user data:
+#   ./scripts/backup-user-data.sh
+#
+# Connect to database:
+#   docker exec -it agent-feed-postgres-phase1 psql -U postgres -d avidm_dev
+#
+# ==============================================================================

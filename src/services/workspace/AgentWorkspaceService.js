@@ -13,7 +13,7 @@ export class AgentWorkspaceService {
     this.databaseService = databaseService;
     this.agentService = agentService;
     this.logger = logger;
-    this.baseWorkspacePath = '/workspaces/agent-feed/prod/agent_workspace';
+    this.baseWorkspacePath = process.env.WORKSPACE_DIR || path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'prod/agent_workspace');
   }
 
   /**

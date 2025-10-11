@@ -1,0 +1,3 @@
+# This directory contains TIER 1 system configuration
+# Files here are read-only in Docker containers
+# Add your agent templates and system configuration here

@@ -129,12 +129,20 @@ export class ClaudeServiceManager extends EventEmitter {
     uptime: Date.now()
   };
 
+  /**
+   * Initialize service manager with environment-aware configuration
+   * prodDirectory resolves from: config > WORKSPACE_ROOT/prod > cwd/prod
+   */
   constructor(config: Partial<ServiceConfiguration> = {}) {
     super();
-    
-    // CRITICAL: Enforce /prod directory requirement
+
+    // CRITICAL: Enforce /prod directory requirement with environment awareness
+    const defaultProdDirectory = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, 'prod')
+      : path.join(process.cwd(), 'prod');
+
     const defaultConfig: ServiceConfiguration = {
-      prodDirectory: '/workspaces/agent-feed/prod',
+      prodDirectory: defaultProdDirectory,
       minWorkers: 2,
       maxWorkers: 8,
       workerTimeout: 300000, // 5 minutes
@@ -149,7 +157,7 @@ export class ClaudeServiceManager extends EventEmitter {
     };
 
     this.config = { ...defaultConfig, ...config };
-    
+
     // Validate prod directory requirement
     if (!this.config.prodDirectory.includes('/prod')) {
       throw new Error('CRITICAL: workingDirectory must be within /prod directory structure');
@@ -284,6 +292,10 @@ export class ClaudeServiceManager extends EventEmitter {
    * SPARC SPECIFICATION: Private implementation methods
    */
 
+  /**
+   * Setup logger with dynamic path resolution
+   * Uses resolved prodDirectory from constructor
+   */
   private setupLogger(): void {
     this.logger = winston.createLogger({
       level: 'info',
@@ -293,7 +305,7 @@ export class ClaudeServiceManager extends EventEmitter {
         winston.format.json()
       ),
       transports: [
-        new winston.transports.File({ 
+        new winston.transports.File({
           filename: path.join(this.config.prodDirectory, 'logs/service-manager.log')
         }),
         new winston.transports.Console({

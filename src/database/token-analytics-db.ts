@@ -5,8 +5,12 @@
 
 import Database from 'better-sqlite3';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { logger } from '@/utils/logger';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export interface TokenUsageRecord {
   id?: number;
@@ -79,8 +83,15 @@ class TokenAnalyticsDB {
   private db: Database.Database;
   private initialized = false;
 
+  /**
+   * Initialize database with dynamic path resolution
+   * Priority: TOKEN_ANALYTICS_DB_PATH > WORKSPACE_ROOT/database.db > cwd/database.db
+   */
   constructor() {
-    const dbPath = process.env.TOKEN_ANALYTICS_DB_PATH || '/workspaces/agent-feed/database.db';
+    const dbPath = process.env.TOKEN_ANALYTICS_DB_PATH ||
+      (process.env.WORKSPACE_ROOT
+        ? join(process.env.WORKSPACE_ROOT, 'database.db')
+        : join(process.cwd(), 'database.db'));
     this.db = new Database(dbPath);
     this.db.pragma('journal_mode = WAL');
     this.db.pragma('synchronous = NORMAL');

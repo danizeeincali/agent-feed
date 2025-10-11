@@ -1,0 +1,337 @@
+{
+  "version": "1.0.0",
+  "description": "CI/CD Pipeline Configuration for agent-feed",
+  "environments": {
+    "development": {
+      "name": "development",
+      "url": "http://localhost:3000",
+      "apiUrl": "http://localhost:8080",
+      "database": {
+        "type": "postgresql",
+        "host": "localhost",
+        "port": 5432,
+        "database": "avidm_dev",
+        "poolMin": 2,
+        "poolMax": 10
+      },
+      "features": {
+        "hotReload": true,
+        "debugMode": true,
+        "verbose": true
+      },
+      "deployment": {
+        "enabled": false,
+        "automatic": false
+      }
+    },
+    "staging": {
+      "name": "staging",
+      "url": "https://staging.agent-feed.example.com",
+      "apiUrl": "https://api-staging.agent-feed.example.com",
+      "database": {
+        "type": "postgresql",
+        "host": "${STAGING_DB_HOST}",
+        "port": 5432,
+        "database": "avidm_staging",
+        "poolMin": 4,
+        "poolMax": 16,
+        "ssl": true
+      },
+      "features": {
+        "hotReload": false,
+        "debugMode": true,
+        "verbose": false
+      },
+      "deployment": {
+        "enabled": true,
+        "automatic": true,
+        "branch": "develop",
+        "healthCheckUrl": "https://staging.agent-feed.example.com/health",
+        "healthCheckRetries": 3,
+        "healthCheckInterval": 10000,
+        "rollbackOnFailure": true
+      },
+      "monitoring": {
+        "enabled": true,
+        "errorTracking": true,
+        "performanceMonitoring": true,
+        "logLevel": "info"
+      },
+      "notifications": {
+        "slack": {
+          "enabled": true,
+          "channel": "#deployments-staging"
+        },
+        "email": {
+          "enabled": true,
+          "recipients": ["devops@example.com"]
+        }
+      }
+    },
+    "production": {
+      "name": "production",
+      "url": "https://agent-feed.example.com",
+      "apiUrl": "https://api.agent-feed.example.com",
+      "database": {
+        "type": "postgresql",
+        "host": "${PRODUCTION_DB_HOST}",
+        "port": 5432,
+        "database": "avidm_production",
+        "poolMin": 8,
+        "poolMax": 32,
+        "ssl": true,
+        "sslMode": "require"
+      },
+      "features": {
+        "hotReload": false,
+        "debugMode": false,
+        "verbose": false
+      },
+      "deployment": {
+        "enabled": true,
+        "automatic": false,
+        "requiresApproval": true,
+        "branch": "main",
+        "healthCheckUrl": "https://agent-feed.example.com/health",
+        "healthCheckRetries": 5,
+        "healthCheckInterval": 15000,
+        "rollbackOnFailure": true,
+        "blueGreen": true,
+        "canaryReleasePercentage": 10
+      },
+      "backup": {
+        "enabled": true,
+        "automatic": true,
+        "beforeDeployment": true,
+        "retentionDays": 30
+      },
+      "monitoring": {
+        "enabled": true,
+        "errorTracking": true,
+        "performanceMonitoring": true,
+        "logLevel": "warn",
+        "alerting": true
+      },
+      "notifications": {
+        "slack": {
+          "enabled": true,
+          "channel": "#deployments-production"
+        },
+        "email": {
+          "enabled": true,
+          "recipients": ["devops@example.com", "team-lead@example.com"]
+        },
+        "pagerDuty": {
+          "enabled": true,
+          "onFailure": true
+        }
+      }
+    }
+  },
+  "pipeline": {
+    "stages": {
+      "lint": {
+        "enabled": true,
+        "required": true,
+        "failFast": true,
+        "timeout": 300
+      },
+      "security": {
+        "enabled": true,
+        "required": true,
+        "failFast": false,
+        "timeout": 600,
+        "vulnerabilityScanners": [
+          "npm-audit",
+          "trivy",
+          "snyk"
+        ],
+        "secretDetection": true
+      },
+      "test-unit": {
+        "enabled": true,
+        "required": true,
+        "failFast": true,
+        "timeout": 900,
+        "coverage": {
+          "enabled": true,
+          "threshold": {
+            "lines": 70,
+            "functions": 70,
+            "branches": 65,
+            "statements": 70
+          }
+        }
+      },
+      "test-integration": {
+        "enabled": true,
+        "required": true,
+        "failFast": false,
+        "timeout": 1200,
+        "databases": ["postgresql", "sqlite"]
+      },
+      "test-e2e": {
+        "enabled": true,
+        "required": false,
+        "failFast": false,
+        "timeout": 1800,
+        "browsers": ["chromium", "firefox", "webkit"],
+        "parallel": true
+      },
+      "build": {
+        "enabled": true,
+        "required": true,
+        "failFast": true,
+        "timeout": 900,
+        "optimization": true,
+        "sourceMap": false
+      },
+      "deploy": {
+        "enabled": true,
+        "required": false,
+        "timeout": 1800
+      }
+    }
+  },
+  "testing": {
+    "unit": {
+      "framework": "jest",
+      "coverage": true,
+      "parallel": true,
+      "maxWorkers": "50%"
+    },
+    "integration": {
+      "framework": "jest",
+      "database": true,
+      "services": ["postgresql"]
+    },
+    "e2e": {
+      "framework": "playwright",
+      "browsers": ["chromium", "firefox", "webkit"],
+      "headless": true,
+      "retries": 2
+    },
+    "performance": {
+      "enabled": true,
+      "thresholds": {
+        "fcp": 1800,
+        "lcp": 2500,
+        "tti": 3500,
+        "cls": 0.1,
+        "fid": 100
+      }
+    }
+  },
+  "security": {
+    "scanning": {
+      "dependencies": {
+        "enabled": true,
+        "schedule": "weekly",
+        "autoFix": false
+      },
+      "secrets": {
+        "enabled": true,
+        "preventCommit": true
+      },
+      "codeAnalysis": {
+        "enabled": true,
+        "tools": ["codeql", "semgrep"]
+      },
+      "containers": {
+        "enabled": true,
+        "scannerTool": "trivy"
+      }
+    },
+    "compliance": {
+      "licenses": {
+        "enabled": true,
+        "allowed": ["MIT", "Apache-2.0", "BSD-3-Clause", "ISC"],
+        "forbidden": ["GPL-3.0", "AGPL-3.0"]
+      }
+    }
+  },
+  "docker": {
+    "registry": "ghcr.io",
+    "imageName": "agent-feed",
+    "platforms": ["linux/amd64", "linux/arm64"],
+    "cache": {
+      "enabled": true,
+      "type": "gha"
+    },
+    "optimization": {
+      "multiStage": true,
+      "layerCaching": true
+    }
+  },
+  "notifications": {
+    "channels": {
+      "slack": {
+        "enabled": true,
+        "webhookUrl": "${SLACK_WEBHOOK_URL}",
+        "events": ["deployment", "failure", "success"]
+      },
+      "email": {
+        "enabled": true,
+        "smtp": {
+          "host": "${SMTP_HOST}",
+          "port": 587,
+          "secure": true
+        },
+        "events": ["deployment", "failure"]
+      },
+      "githubComments": {
+        "enabled": true,
+        "onPullRequest": true,
+        "includeArtifacts": true
+      }
+    }
+  },
+  "artifacts": {
+    "retention": {
+      "logs": 30,
+      "testResults": 60,
+      "buildArtifacts": 14,
+      "coverage": 90,
+      "securityReports": 180
+    },
+    "upload": {
+      "enabled": true,
+      "compression": true
+    }
+  },
+  "performance": {
+    "optimization": {
+      "parallelJobs": 4,
+      "cacheStrategy": "aggressive",
+      "dependencyCaching": true
+    },
+    "limits": {
+      "maxBuildTime": 30,
+      "maxTestTime": 45,
+      "maxDeploymentTime": 60
+    }
+  },
+  "rollback": {
+    "enabled": true,
+    "automatic": true,
+    "conditions": {
+      "healthCheckFailed": true,
+      "errorRateThreshold": 5,
+      "responseTimeThreshold": 5000
+    },
+    "maxRetries": 3
+  },
+  "maintenance": {
+    "windows": {
+      "staging": {
+        "allowed": true,
+        "schedule": "anytime"
+      },
+      "production": {
+        "allowed": true,
+        "schedule": "02:00-04:00 UTC",
+        "daysOfWeek": [0, 2, 4]
+      }
+    }
+  }
+}

@@ -30,6 +30,7 @@ class ClaudeInstanceLauncher {
 
   /**
    * Launch Claude Code instance with specific configuration
+   * Environment-aware path resolution for config
    */
   async launchInstance(type, options = {}) {
     if (this.instances.has(type)) {
@@ -40,9 +41,14 @@ class ClaudeInstanceLauncher {
 
     // Special handling for development instance (current Claude Code)
     if (type === 'development' || type === 'dev') {
+      const baseConfigPath = process.env.WORKSPACE_ROOT
+        ? path.join(process.env.WORKSPACE_ROOT, '.claude')
+        : path.join(process.cwd(), '.claude');
+      const devConfigPath = path.join(baseConfigPath, 'dev/config.json');
+
       console.log(`🔧 Registering current Claude Code as development instance...`);
       console.log(`📁 Workspace: ${config.workspace.root}`);
-      console.log(`⚙️  Config: /workspaces/agent-feed/.claude/dev/config.json`);
+      console.log(`⚙️  Config: ${devConfigPath}`);
       
       const instance = {
         type: 'development',
@@ -60,12 +66,17 @@ class ClaudeInstanceLauncher {
       return instance;
     }
 
-    // Production instance gets its own process
+    // Production instance gets its own process with environment-aware config path
+    const baseConfigPath = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, '.claude')
+      : path.join(process.cwd(), '.claude');
+    const instanceConfigPath = path.join(baseConfigPath, `${type}/config.json`);
+
     const instanceOptions = {
       cwd: config.workspace.root,
       env: {
         ...process.env,
-        CLAUDE_CONFIG_PATH: `/workspaces/agent-feed/.claude/${type}/config.json`,
+        CLAUDE_CONFIG_PATH: instanceConfigPath,
         CLAUDE_INSTANCE_TYPE: type,
         CLAUDE_WORKSPACE_ROOT: config.workspace.root,
         CLAUDE_DANGEROUS_SKIP_PERMISSIONS: 'true'
@@ -144,13 +155,21 @@ class ClaudeInstanceLauncher {
     `;
   }
 
+  /**
+   * Load instance configuration with environment-aware path resolution
+   * Resolves from: WORKSPACE_ROOT/.claude/[type]/config.json > cwd/.claude/[type]/config.json
+   */
   async loadInstanceConfig(type) {
-    const configPath = `/workspaces/agent-feed/.claude/${type}/config.json`;
+    const baseConfigPath = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, '.claude')
+      : path.join(process.cwd(), '.claude');
+    const configPath = path.join(baseConfigPath, `${type}/config.json`);
+
     try {
       const configData = await fs.readFile(configPath, 'utf8');
       return JSON.parse(configData);
     } catch (error) {
-      throw new Error(`Failed to load ${type} configuration: ${error.message}`);
+      throw new Error(`Failed to load ${type} configuration from ${configPath}: ${error.message}`);
     }
   }
 
@@ -194,8 +213,14 @@ class ClaudeInstanceLauncher {
     });
   }
 
+  /**
+   * Log instance output with environment-aware path resolution
+   */
   async logInstanceOutput(type, stream, message) {
-    const logPath = `/workspaces/agent-feed/.claude/${type}/logs/claude-${type}.log`;
+    const baseConfigPath = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, '.claude')
+      : path.join(process.cwd(), '.claude');
+    const logPath = path.join(baseConfigPath, `${type}/logs/claude-${type}.log`);
     const timestamp = new Date().toISOString();
     const logEntry = `[${timestamp}] [${stream.toUpperCase()}] ${message}\n`;
     

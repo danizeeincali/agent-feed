@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="12" failures="0" errors="0" time="1.711">
+    <testsuite name="src/tests/unit/slugify.test.ts" timestamp="2025-10-11T02:43:07.147Z" hostname="codespaces-005acc" tests="12" failures="0" errors="0" skipped="0" time="0.017">
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should convert APIIntegrator to apiintegrator (no hyphens needed)" time="0.009">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should convert &quot;Chief of Staff&quot; to &quot;chief-of-staff&quot;" time="0.001">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should convert &quot;Data Analyzer 2.0&quot; to &quot;data-analyzer-2-0&quot;" time="0">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should convert &quot;Test@Agent#123&quot; to &quot;test-agent-123&quot;" time="0">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should handle multiple spaces: &quot;  Multiple   Spaces  &quot; to &quot;multiple-spaces&quot;" time="0.001">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should return empty string for empty input" time="0">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should return empty string for special chars only &quot;@@##&quot;" time="0.002">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should handle mixed special characters and alphanumeric" time="0">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should remove consecutive hyphens" time="0.001">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should trim leading and trailing hyphens" time="0">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should handle unicode characters by removing them" time="0">
+        </testcase>
+        <testcase classname="src/tests/unit/slugify.test.ts" name="generateSlug &gt; should handle underscores as separators" time="0">
+        </testcase>
+    </testsuite>
+</testsuites>

@@ -27,7 +27,7 @@ class TerminalSession {
       name: 'xterm-256color',
       cols: this.cols,
       rows: this.rows,
-      cwd: process.cwd(),
+      cwd: process.env.WORKSPACE_ROOT || process.cwd(),
       env: process.env
     });
 

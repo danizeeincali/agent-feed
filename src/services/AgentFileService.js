@@ -9,7 +9,7 @@ import matter from 'gray-matter';
 
 class AgentFileService {
   constructor() {
-    this.agentsPath = path.join(process.cwd(), 'prod', '.claude', 'agents');
+    this.agentsPath = path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'prod', '.claude', 'agents');
     this.cache = new Map();
     this.lastScan = null;
     this.scanInterval = 30000; // 30 seconds

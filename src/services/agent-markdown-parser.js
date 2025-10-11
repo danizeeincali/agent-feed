@@ -11,7 +11,7 @@ import matter from 'gray-matter';
 
 class AgentMarkdownParserService {
   constructor() {
-    this.agentsDirectory = '/workspaces/agent-feed/prod/.claude/agents';
+    this.agentsDirectory = process.env.AGENTS_DIR || path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'prod/.claude/agents');
     this.configCache = new Map();
     this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
     this.lastCacheUpdate = new Map();

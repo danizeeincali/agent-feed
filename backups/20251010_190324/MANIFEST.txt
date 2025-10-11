@@ -1,0 +1,41 @@
+=== Agent Feed Backup Manifest ===
+Timestamp: Fri Oct 10 19:03:33 UTC 2025
+Backup Directory: /workspaces/agent-feed/backups/20251010_190324
+
+=== Backup Contents ===
+/workspaces/agent-feed/backups/20251010_190324/MANIFEST.txt (165)
+/workspaces/agent-feed/backups/20251010_190324/metadata/backup_metadata.json (591)
+/workspaces/agent-feed/backups/20251010_190324/userdata/agent-feed_agents_20251010_190324.tar.gz (48K)
+/workspaces/agent-feed/backups/20251010_190324/userdata/.claude_memory_20251010_190324.tar.gz (117)
+/workspaces/agent-feed/backups/20251010_190324/userdata/.claude_config_20251010_190324.tar.gz.sha256 (160)
+/workspaces/agent-feed/backups/20251010_190324/userdata/.claude_memory_20251010_190324.tar.gz.sha256 (160)
+/workspaces/agent-feed/backups/20251010_190324/userdata/agent-feed_agents_20251010_190324.tar.gz.sha256 (163)
+/workspaces/agent-feed/backups/20251010_190324/userdata/.claude_config_20251010_190324.tar.gz (1.4M)
+/workspaces/agent-feed/backups/20251010_190324/postgresql/avidm_dev_20251010_190324.sql.gz (85K)
+/workspaces/agent-feed/backups/20251010_190324/postgresql/database_stats_20251010_190324.txt (507)
+/workspaces/agent-feed/backups/20251010_190324/postgresql/avidm_dev_20251010_190324.sql.gz.sha256 (157)
+/workspaces/agent-feed/backups/20251010_190324/postgresql/avidm_dev_20251010_190324.backup (112K)
+/workspaces/agent-feed/backups/20251010_190324/postgresql/avidm_dev_20251010_190324.backup.sha256 (157)
+/workspaces/agent-feed/backups/20251010_190324/postgresql/avidm_dev_schema_20251010_190324.sql.gz (3.3K)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/agent-pages_20251010_190324.db.gz (52K)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/database_20251010_190324.db.gz (1.8M)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/agent-pages_20251010_190324.db.sha256 (151)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/token-analytics_20251010_190324.db.sha256 (155)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/token-analytics_20251010_190324.db.gz (8.5K)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/agent-feed_20251010_190324.db.gz (43K)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/agent-feed_20251010_190324.db.sha256 (150)
+/workspaces/agent-feed/backups/20251010_190324/sqlite/database_20251010_190324.db.sha256 (148)
+
+=== Total Backup Size ===
+3.5M	/workspaces/agent-feed/backups/20251010_190324
+
+=== Checksums ===
+d9daa322abe4a952947102ca6c1a0a09c89953a0ec7478911092d767a8de78db  /workspaces/agent-feed/backups/20251010_190324/userdata/.claude_config_20251010_190324.tar.gz
+b05ee5e545d9b22c35235656a683f2d625a60817752f837ff441e799a3fc6587  /workspaces/agent-feed/backups/20251010_190324/userdata/.claude_memory_20251010_190324.tar.gz
+7bd2804bf78564d387b8859a18210e1f252e48baefb82612590f51d4e1136874  /workspaces/agent-feed/backups/20251010_190324/userdata/agent-feed_agents_20251010_190324.tar.gz
+06f0b60805dd19924344a034983487539c5e2995248d9b280e0fe4b47128f907  /workspaces/agent-feed/backups/20251010_190324/postgresql/avidm_dev_20251010_190324.sql.gz
+e97075dd142327e5ed630d3751ee72e0c73af1544d6b6f4b676035e89fa07d94  /workspaces/agent-feed/backups/20251010_190324/postgresql/avidm_dev_20251010_190324.backup
+6ec0411b0b9f648e89b62bd03a80bb22844bd537535c1e614950e2d7963499e3  /workspaces/agent-feed/backups/20251010_190324/sqlite/agent-pages_20251010_190324.db
+8b9b6e9bcf41881997e515ccca552701501e140e7514dd621129d508e0272aed  /workspaces/agent-feed/backups/20251010_190324/sqlite/token-analytics_20251010_190324.db
+41d376d0b6284a73bae8cb58b8166213825481f114aea1bd4333cb6b7d617453  /workspaces/agent-feed/backups/20251010_190324/sqlite/agent-feed_20251010_190324.db
+d39a57ae20380db9bd91d3a928a1f96c4f8d735fe55cd1a6a4081e82193ee8a9  /workspaces/agent-feed/backups/20251010_190324/sqlite/database_20251010_190324.db

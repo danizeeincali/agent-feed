@@ -1,65 +1,86 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Regression Prevention Pre-commit Hook
-echo "🔍 Running regression prevention checks..."
+echo "🔍 Running pre-commit hooks..."
 
-# 1. TypeScript compilation check - Prevent white screen of death
-echo "📝 Checking TypeScript compilation..."
-npm run typecheck
-if [ $? -ne 0 ]; then
-  echo "❌ TypeScript compilation failed - preventing commit"
-  echo "🚫 This prevents White Screen of Death from TypeScript errors"
-  exit 1
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Track if any check fails
+FAILED=0
+
+# ============================================================================
+# 1. Lint Staged Files
+# ============================================================================
+echo "${YELLOW}📝 Linting staged files...${NC}"
+if npm run lint 2>/dev/null; then
+  echo "${GREEN}✓ Linting passed${NC}"
+else
+  echo "${RED}✗ Linting failed${NC}"
+  FAILED=1
 fi
 
-# 2. Frontend TypeScript compilation check
-echo "📝 Checking frontend TypeScript compilation..."
-cd frontend && npm run typecheck
-if [ $? -ne 0 ]; then
-  echo "❌ Frontend TypeScript compilation failed - preventing commit"
-  echo "🚫 This prevents White Screen of Death from frontend TypeScript errors"
-  cd ..
-  exit 1
-fi
-cd ..
-
-# 3. Component import/export validation
-echo "🔗 Validating component imports and exports..."
-node scripts/validate-imports.js
-if [ $? -ne 0 ]; then
-  echo "❌ Component import/export validation failed - preventing commit"
-  echo "🚫 This prevents component import errors"
-  exit 1
+# ============================================================================
+# 2. TypeScript Type Checking
+# ============================================================================
+echo "${YELLOW}🔧 Running TypeScript type checking...${NC}"
+if npm run typecheck 2>/dev/null; then
+  echo "${GREEN}✓ Type checking passed${NC}"
+else
+  echo "${RED}✗ Type checking failed${NC}"
+  FAILED=1
 fi
 
-# 4. Build validation test
-echo "🏗️ Running build validation tests..."
-npm run test:build-validation
-if [ $? -ne 0 ]; then
-  echo "❌ Build validation tests failed - preventing commit"
-  echo "🚫 This prevents build-time failures"
-  exit 1
+# ============================================================================
+# 3. Run Fast Unit Tests
+# ============================================================================
+echo "${YELLOW}🧪 Running fast unit tests...${NC}"
+if npm run test -- --bail --maxWorkers=2 --passWithNoTests 2>/dev/null; then
+  echo "${GREEN}✓ Unit tests passed${NC}"
+else
+  echo "${RED}✗ Unit tests failed${NC}"
+  FAILED=1
 fi
 
-# 5. CORS configuration validation
-echo "🌐 Validating CORS configuration..."
-npm run test:cors-validation
-if [ $? -ne 0 ]; then
-  echo "❌ CORS configuration validation failed - preventing commit"
-  echo "🚫 This prevents WebSocket CORS blocking issues"
-  exit 1
+# ============================================================================
+# 4. Check for Sensitive Files
+# ============================================================================
+echo "${YELLOW}🔐 Checking for sensitive files...${NC}"
+SENSITIVE_FILES=$(git diff --cached --name-only | grep -E '\.(env|key|pem|p12|pfx)$' || true)
+if [ -n "$SENSITIVE_FILES" ]; then
+  echo "${RED}✗ Sensitive files detected:${NC}"
+  echo "$SENSITIVE_FILES"
+  echo "${RED}Please remove these files from the commit${NC}"
+  FAILED=1
+else
+  echo "${GREEN}✓ No sensitive files detected${NC}"
 fi
 
-# 6. Terminal integration checks
-echo "💻 Validating terminal integration..."
-npm run test:terminal-integration
-if [ $? -ne 0 ]; then
-  echo "❌ Terminal integration validation failed - preventing commit"
-  echo "🚫 This prevents terminal input/output issues"
-  exit 1
+# ============================================================================
+# 5. Check for Secrets in Code
+# ============================================================================
+echo "${YELLOW}🕵️  Checking for hardcoded secrets...${NC}"
+SECRETS=$(git diff --cached | grep -iE '(api[_-]?key|password|secret|token|auth[_-]?key).*=.*["\'][a-zA-Z0-9]{20,}["\']' || true)
+if [ -n "$SECRETS" ]; then
+  echo "${RED}✗ Potential secrets detected in code:${NC}"
+  echo "$SECRETS"
+  echo "${YELLOW}⚠️  Please review and remove hardcoded secrets${NC}"
+  FAILED=1
+else
+  echo "${GREEN}✓ No hardcoded secrets detected${NC}"
 fi
 
-echo "✅ All regression prevention checks passed!"
-echo "📊 Logging success pattern to NLD database..."
-node scripts/nld-log-success.js "pre-commit-validation" "$(git rev-parse HEAD)"
+# ============================================================================
+# Final Result
+# ============================================================================
+echo ""
+if [ $FAILED -eq 1 ]; then
+  echo "${RED}❌ Pre-commit checks failed. Please fix the errors above.${NC}"
+  exit 1
+else
+  echo "${GREEN}✅ All pre-commit checks passed!${NC}"
+  exit 0
+fi

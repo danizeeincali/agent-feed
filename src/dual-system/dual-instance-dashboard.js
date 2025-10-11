@@ -31,10 +31,18 @@ class DualInstanceDashboard {
     this.setupDualManagerEvents();
   }
 
+  /**
+   * Setup middleware with environment-aware shared path resolution
+   * Resolves from: WORKSPACE_ROOT/agent_workspace/shared > cwd/agent_workspace/shared
+   */
   setupMiddleware() {
+    const sharedPath = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, 'agent_workspace/shared')
+      : path.join(process.cwd(), 'agent_workspace/shared');
+
     this.app.use(express.json());
     this.app.use(express.static(path.join(__dirname, 'dashboard-ui')));
-    this.app.use('/shared', express.static('/workspaces/agent-feed/agent_workspace/shared'));
+    this.app.use('/shared', express.static(sharedPath));
   }
 
   setupRoutes() {
@@ -118,11 +126,14 @@ class DualInstanceDashboard {
       }
     });
 
-    // Serve shared markdown files
+    // Serve shared markdown files with environment-aware path resolution
     this.app.get('/view/markdown/:filename', async (req, res) => {
       try {
         const filename = req.params.filename;
-        const filePath = `/workspaces/agent-feed/agent_workspace/shared/reports/${filename}`;
+        const reportsPath = process.env.WORKSPACE_ROOT
+          ? path.join(process.env.WORKSPACE_ROOT, 'agent_workspace/shared/reports')
+          : path.join(process.cwd(), 'agent_workspace/shared/reports');
+        const filePath = path.join(reportsPath, filename);
         
         const content = await fs.readFile(filePath, 'utf8');
         
@@ -256,8 +267,14 @@ class DualInstanceDashboard {
     }
   }
 
+  /**
+   * Get agent definitions with environment-aware path resolution
+   * Resolves from: WORKSPACE_ROOT/@agents > cwd/@agents
+   */
   async getAgentDefinitions() {
-    const agentsPath = '/workspaces/agent-feed/@agents';
+    const agentsPath = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, '@agents')
+      : path.join(process.cwd(), '@agents');
     const agents = [];
     
     try {
@@ -287,8 +304,14 @@ class DualInstanceDashboard {
     return agents;
   }
 
+  /**
+   * Get shared files with environment-aware path resolution
+   * Resolves from: WORKSPACE_ROOT/agent_workspace/shared > cwd/agent_workspace/shared
+   */
   async getSharedFiles() {
-    const sharedPath = '/workspaces/agent-feed/agent_workspace/shared';
+    const sharedPath = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, 'agent_workspace/shared')
+      : path.join(process.cwd(), 'agent_workspace/shared');
     const files = [];
     
     try {

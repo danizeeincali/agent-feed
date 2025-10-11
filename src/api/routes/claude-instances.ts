@@ -93,7 +93,7 @@ router.post('/',
           name: `claude-${instanceId.split('-').pop()}`,
           status: 'starting',
           type: config.instanceType || 'default',
-          workingDirectory: config.workingDirectory || process.cwd()
+          workingDirectory: config.workingDirectory || process.env.WORKSPACE_ROOT || process.cwd()
         },
         message: 'Claude instance created successfully'
       });

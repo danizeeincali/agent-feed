@@ -10,7 +10,7 @@ import path from 'path';
 class ProcessSingletonGuard {
   constructor(processName = 'agent-feed-backend') {
     this.processName = processName;
-    this.lockFile = path.join(process.cwd(), `.${processName}.lock`);
+    this.lockFile = path.join(process.env.WORKSPACE_ROOT || process.cwd(), `.${processName}.lock`);
     this.pid = process.pid;
   }
 

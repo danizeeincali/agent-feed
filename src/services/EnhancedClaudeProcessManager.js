@@ -139,7 +139,7 @@ class EnhancedClaudeProcessManager extends EventEmitter {
       try {
         process = spawn(command[0], command.slice(1), {
           stdio: ['pipe', 'pipe', 'pipe'],
-          cwd: options.cwd || process.cwd(),
+          cwd: options.cwd || process.env.WORKSPACE_ROOT || process.cwd(),
           env: { ...process.env, ...options.env }
         });
 

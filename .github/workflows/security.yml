@@ -1,0 +1,425 @@
+name: Security Scanning & Audit
+
+on:
+  push:
+    branches: [main, develop, v1]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run security scans weekly on Mondays at 3 AM UTC
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18.x'
+
+jobs:
+  # ============================================================================
+  # Dependency Vulnerability Scanning
+  # ============================================================================
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../api-server && npm ci
+
+      - name: Run npm audit (root)
+        id: npm-audit-root
+        run: |
+          npm audit --json > npm-audit-root.json || true
+          npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Run npm audit (frontend)
+        id: npm-audit-frontend
+        run: |
+          cd frontend
+          npm audit --json > npm-audit-frontend.json || true
+          npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Run npm audit (api-server)
+        id: npm-audit-api
+        run: |
+          cd api-server
+          npm audit --json > npm-audit-api.json || true
+          npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Upload audit reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: npm-audit-reports
+          path: |
+            npm-audit-*.json
+            frontend/npm-audit-*.json
+            api-server/npm-audit-*.json
+
+  # ============================================================================
+  # Secret Scanning
+  # ============================================================================
+  secret-scan:
+    name: Secret Detection Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --json --only-verified
+
+      - name: Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  # ============================================================================
+  # Code Security Analysis
+  # ============================================================================
+  code-security:
+    name: Code Security Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, typescript
+          queries: security-extended,security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript"
+
+  # ============================================================================
+  # Container Security Scanning (Trivy)
+  # ============================================================================
+  container-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-fs-results.sarif'
+          severity: 'CRITICAL,HIGH,MEDIUM'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-fs-results.sarif'
+
+      - name: Run Trivy config scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '0'
+
+  # ============================================================================
+  # OWASP Dependency Check
+  # ============================================================================
+  owasp-scan:
+    name: OWASP Dependency Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'agent-feed'
+          path: '.'
+          format: 'HTML'
+          out: 'dependency-check-report'
+          args: >
+            --enableRetired
+            --enableExperimental
+
+      - name: Upload OWASP report
+        uses: actions/upload-artifact@v3
+        with:
+          name: owasp-dependency-check-report
+          path: dependency-check-report/
+
+  # ============================================================================
+  # License Compliance Check
+  # ============================================================================
+  license-scan:
+    name: License Compliance Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../api-server && npm ci
+
+      - name: Install license-checker
+        run: npm install -g license-checker
+
+      - name: Check licenses (root)
+        run: |
+          license-checker --json --out license-report-root.json
+          license-checker --summary
+
+      - name: Check licenses (frontend)
+        run: |
+          cd frontend
+          license-checker --json --out license-report-frontend.json
+          license-checker --summary
+
+      - name: Check licenses (api-server)
+        run: |
+          cd api-server
+          license-checker --json --out license-report-api.json
+          license-checker --summary
+
+      - name: Upload license reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: license-reports
+          path: |
+            license-report-*.json
+            frontend/license-report-*.json
+            api-server/license-report-*.json
+
+  # ============================================================================
+  # SAST (Static Application Security Testing)
+  # ============================================================================
+  sast-scan:
+    name: SAST Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint security rules
+        run: |
+          npm install -g eslint-plugin-security
+          cd frontend && npm run lint -- --ext .js,.jsx,.ts,.tsx --format json --output-file eslint-security-report.json || true
+
+      - name: Semgrep Security Scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/owasp-top-ten
+            p/javascript
+            p/typescript
+            p/react
+
+      - name: Upload SAST results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: sast-reports
+          path: |
+            frontend/eslint-security-report.json
+            semgrep-results/
+
+  # ============================================================================
+  # Docker Image Scanning
+  # ============================================================================
+  docker-scan:
+    name: Docker Image Security Scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: agent-feed:security-scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'agent-feed:security-scan'
+          format: 'sarif'
+          output: 'trivy-image-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy image results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-image-results.sarif'
+
+      - name: Run Snyk container scan
+        uses: snyk/actions/docker@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: agent-feed:security-scan
+          args: --severity-threshold=high
+
+  # ============================================================================
+  # Security Audit Report Generation
+  # ============================================================================
+  security-report:
+    name: Generate Security Report
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, secret-scan, code-security, container-scan, license-scan, sast-scan]
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: security-artifacts/
+
+      - name: Generate security summary
+        run: |
+          cat > security-report.md << 'EOF'
+          # Security Audit Report
+
+          **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Branch**: ${{ github.ref_name }}
+          **Commit**: ${{ github.sha }}
+
+          ## Job Results
+
+          - Dependency Scan: ${{ needs.dependency-scan.result }}
+          - Secret Scan: ${{ needs.secret-scan.result }}
+          - Code Security: ${{ needs.code-security.result }}
+          - Container Scan: ${{ needs.container-scan.result }}
+          - License Scan: ${{ needs.license-scan.result }}
+          - SAST Scan: ${{ needs.sast-scan.result }}
+
+          ## Recommendations
+
+          1. Review all HIGH and CRITICAL vulnerabilities
+          2. Update dependencies with known vulnerabilities
+          3. Address any secret detection findings immediately
+          4. Review license compliance issues
+
+          ## Artifacts
+
+          All security scan results are available as workflow artifacts.
+          EOF
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-audit-report
+          path: |
+            security-report.md
+            security-artifacts/
+
+      - name: Comment PR with security summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('./security-report.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+  # ============================================================================
+  # Security Policy Validation
+  # ============================================================================
+  policy-check:
+    name: Security Policy Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for SECURITY.md
+        run: |
+          if [ ! -f SECURITY.md ]; then
+            echo "::warning::SECURITY.md file not found. Consider adding a security policy."
+          fi
+
+      - name: Check for .env files in git
+        run: |
+          if git ls-files | grep -E '\.env$|\.env\..*'; then
+            echo "::error::.env files found in git history. These should not be committed."
+            exit 1
+          fi
+
+      - name: Verify .gitignore contains sensitive patterns
+        run: |
+          patterns=(".env" "*.key" "*.pem" "secrets/" "credentials.json")
+          for pattern in "${patterns[@]}"; do
+            if ! grep -q "$pattern" .gitignore; then
+              echo "::warning::.gitignore missing pattern: $pattern"
+            fi
+          done

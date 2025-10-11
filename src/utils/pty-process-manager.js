@@ -52,7 +52,7 @@ class PTYProcessManager extends EventEmitter {
       args: options.args || (process.platform === 'win32' ? [] : ['--login', '-i']),
       cols: options.cols || 80,
       rows: options.rows || 24,
-      cwd: options.cwd || process.cwd(),
+      cwd: options.cwd || process.env.WORKSPACE_ROOT || process.cwd(),
       env: {
         ...process.env,
         TERM: 'xterm-256color',

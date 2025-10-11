@@ -1,6 +1,7 @@
 /**
  * Agent Pages API Routes
  * Database-backed routes for managing agent pages
+ * Phase 2B: Updated to use database selector for PostgreSQL/SQLite
  */
 
 import express from 'express';
@@ -10,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { validatePageMiddleware } from '../middleware/page-validation.js';
 import feedbackLoop from '../services/feedback-loop.js';
+import dbSelector from '../config/database-selector.js';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +21,7 @@ let db = null;
 
 /**
  * Initialize routes with database connection
- * @param {Database} database - Better-sqlite3 database instance
+ * @param {Database} database - Better-sqlite3 database instance (legacy)
  */
 export function initializeAgentPagesRoutes(database) {
   db = database;
@@ -164,78 +166,57 @@ function ensureAgentExists(agentId) {
 /**
  * GET /api/agent-pages/agents/:agentId/pages
  * List all pages for an agent with pagination
+ * Updated: Phase 2B - Uses database selector
  */
-router.get('/agents/:agentId/pages', (req, res) => {
+router.get('/agents/:agentId/pages', async (req, res) => {
   try {
-    if (!db) {
-      return res.status(500).json({
-        success: false,
-        error: 'Database not initialized',
-        message: 'Agent pages database connection is not available'
-      });
-    }
-
     const { agentId } = req.params;
     const { limit = 20, offset = 0, status, content_type } = req.query;
 
     const parsedLimit = parseInt(limit);
     const parsedOffset = parseInt(offset);
 
-    // Build query with optional filters
-    let query = 'SELECT * FROM agent_pages WHERE agent_id = ?';
-    const params = [agentId];
+    // Use database selector to get pages
+    const pages = await dbSelector.getPagesByAgent(agentId, 'anonymous');
+
+    // Apply filters and pagination
+    let filteredPages = pages;
 
     if (status) {
-      query += ' AND status = ?';
-      params.push(status);
+      filteredPages = filteredPages.filter(page => page.status === status);
     }
 
     if (content_type) {
-      query += ' AND content_type = ?';
-      params.push(content_type);
+      filteredPages = filteredPages.filter(page => page.content_type === content_type);
     }
 
-    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    params.push(parsedLimit, parsedOffset);
+    // Sort by created_at DESC
+    filteredPages.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-    // Get pages
-    const pages = db.prepare(query).all(...params);
-
-    // Get total count
-    let countQuery = 'SELECT COUNT(*) as total FROM agent_pages WHERE agent_id = ?';
-    const countParams = [agentId];
-
-    if (status) {
-      countQuery += ' AND status = ?';
-      countParams.push(status);
-    }
-
-    if (content_type) {
-      countQuery += ' AND content_type = ?';
-      countParams.push(content_type);
-    }
-
-    const { total } = db.prepare(countQuery).get(...countParams);
+    const total = filteredPages.length;
+    const paginatedPages = filteredPages.slice(parsedOffset, parsedOffset + parsedLimit);
 
     // Parse JSON fields and transform for frontend
-    const parsedPages = pages.map(page => {
+    const parsedPages = paginatedPages.map(page => {
       const parsed = {
         ...page,
         content_metadata: page.content_metadata ? JSON.parse(page.content_metadata) : null,
-        tags: page.tags ? JSON.parse(page.tags) : null
+        tags: Array.isArray(page.tags) ? page.tags : (page.tags ? JSON.parse(page.tags) : null)
       };
       // Transform each page for frontend consumption
       return transformPageForFrontend(parsed);
     });
 
-    console.log(`📄 Fetched ${parsedPages.length} pages for agent ${agentId} (from database)`);
+    const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
+    console.log(`📄 Fetched ${parsedPages.length} pages for agent ${agentId} (from ${dbSource})`);
 
     res.json({
       success: true,
       pages: parsedPages,
-      total: total || 0,
+      total,
       limit: parsedLimit,
       offset: parsedOffset,
+      source: dbSource,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -243,7 +224,8 @@ router.get('/agents/:agentId/pages', (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message
+      message: error.message,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
   }
 });
@@ -251,29 +233,23 @@ router.get('/agents/:agentId/pages', (req, res) => {
 /**
  * GET /api/agent-pages/agents/:agentId/pages/:pageId
  * Get a single page by ID
+ * Updated: Phase 2B - Uses database selector
  */
-router.get('/agents/:agentId/pages/:pageId', (req, res) => {
+router.get('/agents/:agentId/pages/:pageId', async (req, res) => {
   try {
-    if (!db) {
-      return res.status(500).json({
-        success: false,
-        error: 'Database not initialized',
-        message: 'Agent pages database connection is not available'
-      });
-    }
-
     const { agentId, pageId } = req.params;
 
-    const page = db.prepare(
-      'SELECT * FROM agent_pages WHERE id = ? AND agent_id = ?'
-    ).get(pageId, agentId);
+    // Use database selector to get page
+    const page = await dbSelector.getPageById(pageId, 'anonymous');
 
-    if (!page) {
+    if (!page || page.agent_id !== agentId) {
+      const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
       console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
       return res.status(404).json({
         success: false,
         error: 'Page not found',
-        message: `Page with ID ${pageId} not found for agent ${agentId}`
+        message: `Page with ID ${pageId} not found for agent ${agentId}`,
+        source: dbSource
       });
     }
 
@@ -281,17 +257,19 @@ router.get('/agents/:agentId/pages/:pageId', (req, res) => {
     const parsedPage = {
       ...page,
       content_metadata: page.content_metadata ? JSON.parse(page.content_metadata) : null,
-      tags: page.tags ? JSON.parse(page.tags) : null
+      tags: Array.isArray(page.tags) ? page.tags : (page.tags ? JSON.parse(page.tags) : null)
     };
 
     // Transform page for frontend consumption
     const transformedPage = transformPageForFrontend(parsedPage);
 
-    console.log(`📄 Fetched page ${pageId} for agent ${agentId} (from database)`);
+    const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
+    console.log(`📄 Fetched page ${pageId} for agent ${agentId} (from ${dbSource})`);
 
     res.json({
       success: true,
       page: transformedPage,
+      source: dbSource,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -299,7 +277,8 @@ router.get('/agents/:agentId/pages/:pageId', (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message
+      message: error.message,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
   }
 });
@@ -307,17 +286,10 @@ router.get('/agents/:agentId/pages/:pageId', (req, res) => {
 /**
  * POST /api/agent-pages/agents/:agentId/pages
  * Create a new page with feedback loop integration
+ * Updated: Phase 2B - Uses database selector
  */
 router.post('/agents/:agentId/pages', validatePageMiddleware, async (req, res) => {
   try {
-    if (!db) {
-      return res.status(500).json({
-        success: false,
-        error: 'Database not initialized',
-        message: 'Agent pages database connection is not available'
-      });
-    }
-
     const { agentId } = req.params;
     const { id, title, content_type, content_value, content_metadata, status, tags } = req.body;
 
@@ -326,7 +298,8 @@ router.post('/agents/:agentId/pages', validatePageMiddleware, async (req, res) =
       return res.status(400).json({
         success: false,
         error: 'Validation error',
-        message: 'Title is required'
+        message: 'Title is required',
+        source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
 
@@ -334,22 +307,25 @@ router.post('/agents/:agentId/pages', validatePageMiddleware, async (req, res) =
       return res.status(400).json({
         success: false,
         error: 'Validation error',
-        message: 'Content value is required'
+        message: 'Content value is required',
+        source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
 
-    // Ensure agent exists (auto-create if needed)
-    if (!ensureAgentExists(agentId)) {
-      return res.status(500).json({
-        success: false,
-        error: 'Agent creation failed',
-        message: 'Failed to ensure agent exists'
-      });
+    // Ensure agent exists (auto-create if needed) - only for SQLite legacy support
+    if (db && !dbSelector.usePostgres) {
+      if (!ensureAgentExists(agentId)) {
+        return res.status(500).json({
+          success: false,
+          error: 'Agent creation failed',
+          message: 'Failed to ensure agent exists',
+          source: 'SQLite'
+        });
+      }
     }
 
     // Generate ID if not provided
     const pageId = id || crypto.randomUUID();
-    const now = new Date().toISOString();
 
     // Check if validation passed (from middleware)
     // If req.validationErrors exists, we had validation failures
@@ -386,45 +362,36 @@ router.post('/agents/:agentId/pages', validatePageMiddleware, async (req, res) =
         message: 'Page validation failed',
         errors: simpleErrors,
         pageId,
-        feedbackRecorded: true
+        feedbackRecorded: true,
+        source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
 
-    // Insert page
-    db.prepare(`
-      INSERT INTO agent_pages (
-        id, agent_id, title, content_type, content_value,
-        content_metadata, status, tags, created_at, updated_at, version
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      pageId,
-      agentId,
+    // Use database selector to create page
+    const pageData = {
+      id: pageId,
+      agent_id: agentId,
       title,
-      content_type || 'json',
+      content_type: content_type || 'json',
       content_value,
-      content_metadata ? JSON.stringify(content_metadata) : null,
-      status || 'published',
-      tags ? JSON.stringify(tags) : null,
-      now,
-      now,
-      1
-    );
+      content_metadata,
+      status: status || 'published',
+      tags
+    };
+
+    const createdPage = await dbSelector.upsertPage('anonymous', pageData);
 
     // Record success in feedback system
     await feedbackLoop.recordSuccess(pageId, agentId, content_value);
 
-    // Fetch the created page
-    const createdPage = db.prepare(
-      'SELECT * FROM agent_pages WHERE id = ?'
-    ).get(pageId);
-
     const parsedPage = {
       ...createdPage,
       content_metadata: createdPage.content_metadata ? JSON.parse(createdPage.content_metadata) : null,
-      tags: createdPage.tags ? JSON.parse(createdPage.tags) : null
+      tags: Array.isArray(createdPage.tags) ? createdPage.tags : (createdPage.tags ? JSON.parse(createdPage.tags) : null)
     };
 
-    console.log(`✅ Created page ${pageId} for agent ${agentId} (in database)`);
+    const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
+    console.log(`✅ Created page ${pageId} for agent ${agentId} (in ${dbSource})`);
 
     // Trigger page-verification-agent asynchronously (don't block response)
     triggerPageVerification(agentId, pageId).catch(error => {
@@ -435,24 +402,27 @@ router.post('/agents/:agentId/pages', validatePageMiddleware, async (req, res) =
     res.status(201).json({
       success: true,
       page: parsedPage,
+      source: dbSource,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Error creating page:', error);
 
     // Handle foreign key constraint errors
-    if (error.message.includes('FOREIGN KEY constraint')) {
+    if (error.message.includes('FOREIGN KEY constraint') || error.message.includes('foreign key')) {
       return res.status(400).json({
         success: false,
         error: 'Foreign key constraint error',
-        message: 'Agent does not exist'
+        message: 'Agent does not exist',
+        source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
 
     res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message
+      message: error.message,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
   }
 });
@@ -460,107 +430,68 @@ router.post('/agents/:agentId/pages', validatePageMiddleware, async (req, res) =
 /**
  * PUT /api/agent-pages/agents/:agentId/pages/:pageId
  * Update an existing page (supports partial updates)
+ * Updated: Phase 2B - Uses database selector
  */
-router.put('/agents/:agentId/pages/:pageId', (req, res) => {
+router.put('/agents/:agentId/pages/:pageId', async (req, res) => {
   try {
-    if (!db) {
-      return res.status(500).json({
-        success: false,
-        error: 'Database not initialized',
-        message: 'Agent pages database connection is not available'
-      });
-    }
-
     const { agentId, pageId } = req.params;
     const updates = req.body;
 
     // Check if page exists
-    const existingPage = db.prepare(
-      'SELECT id FROM agent_pages WHERE id = ? AND agent_id = ?'
-    ).get(pageId, agentId);
+    const existingPage = await dbSelector.getPageById(pageId, 'anonymous');
 
-    if (!existingPage) {
+    if (!existingPage || existingPage.agent_id !== agentId) {
+      const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
       console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
       return res.status(404).json({
         success: false,
         error: 'Page not found',
-        message: `Page with ID ${pageId} not found for agent ${agentId}`
+        message: `Page with ID ${pageId} not found for agent ${agentId}`,
+        source: dbSource
       });
     }
 
-    // Build update query dynamically
-    const fields = [];
-    const params = [];
+    // Validate that there are fields to update
+    const validFields = ['title', 'content_type', 'content_value', 'content_metadata', 'status', 'tags'];
+    const hasValidUpdates = Object.keys(updates).some(key => validFields.includes(key));
 
-    if (updates.title !== undefined) {
-      fields.push('title = ?');
-      params.push(updates.title);
-    }
-
-    if (updates.content_type !== undefined) {
-      fields.push('content_type = ?');
-      params.push(updates.content_type);
-    }
-
-    if (updates.content_value !== undefined) {
-      fields.push('content_value = ?');
-      params.push(updates.content_value);
-    }
-
-    if (updates.content_metadata !== undefined) {
-      fields.push('content_metadata = ?');
-      params.push(JSON.stringify(updates.content_metadata));
-    }
-
-    if (updates.status !== undefined) {
-      fields.push('status = ?');
-      params.push(updates.status);
-    }
-
-    if (updates.tags !== undefined) {
-      fields.push('tags = ?');
-      params.push(JSON.stringify(updates.tags));
-    }
-
-    // Always update updated_at
-    fields.push('updated_at = ?');
-    params.push(new Date().toISOString());
-
-    if (fields.length === 0) {
+    if (!hasValidUpdates) {
       return res.status(400).json({
         success: false,
         error: 'Validation error',
-        message: 'No valid fields to update'
+        message: 'No valid fields to update',
+        source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
 
-    // Add WHERE clause params
-    params.push(pageId);
-    params.push(agentId);
+    // Merge existing page data with updates
+    const pageData = {
+      id: pageId,
+      agent_id: agentId,
+      title: updates.title !== undefined ? updates.title : existingPage.title,
+      content_type: updates.content_type !== undefined ? updates.content_type : existingPage.content_type,
+      content_value: updates.content_value !== undefined ? updates.content_value : existingPage.content_value,
+      content_metadata: updates.content_metadata !== undefined ? updates.content_metadata : existingPage.content_metadata,
+      status: updates.status !== undefined ? updates.status : existingPage.status,
+      tags: updates.tags !== undefined ? updates.tags : existingPage.tags
+    };
 
-    // Execute update
-    db.prepare(`
-      UPDATE agent_pages
-      SET ${fields.join(', ')}
-      WHERE id = ? AND agent_id = ?
-    `).run(...params);
-
-    // Fetch updated page
-    const updatedPage = db.prepare(
-      'SELECT * FROM agent_pages WHERE id = ? AND agent_id = ?'
-    ).get(pageId, agentId);
+    // Use database selector to update page
+    const updatedPage = await dbSelector.upsertPage('anonymous', pageData);
 
     const parsedPage = {
       ...updatedPage,
       content_metadata: updatedPage.content_metadata ? JSON.parse(updatedPage.content_metadata) : null,
-      tags: updatedPage.tags ? JSON.parse(updatedPage.tags) : null
+      tags: Array.isArray(updatedPage.tags) ? updatedPage.tags : (updatedPage.tags ? JSON.parse(updatedPage.tags) : null)
     };
 
-    console.log(`✅ Updated page ${pageId} for agent ${agentId} (in database)`);
+    const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
+    console.log(`✅ Updated page ${pageId} for agent ${agentId} (in ${dbSource})`);
 
     res.json({
       success: true,
       page: parsedPage,
+      source: dbSource,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -568,7 +499,8 @@ router.put('/agents/:agentId/pages/:pageId', (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message
+      message: error.message,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
   }
 });
@@ -576,43 +508,46 @@ router.put('/agents/:agentId/pages/:pageId', (req, res) => {
 /**
  * DELETE /api/agent-pages/agents/:agentId/pages/:pageId
  * Delete a page
+ * Updated: Phase 2B - Uses database selector
  */
-router.delete('/agents/:agentId/pages/:pageId', (req, res) => {
+router.delete('/agents/:agentId/pages/:pageId', async (req, res) => {
   try {
-    if (!db) {
-      return res.status(500).json({
-        success: false,
-        error: 'Database not initialized',
-        message: 'Agent pages database connection is not available'
-      });
-    }
-
     const { agentId, pageId } = req.params;
 
     // Check if page exists
-    const existingPage = db.prepare(
-      'SELECT id FROM agent_pages WHERE id = ? AND agent_id = ?'
-    ).get(pageId, agentId);
+    const existingPage = await dbSelector.getPageById(pageId, 'anonymous');
 
-    if (!existingPage) {
+    if (!existingPage || existingPage.agent_id !== agentId) {
+      const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
       console.log(`❌ Page ${pageId} not found for agent ${agentId}`);
       return res.status(404).json({
         success: false,
         error: 'Page not found',
-        message: `Page with ID ${pageId} not found for agent ${agentId}`
+        message: `Page with ID ${pageId} not found for agent ${agentId}`,
+        source: dbSource
       });
     }
 
-    // Delete page
-    db.prepare(
-      'DELETE FROM agent_pages WHERE id = ? AND agent_id = ?'
-    ).run(pageId, agentId);
+    // Delete page using database selector
+    const deleted = await dbSelector.deletePage(pageId, 'anonymous');
 
-    console.log(`✅ Deleted page ${pageId} for agent ${agentId} (from database)`);
+    if (!deleted) {
+      const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
+      return res.status(500).json({
+        success: false,
+        error: 'Delete failed',
+        message: 'Failed to delete page',
+        source: dbSource
+      });
+    }
+
+    const dbSource = dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite';
+    console.log(`✅ Deleted page ${pageId} for agent ${agentId} (from ${dbSource})`);
 
     res.json({
       success: true,
       message: 'Page deleted successfully',
+      source: dbSource,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -620,7 +555,8 @@ router.delete('/agents/:agentId/pages/:pageId', (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message
+      message: error.message,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
   }
 });

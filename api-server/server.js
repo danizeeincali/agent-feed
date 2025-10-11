@@ -14,6 +14,13 @@ import { initializeAutoRegistration } from './middleware/auto-register-pages.js'
 import agentPagesRouter, { initializeAgentPagesRoutes } from './routes/agent-pages.js';
 import feedbackRoutes, { initializeFeedbackRoutes } from './routes/feedback.js';
 import feedbackLoop from './services/feedback-loop.js';
+import dbSelector from './config/database-selector.js';
+import aviControlRouter from './routes/avi-control.js';
+
+// Security middleware imports
+import security from './middleware/security.js';
+import auth from './middleware/auth.js';
+import { readFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -43,7 +50,17 @@ try {
 // Track file watcher for cleanup
 let fileWatcher = null;
 
-// Export database connections for use in routes
+// Initialize database selector (PostgreSQL or SQLite based on environment)
+await dbSelector.initialize();
+
+// Note: System agent templates already seeded in database (Phase 1: AVI Architecture)
+// Templates are stored in config/system/agent-templates/*.json
+// And persisted in system_agent_templates table
+if (process.env.USE_POSTGRES === 'true') {
+  console.log('✅ System agent templates ready (22 templates in database)');
+}
+
+// Export database connections for use in routes (maintains backward compatibility)
 export { db, agentPagesDb };
 
 // Initialize Claude Code routes with database connection
@@ -68,15 +85,87 @@ if (agentPagesDb) {
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
+// Load security configuration
+let securityConfig;
+try {
+  const configPath = join(__dirname, '../config/security-config.json');
+  securityConfig = JSON.parse(readFileSync(configPath, 'utf-8'));
+  console.log('✅ Security configuration loaded');
+} catch (error) {
+  console.warn('⚠️  Security config not found, using defaults');
+  securityConfig = {};
+}
+
+// ============================================================================
+// SECURITY MIDDLEWARE - Applied in order of priority
+// ============================================================================
+
+// 1. Security Headers (Helmet) - Must be first
+app.use(security.securityHeaders);
+
+// 2. Request Size Validation - Prevent large payload attacks
+app.use(security.validateRequestSize);
+
+// 3. CORS - Configured with whitelist
+const corsWhitelist = securityConfig.cors?.whitelist || [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:3001'
+];
+
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control']
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+
+    if (corsWhitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`⚠️  Blocked CORS request from: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: securityConfig.cors?.credentials !== false,
+  methods: securityConfig.cors?.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: securityConfig.cors?.allowedHeaders || [
+    'Content-Type',
+    'Authorization',
+    'X-API-Key',
+    'X-CSRF-Token',
+    'X-Session-ID',
+    'Cache-Control'
+  ],
+  exposedHeaders: securityConfig.cors?.exposedHeaders || [
+    'X-RateLimit-Limit',
+    'X-RateLimit-Remaining',
+    'X-RateLimit-Reset'
+  ]
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// 4. Body Parsers with size limits
+const maxSize = securityConfig.inputValidation?.maxRequestSize || '10mb';
+app.use(express.json({ limit: maxSize }));
+app.use(express.urlencoded({ extended: true, limit: maxSize }));
+
+// 5. Global Rate Limiter - Prevent DoS
+app.use(security.globalRateLimiter);
+
+// 6. Speed Limiter - Slow down excessive requests
+app.use(security.speedLimiter);
+
+// 7. Input Sanitization - Prevent NoSQL injection
+app.use(security.sanitizeInputs);
+
+// 8. Parameter Pollution Prevention
+app.use(security.preventParameterPollution);
+
+// 9. SQL Injection Prevention
+app.use(security.preventSQLInjection);
+
+// 10. XSS Prevention
+app.use(security.preventXSS);
+
+console.log('✅ Security middleware initialized');
 
 // Mount Claude Code routes
 app.use('/api/claude-code', claudeCodeRoutes);
@@ -95,6 +184,179 @@ app.use('/api/agent-pages', agentPagesRouter);
 
 // Mount Feedback routes
 app.use('/api/feedback', feedbackRoutes);
+
+// Mount AVI Control routes (Phase 2: Orchestrator Core)
+app.use('/api/avi', aviControlRouter);
+
+// ============================================================================
+// SECURITY & AUTHENTICATION ROUTES
+// ============================================================================
+
+// Health check endpoint (public, no auth required)
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Security report endpoint (protected - requires admin role)
+app.get('/api/security/report',
+  auth.authenticateJWT,
+  auth.requireRole(auth.ROLES.ADMIN),
+  security.getSuspiciousActivityReport
+);
+
+// Authentication endpoints
+app.post('/api/auth/login',
+  security.authRateLimiter, // Strict rate limiting for login
+  security.validators.email(),
+  security.validators.password(),
+  security.handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { email, password } = req.validatedData;
+
+      // TODO: Replace with real user lookup from database
+      // This is a demo implementation
+      const mockUser = {
+        userId: 'user_123',
+        username: 'demo',
+        email: 'demo@example.com',
+        passwordHash: await auth.hashPassword('Demo123!'), // Demo password
+        role: auth.ROLES.USER
+      };
+
+      // Verify password
+      const isValid = await auth.verifyPassword(password, mockUser.passwordHash);
+
+      if (!isValid) {
+        return res.status(401).json({
+          error: 'Unauthorized',
+          message: 'Invalid email or password'
+        });
+      }
+
+      // Generate tokens
+      const accessToken = auth.generateAccessToken({
+        userId: mockUser.userId,
+        username: mockUser.username,
+        email: mockUser.email,
+        role: mockUser.role
+      });
+
+      const refreshToken = auth.generateRefreshToken({
+        userId: mockUser.userId,
+        username: mockUser.username,
+        email: mockUser.email,
+        role: mockUser.role
+      });
+
+      // Create session
+      const sessionId = auth.createSession(mockUser.userId, {
+        loginTime: Date.now(),
+        userAgent: req.headers['user-agent']
+      });
+
+      res.json({
+        success: true,
+        accessToken,
+        refreshToken,
+        sessionId,
+        expiresIn: '1h',
+        user: {
+          userId: mockUser.userId,
+          username: mockUser.username,
+          email: mockUser.email,
+          role: mockUser.role
+        }
+      });
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({
+        error: 'Internal Server Error',
+        message: 'An error occurred during login'
+      });
+    }
+  }
+);
+
+// Token refresh endpoint
+app.post('/api/auth/refresh', auth.refreshAccessToken);
+
+// Logout endpoint
+app.post('/api/auth/logout',
+  auth.authenticateJWT,
+  (req, res) => {
+    // Revoke refresh token if provided
+    if (req.body.refreshToken) {
+      auth.revokeRefreshToken(req, res);
+    } else {
+      res.json({ message: 'Logged out successfully' });
+    }
+  }
+);
+
+// Generate API key endpoint (protected)
+app.post('/api/auth/api-key',
+  auth.authenticateJWT,
+  (req, res) => {
+    const apiKey = auth.generateAPIKey(
+      req.user.userId,
+      req.body.description || 'API Key'
+    );
+
+    res.json({
+      apiKey,
+      description: req.body.description || 'API Key',
+      createdAt: new Date().toISOString()
+    });
+  }
+);
+
+// Protected endpoint example - requires authentication
+app.get('/api/protected/example',
+  auth.authenticateJWT,
+  auth.userRateLimiter(), // Per-user rate limiting
+  (req, res) => {
+    res.json({
+      message: 'This is a protected endpoint',
+      user: {
+        userId: req.user.userId,
+        username: req.user.username,
+        role: req.user.role
+      }
+    });
+  }
+);
+
+// Admin-only endpoint example
+app.get('/api/admin/example',
+  auth.authenticateJWT,
+  auth.requireRole(auth.ROLES.ADMIN),
+  (req, res) => {
+    res.json({
+      message: 'This is an admin-only endpoint',
+      user: req.user
+    });
+  }
+);
+
+// Permission-based endpoint example
+app.post('/api/content/create',
+  auth.authenticateJWT,
+  auth.requirePermission(auth.PERMISSIONS.WRITE_OWN),
+  (req, res) => {
+    res.json({
+      message: 'Content created successfully',
+      user: req.user
+    });
+  }
+);
+
+console.log('✅ Security and authentication routes initialized');
 
 // Mock Data
 const mockAgents = [
@@ -386,12 +648,16 @@ export function broadcastToSSE(message, connections = sseConnections) {
 // API Routes
 app.get('/api/agents', async (req, res) => {
   try {
-    const agents = await loadAllAgents();
+    // Use database selector for dual database support (PostgreSQL or SQLite)
+    const userId = req.query.userId || 'anonymous';
+    const agents = await dbSelector.getAllAgents(userId);
+
     res.json({
       success: true,
       data: agents,
       total: agents.length,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
   } catch (error) {
     console.error('Error loading agents:', error);
@@ -406,20 +672,34 @@ app.get('/api/agents', async (req, res) => {
 app.get('/api/agents/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
-    const agent = await loadAgent(slug);
+    const userId = req.query.userId || 'anonymous';
+
+    // Try slug lookup first (primary method)
+    let agent = await dbSelector.getAgentBySlug(slug, userId);
+    let lookupMethod = 'slug';
+
+    // Fallback to name lookup for backward compatibility
+    if (!agent) {
+      agent = await dbSelector.getAgentByName(slug, userId);
+      lookupMethod = 'name';
+    }
 
     if (!agent) {
       return res.status(404).json({
         success: false,
         error: 'Agent not found',
-        message: `No agent found with slug: ${slug}`
+        message: `No agent found with slug: ${slug}`,
+        attempted_lookups: ['slug', 'name'],
+        source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
 
     res.json({
       success: true,
       data: agent,
-      timestamp: new Date().toISOString()
+      lookup_method: lookupMethod,
+      timestamp: new Date().toISOString(),
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
   } catch (error) {
     console.error(`Error loading agent ${req.params.slug}:`, error);
@@ -431,98 +711,45 @@ app.get('/api/agents/:slug', async (req, res) => {
   }
 });
 
-app.get('/api/agent-posts', (req, res) => {
-  const { limit = 20, offset = 0, filter = 'all', search = '', sortBy = 'published_at', sortOrder = 'DESC' } = req.query;
+app.get('/api/agent-posts', async (req, res) => {
+  try {
+    const { limit = 20, offset = 0, filter = 'all', search = '', sortBy = 'published_at', sortOrder = 'DESC' } = req.query;
+    const userId = req.query.userId || 'anonymous';
 
-  // Validate and sanitize inputs
-  const parsedLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
-  const parsedOffset = Math.max(parseInt(offset) || 0, 0);
+    // Validate and sanitize inputs
+    const parsedLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+    const parsedOffset = Math.max(parseInt(offset) || 0, 0);
 
-  // Query database
-  if (db) {
-    try {
-      // Get total count
-      const countResult = db.prepare('SELECT COUNT(*) as total FROM agent_posts').get();
-      const total = countResult.total;
+    // Use database selector for dual database support
+    const posts = await dbSelector.getAllPosts(userId, {
+      limit: parsedLimit,
+      offset: parsedOffset,
+      orderBy: `${sortBy} ${sortOrder}`
+    });
 
-      // Query posts with limit and offset - sorted by comment count and creation time
-      const posts = db.prepare(`
-        SELECT
-          id,
-          title,
-          content,
-          authorAgent,
-          publishedAt,
-          metadata,
-          engagement,
-          created_at,
-          last_activity_at,
-          CAST(json_extract(engagement, '$.comments') AS INTEGER) as comment_count
-        FROM agent_posts
-        ORDER BY
-          datetime(COALESCE(last_activity_at, created_at)) DESC,
-          id ASC
-        LIMIT ? OFFSET ?
-      `).all(parsedLimit, parsedOffset);
-
-      // Parse JSON fields and transform to match expected format
-      const transformedPosts = posts.map(post => {
-        let metadata = {};
-        let engagement = {};
-
-        try {
-          metadata = JSON.parse(post.metadata);
-        } catch (e) {
-          console.warn(`Failed to parse metadata for post ${post.id}:`, e.message);
-        }
-
-        try {
-          engagement = JSON.parse(post.engagement);
-        } catch (e) {
-          console.warn(`Failed to parse engagement for post ${post.id}:`, e.message);
-        }
-
-        return {
-          id: post.id,
-          title: post.title,
-          content: post.content,
-          authorAgent: post.authorAgent,
-          publishedAt: post.publishedAt,
-          metadata,
-          engagement,
-          created_at: post.created_at,
-          last_activity_at: post.last_activity_at
-        };
-      });
-
-      return res.json({
-        success: true,
-        data: transformedPosts,
-        total,
-        limit: parsedLimit,
-        offset: parsedOffset
-      });
-    } catch (error) {
-      console.error('❌ Database query error:', error);
-      return res.status(500).json({
-        success: false,
-        error: 'Failed to fetch posts from database'
-      });
-    }
-  } else {
-    // Database not available
-    console.error('❌ Database not available');
-    return res.status(503).json({
+    return res.json({
+      success: true,
+      data: posts,
+      total: posts.length,
+      limit: parsedLimit,
+      offset: parsedOffset,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
+    });
+  } catch (error) {
+    console.error('❌ Error fetching posts:', error);
+    return res.status(500).json({
       success: false,
-      error: 'Database not available'
+      error: 'Failed to fetch posts',
+      message: error.message
     });
   }
 });
 
 // POST endpoint to create new agent posts
-app.post('/api/v1/agent-posts', (req, res) => {
+app.post('/api/v1/agent-posts', async (req, res) => {
   try {
     const { title, content, author_agent, metadata = {} } = req.body;
+    const userId = req.body.userId || 'anonymous';
 
     // Validate required fields
     if (!title || !title.trim()) {
@@ -554,44 +781,14 @@ app.post('/api/v1/agent-posts', (req, res) => {
       });
     }
 
-    const postId = crypto.randomUUID();
-    const now = new Date().toISOString();
-
-    // Create new post object
-    const newPost = {
-      id: postId,
-      agent_id: crypto.randomUUID(),
-      title: title.trim(),
+    // Create post data
+    const postData = {
+      author_agent: author_agent.trim(),
       content: content.trim(),
-      published_at: now,
-      status: 'published',
+      title: title.trim(),
       tags: metadata.tags || [],
-      author: author_agent,
-      authorAgent: author_agent,
-      authorAgentName: author_agent,
-      publishedAt: now,
-      updatedAt: now,
-      category: metadata.postType || 'General',
-      priority: 'medium',
-      visibility: 'public',
-      engagement: {
-        comments: 0,
-        shares: 0,
-        views: 0,
-        saves: 0,
-        reactions: {},
-        stars: { average: 0, count: 0, distribution: {} },
-        isSaved: false
-      },
       metadata: {
         businessImpact: metadata.businessImpact || 5,
-        confidence_score: 0.9,
-        isAgentResponse: metadata.isAgentResponse || false,
-        processing_time_ms: 100,
-        model_version: '1.0',
-        tokens_used: 50,
-        temperature: 0.7,
-        context_length: content.length,
         postType: metadata.postType || 'quick',
         wordCount: metadata.wordCount || content.trim().split(/\s+/).length,
         readingTime: metadata.readingTime || 1,
@@ -599,45 +796,17 @@ app.post('/api/v1/agent-posts', (req, res) => {
       }
     };
 
-    // Insert into database if available
-    if (db) {
-      try {
-        const stmt = db.prepare(`
-          INSERT INTO agent_posts (
-            id, title, content, authorAgent, publishedAt,
-            metadata, engagement, created_at, last_activity_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `);
+    // Use database selector to create post
+    const createdPost = await dbSelector.createPost(userId, postData);
 
-        stmt.run(
-          postId,
-          newPost.title,
-          newPost.content,
-          newPost.authorAgent,
-          newPost.publishedAt,
-          JSON.stringify(newPost.metadata),
-          JSON.stringify(newPost.engagement),
-          now,
-          now  // Initialize last_activity_at to created_at
-        );
-
-        console.log('✅ Post created in database:', postId);
-      } catch (dbError) {
-        console.error('❌ Database insert failed, using mock array fallback:', dbError.message);
-        // Fallback to mock array if database fails
-        mockAgentPosts.unshift(newPost);
-      }
-    } else {
-      // No database, use mock array
-      mockAgentPosts.unshift(newPost);
-      console.log('✅ Post created in mock array:', postId);
-    }
+    console.log(`✅ Post created in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}:`, createdPost.id);
 
     // Return created post
     res.status(201).json({
       success: true,
-      data: newPost,
-      message: 'Post created successfully'
+      data: createdPost,
+      message: 'Post created successfully',
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
 
   } catch (error) {
@@ -786,46 +955,22 @@ app.get('/api/v1/agent-posts', (req, res) => {
  * GET /api/agent-posts/:postId/comments
  * Get all comments for a specific post
  */
-app.get('/api/agent-posts/:postId/comments', (req, res) => {
+app.get('/api/agent-posts/:postId/comments', async (req, res) => {
   try {
     const { postId } = req.params;
+    const userId = req.headers['x-user-id'] || 'anonymous';
 
-    if (!db) {
-      return res.status(503).json({
-        success: false,
-        error: 'Database not available'
-      });
-    }
+    // Get comments using database selector
+    const comments = await dbSelector.getCommentsByPostId(postId, userId);
 
-    // Query comments from database
-    const comments = db.prepare(`
-      SELECT
-        id,
-        post_id,
-        content,
-        author,
-        parent_id,
-        mentioned_users,
-        likes,
-        created_at
-      FROM comments
-      WHERE post_id = ?
-      ORDER BY created_at ASC
-    `).all(postId);
-
-    // Parse JSON fields
-    const parsedComments = comments.map(comment => ({
-      ...comment,
-      mentioned_users: comment.mentioned_users ? JSON.parse(comment.mentioned_users) : []
-    }));
-
-    console.log(`✅ Fetched ${parsedComments.length} comments for post ${postId}`);
+    console.log(`✅ Fetched ${comments.length} comments for post ${postId} from ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}`);
 
     res.json({
       success: true,
-      data: parsedComments,
-      total: parsedComments.length,
-      timestamp: new Date().toISOString()
+      data: comments,
+      total: comments.length,
+      timestamp: new Date().toISOString(),
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
 
   } catch (error) {
@@ -842,10 +987,11 @@ app.get('/api/agent-posts/:postId/comments', (req, res) => {
  * POST /api/agent-posts/:postId/comments
  * Create a new comment for a specific post
  */
-app.post('/api/agent-posts/:postId/comments', (req, res) => {
+app.post('/api/agent-posts/:postId/comments', async (req, res) => {
   try {
     const { postId } = req.params;
     const { content, author, parent_id, mentioned_users } = req.body;
+    const userId = req.headers['x-user-id'] || 'anonymous';
 
     // Validate required fields
     if (!content || !content.trim()) {
@@ -862,77 +1008,27 @@ app.post('/api/agent-posts/:postId/comments', (req, res) => {
       });
     }
 
-    if (!db) {
-      return res.status(503).json({
-        success: false,
-        error: 'Database not available'
-      });
-    }
-
-    // Generate UUID for new comment
-    const commentId = uuidv4();
-    const now = new Date().toISOString();
-
-    // Prepare mentioned_users JSON
-    const mentionedUsersJson = mentioned_users && Array.isArray(mentioned_users)
-      ? JSON.stringify(mentioned_users)
-      : JSON.stringify([]);
-
-    // Insert comment into database
-    const stmt = db.prepare(`
-      INSERT INTO comments (
-        id,
-        post_id,
-        content,
-        author,
-        parent_id,
-        mentioned_users,
-        likes,
-        created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    stmt.run(
-      commentId,
-      postId,
-      content.trim(),
-      author.trim(),
-      parent_id || null,
-      mentionedUsersJson,
-      0,
-      now
-    );
-
-    // Fetch the created comment
-    const createdComment = db.prepare(`
-      SELECT
-        id,
-        post_id,
-        content,
-        author,
-        parent_id,
-        mentioned_users,
-        likes,
-        created_at
-      FROM comments
-      WHERE id = ?
-    `).get(commentId);
-
-    // Parse mentioned_users
-    const parsedComment = {
-      ...createdComment,
-      mentioned_users: createdComment.mentioned_users
-        ? JSON.parse(createdComment.mentioned_users)
-        : []
+    // Prepare comment data
+    const commentData = {
+      id: uuidv4(),
+      post_id: postId,
+      content: content.trim(),
+      author_agent: author.trim(),
+      parent_id: parent_id || null,
+      mentioned_users: mentioned_users || [],
+      depth: 0
     };
 
-    console.log(`✅ Created comment ${commentId} for post ${postId}`);
-    console.log(`📊 Comment count will be auto-updated by trigger`);
+    // Create comment using database selector
+    const createdComment = await dbSelector.createComment(userId, commentData);
+
+    console.log(`✅ Created comment ${createdComment.id} for post ${postId} in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}`);
 
     res.status(201).json({
       success: true,
-      data: parsedComment,
-      message: 'Comment created successfully'
+      data: createdComment,
+      message: 'Comment created successfully',
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
 
   } catch (error) {
@@ -948,15 +1044,27 @@ app.post('/api/agent-posts/:postId/comments', (req, res) => {
 /**
  * PUT /api/agent-posts/:postId/comments/:commentId/like
  * Like a comment (increment likes count)
+ * NOTE: Currently only supported in SQLite mode
  */
 app.put('/api/agent-posts/:postId/comments/:commentId/like', (req, res) => {
   try {
     const { postId, commentId } = req.params;
 
+    // PostgreSQL schema doesn't support likes yet
+    if (dbSelector.usePostgres) {
+      return res.status(501).json({
+        success: false,
+        error: 'Comment likes are not yet supported in PostgreSQL mode',
+        message: 'This feature is only available when using SQLite',
+        source: 'PostgreSQL'
+      });
+    }
+
     if (!db) {
       return res.status(503).json({
         success: false,
-        error: 'Database not available'
+        error: 'Database not available',
+        source: 'SQLite'
       });
     }
 
@@ -970,7 +1078,8 @@ app.put('/api/agent-posts/:postId/comments/:commentId/like', (req, res) => {
     if (!comment) {
       return res.status(404).json({
         success: false,
-        error: 'Comment not found'
+        error: 'Comment not found',
+        source: 'SQLite'
       });
     }
 
@@ -1004,12 +1113,13 @@ app.put('/api/agent-posts/:postId/comments/:commentId/like', (req, res) => {
         : []
     };
 
-    console.log(`✅ Liked comment ${commentId}, new like count: ${parsedComment.likes}`);
+    console.log(`✅ Liked comment ${commentId} in SQLite, new like count: ${parsedComment.likes}`);
 
     res.json({
       success: true,
       data: parsedComment,
-      message: 'Comment liked successfully'
+      message: 'Comment liked successfully',
+      source: 'SQLite'
     });
 
   } catch (error) {
@@ -1017,7 +1127,8 @@ app.put('/api/agent-posts/:postId/comments/:commentId/like', (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to like comment',
-      details: error.message
+      details: error.message,
+      source: 'SQLite'
     });
   }
 });

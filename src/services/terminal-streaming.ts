@@ -48,7 +48,7 @@ export class TerminalStreamingService extends EventEmitter {
     this.io = io;
     this.config = {
       shell: config.shell || (os.platform() === 'win32' ? 'powershell.exe' : '/bin/bash'),
-      cwd: config.cwd || process.cwd(),
+      cwd: config.cwd || process.env.WORKSPACE_ROOT || process.cwd(),
       cols: config.cols || 80,
       rows: config.rows || 24,
       env: config.env || process.env,

@@ -1,0 +1,440 @@
+/**
+ * Database Selector
+ * Provides unified interface to either SQLite or PostgreSQL
+ * Controlled by USE_POSTGRES environment variable
+ *
+ * Phase 2A: Dual Database Support
+ */
+
+import Database from 'better-sqlite3';
+import postgresManager from './postgres.js';
+import agentRepo from '../repositories/postgres/agent.repository.js';
+import memoryRepo from '../repositories/postgres/memory.repository.js';
+import workspaceRepo from '../repositories/postgres/workspace.repository.js';
+
+class DatabaseSelector {
+  constructor() {
+    this.usePostgres = process.env.USE_POSTGRES === 'true';
+    this.sqliteDb = null;
+    this.sqlitePagesDb = null;
+
+    console.log(`📊 Database Mode: ${this.usePostgres ? 'PostgreSQL' : 'SQLite'}`);
+  }
+
+  /**
+   * Initialize database connections
+   */
+  async initialize() {
+    if (this.usePostgres) {
+      // Connect to PostgreSQL
+      await postgresManager.connect();
+      const isHealthy = await postgresManager.healthCheck();
+
+      if (!isHealthy) {
+        console.error('❌ PostgreSQL health check failed');
+        throw new Error('PostgreSQL connection failed');
+      }
+
+      console.log('✅ PostgreSQL connection established');
+    } else {
+      // Connect to SQLite databases
+      this.sqliteDb = new Database('/workspaces/agent-feed/data/database.db');
+      this.sqlitePagesDb = new Database('/workspaces/agent-feed/data/agent-pages.db');
+
+      console.log('✅ SQLite connections established');
+    }
+  }
+
+  /**
+   * Get all agents for a user
+   * @param {string} userId - User ID (default: 'anonymous')
+   * @returns {Promise<Array>} List of agents
+   */
+  async getAllAgents(userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await agentRepo.getAllAgents(userId);
+    } else {
+      // SQLite implementation (existing logic)
+      const agents = this.sqliteDb.prepare(`
+        SELECT * FROM agents WHERE status = 'active' ORDER BY name
+      `).all();
+
+      return agents;
+    }
+  }
+
+  /**
+   * Get agent by name
+   * @param {string} agentName - Agent name
+   * @param {string} userId - User ID
+   * @returns {Promise<object|null>} Agent or null
+   */
+  async getAgentByName(agentName, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await agentRepo.getAgentByName(agentName, userId);
+    } else {
+      // SQLite implementation
+      const agent = this.sqliteDb.prepare(`
+        SELECT * FROM agents WHERE name = ? AND status = 'active'
+      `).get(agentName);
+
+      return agent || null;
+    }
+  }
+
+  /**
+   * Get agent by slug
+   * @param {string} slug - Agent slug
+   * @param {string} userId - User ID
+   * @returns {Promise<object|null>} Agent or null
+   */
+  async getAgentBySlug(slug, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await agentRepo.getAgentBySlug(slug, userId);
+    } else {
+      // SQLite implementation
+      const agent = this.sqliteDb.prepare(`
+        SELECT * FROM agents WHERE slug = ? AND status = 'active'
+      `).get(slug);
+
+      return agent || null;
+    }
+  }
+
+  /**
+   * Get all posts
+   * @param {string} userId - User ID
+   * @param {object} options - Query options (limit, offset)
+   * @returns {Promise<Array>} List of posts
+   */
+  async getAllPosts(userId = 'anonymous', options = {}) {
+    if (this.usePostgres) {
+      return await memoryRepo.getAllPosts(userId, options);
+    } else {
+      // SQLite implementation
+      const limit = options.limit || 100;
+      const offset = options.offset || 0;
+
+      const posts = this.sqliteDb.prepare(`
+        SELECT * FROM agent_posts
+        ORDER BY published_at DESC
+        LIMIT ? OFFSET ?
+      `).all(limit, offset);
+
+      return posts;
+    }
+  }
+
+  /**
+   * Get post by ID
+   * @param {string} postId - Post ID
+   * @param {string} userId - User ID
+   * @returns {Promise<object|null>} Post or null
+   */
+  async getPostById(postId, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await memoryRepo.getPostById(postId, userId);
+    } else {
+      // SQLite implementation
+      const post = this.sqliteDb.prepare(`
+        SELECT * FROM agent_posts WHERE id = ?
+      `).get(postId);
+
+      return post || null;
+    }
+  }
+
+  /**
+   * Create a new post
+   * @param {string} userId - User ID
+   * @param {object} postData - Post data
+   * @returns {Promise<object>} Created post
+   */
+  async createPost(userId = 'anonymous', postData) {
+    if (this.usePostgres) {
+      return await memoryRepo.createPost(userId, postData);
+    } else {
+      // SQLite implementation
+      const insert = this.sqliteDb.prepare(`
+        INSERT INTO agent_posts (id, author_agent, content, title, tags, published_at)
+        VALUES (?, ?, ?, ?, ?, datetime('now'))
+      `);
+
+      const postId = postData.id || `post-${Date.now()}`;
+      insert.run(
+        postId,
+        postData.author_agent,
+        postData.content,
+        postData.title || '',
+        JSON.stringify(postData.tags || [])
+      );
+
+      return this.getPostById(postId, userId);
+    }
+  }
+
+  /**
+   * Get comments for a post
+   * @param {string} postId - Post ID
+   * @param {string} userId - User ID
+   * @returns {Promise<Array>} List of comments
+   */
+  async getCommentsByPostId(postId, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await memoryRepo.getCommentsByPostId(postId, userId);
+    } else {
+      // SQLite implementation
+      const comments = this.sqliteDb.prepare(`
+        SELECT * FROM comments WHERE post_id = ? ORDER BY created_at ASC
+      `).all(postId);
+
+      return comments;
+    }
+  }
+
+  /**
+   * Create a comment
+   * @param {string} userId - User ID
+   * @param {object} commentData - Comment data
+   * @returns {Promise<object>} Created comment
+   */
+  async createComment(userId = 'anonymous', commentData) {
+    if (this.usePostgres) {
+      return await memoryRepo.createComment(userId, commentData);
+    } else {
+      // SQLite implementation
+      const insert = this.sqliteDb.prepare(`
+        INSERT INTO comments (id, post_id, parent_id, author_agent, content, depth, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+      `);
+
+      const commentId = commentData.id || `comment-${Date.now()}`;
+      insert.run(
+        commentId,
+        commentData.post_id,
+        commentData.parent_id || null,
+        commentData.author_agent,
+        commentData.content,
+        commentData.depth || 0
+      );
+
+      // Get the created comment
+      const comment = this.sqliteDb.prepare(`
+        SELECT * FROM comments WHERE id = ?
+      `).get(commentId);
+
+      return comment;
+    }
+  }
+
+  /**
+   * Get posts by agent
+   * @param {string} agentName - Agent name
+   * @param {string} userId - User ID
+   * @param {number} limit - Result limit
+   * @returns {Promise<Array>} List of posts
+   */
+  async getPostsByAgent(agentName, userId = 'anonymous', limit = 50) {
+    if (this.usePostgres) {
+      return await memoryRepo.getPostsByAgent(agentName, userId, limit);
+    } else {
+      // SQLite implementation
+      const posts = this.sqliteDb.prepare(`
+        SELECT * FROM agent_posts
+        WHERE author_agent = ?
+        ORDER BY published_at DESC
+        LIMIT ?
+      `).all(agentName, limit);
+
+      return posts;
+    }
+  }
+
+  /**
+   * Get all pages
+   * @param {string} userId - User ID
+   * @param {object} options - Query options
+   * @returns {Promise<Array>} List of pages
+   */
+  async getAllPages(userId = 'anonymous', options = {}) {
+    if (this.usePostgres) {
+      return await workspaceRepo.getAllPages(userId, options);
+    } else {
+      // SQLite implementation
+      const limit = options.limit || 100;
+      const offset = options.offset || 0;
+
+      const pages = this.sqlitePagesDb.prepare(`
+        SELECT * FROM agent_pages
+        WHERE status = 'published'
+        ORDER BY updated_at DESC
+        LIMIT ? OFFSET ?
+      `).all(limit, offset);
+
+      return pages;
+    }
+  }
+
+  /**
+   * Get pages by agent
+   * @param {string} agentName - Agent name
+   * @param {string} userId - User ID
+   * @returns {Promise<Array>} List of pages
+   */
+  async getPagesByAgent(agentName, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await workspaceRepo.getPagesByAgent(agentName, userId);
+    } else {
+      // SQLite implementation
+      const pages = this.sqlitePagesDb.prepare(`
+        SELECT * FROM agent_pages
+        WHERE agent_id = ? AND status = 'published'
+        ORDER BY updated_at DESC
+      `).all(agentName);
+
+      return pages;
+    }
+  }
+
+  /**
+   * Get page by ID
+   * @param {string} pageId - Page ID
+   * @param {string} userId - User ID
+   * @returns {Promise<object|null>} Page or null
+   */
+  async getPageById(pageId, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await workspaceRepo.getPageById(pageId, userId);
+    } else {
+      // SQLite implementation
+      const page = this.sqlitePagesDb.prepare(`
+        SELECT * FROM agent_pages WHERE id = ?
+      `).get(pageId);
+
+      return page || null;
+    }
+  }
+
+  /**
+   * Upsert a page
+   * @param {string} userId - User ID
+   * @param {object} pageData - Page data
+   * @returns {Promise<object>} Created/updated page
+   */
+  async upsertPage(userId = 'anonymous', pageData) {
+    if (this.usePostgres) {
+      return await workspaceRepo.upsertPage(userId, pageData);
+    } else {
+      // SQLite implementation
+      const upsert = this.sqlitePagesDb.prepare(`
+        INSERT INTO agent_pages (id, agent_id, title, content_type, content_value, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+        ON CONFLICT(id) DO UPDATE SET
+          content_value = excluded.content_value,
+          title = excluded.title,
+          updated_at = datetime('now')
+      `);
+
+      const pageId = pageData.id || `page-${Date.now()}`;
+      upsert.run(
+        pageId,
+        pageData.agent_id,
+        pageData.title,
+        pageData.content_type || 'text',
+        pageData.content_value,
+        pageData.status || 'published'
+      );
+
+      return this.getPageById(pageId, userId);
+    }
+  }
+
+  /**
+   * Search pages
+   * @param {string} searchTerm - Search term
+   * @param {string} userId - User ID
+   * @returns {Promise<Array>} List of matching pages
+   */
+  async searchPages(searchTerm, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await workspaceRepo.searchPages(searchTerm, userId);
+    } else {
+      // SQLite implementation
+      const pages = this.sqlitePagesDb.prepare(`
+        SELECT * FROM agent_pages
+        WHERE (title LIKE ? OR content_value LIKE ?) AND status = 'published'
+        ORDER BY updated_at DESC
+        LIMIT 50
+      `).all(`%${searchTerm}%`, `%${searchTerm}%`);
+
+      return pages;
+    }
+  }
+
+  /**
+   * Delete a page
+   * @param {string} pageId - Page ID
+   * @param {string} userId - User ID
+   * @returns {Promise<boolean>} True if deleted
+   */
+  async deletePage(pageId, userId = 'anonymous') {
+    if (this.usePostgres) {
+      return await workspaceRepo.deletePage(pageId, userId);
+    } else {
+      // SQLite implementation
+      const result = this.sqlitePagesDb.prepare(`
+        DELETE FROM agent_pages WHERE id = ?
+      `).run(pageId);
+
+      return result.changes > 0;
+    }
+  }
+
+  /**
+   * Get system templates
+   * @returns {Promise<Array>} List of system templates
+   */
+  async getSystemTemplates() {
+    if (this.usePostgres) {
+      return await agentRepo.getSystemTemplates();
+    } else {
+      // SQLite doesn't have system templates table
+      // Return empty array or read from JSON files
+      return [];
+    }
+  }
+
+  /**
+   * Close database connections
+   */
+  async close() {
+    if (this.usePostgres) {
+      await postgresManager.close();
+    } else {
+      if (this.sqliteDb) this.sqliteDb.close();
+      if (this.sqlitePagesDb) this.sqlitePagesDb.close();
+    }
+  }
+
+  /**
+   * Get raw database connections (for backward compatibility)
+   */
+  getRawConnections() {
+    if (this.usePostgres) {
+      return {
+        db: null, // Legacy SQLite connection not available
+        agentPagesDb: null,
+        postgresPool: postgresManager.getPool()
+      };
+    } else {
+      return {
+        db: this.sqliteDb,
+        agentPagesDb: this.sqlitePagesDb,
+        postgresPool: null
+      };
+    }
+  }
+}
+
+// Export singleton instance
+export default new DatabaseSelector();

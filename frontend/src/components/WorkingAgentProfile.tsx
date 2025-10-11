@@ -26,7 +26,6 @@ interface AgentData {
 
 const WorkingAgentProfile: React.FC = () => {
   const { agentSlug } = useParams<{ agentSlug: string }>();
-  const agentId = agentSlug; // Keep agentId variable name for internal use
   const navigate = useNavigate();
   const [agentData, setAgentData] = useState<AgentData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,17 +34,19 @@ const WorkingAgentProfile: React.FC = () => {
 
   useEffect(() => {
     const fetchAgentData = async () => {
-      if (!agentId) return;
+      // UPDATED: Use agentSlug directly for API call - backend accepts slugs
+      if (!agentSlug) return;
 
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/agents/${agentId}`);
+        // API endpoint accepts slugs: /api/agents/:slug
+        const response = await fetch(`/api/agents/${agentSlug}`);
 
         if (!response.ok) {
           if (response.status === 404) {
-            setError(`Agent "${agentId}" not found`);
+            setError(`Agent "${agentSlug}" not found`);
           } else {
             setError('Failed to load agent data');
           }
@@ -69,7 +70,7 @@ const WorkingAgentProfile: React.FC = () => {
     };
 
     fetchAgentData();
-  }, [agentId]);
+  }, [agentSlug]);
 
   if (loading) {
     return (
@@ -101,7 +102,7 @@ const WorkingAgentProfile: React.FC = () => {
           </div>
           <User className="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600 mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Agent Not Found</h2>
-          <p className="text-gray-500 dark:text-gray-400">{error || `Agent "${agentId}" not found`}</p>
+          <p className="text-gray-500 dark:text-gray-400">{error || `Agent "${agentSlug}" not found`}</p>
         </div>
       </div>
     );
@@ -202,8 +203,9 @@ const WorkingAgentProfile: React.FC = () => {
           </div>
         )}
 
-{activeTab === 'pages' && (
-          <RealDynamicPagesTab agentId={agentId!} />
+        {/* CRITICAL FIX: Pass agent NAME for pages tab - dynamic pages are stored with agent name as key, not numeric ID */}
+        {activeTab === 'pages' && (
+          <RealDynamicPagesTab agentId={agentData?.name || agentSlug!} />
         )}
 
         {activeTab === 'activities' && (

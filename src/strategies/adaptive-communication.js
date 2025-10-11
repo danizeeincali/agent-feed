@@ -16,7 +16,7 @@ class AdaptiveCommunicationStrategy {
       debug: options.debug || false,
       maxArgLength: options.maxArgLength || 8000, // Max command line argument length
       tempDir: options.tempDir || '/tmp',
-      workingDirectory: options.workingDirectory || process.cwd(),
+      workingDirectory: options.workingDirectory || process.env.WORKSPACE_ROOT || process.cwd(),
       ...options
     };
     

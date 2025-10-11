@@ -22,7 +22,7 @@ export class SimpleProcessManager {
   private readonly prodPath: string;
 
   constructor() {
-    this.prodPath = path.resolve(process.cwd(), 'prod');
+    this.prodPath = path.resolve(process.env.WORKSPACE_ROOT || process.cwd(), 'prod');
     this.ensureProdDirectory();
   }
 

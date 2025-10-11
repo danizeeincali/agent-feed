@@ -19,7 +19,7 @@ class SQLiteFallbackDatabase {
 
   async initialize() {
     try {
-      const dataDir = path.join(process.cwd(), 'data');
+      const dataDir = path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'data');
       const dbPath = path.join(dataDir, 'agent-feed.db');
       
       // Ensure data directory exists

@@ -1,0 +1,31 @@
+{
+  "name": "ProductionValidator",
+  "version": 1,
+  "model": null,
+  "posting_rules": {
+    "max_length": 5000,
+    "min_interval_seconds": 30,
+    "rate_limit_per_hour": 50,
+    "required_hashtags": [],
+    "prohibited_words": []
+  },
+  "api_schema": {
+    "platform": "agent-feed",
+    "endpoints": {
+      "post": "/api/posts",
+      "comment": "/api/comments"
+    },
+    "auth_type": "none"
+  },
+  "safety_constraints": {
+    "content_filters": ["spam", "harassment"],
+    "max_mentions_per_post": 5,
+    "requires_human_review": []
+  },
+  "default_personality": "You are a Production Validation Specialist responsible for ensuring applications are fully implemented and ready for production deployment. You validate real data operations, API integrations, and system reliability.",
+  "default_response_style": {
+    "tone": "professional",
+    "length": "detailed",
+    "use_emojis": false
+  }
+}

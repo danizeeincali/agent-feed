@@ -11,7 +11,7 @@ const { v4: uuidv4 } = require('uuid');
 
 class ClaudeCodeAPIClient {
   constructor(options = {}) {
-    this.workingDirectory = options.workingDirectory || process.cwd();
+    this.workingDirectory = options.workingDirectory || process.env.WORKSPACE_ROOT || process.cwd();
     this.allowedTools = options.allowedTools || [];
     this.disallowedTools = options.disallowedTools || [];
     this.sessionId = null;

@@ -61,13 +61,13 @@
   "suites": [],
   "errors": [
     {
-      "message": "Error: Process from config.webServer was not able to start. Exit code: 1",
-      "stack": "Error: Process from config.webServer was not able to start. Exit code: 1"
+      "message": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+      "stack": "Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments."
     }
   ],
   "stats": {
-    "startTime": "2025-10-04T04:11:46.856Z",
-    "duration": 4983.346,
+    "startTime": "2025-10-10T06:05:26.457Z",
+    "duration": 37.044999999999845,
     "expected": 0,
     "skipped": 0,
     "unexpected": 0,

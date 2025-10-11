@@ -10,7 +10,7 @@ const consoleFormat = printf(({ level, message, timestamp, ...meta }) => {
 });
 
 // Create logs directory if it doesn't exist
-const logDir = path.join(process.cwd(), 'logs');
+const logDir = path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'logs');
 
 const logger = winston.createLogger({
   level: process.env['LOG_LEVEL'] || 'info',

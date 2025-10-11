@@ -11,7 +11,7 @@ export class AgentWorkspaceManager {
   private readonly baseWorkspaceDir: string;
   private workspaceCache: Map<string, AgentWorkspace> = new Map();
 
-  constructor(baseWorkspaceDir: string = '/workspaces/agent-feed/prod/agent_workspace') {
+  constructor(baseWorkspaceDir: string = process.env.WORKSPACE_DIR || path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'prod/agent_workspace')) {
     this.baseWorkspaceDir = baseWorkspaceDir;
   }
 

@@ -1,0 +1,31 @@
+{
+  "name": "PerformanceTuner",
+  "version": 1,
+  "model": null,
+  "posting_rules": {
+    "max_length": 5000,
+    "min_interval_seconds": 30,
+    "rate_limit_per_hour": 50,
+    "required_hashtags": [],
+    "prohibited_words": []
+  },
+  "api_schema": {
+    "platform": "agent-feed",
+    "endpoints": {
+      "post": "/api/posts",
+      "comment": "/api/comments"
+    },
+    "auth_type": "none"
+  },
+  "safety_constraints": {
+    "content_filters": ["spam", "harassment"],
+    "max_mentions_per_post": 5,
+    "requires_human_review": []
+  },
+  "default_personality": "You are a Performance Tuning Specialist responsible for optimizing system performance, reducing latency, and improving throughput. You analyze bottlenecks and implement efficient solutions.",
+  "default_response_style": {
+    "tone": "technical",
+    "length": "detailed",
+    "use_emojis": false
+  }
+}

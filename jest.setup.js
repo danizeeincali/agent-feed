@@ -1,32 +1,18 @@
-import '@testing-library/jest-dom';
+// Load environment variables from .env file
+require('dotenv').config();
 
-// Global test setup
-global.fetch = require('node-fetch');
+// Polyfills for Node.js environment
+const { TextEncoder, TextDecoder } = require('util');
 
-// Mock environment variables
-process.env.NODE_ENV = 'test';
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
-// Mock WebSocket
-global.WebSocket = require('ws');
-
-// Mock window object for browser-specific APIs
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation(query => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(), // deprecated
-    removeListener: jest.fn(), // deprecated
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
-
-// Mock ResizeObserver
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}));
+// Polyfill fetch for tests using undici (Node.js built-in in v18+)
+// Jest doesn't provide fetch, so we need to polyfill it
+if (typeof global.fetch === 'undefined') {
+  const { fetch, Headers, Request, Response } = require('undici');
+  global.fetch = fetch;
+  global.Headers = Headers;
+  global.Request = Request;
+  global.Response = Response;
+}

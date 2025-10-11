@@ -13,11 +13,11 @@ import fs from 'fs';
 export function getDatabasePath() {
   // In test environment, use test database
   if (process.env.NODE_ENV === 'test') {
-    return path.join(process.cwd(), 'tests/tdd-london-activities/test-activities.db');
+    return path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'tests/tdd-london-activities/test-activities.db');
   }
 
   // Production database path
-  const prodDbPath = path.join(process.cwd(), 'database.db');
+  const prodDbPath = path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'database.db');
 
   // Ensure directory exists
   const dbDir = path.dirname(prodDbPath);

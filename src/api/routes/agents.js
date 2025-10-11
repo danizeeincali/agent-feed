@@ -9,7 +9,24 @@ const __dirname = path.dirname(__filename);
 const router = express.Router();
 
 // File-based agent discovery from production directory
-const AGENTS_DIRECTORY = path.join(process.cwd(), 'prod', '.claude', 'agents');
+const AGENTS_DIRECTORY = path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'prod', '.claude', 'agents');
+
+/**
+ * Generate URL-friendly slug from text
+ * @param {string} text - Text to slugify
+ * @returns {string} - URL-friendly slug
+ */
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')        // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')    // Remove all non-word chars
+    .replace(/\-\-+/g, '-')      // Replace multiple - with single -
+    .replace(/^-+/, '')          // Trim - from start of text
+    .replace(/-+$/, '');         // Trim - from end of text
+}
 
 /**
  * Parse agent markdown file to extract metadata
@@ -74,8 +91,12 @@ function parseAgentFile(filePath, fileName) {
       return '#6366F1'; // Default indigo
     };
 
+    // Generate slug from filename (without .md extension)
+    const fileSlug = fileName.replace('.md', '');
+
     return {
-      id: fileName.replace('.md', ''),
+      id: fileSlug,
+      slug: fileSlug,  // Add slug field for frontend compatibility
       name: title,
       display_name: title,
       description: description || `${title} agent for automated assistance`,
@@ -149,28 +170,58 @@ router.get('/', (req, res) => {
   }
 });
 
-// GET /api/agents/:id - Get specific agent details
-router.get('/:id', (req, res) => {
+// GET /api/agents/:identifier - Get specific agent details
+// Supports lookup by: slug (primary), name (fallback), or numeric ID (fallback)
+router.get('/:identifier', (req, res) => {
   try {
-    const { id } = req.params;
-    const agentFile = path.join(AGENTS_DIRECTORY, `${id}.md`);
+    const { identifier } = req.params;
+    let agent = null;
+    let agentFile = null;
+    let lookupMethod = null;
 
-    if (!fs.existsSync(agentFile)) {
+    // Strategy 1: Try direct slug lookup (filename-based)
+    // This is the primary method - fastest and most reliable
+    const slugFile = path.join(AGENTS_DIRECTORY, `${identifier}.md`);
+    if (fs.existsSync(slugFile)) {
+      agent = parseAgentFile(slugFile, `${identifier}.md`);
+      lookupMethod = 'slug';
+      agentFile = slugFile;
+    }
+
+    // Strategy 2: If not found by slug, try finding by name (backward compatibility)
+    // This handles cases where identifier is a display name instead of slug
+    if (!agent) {
+      const allAgents = discoverAgents();
+      agent = allAgents.find(a =>
+        a.name.toLowerCase() === identifier.toLowerCase() ||
+        a.display_name?.toLowerCase() === identifier.toLowerCase()
+      );
+
+      if (agent) {
+        lookupMethod = 'name';
+        agentFile = agent.file_path;
+      }
+    }
+
+    // Strategy 3: If identifier is numeric, try ID-based lookup (legacy support)
+    // Some older systems may still use numeric IDs
+    if (!agent && /^\d+$/.test(identifier)) {
+      const allAgents = discoverAgents();
+      agent = allAgents.find(a => a.id === identifier);
+
+      if (agent) {
+        lookupMethod = 'id';
+        agentFile = agent.file_path;
+      }
+    }
+
+    // If still not found after all strategies, return 404
+    if (!agent || !agentFile) {
       return res.status(404).json({
         success: false,
         error: 'Agent not found',
-        id,
-        data_source: 'file-based-discovery'
-      });
-    }
-
-    const agent = parseAgentFile(agentFile, `${id}.md`);
-
-    if (!agent) {
-      return res.status(500).json({
-        success: false,
-        error: 'Failed to parse agent file',
-        id,
+        identifier,
+        attempted_lookups: ['slug', 'name', 'id'],
         data_source: 'file-based-discovery'
       });
     }
@@ -179,9 +230,15 @@ router.get('/:id', (req, res) => {
     const content = fs.readFileSync(agentFile, 'utf8');
     agent.content = content;
 
+    // Ensure slug field is present in response
+    if (!agent.slug) {
+      agent.slug = agent.id;
+    }
+
     res.json({
       success: true,
       agent,
+      lookup_method: lookupMethod,
       data_source: 'file-based-discovery'
     });
   } catch (error) {

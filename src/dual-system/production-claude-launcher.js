@@ -9,11 +9,22 @@ const { spawn } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
 
+/**
+ * Production Claude Launcher with environment-aware paths
+ * Resolves from: WORKSPACE_ROOT > cwd
+ */
 class ProductionClaudeLauncher {
   constructor() {
     this.prodInstance = null;
-    this.configPath = '/workspaces/agent-feed/.claude/prod/config.json';
-    this.workspaceRoot = '/workspaces/agent-feed/agent_workspace/';
+    const baseConfigPath = process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, '.claude')
+      : path.join(process.cwd(), '.claude');
+    const workspaceBase = process.env.WORKSPACE_ROOT
+      ? process.env.WORKSPACE_ROOT
+      : process.cwd();
+
+    this.configPath = path.join(baseConfigPath, 'prod/config.json');
+    this.workspaceRoot = path.join(workspaceBase, 'agent_workspace/');
   }
 
   async launch() {

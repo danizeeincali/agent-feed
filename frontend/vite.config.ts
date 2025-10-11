@@ -70,6 +70,18 @@ export default defineConfig({
           });
         }
       },
+      // PHASE 3D FIX: Proxy /activities to /api/activities on backend
+      '/activities': {
+        target: 'http://127.0.0.1:3001',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/activities/, '/api/activities'),
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('🔍 PHASE 3D: Activities proxy:', req.url, '->', proxyReq.path);
+          });
+        }
+      },
       // CRITICAL FIX: WebSocket proxy for backend WebSocket server - FIXED TO PORT 3001 FOR SPARC COMPLETION
       '/ws': {
         target: 'http://127.0.0.1:3001', // Force IPv4 to avoid IPv6 connection issues

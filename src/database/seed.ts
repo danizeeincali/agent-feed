@@ -1,6 +1,125 @@
+/**
+ * Database Seeding Functions
+ * Phase 1: System template seeding with validation
+ */
+
+import { Pool } from 'pg';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { validateSystemTemplateConfig, SystemTemplateConfig } from '../types/agent-templates';
+import { logger } from '../utils/logger';
+
+/**
+ * Seed system agent templates from JSON configuration files
+ *
+ * London School TDD Approach:
+ * - Coordinates between filesystem and database
+ * - Validates data before persistence
+ * - Uses UPSERT pattern for idempotency
+ *
+ * @param pool - PostgreSQL connection pool
+ * @param configDir - Directory containing template JSON files. Defaults to
+ *                    $WORKSPACE_ROOT/config/system/agent-templates or
+ *                    process.cwd()/config/system/agent-templates
+ */
+export async function seedSystemTemplates(
+  pool: Pool,
+  configDir: string = process.env.WORKSPACE_ROOT
+    ? path.join(process.env.WORKSPACE_ROOT, 'config/system/agent-templates')
+    : path.join(process.cwd(), 'config/system/agent-templates')
+): Promise<void> {
+  try {
+    logger.info('Starting system template seeding...');
+
+    // Read all JSON files from config directory
+    const files = await fs.readdir(configDir);
+    const jsonFiles = files.filter(file => file.endsWith('.json'));
+
+    if (jsonFiles.length === 0) {
+      logger.warn(`No JSON template files found in ${configDir}`);
+      return;
+    }
+
+    logger.info(`Found ${jsonFiles.length} template files`);
+
+    // Process each template file
+    for (const file of jsonFiles) {
+      const filePath = path.join(configDir, file);
+
+      try {
+        // Read and parse JSON file
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const templateData = JSON.parse(fileContent);
+
+        // Validate template schema
+        const validationResult = validateSystemTemplateConfig(templateData);
+
+        if (!validationResult.success) {
+          throw new Error(
+            `Validation failed for ${file}: ${validationResult.errors.message}`
+          );
+        }
+
+        const template = validationResult.data;
+
+        // Insert or update template (UPSERT for idempotency)
+        const query = `
+          INSERT INTO system_agent_templates (
+            name,
+            version,
+            model,
+            posting_rules,
+            api_schema,
+            safety_constraints,
+            default_personality,
+            default_response_style
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          ON CONFLICT (name) DO UPDATE SET
+            version = EXCLUDED.version,
+            model = EXCLUDED.model,
+            posting_rules = EXCLUDED.posting_rules,
+            api_schema = EXCLUDED.api_schema,
+            safety_constraints = EXCLUDED.safety_constraints,
+            default_personality = EXCLUDED.default_personality,
+            default_response_style = EXCLUDED.default_response_style,
+            updated_at = NOW()
+        `;
+
+        const values = [
+          template.name,
+          template.version,
+          template.model,
+          JSON.stringify(template.posting_rules),
+          JSON.stringify(template.api_schema),
+          JSON.stringify(template.safety_constraints),
+          template.default_personality,
+          template.default_response_style ? JSON.stringify(template.default_response_style) : null
+        ];
+
+        await pool.query(query, values);
+        logger.info(`Seeded template: ${template.name} (version ${template.version})`);
+
+      } catch (error) {
+        logger.error(`Failed to process template file ${file}:`, error);
+        throw error; // Re-throw to fail fast on errors
+      }
+    }
+
+    logger.info('System template seeding completed successfully');
+
+  } catch (error) {
+    logger.error('System template seeding failed:', error);
+    throw error;
+  }
+}
+
+// ============================================================================
+// OLD SEEDING LOGIC (Preserved for backward compatibility)
+// ============================================================================
+
 import { db } from './connection';
 import { AuthService } from '@/middleware/auth';
-import { logger } from '@/utils/logger';
 
 interface SeedUser {
   email: string;
@@ -177,7 +296,7 @@ class DatabaseSeeder {
             {
               id: 'analyze-and-store',
               type: 'claude_flow_spawn',
-              config: { 
+              config: {
                 agent_types: ['researcher', 'analyzer', 'coordinator'],
                 task: 'Analyze Claude AI update and extract key features'
               },
@@ -330,7 +449,7 @@ class DatabaseSeeder {
     for (const feed of feeds) {
       for (let i = 0; i < 2; i++) {
         const item = sampleItems[i % sampleItems.length];
-        
+
         try {
           // Create content hash for deduplication
           const contentHash = require('crypto')

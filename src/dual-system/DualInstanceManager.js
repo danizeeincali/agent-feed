@@ -47,10 +47,18 @@ class DualInstanceManager extends EventEmitter {
     }
   }
 
+  /**
+   * Load configurations with environment-aware path resolution
+   * Resolves from: WORKSPACE_ROOT/.claude/[env]/config.json > cwd/.claude/[env]/config.json
+   */
   async loadConfigurations() {
     try {
-      const devConfigPath = '/workspaces/agent-feed/.claude/dev/config.json';
-      const prodConfigPath = '/workspaces/agent-feed/.claude/prod/config.json';
+      const baseConfigPath = process.env.WORKSPACE_ROOT
+        ? path.join(process.env.WORKSPACE_ROOT, '.claude')
+        : path.join(process.cwd(), '.claude');
+
+      const devConfigPath = path.join(baseConfigPath, 'dev/config.json');
+      const prodConfigPath = path.join(baseConfigPath, 'prod/config.json');
       
       const [devConfigData, prodConfigData] = await Promise.all([
         fs.readFile(devConfigPath, 'utf8'),

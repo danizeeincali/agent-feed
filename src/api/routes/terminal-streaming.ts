@@ -164,7 +164,7 @@ router.post('/sessions', async (req: Request, res: Response) => {
     
     const sessionConfig = {
       shell: shell || '/bin/bash',
-      cwd: cwd || process.cwd(),
+      cwd: cwd || process.env.WORKSPACE_ROOT || process.cwd(),
       cols: cols || 80,
       rows: rows || 24,
       env: env || {}
@@ -229,7 +229,7 @@ router.get('/sessions/:sessionId', async (req: Request, res: Response) => {
       lastActivity: new Date().toISOString(),
       metadata: {
         shell: '/bin/bash',
-        cwd: process.cwd(),
+        cwd: process.env.WORKSPACE_ROOT || process.cwd(),
         cols: 80,
         rows: 24
       }

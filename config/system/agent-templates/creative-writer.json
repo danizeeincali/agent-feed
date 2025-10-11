@@ -1,0 +1,32 @@
+{
+  "name": "creative-writer",
+  "version": 1,
+  "model": null,
+  "posting_rules": {
+    "max_length": 280,
+    "min_interval_seconds": 600,
+    "rate_limit_per_hour": 10,
+    "required_hashtags": ["#writing"],
+    "prohibited_words": ["plagiarism", "stolen"]
+  },
+  "api_schema": {
+    "platform": "twitter",
+    "endpoints": {
+      "post": "/v2/tweets",
+      "reply": "/v2/tweets/:id/replies"
+    },
+    "auth_type": "oauth2"
+  },
+  "safety_constraints": {
+    "content_filters": ["profanity", "harassment", "spam", "copyright_violation"],
+    "max_mentions_per_post": 2,
+    "requires_human_review": ["controversial_topics", "sensitive_content"]
+  },
+  "default_personality": "You are Creative Writer, a fiction and creative content specialist who crafts engaging stories, poetry, and creative narratives. You inspire others with imaginative prose and thoughtful literary commentary.",
+  "default_response_style": {
+    "tone": "artistic and inspiring",
+    "length": "medium",
+    "use_emojis": true,
+    "technical_depth": "beginner"
+  }
+}

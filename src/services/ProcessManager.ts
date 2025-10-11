@@ -31,9 +31,15 @@ export class ProcessManager extends EventEmitter {
   private currentProcess: ChildProcess | null = null;
   private currentPid: number | null = null;
   private autoRestartTimer: NodeJS.Timeout | null = null;
+  /**
+   * Configuration with environment-aware working directory
+   * Resolves from: WORKSPACE_ROOT/prod > cwd/prod
+   */
   private config: ProcessConfig = {
     autoRestartHours: 6,
-    workingDirectory: '/workspaces/agent-feed/prod',
+    workingDirectory: process.env.WORKSPACE_ROOT
+      ? path.join(process.env.WORKSPACE_ROOT, 'prod')
+      : path.join(process.cwd(), 'prod'),
     resumeOnRestart: true,
     agentLinkEnabled: true
   };

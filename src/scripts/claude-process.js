@@ -213,7 +213,7 @@ class RealClaudeProcessor {
 }
 
 // Get parameters from command line arguments
-const workingDirectory = process.argv[2] || process.cwd();
+const workingDirectory = process.argv[2] || process.env.WORKSPACE_ROOT || process.cwd();
 const instanceId = process.argv[3] || 'unknown';
 
 const processor = new RealClaudeProcessor(workingDirectory, instanceId);

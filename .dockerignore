@@ -126,3 +126,21 @@ uploads/
 
 # Memory dumps
 *.heapsnapshot
+
+# Phase 1 specific exclusions
+backups/
+data/
+.env.phase1
+.env.phase1.local
+!.env.phase1.example
+*.dump
+PHASE*.md
+SPARC*.md
+*REPORT.md
+*PLAN.md
+*SPEC.md
+.claude-flow/metrics/
+monitoring/
+scripts/
+!scripts/init-db.sh
+!scripts/backup-user-data.sh

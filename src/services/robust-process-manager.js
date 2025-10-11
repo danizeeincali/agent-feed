@@ -110,7 +110,7 @@ class RobustProcessManager {
       // Spawn the process
       const childProcess = spawn(command, args, {
         stdio: config.stdio || ['pipe', 'pipe', 'pipe'],
-        cwd: config.cwd || process.cwd(),
+        cwd: config.cwd || process.env.WORKSPACE_ROOT || process.cwd(),
         env: { ...process.env, ...(config.env || {}) }
       });
       

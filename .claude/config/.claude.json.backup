@@ -1,0 +1,31 @@
+{
+  "installMethod": "unknown",
+  "autoUpdates": true,
+  "cachedStatsigGates": {
+    "tengu_disable_bypass_permissions_mode": false
+  },
+  "firstStartTime": "2025-10-10T16:58:03.984Z",
+  "userID": "25c82f92ade3817c4177de9eac9132eaea3edfc206c37701f9dbd4fac1b40c05",
+  "projects": {
+    "/workspaces/agent-feed": {
+      "allowedTools": [],
+      "history": [],
+      "mcpContextUris": [],
+      "mcpServers": {},
+      "enabledMcpjsonServers": [],
+      "disabledMcpjsonServers": [],
+      "hasTrustDialogAccepted": false,
+      "projectOnboardingSeenCount": 0,
+      "hasClaudeMdExternalIncludesApproved": false,
+      "hasClaudeMdExternalIncludesWarningShown": false,
+      "exampleFiles": [
+        "App.tsx",
+        "RealSocialMediaFeed.tsx",
+        "simple-backend.js",
+        "tsconfig.tsbuildinfo",
+        "vite.config.ts"
+      ],
+      "exampleFilesGeneratedAt": 1760157560870
+    }
+  }
+}

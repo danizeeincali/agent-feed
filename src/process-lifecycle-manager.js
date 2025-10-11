@@ -26,7 +26,7 @@ class ProcessLifecycleManager extends EventEmitter {
     this.healthMonitor = null;
     this.zombieChecker = null;
     this.isMonitoring = false;
-    this.logDir = path.join(process.cwd(), 'logs', 'process-lifecycle');
+    this.logDir = path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'logs', 'process-lifecycle');
     
     this.setupLogging();
     this.startMonitoring();

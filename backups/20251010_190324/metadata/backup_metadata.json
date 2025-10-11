@@ -1,0 +1,29 @@
+{
+  "backup": {
+    "timestamp": "20251010_190324",
+    "date": "2025-10-10T19:03:33+00:00",
+    "version": "1.0.0",
+    "hostname": "codespaces-005acc",
+    "user": "codespace",
+    "success": true,
+    "errors": [
+  ""
+],
+    "components": {
+      "postgresql": {
+        "enabled": true,
+        "database": "avidm_dev",
+        "host": "localhost",
+        "port": 5432
+      },
+      "sqlite": {
+        "enabled": true
+      },
+      "userdata": {
+        "enabled": true
+      }
+    },
+    "backup_dir": "/workspaces/agent-feed/backups/20251010_190324",
+    "retention_days": 7
+  }
+}

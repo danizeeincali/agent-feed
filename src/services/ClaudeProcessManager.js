@@ -58,7 +58,7 @@ class ClaudeProcessManager extends EventEmitter {
       name: 'xterm-256color',
       cols: 120,
       rows: 30,
-      cwd: config.cwd || process.cwd(),
+      cwd: config.cwd || process.env.WORKSPACE_ROOT || process.cwd(),
       env: { ...process.env, ...config.env }
     });
 

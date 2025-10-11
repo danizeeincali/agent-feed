@@ -12,7 +12,7 @@ export class AgentDiscoveryService {
   private cache: Map<string, AgentDefinition> = new Map();
   private lastScanTime: Date | null = null;
 
-  constructor(agentDirectory: string = '/workspaces/agent-feed/prod/.claude/agents') {
+  constructor(agentDirectory: string = process.env.AGENTS_DIR || path.join(process.env.CLAUDE_PROD_DIR || process.env.WORKSPACE_ROOT || process.cwd(), 'agents')) {
     this.agentDirectory = agentDirectory;
   }
 
@@ -120,7 +120,7 @@ export class AgentDiscoveryService {
         body: body.trim(),
         filePath,
         lastModified: new Date(),
-        workspaceDirectory: `/workspaces/agent-feed/prod/agent_workspace/${frontmatter.name}/`
+        workspaceDirectory: path.join(process.env.AGENT_WORKSPACE_DIR || path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'agent_workspace'), frontmatter.name, '/')
       };
     } catch (error) {
       throw new AgentParseError(`Invalid frontmatter in ${filePath}: ${error.message}`);

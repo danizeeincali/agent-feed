@@ -22,8 +22,8 @@ class AgentService extends EventEmitter {
     
     // Production agent directories
     this.agentDirectories = [
-      '/workspaces/agent-feed/prod/.claude/agents',
-      '/workspaces/agent-feed/prod/agent_workspace'
+      process.env.AGENTS_DIR || path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'prod/.claude/agents'),
+      process.env.WORKSPACE_DIR || path.join(process.env.WORKSPACE_ROOT || process.cwd(), 'prod/agent_workspace')
     ];
     
     // Agent status tracking

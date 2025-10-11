@@ -179,7 +179,7 @@ router.post('/instances', (req: Request, res: Response) => {
         name: `${instanceType || 'default'}/claude`,
         status: 'running', // Simulate successful creation
         type: instanceType || 'default',
-        workingDirectory: workingDirectory || process.cwd(),
+        workingDirectory: workingDirectory || process.env.WORKSPACE_ROOT || process.cwd(),
         pid: Math.floor(Math.random() * 50000) + 1000
       },
       message: 'Claude instance created successfully'

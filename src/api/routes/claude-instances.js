@@ -49,7 +49,7 @@ router.post('/instances', async (req, res) => {
     const instance = await claudeManager.createInstance({
       name,
       mode: mode || 'chat',
-      cwd: cwd || process.cwd(),
+      cwd: cwd || process.env.WORKSPACE_ROOT || process.cwd(),
       env,
       additionalArgs
     });
