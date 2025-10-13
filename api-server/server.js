@@ -16,6 +16,27 @@ import feedbackRoutes, { initializeFeedbackRoutes } from './routes/feedback.js';
 import feedbackLoop from './services/feedback-loop.js';
 import dbSelector from './config/database-selector.js';
 import aviControlRouter from './routes/avi-control.js';
+import monitoringRouter from './routes/monitoring.js';
+// Phase 5: Monitoring service integration
+import { MonitoringService, AlertingService } from './services/monitoring-service.js';
+
+// Legacy orchestrator (Phase 1)
+import { startOrchestrator as startLegacyOrchestrator, stopOrchestrator as stopLegacyOrchestrator } from './avi/orchestrator.js';
+
+// New orchestrator factory (Phase 2) - Dynamic import for TypeScript support
+let newOrchestratorModule = null;
+async function loadNewOrchestrator() {
+  if (!newOrchestratorModule) {
+    try {
+      newOrchestratorModule = await import('../src/avi/orchestrator-factory.ts');
+      console.log('✅ New orchestrator factory loaded successfully');
+    } catch (error) {
+      console.error('❌ Failed to load new orchestrator factory:', error);
+      throw error;
+    }
+  }
+  return newOrchestratorModule;
+}
 
 // Security middleware imports
 import security from './middleware/security.js';
@@ -187,6 +208,9 @@ app.use('/api/feedback', feedbackRoutes);
 
 // Mount AVI Control routes (Phase 2: Orchestrator Core)
 app.use('/api/avi', aviControlRouter);
+
+// Mount Phase 5 Monitoring routes
+app.use('/api/monitoring', monitoringRouter);
 
 // ============================================================================
 // SECURITY & AUTHENTICATION ROUTES
@@ -3351,8 +3375,12 @@ setTimeout(() => {
   streamingTickerMessages.push(...initialMessages);
 }, 1000);
 
+// Phase 5: Monitoring service instances (module-level for shutdown)
+let monitoringService = null;
+let alertingService = null;
+
 // Start server
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
   console.log(`🚀 API Server running on http://localhost:${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/health`);
   console.log(`🤖 Agents API: http://localhost:${PORT}/api/agents`);
@@ -3363,6 +3391,66 @@ const server = app.listen(PORT, () => {
 
   // Log initial memory usage
   logMemoryUsage();
+
+  // Initialize Phase 5 Monitoring System
+  monitoringService = new MonitoringService();
+  alertingService = new AlertingService(null); // Will be set after init
+
+  if (process.env.AVI_MONITORING_ENABLED !== 'false') {
+    try {
+      console.log('\n📊 Initializing Phase 5 Monitoring System...');
+      await monitoringService.initialize();
+
+      // Wire up alerting service
+      alertingService.alertManager = monitoringService.alertManager;
+
+      // Initialize monitoring routes with services
+      monitoringRouter.initialize(monitoringService, alertingService);
+
+      console.log('✅ Phase 5 Monitoring System active');
+      console.log('   📈 Metrics API: http://localhost:' + PORT + '/api/monitoring/metrics');
+      console.log('   🏥 Health API: http://localhost:' + PORT + '/api/monitoring/health');
+      console.log('   🚨 Alerts API: http://localhost:' + PORT + '/api/monitoring/alerts');
+    } catch (error) {
+      console.error('❌ Failed to initialize monitoring:', error.message);
+      console.warn('   Monitoring endpoints will return mock data');
+    }
+  } else {
+    console.log('\n⚠️  Phase 5 Monitoring disabled (set AVI_MONITORING_ENABLED=true to enable)');
+  }
+
+  // Start AVI Orchestrator (Phase 2: Always-on monitoring)
+  if (process.env.AVI_ORCHESTRATOR_ENABLED !== 'false') {
+    try {
+      console.log('\n🤖 Starting AVI Orchestrator (Phase 2)...');
+
+      // Try to use new TypeScript orchestrator (Phase 2) with dynamic import
+      try {
+        console.log('   Attempting to load new orchestrator factory (TypeScript)...');
+        const orchestratorModule = await loadNewOrchestrator();
+        await orchestratorModule.startOrchestrator();
+        console.log('✅ AVI Orchestrator (Phase 2 TypeScript) started - monitoring for agent activity');
+      } catch (tsError) {
+        // Fall back to legacy orchestrator if TypeScript loading fails
+        console.warn('⚠️  Failed to load TypeScript orchestrator, falling back to legacy:', tsError.message);
+        console.log('   Using legacy orchestrator (Phase 1)');
+        await startLegacyOrchestrator({
+          maxWorkers: parseInt(process.env.AVI_MAX_WORKERS) || 5,
+          maxContextSize: parseInt(process.env.AVI_MAX_CONTEXT) || 50000,
+          pollInterval: parseInt(process.env.AVI_POLL_INTERVAL) || 5000,
+          healthCheckInterval: parseInt(process.env.AVI_HEALTH_CHECK_INTERVAL) || 30000
+        });
+        console.log('✅ AVI Orchestrator (Phase 1 Legacy) started - monitoring for agent activity');
+      }
+    } catch (error) {
+      console.error('❌ Failed to start AVI Orchestrator:', error);
+      console.error('   Server will continue running, but agents will not automatically respond');
+      console.error('   Error details:', error.message);
+      // Don't crash the server if orchestrator fails - graceful degradation
+    }
+  } else {
+    console.log('\n⚠️  AVI Orchestrator disabled (set AVI_ORCHESTRATOR_ENABLED=true to enable)');
+  }
 });
 
 // =============================================================================
@@ -3448,6 +3536,34 @@ async function gracefulShutdown(signal) {
   sseHeartbeats.clear();
   console.log('✅ All SSE connections and heartbeats cleared');
 
+  // Stop Phase 5 Monitoring System
+  if (monitoringService) {
+    try {
+      console.log('📊 Stopping Phase 5 Monitoring System...');
+      await monitoringService.shutdown();
+      console.log('✅ Phase 5 Monitoring System stopped');
+    } catch (error) {
+      console.warn('⚠️ Error stopping monitoring system:', error.message);
+    }
+  }
+
+  // Stop AVI Orchestrator
+  try {
+    console.log('🤖 Stopping AVI Orchestrator...');
+
+    // Try to stop TypeScript orchestrator first, fall back to legacy if needed
+    if (newOrchestratorModule) {
+      await newOrchestratorModule.stopOrchestrator();
+      console.log('✅ AVI Orchestrator (Phase 2 TypeScript) stopped');
+    } else {
+      await stopLegacyOrchestrator();
+      console.log('✅ AVI Orchestrator (Phase 1 Legacy) stopped');
+    }
+  } catch (error) {
+    console.warn('⚠️ Error stopping AVI Orchestrator:', error.message);
+    // Continue with shutdown even if orchestrator stop fails
+  }
+
   // Close file watcher
   if (fileWatcher) {
     console.log('📂 Closing file watcher...');
@@ -3506,5 +3622,11 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('Reason:', reason);
   logMemoryUsage();
 });
+
+// Export orchestrator helper functions for routes (Phase 2 disabled for production)
+// export {
+//   getOrchestratorStatus,
+//   isOrchestratorHealthy
+// };
 
 export default app;

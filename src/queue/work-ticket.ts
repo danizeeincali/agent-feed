@@ -14,12 +14,20 @@ import {
   WorkTicketStatus,
   QueueStats
 } from '../types/work-ticket';
+import { PriorityQueue } from './priority-queue';
 
 export class WorkTicketQueue {
   private db?: DatabaseManager;
+  private tickets: Map<string, WorkTicket>;
+  private workerAssignments: Map<string, string>;
+  private ticketCounter: number = 0;
+  private priorityQueue: PriorityQueue<WorkTicket>;
 
   constructor(db?: DatabaseManager) {
     this.db = db;
+    this.tickets = new Map<string, WorkTicket>();
+    this.workerAssignments = new Map<string, string>();
+    this.priorityQueue = new PriorityQueue<WorkTicket>();
   }
 
   /**
@@ -49,7 +57,7 @@ export class WorkTicketQueue {
       ]);
 
       const row = result.rows[0];
-      return {
+      const ticket: WorkTicket = {
         id: row.id.toString(),
         type: input.type,
         priority: row.priority,
@@ -59,11 +67,19 @@ export class WorkTicketQueue {
         createdAt: row.created_at,
         status: row.status as WorkTicketStatus
       };
+
+      // Store in memory map
+      this.tickets.set(ticket.id, ticket);
+      // Add to priority queue
+      this.priorityQueue.enqueue(ticket, ticket.priority);
+
+      return ticket;
     }
 
     // Fallback to in-memory (for unit tests)
+    const ticketId = this.generateTicketId();
     const ticket: WorkTicket = {
-      id: Date.now().toString(),
+      id: ticketId,
       type: input.type,
       priority: input.priority,
       agentName: input.agentName,
@@ -72,6 +88,12 @@ export class WorkTicketQueue {
       createdAt: new Date(),
       status: 'pending'
     };
+
+    // Store in memory map
+    this.tickets.set(ticketId, ticket);
+    // Add to priority queue
+    this.priorityQueue.enqueue(ticket, ticket.priority);
+
     return ticket;
   }
 

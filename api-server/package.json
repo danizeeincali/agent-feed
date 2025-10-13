@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "tsx server.js",
+    "dev": "tsx server.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -26,6 +26,7 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3",
+    "tsx": "^4.20.6",
     "uuid": "^13.0.0",
     "xss-clean": "^0.1.4",
     "zod": "^3.25.76",

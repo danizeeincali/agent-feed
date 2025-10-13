@@ -9,6 +9,7 @@
     "start": "concurrently \"cd api-server && npm start\" \"cd frontend && npm run preview\"",
     "avi": "./scripts/run-avi.sh",
     "avi:cli": "./scripts/run-avi-cli.sh",
+    "avi:orchestrator": "tsx src/scripts/start-orchestrator.ts",
     "migrate:agents": "tsx scripts/migrate-prod-agents-to-db.ts",
     "migrate:agents:dry-run": "tsx scripts/migrate-prod-agents-to-db.ts --dry-run",
     "health-check": "tsx scripts/health-check.ts",

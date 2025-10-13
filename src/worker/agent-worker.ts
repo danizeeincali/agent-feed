@@ -96,9 +96,9 @@ export class AgentWorker {
 
       return {
         success: true,
-        responseId,
+        output: { responseId },
         tokensUsed: response.tokensUsed,
-        durationMs: duration,
+        duration,
       };
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -108,8 +108,9 @@ export class AgentWorker {
 
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        durationMs: duration,
+        error: error as Error,
+        tokensUsed: 0,
+        duration,
       };
     }
   }

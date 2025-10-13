@@ -17,6 +17,7 @@ import { AgentWorker } from './agent-worker';
 import type { WorkerConfig, WorkerResult, WorkerMetrics, WorkerSpawnerConfig, WorkerSpawnerStats } from '../types/worker';
 import { WorkTicket } from '../types/work-ticket';
 import { DatabaseManager } from '../types/database-manager';
+import { composeAgentContext } from '../database/context-composer';
 
 // Task executor type for dependency injection (legacy support)
 type TaskExecutor = (config: WorkerConfig, context: any) => Promise<any>;
@@ -101,10 +102,15 @@ export class WorkerSpawner {
 
     try {
       // Load agent context from database
-      const context = await composeAgentContext(config.userId, config.agentName);
+      if (!this.database) {
+        throw new Error('Database manager not available for context loading');
+      }
+      const context = await composeAgentContext(config.userId, config.agentName, this.database);
 
       // Execute the task using injected executor
-      const output = await this.taskExecutor(config, context);
+      const output = this.taskExecutor
+        ? await this.taskExecutor(config, context)
+        : await this.defaultTaskExecutor(config, context);
 
       // Calculate metrics
       const duration = Date.now() - startTime;

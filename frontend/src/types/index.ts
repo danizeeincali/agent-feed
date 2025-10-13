@@ -1,3 +1,25 @@
+// Re-export monitoring types from MonitoringApiService
+export type {
+  Alert,
+  AlertsResponse,
+  AlertHistoryResponse,
+  HealthStatus,
+  ComponentHealth,
+  SystemMetrics,
+  CpuMetrics,
+  MemoryMetrics,
+  DiskMetrics,
+  NetworkMetrics,
+  RequestMetrics,
+  ErrorMetrics,
+  RecentError,
+  CacheMetrics,
+  QueueMetrics,
+  HistoricalStats,
+  MetricDataPoint,
+  TrendAnalysis
+} from '../services/MonitoringApiService';
+
 export interface Agent {
   id: string;
   name: string;

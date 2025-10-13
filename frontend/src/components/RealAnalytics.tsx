@@ -11,6 +11,8 @@ const TokenAnalyticsDashboard = lazy(() => import('./TokenAnalyticsDashboard.tsx
 
 // Import EnhancedPerformanceMetrics for the performance tab
 import EnhancedPerformanceMetrics from './EnhancedPerformanceMetrics';
+// Import MonitoringTab for Phase 5 monitoring
+import MonitoringTab from './monitoring/MonitoringTab';
 
 // Extended SystemMetrics for dashboard display
 interface SystemMetrics extends ApiSystemMetrics {
@@ -148,7 +150,9 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const tabParam = urlParams.get('tab');
-      return tabParam === 'performance' ? 'performance' : 'claude-sdk';
+      if (tabParam === 'performance') return 'performance';
+      if (tabParam === 'monitoring') return 'monitoring';
+      return 'claude-sdk';
     }
     return 'claude-sdk';
   };
@@ -428,12 +432,16 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
 
       {/* Analytics Tabs */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:grid-cols-3">
           <TabsTrigger value="claude-sdk" className="text-sm">
             Claude SDK Analytics
           </TabsTrigger>
           <TabsTrigger value="performance" className="text-sm">
             Performance
+          </TabsTrigger>
+          <TabsTrigger value="monitoring" className="text-sm">
+            <Activity className="w-4 h-4 mr-2" />
+            Monitoring
           </TabsTrigger>
         </TabsList>
 
@@ -454,6 +462,15 @@ const RealAnalytics: React.FC<RealAnalyticsProps> = ({ className = '' }) => {
             onReset={() => window.location.reload()}
           >
             <ApplicationPerformanceMetrics />
+          </ErrorBoundary>
+        </TabsContent>
+
+        <TabsContent value="monitoring" className="space-y-6 overflow-y-auto">
+          <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            onReset={() => window.location.reload()}
+          >
+            <MonitoringTab />
           </ErrorBoundary>
         </TabsContent>
       </Tabs>

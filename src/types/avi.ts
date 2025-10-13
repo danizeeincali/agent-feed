@@ -28,15 +28,33 @@ export interface OrchestratorConfig {
 }
 
 /**
+ * AviConfig - Configuration for AviOrchestrator
+ */
+export interface AviConfig {
+  /** Maximum concurrent workers */
+  maxConcurrentWorkers?: number;
+  /** Check interval for pending tickets (ms) */
+  checkInterval: number;
+  /** Enable health monitoring */
+  enableHealthMonitor?: boolean;
+  /** Health check interval (ms) */
+  healthCheckInterval?: number;
+  /** Graceful shutdown timeout (ms) */
+  shutdownTimeout?: number;
+  /** Context bloat threshold (tokens) */
+  contextBloatThreshold?: number;
+  /** Worker timeout (ms) */
+  workerTimeout?: number;
+}
+
+/**
  * Runtime state of Avi orchestrator
  */
 export interface AviState {
   /** Current operational status */
-  status: AviStatus;
+  status: 'initializing' | 'running' | 'restarting' | 'stopped';
   /** When the orchestrator started */
   startTime: Date;
-  /** Current context size in tokens */
-  contextSize: number;
   /** Total tickets processed since start */
   ticketsProcessed: number;
   /** Total workers spawned since start */
