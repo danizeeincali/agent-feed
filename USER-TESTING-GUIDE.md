@@ -207,7 +207,7 @@ Open these URLs in your browser:
    - Should show full metrics JSON
 
 4. **Prometheus Format:**
-   - http://localhost:3001/api/monitoring/metrics?format=prometheus
+   - http://localhost:3001/api/mook do thatnitoring/metrics?format=prometheus
    - Should show Prometheus-formatted metrics
 
 5. **Active Alerts:**

@@ -45,22 +45,35 @@ export class WorkQueueAdapter implements IWorkQueue {
    * @returns Promise resolving to array of pending tickets
    */
   async getPendingTickets(): Promise<PendingTicket[]> {
+    console.log('🔍 [WorkQueueAdapter] getPendingTickets() called');
+
     await this.initRepository();
+    console.log('✅ [WorkQueueAdapter] Repository initialized');
 
     try {
       // Get all pending tickets for orchestrator (no user filter)
       // NOTE: We check if repository has getAllPendingTickets method first
+      console.log('🔍 [WorkQueueAdapter] Querying repository for pending tickets...');
+
       const tickets = this.repository.getAllPendingTickets
         ? await this.repository.getAllPendingTickets({ status: 'pending', limit: 100 })
         : await this.repository.getTicketsByUser(null, { status: 'pending', limit: 100 });
 
+      console.log(`📊 [WorkQueueAdapter] Query returned ${tickets?.length || 0} tickets`);
+
       // Validate tickets is an array
       if (!Array.isArray(tickets)) {
+        console.error('❌ [WorkQueueAdapter] Invalid response - not an array:', typeof tickets);
         throw new Error('Invalid response from repository: expected array');
       }
 
-      return tickets.map(this.mapTicketToInterface);
+      const mapped = tickets.map(this.mapTicketToInterface);
+      console.log(`✅ [WorkQueueAdapter] Mapped ${mapped.length} tickets to interface`);
+
+      return mapped;
     } catch (error) {
+      console.error('❌ [WorkQueueAdapter] Error:', error);
+      console.error('❌ [WorkQueueAdapter] Stack:', (error as Error).stack);
       logger.error('Failed to get pending tickets', { error, context: 'WorkQueueAdapter' });
       throw new Error('Failed to retrieve pending tickets from work queue');
     }

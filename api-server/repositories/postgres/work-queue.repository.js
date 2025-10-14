@@ -251,6 +251,27 @@ class WorkQueueRepository {
   }
 
   /**
+   * Get all pending tickets (for orchestrator)
+   * @param {object} options - Query options (status, limit, offset)
+   * @returns {Promise<Array>} List of pending tickets
+   */
+  async getAllPendingTickets(options = {}) {
+    const { status = 'pending', limit = 100, offset = 0 } = options;
+
+    let query = `
+      SELECT * FROM work_queue
+      WHERE status = $1
+      ORDER BY priority DESC, created_at ASC
+      LIMIT $2 OFFSET $3
+    `;
+
+    const values = [status, limit, offset];
+
+    const result = await postgresManager.query(query, values);
+    return result.rows;
+  }
+
+  /**
    * Get tickets assigned to a specific agent
    * @param {string} agentName - Agent template name
    * @param {object} options - Query options

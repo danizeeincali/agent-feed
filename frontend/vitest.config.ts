@@ -10,6 +10,7 @@ export default defineConfig({
     setupFiles: ['./src/tests/setup/vitestSetup.ts'],
     include: [
       'src/tests/**/*.{test,spec}.{js,ts,tsx}',
+      'src/**/__tests__/**/*.{test,spec}.{js,ts,tsx}',
     ],
     exclude: [
       'src/tests/e2e/**/*',

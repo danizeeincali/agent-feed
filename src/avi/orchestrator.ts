@@ -158,7 +158,10 @@ export class AviOrchestrator {
    * Process pending tickets from the work queue
    */
   async processTickets(): Promise<void> {
+    console.log('📊 [processTickets] Starting...');
+
     if (!this.running || this.shuttingDown) {
+      console.log(`⚠️  [processTickets] Aborted (running: ${this.running}, shuttingDown: ${this.shuttingDown})`);
       return; // Don't process during shutdown
     }
 
@@ -167,37 +170,52 @@ export class AviOrchestrator {
       this.state.lastHealthCheck = new Date();
 
       // Get current active workers count
+      console.log('🔍 [processTickets] Getting active workers...');
       const activeWorkers = await this.workerSpawner.getActiveWorkers();
       this.state.activeWorkers = activeWorkers.length;
+      console.log(`👷 [processTickets] Active workers: ${activeWorkers.length}`);
 
       // Check if we can spawn more workers
       const availableSlots = (this.config.maxConcurrentWorkers ?? 10) - activeWorkers.length;
+      console.log(`📊 [processTickets] Available slots: ${availableSlots}`);
+
       if (availableSlots <= 0) {
+        console.log('⚠️  [processTickets] At maximum capacity, skipping');
         return; // At maximum capacity
       }
 
       // Get pending tickets
+      console.log('🔍 [processTickets] Fetching pending tickets...');
       const pendingTickets = await this.workQueue.getPendingTickets();
+      console.log(`📋 [processTickets] Found ${pendingTickets.length} pending tickets`);
+
       if (pendingTickets.length === 0) {
+        console.log('ℹ️  [processTickets] No tickets to process');
         return; // No work to do
       }
 
       // Process tickets up to available slots
       const ticketsToProcess = pendingTickets.slice(0, availableSlots);
+      console.log(`🚀 [processTickets] Processing ${ticketsToProcess.length} tickets...`);
 
       for (const ticket of ticketsToProcess) {
         try {
+          console.log(`🤖 [processTickets] Spawning worker for ticket ${ticket.id}...`);
           await this.spawnWorkerForTicket(ticket);
+          console.log(`✅ [processTickets] Worker spawned for ticket ${ticket.id}`);
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : String(error);
-          console.error(`Failed to spawn worker for ticket ${ticket.id}:`, errorMessage);
+          console.error(`❌ [processTickets] Failed to spawn worker for ticket ${ticket.id}:`, errorMessage);
           this.state.lastError = errorMessage;
         }
       }
 
+      console.log(`✅ [processTickets] Completed processing ${ticketsToProcess.length} tickets`);
+
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error('Error processing tickets:', errorMessage);
+      console.error('❌ [processTickets] Error:', errorMessage);
+      console.error('❌ [processTickets] Stack:', (error as Error).stack);
       this.state.lastError = errorMessage;
     }
   }
@@ -211,14 +229,22 @@ export class AviOrchestrator {
 
   /**
    * Spawn a worker for a specific ticket
+   * FIXED: Assign ticket BEFORE spawning worker to prevent race condition
    */
   private async spawnWorkerForTicket(ticket: PendingTicket): Promise<void> {
     try {
-      // Spawn the worker
-      const worker = await this.workerSpawner.spawnWorker(ticket);
+      // STEP 1: Generate worker ID and assign ticket (pending → assigned)
+      const workerId = `worker-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      await this.workQueue.assignTicket(ticket.id, workerId);
 
-      // Assign ticket to worker in queue
-      await this.workQueue.assignTicket(ticket.id, worker.id);
+      // STEP 2: Spawn the worker (assigned → processing)
+      // Worker will now find ticket in 'assigned' state
+      const worker = await this.workerSpawner.spawnWorker(ticket, workerId);
+
+      // Verify worker ID matches (sanity check)
+      if (worker.id !== workerId) {
+        throw new Error(`Worker ID mismatch: expected ${workerId}, got ${worker.id}`);
+      }
 
       // Update metrics
       this.state.workersSpawned += 1;
@@ -237,11 +263,23 @@ export class AviOrchestrator {
    * Start the main processing loop
    */
   private startMainLoop(): void {
+    console.log('🔄 Starting orchestrator main loop...');
+    console.log(`   Interval: ${this.config.checkInterval}ms`);
+    console.log(`   Max Workers: ${this.config.maxConcurrentWorkers ?? 10}`);
+
     this.intervalHandle = setInterval(async () => {
+      console.log('🔄 [Main Loop] Polling cycle started');
+
       if (this.running && !this.shuttingDown) {
         await this.processTickets();
+      } else {
+        console.log(`⚠️  [Main Loop] Skipped (running: ${this.running}, shuttingDown: ${this.shuttingDown})`);
       }
+
+      console.log('✅ [Main Loop] Polling cycle completed');
     }, this.config.checkInterval);
+
+    console.log('✅ Main loop interval set successfully');
   }
 
   /**

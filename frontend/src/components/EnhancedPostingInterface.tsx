@@ -6,6 +6,10 @@ import { MentionInput, MentionSuggestion } from './MentionInput';
 import AviTypingIndicator from './AviTypingIndicator';
 import MarkdownRenderer from './markdown/MarkdownRenderer';
 import { useActivityStream } from '../hooks/useActivityStream';
+import { useToast } from '../hooks/useToast';
+import ToastContainer from './ToastContainer';
+import SystemCommandWarningDialog from './SystemCommandWarningDialog';
+import { detectRiskyContent } from '../utils/detectRiskyContent';
 // Removed AviDirectChatSDK import - using built-in Avi chat component
 
 type PostingTab = 'post' | 'quick' | 'avi';
@@ -22,6 +26,7 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
   isLoading = false // Default to false to prevent undefined errors
 }) => {
   const [activeTab, setActiveTab] = useState<PostingTab>('quick');
+  const toast = useToast();
 
   const tabs = [
     { id: 'quick' as PostingTab, label: 'Quick Post', icon: Zap, description: 'Share your thoughts' },
@@ -29,66 +34,92 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
   ];
 
   return (
-    <div className={cn('bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm', className)}>
-      {/* Tab Navigation */}
-      <div className="border-b border-gray-100 dark:border-gray-800">
-        <nav className="flex space-x-8 px-4" aria-label="Posting tabs">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors',
-                  isActive
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
-                )}
-                aria-selected={isActive}
-              >
-                <tab.icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+    <>
+      <div className={cn('bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm', className)}>
+        {/* Tab Navigation */}
+        <div className="border-b border-gray-100 dark:border-gray-800">
+          <nav className="flex space-x-8 px-4" aria-label="Posting tabs">
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    'flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors',
+                    isActive
+                      ? 'border-blue-500 text-blue-600'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300'
+                  )}
+                  aria-selected={isActive}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        <div className="p-4">
+          {activeTab === 'quick' && (
+            <QuickPostSection onPostCreated={onPostCreated} toast={toast} />
+          )}
+
+          {activeTab === 'avi' && (
+            <AviChatSection
+              onMessageSent={onPostCreated}
+              isLoading={isLoading}
+            />
+          )}
+        </div>
       </div>
 
-      {/* Tab Content */}
-      <div className="p-4">
-        {activeTab === 'quick' && (
-          <QuickPostSection onPostCreated={onPostCreated} />
-        )}
-
-        {activeTab === 'avi' && (
-          <AviChatSection
-            onMessageSent={onPostCreated}
-            isLoading={isLoading}
-          />
-        )}
-      </div>
-    </div>
+      {/* Toast Container */}
+      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismissToast} />
+    </>
   );
 };
 
 // Simple Quick Post Component
-const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ onPostCreated }) => {
+const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void; toast: ReturnType<typeof useToast> }> = ({ onPostCreated, toast }) => {
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedMentions, setSelectedMentions] = useState<MentionSuggestion[]>([]);
+  const [showWarningDialog, setShowWarningDialog] = useState(false);
+  const [detectedRisk, setDetectedRisk] = useState<ReturnType<typeof detectRiskyContent> | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim() || isSubmitting) return;
 
+    // Check for risky content
+    const title = content.trim().slice(0, 50) + (content.length > 50 ? '...' : '');
+    const riskCheck = detectRiskyContent(content, title);
+
+    if (riskCheck.isRisky) {
+      // Show warning dialog
+      setDetectedRisk(riskCheck);
+      setShowWarningDialog(true);
+      toast.showWarning('⚠️ System operation detected - please review');
+      return;
+    }
+
+    // No risk detected, proceed with post
+    await submitPost();
+  };
+
+  const submitPost = async () => {
     setIsSubmitting(true);
     try {
+      const title = content.trim().slice(0, 50) + (content.length > 50 ? '...' : '');
+
       const response = await fetch('/api/v1/agent-posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: content.trim().slice(0, 50) + (content.length > 50 ? '...' : ''),
+          title,
           content: content.trim(),
           author_agent: 'user-agent',
           metadata: {
@@ -103,17 +134,34 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create post');
+        const errorData = await response.json();
+        toast.showError(errorData.message || 'Failed to create post');
+        return;
       }
 
       const result = await response.json();
+      toast.showSuccess(`✓ Post created successfully!`);
       onPostCreated?.(result.data);
       setContent('');
     } catch (error) {
       console.error('Failed to create quick post:', error);
+      toast.showError('Network error: Could not create post');
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleWarningCancel = () => {
+    setShowWarningDialog(false);
+    setDetectedRisk(null);
+    toast.showInfo('Post cancelled');
+  };
+
+  const handleWarningContinue = () => {
+    setShowWarningDialog(false);
+    setDetectedRisk(null);
+    // User confirmed, proceed with post
+    submitPost();
   };
 
   const handleMentionSelect = (mention: MentionSuggestion) => {
@@ -168,6 +216,16 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void }> = ({ o
           {isSubmitting ? 'Posting...' : 'Quick Post'}
         </button>
       </form>
+
+      {/* Warning Dialog */}
+      <SystemCommandWarningDialog
+        isOpen={showWarningDialog}
+        detectedPattern={detectedRisk?.pattern || null}
+        description={detectedRisk?.description || null}
+        reason={detectedRisk?.reason || null}
+        onCancel={handleWarningCancel}
+        onContinue={handleWarningContinue}
+      />
     </div>
   );
 };

@@ -9,7 +9,8 @@
 import type { IWorkerSpawner, PendingTicket, WorkerInfo } from '../types/avi';
 import type { DatabaseManager } from '../types/database-manager';
 import type { WorkTicket } from '../types/work-ticket';
-import { AgentWorker } from '../worker/agent-worker';
+import { UnifiedAgentWorker } from '../worker/unified-agent-worker';
+import { ClaudeCodeWorker } from '../worker/claude-code-worker';
 import { validateTicketId } from '../utils/validation';
 import logger from '../utils/logger';
 
@@ -25,6 +26,7 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
   private workQueueRepository: any;
   private repositoryPromise?: Promise<void>;
   private validationEnabled: boolean;
+  private claudeCodeEnabled: boolean;
 
   constructor(db: DatabaseManager) {
     this.db = db;
@@ -34,8 +36,15 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
     // Phase 4 validation flag
     this.validationEnabled = process.env.AVI_ENABLE_VALIDATION === 'true';
 
+    // Phase 3: Claude Code SDK integration (feature flag)
+    this.claudeCodeEnabled = process.env.ENABLE_CLAUDE_CODE_WORKER === 'true';
+
     if (this.validationEnabled) {
       logger.info('Phase 4 validation enabled (integration pending)');
+    }
+
+    if (this.claudeCodeEnabled) {
+      logger.info('Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector');
     }
   }
 
@@ -58,25 +67,27 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
   /**
    * Spawn a new worker for a ticket
    * @param ticket - Pending ticket to process
+   * @param workerId - Optional pre-assigned worker ID (to prevent race condition)
    * @returns Promise resolving to worker information
    */
-  async spawnWorker(ticket: PendingTicket): Promise<WorkerInfo> {
+  async spawnWorker(ticket: PendingTicket, workerId?: string): Promise<WorkerInfo> {
     await this.initRepository();
 
-    const workerId = this.generateWorkerId();
+    // Use provided worker ID or generate new one
+    const finalWorkerId = workerId || this.generateWorkerId();
 
     const workerInfo: WorkerInfo = {
-      id: workerId,
+      id: finalWorkerId,
       ticketId: ticket.id,
       status: 'spawning',
       startTime: new Date(),
     };
 
-    this.activeWorkers.set(workerId, workerInfo);
+    this.activeWorkers.set(finalWorkerId, workerInfo);
 
     // Create worker promise (async execution)
     const promise = this.executeWorker(ticket, workerInfo);
-    this.workerPromises.set(workerId, promise);
+    this.workerPromises.set(finalWorkerId, promise);
 
     // Update status to running
     workerInfo.status = 'running';
@@ -148,11 +159,16 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
       // Mark ticket as processing
       await this.workQueueRepository.startProcessing(ticketIdNum);
 
-      // Create work ticket object for AgentWorker
+      // Create work ticket object for worker
       const workTicket = await this.loadWorkTicket(ticket.id);
 
-      // Execute worker
-      const worker = new AgentWorker(this.db);
+      // Execute worker - use ClaudeCodeWorker if enabled, otherwise fall back to UnifiedAgentWorker
+      const worker = this.claudeCodeEnabled
+        ? new ClaudeCodeWorker(this.db)
+        : new UnifiedAgentWorker(this.db);
+
+      logger.info(`Using ${this.claudeCodeEnabled ? 'ClaudeCodeWorker' : 'UnifiedAgentWorker'} for ticket ${ticket.id}`);
+
       const result = await worker.executeTicket(workTicket);
 
       // Phase 4: Validation integration (TODO: resolve type constraints)

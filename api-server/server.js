@@ -19,6 +19,8 @@ import aviControlRouter from './routes/avi-control.js';
 import monitoringRouter from './routes/monitoring.js';
 // Phase 5: Monitoring service integration
 import { MonitoringService, AlertingService } from './services/monitoring-service.js';
+// Work queue repository for post-to-ticket integration
+import workQueueRepository from './repositories/postgres/work-queue.repository.js';
 
 // Legacy orchestrator (Phase 1)
 import { startOrchestrator as startLegacyOrchestrator, stopOrchestrator as stopLegacyOrchestrator } from './avi/orchestrator.js';
@@ -41,6 +43,7 @@ async function loadNewOrchestrator() {
 // Security middleware imports
 import security from './middleware/security.js';
 import auth from './middleware/auth.js';
+import { protectCriticalPaths } from './middleware/protectCriticalPaths.js';
 import { readFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -174,19 +177,33 @@ app.use(security.globalRateLimiter);
 // 6. Speed Limiter - Slow down excessive requests
 app.use(security.speedLimiter);
 
-// 7. Input Sanitization - Prevent NoSQL injection
-app.use(security.sanitizeInputs);
+// 7. Protected Path Middleware - Block access to /prod/, /node_modules/, /.git/
+app.use(protectCriticalPaths);
 
-// 8. Parameter Pollution Prevention
-app.use(security.preventParameterPollution);
+// ============================================================================
+// REMOVED AGGRESSIVE SECURITY (Single-user VPS - User accepts risk)
+// ============================================================================
+// The following middleware has been disabled for single-user VPS deployment:
+// - security.sanitizeInputs (NoSQL injection prevention)
+// - security.preventParameterPollution (HPP protection)
+// - security.preventSQLInjection (SQL keyword blocking - too aggressive)
+// - security.preventXSS (XSS pattern blocking - blocks normal posts)
+//
+// Remaining Protection:
+// ✅ Rate limiting (DoS prevention)
+// ✅ CORS (origin validation)
+// ✅ Helmet (security headers)
+// ✅ Request size limits (memory protection)
+// ✅ Protected path blocking (/prod/, /node_modules/, /.git/)
+//
+// Risk Acceptance:
+// - Single-user VPS deployment
+// - User accepts responsibility for input validation
+// - Protected paths prevent critical system damage
+// - Database backups available for recovery
+// ============================================================================
 
-// 9. SQL Injection Prevention
-app.use(security.preventSQLInjection);
-
-// 10. XSS Prevention
-app.use(security.preventXSS);
-
-console.log('✅ Security middleware initialized');
+console.log('✅ Minimal security middleware initialized (single-user mode)');
 
 // Mount Claude Code routes
 app.use('/api/claude-code', claudeCodeRoutes);
@@ -825,10 +842,35 @@ app.post('/api/v1/agent-posts', async (req, res) => {
 
     console.log(`✅ Post created in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}:`, createdPost.id);
 
+    // Create work queue ticket for AVI orchestrator (Post-to-Ticket Integration)
+    let ticket = null;
+    try {
+      ticket = await workQueueRepository.createTicket({
+        user_id: userId,
+        post_id: createdPost.id,
+        post_content: createdPost.content,
+        post_author: createdPost.author_agent,
+        post_metadata: {
+          title: createdPost.title,
+          tags: createdPost.tags || [],
+          ...metadata
+        },
+        assigned_agent: null, // Let orchestrator assign
+        priority: 5 // Default medium priority
+      });
+
+      console.log(`✅ Work ticket created for orchestrator: ticket-${ticket.id}`);
+    } catch (ticketError) {
+      console.error('❌ Failed to create work ticket:', ticketError);
+      // Log error but don't fail the post creation
+      // This maintains backward compatibility
+    }
+
     // Return created post
     res.status(201).json({
       success: true,
       data: createdPost,
+      ticket: ticket ? { id: ticket.id, status: ticket.status } : null,
       message: 'Post created successfully',
       source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });
@@ -843,124 +885,35 @@ app.post('/api/v1/agent-posts', async (req, res) => {
   }
 });
 
-app.get('/api/v1/agent-posts', (req, res) => {
+app.get('/api/v1/agent-posts', async (req, res) => {
   try {
-    // Database health check
-    if (!db) {
-      return res.status(503).json({
-        success: false,
-        error: 'Database not initialized',
-        details: 'Server starting up or database connection failed'
-      });
-    }
+    const { limit = 20, offset = 0, filter = 'all', search = '', sortBy = 'published_at', sortOrder = 'DESC' } = req.query;
+    const userId = req.query.userId || 'anonymous';
 
-    try {
-      db.prepare('SELECT 1').get();
-    } catch (connError) {
-      return res.status(503).json({
-        success: false,
-        error: 'Database connection failed',
-        details: connError.message
-      });
-    }
+    // Validate and sanitize inputs
+    const parsedLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+    const parsedOffset = Math.max(parseInt(offset) || 0, 0);
 
-    // Parse query parameters
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = parseInt(req.query.offset) || 0;
+    // Use database selector for dual database support (matches /api/agent-posts pattern)
+    const posts = await dbSelector.getAllPosts(userId, {
+      limit: parsedLimit,
+      offset: parsedOffset,
+      orderBy: `${sortBy} ${sortOrder}`
+    });
 
-    // Validate parameters
-    if (limit < 1 || limit > 100) {
-      return res.status(400).json({
-        success: false,
-        error: 'Limit must be between 1 and 100'
-      });
-    }
-
-    if (offset < 0) {
-      return res.status(400).json({
-        success: false,
-        error: 'Offset must be non-negative'
-      });
-    }
-
-    // Query database
-    if (db) {
-      try {
-        // Get total count
-        const countResult = db.prepare('SELECT COUNT(*) as total FROM agent_posts').get();
-        const total = countResult.total;
-
-        // Query posts with limit and offset - sorted by comment count and creation time
-        const posts = db.prepare(`
-          SELECT
-            id,
-            title,
-            content,
-            authorAgent,
-            publishedAt,
-            metadata,
-            engagement,
-            created_at,
-            last_activity_at,
-            CAST(json_extract(engagement, '$.comments') AS INTEGER) as comment_count
-          FROM agent_posts
-          ORDER BY
-            datetime(COALESCE(last_activity_at, created_at)) DESC,  -- Most recent activity (post OR comment)
-            id ASC                                                    -- Deterministic tiebreaker
-          LIMIT ? OFFSET ?
-        `).all(limit, offset);
-
-        // Parse JSON fields and transform to match expected format
-        const transformedPosts = posts.map(post => {
-          let metadata = {};
-          let engagement = {};
-
-          try {
-            metadata = JSON.parse(post.metadata);
-          } catch (e) {
-            console.warn(`Failed to parse metadata for post ${post.id}:`, e.message);
-          }
-
-          try {
-            engagement = JSON.parse(post.engagement);
-          } catch (e) {
-            console.warn(`Failed to parse engagement for post ${post.id}:`, e.message);
-          }
-
-          return {
-            id: post.id,
-            title: post.title,
-            content: post.content,
-            authorAgent: post.authorAgent,
-            publishedAt: post.publishedAt,
-            metadata,
-            engagement,
-            created_at: post.created_at,
-            last_activity_at: post.last_activity_at  // Include activity timestamp
-          };
-        });
-
-        return res.json({
-          success: true,
-          version: "1.0",
-          data: transformedPosts,
-          meta: {
-            total,
-            limit,
-            offset,
-            returned: transformedPosts.length,
-            timestamp: new Date().toISOString()
-          }
-        });
-      } catch (dbError) {
-        console.error('❌ Database query error:', dbError);
-        return res.status(500).json({
-          success: false,
-          error: 'Database query failed',
-          details: dbError.message
-        });
-      }
-    }
+    return res.json({
+      success: true,
+      version: "1.0",
+      data: posts,
+      meta: {
+        total: posts.length,
+        limit: parsedLimit,
+        offset: parsedOffset,
+        returned: posts.length,
+        timestamp: new Date().toISOString()
+      },
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
+    });
   } catch (error) {
     console.error('❌ Error in /api/v1/agent-posts:', error);
     res.status(500).json({
@@ -1048,9 +1001,41 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
 
     console.log(`✅ Created comment ${createdComment.id} for post ${postId} in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}`);
 
+    // Create work queue ticket for AVI orchestrator (Comment-to-Ticket Integration)
+    let ticket = null;
+    try {
+      // Fetch parent post for context
+      const parentPost = await dbSelector.getPostById(postId);
+
+      ticket = await workQueueRepository.createTicket({
+        user_id: userId,
+        post_id: createdComment.id, // Use comment ID as ticket identifier
+        post_content: createdComment.content,
+        post_author: createdComment.author_agent,
+        post_metadata: {
+          type: 'comment', // Discriminator for comment vs post
+          parent_post_id: postId,
+          parent_post_title: parentPost?.title || 'Unknown Post',
+          parent_post_content: parentPost?.content || '',
+          parent_comment_id: parent_id || null,
+          mentioned_users: mentioned_users || [],
+          depth: commentData.depth || 0
+        },
+        assigned_agent: null, // Let orchestrator assign
+        priority: 5 // Default medium priority
+      });
+
+      console.log(`✅ Work ticket created for comment: ticket-${ticket.id}`);
+    } catch (ticketError) {
+      console.error('❌ Failed to create work ticket for comment:', ticketError);
+      // Log error but don't fail the comment creation
+      // This maintains backward compatibility
+    }
+
     res.status(201).json({
       success: true,
       data: createdComment,
+      ticket: ticket ? { id: ticket.id, status: ticket.status } : null,
       message: 'Comment created successfully',
       source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
     });

@@ -155,7 +155,7 @@ export interface HealthStatus {
  */
 export interface IWorkerSpawner {
   /** Spawn a new worker for a ticket */
-  spawnWorker(ticket: PendingTicket): Promise<WorkerInfo>;
+  spawnWorker(ticket: PendingTicket, workerId?: string): Promise<WorkerInfo>;
   /** Get active workers */
   getActiveWorkers(): Promise<WorkerInfo[]>;
   /** Terminate a specific worker */
