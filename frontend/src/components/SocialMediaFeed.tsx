@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
-import { 
+import {
   RefreshCw,
   TrendingUp,
   MessageCircle,
@@ -24,6 +24,7 @@ import { TypingIndicator } from '@/components/TypingIndicator';
 import { LiveActivityIndicator } from '@/components/LiveActivityIndicator';
 import { apiService } from '@/services/api';
 import { useDebounce } from '../hooks/useDebounce';
+import { usePosts } from '../hooks/usePosts';
 
 interface AgentPost {
   id: string;
@@ -64,7 +65,8 @@ interface SocialMediaFeedProps {
 }
 
 const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }) => {
-  const [posts, setPosts] = useState<AgentPost[]>([]);
+  // PHASE 2: usePosts hook integration with optimistic updates
+  const { posts, setPosts, updatePostInList, refetchPost } = usePosts([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>('all');
@@ -186,18 +188,16 @@ const SocialMediaFeed: React.FC<SocialMediaFeedProps> = memo(({ className = '' }
       setPosts(prev => prev.filter(post => post.id !== data.id));
     };
 
-  
-    // Handle comment updates
+
+    // Handle comment updates - PHASE 2: Using updatePostInList from usePosts hook
     const handleCommentCreated = (data: any) => {
-      setPosts(prev => prev.map(post => {
-        if (post.id === data.postId) {
-          return {
-            ...post,
-            comments: (post.comments || 0) + 1
-          };
-        }
-        return post;
-      }));
+      console.log('[SocialMediaFeed] WebSocket comment:created event received', { postId: data.postId });
+      const currentPost = posts.find(p => p.id === data.postId);
+      if (currentPost) {
+        const newCount = (currentPost.comments || 0) + 1;
+        updatePostInList(data.postId, { comments: newCount });
+        console.log('[SocialMediaFeed] Updated comment count via WebSocket', { postId: data.postId, newCount });
+      }
     };
 
     // Register event handlers

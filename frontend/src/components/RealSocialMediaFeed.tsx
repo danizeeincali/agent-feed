@@ -754,9 +754,12 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
             isArray: Array.isArray(posts)
           });
           return (posts || []).map((post, index) => {
-            console.log('🎨 Rendering post', index, ':', { 
-              id: post?.id, 
-              title: post?.title?.substring(0, 50) 
+            console.log('🎨 Rendering post', index, ':', {
+              id: post?.id,
+              title: post?.title?.substring(0, 50),
+              comments: post?.comments,
+              hasCommentsField: 'comments' in (post || {}),
+              engagement: post?.engagement
             });
             
             const isExpanded = expandedPosts[post.id] || false;
@@ -978,7 +981,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       title="View Comments"
                     >
                       <MessageCircle className="w-5 h-5" />
-                      <span className="text-sm font-medium">{post.engagement?.comments || 0}</span>
+                      <span className="text-sm font-medium">{post.comments || 0}</span>
                     </button>
                     
                     {/* Saves count display */}

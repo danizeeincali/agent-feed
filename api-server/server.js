@@ -845,15 +845,28 @@ app.post('/api/v1/agent-posts', async (req, res) => {
     // Create work queue ticket for AVI orchestrator (Post-to-Ticket Integration)
     let ticket = null;
     try {
+      // Helper to sanitize content (remove null bytes that break PostgreSQL JSONB)
+      const sanitize = (str) => str ? str.replace(/\u0000/g, '') : '';
+
       ticket = await workQueueRepository.createTicket({
         user_id: userId,
         post_id: createdPost.id,
         post_content: createdPost.content,
         post_author: createdPost.author_agent,
         post_metadata: {
+          // Spread business metadata first (allows overrides)
+          ...metadata,
+
+          // Outcome posting metadata (for WorkContextExtractor)
+          // These fields enable outcome comment posting for post-originated tickets
+          type: 'post',
+          parent_post_id: createdPost.id,  // Post replies to itself (top-level comment)
+          parent_post_title: sanitize(createdPost.title) || '',
+          parent_post_content: sanitize(createdPost.content) || '',
+
+          // Existing metadata (override to ensure correctness)
           title: createdPost.title,
           tags: createdPost.tags || [],
-          ...metadata
         },
         assigned_agent: null, // Let orchestrator assign
         priority: 5 // Default medium priority
@@ -919,6 +932,88 @@ app.get('/api/v1/agent-posts', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to fetch agent posts',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/v1/agent-posts/:id
+ * Get a single agent post by ID
+ */
+app.get('/api/v1/agent-posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: 'Post ID is required'
+      });
+    }
+
+    // Get post from database
+    const post = await dbSelector.getPostById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      });
+    }
+
+    return res.json({
+      success: true,
+      version: "1.0",
+      data: post,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
+    });
+  } catch (error) {
+    console.error(`❌ Error in GET /api/v1/agent-posts/:id:`, error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch agent post',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * DELETE /api/v1/agent-posts/:id
+ * Delete an agent post by ID
+ */
+app.delete('/api/v1/agent-posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: 'Post ID is required'
+      });
+    }
+
+    // Check if post exists
+    const post = await dbSelector.getPostById(id);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        error: 'Post not found'
+      });
+    }
+
+    // Delete post from database
+    await dbSelector.deletePost(id);
+
+    return res.json({
+      success: true,
+      message: 'Post deleted successfully'
+    });
+  } catch (error) {
+    console.error(`❌ Error in DELETE /api/v1/agent-posts/:id:`, error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to delete agent post',
       details: error.message
     });
   }
@@ -1002,34 +1097,42 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
     console.log(`✅ Created comment ${createdComment.id} for post ${postId} in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}`);
 
     // Create work queue ticket for AVI orchestrator (Comment-to-Ticket Integration)
+    // CRITICAL: Check skipTicket parameter to prevent infinite loops
+    // When agents post outcomes, they set skipTicket=true to avoid creating new tickets
+    const skipTicket = req.body.skipTicket === true;
+
     let ticket = null;
-    try {
-      // Fetch parent post for context
-      const parentPost = await dbSelector.getPostById(postId);
+    if (!skipTicket) {
+      try {
+        // Fetch parent post for context
+        const parentPost = await dbSelector.getPostById(postId);
 
-      ticket = await workQueueRepository.createTicket({
-        user_id: userId,
-        post_id: createdComment.id, // Use comment ID as ticket identifier
-        post_content: createdComment.content,
-        post_author: createdComment.author_agent,
-        post_metadata: {
-          type: 'comment', // Discriminator for comment vs post
-          parent_post_id: postId,
-          parent_post_title: parentPost?.title || 'Unknown Post',
-          parent_post_content: parentPost?.content || '',
-          parent_comment_id: parent_id || null,
-          mentioned_users: mentioned_users || [],
-          depth: commentData.depth || 0
-        },
-        assigned_agent: null, // Let orchestrator assign
-        priority: 5 // Default medium priority
-      });
+        ticket = await workQueueRepository.createTicket({
+          user_id: userId,
+          post_id: createdComment.id, // Use comment ID as ticket identifier
+          post_content: createdComment.content,
+          post_author: createdComment.author_agent,
+          post_metadata: {
+            type: 'comment', // Discriminator for comment vs post
+            parent_post_id: postId,
+            parent_post_title: parentPost?.title || 'Unknown Post',
+            parent_post_content: parentPost?.content || '',
+            parent_comment_id: parent_id || null,
+            mentioned_users: mentioned_users || [],
+            depth: commentData.depth || 0
+          },
+          assigned_agent: null, // Let orchestrator assign
+          priority: 5 // Default medium priority
+        });
 
-      console.log(`✅ Work ticket created for comment: ticket-${ticket.id}`);
-    } catch (ticketError) {
-      console.error('❌ Failed to create work ticket for comment:', ticketError);
-      // Log error but don't fail the comment creation
-      // This maintains backward compatibility
+        console.log(`✅ Work ticket created for comment: ticket-${ticket.id}`);
+      } catch (ticketError) {
+        console.error('❌ Failed to create work ticket for comment:', ticketError);
+        // Log error but don't fail the comment creation
+        // This maintains backward compatibility
+      }
+    } else {
+      console.log(`⏭️  Skipping ticket creation for comment ${createdComment.id} (skipTicket=true)`);
     }
 
     res.status(201).json({

@@ -96,8 +96,23 @@ global.WebSocket = vi.fn().mockImplementation(() => ({
   CLOSED: 3
 }));
 
-// Set up fetch mock
-global.fetch = vi.fn();
+// Set up fetch - use real fetch for integration tests, mock for unit tests
+// This allows TDD tests to make real API calls
+if (process.env.USE_REAL_FETCH !== 'false') {
+  // Use node's fetch for real HTTP calls in tests
+  // @ts-ignore - undici fetch is available in Node 18+
+  global.fetch = global.fetch || fetch;
+} else {
+  // Mock fetch for isolated unit tests
+  global.fetch = vi.fn();
+}
+
+// Set up test environment variables for API access
+// Backend API is at http://127.0.0.1:3001/api
+if (typeof process !== 'undefined' && !process.env.VITE_API_BASE_URL) {
+  process.env.VITE_API_BASE_URL = 'http://127.0.0.1:3001/api';
+  console.log('🔧 Test environment: Set VITE_API_BASE_URL to', process.env.VITE_API_BASE_URL);
+}
 
 // Mock canvas context for xterm
 HTMLCanvasElement.prototype.getContext = vi.fn(() => ({

@@ -267,7 +267,12 @@ class WorkQueueRepository {
 
     const values = [status, limit, offset];
 
+    console.log(`🔍 [WorkQueueRepository] getAllPendingTickets query:`, { status, limit, offset });
     const result = await postgresManager.query(query, values);
+    console.log(`📊 [WorkQueueRepository] Query result: ${result.rows.length} tickets found`);
+    if (result.rows.length > 0) {
+      console.log(`   First ticket: ID=${result.rows[0].id}, status=${result.rows[0].status}, priority=${result.rows[0].priority}`);
+    }
     return result.rows;
   }
 

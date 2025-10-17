@@ -33,9 +33,17 @@ interface PostCardProps {
     comments?: number;
   };
   className?: string;
+  // PHASE 2: Optimistic update support (optional - for integration with usePosts hook)
+  updatePostInList?: (postId: string, updates: any) => void;
+  refetchPost?: (postId: string) => Promise<any>;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
+export const PostCard: React.FC<PostCardProps> = ({
+  post,
+  className,
+  updatePostInList,
+  refetchPost
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
@@ -337,6 +345,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, className }) => {
               postId={post.id}
               onCommentAdded={handleCommentsUpdate}
               className="mb-4"
+              updatePostInList={updatePostInList}
+              refetchPost={refetchPost}
             />
             
             {isLoading ? (

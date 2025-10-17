@@ -466,3 +466,494 @@
 {"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":879,"service":"agent-feed","sessionId":"worker_anonymous_500_1760411315686","ticketId":"500","timestamp":"2025-10-14 03:08:35","version":"1.0.0"}
 {"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_500_1760411315686","success":true,"ticketId":"500","timestamp":"2025-10-14 03:08:47","version":"1.0.0"}
 {"contentLength":153,"duration":12155,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"500","timestamp":"2025-10-14 03:08:47","tokensUsed":2665,"version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-14 04:00:21","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-14 04:33:05","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 19:17:48","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 19:21:06","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 19:23:16","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 19:23:16","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 504","service":"agent-feed","timestamp":"2025-10-16 19:23:16","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"504","timestamp":"2025-10-16 19:23:16","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":85,"requestPreview":"FINAL TEST: Create file FINAL_SUCCESS.txt with text: Agent outcome posting is WORKING","service":"agent-feed","ticketId":"504","timestamp":"2025-10-16 19:23:16","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":880,"service":"agent-feed","sessionId":"worker_anonymous_504_1760642596244","ticketId":"504","timestamp":"2025-10-16 19:23:16","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_504_1760642596244","success":true,"ticketId":"504","timestamp":"2025-10-16 19:23:27","version":"1.0.0"}
+{"contentLength":179,"duration":11454,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"504","timestamp":"2025-10-16 19:23:27","tokensUsed":1143,"version":"1.0.0"}
+{"level":"info","message":"Outcome is post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"504","timestamp":"2025-10-16 19:23:27","version":"1.0.0"}
+{"contentLength":286,"level":"info","message":"Posting outcome as comment reply","postId":"1","service":"agent-feed","ticketId":"504","timestamp":"2025-10-16 19:23:27","version":"1.0.0"}
+{"contentLength":286,"level":"info","message":"Creating comment","postId":"1","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 19:23:27","userId":"anonymous","version":"1.0.0"}
+{"attempt":1,"error":"Author is required","errorCode":"ERR_BAD_REQUEST","httpStatus":400,"level":"error","message":"createComment failed with non-retryable error","service":"agent-feed","timestamp":"2025-10-16 19:23:27","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to create comment after all retries","postId":"1","retryAttempts":3,"service":"agent-feed","timestamp":"2025-10-16 19:23:27","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to post comment reply","service":"agent-feed","ticketId":"504","timestamp":"2025-10-16 19:23:27","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to post outcome (non-fatal)","service":"agent-feed","ticketId":"504","timestamp":"2025-10-16 19:23:27","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 19:26:22","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 19:31:02","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 19:31:02","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 505","service":"agent-feed","timestamp":"2025-10-16 19:31:02","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"505","timestamp":"2025-10-16 19:31:02","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":152,"requestPreview":"COMPLETE TEST: Create a file called COMPLETE_OUTCOME_TEST.txt with the text: The agent outcome posti","service":"agent-feed","ticketId":"505","timestamp":"2025-10-16 19:31:02","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":947,"service":"agent-feed","sessionId":"worker_anonymous_505_1760643062551","ticketId":"505","timestamp":"2025-10-16 19:31:02","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_505_1760643062551","success":true,"ticketId":"505","timestamp":"2025-10-16 19:31:11","version":"1.0.0"}
+{"contentLength":140,"duration":9059,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"505","timestamp":"2025-10-16 19:31:11","tokensUsed":1115,"version":"1.0.0"}
+{"level":"info","message":"Outcome is post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"505","timestamp":"2025-10-16 19:31:11","version":"1.0.0"}
+{"contentLength":293,"level":"info","message":"Posting outcome as comment reply","postId":"1","service":"agent-feed","ticketId":"505","timestamp":"2025-10-16 19:31:11","version":"1.0.0"}
+{"contentLength":293,"level":"info","message":"Creating comment","postId":"1","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 19:31:11","userId":"anonymous","version":"1.0.0"}
+{"attempt":1,"error":"Author is required","errorCode":"ERR_BAD_REQUEST","httpStatus":400,"level":"error","message":"createComment failed with non-retryable error","service":"agent-feed","timestamp":"2025-10-16 19:31:11","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to create comment after all retries","postId":"1","retryAttempts":3,"service":"agent-feed","timestamp":"2025-10-16 19:31:11","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to post comment reply","service":"agent-feed","ticketId":"505","timestamp":"2025-10-16 19:31:11","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to post outcome (non-fatal)","service":"agent-feed","ticketId":"505","timestamp":"2025-10-16 19:31:11","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 19:43:15","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 19:45:15","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 19:45:15","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 506","service":"agent-feed","timestamp":"2025-10-16 19:45:15","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:15","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":121,"requestPreview":"LOGGING TEST: Create file LOGGING_TEST.txt with text: Comprehensive logging is now active and outcom","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:15","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":916,"service":"agent-feed","sessionId":"worker_anonymous_506_1760643915235","ticketId":"506","timestamp":"2025-10-16 19:45:15","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_506_1760643915235","success":true,"ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"contentLength":179,"duration":9371,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","tokensUsed":1147,"version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Checking outcome posting","postingEnabled":true,"service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Outcome posting IS enabled, calling postOutcomeIfWorthy","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":true,"service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","toolsUsed":["Write"],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"isWorthy":true,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"level":"info","message":"✅ [postOutcomeIfWorthy] Outcome IS post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"contentLength":284,"level":"info","message":"Posting outcome as comment reply","postId":"1","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"contentLength":284,"level":"info","message":"Creating comment","postId":"1","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 19:45:24","userId":"anonymous","version":"1.0.0"}
+{"attempt":1,"error":"Author is required","errorCode":"ERR_BAD_REQUEST","httpStatus":400,"level":"error","message":"createComment failed with non-retryable error","service":"agent-feed","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to create comment after all retries","postId":"1","retryAttempts":3,"service":"agent-feed","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to post comment reply","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"error":"Request failed with status code 400","level":"error","message":"Failed to post outcome (non-fatal)","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"level":"info","message":"✅ [ClaudeCodeWorker] postOutcomeIfWorthy completed successfully","service":"agent-feed","ticketId":"506","timestamp":"2025-10-16 19:45:24","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 19:47:35","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 19:49:40","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 19:49:40","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 507","service":"agent-feed","timestamp":"2025-10-16 19:49:40","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:40","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":94,"requestPreview":"SUCCESS TEST: Create file SUCCESS_TEST.txt with text: Outcome posting is now fixed and working","service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:40","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":889,"service":"agent-feed","sessionId":"worker_anonymous_507_1760644180241","ticketId":"507","timestamp":"2025-10-16 19:49:40","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_507_1760644180241","success":true,"ticketId":"507","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"contentLength":238,"duration":11293,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:51","tokensUsed":1187,"version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Checking outcome posting","postingEnabled":true,"service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Outcome posting IS enabled, calling postOutcomeIfWorthy","service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":true,"service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:51","toolsUsed":["Write"],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"isWorthy":true,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"level":"info","message":"✅ [postOutcomeIfWorthy] Outcome IS post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"507","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"contentLength":431,"level":"info","message":"Posting outcome as comment reply","postId":"1","service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"author":"default","contentLength":431,"level":"info","message":"Creating comment","postId":"1","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 19:49:51","userId":"anonymous","version":"1.0.0"}
+{"commentId":"d1c78220-9902-41a8-8b9f-4c3a546a3bdd","level":"info","message":"Comment created successfully","postId":"1","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"level":"info","message":"Successfully posted outcome as comment","postId":"1","service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"level":"info","message":"✅ [ClaudeCodeWorker] postOutcomeIfWorthy completed successfully","service":"agent-feed","ticketId":"507","timestamp":"2025-10-16 19:49:51","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 20:03:44","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 20:06:19","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 20:06:19","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 508","service":"agent-feed","timestamp":"2025-10-16 20:06:19","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:19","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":230,"requestPreview":"I want to know what files are in you root workspace directory. please check that then create a file ","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:19","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":1025,"service":"agent-feed","sessionId":"worker_anonymous_508_1760645179215","ticketId":"508","timestamp":"2025-10-16 20:06:19","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_508_1760645179215","success":true,"ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"contentLength":701,"duration":28324,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","tokensUsed":3959,"version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Checking outcome posting","postingEnabled":true,"service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Outcome posting IS enabled, calling postOutcomeIfWorthy","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":true,"service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","toolsUsed":["Bash","Write"],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"isWorthy":true,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"level":"info","message":"✅ [postOutcomeIfWorthy] Outcome IS post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"hasFeedItemId":true,"hasMetadata":true,"level":"warn","message":"No parent_post_id found for non-autonomous ticket","originType":"post","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"error":"Cannot determine reply target: missing parent_post_id","level":"error","message":"Failed to post comment reply","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"error":"Cannot determine reply target: missing parent_post_id","level":"error","message":"Failed to post outcome (non-fatal)","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"level":"info","message":"✅ [ClaudeCodeWorker] postOutcomeIfWorthy completed successfully","service":"agent-feed","ticketId":"508","timestamp":"2025-10-16 20:06:47","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 20:22:39","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 20:23:19","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 20:23:19","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 509","service":"agent-feed","timestamp":"2025-10-16 20:23:19","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:23:19","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":161,"requestPreview":"Please find all TypeScript files in the src directory and create a markdown file called typescript_f","service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:23:19","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":956,"service":"agent-feed","sessionId":"worker_anonymous_509_1760646199692","ticketId":"509","timestamp":"2025-10-16 20:23:19","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_509_1760646199692","success":true,"ticketId":"509","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"contentLength":920,"duration":59382,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:24:19","tokensUsed":9988,"version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Checking outcome posting","postingEnabled":true,"service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Outcome posting IS enabled, calling postOutcomeIfWorthy","service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":true,"service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:24:19","toolsUsed":["TodoWrite","Glob","Bash","Write"],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"isWorthy":true,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"level":"info","message":"✅ [postOutcomeIfWorthy] Outcome IS post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"509","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"contentLength":415,"level":"info","message":"Posting outcome as comment reply","postId":"prod-post-c3f6e7bd-8b90-4aea-9fef-d10b66014112","service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"author":"default","contentLength":415,"level":"info","message":"Creating comment","postId":"prod-post-c3f6e7bd-8b90-4aea-9fef-d10b66014112","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 20:24:19","userId":"anonymous","version":"1.0.0"}
+{"commentId":"fc234ced-0e22-487f-9566-f6dc151d5e65","level":"info","message":"Comment created successfully","postId":"prod-post-c3f6e7bd-8b90-4aea-9fef-d10b66014112","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"level":"info","message":"Successfully posted outcome as comment","postId":"prod-post-c3f6e7bd-8b90-4aea-9fef-d10b66014112","service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"level":"info","message":"✅ [ClaudeCodeWorker] postOutcomeIfWorthy completed successfully","service":"agent-feed","ticketId":"509","timestamp":"2025-10-16 20:24:19","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 20:24:59","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 20:24:59","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 510","service":"agent-feed","timestamp":"2025-10-16 20:24:59","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:24:59","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":99,"requestPreview":"REGRESSION TEST: Create file regression_test.txt with text: Comment-to-ticket still works after fix","service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:24:59","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":894,"service":"agent-feed","sessionId":"worker_anonymous_510_1760646299705","ticketId":"510","timestamp":"2025-10-16 20:24:59","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_510_1760646299705","success":true,"ticketId":"510","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"contentLength":113,"duration":9059,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:25:08","tokensUsed":1079,"version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Checking outcome posting","postingEnabled":true,"service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Outcome posting IS enabled, calling postOutcomeIfWorthy","service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":true,"service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:25:08","toolsUsed":["Write"],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"isWorthy":true,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"level":"info","message":"✅ [postOutcomeIfWorthy] Outcome IS post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"510","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"contentLength":255,"level":"info","message":"Posting outcome as comment reply","postId":"1","service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"author":"default","contentLength":255,"level":"info","message":"Creating comment","postId":"1","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 20:25:08","userId":"anonymous","version":"1.0.0"}
+{"commentId":"6ab0cb44-fe72-49a7-8392-4b5a64a2c6ac","level":"info","message":"Comment created successfully","postId":"1","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"level":"info","message":"Successfully posted outcome as comment","postId":"1","service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"level":"info","message":"✅ [ClaudeCodeWorker] postOutcomeIfWorthy completed successfully","service":"agent-feed","ticketId":"510","timestamp":"2025-10-16 20:25:08","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector","service":"agent-feed","timestamp":"2025-10-16 20:30:09","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 20:31:54","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 20:31:54","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 511","service":"agent-feed","timestamp":"2025-10-16 20:31:54","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:31:54","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":230,"requestPreview":"I want to know what files are in you root workspace directory. please check that then create a file ","service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:31:54","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":1025,"service":"agent-feed","sessionId":"worker_anonymous_511_1760646714468","ticketId":"511","timestamp":"2025-10-16 20:31:54","version":"1.0.0"}
+{"level":"info","message":"Claude Code SDK response received","responsesCount":1,"service":"agent-feed","sessionId":"worker_anonymous_511_1760646714468","success":true,"ticketId":"511","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"contentLength":666,"duration":28761,"level":"info","message":"Ticket execution completed successfully","service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:32:23","tokensUsed":3951,"version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Checking outcome posting","postingEnabled":true,"service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"level":"info","message":"📬 [ClaudeCodeWorker] Outcome posting IS enabled, calling postOutcomeIfWorthy","service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":true,"service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:32:23","toolsUsed":["Bash","Write"],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"isWorthy":true,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"level":"info","message":"✅ [postOutcomeIfWorthy] Outcome IS post-worthy, preparing to post","service":"agent-feed","success":true,"ticketId":"511","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"contentLength":291,"level":"info","message":"Posting outcome as comment reply","postId":"prod-post-89d168bc-a114-4733-8cd0-9a6341e6fe83","service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"author":"default","contentLength":291,"level":"info","message":"Creating comment","postId":"prod-post-89d168bc-a114-4733-8cd0-9a6341e6fe83","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 20:32:23","userId":"anonymous","version":"1.0.0"}
+{"commentId":"5d66112d-a83a-4f39-9304-177051d9ee5f","level":"info","message":"Comment created successfully","postId":"prod-post-89d168bc-a114-4733-8cd0-9a6341e6fe83","service":"agent-feed","skipTicket":true,"timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"level":"info","message":"Successfully posted outcome as comment","postId":"prod-post-89d168bc-a114-4733-8cd0-9a6341e6fe83","service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"level":"info","message":"✅ [ClaudeCodeWorker] postOutcomeIfWorthy completed successfully","service":"agent-feed","ticketId":"511","timestamp":"2025-10-16 20:32:23","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 22:22:47","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 512","service":"agent-feed","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:22:47","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":67,"requestPreview":"This post is used for testing comment counter refetch functionality","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":862,"service":"agent-feed","sessionId":"worker_anonymous_512_1760653367821","ticketId":"512","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 22:22:47","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 513","service":"agent-feed","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:22:47","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":35,"requestPreview":"Test comment for refetch validation","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":830,"service":"agent-feed","sessionId":"worker_anonymous_513_1760653367859","ticketId":"513","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 22:22:47","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 514","service":"agent-feed","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:22:47","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":17,"requestPreview":"Testing isolation","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":812,"service":"agent-feed","sessionId":"worker_anonymous_514_1760653367878","ticketId":"514","timestamp":"2025-10-16 22:22:47","version":"1.0.0"}
+{"duration":60011,"error":"Claude Code SDK timeout after 60000ms","level":"error","message":"Ticket execution failed","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":false,"service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:23:47","toolsUsed":[],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"isWorthy":false,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"level":"info","message":"⏭️  [postOutcomeIfWorthy] Outcome NOT post-worthy, skipping","service":"agent-feed","success":false,"ticketId":"512","timestamp":"2025-10-16 22:23:47","toolsUsed":[],"version":"1.0.0"}
+{"duration":60004,"error":"Claude Code SDK timeout after 60000ms","level":"error","message":"Ticket execution failed","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":false,"service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:23:47","toolsUsed":[],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"isWorthy":false,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"level":"info","message":"⏭️  [postOutcomeIfWorthy] Outcome NOT post-worthy, skipping","service":"agent-feed","success":false,"ticketId":"513","timestamp":"2025-10-16 22:23:47","toolsUsed":[],"version":"1.0.0"}
+{"duration":60004,"error":"Claude Code SDK timeout after 60000ms","level":"error","message":"Ticket execution failed","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":false,"service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:23:47","toolsUsed":[],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"isWorthy":false,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 22:23:47","version":"1.0.0"}
+{"level":"info","message":"⏭️  [postOutcomeIfWorthy] Outcome NOT post-worthy, skipping","service":"agent-feed","success":false,"ticketId":"514","timestamp":"2025-10-16 22:23:47","toolsUsed":[],"version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 22:23:52","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 512","service":"agent-feed","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:23:52","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":67,"requestPreview":"This post is used for testing comment counter refetch functionality","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":862,"service":"agent-feed","sessionId":"worker_anonymous_512_1760653432863","ticketId":"512","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 22:23:52","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 513","service":"agent-feed","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:23:52","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":35,"requestPreview":"Test comment for refetch validation","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":830,"service":"agent-feed","sessionId":"worker_anonymous_513_1760653432874","ticketId":"513","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"baseUrl":"http://localhost:3001/api","level":"info","message":"AgentFeedAPIClient initialized","retryAttempts":3,"retryDelay":1000,"service":"agent-feed","timeout":10000,"timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"ClaudeCodeWorker initialized","model":"claude-sonnet-4-20250514","outcomePostingEnabled":true,"service":"agent-feed","timeout":60000,"timestamp":"2025-10-16 22:23:52","version":"1.0.0","workingDirectory":"/workspaces/agent-feed/prod/agent_workspace"}
+{"level":"info","message":"Using ClaudeCodeWorker for ticket 514","service":"agent-feed","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"agentName":"default","level":"info","message":"ClaudeCodeWorker executing ticket","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:23:52","userId":"anonymous","version":"1.0.0"}
+{"level":"info","message":"User request extracted","requestLength":17,"requestPreview":"Testing isolation","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"endpoint":"http://localhost:3001/api/claude-code/streaming-chat","level":"info","message":"Calling Claude Code SDK","promptLength":812,"service":"agent-feed","sessionId":"worker_anonymous_514_1760653432886","ticketId":"514","timestamp":"2025-10-16 22:23:52","version":"1.0.0"}
+{"duration":60003,"error":"Claude Code SDK timeout after 60000ms","level":"error","message":"Ticket execution failed","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":false,"service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:24:52","toolsUsed":[],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"isWorthy":false,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"level":"info","message":"⏭️  [postOutcomeIfWorthy] Outcome NOT post-worthy, skipping","service":"agent-feed","success":false,"ticketId":"512","timestamp":"2025-10-16 22:24:52","toolsUsed":[],"version":"1.0.0"}
+{"duration":60003,"error":"Claude Code SDK timeout after 60000ms","level":"error","message":"Ticket execution failed","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":false,"service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:24:52","toolsUsed":[],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"isWorthy":false,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"level":"info","message":"⏭️  [postOutcomeIfWorthy] Outcome NOT post-worthy, skipping","service":"agent-feed","success":false,"ticketId":"513","timestamp":"2025-10-16 22:24:52","toolsUsed":[],"version":"1.0.0"}
+{"duration":60003,"error":"Claude Code SDK timeout after 60000ms","level":"error","message":"Ticket execution failed","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] START","resultSuccess":false,"service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:24:52","toolsUsed":[],"version":"1.0.0"}
+{"level":"info","message":"🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()","service":"agent-feed","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"isWorthy":false,"level":"info","message":"🔍 [postOutcomeIfWorthy] isPostWorthy result","service":"agent-feed","timestamp":"2025-10-16 22:24:52","version":"1.0.0"}
+{"level":"info","message":"⏭️  [postOutcomeIfWorthy] Outcome NOT post-worthy, skipping","service":"agent-feed","success":false,"ticketId":"514","timestamp":"2025-10-16 22:24:52","toolsUsed":[],"version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 512","service":"agent-feed","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:25:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"512","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"512","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"duration":8,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"512","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 513","service":"agent-feed","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:25:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"513","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"513","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"duration":2,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"513","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 514","service":"agent-feed","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:25:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"514","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"514","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"514","timestamp":"2025-10-16 22:25:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 515","service":"agent-feed","timestamp":"2025-10-16 22:25:53","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"515","timestamp":"2025-10-16 22:25:53","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"515","timestamp":"2025-10-16 22:25:53","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"515","timestamp":"2025-10-16 22:25:53","version":"1.0.0"}
+{"duration":12,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"515","timestamp":"2025-10-16 22:25:53","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 515","service":"agent-feed","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"515","timestamp":"2025-10-16 22:25:58","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"515","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"515","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"duration":2,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"515","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 516","service":"agent-feed","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"516","timestamp":"2025-10-16 22:25:58","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"516","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"516","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"516","timestamp":"2025-10-16 22:25:58","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 515","service":"agent-feed","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"515","timestamp":"2025-10-16 22:26:03","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"515","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"515","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"515","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 516","service":"agent-feed","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"516","timestamp":"2025-10-16 22:26:03","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"516","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"516","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"516","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 517","service":"agent-feed","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"517","timestamp":"2025-10-16 22:26:03","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"517","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"517","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"517","timestamp":"2025-10-16 22:26:03","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 516","service":"agent-feed","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"516","timestamp":"2025-10-16 22:26:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"516","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"516","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"duration":2,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"516","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 517","service":"agent-feed","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"517","timestamp":"2025-10-16 22:26:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"517","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"517","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"517","timestamp":"2025-10-16 22:26:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 517","service":"agent-feed","timestamp":"2025-10-16 22:26:14","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"517","timestamp":"2025-10-16 22:26:14","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"517","timestamp":"2025-10-16 22:26:14","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"517","timestamp":"2025-10-16 22:26:14","version":"1.0.0"}
+{"duration":3,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"517","timestamp":"2025-10-16 22:26:14","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 518","service":"agent-feed","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"518","timestamp":"2025-10-16 22:26:23","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"518","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"518","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"duration":5,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"518","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 519","service":"agent-feed","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"519","timestamp":"2025-10-16 22:26:23","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"519","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"519","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"duration":3,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"519","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 520","service":"agent-feed","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"520","timestamp":"2025-10-16 22:26:23","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"520","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"520","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"duration":2,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"520","timestamp":"2025-10-16 22:26:23","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 518","service":"agent-feed","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"518","timestamp":"2025-10-16 22:26:28","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"518","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"518","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"duration":9,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"518","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 519","service":"agent-feed","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"519","timestamp":"2025-10-16 22:26:28","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"519","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"519","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"519","timestamp":"2025-10-16 22:26:28","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 520","service":"agent-feed","timestamp":"2025-10-16 22:26:29","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"520","timestamp":"2025-10-16 22:26:29","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"520","timestamp":"2025-10-16 22:26:29","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"520","timestamp":"2025-10-16 22:26:29","version":"1.0.0"}
+{"duration":7,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"520","timestamp":"2025-10-16 22:26:29","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 518","service":"agent-feed","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"518","timestamp":"2025-10-16 22:26:33","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"518","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"518","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"518","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 519","service":"agent-feed","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"519","timestamp":"2025-10-16 22:26:33","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"519","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"519","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"519","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 520","service":"agent-feed","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"520","timestamp":"2025-10-16 22:26:33","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"520","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"520","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"duration":2,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"520","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 521","service":"agent-feed","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"521","timestamp":"2025-10-16 22:26:33","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"521","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"521","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"521","timestamp":"2025-10-16 22:26:33","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 521","service":"agent-feed","timestamp":"2025-10-16 22:26:38","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"521","timestamp":"2025-10-16 22:26:38","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"521","timestamp":"2025-10-16 22:26:38","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"521","timestamp":"2025-10-16 22:26:38","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"521","timestamp":"2025-10-16 22:26:38","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 521","service":"agent-feed","timestamp":"2025-10-16 22:26:43","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"521","timestamp":"2025-10-16 22:26:43","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"521","timestamp":"2025-10-16 22:26:43","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"521","timestamp":"2025-10-16 22:26:43","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"521","timestamp":"2025-10-16 22:26:43","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 522","service":"agent-feed","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"522","timestamp":"2025-10-16 22:27:28","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"522","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"522","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"522","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 523","service":"agent-feed","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"523","timestamp":"2025-10-16 22:27:28","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"523","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"523","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"523","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 524","service":"agent-feed","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"524","timestamp":"2025-10-16 22:27:28","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"524","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"524","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"524","timestamp":"2025-10-16 22:27:28","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 522","service":"agent-feed","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"522","timestamp":"2025-10-16 22:27:33","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"522","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"522","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"522","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 523","service":"agent-feed","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"523","timestamp":"2025-10-16 22:27:33","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"523","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"523","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"duration":2,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"523","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 524","service":"agent-feed","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"524","timestamp":"2025-10-16 22:27:33","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"524","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"524","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"524","timestamp":"2025-10-16 22:27:33","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 522","service":"agent-feed","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"522","timestamp":"2025-10-16 22:27:38","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"522","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"522","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"522","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 523","service":"agent-feed","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"523","timestamp":"2025-10-16 22:27:38","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"523","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"523","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"523","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 524","service":"agent-feed","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"524","timestamp":"2025-10-16 22:27:38","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"524","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"524","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"524","timestamp":"2025-10-16 22:27:38","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 525","service":"agent-feed","timestamp":"2025-10-16 22:27:43","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"525","timestamp":"2025-10-16 22:27:43","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"525","timestamp":"2025-10-16 22:27:43","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"525","timestamp":"2025-10-16 22:27:43","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"525","timestamp":"2025-10-16 22:27:43","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 525","service":"agent-feed","timestamp":"2025-10-16 22:27:48","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"525","timestamp":"2025-10-16 22:27:48","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"525","timestamp":"2025-10-16 22:27:48","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"525","timestamp":"2025-10-16 22:27:48","version":"1.0.0"}
+{"duration":5,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"525","timestamp":"2025-10-16 22:27:48","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 525","service":"agent-feed","timestamp":"2025-10-16 22:27:53","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"525","timestamp":"2025-10-16 22:27:53","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"525","timestamp":"2025-10-16 22:27:53","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"525","timestamp":"2025-10-16 22:27:53","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"525","timestamp":"2025-10-16 22:27:53","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 526","service":"agent-feed","timestamp":"2025-10-16 22:28:38","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"526","timestamp":"2025-10-16 22:28:38","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"526","timestamp":"2025-10-16 22:28:38","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"526","timestamp":"2025-10-16 22:28:38","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"526","timestamp":"2025-10-16 22:28:38","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 526","service":"agent-feed","timestamp":"2025-10-16 22:28:43","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"526","timestamp":"2025-10-16 22:28:43","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"526","timestamp":"2025-10-16 22:28:43","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"526","timestamp":"2025-10-16 22:28:43","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"526","timestamp":"2025-10-16 22:28:43","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 526","service":"agent-feed","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"526","timestamp":"2025-10-16 22:28:48","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"526","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"526","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"526","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 527","service":"agent-feed","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"527","timestamp":"2025-10-16 22:28:48","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"527","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"527","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"527","timestamp":"2025-10-16 22:28:48","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 527","service":"agent-feed","timestamp":"2025-10-16 22:28:53","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"527","timestamp":"2025-10-16 22:28:53","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"527","timestamp":"2025-10-16 22:28:53","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"527","timestamp":"2025-10-16 22:28:53","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"527","timestamp":"2025-10-16 22:28:53","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 527","service":"agent-feed","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"527","timestamp":"2025-10-16 22:28:58","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"527","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"527","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"527","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 528","service":"agent-feed","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"528","timestamp":"2025-10-16 22:28:58","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"528","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"528","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"528","timestamp":"2025-10-16 22:28:58","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 528","service":"agent-feed","timestamp":"2025-10-16 22:29:03","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"528","timestamp":"2025-10-16 22:29:03","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"528","timestamp":"2025-10-16 22:29:03","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"528","timestamp":"2025-10-16 22:29:03","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"528","timestamp":"2025-10-16 22:29:03","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 528","service":"agent-feed","timestamp":"2025-10-16 22:29:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"528","timestamp":"2025-10-16 22:29:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"528","timestamp":"2025-10-16 22:29:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"528","timestamp":"2025-10-16 22:29:08","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"528","timestamp":"2025-10-16 22:29:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 529","service":"agent-feed","timestamp":"2025-10-16 22:29:13","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"529","timestamp":"2025-10-16 22:29:13","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"529","timestamp":"2025-10-16 22:29:13","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"529","timestamp":"2025-10-16 22:29:13","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"529","timestamp":"2025-10-16 22:29:13","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 529","service":"agent-feed","timestamp":"2025-10-16 22:29:18","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"529","timestamp":"2025-10-16 22:29:18","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"529","timestamp":"2025-10-16 22:29:18","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"529","timestamp":"2025-10-16 22:29:18","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"529","timestamp":"2025-10-16 22:29:18","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 529","service":"agent-feed","timestamp":"2025-10-16 22:29:23","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"529","timestamp":"2025-10-16 22:29:23","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"529","timestamp":"2025-10-16 22:29:23","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"529","timestamp":"2025-10-16 22:29:23","version":"1.0.0"}
+{"duration":0,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"529","timestamp":"2025-10-16 22:29:23","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 530","service":"agent-feed","timestamp":"2025-10-16 22:29:58","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"530","timestamp":"2025-10-16 22:29:58","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"530","timestamp":"2025-10-16 22:29:58","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"530","timestamp":"2025-10-16 22:29:58","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"530","timestamp":"2025-10-16 22:29:58","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 530","service":"agent-feed","timestamp":"2025-10-16 22:30:03","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"530","timestamp":"2025-10-16 22:30:03","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"530","timestamp":"2025-10-16 22:30:03","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"530","timestamp":"2025-10-16 22:30:03","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"530","timestamp":"2025-10-16 22:30:03","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 530","service":"agent-feed","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"530","timestamp":"2025-10-16 22:30:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"530","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"530","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"530","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 531","service":"agent-feed","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"531","timestamp":"2025-10-16 22:30:08","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"531","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"531","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"531","timestamp":"2025-10-16 22:30:08","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 531","service":"agent-feed","timestamp":"2025-10-16 22:30:13","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"531","timestamp":"2025-10-16 22:30:13","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"531","timestamp":"2025-10-16 22:30:13","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"531","timestamp":"2025-10-16 22:30:13","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"531","timestamp":"2025-10-16 22:30:13","version":"1.0.0"}
+{"level":"info","message":"Using UnifiedAgentWorker for ticket 531","service":"agent-feed","timestamp":"2025-10-16 22:30:18","version":"1.0.0"}
+{"level":"info","message":"UnifiedAgentWorker executing ticket","service":"agent-feed","ticketId":"531","timestamp":"2025-10-16 22:30:18","userId":"anonymous","version":"1.0.0"}
+{"confidence":0.5,"level":"info","message":"Task type detected","service":"agent-feed","taskType":"rss_feed","ticketId":"531","timestamp":"2025-10-16 22:30:18","version":"1.0.0"}
+{"level":"info","message":"Executing RSS feed processing","service":"agent-feed","ticketId":"531","timestamp":"2025-10-16 22:30:18","version":"1.0.0"}
+{"duration":1,"level":"info","message":"Ticket execution completed","service":"agent-feed","success":false,"ticketId":"531","timestamp":"2025-10-16 22:30:18","version":"1.0.0"}

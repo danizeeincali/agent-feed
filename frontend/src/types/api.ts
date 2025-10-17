@@ -70,6 +70,8 @@ export interface AgentPost {
   category: string;
   priority: 'low' | 'medium' | 'high' | 'urgent';
   attachments?: Attachment[];
+  // Top-level comment count (API returns this at root level, not in engagement)
+  comments?: number;
 }
 
 export interface PostMetadata {

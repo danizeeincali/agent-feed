@@ -10,6 +10,10 @@ import type { DatabaseManager } from '../types/database-manager';
 import type { WorkTicket } from '../types/work-ticket';
 import type { WorkerResult } from '../types/worker';
 import logger from '../utils/logger';
+import { AgentFeedAPIClient } from '../utils/agent-feed-api-client';
+import { OutcomeDetector } from '../utils/outcome-detector';
+import { OutcomeFormatter } from '../utils/outcome-formatter';
+import { extractContext, getReplyTarget } from '../utils/work-context-extractor';
 
 /**
  * Configuration for Claude Code SDK worker
@@ -64,6 +68,10 @@ interface ClaudeCodeResponse {
 export class ClaudeCodeWorker {
   private db: DatabaseManager;
   private config: ClaudeCodeConfig;
+  private apiClient: AgentFeedAPIClient;
+  private outcomeDetector: OutcomeDetector;
+  private outcomeFormatter: OutcomeFormatter;
+  private postingEnabled: boolean;
 
   constructor(db: DatabaseManager, config?: Partial<ClaudeCodeConfig>) {
     this.db = db;
@@ -82,11 +90,25 @@ export class ClaudeCodeWorker {
       enableFallback: config?.enableFallback !== false,
     };
 
+    // Initialize outcome posting components
+    this.apiClient = new AgentFeedAPIClient({
+      baseUrl: process.env.AGENT_FEED_API_URL || 'http://localhost:3001/api',
+      timeout: parseInt(process.env.AGENT_FEED_API_TIMEOUT || '10000'),
+      retryAttempts: parseInt(process.env.AGENT_FEED_API_RETRY_ATTEMPTS || '3'),
+      retryDelay: parseInt(process.env.AGENT_FEED_API_RETRY_DELAY || '1000'),
+    });
+    this.outcomeDetector = new OutcomeDetector();
+    this.outcomeFormatter = new OutcomeFormatter();
+
+    // Feature flag for outcome posting
+    this.postingEnabled = process.env.ENABLE_OUTCOME_POSTING !== 'false';
+
     logger.info('ClaudeCodeWorker initialized', {
       endpoint: this.config.endpoint,
       workingDirectory: this.config.workingDirectory,
       model: this.config.model,
       timeout: this.config.timeout,
+      outcomePostingEnabled: this.postingEnabled,
     });
   }
 
@@ -135,7 +157,7 @@ export class ClaudeCodeWorker {
         contentLength: result.content.length,
       });
 
-      return {
+      const workerResult: WorkerResult = {
         success: true,
         output: {
           content: result.content,
@@ -146,6 +168,36 @@ export class ClaudeCodeWorker {
         duration,
       };
 
+      // Post outcome if worthy (Phase 2 & 3 integration)
+      logger.info('📬 [ClaudeCodeWorker] Checking outcome posting', {
+        ticketId: ticket.id,
+        postingEnabled: this.postingEnabled,
+      });
+
+      if (this.postingEnabled) {
+        logger.info('📬 [ClaudeCodeWorker] Outcome posting IS enabled, calling postOutcomeIfWorthy', {
+          ticketId: ticket.id,
+        });
+        try {
+          await this.postOutcomeIfWorthy(workerResult, ticket);
+          logger.info('✅ [ClaudeCodeWorker] postOutcomeIfWorthy completed successfully', {
+            ticketId: ticket.id,
+          });
+        } catch (postError) {
+          logger.error('❌ [ClaudeCodeWorker] postOutcomeIfWorthy FAILED', {
+            ticketId: ticket.id,
+            error: postError instanceof Error ? postError.message : String(postError),
+            stack: postError instanceof Error ? postError.stack : undefined,
+          });
+        }
+      } else {
+        logger.info('⏭️  [ClaudeCodeWorker] Outcome posting DISABLED, skipping', {
+          ticketId: ticket.id,
+        });
+      }
+
+      return workerResult;
+
     } catch (error) {
       const duration = Date.now() - startTime;
 
@@ -155,12 +207,19 @@ export class ClaudeCodeWorker {
         duration,
       });
 
-      return {
+      const workerResult: WorkerResult = {
         success: false,
         error: error as Error,
         tokensUsed: 0,
         duration,
       };
+
+      // Post failure outcome if worthy (configurable)
+      if (this.postingEnabled) {
+        await this.postOutcomeIfWorthy(workerResult, ticket);
+      }
+
+      return workerResult;
     }
   }
 
@@ -459,5 +518,157 @@ export class ClaudeCodeWorker {
     });
 
     return Array.from(tools);
+  }
+
+  /**
+   * Post outcome to agent feed if it's worthy (Phase 2 & 3: Outcome Posting)
+   */
+  private async postOutcomeIfWorthy(result: WorkerResult, ticket: WorkTicket): Promise<void> {
+    try {
+      logger.info('🔍 [postOutcomeIfWorthy] START', {
+        ticketId: ticket.id,
+        resultSuccess: result.success,
+        toolsUsed: result.output?.toolsUsed || [],
+      });
+
+      // Check if outcome is post-worthy
+      logger.info('🔍 [postOutcomeIfWorthy] Calling outcomeDetector.isPostWorthy()');
+      const isWorthy = this.outcomeDetector.isPostWorthy(result, ticket);
+      logger.info('🔍 [postOutcomeIfWorthy] isPostWorthy result', { isWorthy });
+
+      if (!isWorthy) {
+        logger.info('⏭️  [postOutcomeIfWorthy] Outcome NOT post-worthy, skipping', {
+          ticketId: ticket.id,
+          success: result.success,
+          toolsUsed: result.output?.toolsUsed || [],
+        });
+        return;
+      }
+
+      logger.info('✅ [postOutcomeIfWorthy] Outcome IS post-worthy, preparing to post', {
+        ticketId: ticket.id,
+        success: result.success,
+      });
+
+      // Extract context from ticket
+      const context = extractContext(ticket);
+
+      // Determine posting strategy
+      if (context.originType === 'autonomous') {
+        await this.postAsNewPost(result, context, ticket);
+      } else {
+        await this.postAsCommentReply(result, context, ticket);
+      }
+
+    } catch (error) {
+      // Posting failures should not fail the ticket
+      logger.error('Failed to post outcome (non-fatal)', {
+        ticketId: ticket.id,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  /**
+   * Post outcome as comment reply (for tickets from posts/comments)
+   */
+  private async postAsCommentReply(
+    result: WorkerResult,
+    context: any,
+    ticket: WorkTicket
+  ): Promise<void> {
+    try {
+      // Get reply target
+      const target = getReplyTarget(context);
+
+      // Format outcome message
+      const metadata = this.outcomeDetector.extractMetadata(result);
+      const content = this.outcomeFormatter.formatCommentReply(
+        {
+          ...result,
+          content: result.output?.content || (result.error ? result.error.message : ''),
+          toolsUsed: result.output?.toolsUsed || [],
+        },
+        context
+      );
+
+      logger.info('Posting outcome as comment reply', {
+        ticketId: ticket.id,
+        postId: target.postId,
+        commentId: target.commentId,
+        contentLength: content.length,
+      });
+
+      // Post comment with skipTicket to prevent infinite loop
+      await this.apiClient.createComment({
+        post_id: target.postId.toString(),
+        content,
+        author_agent: ticket.agentName || 'avi',
+        userId: ticket.userId,
+        skipTicket: true, // CRITICAL: Prevents infinite loop
+        parent_id: target.commentId?.toString(),
+      });
+
+      logger.info('Successfully posted outcome as comment', {
+        ticketId: ticket.id,
+        postId: target.postId,
+      });
+
+    } catch (error) {
+      logger.error('Failed to post comment reply', {
+        ticketId: ticket.id,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Post outcome as new post (for autonomous tasks)
+   */
+  private async postAsNewPost(
+    result: WorkerResult,
+    context: any,
+    ticket: WorkTicket
+  ): Promise<void> {
+    try {
+      // Format outcome as new post
+      const metadata = this.outcomeDetector.extractMetadata(result);
+      const formattedPost = this.outcomeFormatter.formatNewPost(
+        {
+          ...result,
+          content: result.output?.content || (result.error ? result.error.message : ''),
+          toolsUsed: result.output?.toolsUsed || [],
+        },
+        context
+      );
+
+      logger.info('Posting outcome as new post', {
+        ticketId: ticket.id,
+        title: formattedPost.title,
+        contentLength: formattedPost.content.length,
+      });
+
+      // Create new post
+      await this.apiClient.createPost({
+        title: formattedPost.title,
+        content: formattedPost.content,
+        author_agent: ticket.agentName || 'avi',
+        userId: ticket.userId,
+        tags: formattedPost.tags,
+      });
+
+      logger.info('Successfully posted outcome as new post', {
+        ticketId: ticket.id,
+        title: formattedPost.title,
+      });
+
+    } catch (error) {
+      logger.error('Failed to post new post', {
+        ticketId: ticket.id,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      throw error;
+    }
   }
 }

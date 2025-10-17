@@ -19,6 +19,9 @@ interface CommentFormProps {
   mentionSuggestions?: string[];
   onCancel?: () => void;
   useMentionInput?: boolean;
+  // PHASE 2: Optimistic update support
+  updatePostInList?: (postId: string, updates: any) => void;
+  refetchPost?: (postId: string) => Promise<any>;
 }
 
 export const CommentForm: React.FC<CommentFormProps> = ({
@@ -33,7 +36,9 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   showFormatting = true,
   mentionSuggestions = [],
   onCancel,
-  useMentionInput = true
+  useMentionInput = true,
+  updatePostInList,
+  refetchPost
 }) => {
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,7 +60,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!content.trim()) {
       setError('Comment content is required');
       return;
@@ -69,26 +74,76 @@ export const CommentForm: React.FC<CommentFormProps> = ({
     setIsSubmitting(true);
     setError('');
 
+    // PHASE 2: Get original count for rollback
+    let originalCount: number | undefined;
+    if (updatePostInList && !parentId) {
+      // Only track for root comments, not replies
+      try {
+        const currentPost = await apiService.getAgentPost(postId);
+        if (currentPost.success && currentPost.data) {
+          originalCount = currentPost.data.comments || 0;
+        }
+      } catch (err) {
+        console.warn('[CommentForm] Could not fetch current post for optimistic update', err);
+      }
+    }
+
     try {
-      console.log('Submitting comment via API service:', {
+      console.log('[CommentForm] Submitting comment via API service:', {
         postId,
         content: content.trim(),
         parentId,
-        author: currentUser
+        author: currentUser,
+        hasOptimisticUpdates: !!(updatePostInList && refetchPost)
       });
-      
+
+      // PHASE 2: Step 1 - Optimistic update (instant UI feedback)
+      if (updatePostInList && originalCount !== undefined && !parentId) {
+        const optimisticCount = originalCount + 1;
+        console.log('[CommentForm] Optimistic update:', { postId, from: originalCount, to: optimisticCount });
+        updatePostInList(postId, { comments: optimisticCount });
+      }
+
+      // PHASE 2: Step 2 - Create comment via API
       const result = await apiService.createComment(postId, content.trim(), {
         parentId: parentId || undefined,
         author: currentUser,
         mentionedUsers: useMentionInput ? MentionService.extractMentions(content) : extractMentions(content)
       });
-      
-      console.log('Comment submitted successfully:', result);
-      
+
+      console.log('[CommentForm] Comment submitted successfully:', result);
+
+      // PHASE 2: Step 3 - Refetch to confirm with server (if available)
+      if (refetchPost && !parentId) {
+        try {
+          const updated = await refetchPost(postId);
+          if (updated) {
+            console.log('[CommentForm] Post refetched successfully:', {
+              postId,
+              confirmedCount: updated.comments
+            });
+            // Step 4: Update with confirmed value
+            if (updatePostInList) {
+              updatePostInList(postId, { comments: updated.comments });
+            }
+          }
+        } catch (refetchError) {
+          console.warn('[CommentForm] Refetch failed but comment was created:', refetchError);
+          // Keep optimistic update - will sync on next page load
+        }
+      }
+
       setContent('');
       onCommentAdded?.();
     } catch (error) {
-      console.error('Comment submission failed:', error);
+      console.error('[CommentForm] Comment submission failed:', error);
+
+      // PHASE 2: Rollback optimistic update on error
+      if (updatePostInList && originalCount !== undefined && !parentId) {
+        console.log('[CommentForm] Rolling back optimistic update:', { postId, to: originalCount });
+        updatePostInList(postId, { comments: originalCount });
+      }
+
       setError(error instanceof Error ? error.message : 'Failed to post technical analysis');
     } finally {
       setIsSubmitting(false);

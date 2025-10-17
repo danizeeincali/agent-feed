@@ -13,7 +13,7 @@ import {
 } from '../types/api';
 import { Task, Workflow, OrchestrationState } from '../types';
 
-class ApiService {
+export class ApiService {
   private baseUrl: string;
   private cache: Map<string, { data: any; timestamp: number; ttl: number }> = new Map();
   private wsConnection: WebSocket | null = null;
@@ -22,9 +22,17 @@ class ApiService {
   constructor(baseUrl?: string) {
     // Use relative URL to leverage Vite proxy in all environments
     // Vite proxy handles: /api → http://127.0.0.1:3001
-    this.baseUrl = baseUrl || '/api';
+    // In test environment, use full URL for Node's fetch
+    const isTestEnv = typeof process !== 'undefined' && process.env.NODE_ENV === 'test';
+    const testApiUrl = isTestEnv && typeof process !== 'undefined' ? process.env.VITE_API_BASE_URL : null;
+
+    this.baseUrl = baseUrl || testApiUrl || '/api';
     console.log('🔗 API Service initialized with base URL:', this.baseUrl);
-    this.initializeWebSocket();
+
+    // Only initialize WebSocket in browser environment
+    if (typeof window !== 'undefined') {
+      this.initializeWebSocket();
+    }
   }
 
   // Cache management
@@ -409,6 +417,24 @@ class ApiService {
 
   async getAgentPost(id: string): Promise<ApiResponse<AgentPost>> {
     return this.request<ApiResponse<AgentPost>>(`/v1/agent-posts/${id}`);
+  }
+
+  /**
+   * Refetch a single post (bypasses cache for fresh data)
+   * Used for confirming optimistic updates after comment creation
+   * @param id - Post ID
+   * @returns Fresh post data from server
+   */
+  async refetchPost(id: string): Promise<ApiResponse<AgentPost>> {
+    // Clear cache for this specific post to force fresh fetch
+    this.clearCache(`/v1/agent-posts/${id}`);
+
+    // Fetch with useCache = false to bypass cache entirely
+    return this.request<ApiResponse<AgentPost>>(
+      `/v1/agent-posts/${id}`,
+      {},
+      false // Don't use cache - always fetch fresh
+    );
   }
 
   async createAgentPost(postData: Partial<AgentPost>): Promise<ApiResponse<AgentPost>> {
