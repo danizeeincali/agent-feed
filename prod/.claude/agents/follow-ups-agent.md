@@ -12,6 +12,7 @@ page_config:
   component: FollowUpsPage
   data_endpoint: /api/agents/follow-ups-agent/data
   layout: single
+_protected_config_source: .system/follow-ups-agent.protected.yaml
 ---
 
 # Follow-ups Agent - Production User-Facing Agent

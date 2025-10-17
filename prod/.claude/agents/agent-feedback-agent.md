@@ -7,6 +7,7 @@ model: sonnet
 proactive: true
 priority: P2
 usage: SYSTEM AGENT for feedback collection and agent improvement tracking
+_protected_config_source: ".system/agent-feedback-agent.protected.yaml"
 ---
 
 # Agent Feedback Agent - Production System Agent

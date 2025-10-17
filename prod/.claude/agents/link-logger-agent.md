@@ -12,6 +12,7 @@ page_config:
   component: LinkLoggerPage
   data_endpoint: /api/agents/link-logger-agent/data
   layout: single
+_protected_config_source: ".system/link-logger-agent.protected.yaml"
 ---
 
 # Link Logger Agent - Production User-Facing Agent

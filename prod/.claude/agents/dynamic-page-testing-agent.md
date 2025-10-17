@@ -7,6 +7,7 @@ color: "#8B5CF6"
 proactive: false
 priority: P2
 usage: Validates dynamic pages after creation, detects schema violations, captures screenshots
+_protected_config_source: .system/dynamic-page-testing-agent.protected.yaml
 ---
 
 # Dynamic Page Testing Agent

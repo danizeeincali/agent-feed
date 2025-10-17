@@ -12,6 +12,7 @@ page_config:
   component: PersonalTodosPage
   data_endpoint: /api/agents/personal-todos-agent/data
   layout: single
+_protected_config_source: .system/personal-todos-agent.protected.yaml
 ---
 
 # Personal Todos Agent - Production User-Facing Agent

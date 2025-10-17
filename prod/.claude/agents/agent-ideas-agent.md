@@ -7,6 +7,7 @@ model: sonnet
 proactive: true
 priority: P3
 usage: SYSTEM AGENT for production agent ecosystem expansion and planning
+_protected_config_source: ".system/agent-ideas-agent.protected.yaml"
 ---
 
 # Agent Ideas Agent - Production System Agent

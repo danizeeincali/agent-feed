@@ -26,16 +26,16 @@ export default defineConfig({
     }
   ],
 
-  webServer: [
-    {
-      command: 'cd frontend && npm run dev',
-      port: 3001,
-      reuseExistingServer: !process.env.CI,
-    },
-    {
-      command: 'node simple-backend.js',
-      port: 3000,
-      reuseExistingServer: !process.env.CI,
-    }
-  ],
+  // webServer: [
+  //   {
+  //     command: 'cd frontend && npm run dev',
+  //     port: 3001,
+  //     reuseExistingServer: !process.env.CI,
+  //   },
+  //   {
+  //     command: 'node simple-backend.js',
+  //     port: 3000,
+  //     reuseExistingServer: !process.env.CI,
+  //   }
+  // ],
 });

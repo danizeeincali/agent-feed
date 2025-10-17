@@ -7,6 +7,7 @@ model: sonnet
 proactive: true
 priority: P0
 usage: PROACTIVE for user discovery and onboarding - FIRST agent experience
+_protected_config_source: ".system/get-to-know-you-agent.protected.yaml"
 ---
 
 # Get-to-Know-You Agent - Production Critical Onboarding Agent

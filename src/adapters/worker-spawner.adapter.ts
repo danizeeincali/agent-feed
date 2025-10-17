@@ -3,6 +3,7 @@
  * Spawns and manages AgentWorker instances
  *
  * Phase 2: AVI Orchestrator Integration
+ * Phase 3: Protected Agent Fields Integration
  * Phase 4: Validation & Error Handling Integration
  */
 
@@ -12,6 +13,7 @@ import type { WorkTicket } from '../types/work-ticket';
 import { UnifiedAgentWorker } from '../worker/unified-agent-worker';
 import { ClaudeCodeWorker } from '../worker/claude-code-worker';
 import { validateTicketId } from '../utils/validation';
+import { ProtectedAgentLoader } from '../config/loaders/protected-agent-loader';
 import logger from '../utils/logger';
 
 /**
@@ -27,6 +29,7 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
   private repositoryPromise?: Promise<void>;
   private validationEnabled: boolean;
   private claudeCodeEnabled: boolean;
+  private agentLoader: ProtectedAgentLoader;
 
   constructor(db: DatabaseManager) {
     this.db = db;
@@ -39,6 +42,12 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
     // Phase 3: Claude Code SDK integration (feature flag)
     this.claudeCodeEnabled = process.env.ENABLE_CLAUDE_CODE_WORKER === 'true';
 
+    // Phase 3: Protected agent fields integration
+    this.agentLoader = new ProtectedAgentLoader();
+
+    // Start file watchers for hot-reload
+    this.agentLoader.watchForChanges();
+
     if (this.validationEnabled) {
       logger.info('Phase 4 validation enabled (integration pending)');
     }
@@ -46,6 +55,8 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
     if (this.claudeCodeEnabled) {
       logger.info('Claude Code SDK worker enabled - replacing regex-based TaskTypeDetector');
     }
+
+    logger.info('Protected agent fields integration enabled');
   }
 
   /**
@@ -199,6 +210,35 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
         contentLength: workTicket.payload?.content?.length || 0
       });
 
+      // Phase 3: Load agent configuration with protected fields
+      console.log(`🔧 [executeWorker] Loading agent config for ${workTicket.agentName}...`);
+      let agentConfig;
+      try {
+        agentConfig = await this.agentLoader.loadAgent(workTicket.agentName);
+        console.log(`✅ [executeWorker] Agent config loaded`, {
+          agentName: workTicket.agentName,
+          hasProtection: !!agentConfig._protected,
+          protectedVersion: agentConfig._protected?.version,
+        });
+
+        // Log protected permissions if present
+        if (agentConfig._permissions) {
+          logger.info('Agent has protected permissions', {
+            agentName: workTicket.agentName,
+            workspace: agentConfig._permissions.workspace?.root,
+            allowedTools: agentConfig._permissions.tool_permissions?.allowed,
+            apiAccess: agentConfig._permissions.api_access?.base_url,
+          });
+        }
+      } catch (loadError) {
+        // Gracefully handle agent config loading errors
+        logger.error('Failed to load agent config, using defaults', {
+          agentName: workTicket.agentName,
+          error: loadError instanceof Error ? loadError.message : String(loadError),
+        });
+        agentConfig = null; // Worker will use defaults
+      }
+
       // Execute worker - use ClaudeCodeWorker if enabled, otherwise fall back to UnifiedAgentWorker
       console.log(`🔧 [executeWorker] Creating worker instance (ClaudeCode: ${this.claudeCodeEnabled})...`);
       const worker = this.claudeCodeEnabled
@@ -206,7 +246,10 @@ export class WorkerSpawnerAdapter implements IWorkerSpawner {
         : new UnifiedAgentWorker(this.db);
       console.log(`✅ [executeWorker] Worker instance created`);
 
-      logger.info(`Using ${this.claudeCodeEnabled ? 'ClaudeCodeWorker' : 'UnifiedAgentWorker'} for ticket ${ticket.id}`);
+      logger.info(`Using ${this.claudeCodeEnabled ? 'ClaudeCodeWorker' : 'UnifiedAgentWorker'} for ticket ${ticket.id}`, {
+        agentName: workTicket.agentName,
+        hasProtectedConfig: !!agentConfig,
+      });
 
       console.log(`🚀 [executeWorker] Executing ticket ${ticket.id}...`);
       const result = await worker.executeTicket(workTicket);

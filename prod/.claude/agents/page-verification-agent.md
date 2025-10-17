@@ -7,6 +7,7 @@ color: "#06B6D4"
 proactive: true
 priority: P2
 usage: Automatically validates pages after creation, tests data visualizations, checks anchor links, and generates detailed test reports
+_protected_config_source: ".system/page-verification-agent.protected.yaml"
 ---
 
 # Page Verification Agent

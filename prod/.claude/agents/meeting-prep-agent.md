@@ -12,6 +12,7 @@ page_config:
   component: MeetingPrepPage
   data_endpoint: /api/agents/meeting-prep-agent/data
   layout: single
+_protected_config_source: ".system/meeting-prep-agent.protected.yaml"
 ---
 
 # Meeting Prep Agent - Production User-Facing Agent

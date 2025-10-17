@@ -1,0 +1,129 @@
+
+Running 15 tests using 1 worker
+
+📸 Checkpoint 1: Verifying backup existence...
+✅ Backup created: /workspaces/agent-feed/prod/agent_workspace/meta-update-agent/backups/CLAUDE.md.2025-10-17T06-08-57-712Z.bak
+📋 CLAUDE Backups Found:
+  - CLAUDE.md.before-frontmatter.20251017-060415.bak (11640 bytes) - 2025-10-17T06:04:15.862Z
+  - CLAUDE.md.20251017-060432.bak (11758 bytes) - 2025-10-17T06:04:32.627Z
+  - CLAUDE.md.2025-10-17T06-08-57-712Z.bak (11848 bytes) - 2025-10-17T06:08:57.714Z
+  - CLAUDE.md.2025-10-17T06-07-55-098Z.bak (11758 bytes) - 2025-10-17T06:07:55.104Z
+  ✓   1 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:30:3 › CLAUDE.md Protection Migration - Phase 1: Pre-Migration Validation › Checkpoint 1: Verify backup exists or can be created (373ms)
+📸 Checkpoint 2: Verifying CLAUDE.md functionality...
+📋 Critical Sections Check:
+  ✅ CRITICAL: CONCURRENT EXECUTION
+  ✅ Project Overview
+  ✅ SPARC Commands
+  ✅ Available Agents
+  ✅ MCP Tools
+  ✅ Agent Coordination Protocol
+  ✅ Λvi
+  ✓   2 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:97:3 › CLAUDE.md Protection Migration - Phase 1: Pre-Migration Validation › Checkpoint 2: Verify original CLAUDE.md is functional (603ms)
+📸 Checkpoint 3: Verifying protected config exists...
+Protected config exists: true
+  Size: 1805 bytes
+  Permissions: 444
+  Modified: 2025-10-17T06:08:23.649Z
+  ✓   3 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:172:3 › CLAUDE.md Protection Migration - Phase 2: Protected Config Validation › Checkpoint 3: Verify CLAUDE.protected.yaml exists (289ms)
+📸 Checkpoint 4: Verifying 14 protected fields...
+✅ API Endpoints: permissions.api_endpoints
+   Value preview: [{"path":"/api/posts","methods":["GET","POST"],"rate_limit":"10/minute","authentication":"required"}...
+✅ Workspace Root: permissions.workspace.root
+   Value preview: /workspaces/agent-feed/prod/agent_workspace
+✅ Max Storage: permissions.workspace.max_storage
+   Value preview: 10GB
+✅ Allowed Paths: permissions.workspace.allowed_paths
+   Value preview: ["/workspaces/agent-feed/prod/agent_workspace/**","/workspaces/agent-feed/prod/.claude/agents/**","/...
+✅ Forbidden Paths: permissions.workspace.forbidden_paths
+   Value preview: ["/workspaces/agent-feed/src/**","/workspaces/agent-feed/frontend/**","/workspaces/agent-feed/tests/...
+✅ Tool Permissions: permissions.tool_permissions
+   Value preview: {"allowed":["Read","Write","Edit","Bash","Grep","Glob","WebFetch","WebSearch","TodoWrite","SlashComm...
+✅ Resource Limits: permissions.resource_limits
+   Value preview: {"max_memory":"2GB","max_cpu_percent":80,"max_execution_time":"600s","max_concurrent_tasks":5}...
+✅ Max Memory: permissions.resource_limits.max_memory
+   Value preview: 2GB
+✅ Max CPU Percent: permissions.resource_limits.max_cpu_percent
+   Value preview: 80
+✅ Posting Rules: permissions.posting_rules
+   Value preview: {"auto_post_outcomes":true,"post_threshold":"significant_outcome","default_post_type":"new_post"}...
+✅ Security: permissions.security
+   Value preview: {"sandbox_enabled":true,"network_access":"api_only","file_operations":"workspace_only"}...
+✅ Version: version
+   Value preview: 1.0.0
+✅ Agent ID: agent_id
+   Value preview: CLAUDE
+✅ Checksum: checksum
+   Value preview: sha256:0ba38ad2d14752f05cef982492cbb155babdd3ce79500bbc6379934a1363691d
+  ✓   4 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:217:3 › CLAUDE.md Protection Migration - Phase 2: Protected Config Validation › Checkpoint 4: Verify all 14 protected fields (434ms)
+📸 Checkpoint 5: Computing and validating checksum...
+Current checksum: sha256:0ba38ad2d14752f05cef982492cbb155babdd3ce79500bbc6379934a1363691d
+Computed checksum: sha256:0ba38ad2d14752f05cef982492cbb155babdd3ce79500bbc6379934a1363691d
+✅ Checksum is valid
+  ✓   5 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:301:3 › CLAUDE.md Protection Migration - Phase 2: Protected Config Validation › Checkpoint 5: Compute and validate SHA-256 checksum (335ms)
+📸 Checkpoint 6: Setting file permissions...
+Permissions before: 444
+Permissions after: 444
+✅ File is now read-only: true
+  ✓   6 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:386:3 › CLAUDE.md Protection Migration - Phase 2: Protected Config Validation › Checkpoint 6: Set file permissions to 444 (read-only) (282ms)
+📸 Checkpoint 7: Verifying frontmatter...
+Frontmatter: {
+  _protected_config_source: [32m'.system/CLAUDE.protected.yaml'[39m,
+  _agent_type: [32m'system'[39m,
+  _protection_level: [32m'maximum'[39m
+}
+✅ _protected_config_source: .system/CLAUDE.protected.yaml (expected: .system/CLAUDE.protected.yaml)
+✅ _agent_type: system (expected: system)
+✅ _protection_level: maximum (expected: maximum)
+  ✓   7 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:435:3 › CLAUDE.md Protection Migration - Phase 2: Protected Config Validation › Checkpoint 7: Verify frontmatter in CLAUDE.md (367ms)
+📸 Checkpoint 8: Testing ProtectedAgentLoader...
+✅ Config loaded successfully
+   Agent ID: CLAUDE
+   Version: 1.0.0
+  ✓   8 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:500:3 › CLAUDE.md Protection Migration - Phase 3: Integration Validation › Checkpoint 8: Load with ProtectedAgentLoader (365ms)
+📸 Checkpoint 9: Testing IntegrityChecker...
+Stored checksum:   sha256:0ba38ad2d14752f05cef982492cbb155babdd3ce79500bbc6379934a1363691d
+Computed checksum: sha256:0ba38ad2d14752f05cef982492cbb155babdd3ce79500bbc6379934a1363691d
+Integrity check:   ✅ PASS
+  ✓   9 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:567:3 › CLAUDE.md Protection Migration - Phase 3: Integration Validation › Checkpoint 9: Validate with IntegrityChecker (420ms)
+📸 Checkpoint 10: Verifying system boundaries...
+Allowed paths: 3
+Forbidden paths: 5
+✅ /workspaces/agent-feed/prod/agent_workspace/**
+✅ /workspaces/agent-feed/src/**
+✅ /workspaces/agent-feed/frontend/**
+✅ /workspaces/agent-feed/prod/system_instructions/**
+  ✓  10 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:629:3 › CLAUDE.md Protection Migration - Phase 4: Functional Validation › Checkpoint 10: Verify system boundaries enforced (330ms)
+📸 Checkpoint 11: Verifying resource limits...
+✅ max_memory: 2GB (expected: 2GB)
+✅ max_cpu_percent: 80 (expected: 80)
+  ✓  11 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:701:3 › CLAUDE.md Protection Migration - Phase 4: Functional Validation › Checkpoint 11: Verify resource limits present (316ms)
+📸 Checkpoint 12: Verifying tool permissions...
+Allowed tools: 10
+Forbidden tools: 1
+  ✓  12 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:754:3 › CLAUDE.md Protection Migration - Phase 4: Functional Validation › Checkpoint 12: Verify tool permissions present (317ms)
+📸 Checkpoint 13: Testing write protection...
+✅ Write failed as expected: EACCES: permission denied, open '/workspaces/agent-feed/prod/.claude/agents/.system/CLAUDE.protected.yaml'
+  ✓  13 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:808:3 › CLAUDE.md Protection Migration - Phase 5: Final Validation › Checkpoint 13: Attempt write to protected config (should fail) (335ms)
+📸 Checkpoint 14: Verifying checksum integrity after write attempt...
+Checksum after write attempt: ✅ STILL VALID
+  ✓  14 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:853:3 › CLAUDE.md Protection Migration - Phase 5: Final Validation › Checkpoint 14: Verify checksum after write attempt (352ms)
+📸 Checkpoint 15: Final production readiness assessment...
+
+============================================================
+PRODUCTION READINESS ASSESSMENT
+============================================================
+✅ Backup exists
+✅ CLAUDE.md functional
+✅ Protected config exists
+✅ File permissions correct
+✅ Frontmatter present
+✅ All 14 fields present
+✅ Checksum valid
+✅ Write protection enforced
+============================================================
+Result: 8/8 checks passed
+Status: ✅ PRODUCTION READY
+============================================================
+  ✓  15 [chromium] › tests/e2e/claude-validation/claude-md-protection-validation.spec.ts:901:3 › CLAUDE.md Protection Migration - Phase 5: Final Validation › Checkpoint 15: Production readiness assessment (311ms)
+
+  15 passed (7.1s)

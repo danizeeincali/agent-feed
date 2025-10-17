@@ -7,6 +7,7 @@ color: "#10B981"
 proactive: true
 priority: P1
 usage: PROACTIVE for dynamic page creation, component validation, template management, and inter-agent page building coordination
+_protected_config_source: .system/page-builder-agent.protected.yaml
 ---
 
 # PageBuilder Agent - Centralized Dynamic Page Service

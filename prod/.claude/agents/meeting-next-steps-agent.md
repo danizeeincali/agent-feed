@@ -12,6 +12,7 @@ page_config:
   component: MeetingNextStepsPage
   data_endpoint: /api/agents/meeting-next-steps-agent/data
   layout: single
+_protected_config_source: ".system/meeting-next-steps-agent.protected.yaml"
 ---
 
 # Meeting Next Steps Agent - Production User-Facing Agent

@@ -1,7 +1,42 @@
 # Plan B: Protected Agent Definition Fields Architecture
 
+## 🔍 Current State Analysis
+
+### Existing Agent Format: Markdown with YAML Frontmatter ✅
+
+**Current Reality**:
+- All agents use `.md` files (NOT `.yaml` files)
+- Located in: `/prod/.claude/agents/*.md` and `/workspaces/agent-feed/.claude/agents/`
+- Standard Claude Code format: YAML frontmatter + Markdown body
+
+**Example Current Agent** (`meta-agent.md`):
+```markdown
+---
+name: meta-agent
+description: Generates new agent configurations
+tools: [Bash, Glob, Grep, Read, Edit, Write]
+model: sonnet
+color: "#374151"
+proactive: true
+priority: P2
+---
+
+# Meta Agent - Production Agent Generator
+
+Your sole purpose is to act as an expert agent architect...
+```
+
+**Why This Document Originally Proposed YAML**:
+- YAML was suggested for **future** protection architecture
+- Not because the system currently uses YAML
+- Proposed for structured validation and clear separation
+
+---
+
 ## Overview
 Establish a protection mechanism for critical agent definition fields (particularly API usage rules and system boundaries) while maintaining user customizability for personality and behavior.
+
+**Key Design Decision**: Maintain `.md` agent format compatibility while adding protection layer.
 
 ## 1. Field Classification
 
@@ -35,9 +70,63 @@ user_editable_fields:
   - autonomous_mode            # Level of autonomy
 ```
 
-## 2. Architecture: Split Configuration Files (RECOMMENDED)
+## 2. Architecture Options: Three Approaches
 
-**Structure**:
+### Option 1: Extended Markdown Frontmatter ⚡ FASTEST
+
+**Structure**: Single `.md` file with protected section in frontmatter
+```
+/prod/.claude/agents/
+├── strategic-planner-agent.md  # Contains both user + protected config
+```
+
+**Example**:
+```markdown
+---
+name: strategic-planner
+description: Strategic planning specialist
+tools: [Read, Write, Bash]
+model: sonnet
+color: "#374151"
+
+# NEW: Protected configuration section
+_protected:
+  version: "1.0.0"
+  checksum: "sha256:abc123..."
+  permissions:
+    api_endpoints:
+      - path: "/api/posts"
+        methods: ["GET", "POST"]
+        rate_limit: "10/minute"
+    workspace: "/prod/agent_workspace/agents/strategic-planner"
+    tool_permissions:
+      allowed: ["Read", "Write", "Bash"]
+      forbidden: ["KillShell"]
+---
+
+# Strategic Planner Agent
+Your role is to...
+```
+
+**Pros**:
+- ✅ No file structure changes
+- ✅ Compatible with existing Claude Code
+- ✅ Single file per agent (simpler)
+- ✅ YAML frontmatter already validated
+- ✅ Easy to implement protection checks
+- ✅ Fastest to implement
+
+**Cons**:
+- ⚠️ User could still edit frontmatter in file
+- ⚠️ Requires runtime validation to enforce
+
+**Implementation Path**: Extend agent loader to validate `_protected` section
+
+---
+
+### Option 2: Split YAML Files (Original Proposal)
+
+**Structure**: Separate user and system configuration files
 ```
 /prod/.claude/agents/
 ├── agent-name/
@@ -125,61 +214,199 @@ permissions:
     file_operations: "workspace_only"  # none | workspace_only | restricted | full
 ```
 
-**Advantages**:
-- Clear separation of concerns
-- `.system/` directory signals protection
-- User can't accidentally modify system rules
-- Easy to version control separately
-- System can update protected.yaml without touching user config
+**Pros**:
+- ✅ Physical file protection (OS-level permissions)
+- ✅ Clear separation of concerns
+- ✅ Harder for users to accidentally modify protected fields
+- ✅ Explicit system vs user configuration
+
+**Cons**:
+- ❌ Breaking change (all agents need migration)
+- ❌ Not standard Claude Code format
+- ❌ More complex directory structure
+- ❌ Claude Code may not recognize split format
+- ❌ Requires custom loader implementation
+
+**Implementation Path**: Full migration of all agents + custom loader
+
+---
+
+### Option 3: Hybrid - Markdown + Protected Sidecar ✅ RECOMMENDED
+
+**Structure**: Keep `.md` agents, add `.protected.yaml` sidecars
+```
+/prod/.claude/agents/
+├── strategic-planner-agent.md           # Main agent (standard format)
+└── .system/
+    └── strategic-planner.protected.yaml # Protected config (read-only)
+```
+
+**Main Agent File** (`strategic-planner-agent.md`):
+```markdown
+---
+name: strategic-planner
+description: Strategic planning specialist
+tools: [Read, Write, Bash]
+model: sonnet
+color: "#374151"
+_protected_config_source: ".system/strategic-planner.protected.yaml"
+---
+
+# Strategic Planner Agent
+Your role is to provide strategic planning...
+```
+
+**Protected Sidecar** (`.system/strategic-planner.protected.yaml`):
+```yaml
+version: "1.0.0"
+checksum: "sha256:abc123..."
+agent_id: "strategic-planner"
+permissions:
+  api_endpoints:
+    - path: "/api/posts"
+      methods: ["GET", "POST"]
+      rate_limit: "10/minute"
+  workspace:
+    root: "/prod/agent_workspace/agents/strategic-planner"
+    max_storage: "1GB"
+  tool_permissions:
+    allowed: ["Read", "Write", "Bash", "Grep", "Glob"]
+    forbidden: ["KillShell"]
+  resource_limits:
+    max_memory: "512MB"
+    max_cpu_percent: 50
+```
+
+**Pros**:
+- ✅ Standard `.md` format preserved (Claude Code compatible)
+- ✅ OS-level file protection for sensitive config
+- ✅ Backward compatible (agents without sidecars still work)
+- ✅ Easy migration path (add sidecars incrementally)
+- ✅ Protected files in single `.system/` directory
+- ✅ Clear separation without breaking changes
+- ✅ Best of both worlds
+
+**Cons**:
+- ⚠️ Two files per protected agent (slightly more complex)
+- ⚠️ Requires loader to merge configs at runtime
+
+**Implementation Path**:
+1. Create `.system/` directory
+2. Add protected config sidecars for agents that need protection
+3. Update agent loader to merge configs
+4. Non-breaking (agents without sidecars work as-is)
 
 ## 3. Protection Enforcement Mechanisms
 
-### File System Protection
-```bash
-# Make .system directory read-only for user processes
-chmod 555 /prod/.claude/agents/*/.system/
-chmod 444 /prod/.claude/agents/*/.system/protected.yaml
+---
 
-# Ownership: root or system user
-chown root:agents /prod/.claude/agents/*/.system/protected.yaml
+## 3. Recommendation Summary
+
+### Primary Recommendation: **Option 3 (Hybrid Markdown + Protected Sidecar)** ✅
+
+**Why This Approach Wins**:
+
+1. **Claude Code Compatibility** ✅
+   - Maintains standard `.md` agent format
+   - No breaking changes to existing agents
+   - Claude Code continues to work normally
+
+2. **OS-Level Protection** ✅
+   - Protected configs in `.system/` directory
+   - File permissions prevent tampering
+   - Physical separation of concerns
+
+3. **Incremental Migration** ✅
+   - Add protection to agents as needed
+   - No "big bang" migration required
+   - Agents without sidecars work fine
+
+4. **Clear Mental Model** ✅
+   - Main agent = personality + behavior
+   - Sidecar = system rules + boundaries
+   - Easy to understand and maintain
+
+**Implementation Phases**:
+```
+Phase 1: Create .system/ directory with protected configs
+Phase 2: Update agent loader to merge configs at runtime
+Phase 3: Add validation and integrity checking
+Phase 4: Migrate agents incrementally (non-breaking)
+Phase 5: Enforce protection with file permissions
 ```
 
-### Runtime Validation
+---
+
+## 4. Protection Enforcement Mechanisms
+
+### File System Protection (Option 3 - Hybrid)
+```bash
+# Make .system directory read-only for user processes
+chmod 555 /prod/.claude/agents/.system/
+chmod 444 /prod/.claude/agents/.system/*.protected.yaml
+
+# Ownership: root or system user
+chown root:agents /prod/.claude/agents/.system/*.protected.yaml
+```
+
+### Runtime Validation (Hybrid Approach)
 ```typescript
 class AgentConfigValidator {
   private protectedSchema: ProtectedConfigSchema;
 
   async validateAgentConfig(agentName: string): Promise<ValidationResult> {
-    // Load both configs
-    const userConfig = await this.loadUserConfig(agentName);
-    const protectedConfig = await this.loadProtectedConfig(agentName);
+    // Load main .md agent file
+    const agentConfig = await this.loadAgentMarkdown(agentName);
+
+    // Check if agent has protected sidecar
+    const protectedConfigPath = agentConfig._protected_config_source;
+    if (!protectedConfigPath) {
+      // Agent has no protection - return as-is
+      return { valid: true, config: agentConfig };
+    }
+
+    // Load protected sidecar
+    const protectedConfig = await this.loadProtectedSidecar(protectedConfigPath);
 
     // Verify protected config hasn't been tampered with
     if (!this.verifyProtectedConfigIntegrity(protectedConfig)) {
       throw new SecurityError('Protected config has been modified');
     }
 
-    // Merge configs
-    return this.mergeConfigs(userConfig, protectedConfig);
+    // Merge configs (protected takes precedence)
+    const mergedConfig = this.mergeConfigs(agentConfig, protectedConfig);
+
+    return { valid: true, config: mergedConfig };
+  }
+
+  private async loadAgentMarkdown(agentName: string): Promise<AgentConfig> {
+    const filePath = `/prod/.claude/agents/${agentName}-agent.md`;
+    const content = await fs.promises.readFile(filePath, 'utf-8');
+    const { data: frontmatter, content: body } = matter(content);
+    return { ...frontmatter, _body: body };
+  }
+
+  private async loadProtectedSidecar(relativePath: string): Promise<ProtectedConfig> {
+    const fullPath = path.join('/prod/.claude/agents', relativePath);
+    const content = await fs.promises.readFile(fullPath, 'utf-8');
+    return yaml.parse(content);
   }
 
   private verifyProtectedConfigIntegrity(config: ProtectedConfig): boolean {
     // Verify checksum or signature
     const computedHash = this.computeHash(config);
-    const storedHash = config._metadata?.hash;
+    const storedHash = config.checksum?.replace('sha256:', '');
     return computedHash === storedHash;
   }
 
-  private mergeConfigs(user: UserConfig, protected: ProtectedConfig): AgentConfig {
+  private mergeConfigs(agent: AgentConfig, protected: ProtectedConfig): AgentConfig {
     // Protected config takes precedence for system fields
     return {
-      ...user,
+      ...agent,
       _protected: protected,
-      // Protected fields cannot be overridden
-      api_endpoints: protected.permissions.api_access.endpoints,
-      tool_permissions: protected.permissions.tool_permissions,
-      workspace_path: protected.permissions.workspace,
-      resource_limits: protected.permissions.resource_limits,
+      // Protected fields cannot be overridden by agent config
+      _permissions: protected.permissions,
+      _resource_limits: protected.permissions?.resource_limits,
     };
   }
 }
@@ -213,30 +440,37 @@ class ProtectedAgentLoader {
   }
 
   watchForChanges(): void {
-    // Watch user config files
+    // Watch agent directory for changes
     const watcher = fs.watch('/prod/.claude/agents', { recursive: true });
 
     watcher.on('change', (eventType, filename) => {
-      // Only reload on user config changes
-      if (filename.endsWith('agent.yaml')) {
+      // Reload on .md agent file changes
+      if (filename.endsWith('-agent.md')) {
         const agentName = this.extractAgentName(filename);
         this.reloadAgent(agentName);
       }
 
       // Alert on protected config changes (should never happen)
-      if (filename.includes('.system/protected.yaml')) {
+      if (filename.includes('.system/') && filename.endsWith('.protected.yaml')) {
         logger.error(`⚠️ Protected config modified: ${filename}`);
         // Restore from backup
         this.restoreProtectedConfig(filename);
       }
     });
   }
+
+  private extractAgentName(filename: string): string {
+    // Extract agent name from "agent-name-agent.md" -> "agent-name"
+    return path.basename(filename, '-agent.md');
+  }
 }
 ```
 
-## 4. System Update Mechanism
+---
 
-### Updating Protected Configs
+## 5. System Update Mechanism
+
+### Updating Protected Configs (Hybrid Approach)
 ```typescript
 class ProtectedConfigManager {
   // Only system/admin can call this
@@ -278,47 +512,76 @@ class ProtectedConfigManager {
     agentName: string,
     config: ProtectedConfig
   ): Promise<void> {
-    const backupPath = `/prod/backups/agent-configs/${agentName}/${Date.now()}.yaml`;
+    const backupPath = `/prod/backups/agent-configs/${agentName}/${Date.now()}.protected.yaml`;
     await fs.promises.mkdir(path.dirname(backupPath), { recursive: true });
     await fs.promises.writeFile(backupPath, yaml.stringify(config));
+  }
+
+  private async writeProtectedConfig(
+    agentName: string,
+    config: ProtectedConfig
+  ): Promise<void> {
+    const configPath = `/prod/.claude/agents/.system/${agentName}.protected.yaml`;
+    // Write atomically (temp file + rename)
+    const tempPath = `${configPath}.tmp`;
+    await fs.promises.writeFile(tempPath, yaml.stringify(config));
+    await fs.promises.rename(tempPath, configPath);
+    // Set read-only permissions
+    await fs.promises.chmod(configPath, 0o444);
   }
 }
 ```
 
-### Migration Strategy for Existing Agents
+### Migration Strategy (Hybrid Approach - Incremental)
 ```typescript
 class AgentConfigMigrator {
-  async migrateToProtectedModel(): Promise<void> {
+  /**
+   * Add protection to a specific agent (non-breaking, incremental)
+   */
+  async addProtectionToAgent(agentName: string, protectedConfig: ProtectedConfig): Promise<void> {
+    // 1. Backup existing agent file
+    await this.backupAgentFile(agentName);
+
+    // 2. Create .system directory if it doesn't exist
+    const systemDir = '/prod/.claude/agents/.system';
+    await fs.promises.mkdir(systemDir, { recursive: true, mode: 0o555 });
+
+    // 3. Write protected sidecar
+    const sidecarPath = `${systemDir}/${agentName}.protected.yaml`;
+    await fs.promises.writeFile(sidecarPath, yaml.stringify(protectedConfig));
+    await fs.promises.chmod(sidecarPath, 0o444);
+
+    // 4. Update agent .md file to reference sidecar
+    await this.addSidecarReference(agentName);
+
+    logger.info(`✅ Added protection to ${agentName}`);
+  }
+
+  /**
+   * Migrate all agents at once (optional - use with caution)
+   */
+  async migrateAllAgents(): Promise<void> {
     const agents = await this.discoverAgents();
 
-    for (const agentPath of agents) {
-      const agentName = path.basename(agentPath);
+    for (const agentFile of agents) {
+      const agentName = this.extractAgentName(agentFile);
 
-      // Read existing agent config
-      const existing = await this.loadExistingConfig(agentPath);
+      // Read existing agent frontmatter
+      const frontmatter = await this.loadAgentFrontmatter(agentFile);
 
-      // Split into user and protected configs
-      const { userConfig, protectedConfig } = this.splitConfig(existing);
+      // Check if agent has protected fields that should be extracted
+      const protectedConfig = this.extractProtectedFields(frontmatter);
 
-      // Create .system directory
-      const systemDir = path.join(agentPath, '.system');
-      await fs.promises.mkdir(systemDir, { recursive: true });
-
-      // Write separated configs
-      await this.writeUserConfig(agentPath, userConfig);
-      await this.writeProtectedConfig(systemDir, protectedConfig);
-
-      // Set permissions
-      await this.setProtections(systemDir);
-
-      logger.info(`✅ Migrated ${agentName} to protected model`);
+      if (Object.keys(protectedConfig.permissions || {}).length > 0) {
+        // Agent has protected fields - migrate them
+        await this.addProtectionToAgent(agentName, protectedConfig);
+      } else {
+        logger.info(`⏭️ Skipped ${agentName} - no protected fields`);
+      }
     }
   }
 
-  private splitConfig(config: any): {
-    userConfig: UserConfig;
-    protectedConfig: ProtectedConfig;
-  } {
+  private extractProtectedFields(frontmatter: any): ProtectedConfig {
     const protectedFieldNames = [
       'api_endpoints', 'api_methods', 'api_rate_limits',
       'system_boundaries', 'security_policies', 'tool_permissions',
@@ -326,18 +589,37 @@ class AgentConfigMigrator {
       'forbidden_operations'
     ];
 
-    const userConfig: any = {};
-    const protectedConfig: any = { permissions: {} };
+    const protectedConfig: ProtectedConfig = {
+      version: '1.0.0',
+      agent_id: frontmatter.name || 'unknown',
+      checksum: '', // Will be computed
+      permissions: {}
+    };
 
-    for (const [key, value] of Object.entries(config)) {
-      if (protectedFieldNames.includes(key)) {
-        protectedConfig.permissions[key] = value;
-      } else {
-        userConfig[key] = value;
+    for (const fieldName of protectedFieldNames) {
+      if (frontmatter[fieldName]) {
+        protectedConfig.permissions[fieldName] = frontmatter[fieldName];
       }
     }
 
-    return { userConfig, protectedConfig };
+    return protectedConfig;
+  }
+
+  private async addSidecarReference(agentName: string): Promise<void> {
+    const agentPath = `/prod/.claude/agents/${agentName}-agent.md`;
+    const content = await fs.promises.readFile(agentPath, 'utf-8');
+    const { data, content: body } = matter(content);
+
+    // Add reference to protected sidecar
+    data._protected_config_source = `.system/${agentName}.protected.yaml`;
+
+    // Write updated agent file
+    const updated = matter.stringify(body, data);
+    await fs.promises.writeFile(agentPath, updated);
+  }
+
+  private extractAgentName(filename: string): string {
+    return path.basename(filename, '-agent.md');
   }
 }
 ```
@@ -402,82 +684,90 @@ class AgentConfigMigrator {
 
 ---
 
-### Phase 2: File Structure Migration
+### Phase 2: Hybrid Architecture Setup (Non-Breaking)
 **Status**: ⏸️ NOT STARTED
 **Depends On**: Phase 1
 
 **Tasks**:
-1. Create `.system/` directories for all existing agents
-   - Scan `/prod/.claude/agents/` for agent directories
-   - Create `.system/` subdirectory in each
-   - Create `.gitkeep` or README in each .system/
+1. Create central `.system/` directory
+   - Create `/prod/.claude/agents/.system/` directory
+   - Set directory permissions to 555 (read-only, executable)
+   - Add `.gitkeep` to track in version control
 
-2. Split existing agent configs into user + protected
-   - Implement `AgentConfigMigrator` class
-   - Read existing agent files
-   - Parse and split fields based on classification
-   - Validate split configs against schemas
+2. Implement `AgentConfigMigrator` class
+   - Add `addProtectionToAgent()` method for incremental migration
+   - Add `migrateAllAgents()` method for bulk migration (optional)
+   - Extract protected fields from agent frontmatter
+   - Generate protected config sidecars
 
-3. Write separated configs to new locations
-   - Write `agent.yaml` (user-editable)
-   - Write `.system/protected.yaml` (system-controlled)
-   - Preserve any custom fields not in schemas
+3. Create protected config sidecars for critical agents
+   - Identify agents that need protection (e.g., meta-agent, system agents)
+   - Generate `.protected.yaml` sidecars with API rules, resource limits
+   - Add `_protected_config_source` reference to agent frontmatter
+   - Validate sidecar format and integrity
 
-4. Set file permissions on `.system/` directories
-   - Set directory to 555 (read-only, executable)
-   - Set protected.yaml to 444 (read-only)
-   - Set ownership to system user if applicable
+4. Set file permissions on protected configs
+   - Set `.system/` directory to 555 (read-only, executable)
+   - Set `*.protected.yaml` files to 444 (read-only)
+   - Verify permissions prevent unauthorized modification
 
-5. Create backup mechanism before migration
-   - Backup all existing agent configs to `/prod/backups/pre-migration/`
+5. Create backup mechanism
+   - Backup all agent `.md` files to `/prod/backups/pre-protection/`
    - Include timestamp in backup directory name
    - Verify backups are readable
 
 **Acceptance Criteria**:
-- [ ] All agents have `.system/` directories
-- [ ] All configs successfully split
-- [ ] File permissions correctly set
+- [ ] Central `.system/` directory created with correct permissions
+- [ ] Protected sidecars created for critical agents
+- [ ] File permissions correctly set and verified
 - [ ] Backups created and verified
-- [ ] No data loss during migration
+- [ ] Agents without sidecars continue working normally (backward compatible)
 
 ---
 
-### Phase 3: Runtime Protection
+### Phase 3: Runtime Protection (Hybrid Loader)
 **Status**: ⏸️ NOT STARTED
 **Depends On**: Phase 2
 
 **Tasks**:
 1. Implement `AgentConfigValidator` in `/workspaces/agent-feed/src/config/agent-config-validator.ts`
-   - Load and parse user config (agent.yaml)
-   - Load and parse protected config (.system/protected.yaml)
+   - Load and parse agent `.md` file (frontmatter + body)
+   - Check for `_protected_config_source` field in frontmatter
+   - If present, load protected sidecar (`.system/*.protected.yaml`)
    - Validate both against schemas
    - Merge configs with protected taking precedence
+   - Return merged config or plain config (if no sidecar)
 
 2. Implement `ProtectedAgentLoader` in `/workspaces/agent-feed/src/config/protected-agent-loader.ts`
-   - Add config cache (Map)
-   - Implement `loadAgent()` method
-   - Implement `reloadAgent()` method
-   - Add logging for load/reload events
+   - Add config cache (Map) for performance
+   - Implement `loadAgent()` method with sidecar support
+   - Implement `reloadAgent()` method for hot-reloading
+   - Add logging for load/reload/merge events
+   - Handle agents without sidecars gracefully
 
 3. Add integrity checking for protected configs
-   - Compute SHA-256 hash of protected config content
-   - Store hash in `_metadata.hash` field
+   - Compute SHA-256 hash of protected sidecar content
+   - Store hash in `checksum` field of sidecar
    - Verify hash on each load
-   - Throw error if hash mismatch detected
+   - Throw SecurityError if hash mismatch detected
+   - Log all integrity check results
 
 4. Add tampering detection with file watcher
-   - Use `fs.watch()` to monitor `.system/` directories
-   - Detect unauthorized modifications
-   - Log security alert
+   - Use `fs.watch()` to monitor `.system/` directory
+   - Detect unauthorized modifications to `.protected.yaml` files
+   - Log security alert immediately
    - Restore from backup if tampering detected
-   - Notify system admin
+   - Send notification to system admin
+   - Continue watching after restoration
 
 **Acceptance Criteria**:
-- [ ] Configs load and merge correctly
-- [ ] Protected fields cannot be overridden by user config
-- [ ] Integrity checking detects modifications
+- [ ] Agents with sidecars load and merge correctly
+- [ ] Agents without sidecars load normally (backward compatible)
+- [ ] Protected fields cannot be overridden by agent frontmatter
+- [ ] Integrity checking detects sidecar modifications
 - [ ] File watcher detects tampering attempts
-- [ ] Security alerts logged appropriately
+- [ ] Security alerts logged with full context
+- [ ] Performance acceptable with caching
 
 ---
 
@@ -573,3 +863,47 @@ class AgentConfigMigrator {
 4. **Add audit logging** for all protected config changes
 5. **Consider role-based access** for different protection levels
 6. **Implement config inheritance** for shared settings across agents
+
+---
+
+## Summary: YAML vs Markdown Question Answered
+
+### The Confusion
+
+**Original Question**: "Why is it using yml? Claude code sub agents use .md files in the agents folder."
+
+**Answer**: The project **already uses `.md` files** for all agents. YAML was proposed in this document as a **future architecture option**, not the current implementation.
+
+### Current Reality ✅
+
+```
+/prod/.claude/agents/
+├── meta-agent.md
+├── page-builder-agent.md
+├── strategic-planner-agent.md  (example)
+└── ... (all .md files)
+```
+
+**Format**: Markdown with YAML frontmatter (standard Claude Code format)
+
+### Proposed Future State (Option 3 - Hybrid) ✅
+
+```
+/prod/.claude/agents/
+├── strategic-planner-agent.md           # Main agent (unchanged)
+└── .system/
+    └── strategic-planner.protected.yaml # Protected sidecar (NEW)
+```
+
+**Why Hybrid Approach**:
+1. **Preserves existing .md format** (no breaking changes)
+2. **Adds YAML sidecars only for protected configs** (OS-level protection)
+3. **Incremental migration** (add protection agent-by-agent)
+4. **Claude Code compatible** (continues working normally)
+
+### Key Takeaway
+
+- ✅ **Current agents**: `.md` files (Markdown + YAML frontmatter)
+- ✅ **Future protection**: Add `.protected.yaml` sidecars (optional)
+- ✅ **No migration required**: Agents without sidecars work as-is
+- ✅ **Best of both worlds**: Standard format + OS-level protection
