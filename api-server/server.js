@@ -439,7 +439,6 @@ const mockAgentPosts = [
       isSaved: false
     },
     metadata: {
-      businessImpact: 5,
       confidence_score: 0.9,
       isAgentResponse: false,
       processing_time_ms: 100,
@@ -480,7 +479,6 @@ const mockAgentPosts = [
       isSaved: false
     },
     metadata: {
-      businessImpact: 8,
       confidence_score: 0.95,
       isAgentResponse: false,
       processing_time_ms: 150,
@@ -691,14 +689,53 @@ app.get('/api/agents', async (req, res) => {
   try {
     // Use database selector for dual database support (PostgreSQL or SQLite)
     const userId = req.query.userId || 'anonymous';
-    const agents = await dbSelector.getAllAgents(userId);
+
+    // Parse tier filtering parameters
+    const tierParam = req.query.tier;
+    const includeSystemParam = req.query.include_system;
+
+    // Validate tier parameter
+    if (tierParam && !['1', '2', 'all'].includes(tierParam)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid tier parameter',
+        message: 'Tier must be 1, 2, or "all"',
+        code: 'INVALID_TIER'
+      });
+    }
+
+    // Build filter options
+    const options = {};
+    if (tierParam) {
+      options.tier = tierParam === 'all' ? 'all' : Number(tierParam);
+    }
+    if (includeSystemParam) {
+      options.include_system = includeSystemParam === 'true';
+    }
+
+    // Get filtered agents
+    const filteredAgents = await dbSelector.getAllAgents(userId, options);
+
+    // Get all agents for metadata calculation
+    const allAgents = await dbSelector.getAllAgents(userId, { tier: 'all' });
+
+    // Calculate tier metadata
+    const appliedTier = options.tier !== undefined ? options.tier : 1;
+    const metadata = {
+      total: allAgents.length,
+      tier1: allAgents.filter(a => a.tier === 1).length,
+      tier2: allAgents.filter(a => a.tier === 2).length,
+      protected: allAgents.filter(a => a.visibility === 'protected').length,
+      filtered: filteredAgents.length,
+      appliedTier: String(appliedTier)
+    };
 
     res.json({
       success: true,
-      data: agents,
-      total: agents.length,
+      data: filteredAgents,
+      metadata,
       timestamp: new Date().toISOString(),
-      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'Filesystem'
     });
   } catch (error) {
     console.error('Error loading agents:', error);
@@ -709,6 +746,116 @@ app.get('/api/agents', async (req, res) => {
     });
   }
 });
+
+// API v1 endpoint: /api/v1/claude-live/prod/agents
+// New endpoint with tier filtering and modified response format
+app.get('/api/v1/claude-live/prod/agents', async (req, res) => {
+  try {
+    console.log(`\n🌐 GET /api/v1/claude-live/prod/agents - Query params:`, req.query);
+
+    // Use database selector for dual database support (PostgreSQL or SQLite)
+    const userId = req.query.userId || 'anonymous';
+
+    // Parse tier filtering parameters
+    const tierParam = req.query.tier;
+    console.log(`📊 Tier parameter: "${tierParam}" (type: ${typeof tierParam})`);
+
+    // Validate tier parameter
+    if (tierParam && !['1', '2', 'all'].includes(tierParam)) {
+      console.log(`❌ Invalid tier parameter: ${tierParam}`);
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid tier parameter',
+        message: 'Tier must be 1, 2, or "all"',
+        code: 'INVALID_TIER'
+      });
+    }
+
+    // Build filter options
+    const options = {};
+    if (tierParam) {
+      options.tier = tierParam === 'all' ? 'all' : Number(tierParam);
+    }
+    console.log(`⚙️  Filter options:`, options);
+
+    // Get filtered agents
+    console.log(`📡 Calling dbSelector.getAllAgents with options:`, options);
+    const filteredAgents = await dbSelector.getAllAgents(userId, options);
+    console.log(`✅ Received ${filteredAgents.length} filtered agents from repository`);
+
+    // Get all agents for metadata calculation
+    const allAgents = await dbSelector.getAllAgents(userId, { tier: 'all' });
+    console.log(`📊 Total agents for metadata: ${allAgents.length}`);
+
+    // Calculate tier metadata
+    const appliedTier = options.tier !== undefined ? options.tier : 1;
+    const metadata = {
+      total: allAgents.length,
+      tier1: allAgents.filter(a => a.tier === 1).length,
+      tier2: allAgents.filter(a => a.tier === 2).length,
+      protected: allAgents.filter(a => a.visibility === 'protected').length,
+      filtered: filteredAgents.length,
+      appliedTier: String(appliedTier)
+    };
+    console.log(`📊 Metadata:`, metadata);
+
+    // Log response details before sending
+    console.log(`📤 Sending response with ${filteredAgents.length} agents`);
+    if (filteredAgents.length > 0) {
+      console.log(`📤 First agent:`, { name: filteredAgents[0].name, tier: filteredAgents[0].tier });
+    } else {
+      console.log(`⚠️  WARNING: Sending empty agents array!`);
+    }
+
+    // Return response with "agents" field instead of "data"
+    res.json({
+      success: true,
+      agents: filteredAgents,
+      metadata
+    });
+  } catch (error) {
+    console.error('❌ Error loading agents:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to load agents',
+      message: error.message
+    });
+  }
+});
+
+// Helper function to load tools from agent markdown file
+function loadAgentTools(agentName) {
+  try {
+    const agentFilePath = '/workspaces/agent-feed/prod/.claude/agents/' + agentName + '.md';
+    const fileContent = readFileSync(agentFilePath, 'utf-8');
+
+    // Extract YAML frontmatter
+    const frontmatterMatch = fileContent.match(/^---\n([\s\S]+?)\n---/);
+    if (!frontmatterMatch) {
+      return [];
+    }
+
+    // Parse tools from frontmatter
+    const frontmatter = frontmatterMatch[1];
+    const toolsMatch = frontmatter.match(/tools:\s*\[([^\]]+)\]/);
+
+    if (!toolsMatch) {
+      return [];
+    }
+
+    // Extract and clean tool names
+    const tools = toolsMatch[1]
+      .split(',')
+      .map(tool => tool.trim().replace(/^['"]|['"]$/g, ''))
+      .filter(tool => tool.length > 0);
+
+    return tools;
+  } catch (error) {
+    // Agent markdown file doesn't exist or can't be read - return empty array
+    console.log(`Could not load tools for agent ${agentName}:`, error.message);
+    return [];
+  }
+}
 
 app.get('/api/agents/:slug', async (req, res) => {
   try {
@@ -734,6 +881,10 @@ app.get('/api/agents/:slug', async (req, res) => {
         source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
       });
     }
+
+    // Load tools from agent markdown file
+    const tools = loadAgentTools(agent.name || agent.slug || slug);
+    agent.tools = tools;
 
     res.json({
       success: true,
@@ -829,7 +980,6 @@ app.post('/api/v1/agent-posts', async (req, res) => {
       title: title.trim(),
       tags: metadata.tags || [],
       metadata: {
-        businessImpact: metadata.businessImpact || 5,
         postType: metadata.postType || 'quick',
         wordCount: metadata.wordCount || content.trim().split(/\s+/).length,
         readingTime: metadata.readingTime || 1,
@@ -3468,8 +3618,8 @@ let monitoringService = null;
 let alertingService = null;
 
 // Start server
-const server = app.listen(PORT, async () => {
-  console.log(`🚀 API Server running on http://localhost:${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', async () => {
+  console.log(`🚀 API Server running on http://0.0.0.0:${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/health`);
   console.log(`🤖 Agents API: http://localhost:${PORT}/api/agents`);
   console.log(`📝 Templates API: http://localhost:${PORT}/api/templates`);

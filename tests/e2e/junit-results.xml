@@ -1,0 +1,214 @@
+<testsuites id="" name="" tests="7" failures="7" skipped="0" errors="0" time="13.452283999999999">
+<testsuite name="avidm-port-fix-browser-validation.spec.ts" timestamp="2025-10-20T05:31:34.588Z" hostname="chromium" tests="7" failures="7" skipped="0" time="0.044" errors="0">
+<testcase name="AviDMService Port Fix - Browser E2E Validation › 1. Backend health check responds on port 3001" classname="avidm-port-fix-browser-validation.spec.ts" time="0.008">
+<failure message="avidm-port-fix-browser-validation.spec.ts:28:3 1. Backend health check responds on port 3001" type="FAILURE">
+<![CDATA[  [chromium] › avidm-port-fix-browser-validation.spec.ts:28:3 › AviDMService Port Fix - Browser E2E Validation › 1. Backend health check responds on port 3001 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+      - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-RXQLRZ --remote-debugging-pipe --no-startup-window
+      - <launched> pid=205454
+      - [pid=205454][err] [205454:205748:1020/053138.656751:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      - [pid=205454][err] [205454:205454:1020/053138.714204:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY
+      - [pid=205454][err] [205454:205454:1020/053138.714229:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.
+      - [pid=205454] <gracefully close start>
+      - [pid=205454] <kill>
+      - [pid=205454] <will force kill>
+      - [pid=205454] <process did exit: exitCode=1, signal=null>
+      - [pid=205454] starting temporary directories cleanup
+      - [pid=205454] finished temporary directories cleanup
+      - [pid=205454] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="AviDMService Port Fix - Browser E2E Validation › 2. Verify no service running on old port 8080" classname="avidm-port-fix-browser-validation.spec.ts" time="0.006">
+<failure message="avidm-port-fix-browser-validation.spec.ts:42:3 2. Verify no service running on old port 8080" type="FAILURE">
+<![CDATA[  [chromium] › avidm-port-fix-browser-validation.spec.ts:42:3 › AviDMService Port Fix - Browser E2E Validation › 2. Verify no service running on old port 8080 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+      - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-Fo01Jt --remote-debugging-pipe --no-startup-window
+      - <launched> pid=205809
+      - [pid=205809][err] [205809:205823:1020/053140.148991:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      - [pid=205809][err] [205809:205809:1020/053140.151213:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY
+      - [pid=205809][err] [205809:205809:1020/053140.151227:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.
+      - [pid=205809] <gracefully close start>
+      - [pid=205809] <kill>
+      - [pid=205809] <will force kill>
+      - [pid=205809] <process did exit: exitCode=1, signal=null>
+      - [pid=205809] starting temporary directories cleanup
+      - [pid=205809] finished temporary directories cleanup
+      - [pid=205809] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="AviDMService Port Fix - Browser E2E Validation › 3. Frontend makes requests to correct port (3001)" classname="avidm-port-fix-browser-validation.spec.ts" time="0.005">
+<failure message="avidm-port-fix-browser-validation.spec.ts:60:3 3. Frontend makes requests to correct port (3001)" type="FAILURE">
+<![CDATA[  [chromium] › avidm-port-fix-browser-validation.spec.ts:60:3 › AviDMService Port Fix - Browser E2E Validation › 3. Frontend makes requests to correct port (3001) 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+      - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-C19YL9 --remote-debugging-pipe --no-startup-window
+      - <launched> pid=205845
+      - [pid=205845][err] [205845:205859:1020/053141.187503:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      - [pid=205845][err] [205845:205845:1020/053141.189737:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY
+      - [pid=205845][err] [205845:205845:1020/053141.190133:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.
+      - [pid=205845] <gracefully close start>
+      - [pid=205845] <kill>
+      - [pid=205845] <will force kill>
+      - [pid=205845] <process did exit: exitCode=1, signal=null>
+      - [pid=205845] starting temporary directories cleanup
+      - [pid=205845] finished temporary directories cleanup
+      - [pid=205845] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="AviDMService Port Fix - Browser E2E Validation › 4. No 403 Forbidden errors on API calls" classname="avidm-port-fix-browser-validation.spec.ts" time="0.01">
+<failure message="avidm-port-fix-browser-validation.spec.ts:101:3 4. No 403 Forbidden errors on API calls" type="FAILURE">
+<![CDATA[  [chromium] › avidm-port-fix-browser-validation.spec.ts:101:3 › AviDMService Port Fix - Browser E2E Validation › 4. No 403 Forbidden errors on API calls 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+      - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-BIf4iw --remote-debugging-pipe --no-startup-window
+      - <launched> pid=205928
+      - [pid=205928][err] [205928:205981:1020/053142.608328:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      - [pid=205928][err] [205928:205928:1020/053142.610972:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY
+      - [pid=205928][err] [205928:205928:1020/053142.610981:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.
+      - [pid=205928] <gracefully close start>
+      - [pid=205928] <kill>
+      - [pid=205928] <will force kill>
+      - [pid=205928] <process did exit: exitCode=1, signal=null>
+      - [pid=205928] starting temporary directories cleanup
+      - [pid=205928] finished temporary directories cleanup
+      - [pid=205928] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="AviDMService Port Fix - Browser E2E Validation › 5. Real data validation - agents endpoint" classname="avidm-port-fix-browser-validation.spec.ts" time="0.005">
+<failure message="avidm-port-fix-browser-validation.spec.ts:137:3 5. Real data validation - agents endpoint" type="FAILURE">
+<![CDATA[  [chromium] › avidm-port-fix-browser-validation.spec.ts:137:3 › AviDMService Port Fix - Browser E2E Validation › 5. Real data validation - agents endpoint 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+      - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-oL8hBE --remote-debugging-pipe --no-startup-window
+      - <launched> pid=206212
+      - [pid=206212][err] [206212:206226:1020/053144.419212:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      - [pid=206212][err] [206212:206212:1020/053144.423200:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY
+      - [pid=206212][err] [206212:206212:1020/053144.423213:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.
+      - [pid=206212] <gracefully close start>
+      - [pid=206212] <kill>
+      - [pid=206212] <will force kill>
+      - [pid=206212] <process did exit: exitCode=1, signal=null>
+      - [pid=206212] starting temporary directories cleanup
+      - [pid=206212] finished temporary directories cleanup
+      - [pid=206212] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="AviDMService Port Fix - Browser E2E Validation › 6. Network trace validation" classname="avidm-port-fix-browser-validation.spec.ts" time="0.005">
+<failure message="avidm-port-fix-browser-validation.spec.ts:173:3 6. Network trace validation" type="FAILURE">
+<![CDATA[  [chromium] › avidm-port-fix-browser-validation.spec.ts:173:3 › AviDMService Port Fix - Browser E2E Validation › 6. Network trace validation 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+      - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-U6u2XD --remote-debugging-pipe --no-startup-window
+      - <launched> pid=206249
+      - [pid=206249][err] [206249:206249:1020/053146.012874:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY
+      - [pid=206249][err] [206249:206249:1020/053146.012924:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.
+      - [pid=206249][err] [206249:206264:1020/053146.017930:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      - [pid=206249] <gracefully close start>
+      - [pid=206249] <kill>
+      - [pid=206249] <will force kill>
+      - [pid=206249] <process did exit: exitCode=1, signal=null>
+      - [pid=206249] starting temporary directories cleanup
+      - [pid=206249] finished temporary directories cleanup
+      - [pid=206249] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="AviDMService Port Fix - Browser E2E Validation › 7. Production readiness - no mock responses" classname="avidm-port-fix-browser-validation.spec.ts" time="0.005">
+<failure message="avidm-port-fix-browser-validation.spec.ts:214:3 7. Production readiness - no mock responses" type="FAILURE">
+<![CDATA[  [chromium] › avidm-port-fix-browser-validation.spec.ts:214:3 › AviDMService Port Fix - Browser E2E Validation › 7. Production readiness - no mock responses 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+      - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-WfTYrv --remote-debugging-pipe --no-startup-window
+      - <launched> pid=206337
+      - [pid=206337][err] [206337:206351:1020/053147.737396:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+      - [pid=206337][err] [206337:206337:1020/053147.741734:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY
+      - [pid=206337][err] [206337:206337:1020/053147.741751:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.
+      - [pid=206337] <gracefully close start>
+      - [pid=206337] <kill>
+      - [pid=206337] <will force kill>
+      - [pid=206337] <process did exit: exitCode=1, signal=null>
+      - [pid=206337] starting temporary directories cleanup
+      - [pid=206337] finished temporary directories cleanup
+      - [pid=206337] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

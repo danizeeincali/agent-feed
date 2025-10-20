@@ -1,4 +1,4 @@
-import { Agent, Post, ApiResponse } from '../types/api';
+import { Agent, AgentPost, ApiResponse } from '../types/api';
 
 /**
  * Custom EventEmitter implementation for browser compatibility
@@ -106,12 +106,14 @@ class IsolatedApiService extends BrowserEventEmitter {
     return requestPromise;
   }
 
-  async getAgents(): Promise<ApiResponse<Agent[]>> {
-    return this.request<Agent[]>('/agents');
+  async getAgents(options?: { tier?: '1' | '2' | 'all' }): Promise<ApiResponse<Agent[]>> {
+    const tier = options?.tier || 'all';
+    const endpoint = `/v1/claude-live/prod/agents?tier=${tier}`;
+    return this.request<Agent[]>(endpoint);
   }
 
-  async getPosts(): Promise<ApiResponse<Post[]>> {
-    return this.request<Post[]>('/agent-posts');
+  async getPosts(): Promise<ApiResponse<AgentPost[]>> {
+    return this.request<AgentPost[]>('/agent-posts');
   }
 
 

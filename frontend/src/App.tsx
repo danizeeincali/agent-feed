@@ -39,7 +39,6 @@ import DynamicPageRenderer from './components/DynamicPageRenderer';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
-import AgentConfigPage from './pages/AgentConfigPage';
 // import './styles/agents.css'; // Moved to _app.tsx
 import {
   Activity,
@@ -100,7 +99,6 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     // { name: 'Workflows', href: '/workflows', icon: Workflow }, // REMOVED: TDD GREEN Phase
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
-    { name: 'Agent Config', href: '/agents/config', icon: SettingsIcon },
   ], []);
 
   return (
@@ -273,7 +271,7 @@ const App: React.FC = () => {
                     <RouteWrapper routeKey="agents">
                       <RouteErrorBoundary routeName="Agents" key="agents-route">
                         <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
-                          <IsolatedRealAgentManager key="agents-manager" />
+                          <IsolatedRealAgentManager key="isolated-agents-manager" />
                         </Suspense>
                       </RouteErrorBoundary>
                     </RouteWrapper>
@@ -282,7 +280,7 @@ const App: React.FC = () => {
                     <RouteWrapper routeKey="agents">
                       <RouteErrorBoundary routeName="Agents" key="agents-route">
                         <Suspense fallback={<FallbackComponents.AgentManagerFallback />}>
-                          <IsolatedRealAgentManager key="agents-manager" />
+                          <IsolatedRealAgentManager key="isolated-agents-manager" />
                         </Suspense>
                       </RouteErrorBoundary>
                     </RouteWrapper>
@@ -320,20 +318,6 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="DebugPosts">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Debug Posts..." />}>
                         <DebugPostsDisplay />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/agents/config" element={
-                    <RouteErrorBoundary routeName="AgentConfig">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Agent Configuration..." />}>
-                        <AgentConfigPage isAdmin={false} />
-                      </Suspense>
-                    </RouteErrorBoundary>
-                  } />
-                  <Route path="/admin/protected-configs" element={
-                    <RouteErrorBoundary routeName="ProtectedConfigs">
-                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Protected Configurations..." />}>
-                        <AgentConfigPage isAdmin={true} />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

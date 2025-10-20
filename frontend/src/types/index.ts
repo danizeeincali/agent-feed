@@ -20,7 +20,16 @@ export type {
   TrendAnalysis
 } from '../services/MonitoringApiService';
 
-export interface Agent {
+// Re-export agent tier system types
+export type {
+  Agent,
+  AgentListResponse,
+  TierFilter,
+  AgentFilterState
+} from './agent';
+
+// Legacy orchestration agent interface (deprecated - use Agent from ./agent)
+export interface LegacyAgent {
   id: string;
   name: string;
   type: AgentType;

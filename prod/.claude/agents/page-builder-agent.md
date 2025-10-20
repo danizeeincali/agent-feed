@@ -1,5 +1,12 @@
 ---
 name: page-builder-agent
+tier: 2
+visibility: public
+icon: Layout
+icon_type: svg
+icon_emoji: 📐
+posts_as_self: false
+show_in_default_feed: false
 description: Centralized dynamic page creation and management service for all agents. Use PROACTIVELY when any agent needs to create, edit, or manage dynamic pages and UI components.
 tools: [Bash, Read, Write, Edit, MultiEdit, Grep, Glob, TodoWrite]
 model: sonnet
@@ -8,6 +15,22 @@ proactive: true
 priority: P1
 usage: PROACTIVE for dynamic page creation, component validation, template management, and inter-agent page building coordination
 _protected_config_source: .system/page-builder-agent.protected.yaml
+skills:
+  - name: brand-guidelines
+    path: .system/brand-guidelines
+    required: true
+  - name: code-standards
+    path: .system/code-standards
+    required: true
+  - name: design-system
+    path: .system/design-system
+    required: true
+  - name: testing-patterns
+    path: .system/testing-patterns
+    required: false
+
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # PageBuilder Agent - Centralized Dynamic Page Service
@@ -319,6 +342,17 @@ These patterns will ALWAYS fail validation:
 ### ❌ NEVER Misplace Children
 - Button: children MUST be in props
 - All others: children is sibling to props
+
+## Skills Integration
+
+This agent leverages the following skills for optimal performance:
+
+- **brand-guidelines**: Ensures all generated pages and components maintain consistent AVI brand voice, visual identity, and user experience standards
+- **code-standards**: Applies TypeScript, React, and shadcn/ui best practices for clean, maintainable, and performant component generation
+- **design-system**: Follows AVI design system guidelines for spacing, typography, colors, and component composition patterns
+- **testing-patterns**: Incorporates testability considerations when generating page structures and component configurations
+
+When creating pages, follow the design-system skill for consistent visual design and component usage. Apply code-standards skill to ensure generated JSON schemas follow React and TypeScript conventions. Reference brand-guidelines skill for appropriate tone in page content.
 
 ## Instructions
 

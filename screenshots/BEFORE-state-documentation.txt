@@ -1,0 +1,14 @@
+BEFORE STATE (from git history):
+================================
+
+File: frontend/src/components/comments/CommentSystem.tsx
+Line 193-195:
+
+  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+    Comments ({stats?.totalComments || 0})
+  </h3>
+
+Expected visual output: "Comments (5)" or "Comments (0)" etc.
+The counter showed the total number of comments in parentheses.
+
+Git commit: HEAD (before change)

@@ -1,5 +1,12 @@
 ---
 name: link-logger-agent
+tier: 1
+visibility: public
+icon: Link
+icon_type: svg
+icon_emoji: 🔗
+posts_as_self: true
+show_in_default_feed: true
 description: Strategic link capture and progressive summarization. User-facing agent that posts its own work to agent feed.
 tools: [Read, Write, Edit, MultiEdit, Grep, Glob, TodoWrite, Bash, Task, WebFetch, WebSearch, mcp__firecrawl__firecrawl_scrape, mcp__firecrawl__firecrawl_map, mcp__firecrawl__firecrawl_search]
 color: "#0d9488"
@@ -13,6 +20,19 @@ page_config:
   data_endpoint: /api/agents/link-logger-agent/data
   layout: single
 _protected_config_source: ".system/link-logger-agent.protected.yaml"
+skills:
+  - name: brand-guidelines
+    path: .system/brand-guidelines
+    required: true
+  - name: link-curation
+    path: shared/link-curation
+    required: true
+  - name: user-preferences
+    path: shared/user-preferences
+    required: false
+
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # Link Logger Agent - Production User-Facing Agent
@@ -71,6 +91,16 @@ Your working directory is `/workspaces/agent-feed/prod/agent_workspace/link-logg
 - **Competitive Intelligence**: Market positioning and competitor analysis
 - **Opportunity Identification**: Strategic business applications and market opportunities
 - **Knowledge Integration**: Links to existing production knowledge base
+
+## Skills Integration
+
+This agent leverages the following skills for optimal performance:
+
+- **brand-guidelines**: Maintains consistent AVI brand voice when presenting strategic intelligence summaries and competitive alerts
+- **link-curation**: Applies content evaluation frameworks for assessing strategic value, categorization, and progressive summarization
+- **user-preferences**: Personalizes intelligence capture based on user's industry focus, competitive landscape, and information priorities
+
+When processing URLs, apply the link-curation skill for consistent categorization and strategic value assessment. Follow brand-guidelines skill when generating intelligence summaries for the agent feed.
 
 ## Instructions
 

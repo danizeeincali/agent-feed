@@ -1,0 +1,254 @@
+name: Skills Deployment Pipeline
+
+on:
+  push:
+    paths:
+      - 'prod/skills/**'
+      - 'api-server/services/skills-service.ts'
+    branches:
+      - main
+      - v1
+  pull_request:
+    paths:
+      - 'prod/skills/**'
+      - 'api-server/services/skills-service.ts'
+
+jobs:
+  validate-skills:
+    runs-on: ubuntu-latest
+    name: Validate Skill Structure
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate SKILL.md structure
+        run: |
+          echo "Validating all SKILL.md files have valid frontmatter..."
+
+          # Find all SKILL.md files
+          find prod/skills -name "SKILL.md" -type f | while read skill_file; do
+            echo "Validating: $skill_file"
+
+            # Check frontmatter exists
+            if ! head -n 1 "$skill_file" | grep -q "^---$"; then
+              echo "ERROR: Missing frontmatter in $skill_file"
+              exit 1
+            fi
+
+            # Check required fields
+            if ! grep -q "name:" "$skill_file"; then
+              echo "ERROR: Missing 'name' in $skill_file"
+              exit 1
+            fi
+
+            if ! grep -q "description:" "$skill_file"; then
+              echo "ERROR: Missing 'description' in $skill_file"
+              exit 1
+            fi
+
+            echo "✓ $skill_file validated"
+          done
+
+          echo "All SKILL.md files validated successfully!"
+
+      - name: Check token limits
+        run: |
+          echo "Checking token limits for skills..."
+
+          find prod/skills -name "SKILL.md" -type f | while read skill_file; do
+            # Remove frontmatter and estimate tokens (rough: 4 chars per token)
+            content=$(sed '1,/^---$/d' "$skill_file" | sed '1,/^---$/d')
+            char_count=$(echo "$content" | wc -c)
+            estimated_tokens=$((char_count / 4))
+
+            echo "$skill_file: ~$estimated_tokens tokens"
+
+            if [ $estimated_tokens -gt 5000 ]; then
+              echo "WARNING: $skill_file exceeds recommended 5000 token limit"
+            fi
+          done
+
+      - name: Lint Markdown files
+        run: |
+          npx markdownlint-cli2 "prod/skills/**/*.md" || true
+
+      - name: Validate file permissions
+        run: |
+          echo "Checking .system directory permissions..."
+
+          if [ ! -f "prod/skills/.system/.protected" ]; then
+            echo "ERROR: Missing .protected marker in .system directory"
+            exit 1
+          fi
+
+          echo "✓ Protection marker validated"
+
+  test-skills:
+    needs: validate-skills
+    runs-on: ubuntu-latest
+    name: Test Skills Service
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test tests/skills/skills-service.test.ts
+
+      - name: Run integration tests
+        run: npm test tests/skills/skills-integration.test.ts
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Run E2E tests
+        run: npx playwright test tests/e2e/skills-validation.spec.ts
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 30
+
+  security-scan:
+    needs: validate-skills
+    runs-on: ubuntu-latest
+    name: Security Scan
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan for sensitive data
+        run: |
+          echo "Scanning for potential secrets..."
+
+          # Check for API keys
+          if grep -r "sk-ant-api" prod/skills/; then
+            echo "ERROR: Found potential API key in skills"
+            exit 1
+          fi
+
+          # Check for hardcoded credentials
+          if grep -r "password.*=" prod/skills/ | grep -v "example"; then
+            echo "WARNING: Found potential hardcoded credential"
+          fi
+
+          echo "✓ No secrets detected"
+
+      - name: Validate protection markers
+        run: |
+          echo "Validating .system protection..."
+
+          if [ ! -f "prod/skills/.system/.protected" ]; then
+            echo "ERROR: Missing .protected marker"
+            exit 1
+          fi
+
+          protected_content=$(cat prod/skills/.system/.protected)
+          if ! echo "$protected_content" | grep -q "PROTECTED"; then
+            echo "ERROR: Invalid .protected marker content"
+            exit 1
+          fi
+
+          echo "✓ Protection markers valid"
+
+  deploy-skills:
+    needs: [test-skills, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    name: Deploy to Production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying skills to production..."
+          echo "Skills directory: /prod/skills/"
+          echo "Protection status: Verified"
+
+          # In a real deployment, this would:
+          # 1. Sync skills to production server
+          # 2. Update skills registry
+          # 3. Invalidate caches
+          # 4. Register with Anthropic API (if needed)
+
+          echo "✓ Deployment simulation complete"
+
+      - name: Register skills with Anthropic API
+        if: github.event_name == 'push' && secrets.ANTHROPIC_API_KEY != ''
+        run: |
+          echo "Registering skills with Anthropic API..."
+          # This would run the actual skill registration
+          # node scripts/register-skills.js
+          echo "✓ Skills registered (simulation)"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Notify deployment
+        run: |
+          echo "🎉 Skills deployment complete!"
+          echo "Branch: ${{ github.ref }}"
+          echo "Commit: ${{ github.sha }}"
+
+  report:
+    needs: [validate-skills, test-skills, security-scan]
+    runs-on: ubuntu-latest
+    if: always()
+    name: Generate Report
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate deployment report
+        run: |
+          echo "# Skills Deployment Report" > report.md
+          echo "" >> report.md
+          echo "**Date:** $(date)" >> report.md
+          echo "**Branch:** ${{ github.ref }}" >> report.md
+          echo "**Commit:** ${{ github.sha }}" >> report.md
+          echo "" >> report.md
+          echo "## Skills Validated" >> report.md
+          find prod/skills -name "SKILL.md" | while read skill; do
+            skill_name=$(basename $(dirname "$skill"))
+            echo "- $skill_name" >> report.md
+          done
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: report.md
+          retention-days: 90

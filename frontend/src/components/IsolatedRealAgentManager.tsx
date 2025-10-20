@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RefreshCw, AlertCircle, Bot } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Agent, ApiResponse } from '../types/api';
@@ -7,6 +7,11 @@ import { createApiService } from '../services/apiServiceIsolated';
 import AgentListSidebar from './AgentListSidebar';
 import WorkingAgentProfile from './WorkingAgentProfile';
 import { generateSlug } from '@/utils/slugify';
+import { useAgentTierFilter } from '../hooks/useAgentTierFilter';
+import { AgentTierToggle } from './agents/AgentTierToggle';
+import { AgentTierBadge } from './agents/AgentTierBadge';
+import { AgentIcon } from './agents/AgentIcon';
+import { ProtectionBadge } from './agents/ProtectionBadge';
 
 interface IsolatedRealAgentManagerProps {
   className?: string;
@@ -17,7 +22,7 @@ interface IsolatedRealAgentManagerProps {
  * Prevents conflicts with other routes through API service isolation
  */
 const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ className = '' }) => {
-  const [agents, setAgents] = useState<Agent[]>([]);
+  const [allAgents, setAllAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,16 +35,20 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
   // Create isolated API service for this route
   const [apiService] = useState(() => createApiService(routeKey));
 
+  // Tier filtering hook with localStorage persistence
+  const { currentTier, setCurrentTier, showTier1, showTier2 } = useAgentTierFilter();
+
   // Real data loading with cleanup
   const loadAgents = useCallback(async () => {
     try {
       setError(null);
-      const response: any = await apiService.getAgents();
+      // Always fetch ALL agents for client-side filtering
+      const response: any = await apiService.getAgents({ tier: 'all' });
       if (!apiService.getStatus().isDestroyed) {
         // Handle actual API response format: {success: true, agents: [...], totalAgents: 3}
         const agentsData = response.agents || response.data || [];
-        setAgents(agentsData);
-        console.log(`✅ Loaded ${agentsData.length} agents:`, agentsData);
+        setAllAgents(agentsData);
+        console.log(`✅ Loaded ${agentsData.length} total agents`);
       }
     } catch (err) {
       if (err.name !== 'AbortError' && !apiService.getStatus().isDestroyed) {
@@ -52,35 +61,52 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
         setRefreshing(false);
       }
     }
-  }, [apiService]);
+  }, [apiService]); // Remove currentTier from dependencies
+
+  // Client-side filtering
+  const displayedAgents = useMemo(() => {
+    if (currentTier === 'all') return allAgents;
+    const tierNum = Number(currentTier);
+    return allAgents.filter(a => a.tier === tierNum);
+  }, [allAgents, currentTier]);
+
+  // Tier counts from ALL agents
+  const tierCounts = useMemo(() => ({
+    tier1: allAgents.filter(a => a.tier === 1).length,
+    tier2: allAgents.filter(a => a.tier === 2).length,
+    total: allAgents.length
+  }), [allAgents]);
 
   // Sync selected agent with URL
   useEffect(() => {
-    if (agentSlug && agents.length > 0) {
-      const agent = agents.find(a => a.slug === agentSlug);
+    if (agentSlug && displayedAgents.length > 0) {
+      const agent = displayedAgents.find(a => a.slug === agentSlug);
       if (agent) {
         setSelectedAgentId(agent.id);
       }
-    } else if (!agentSlug && agents.length > 0 && !selectedAgentId) {
+    } else if (!agentSlug && displayedAgents.length > 0 && !selectedAgentId) {
       // Auto-select first agent if no slug in URL
-      const firstAgent = agents[0];
+      const firstAgent = displayedAgents[0];
       setSelectedAgentId(firstAgent.id);
       // UPDATED: Use agent.slug if available, otherwise generate from agent.name
       const slug = firstAgent.slug || generateSlug(firstAgent.name);
       navigate(`/agents/${slug}`, { replace: true });
     }
-  }, [agentSlug, agents, selectedAgentId, navigate]);
+  }, [agentSlug, displayedAgents, selectedAgentId, navigate]);
 
+  // Component lifecycle effect - runs ONLY on mount/unmount or route change
+  // Does NOT run when tier changes (loadAgents removed from dependencies)
   useEffect(() => {
     console.log(`🚀 IsolatedRealAgentManager mounted for route: ${routeKey}`);
 
+    // Initial load
     loadAgents();
 
     // Listen for real-time agent updates
     const handleAgentsUpdate = (updatedAgent: Agent) => {
       if (apiService.getStatus().isDestroyed) return;
 
-      setAgents(current => {
+      setAllAgents(current => {
         const index = current.findIndex(agent => agent.id === updatedAgent.id);
         if (index >= 0) {
           const updated = [...current];
@@ -94,11 +120,11 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
 
     apiService.on('agents_updated', handleAgentsUpdate);
 
-    // Register cleanup function
+    // Register cleanup function - ONLY runs on route change or unmount
     const cleanup = () => {
       console.log(`🧹 Cleaning up IsolatedRealAgentManager for ${routeKey}`);
       apiService.destroy();
-      setAgents([]);
+      setAllAgents([]);
       setError(null);
       setLoading(false);
     };
@@ -106,7 +132,9 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
     registerCleanup(cleanup);
 
     return cleanup;
-  }, [routeKey, loadAgents, apiService, registerCleanup]);
+  }, [routeKey, apiService, registerCleanup]);
+  // ✅ loadAgents intentionally removed from dependencies to prevent cleanup on tier change
+  // ✅ Tier change effect removed - client-side filtering handles tier changes instantly
 
   // Real agent operations with error handling
   const handleRefresh = async () => {
@@ -136,8 +164,8 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
     );
   }
 
-  // Get selected agent details (no filtering needed - sidebar handles it)
-  const selectedAgent = agents.find(agent => agent.id === selectedAgentId);
+  // Get selected agent details (from displayed agents)
+  const selectedAgent = displayedAgents.find(agent => agent.id === selectedAgentId);
 
   if (loading) {
     return (
@@ -156,12 +184,39 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
     <div className="flex h-screen" data-testid="isolated-agent-manager">
       {/* Sidebar */}
       <AgentListSidebar
-        agents={agents}
+        agents={displayedAgents}
         selectedAgentId={selectedAgentId}
         onSelectAgent={handleSelectAgent}
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         loading={false}
+        tierFilterEnabled={true}
+        currentTier={currentTier}
+        onTierChange={setCurrentTier}
+        tierCounts={tierCounts}
+        renderAgentBadges={(agent) => (
+          <>
+            <AgentTierBadge tier={agent.tier || 1} variant="compact" />
+            {agent.visibility === 'protected' && (
+              <ProtectionBadge
+                isProtected={true}
+                protectionReason="System agent - protected from modification"
+              />
+            )}
+          </>
+        )}
+        renderAgentIcon={(agent) => (
+          <AgentIcon
+            agent={{
+              name: agent.name,
+              icon: agent.icon,
+              icon_type: agent.icon_type,
+              icon_emoji: agent.icon_emoji,
+              tier: agent.tier
+            }}
+            size="md"
+          />
+        )}
       />
 
       {/* Detail Panel */}
@@ -175,14 +230,26 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
                 Route: {routeKey} | API Status: {apiService.getStatus().isDestroyed ? 'Destroyed' : 'Active'}
               </p>
             </div>
-            <button
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className="flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors text-gray-900 dark:text-gray-100"
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
-            </button>
+
+            <div className="flex items-center gap-3">
+              {/* Tier toggle */}
+              <AgentTierToggle
+                currentTier={currentTier}
+                onTierChange={setCurrentTier}
+                tierCounts={tierCounts}
+                loading={loading || refreshing}
+              />
+
+              {/* Refresh button */}
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors text-gray-900 dark:text-gray-100"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </button>
+            </div>
           </div>
         </div>
 
@@ -211,11 +278,11 @@ const IsolatedRealAgentManager: React.FC<IsolatedRealAgentManagerProps> = ({ cla
             <div className="text-center py-12 px-6">
               <Bot className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100 mb-2">
-                {agents.length === 0 ? 'No agents available' : 'Select an agent'}
+                {displayedAgents.length === 0 ? 'No agents available' : 'Select an agent'}
               </h3>
               <p className="text-gray-500 dark:text-gray-400 max-w-md">
-                {agents.length === 0
-                  ? 'No agents have been created yet.'
+                {displayedAgents.length === 0
+                  ? 'No agents match the current filter.'
                   : 'Choose an agent from the sidebar to view details and manage their configuration.'}
               </p>
             </div>

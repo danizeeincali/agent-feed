@@ -1,67 +1,215 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="11" failures="0" errors="0" time="4.618">
-    <testsuite name="src/tests/integration/comment-counter-integration.test.tsx" timestamp="2025-10-16T23:40:59.400Z" hostname="codespaces-005acc" tests="11" failures="0" errors="0" skipped="1" time="0.581">
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; API Response Structure &gt; should return posts with comments field at root level" time="0.032">
-            <system-out>
-Post structure: {
-  id: &apos;prod-post-780cce10-57fc-4031-96db-d9f0e15e3010&apos;,
-  hasCommentsField: true,
-  commentsValue: 0,
-  hasEngagement: false,
-  engagementComments: undefined
-}
-
-            </system-out>
+<testsuites name="vitest tests" tests="27" failures="26" errors="0" time="6.568">
+    <testsuite name="src/tests/unit/AviDMService-cwd-fix.test.ts" timestamp="2025-10-20T21:54:04.044Z" hostname="codespaces-005acc" tests="27" failures="26" errors="0" skipped="0" time="0.261">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Configuration &gt; should use absolute base URL by default" time="0.02">
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; API Response Structure &gt; should return comments as a number (not undefined)" time="0.021">
-            <system-out>
-Post 1: { id: &apos;prod-pos&apos;, title: &apos;Second TDD Test Post&apos;, comments: 0 }
-Post 2: {
-  id: &apos;prod-pos&apos;,
-  title: &apos;TDD Test Post for Comment Counter&apos;,
-  comments: 4
-}
-Post 3: {
-  id: &apos;prod-pos&apos;,
-  title: &apos;TDD Test Post for Comment Counter&apos;,
-  comments: 3
-}
-Post 4: { id: &apos;prod-pos&apos;, title: &apos;This should fail&apos;, comments: 0 }
-Post 5: { id: &apos;prod-pos&apos;, title: &apos;Rapid comment 3&apos;, comments: 0 }
-Post 6: { id: &apos;prod-pos&apos;, title: &apos;Rapid comment 2&apos;, comments: 0 }
-Post 7: { id: &apos;prod-pos&apos;, title: &apos;Rapid comment 1&apos;, comments: 0 }
-Post 8: { id: &apos;prod-pos&apos;, title: &apos;Test comment for persistence&apos;, comments: 0 }
-Post 9: {
-  id: &apos;prod-pos&apos;,
-  title: &apos;Test comment for server confirmation&apos;,
-  comments: 0
-}
-Post 10: {
-  id: &apos;prod-pos&apos;,
-  title: &apos;Test comment for optimistic update&apos;,
-  comments: 0
-}
-
-            </system-out>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Configuration &gt; should default to http://localhost:3001" time="0.056">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:105:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; API Response Structure &gt; should include comments count in newly created posts" time="0">
-            <skipped/>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Configuration &gt; should accept custom base URL" time="0.014">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:114:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; Component Data Flow &gt; should render comment counts from API data" time="0.139">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Configuration &gt; should accept base URL from environment variable" time="0.008">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:123:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; Component Data Flow &gt; should update counter when post data changes" time="0.021">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Configuration &gt; should not have /api suffix in base URL" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:131:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; State Management &gt; should maintain consistent comment counts across re-renders" time="0.027">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Send Message - CWD Path Handling &gt; should send message with correct cwd path in options" time="0.015">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:151:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; State Management &gt; should reflect API data accurately without transformation" time="0.035">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Send Message - CWD Path Handling &gt; should pass cwd to HTTP client in request body" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:182:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; Real-world Scenarios &gt; should handle posts with zero comments" time="0.039">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Send Message - CWD Path Handling &gt; should include enableTools in options" time="0.009">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:204:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; Real-world Scenarios &gt; should handle posts with multiple comments" time="0.04">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Send Message - CWD Path Handling &gt; should merge custom options with cwd" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:223:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; Real-world Scenarios &gt; should handle API errors gracefully" time="0.025">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; HTTP Client Integration &gt; should initialize HTTP client with correct base URL" time="0.013">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:243:23
+            </failure>
         </testcase>
-        <testcase classname="src/tests/integration/comment-counter-integration.test.tsx" name="Comment Counter - Integration Tests (Real API) &gt; Performance &gt; should handle large datasets efficiently" time="0.118">
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; HTTP Client Integration &gt; should use correct timeout for Claude Code (300 seconds)" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:253:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; HTTP Client Integration &gt; should have retry configuration" time="0.019">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:262:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Session Management with CWD &gt; should create session with project path" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:277:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Session Management with CWD &gt; should maintain project path in session context" time="0.022">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:302:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Error Handling &gt; should handle initialization errors gracefully" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:328:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Error Handling &gt; should handle send message errors" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:338:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Error Handling &gt; should support offline mode fallback" time="0.004">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:349:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Context Management &gt; should serialize context with project path" time="0.013">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:373:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Context Management &gt; should update project context" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:383:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Interaction Contracts (London School) &gt; should follow correct collaboration sequence for sending message" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:419:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Interaction Contracts (London School) &gt; should sanitize content before sending" time="0">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:434:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Interaction Contracts (London School) &gt; should check rate limit before sending" time="0.007">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:455:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Interaction Contracts (London School) &gt; should record request after successful send" time="0.003">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:477:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Event System &gt; should emit messageReceived event after successful send" time="0.003">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:502:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Event System &gt; should emit error event on failure" time="0.008">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:525:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Cleanup and Disposal &gt; should clean up resources on dispose" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:551:23
+            </failure>
+        </testcase>
+        <testcase classname="src/tests/unit/AviDMService-cwd-fix.test.ts" name="AviDMService - CWD Path Configuration &gt; Cleanup and Disposal &gt; should not allow sending messages after disposal" time="0.001">
+            <failure message="this.websocketManager.onConnect is not a function" type="TypeError">
+TypeError: this.websocketManager.onConnect is not a function
+ ❯ AviDMService.setupEventListeners src/services/AviDMService.ts:124:27
+ ❯ new AviDMService src/services/AviDMService.ts:88:10
+ ❯ src/tests/unit/AviDMService-cwd-fix.test.ts:562:23
+            </failure>
         </testcase>
     </testsuite>
 </testsuites>

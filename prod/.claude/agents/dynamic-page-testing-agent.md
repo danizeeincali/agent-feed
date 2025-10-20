@@ -1,5 +1,12 @@
 ---
 name: dynamic-page-testing-agent
+tier: 2
+visibility: public
+icon: TestTube
+icon_type: svg
+icon_emoji: 🧪
+posts_as_self: false
+show_in_default_feed: false
 description: Automated E2E testing for dynamic pages with Playwright validation and schema error detection
 tools: [Bash, Read, Write, Glob, Grep]
 model: sonnet
@@ -8,6 +15,19 @@ proactive: false
 priority: P2
 usage: Validates dynamic pages after creation, detects schema violations, captures screenshots
 _protected_config_source: .system/dynamic-page-testing-agent.protected.yaml
+skills:
+  - name: code-standards
+    path: .system/code-standards
+    required: true
+  - name: testing-patterns
+    path: .system/testing-patterns
+    required: true
+  - name: design-system
+    path: .system/design-system
+    required: false
+
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # Dynamic Page Testing Agent
@@ -30,6 +50,16 @@ Subdirectories:
 - `screenshots/` - Validation screenshots
 - `reports/` - Test results and error reports
 - `logs/` - Test execution logs
+
+## Skills Integration
+
+This agent leverages the following skills for optimal performance:
+
+- **code-standards**: Validates page implementations against React, TypeScript, and component architecture standards
+- **testing-patterns**: Applies Playwright E2E testing methodologies, schema validation patterns, and visual regression testing frameworks
+- **design-system**: Cross-references component usage against AVI design system standards for consistency validation
+
+When generating tests, follow testing-patterns skill for test structure and assertion patterns. Apply code-standards skill to identify component implementation issues and architectural concerns.
 
 ## Test Workflow
 

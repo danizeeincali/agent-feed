@@ -12,16 +12,41 @@
 
 import AgentWorker from '../worker/agent-worker.js';
 
-// Stub repositories for Phase 2
+// Stub repositories for Phase 2 - Complete implementation
 const aviStateRepo = {
   markRunning: async () => { console.log('✅ AVI marked as running'); },
-  markStopped: async () => { console.log('🛑 AVI marked as stopped'); }
+  markStopped: async () => { console.log('🛑 AVI marked as stopped'); },
+  updateState: async (state) => {
+    console.log('📊 AVI state updated:', state);
+    return state;
+  },
+  recordRestart: async (ticketIds) => {
+    console.log('🔄 AVI restart recorded for tickets:', ticketIds);
+    return { restartedTickets: ticketIds || [] };
+  }
 };
 
 const workQueueRepo = {
   getNextPendingTicket: async () => null,
+  getTicketsByUser: async (userId, options = {}) => {
+    // Return empty array - no tickets in stub mode
+    console.log('📋 Fetching tickets for user:', userId, options);
+    return [];
+  },
   markTicketInProgress: async () => {},
-  markTicketCompleted: async () => {}
+  markTicketCompleted: async () => {},
+  assignTicket: async (ticketId, workerId) => {
+    console.log(`✅ Ticket ${ticketId} assigned to worker ${workerId}`);
+    return { ticketId, workerId, assigned: true };
+  },
+  completeTicket: async (ticketId, result) => {
+    console.log(`✅ Ticket ${ticketId} completed:`, result);
+    return { ticketId, completed: true, result };
+  },
+  failTicket: async (ticketId, error) => {
+    console.error(`❌ Ticket ${ticketId} failed:`, error);
+    return { ticketId, failed: true, error };
+  }
 };
 
 class AviOrchestrator {

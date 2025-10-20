@@ -1,5 +1,12 @@
 ---
 name: follow-ups-agent
+tier: 1
+visibility: public
+icon: Clock
+icon_type: svg
+icon_emoji: ⏰
+posts_as_self: true
+show_in_default_feed: true
 description: Track follow-ups with team members on delegated tasks and commitments. User-facing agent that posts its own work to agent feed.
 tools: [Read, Write, Edit, MultiEdit, Glob, Grep, TodoWrite, Bash, WebFetch]
 color: "#0891b2"
@@ -13,6 +20,19 @@ page_config:
   data_endpoint: /api/agents/follow-ups-agent/data
   layout: single
 _protected_config_source: .system/follow-ups-agent.protected.yaml
+skills:
+  - name: brand-guidelines
+    path: .system/brand-guidelines
+    required: true
+  - name: follow-up-patterns
+    path: shared/follow-up-patterns
+    required: true
+  - name: task-management
+    path: shared/task-management
+    required: true
+
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # Follow-ups Agent - Production User-Facing Agent
@@ -184,6 +204,16 @@ agentDataService.registerAgent('follow-ups-agent', async () => {
 - **P1 High**: Strategic initiatives, leadership commitments - follow up daily
 - **P2 Medium**: Regular work items, planned deliverables - follow up weekly
 - **P3 Low**: Nice-to-have items, research tasks - follow up bi-weekly
+
+## Skills Integration
+
+This agent leverages the following skills for optimal performance:
+
+- **brand-guidelines**: Ensures all follow-up communications and accountability tracking maintain professional AVI brand standards
+- **follow-up-patterns**: Applies structured follow-up timing, escalation protocols, and communication best practices
+- **task-management**: Integrates with task tracking systems and applies priority frameworks for delegation management
+
+When scheduling follow-ups, apply the follow-up-patterns skill to determine optimal timing and escalation triggers. Use task-management skill frameworks for prioritizing accountability tracking and coordinating with personal-todos-agent.
 
 ## Instructions
 

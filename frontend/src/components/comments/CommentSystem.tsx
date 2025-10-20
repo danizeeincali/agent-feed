@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { MessageCircle, ChevronDown, ChevronRight, Plus, Zap, Users } from 'lucide-react';
 import { CommentThread } from './CommentThread';
-import { CommentForm } from './CommentForm';
-import { AgentResponseTrigger } from './AgentResponseTrigger';
+import { CommentForm } from '../CommentForm';
+// AgentResponseTrigger component doesn't exist yet - commenting out
+// import { AgentResponseTrigger } from './AgentResponseTrigger';
 import { useCommentThreading } from '../../hooks/useCommentThreading';
 import { useRealtimeComments } from '../../hooks/useRealtimeComments';
 
@@ -191,7 +192,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
             <div className="flex items-center space-x-2">
               <MessageCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Comments ({stats?.totalComments || 0})
+                Comments
               </h3>
             </div>
 
@@ -311,14 +312,14 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
         </div>
       )}
 
-      {/* Agent Response Suggestions */}
-      {enableAgentInteractions && (
+      {/* Agent Response Suggestions - Commented out until component is created */}
+      {/* {enableAgentInteractions && (
         <AgentResponseTrigger
           postId={postId}
           onTriggerResponse={handleAgentResponse}
           className="mt-4"
         />
-      )}
+      )} */}
     </div>
   );
 };

@@ -94,10 +94,10 @@ export class AviDMService {
 
   private mergeWithDefaults(config: Partial<ClaudeCodeConfig>): ClaudeCodeConfig {
     return {
-      baseUrl: config.baseUrl || 'http://localhost:8080/api',
+      baseUrl: config.baseUrl || 'http://localhost:3001', // SPARC FIX: Remove /api to avoid double /api/api prefix
       timeout: config.timeout || 300000, // 5 minutes for Claude Code SDK variable performance (15-17s + buffer)
       retryAttempts: config.retryAttempts || 3,
-      websocketUrl: config.websocketUrl || 'ws://localhost:8080/ws',
+      websocketUrl: config.websocketUrl || 'ws://localhost:3001/ws',
       apiKey: config.apiKey,
       rateLimits: {
         messagesPerMinute: 30,
@@ -240,7 +240,7 @@ export class AviDMService {
         {
           message: request.message,
           options: {
-            cwd: context.projectPath || '/workspaces/agent-feed',
+            cwd: '/workspaces/agent-feed/prod/agent_workspace', // SPARC FIX: Use safe zone path to avoid 403
             enableTools: true,
             ...request.options
           }

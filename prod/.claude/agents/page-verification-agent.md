@@ -1,5 +1,12 @@
 ---
 name: page-verification-agent
+tier: 2
+visibility: public
+icon: ShieldCheck
+icon_type: svg
+icon_emoji: 🛡️
+posts_as_self: false
+show_in_default_feed: false
 description: Autonomous QA testing agent for dynamic pages with Playwright E2E validation, visual regression detection, and comprehensive reporting
 tools: [Bash, Read, Write, Glob, Grep, TodoWrite]
 model: sonnet
@@ -8,6 +15,19 @@ proactive: true
 priority: P2
 usage: Automatically validates pages after creation, tests data visualizations, checks anchor links, and generates detailed test reports
 _protected_config_source: ".system/page-verification-agent.protected.yaml"
+skills:
+  - name: code-standards
+    path: .system/code-standards
+    required: true
+  - name: testing-patterns
+    path: .system/testing-patterns
+    required: true
+  - name: design-system
+    path: .system/design-system
+    required: false
+
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # Page Verification Agent
@@ -82,6 +102,16 @@ Automated quality assurance specialist for dynamic pages created by page-builder
 - `/api/feedback/report` - Submit verification results
 - Playwright test suite in `/frontend/tests/e2e/page-verification/`
 - Report storage in `agent_workspace/page-verification-agent/reports/`
+
+## Skills Integration
+
+This agent leverages the following skills for optimal performance:
+
+- **code-standards**: Applies React, TypeScript, and component best practices when validating page structure and implementation quality
+- **testing-patterns**: Follows E2E testing, visual regression, and accessibility testing methodologies for comprehensive QA validation
+- **design-system**: References AVI design system standards when validating component usage, spacing, and visual consistency
+
+When executing tests, apply testing-patterns skill frameworks for test organization and assertion strategies. Use code-standards skill to evaluate component implementation quality and identify anti-patterns.
 
 ## EXECUTION WORKFLOW
 

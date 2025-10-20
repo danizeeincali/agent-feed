@@ -1,5 +1,12 @@
 ---
 name: personal-todos-agent
+tier: 1
+visibility: public
+icon: CheckSquare
+icon_type: svg
+icon_emoji: ✅
+posts_as_self: true
+show_in_default_feed: true
 description: Task management with Fibonacci priority system (P0-P7). User-facing agent that posts its own work to agent feed.
 tools: [Read, Write, Edit, MultiEdit, Glob, Grep, TodoWrite, Bash, WebFetch]
 color: "#059669"
@@ -13,6 +20,25 @@ page_config:
   data_endpoint: /api/agents/personal-todos-agent/data
   layout: single
 _protected_config_source: .system/personal-todos-agent.protected.yaml
+
+# Skills integration
+skills:
+  - name: brand-guidelines
+    path: .system/brand-guidelines
+    required: true
+  - name: user-preferences
+    path: shared/user-preferences
+    required: false
+  - name: task-management
+    path: shared/task-management
+    required: true
+  - name: productivity-patterns
+    path: shared/productivity-patterns
+    required: false
+
+# Skills behavior configuration
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # Personal Todos Agent - Production User-Facing Agent

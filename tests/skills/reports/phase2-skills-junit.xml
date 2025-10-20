@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="118" failures="0" errors="0" time="0.863">
+  <testsuite name="Phase 2 Skills - Unit Tests" errors="0" failures="0" skipped="0" timestamp="2025-10-18T06:36:01" time="0.303" tests="47">
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › user-preferences skill" name="should exist and be readable" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › user-preferences skill" name="should have valid frontmatter with required fields" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › user-preferences skill" name="should have all required content sections" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › user-preferences skill" name="should have no placeholder content" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › user-preferences skill" name="should have reasonable content length (300+ lines)" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › user-preferences skill" name="should contain JSON schema examples" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › user-preferences skill" name="should define preference categories" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should exist and be readable" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should have valid frontmatter with required fields" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should have all required content sections" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should have no placeholder content" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should have reasonable content length (300+ lines)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should define all Fibonacci priority levels" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should contain priority selection criteria" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › task-management skill" name="should include task templates and examples" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › productivity-patterns skill" name="should exist and be readable" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › productivity-patterns skill" name="should have valid frontmatter with required fields" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › productivity-patterns skill" name="should have all required content sections" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › productivity-patterns skill" name="should have no placeholder content" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › productivity-patterns skill" name="should have reasonable content length (300+ lines)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › productivity-patterns skill" name="should define productivity frameworks" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Shared Skills › productivity-patterns skill" name="should include code examples and patterns" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › meeting-templates skill" name="should exist and be readable" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › meeting-templates skill" name="should have valid frontmatter with required fields" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › meeting-templates skill" name="should have all required content sections" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › meeting-templates skill" name="should have no placeholder content" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › meeting-templates skill" name="should have reasonable content length (300+ lines)" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › meeting-templates skill" name="should define multiple meeting templates" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › agenda-frameworks skill" name="should exist and be readable" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › agenda-frameworks skill" name="should have valid frontmatter with required fields" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › agenda-frameworks skill" name="should have all required content sections" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › agenda-frameworks skill" name="should have no placeholder content" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › agenda-frameworks skill" name="should have reasonable content length (300+ lines)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › agenda-frameworks skill" name="should define multiple agenda frameworks" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › note-taking skill" name="should exist and be readable" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › note-taking skill" name="should have valid frontmatter with required fields" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › note-taking skill" name="should have all required content sections" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › note-taking skill" name="should have no placeholder content" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › note-taking skill" name="should have reasonable content length (300+ lines)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Agent-Specific Skills (Meeting Prep Agent) › note-taking skill" name="should define note-taking methodologies" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Cross-Skill Validation" name="should have consistent version numbering across all Phase 2 skills" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Cross-Skill Validation" name="should have proper markdown structure in all Phase 2 skills" time="0.009">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Cross-Skill Validation" name="should not have any broken internal references" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › Cross-Skill Validation" name="should total to approximately 3,447 lines across all 6 Phase 2 skills" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › File System Validation" name="should have correct directory structure" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › File System Validation" name="should have SKILL.md file in each skill directory" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Unit Tests › File System Validation" name="should have readable permissions on all skill files" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Phase 2 Skills - Integration Tests" errors="0" failures="0" skipped="0" timestamp="2025-10-18T06:36:01" time="0.181" tests="29">
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Shared Skills Loading" name="should load user-preferences skill metadata" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Shared Skills Loading" name="should load task-management skill metadata" time="0.003">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Shared Skills Loading" name="should load productivity-patterns skill metadata" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Shared Skills Loading" name="should load complete user-preferences skill definition" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Shared Skills Loading" name="should load complete task-management skill definition" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Shared Skills Loading" name="should load complete productivity-patterns skill definition" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Agent-Specific Skills Loading (Meeting Prep Agent)" name="should load meeting-templates skill metadata" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Agent-Specific Skills Loading (Meeting Prep Agent)" name="should load agenda-frameworks skill metadata" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Agent-Specific Skills Loading (Meeting Prep Agent)" name="should load note-taking skill metadata" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Agent-Specific Skills Loading (Meeting Prep Agent)" name="should load complete meeting-templates skill definition" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Agent-Specific Skills Loading (Meeting Prep Agent)" name="should load complete agenda-frameworks skill definition" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Agent-Specific Skills Loading (Meeting Prep Agent)" name="should load complete note-taking skill definition" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Progressive Loading Workflow" name="should demonstrate Tier 1 (Discovery) - metadata only loading" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Progressive Loading Workflow" name="should demonstrate Tier 2 (Invocation) - full content loading" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Progressive Loading Workflow" name="should use cache on subsequent Tier 2 loads" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Progressive Loading Workflow" name="should bypass cache when useCache is false" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Cache Management" name="should cache multiple Phase 2 skills independently" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Cache Management" name="should clear all cached Phase 2 skills" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Cache Management" name="should generate unique hashes for different skills" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Cross-Skill Reference Validation" name="should verify productivity-patterns can be referenced by multiple agents" time="0.012">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Cross-Skill Reference Validation" name="should verify task-management references are valid" time="0.008">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Cross-Skill Reference Validation" name="should verify user-preferences schema is complete for agent usage" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Error Handling" name="should throw error for non-existent skill" time="0.037">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Error Handling" name="should throw error for invalid skill path" time="0.041">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Error Handling" name="should handle missing SKILL.md gracefully" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Batch Loading Performance" name="should load all Phase 2 skills in parallel" time="0.003">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Phase 2 Skills Loading › Batch Loading Performance" name="should efficiently load metadata for all Phase 2 skills" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Combined Phase 1 + Phase 2 Loading" name="should load all 10 skills (4 Phase 1 + 6 Phase 2)" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Skills - Integration Tests › Skills Service - Combined Phase 1 + Phase 2 Loading" name="should verify Phase 2 skills are accessible while Phase 1 may be protected" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="Phase 2 Agent Configuration Tests" errors="0" failures="0" skipped="0" timestamp="2025-10-18T06:36:02" time="0.079" tests="42">
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should exist and be readable" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have skills section in frontmatter" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have 4 skills configured" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have brand-guidelines skill" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have code-standards skill" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have avi-architecture skill" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have agent-templates skill" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have progressive loading configured" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have cache TTL configured" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meta-agent Configuration" name="should have all skill paths pointing to valid directories" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should exist and be readable" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have skills section in frontmatter" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have 4 skills configured" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have brand-guidelines skill (Phase 1)" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have user-preferences skill (Phase 2 - shared)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have task-management skill (Phase 2 - shared)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have productivity-patterns skill (Phase 2 - shared)" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have progressive loading configured" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have cache TTL configured" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have all Phase 2 skill paths pointing to valid directories" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › personal-todos-agent Configuration" name="should have mix of required and optional skills" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should exist and be readable" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have skills section in frontmatter" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have 5 skills configured" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have brand-guidelines skill (Phase 1)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have meeting-templates skill (Phase 2 - agent-specific)" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have agenda-frameworks skill (Phase 2 - agent-specific)" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have note-taking skill (Phase 2 - agent-specific)" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have productivity-patterns skill (Phase 2 - shared)" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have progressive loading configured" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have cache TTL configured" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have all Phase 2 skill paths pointing to valid directories" time="0.005">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have agent-specific skills in correct directory structure" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › meeting-prep-agent Configuration" name="should have mix of required and optional skills" time="0">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Cross-Agent Configuration Validation" name="should have consistent skills_loading across all agents" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Cross-Agent Configuration Validation" name="should have consistent cache TTL across all agents" time="0.002">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Cross-Agent Configuration Validation" name="should have brand-guidelines as required skill in all agents" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Cross-Agent Configuration Validation" name="should verify shared skills are accessible to multiple agents" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Cross-Agent Configuration Validation" name="should verify agent-specific skills are only in their agent" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Cross-Agent Configuration Validation" name="should total to 13 skill references across all 3 agents" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Skills Configuration Integrity" name="should have valid YAML structure in all agent configs" time="0.001">
+    </testcase>
+    <testcase classname="Phase 2 Agent Configuration Tests › Skills Configuration Integrity" name="should not have any placeholder or incomplete skill references" time="0.003">
+    </testcase>
+  </testsuite>
+</testsuites>

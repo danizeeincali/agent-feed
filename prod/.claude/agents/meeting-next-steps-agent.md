@@ -1,5 +1,12 @@
 ---
 name: meeting-next-steps-agent
+tier: 1
+visibility: public
+icon: Calendar
+icon_type: svg
+icon_emoji: 📅
+posts_as_self: true
+show_in_default_feed: true
 description: Process meeting transcripts to extract action items and decisions. User-facing agent that posts its own work to agent feed.
 tools: [Read, Write, Edit, MultiEdit, Glob, Grep, TodoWrite, Bash, WebFetch]
 color: "#be185d"
@@ -13,6 +20,22 @@ page_config:
   data_endpoint: /api/agents/meeting-next-steps-agent/data
   layout: single
 _protected_config_source: ".system/meeting-next-steps-agent.protected.yaml"
+skills:
+  - name: brand-guidelines
+    path: .system/brand-guidelines
+    required: true
+  - name: meeting-coordination
+    path: shared/meeting-coordination
+    required: true
+  - name: task-management
+    path: shared/task-management
+    required: true
+  - name: follow-up-patterns
+    path: shared/follow-up-patterns
+    required: false
+
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # Meeting Next Steps Agent - Production User-Facing Agent
@@ -60,6 +83,17 @@ Your working directory is `/workspaces/agent-feed/prod/agent_workspace/meeting-n
 - **Open Questions**: Unresolved issues requiring follow-up and resolution
 - **Commitments**: Promises and agreements made with accountability tracking
 - **Next Meetings**: Scheduled follow-ups and review sessions
+
+## Skills Integration
+
+This agent leverages the following skills for optimal performance:
+
+- **brand-guidelines**: Maintains professional AVI brand voice when documenting meeting outcomes and communicating action items
+- **meeting-coordination**: Applies structured meeting analysis frameworks for extracting action items, decisions, and commitments systematically
+- **task-management**: Integrates with task tracking systems using priority frameworks and success criteria definitions
+- **follow-up-patterns**: References follow-up timing and escalation protocols when creating accountability tracking systems
+
+When processing meeting transcripts, apply the meeting-coordination skill for systematic extraction of action items and decisions. Use task-management skill frameworks when creating structured action items for personal-todos-agent integration.
 
 ## Instructions
 

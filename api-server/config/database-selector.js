@@ -11,14 +11,17 @@ import postgresManager from './postgres.js';
 import agentRepo from '../repositories/postgres/agent.repository.js';
 import memoryRepo from '../repositories/postgres/memory.repository.js';
 import workspaceRepo from '../repositories/postgres/workspace.repository.js';
+import fsAgentRepo from '../repositories/agent.repository.js';
 
 class DatabaseSelector {
   constructor() {
     this.usePostgres = process.env.USE_POSTGRES === 'true';
+    this.usePostgresAgents = process.env.USE_POSTGRES_AGENTS === 'true';
     this.sqliteDb = null;
     this.sqlitePagesDb = null;
 
     console.log(`📊 Database Mode: ${this.usePostgres ? 'PostgreSQL' : 'SQLite'}`);
+    console.log(`📂 Agent Source: ${this.usePostgresAgents ? 'PostgreSQL' : 'Filesystem'}`);
   }
 
   /**
@@ -26,17 +29,26 @@ class DatabaseSelector {
    */
   async initialize() {
     if (this.usePostgres) {
-      // Connect to PostgreSQL
-      await postgresManager.connect();
-      const isHealthy = await postgresManager.healthCheck();
+      try {
+        // Connect to PostgreSQL
+        await postgresManager.connect();
+        const isHealthy = await postgresManager.healthCheck();
 
-      if (!isHealthy) {
-        console.error('❌ PostgreSQL health check failed');
-        throw new Error('PostgreSQL connection failed');
+        if (!isHealthy) {
+          console.error('❌ PostgreSQL health check failed');
+          console.log('⚠️  Falling back to SQLite mode');
+          this.usePostgres = false;
+        } else {
+          console.log('✅ PostgreSQL connection established');
+        }
+      } catch (error) {
+        console.error('❌ PostgreSQL connection error:', error.message);
+        console.log('⚠️  Falling back to SQLite mode');
+        this.usePostgres = false;
       }
+    }
 
-      console.log('✅ PostgreSQL connection established');
-    } else {
+    if (!this.usePostgres) {
       // Connect to SQLite databases
       this.sqliteDb = new Database('/workspaces/agent-feed/data/database.db');
       this.sqlitePagesDb = new Database('/workspaces/agent-feed/data/agent-pages.db');
@@ -48,18 +60,17 @@ class DatabaseSelector {
   /**
    * Get all agents for a user
    * @param {string} userId - User ID (default: 'anonymous')
+   * @param {Object} options - Filtering options
+   * @param {number|'all'} options.tier - Tier filter (1, 2, or 'all')
+   * @param {boolean} options.include_system - Legacy parameter for backward compatibility
    * @returns {Promise<Array>} List of agents
    */
-  async getAllAgents(userId = 'anonymous') {
-    if (this.usePostgres) {
-      return await agentRepo.getAllAgents(userId);
+  async getAllAgents(userId = 'anonymous', options = {}) {
+    if (this.usePostgresAgents) {
+      return await agentRepo.getAllAgents(userId, options);
     } else {
-      // SQLite implementation (existing logic)
-      const agents = this.sqliteDb.prepare(`
-        SELECT * FROM agents WHERE status = 'active' ORDER BY name
-      `).all();
-
-      return agents;
+      // Use filesystem repository
+      return await fsAgentRepo.getAllAgents(userId, options);
     }
   }
 
@@ -70,15 +81,10 @@ class DatabaseSelector {
    * @returns {Promise<object|null>} Agent or null
    */
   async getAgentByName(agentName, userId = 'anonymous') {
-    if (this.usePostgres) {
+    if (this.usePostgresAgents) {
       return await agentRepo.getAgentByName(agentName, userId);
     } else {
-      // SQLite implementation
-      const agent = this.sqliteDb.prepare(`
-        SELECT * FROM agents WHERE name = ? AND status = 'active'
-      `).get(agentName);
-
-      return agent || null;
+      return await fsAgentRepo.getAgentByName(agentName, userId);
     }
   }
 
@@ -89,15 +95,10 @@ class DatabaseSelector {
    * @returns {Promise<object|null>} Agent or null
    */
   async getAgentBySlug(slug, userId = 'anonymous') {
-    if (this.usePostgres) {
+    if (this.usePostgresAgents) {
       return await agentRepo.getAgentBySlug(slug, userId);
     } else {
-      // SQLite implementation
-      const agent = this.sqliteDb.prepare(`
-        SELECT * FROM agents WHERE slug = ? AND status = 'active'
-      `).get(slug);
-
-      return agent || null;
+      return await fsAgentRepo.getAgentBySlug(slug, userId);
     }
   }
 

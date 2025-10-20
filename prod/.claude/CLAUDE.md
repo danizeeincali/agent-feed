@@ -349,6 +349,219 @@ Remember: **Claude Flow coordinates, Claude Code creates, PageBuilder Agent buil
 - Personal/business task prioritization
 - Cross-functional workflow coordination
 
+## 🎯 Claude Agent Skills Integration
+
+### Skills Architecture
+
+AVI uses Claude Agent Skills for token-efficient knowledge delivery through progressive disclosure:
+
+1. **Discovery**: All skill metadata loaded at startup (~100 tokens/skill)
+2. **Invocation**: Full skill content loaded when relevant (~2,000 tokens)
+3. **Resources**: Supporting files loaded as referenced
+
+### Skills Directory Structure
+
+```
+/prod/skills/
+├── .system/          # Protected system skills (read-only)
+│   ├── brand-guidelines/
+│   ├── code-standards/
+│   └── avi-architecture/
+├── shared/           # Cross-agent skills (editable)
+└── agent-specific/   # Agent-scoped skills (editable)
+```
+
+### System Skills Available
+
+1. **brand-guidelines** - AVI brand voice and messaging standards
+2. **code-standards** - TypeScript, React, and testing best practices
+3. **avi-architecture** - System design patterns and coordination guidelines
+
+### Using Skills in Agents
+
+**Add to agent frontmatter:**
+```yaml
+skills:
+  - name: brand-guidelines
+    path: .system/brand-guidelines
+    required: true
+  - name: code-standards
+    path: .system/code-standards
+    required: false
+```
+
+**Reference skills in content:**
+```markdown
+When generating agent posts, follow the brand-guidelines skill
+for consistent tone and messaging.
+
+When writing code, apply the code-standards skill for quality
+and consistency.
+```
+
+### Skills vs Tools vs MCP
+
+| Feature | Skills | Tools | MCP |
+|---------|--------|-------|-----|
+| **Purpose** | Static knowledge, workflows | System operations | External services |
+| **Loading** | Progressive (on-demand) | Always available | Connection-based |
+| **Cost** | Low (cached) | None (local) | Medium (network) |
+| **Use For** | Standards, templates, docs | File ops, git, bash | APIs, databases |
+
+### Skills Service API
+
+**Location**: `/api-server/services/skills-service.ts`
+
+**Usage:**
+```typescript
+import { createSkillsService } from '@/api-server/services/skills-service';
+
+const service = createSkillsService();
+
+// Load skill metadata only (Tier 1)
+const metadata = await service.loadSkillMetadata('.system/brand-guidelines');
+
+// Load complete skill (Tier 2)
+const skill = await service.loadSkillFiles('.system/brand-guidelines');
+
+// Load specific resource (Tier 3)
+const content = await service.loadResource('.system/brand-guidelines', 'templates/example.md');
+```
+
+### Skills Governance
+
+All skills must comply with:
+- Token limits (<5,000 tokens per skill)
+- Security validation
+- Version control
+- Protection enforcement for `.system/` skills
+
+### Creating New Skills
+
+See: `/prod/system_instructions/skills/skill_creation_guide.md` (future)
+
+## 🎯 Specialized Agent Routing (Phase 4.2)
+
+Avi coordinates 6 specialized agents for 70-78% token efficiency improvement:
+
+### Agent Roster
+
+**Skills Management**:
+- `skills-architect-agent` - Creates new skills (5K tokens)
+- `skills-maintenance-agent` - Updates existing skills (4.5K tokens)
+
+**Agent Management**:
+- `agent-architect-agent` - Creates new agents (5K tokens)
+- `agent-maintenance-agent` - Updates existing agents (4.5K tokens)
+
+**Learning & Optimization**:
+- `learning-optimizer-agent` - Autonomous learning management (4K tokens, auto-running)
+
+**System Architecture**:
+- `system-architect-agent` - System-wide design and architecture (6K tokens)
+
+### Routing Logic
+
+**Skill Operations**:
+```
+Create new skill → skills-architect-agent
+Update/fix existing skill → skills-maintenance-agent
+Keywords: "create skill", "new skill", "update skill", "fix skill"
+```
+
+**Agent Operations**:
+```
+Create new agent → agent-architect-agent
+Update/fix existing agent → agent-maintenance-agent
+Keywords: "create agent", "new agent", "update agent", "fix agent"
+```
+
+**Learning & Performance**:
+```
+Performance analysis → learning-optimizer-agent
+Learning enablement → Automatic (agent-initiated, no user action)
+Keywords: "performance", "accuracy", "learning", "improve"
+```
+
+**System Architecture**:
+```
+System design → system-architect-agent
+Keywords: "architecture", "system design", "scaling", "infrastructure"
+```
+
+### Token Efficiency
+
+**Meta-Agent Approach** (Legacy): 30K tokens every operation
+**Specialist Approach** (Phase 4.2): 6-9K tokens per operation
+**Efficiency Gain**: 70-78% reduction
+
+### Progressive Agent Loading
+
+**Tier 1 - Startup** (600 tokens total):
+- Load metadata for all 6 specialists
+- Agent name, specialization, token budget, purpose
+
+**Tier 2 - On Request** (4-6K tokens):
+- Load only the selected specialist
+- Full instructions, skills, process documentation
+
+**Tier 3 - Context** (1K tokens):
+- Request context, file paths, user requirements
+
+**Total Active**: 6-9K tokens vs 30K (meta-agent)
+
+### Multi-Domain Coordination
+
+When requests span multiple domains, Avi:
+1. Decomposes into sub-tasks
+2. Routes to appropriate specialists (sequential or parallel)
+3. Coordinates execution and handoffs
+4. Synthesizes unified result
+
+**Example**:
+```
+User: "Create testing agent with E2E testing skills"
+
+Avi executes:
+1. skills-architect-agent → Create E2E testing skills
+2. Wait for completion
+3. agent-architect-agent → Create agent using new skills
+4. Report: "Created E2E testing skills and testing-agent"
+```
+
+### Autonomous Learning
+
+`learning-optimizer-agent` operates autonomously:
+- Runs every hour automatically
+- Monitors skill performance across all agents
+- Enables learning when success rate < 70%
+- Tracks improvements and reports to Avi
+- No user intervention required
+
+User requests are for status/reports only.
+
+### Agent Specialization Principle
+
+Each specialist has single responsibility:
+- **Creators** (architects): Design and build new (skills/agents)
+- **Maintainers**: Update and fix existing (skills/agents)
+- **Optimizer**: Autonomous learning management
+- **System**: Architecture and infrastructure
+
+**Key**: Single responsibility = focused context = token efficiency
+
+### Migration Status
+
+**Phase 1** (Current): Coexistence with meta-agent
+- meta-agent available but deprecated
+- Specialists preferred for all new work
+- Migration path: Week 1-2
+
+**Phase 2** (Target): Specialist-only
+- meta-agent removed
+- All routing through specialists
+- Timeline: Week 2+
+
 # important-instruction-reminders
 Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
@@ -356,3 +569,4 @@ ALWAYS prefer editing an existing file to creating a new one.
 NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
 Never save working files, text/mds and tests to the root folder.
 **ALWAYS use PageBuilder Agent for dynamic page creation across all agents.**
+**ALWAYS reference appropriate skills when relevant to task.**

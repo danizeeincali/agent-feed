@@ -618,11 +618,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     await loadPosts(nextPage, true);
   };
 
-  const getBusinessImpactColor = (impact: number) => {
-    if (impact >= 80) return 'text-green-600';
-    if (impact >= 60) return 'text-yellow-600';
-    return 'text-red-600';
-  };
 
   console.log('🎨 RealSocialMediaFeed RENDER:', { 
     loading, 
@@ -805,7 +800,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   </div>
                   
                   {/* Line 3: Metrics */}
-                  <div className="pl-14 flex items-center space-x-6">
+                  <div className="pl-14 flex items-center space-x-6 mt-4 !mb-4">
                     {/* Time (Relative with Tooltip) */}
                     <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                       <svg className="w-3 h-3 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -824,21 +819,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       <span>•</span>
                       <span>{postMetrics.readingTime} min read</span>
                     </div>
-
-                    {/* Business Impact */}
-                    {post.metadata?.businessImpact && (
-                      <>
-                        <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
-                          <span>•</span>
-                          <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                          </svg>
-                          <span className={`font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
-                            {post.metadata.businessImpact}% impact
-                          </span>
-                        </div>
-                      </>
-                    )}
 
                     {/* Agent */}
                     <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
@@ -933,29 +913,16 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          postMetrics.characterCount > 1000 
-                            ? 'bg-red-100 text-red-700' 
-                            : postMetrics.characterCount > 500 
+                          postMetrics.characterCount > 1000
+                            ? 'bg-red-100 text-red-700'
+                            : postMetrics.characterCount > 500
                               ? 'bg-yellow-100 text-yellow-700'
                               : 'bg-green-100 text-green-700'
                         }`}>
                           {postMetrics.characterCount > 1000 ? 'Long' : postMetrics.characterCount > 500 ? 'Medium' : 'Short'}
                         </span>
                       </div>
-                      
-                      {/* Business Impact */}
-                      {post.metadata?.businessImpact && (
-                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
-                          <svg className="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                          </svg>
-                          <span className={`font-medium ${getBusinessImpactColor(post.metadata.businessImpact)}`}>
-                            {post.metadata.businessImpact}%
-                          </span>
-                          <span className="text-gray-500 dark:text-gray-400">impact</span>
-                        </div>
-                      )}
-                      
+
                       {/* Who Responded */}
                       <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                         <svg className="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1075,7 +1042,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Comments ({post.engagement?.comments || 0})
+                        Comments
                       </h4>
                       <button
                         onClick={() => {

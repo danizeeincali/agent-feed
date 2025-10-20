@@ -22,6 +22,11 @@ import {
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import LoadingSpinner from './LoadingSpinner';
+import { useAgentTierFilter } from '../hooks/useAgentTierFilter';
+import { AgentTierToggle } from './agents/AgentTierToggle';
+import { AgentTierBadge } from './agents/AgentTierBadge';
+import { AgentIcon } from './agents/AgentIcon';
+import { ProtectionBadge } from './agents/ProtectionBadge';
 
 // Types
 interface Agent {
@@ -37,6 +42,16 @@ interface Agent {
   updated_at: string;
   last_used?: string;
   usage_count: number;
+
+  // Tier system fields (new)
+  tier: 1 | 2;
+  visibility: 'public' | 'protected';
+  icon?: string;
+  icon_type?: 'svg' | 'emoji';
+  icon_emoji?: string;
+  posts_as_self: boolean;
+  show_in_default_feed: boolean;
+
   performance_metrics: {
     success_rate: number;
     average_response_time: number;
@@ -113,6 +128,9 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
   const [showBulkActions, setShowBulkActions] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  // Tier filtering hook with localStorage persistence
+  const { currentTier, setCurrentTier, showTier1, showTier2 } = useAgentTierFilter();
+
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(12);
@@ -136,12 +154,15 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
     status: 'active'
   });
 
-  // Load agents
+  // Load agents with tier filtering
   const loadAgents = useCallback(async (showRefreshing = false) => {
     if (showRefreshing) setRefreshing(true);
-    
+
     try {
-      const response = await fetch('/api/v1/claude-live/prod/agents');
+      // Build API URL with tier parameter
+      const url = `/api/v1/claude-live/prod/agents?tier=${currentTier}`;
+      const response = await fetch(url);
+
       if (response.ok) {
         const data = await response.json();
         // Transform the API response to match expected agent structure
@@ -158,6 +179,16 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
           updated_at: agent.lastActivity || new Date().toISOString(),
           last_used: agent.lastActivity,
           usage_count: agent.posts?.length || 50,
+
+          // Tier system fields with fallback defaults
+          tier: agent.tier || 1,
+          visibility: agent.visibility || 'public',
+          icon: agent.icon || null,
+          icon_type: agent.icon_type || 'emoji',
+          icon_emoji: agent.icon_emoji || '🤖',
+          posts_as_self: agent.posts_as_self !== false,
+          show_in_default_feed: agent.show_in_default_feed !== false,
+
           performance_metrics: {
             success_rate: 0.95,
             average_response_time: 1200,
@@ -183,25 +214,37 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
       setLoading(false);
       setRefreshing(false);
     }
-  }, []);
+  }, [currentTier]);
 
   useEffect(() => {
     loadAgents();
-    
-    // Auto-refresh every 30 seconds
-    const interval = setInterval(() => loadAgents(), 30000);
-    return () => clearInterval(interval);
-  }, [loadAgents]);
+  }, [loadAgents, currentTier]); // Reload when tier changes
 
-  // Filter and search agents
+  // Calculate tier counts for toggle display
+  const tierCounts = {
+    tier1: agents.filter(a => a.tier === 1).length,
+    tier2: agents.filter(a => a.tier === 2).length,
+    total: agents.length
+  };
+
+  // Filter and search agents (with tier filtering)
   const filteredAgents = agents.filter(agent => {
     const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          agent.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          agent.capabilities.some(cap => cap.toLowerCase().includes(searchQuery.toLowerCase()));
-    
+
     const matchesStatus = statusFilter === 'all' || agent.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
+
+    // Apply tier filter (redundant with API but ensures consistency)
+    let matchesTier = true;
+    if (currentTier === '1') {
+      matchesTier = agent.tier === 1;
+    } else if (currentTier === '2') {
+      matchesTier = agent.tier === 2;
+    }
+    // currentTier === 'all' means show all tiers
+
+    return matchesSearch && matchesStatus && matchesTier;
   });
 
   // Paginate agents
@@ -527,7 +570,15 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
               />
             </div>
           </div>
-          
+
+          {/* Tier Filter Toggle */}
+          <AgentTierToggle
+            currentTier={currentTier}
+            onTierChange={setCurrentTier}
+            tierCounts={tierCounts}
+            loading={loading || refreshing}
+          />
+
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -689,21 +740,38 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
                         checked={bulkSelection.has(agent.id)}
                         onChange={() => handleSelectAgent(agent.id)}
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        disabled={agent.visibility === 'protected'}
                       />
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold"
-                        style={{ backgroundColor: agent.avatar_color }}
-                      >
-                        {agent.display_name.charAt(0).toUpperCase()}
-                      </div>
+
+                      {/* Agent Icon (SVG/Emoji/Initials) */}
+                      <AgentIcon
+                        agent={{
+                          name: agent.name,
+                          icon: agent.icon,
+                          icon_type: agent.icon_type,
+                          icon_emoji: agent.icon_emoji,
+                          tier: agent.tier
+                        }}
+                        size="xl"
+                      />
+
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 truncate">
                           {agent.display_name}
                         </h3>
-                        <StatusBadge status={agent.status} />
+                        <div className="flex items-center gap-2 mt-1">
+                          <StatusBadge status={agent.status} />
+                          <AgentTierBadge tier={agent.tier} variant="compact" />
+                          {agent.visibility === 'protected' && (
+                            <ProtectionBadge
+                              isProtected={true}
+                              protectionReason="System agent - protected from modification"
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
-                    
+
                     <div className="relative">
                       <button
                         className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
@@ -760,20 +828,29 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleStatusToggle(
-                          agent.id, 
+                          agent.id,
                           agent.status === 'active' ? 'inactive' : 'active'
                         )}
+                        disabled={agent.visibility === 'protected'}
                         className={cn(
                           'p-1 rounded transition-colors',
-                          agent.status === 'active'
+                          agent.visibility === 'protected'
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : agent.status === 'active'
                             ? 'text-green-600 hover:bg-green-100'
                             : 'text-gray-400 hover:bg-gray-100'
                         )}
-                        title={agent.status === 'active' ? 'Deactivate' : 'Activate'}
+                        title={
+                          agent.visibility === 'protected'
+                            ? 'Protected - cannot modify'
+                            : agent.status === 'active'
+                            ? 'Deactivate'
+                            : 'Activate'
+                        }
                       >
                         {agent.status === 'active' ? <Power className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                       </button>
-                      
+
                       <button
                         onClick={() => setSelectedAgent(agent)}
                         className="p-1 text-blue-600 hover:bg-blue-100 rounded transition-colors"
@@ -782,20 +859,32 @@ const AgentManager: React.FC<AgentManagerProps> = ({ className }) => {
                         <TestTube className="w-4 h-4" />
                       </button>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleEditAgent(agent)}
-                        className="p-1 text-gray-600 hover:bg-gray-100 rounded transition-colors"
-                        title="Edit"
+                        disabled={agent.visibility === 'protected'}
+                        className={cn(
+                          'p-1 rounded transition-colors',
+                          agent.visibility === 'protected'
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-600 hover:bg-gray-100'
+                        )}
+                        title={agent.visibility === 'protected' ? 'Protected - cannot edit' : 'Edit'}
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
-                      
+
                       <button
                         onClick={() => handleDelete(agent.id)}
-                        className="p-1 text-red-600 hover:bg-red-100 rounded transition-colors"
-                        title="Delete"
+                        disabled={agent.visibility === 'protected'}
+                        className={cn(
+                          'p-1 rounded transition-colors',
+                          agent.visibility === 'protected'
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-red-600 hover:bg-red-100'
+                        )}
+                        title={agent.visibility === 'protected' ? 'Protected - cannot delete' : 'Delete'}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

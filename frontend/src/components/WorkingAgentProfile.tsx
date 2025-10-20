@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  User, 
-  Bot, 
-  Activity,
-  TrendingUp,
-  Brain,
+import {
+  ArrowLeft,
+  User,
+  Bot,
   FileText,
-  Settings,
-  Plus,
-  Eye
+  Code
 } from 'lucide-react';
 import RealDynamicPagesTab from './RealDynamicPagesTab';
-import PageManager from './PageManager';
+import { getToolDescription } from '../constants/toolDescriptions';
 
 interface AgentData {
   id: string;
@@ -22,6 +17,7 @@ interface AgentData {
   description: string;
   status: string;
   capabilities?: string[];
+  tools?: string[];
 }
 
 const WorkingAgentProfile: React.FC = () => {
@@ -30,7 +26,7 @@ const WorkingAgentProfile: React.FC = () => {
   const [agentData, setAgentData] = useState<AgentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'pages' | 'activities' | 'performance' | 'capabilities'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'pages'>('overview');
 
   useEffect(() => {
     const fetchAgentData = async () => {
@@ -146,10 +142,7 @@ const WorkingAgentProfile: React.FC = () => {
         <nav className="-mb-px flex space-x-8">
           {[
             { id: 'overview', name: 'Overview', icon: User },
-            { id: 'pages', name: 'Dynamic Pages', icon: FileText },
-            { id: 'activities', name: 'Activities', icon: Activity },
-            { id: 'performance', name: 'Performance', icon: TrendingUp },
-            { id: 'capabilities', name: 'Capabilities', icon: Brain }
+            { id: 'pages', name: 'Dynamic Pages', icon: FileText }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -173,7 +166,7 @@ const WorkingAgentProfile: React.FC = () => {
           <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Agent Information</h3>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
                 <h4 className="font-medium text-gray-900 dark:text-gray-100">Description</h4>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">{agentData.description}</p>
@@ -183,6 +176,28 @@ const WorkingAgentProfile: React.FC = () => {
                 <h4 className="font-medium text-gray-900 dark:text-gray-100">Status</h4>
                 <p className="text-gray-600 dark:text-gray-400 mt-1 capitalize">{agentData.status}</p>
               </div>
+
+              {/* Tools Section */}
+              {agentData.tools && agentData.tools.length > 0 && (
+                <div>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">Available Tools</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {agentData.tools.map((tool, index) => (
+                      <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+                        <div className="flex items-start gap-2">
+                          <Code className="w-4 h-4 text-blue-500 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                          <div className="min-w-0 flex-1">
+                            <h5 className="font-medium text-sm text-gray-900 dark:text-gray-100 mb-1">{tool}</h5>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                              {getToolDescription(tool)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {agentData.capabilities && agentData.capabilities.length > 0 && (
                 <div>
@@ -199,6 +214,11 @@ const WorkingAgentProfile: React.FC = () => {
                   </div>
                 </div>
               )}
+
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-gray-100">Agent ID</h4>
+                <p className="text-gray-600 dark:text-gray-400 mt-1 font-mono text-sm">{agentData.id}</p>
+              </div>
             </div>
           </div>
         )}
@@ -206,49 +226,6 @@ const WorkingAgentProfile: React.FC = () => {
         {/* CRITICAL FIX: Pass agent NAME for pages tab - dynamic pages are stored with agent name as key, not numeric ID */}
         {activeTab === 'pages' && (
           <RealDynamicPagesTab agentId={agentData?.name || agentSlug!} />
-        )}
-
-        {activeTab === 'activities' && (
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Recent Activities</h3>
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              <Activity className="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600 mb-4" />
-              <p>No recent activities to display</p>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'performance' && (
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Performance Metrics</h3>
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              <TrendingUp className="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600 mb-4" />
-              <p>Performance metrics will be available once agent is active</p>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'capabilities' && (
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Capabilities & Skills</h3>
-            {agentData.capabilities && agentData.capabilities.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {agentData.capabilities.map((capability, index) => (
-                  <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">{capability}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {capability} functionality for agent operations
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                <Brain className="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600 mb-4" />
-                <p>No capabilities information available</p>
-              </div>
-            )}
-          </div>
         )}
       </div>
     </div>

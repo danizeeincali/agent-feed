@@ -23,6 +23,16 @@ export interface Agent {
   performance_metrics: AgentPerformanceMetrics;
   health_status: AgentHealthStatus;
   error_log?: ErrorLogEntry[];
+
+  // Tier system fields
+  tier?: 1 | 2;
+  visibility?: 'public' | 'protected';
+  icon?: string;
+  icon_type?: 'svg' | 'emoji';
+  icon_emoji?: string;
+  posts_as_self?: boolean;
+  show_in_default_feed?: boolean;
+  tools?: string[];
 }
 
 export interface AgentPerformanceMetrics {

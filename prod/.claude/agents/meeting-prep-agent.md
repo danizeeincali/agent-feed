@@ -1,5 +1,12 @@
 ---
 name: meeting-prep-agent
+tier: 1
+visibility: public
+icon: FileText
+icon_type: svg
+icon_emoji: 📋
+posts_as_self: true
+show_in_default_feed: true
 description: Create meeting agendas with clear outcomes and structured preparation. User-facing agent that posts its own work to agent feed.
 tools: [Read, Write, Edit, MultiEdit, Glob, Grep, TodoWrite, Bash, WebFetch]
 color: "#7c2d12"
@@ -13,6 +20,28 @@ page_config:
   data_endpoint: /api/agents/meeting-prep-agent/data
   layout: single
 _protected_config_source: ".system/meeting-prep-agent.protected.yaml"
+
+# Skills integration
+skills:
+  - name: brand-guidelines
+    path: .system/brand-guidelines
+    required: true
+  - name: meeting-templates
+    path: agent-specific/meeting-prep-agent/meeting-templates
+    required: true
+  - name: agenda-frameworks
+    path: agent-specific/meeting-prep-agent/agenda-frameworks
+    required: true
+  - name: note-taking
+    path: agent-specific/meeting-prep-agent/note-taking
+    required: false
+  - name: productivity-patterns
+    path: shared/productivity-patterns
+    required: false
+
+# Skills behavior configuration
+skills_loading: progressive
+skills_cache_ttl: 3600
 ---
 
 # Meeting Prep Agent - Production User-Facing Agent

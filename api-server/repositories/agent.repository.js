@@ -98,10 +98,20 @@ export async function readAgentFile(filePath) {
       description: frontmatter.description || '',
       tools: parseTools(frontmatter.tools || []),
       color: frontmatter.color || '#6366f1',
+      avatar_url: frontmatter.avatar_url || null,
+      status: frontmatter.status || 'active',
       model: frontmatter.model || 'sonnet',
       proactive: frontmatter.proactive === true || frontmatter.proactive === 'true',
       priority: frontmatter.priority || 'P3',
       usage: frontmatter.usage || '',
+      // Tier system fields
+      tier: frontmatter.tier || 1, // Default to T1 if not specified
+      visibility: frontmatter.visibility || 'public',
+      icon: frontmatter.icon || null,
+      icon_type: frontmatter.icon_type || 'emoji',
+      icon_emoji: frontmatter.icon_emoji || '🤖',
+      posts_as_self: frontmatter.posts_as_self !== false, // Default true
+      show_in_default_feed: frontmatter.show_in_default_feed !== false, // Default true
       content: markdownContent.trim(),
       hash: calculateHash(content),
       filePath,
@@ -163,11 +173,136 @@ export async function hasFileChanged(filePath, cachedHash) {
   }
 }
 
+/**
+ * Get all agents for a user
+ * @param {string} userId - User ID (optional, for future customization)
+ * @param {Object} options - Filtering options
+ * @param {number|'all'} options.tier - Tier filter (1, 2, or 'all')
+ * @param {boolean} options.include_system - Legacy parameter for backward compatibility
+ * @returns {Promise<Array>} - Array of agent objects
+ */
+export async function getAllAgents(userId = 'anonymous', options = {}) {
+  try {
+    const filePaths = await listAgentFiles();
+    console.log(`📂 Found ${filePaths.length} agent files`);
+
+    const agents = await Promise.all(
+      filePaths.map(filePath => readAgentFile(filePath))
+    );
+    console.log(`✅ Parsed ${agents.length} agents`);
+
+    // Apply tier filtering
+    let filteredAgents = agents;
+
+    // Handle legacy include_system parameter
+    if (options.include_system !== undefined && options.tier === undefined) {
+      options.tier = options.include_system ? 'all' : 1;
+    }
+
+    // Default to tier 1 if not specified
+    const tier = options.tier !== undefined ? options.tier : 1;
+    console.log(`🔍 Filtering for tier: ${tier} (type: ${typeof tier})`);
+
+    if (tier !== 'all') {
+      // Log tier values BEFORE filtering
+      console.log('Agent tiers before filtering:', agents.map(a => ({ name: a.name, tier: a.tier, tierType: typeof a.tier })));
+
+      const tierNumber = Number(tier);
+      filteredAgents = agents.filter(agent => {
+        const matches = agent.tier === tierNumber;
+        if (!matches) {
+          console.log(`  ❌ Agent "${agent.name}" tier ${agent.tier} (${typeof agent.tier}) !== ${tierNumber} (number)`);
+        }
+        return matches;
+      });
+
+      console.log(`✅ Filtered to ${filteredAgents.length} agents matching tier ${tierNumber}`);
+    } else {
+      console.log(`✅ Returning all ${filteredAgents.length} agents (tier=all)`);
+    }
+
+    // Sort by name alphabetically
+    filteredAgents.sort((a, b) => a.name.localeCompare(b.name));
+
+    console.log(`📂 Loaded ${filteredAgents.length}/${agents.length} agents (tier=${tier})`);
+    console.log(`📤 Returning ${filteredAgents.length} agents:`, filteredAgents.map(a => ({ name: a.name, tier: a.tier })));
+
+    return filteredAgents;
+  } catch (error) {
+    console.error('Failed to get all agents:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get agent by slug
+ * @param {string} slug - Agent slug (filename without extension)
+ * @param {string} userId - User ID (optional, for future customization)
+ * @returns {Promise<Object|null>} - Agent object or null if not found
+ */
+export async function getAgentBySlug(slug, userId = 'anonymous') {
+  try {
+    const filePath = await findAgentFileBySlug(slug);
+    if (!filePath) {
+      return null;
+    }
+
+    const agent = await readAgentFile(filePath);
+    return agent;
+  } catch (error) {
+    console.error(`Failed to get agent by slug ${slug}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Get agent by name
+ * @param {string} agentName - Agent name
+ * @param {string} userId - User ID (optional, for future customization)
+ * @returns {Promise<Object|null>} - Agent object or null if not found
+ */
+export async function getAgentByName(agentName, userId = 'anonymous') {
+  try {
+    const agents = await getAllAgents(userId, { tier: 'all' });
+    const agent = agents.find(a => a.name === agentName);
+    return agent || null;
+  } catch (error) {
+    console.error(`Failed to get agent by name ${agentName}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Calculate tier metadata for agents
+ * @param {Array} allAgents - All agents (unfiltered)
+ * @param {Array} filteredAgents - Filtered agents
+ * @param {number|'all'} appliedTier - Applied tier filter
+ * @returns {Object} - Metadata object with tier counts
+ */
+export function calculateTierMetadata(allAgents, filteredAgents, appliedTier) {
+  const tier1Count = allAgents.filter(a => a.tier === 1).length;
+  const tier2Count = allAgents.filter(a => a.tier === 2).length;
+  const protectedCount = allAgents.filter(a => a.visibility === 'protected').length;
+
+  return {
+    total: allAgents.length,
+    tier1: tier1Count,
+    tier2: tier2Count,
+    protected: protectedCount,
+    filtered: filteredAgents.length,
+    appliedTier: String(appliedTier)
+  };
+}
+
 export default {
   readAgentFile,
   listAgentFiles,
   findAgentFileBySlug,
   hasFileChanged,
   generateAgentId,
-  calculateHash
+  calculateHash,
+  getAllAgents,
+  getAgentBySlug,
+  getAgentByName,
+  calculateTierMetadata
 };

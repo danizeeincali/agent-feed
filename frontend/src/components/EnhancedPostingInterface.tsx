@@ -289,7 +289,7 @@ const AviChatSection: React.FC<{
         body: JSON.stringify({
           message: fullPrompt,
           options: {
-            cwd: '/workspaces/agent-feed/prod'
+            cwd: '/workspaces/agent-feed/prod/agent_workspace' // SPARC FIX: Use safe zone path to avoid 403
           }
         }),
         signal: controller.signal // SPARC FIX: Enable abort on timeout

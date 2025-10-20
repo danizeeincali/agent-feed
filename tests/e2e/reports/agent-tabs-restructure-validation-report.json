@@ -1,0 +1,115 @@
+{
+  "testSuite": "Agent Manager Tabs Restructure Validation",
+  "timestamp": "2025-10-18T00:40:16.330Z",
+  "testEnvironment": {
+    "frontendUrl": "http://localhost:5173",
+    "backendUrl": "http://localhost:3001",
+    "testAgent": "meta-agent"
+  },
+  "summary": {
+    "visual": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "passRate": "NaN%"
+    },
+    "functional": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "passRate": "100%"
+    },
+    "data": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "passRate": "100%"
+    },
+    "accessibility": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "passRate": "NaN%"
+    },
+    "performance": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "passRate": "NaN%"
+    }
+  },
+  "consoleErrors": [],
+  "detailedResults": {
+    "visual": {
+      "passed": 0,
+      "failed": 0,
+      "tests": []
+    },
+    "functional": {
+      "passed": 1,
+      "failed": 0,
+      "tests": [
+        {
+          "testName": "2.6 Removed tabs do not exist",
+          "passed": true,
+          "details": {
+            "activitiesExists": false,
+            "performanceExists": false,
+            "capabilitiesExists": false
+          },
+          "timestamp": "2025-10-18T00:39:35.259Z"
+        }
+      ]
+    },
+    "data": {
+      "passed": 2,
+      "failed": 0,
+      "tests": [
+        {
+          "testName": "3.1 API returns tools field",
+          "passed": true,
+          "details": {
+            "hasTools": true,
+            "toolCount": 13
+          },
+          "timestamp": "2025-10-18T00:39:40.730Z"
+        },
+        {
+          "testName": "3.2 Meta-agent has correct tool count",
+          "passed": true,
+          "details": {
+            "expected": 13,
+            "actual": 13,
+            "tools": [
+              "Bash",
+              "Glob",
+              "Grep",
+              "LS",
+              "Read",
+              "Edit",
+              "MultiEdit",
+              "Write",
+              "NotebookEdit",
+              "WebFetch",
+              "TodoWrite",
+              "WebSearch",
+              "mcp__firecrawl__*"
+            ]
+          },
+          "timestamp": "2025-10-18T00:39:45.776Z"
+        }
+      ]
+    },
+    "accessibility": {
+      "passed": 0,
+      "failed": 0,
+      "tests": []
+    },
+    "performance": {
+      "passed": 0,
+      "failed": 0,
+      "tests": []
+    },
+    "consoleErrors": []
+  }
+}

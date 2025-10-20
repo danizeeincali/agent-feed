@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Search, Bot, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { Agent } from '../types/api';
+import { AgentTierToggle } from './agents/AgentTierToggle';
 
 interface AgentListSidebarProps {
   agents: Agent[];
@@ -10,12 +11,28 @@ interface AgentListSidebarProps {
   onSearchChange: (value: string) => void;
   loading?: boolean;
   className?: string;
+
+  // Tier filtering props
+  tierFilterEnabled?: boolean;
+  currentTier?: '1' | '2' | 'all';
+  onTierChange?: (tier: '1' | '2' | 'all') => void;
+  tierCounts?: {
+    tier1: number;
+    tier2: number;
+    total: number;
+  };
+
+  // Render props for customization
+  renderAgentBadges?: (agent: Agent) => React.ReactNode;
+  renderAgentIcon?: (agent: Agent) => React.ReactNode;
 }
 
 interface AgentListItemProps {
   agent: Agent;
   isSelected: boolean;
   onClick: () => void;
+  renderBadges?: (agent: Agent) => React.ReactNode;
+  renderIcon?: (agent: Agent) => React.ReactNode;
 }
 
 /**
@@ -35,6 +52,12 @@ const AgentListSidebar: React.FC<AgentListSidebarProps> = ({
   onSearchChange,
   loading = false,
   className = '',
+  tierFilterEnabled = false,
+  currentTier,
+  onTierChange,
+  tierCounts,
+  renderAgentBadges,
+  renderAgentIcon,
 }) => {
   // Filter agents based on search term (client-side filtering)
   const filteredAgents = useMemo(() => {
@@ -81,6 +104,18 @@ const AgentListSidebar: React.FC<AgentListSidebarProps> = ({
           />
         </div>
 
+        {/* Tier toggle (if enabled) */}
+        {tierFilterEnabled && currentTier && onTierChange && tierCounts && (
+          <div className="mt-3">
+            <AgentTierToggle
+              currentTier={currentTier}
+              onTierChange={onTierChange}
+              tierCounts={tierCounts}
+              loading={loading}
+            />
+          </div>
+        )}
+
         {/* Results Count */}
         <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
           {filteredAgents.length} of {agents.length} agents
@@ -101,6 +136,8 @@ const AgentListSidebar: React.FC<AgentListSidebarProps> = ({
                 agent={agent}
                 isSelected={agent.id === selectedAgentId}
                 onClick={() => onSelectAgent(agent)}
+                renderBadges={renderAgentBadges}
+                renderIcon={renderAgentIcon}
               />
             ))}
           </div>
@@ -115,7 +152,7 @@ const AgentListSidebar: React.FC<AgentListSidebarProps> = ({
  * Memoized to prevent unnecessary re-renders
  */
 const AgentListItem: React.FC<AgentListItemProps> = React.memo(
-  ({ agent, isSelected, onClick }) => {
+  ({ agent, isSelected, onClick, renderBadges, renderIcon }) => {
     const getStatusColor = (status: string) => {
       switch (status) {
         case 'active':
@@ -174,20 +211,24 @@ const AgentListItem: React.FC<AgentListItemProps> = React.memo(
         aria-selected={isSelected}
       >
         <div className="flex items-start gap-3">
-          {/* Avatar with Agent Color */}
-          <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 relative"
-            style={{ backgroundColor: agent.avatar_color || '#6B7280' }}
-          >
-            <Bot className="w-5 h-5 text-white" />
-            {/* Status Dot Indicator */}
+          {/* Avatar with Agent Color or Custom Icon */}
+          {renderIcon ? (
+            renderIcon(agent)
+          ) : (
             <div
-              className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white dark:border-gray-900 ${getStatusDot(
-                agent.status
-              )}`}
-              title={agent.status}
-            />
-          </div>
+              className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 relative"
+              style={{ backgroundColor: agent.avatar_color || '#6B7280' }}
+            >
+              <Bot className="w-5 h-5 text-white" />
+              {/* Status Dot Indicator */}
+              <div
+                className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-white dark:border-gray-900 ${getStatusDot(
+                  agent.status
+                )}`}
+                title={agent.status}
+              />
+            </div>
+          )}
 
           {/* Agent Info */}
           <div className="flex-1 min-w-0">
@@ -201,7 +242,7 @@ const AgentListItem: React.FC<AgentListItemProps> = React.memo(
               {agent.description || `Agent ${agent.id} - No description available`}
             </p>
 
-            {/* Status Badge */}
+            {/* Status Badge and Custom Badges */}
             <div className="flex items-center gap-2">
               <span
                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
@@ -211,6 +252,8 @@ const AgentListItem: React.FC<AgentListItemProps> = React.memo(
                 {getStatusIcon(agent.status)}
                 {agent.status}
               </span>
+              {/* Render custom badges if provided */}
+              {renderBadges && renderBadges(agent)}
             </div>
           </div>
         </div>

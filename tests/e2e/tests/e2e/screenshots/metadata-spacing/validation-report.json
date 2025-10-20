@@ -1,0 +1,18 @@
+{
+  "timestamp": "2025-10-17T20:49:00.180Z",
+  "change": "Added mt-4 class to metadata line",
+  "location": "frontend/src/components/RealSocialMediaFeed.tsx:803",
+  "measurements": {
+    "marginTop": "12px",
+    "paddingLeft": "56px",
+    "expectedMarginTop": "16px",
+    "expectedPaddingLeft": "56px"
+  },
+  "classes": "pl-14 flex items-center space-x-6 mt-4",
+  "validation": {
+    "spacingCorrect": false,
+    "classesCorrect": true,
+    "noLayoutShifts": true,
+    "noConsoleErrors": true
+  }
+}
