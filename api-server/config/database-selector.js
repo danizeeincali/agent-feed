@@ -50,7 +50,7 @@ class DatabaseSelector {
 
     if (!this.usePostgres) {
       // Connect to SQLite databases
-      this.sqliteDb = new Database('/workspaces/agent-feed/data/database.db');
+      this.sqliteDb = new Database('/workspaces/agent-feed/database.db');
       this.sqlitePagesDb = new Database('/workspaces/agent-feed/data/agent-pages.db');
 
       console.log('✅ SQLite connections established');
@@ -116,9 +116,10 @@ class DatabaseSelector {
       const limit = options.limit || 100;
       const offset = options.offset || 0;
 
+      // Fixed: Column name is publishedAt (camelCase), not published_at (snake_case)
       const posts = this.sqliteDb.prepare(`
         SELECT * FROM agent_posts
-        ORDER BY published_at DESC
+        ORDER BY publishedAt DESC
         LIMIT ? OFFSET ?
       `).all(limit, offset);
 

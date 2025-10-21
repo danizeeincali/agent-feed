@@ -1,0 +1,192 @@
+
+> agent-feed@0.1.0 test
+> jest --config jest.config.cjs tests/integration/database-selector-column-names.test.js
+
+  console.log
+    [dotenv@17.2.3] injecting env (39) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    Connected to agent-pages.db
+
+      at Database.<anonymous> (backend/services/database-selector.js:27:19)
+
+  console.log
+    Connected to agent-pages.db
+
+      at Database.<anonymous> (backend/services/database-selector.js:27:19)
+
+FAIL tests/integration/database-selector-column-names.test.js
+  Database Selector Column Names Integration Tests
+    getAllPosts() - Query Execution and Column Names
+      ✓ should execute query without column name errors (3 ms)
+      ✕ should return posts ordered by publishedAt descending (1 ms)
+      ✕ should return posts with correct camelCase column names (2 ms)
+      ✕ should return posts with correct data types (2 ms)
+      ✕ should return publishedAt as valid ISO 8601 date string (1 ms)
+    getPostById() - Single Post Retrieval
+      ✕ should retrieve post by ID with correct column names (2 ms)
+      ✓ should return null for non-existent post ID (9 ms)
+      ✓ should handle post retrieval without errors (16 ms)
+    createPost() - Post Creation
+      ✓ should create post with correct column mapping (5 ms)
+      ✕ should retrieve created post with correct column names (11 ms)
+    API Endpoint Integration - /api/agent-posts
+      ✓ should return 200 OK from API endpoint (18 ms)
+      ✕ should return posts with camelCase columns from API (5 ms)
+      ✕ should return properly ordered posts from API (2 ms)
+    Frontend Connection Check
+      ✓ should successfully query database directly
+      ✓ should return valid data structure for frontend consumption (1 ms)
+    Error Handling and Edge Cases
+      ✓ should handle empty result set gracefully
+      ✓ should handle malformed post IDs
+      ✓ should validate column name consistency across operations (1 ms)
+
+  ● Database Selector Column Names Integration Tests › getAllPosts() - Query Execution and Column Names › should return posts ordered by publishedAt descending
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= NaN
+    Received:    NaN
+
+      77 |           const currentDate = new Date(posts[i].publishedAt);
+      78 |           const nextDate = new Date(posts[i + 1].publishedAt);
+    > 79 |           expect(currentDate.getTime()).toBeGreaterThanOrEqual(nextDate.getTime());
+         |                                         ^
+      80 |         }
+      81 |       }
+      82 |     });
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:79:41)
+
+  ● Database Selector Column Names Integration Tests › getAllPosts() - Query Execution and Column Names › should return posts with correct camelCase column names
+
+    expect(received).toHaveProperty(path)
+
+    Expected path: "agentName"
+    Received path: []
+
+    Received value: {"agent_avatar": "/avatars/avi.png", "agent_name": "Avi", "agent_title": "Digital Marketing Specialist", "category": "Marketing", "comments": 8, "content": "Just launched a new campaign!", "id": 1, "image_url": null, "likes": 42, "outcomes": "Campaign reached 10k impressions", "published_at": "2025-10-21T10:00:00Z", "shares": 12}
+
+      90 |         // Verify camelCase naming convention
+      91 |         expect(post).toHaveProperty('id');
+    > 92 |         expect(post).toHaveProperty('agentName');
+         |                      ^
+      93 |         expect(post).toHaveProperty('agentTitle');
+      94 |         expect(post).toHaveProperty('agentAvatar');
+      95 |         expect(post).toHaveProperty('content');
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:92:22)
+
+  ● Database Selector Column Names Integration Tests › getAllPosts() - Query Execution and Column Names › should return posts with correct data types
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "string"
+    Received: "undefined"
+
+      118 |
+      119 |         expect(typeof post.id).toBe('number');
+    > 120 |         expect(typeof post.agentName).toBe('string');
+          |                                       ^
+      121 |         expect(typeof post.agentTitle).toBe('string');
+      122 |         expect(typeof post.content).toBe('string');
+      123 |         expect(typeof post.publishedAt).toBe('string');
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:120:39)
+
+  ● Database Selector Column Names Integration Tests › getAllPosts() - Query Execution and Column Names › should return publishedAt as valid ISO 8601 date string
+
+    expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "Invalid Date"
+
+      149 |         const date = new Date(post.publishedAt);
+      150 |         expect(date).toBeInstanceOf(Date);
+    > 151 |         expect(date.toString()).not.toBe('Invalid Date');
+          |                                     ^
+      152 |
+      153 |         // Should match ISO 8601 format
+      154 |         expect(post.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:151:37)
+
+  ● Database Selector Column Names Integration Tests › getPostById() - Single Post Retrieval › should retrieve post by ID with correct column names
+
+    expect(received).toHaveProperty(path)
+
+    Expected path: "agentName"
+    Received path: []
+
+    Received value: {"agent_avatar": "/avatars/avi.png", "agent_name": "Avi", "agent_title": "Digital Marketing Specialist", "category": "Marketing", "comments": 8, "content": "Just launched a new campaign!", "id": 1, "image_url": null, "likes": 42, "outcomes": "Campaign reached 10k impressions", "published_at": "2025-10-21T10:00:00Z", "shares": 12}
+
+      170 |
+      171 |         // Verify camelCase columns
+    > 172 |         expect(post).toHaveProperty('agentName');
+          |                      ^
+      173 |         expect(post).toHaveProperty('publishedAt');
+      174 |         expect(post).not.toHaveProperty('agent_name');
+      175 |         expect(post).not.toHaveProperty('published_at');
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:172:22)
+
+  ● Database Selector Column Names Integration Tests › createPost() - Post Creation › should retrieve created post with correct column names
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Test Agent"
+    Received: undefined
+
+      223 |
+      224 |         expect(post).toBeDefined();
+    > 225 |         expect(post.agentName).toBe('Test Agent');
+          |                                ^
+      226 |         expect(post).toHaveProperty('publishedAt');
+      227 |         expect(post).not.toHaveProperty('published_at');
+      228 |       }
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:225:32)
+
+  ● Database Selector Column Names Integration Tests › API Endpoint Integration - /api/agent-posts › should return posts with camelCase columns from API
+
+    expect(received).toHaveProperty(path)
+
+    Expected path: "agentName"
+    Received path: []
+
+    Received value: {"agent_avatar": "/avatars/avi.png", "agent_name": "Avi", "agent_title": "Digital Marketing Specialist", "category": "Marketing", "comments": 8, "content": "Just launched a new campaign!", "id": 1, "image_url": null, "likes": 42, "outcomes": "Campaign reached 10k impressions", "published_at": "2025-10-21T10:00:00Z", "shares": 12}
+
+      264 |
+      265 |         // Verify camelCase naming
+    > 266 |         expect(post).toHaveProperty('agentName');
+          |                      ^
+      267 |         expect(post).toHaveProperty('publishedAt');
+      268 |         expect(post).not.toHaveProperty('agent_name');
+      269 |         expect(post).not.toHaveProperty('published_at');
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:266:22)
+
+  ● Database Selector Column Names Integration Tests › API Endpoint Integration - /api/agent-posts › should return properly ordered posts from API
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= NaN
+    Received:    NaN
+
+      283 |           const currentDate = new Date(posts[i].publishedAt);
+      284 |           const nextDate = new Date(posts[i + 1].publishedAt);
+    > 285 |           expect(currentDate.getTime()).toBeGreaterThanOrEqual(nextDate.getTime());
+          |                                         ^
+      286 |         }
+      287 |       }
+      288 |     });
+
+      at Object.<anonymous> (tests/integration/database-selector-column-names.test.js:285:41)
+
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 10 passed, 18 total
+Snapshots:   0 total
+Time:        0.839 s, estimated 1 s
+Ran all test suites matching /tests\/integration\/database-selector-column-names.test.js/i.

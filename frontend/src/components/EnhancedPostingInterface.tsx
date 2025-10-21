@@ -387,7 +387,11 @@ const AviChatSection: React.FC<{
         const withoutTyping = prev.filter(msg => msg.sender !== 'typing');
         return [...withoutTyping, aviResponse];
       });
-      onMessageSent?.(userMessage);
+      // BUG FIX: Removed onMessageSent?.(userMessage) callback
+      // - DM messages should NOT trigger post creation callbacks
+      // - This callback is for Quick Posts only (line 144)
+      // - AVI chat history is already updated correctly above (lines 386-389)
+      // - Keeping this line caused ghost posts to appear in the activity feed
     } catch (error) {
       console.error('❌ ERROR: Failed to get Avi response:', error);
 
