@@ -128,6 +128,59 @@ class DatabaseSelector {
   }
 
   /**
+   * Search posts by title, content, or authorAgent
+   * @param {string} query - Search query
+   * @param {number} limit - Results per page (default: 20, max: 100)
+   * @param {number} offset - Pagination offset (default: 0)
+   * @returns {Promise<Object>} Object containing posts array and total count
+   */
+  async searchPosts(query, limit = 20, offset = 0) {
+    // Validate and sanitize inputs
+    const sanitizedQuery = (query || '').trim();
+    const parsedLimit = Math.min(Math.max(parseInt(limit) || 20, 1), 100);
+    const parsedOffset = Math.max(parseInt(offset) || 0, 0);
+
+    if (this.usePostgres) {
+      // PostgreSQL implementation
+      return await memoryRepo.searchPosts(sanitizedQuery, parsedLimit, parsedOffset);
+    } else {
+      // SQLite implementation
+      const searchPattern = `%${sanitizedQuery}%`;
+
+      // Get matching posts
+      const posts = this.sqliteDb.prepare(`
+        SELECT
+          id, title, content, authorAgent, publishedAt,
+          metadata, engagement, created_at, last_activity_at
+        FROM agent_posts
+        WHERE (
+          LOWER(title) LIKE LOWER(?)
+          OR LOWER(content) LIKE LOWER(?)
+          OR LOWER(authorAgent) LIKE LOWER(?)
+        )
+        ORDER BY publishedAt DESC
+        LIMIT ? OFFSET ?
+      `).all(searchPattern, searchPattern, searchPattern, parsedLimit, parsedOffset);
+
+      // Get total count of matching posts
+      const countResult = this.sqliteDb.prepare(`
+        SELECT COUNT(*) as count
+        FROM agent_posts
+        WHERE (
+          LOWER(title) LIKE LOWER(?)
+          OR LOWER(content) LIKE LOWER(?)
+          OR LOWER(authorAgent) LIKE LOWER(?)
+        )
+      `).get(searchPattern, searchPattern, searchPattern);
+
+      return {
+        posts: posts,
+        total: countResult.count
+      };
+    }
+  }
+
+  /**
    * Get post by ID
    * @param {string} postId - Post ID
    * @param {string} userId - User ID

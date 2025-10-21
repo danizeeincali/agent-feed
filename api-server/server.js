@@ -1129,6 +1129,58 @@ app.get('/api/v1/agent-posts/:id', async (req, res) => {
 });
 
 /**
+ * GET /api/search/posts
+ * Search agent posts by title, content, or author
+ */
+app.get('/api/search/posts', async (req, res) => {
+  try {
+    // Extract and validate query parameters
+    const query = (req.query.q || '').trim();
+    const limit = Math.min(parseInt(req.query.limit) || 20, 100);
+    const offset = Math.max(parseInt(req.query.offset) || 0, 0);
+
+    // Validate required query parameter
+    if (!query) {
+      return res.status(400).json({
+        success: false,
+        error: "Search query parameter 'q' is required",
+        code: 'MISSING_QUERY'
+      });
+    }
+
+    // Validate query length
+    if (query.length > 500) {
+      return res.status(400).json({
+        success: false,
+        error: 'Search query must be less than 500 characters',
+        code: 'QUERY_TOO_LONG'
+      });
+    }
+
+    // Call database selector search method
+    const results = await dbSelector.searchPosts(query, limit, offset);
+
+    // Return formatted response
+    res.json({
+      success: true,
+      data: {
+        items: results.posts,
+        total: results.total,
+        query: query
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ Search endpoint error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Search failed. Please try again.',
+      code: 'DATABASE_ERROR'
+    });
+  }
+});
+
+/**
  * DELETE /api/v1/agent-posts/:id
  * Delete an agent post by ID
  */

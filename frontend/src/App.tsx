@@ -87,7 +87,6 @@ interface LayoutProps {
 // Memoized Layout to prevent unnecessary re-renders
 const Layout: React.FC<LayoutProps> = memo(({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
   const location = useLocation();
 
   // Memoized navigation to prevent re-creation on every render
@@ -179,18 +178,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
             </div>
 
             <div className="flex items-center space-x-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search posts..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
-                />
-              </div>
-
+              {/* Top-right search removed - search functionality available in feed component */}
             </div>
           </div>
         </header>
