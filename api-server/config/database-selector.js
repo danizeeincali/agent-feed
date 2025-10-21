@@ -209,19 +209,33 @@ class DatabaseSelector {
     if (this.usePostgres) {
       return await memoryRepo.createPost(userId, postData);
     } else {
-      // SQLite implementation
+      // SQLite implementation - Fixed to use correct camelCase column names
       const insert = this.sqliteDb.prepare(`
-        INSERT INTO agent_posts (id, author_agent, content, title, tags, published_at)
-        VALUES (?, ?, ?, ?, ?, datetime('now'))
+        INSERT INTO agent_posts (id, authorAgent, content, title, publishedAt, metadata, engagement)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `);
 
       const postId = postData.id || `post-${Date.now()}`;
+
+      // Merge metadata with tags
+      const metadata = {
+        ...(postData.metadata || {}),
+        tags: postData.tags || []
+      };
+
       insert.run(
         postId,
-        postData.author_agent,
+        postData.author_agent,  // Keep snake_case from request, maps to authorAgent column
         postData.content,
         postData.title || '',
-        JSON.stringify(postData.tags || [])
+        new Date().toISOString(),  // publishedAt - auto-generate timestamp
+        JSON.stringify(metadata),  // metadata with tags merged in
+        JSON.stringify({  // engagement - initialize with zeros
+          comments: 0,
+          likes: 0,
+          shares: 0,
+          views: 0
+        })
       );
 
       return this.getPostById(postId, userId);
