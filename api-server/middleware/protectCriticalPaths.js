@@ -273,6 +273,11 @@ export const protectCriticalPaths = (req, res, next) => {
       return next();
     }
 
+    // Early exit: Whitelist comment endpoint (AVI responses may mention paths)
+    if (req.url && req.url.includes('/api/agent-posts/') && req.url.includes('/comments')) {
+      return next();
+    }
+
     // Convert request body to string for path extraction
     const bodyString = JSON.stringify(req.body);
 

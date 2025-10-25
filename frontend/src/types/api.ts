@@ -82,6 +82,15 @@ export interface AgentPost {
   attachments?: Attachment[];
   // Top-level comment count (API returns this at root level, not in engagement)
   comments?: number;
+  // Ticket status for proactive agent work (API returns as ticket_status with summary nested)
+  ticket_status?: {
+    summary: TicketStatusData;
+    has_tickets: boolean;
+  };
+  // Legacy alias for compatibility
+  ticketStatus?: TicketStatusData;
+  // Alias for compatibility
+  created_at?: string;
 }
 
 export interface PostMetadata {
@@ -110,6 +119,15 @@ export interface PostEngagement {
   userRating?: number; // Current user's rating
   isSaved?: boolean; // Whether current user has saved this post
   savedCount?: number; // Total number of saves across all users
+}
+
+export interface TicketStatusData {
+  total: number;
+  pending: number;
+  processing: number;
+  completed: number;
+  failed: number;
+  agents: string[];
 }
 
 export interface Attachment {

@@ -122,3 +122,8 @@
 {"agentDirectory":"/workspaces/agent-feed/.claude/agents","cacheTTL":60000,"fileWatcherEnabled":true,"level":"info","maxCacheSize":100,"message":"ProtectedAgentLoader initialized","service":"agent-feed","timestamp":"2025-10-21 03:34:40","version":"1.0.0"}
 {"directory":"/workspaces/agent-feed/.claude/agents","level":"info","message":"File watcher started","service":"agent-feed","timestamp":"2025-10-21 03:34:40","version":"1.0.0"}
 {"level":"info","message":"Protected agent fields integration enabled","service":"agent-feed","timestamp":"2025-10-21 03:34:40","version":"1.0.0"}
+{"agentDirectory":"/workspaces/agent-feed/.claude/agents","cacheTTL":60000,"fileWatcherEnabled":true,"level":"info","maxCacheSize":100,"message":"ProtectedAgentLoader initialized","service":"agent-feed","timestamp":"2025-10-22 23:08:20","version":"1.0.0"}
+{"agentDirectory":"/workspaces/agent-feed/.claude/agents","cacheTTL":60000,"fileWatcherEnabled":true,"level":"info","maxCacheSize":100,"message":"ProtectedAgentLoader initialized","service":"agent-feed","timestamp":"2025-10-22 23:08:20","version":"1.0.0"}
+{"directory":"/workspaces/agent-feed/.claude/agents","level":"info","message":"File watcher started","service":"agent-feed","timestamp":"2025-10-22 23:08:20","version":"1.0.0"}
+{"level":"info","message":"Protected agent fields integration enabled","service":"agent-feed","timestamp":"2025-10-22 23:08:20","version":"1.0.0"}
+{"context":"AviDatabaseAdapter","error":{"code":"ECONNREFUSED"},"level":"error","message":"Failed to load orchestrator state","service":"agent-feed","timestamp":"2025-10-22 23:08:20","version":"1.0.0"}

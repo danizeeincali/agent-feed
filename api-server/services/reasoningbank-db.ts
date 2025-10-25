@@ -495,23 +495,17 @@ export class ReasoningBankDatabaseService implements ReasoningBankDB {
       return;
     }
 
-    // Apply migration if it exists, otherwise apply schema
-    let schemaSQL: string;
-    if (existsSync(this.migrationPath)) {
-      schemaSQL = readFileSync(this.migrationPath, 'utf-8');
-      if (this.verbose) {
-        console.log('[ReasoningBankDB] Applying migration: 004-reasoningbank-init.sql');
-      }
-    } else if (existsSync(this.schemaPath)) {
-      schemaSQL = readFileSync(this.schemaPath, 'utf-8');
-      if (this.verbose) {
-        console.log('[ReasoningBankDB] Applying schema: reasoningbank-schema.sql');
-      }
-    } else {
-      throw new Error('Schema file not found');
+    // Always use schema file (migration has PRAGMA issues inside transactions)
+    if (!existsSync(this.schemaPath)) {
+      throw new Error('Schema file not found: ' + this.schemaPath);
     }
 
-    // Execute schema/migration
+    const schemaSQL = readFileSync(this.schemaPath, 'utf-8');
+    if (this.verbose) {
+      console.log('[ReasoningBankDB] Applying schema: reasoningbank-schema.sql');
+    }
+
+    // Execute schema
     this.db.exec(schemaSQL);
 
     if (this.verbose) {

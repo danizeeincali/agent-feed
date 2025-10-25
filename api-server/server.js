@@ -17,28 +17,27 @@ import feedbackLoop from './services/feedback-loop.js';
 import dbSelector from './config/database-selector.js';
 import aviControlRouter from './routes/avi-control.js';
 import monitoringRouter from './routes/monitoring.js';
+import reasoningBankRouter from './routes/reasoningbank.js';
 // Phase 5: Monitoring service integration
 import { MonitoringService, AlertingService } from './services/monitoring-service.js';
 // Work queue repository for post-to-ticket integration
 import workQueueRepository from './repositories/postgres/work-queue.repository.js';
 
-// Legacy orchestrator (Phase 1)
-import { startOrchestrator as startLegacyOrchestrator, stopOrchestrator as stopLegacyOrchestrator } from './avi/orchestrator.js';
+// Proactive agent work queue (for link-logger, etc.)
+import { WorkQueueRepository } from './repositories/work-queue-repository.js';
+import { processPostForProactiveAgents } from './services/ticket-creation-service.cjs';
 
-// New orchestrator factory (Phase 2) - Dynamic import for TypeScript support
-let newOrchestratorModule = null;
-async function loadNewOrchestrator() {
-  if (!newOrchestratorModule) {
-    try {
-      newOrchestratorModule = await import('../src/avi/orchestrator-factory.ts');
-      console.log('✅ New orchestrator factory loaded successfully');
-    } catch (error) {
-      console.error('❌ Failed to load new orchestrator factory:', error);
-      throw error;
-    }
-  }
-  return newOrchestratorModule;
-}
+// WebSocket service for real-time updates
+import websocketService from './services/websocket-service.js';
+
+// Ticket status service for post/comment ticket tracking
+import ticketStatusService from './services/ticket-status-service.js';
+
+// AVI Orchestrator (Phase 1)
+import { startOrchestrator, stopOrchestrator } from './avi/orchestrator.js';
+
+// AVI Session Manager (Phase 2) - Persistent AVI for DM and Q&A
+import { getAviSession } from './avi/session-manager.js';
 
 // Security middleware imports
 import security from './middleware/security.js';
@@ -71,6 +70,10 @@ try {
   console.error('❌ Agent pages database error:', error);
 }
 
+// Initialize proactive agent work queue (for link-logger, follow-ups, etc.)
+const proactiveWorkQueue = new WorkQueueRepository(db);
+console.log('✅ Proactive agent work queue initialized');
+
 // Track file watcher for cleanup
 let fileWatcher = null;
 
@@ -84,8 +87,8 @@ if (process.env.USE_POSTGRES === 'true') {
   console.log('✅ System agent templates ready (22 templates in database)');
 }
 
-// Export database connections for use in routes (maintains backward compatibility)
-export { db, agentPagesDb };
+// Export database connections and websocket service for use in routes (maintains backward compatibility)
+export { db, agentPagesDb, websocketService };
 
 // Initialize Claude Code routes with database connection
 if (initializeWithDatabase) {
@@ -205,6 +208,113 @@ app.use(protectCriticalPaths);
 
 console.log('✅ Minimal security middleware initialized (single-user mode)');
 
+// ============================================================================
+// AVI HELPER FUNCTIONS (Phase 3: Post Creation Integration)
+// ============================================================================
+
+/**
+ * Check if text contains URL
+ */
+function containsURL(text) {
+  const urlPattern = /https?:\/\/[^\s]+/;
+  return urlPattern.test(text);
+}
+
+/**
+ * Detect if post is a question for AVI
+ * Questions without URLs are directed to AVI
+ * Questions with URLs go to link-logger-agent
+ */
+function isAviQuestion(content) {
+  const lowerContent = content.toLowerCase();
+
+  // Skip if contains URL (goes to link-logger)
+  if (containsURL(content)) {
+    return false;
+  }
+
+  // Pattern 1: Direct address
+  if (lowerContent.includes('avi') || lowerContent.includes('λvi')) {
+    return true;
+  }
+
+  // Pattern 2: Question marks
+  if (content.includes('?')) {
+    return true;
+  }
+
+  // Pattern 3: Common command/question patterns
+  const questionPatterns = [
+    /^(what|where|when|why|how|who|status|help)/i,
+    /directory/i,
+    /working on/i,
+    /tell me/i,
+    /show me/i
+  ];
+
+  return questionPatterns.some(pattern => pattern.test(content));
+}
+
+/**
+ * Handle AVI response to post (async)
+ * Does not block post creation
+ */
+async function handleAviResponse(post) {
+  try {
+    console.log(`💬 Post ${post.id} detected as AVI question`);
+
+    // Get AVI session (initializes on first use)
+    const aviSession = getAviSession({
+      idleTimeout: 60 * 60 * 1000 // 60 minutes
+    });
+
+    // Chat with AVI
+    const result = await aviSession.chat(post.content, {
+      includeSystemPrompt: !aviSession.sessionActive, // Only first time
+      maxTokens: 2000 // Keep responses concise
+    });
+
+    if (!result.success) {
+      console.error('❌ AVI chat failed:', result.error);
+      return;
+    }
+
+    console.log(`✅ AVI generated response (${result.tokensUsed} tokens)`);
+
+    // Post AVI's response as comment
+    const comment = {
+      content: result.response,
+      author: 'avi',        // Backward compatibility
+      author_agent: 'avi',  // Primary field
+      parent_id: null,
+      mentioned_users: [],
+      skipTicket: true // Don't create ticket for AVI's response
+    };
+
+    const response = await fetch(
+      `http://localhost:3001/api/agent-posts/${post.id}/comments`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(comment)
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Failed to post AVI comment:', errorText);
+      return;
+    }
+
+    const commentResult = await response.json();
+    console.log(`✅ AVI comment posted: ${commentResult.data?.id}`);
+    console.log(`   Session: ${result.sessionId}, Total tokens: ${result.totalTokens}`);
+
+  } catch (error) {
+    console.error('❌ Error handling AVI response:', error);
+  }
+}
+
 // Mount Claude Code routes
 app.use('/api/claude-code', claudeCodeRoutes);
 
@@ -228,6 +338,9 @@ app.use('/api/avi', aviControlRouter);
 
 // Mount Phase 5 Monitoring routes
 app.use('/api/monitoring', monitoringRouter);
+
+// Mount ReasoningBank routes (Memory System)
+app.use('/api/reasoningbank', reasoningBankRouter);
 
 // ============================================================================
 // SECURITY & AUTHENTICATION ROUTES
@@ -1029,6 +1142,27 @@ app.post('/api/v1/agent-posts', async (req, res) => {
       // This maintains backward compatibility
     }
 
+    // Process URLs for proactive agents (link-logger, follow-ups, etc.)
+    try {
+      const proactiveTickets = await processPostForProactiveAgents(createdPost, proactiveWorkQueue);
+      if (proactiveTickets.length > 0) {
+        console.log(`✅ Created ${proactiveTickets.length} proactive agent ticket(s)`);
+      }
+    } catch (proactiveError) {
+      console.error('❌ Proactive agent ticket creation failed:', proactiveError);
+      // Log error but don't fail the post creation
+    }
+
+    // Check if post is directed at AVI (not a URL for link-logger)
+    if (isAviQuestion(content)) {
+      console.log(`💬 Post ${createdPost.id} appears to be question for AVI`);
+
+      // Trigger AVI response (async, don't wait)
+      handleAviResponse(createdPost).catch(error => {
+        console.error('❌ AVI response error:', error);
+      });
+    }
+
     // Return created post
     res.status(201).json({
       success: true,
@@ -1050,7 +1184,14 @@ app.post('/api/v1/agent-posts', async (req, res) => {
 
 app.get('/api/v1/agent-posts', async (req, res) => {
   try {
-    const { limit = 20, offset = 0, filter = 'all', search = '', sortBy = 'published_at', sortOrder = 'DESC' } = req.query;
+    const {
+      limit = 20,
+      offset = 0,
+      filter = 'all',
+      search = '',
+      sortBy = 'published_at',
+      sortOrder = 'DESC'
+    } = req.query;
     const userId = req.query.userId || 'anonymous';
 
     // Validate and sanitize inputs
@@ -1064,10 +1205,101 @@ app.get('/api/v1/agent-posts', async (req, res) => {
       orderBy: `${sortBy} ${sortOrder}`
     });
 
+    // Always enrich posts with ticket status
+    let enrichedPosts = posts;
+    if (db && posts.length > 0) {
+      try {
+        const postIds = posts.map(p => p.id);
+        const placeholders = postIds.map(() => '?').join(',');
+
+        // Use db (database.db) where work_queue_tickets has valid post_id values
+        const ticketsStmt = db.prepare(`
+          SELECT
+            id,
+            post_id,
+            agent_id,
+            status,
+            retry_count,
+            created_at,
+            assigned_at,
+            completed_at,
+            metadata,
+            result
+          FROM work_queue_tickets
+          WHERE post_id IN (${placeholders})
+          ORDER BY created_at DESC
+        `);
+
+        const allTickets = ticketsStmt.all(...postIds);
+        console.log(`🎫 Found ${allTickets.length} tickets for ${postIds.length} posts`);
+
+        // Deserialize and group tickets by post_id
+        const ticketsByPost = {};
+        allTickets.forEach(ticket => {
+          if (!ticketsByPost[ticket.post_id]) {
+            ticketsByPost[ticket.post_id] = [];
+          }
+          // Deserialize JSON fields
+          ticketsByPost[ticket.post_id].push({
+            ...ticket,
+            metadata: ticket.metadata ? JSON.parse(ticket.metadata) : null,
+            result: ticket.result ? JSON.parse(ticket.result) : null
+          });
+        });
+
+        // Add ticket status to each post
+        enrichedPosts = posts.map(post => {
+          try {
+            const tickets = ticketsByPost[post.id] || [];
+            const summary = ticketStatusService.getTicketStatusSummary(tickets);
+
+            return {
+              ...post,
+              ticket_status: summary
+            };
+          } catch (postTicketError) {
+            console.error(`Error processing ticket status for post ${post.id}:`, postTicketError);
+            // Graceful fallback for individual post
+            return {
+              ...post,
+              ticket_status: {
+                total: 0,
+                pending: 0,
+                processing: 0,
+                completed: 0,
+                failed: 0,
+                agents: []
+              }
+            };
+          }
+        });
+      } catch (ticketError) {
+        console.error('Error enriching posts with ticket status:', ticketError);
+        // Continue without ticket data on error - add null ticket_status to all posts
+        enrichedPosts = posts.map(post => ({
+          ...post,
+          ticket_status: null
+        }));
+      }
+    } else {
+      // No posts or no database - add empty ticket status
+      enrichedPosts = posts.map(post => ({
+        ...post,
+        ticket_status: {
+          total: 0,
+          pending: 0,
+          processing: 0,
+          completed: 0,
+          failed: 0,
+          agents: []
+        }
+      }));
+    }
+
     return res.json({
       success: true,
       version: "1.0",
-      data: posts,
+      data: enrichedPosts,
       meta: {
         total: posts.length,
         limit: parsedLimit,
@@ -1123,6 +1355,70 @@ app.get('/api/v1/agent-posts/:id', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to fetch agent post',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/agent-posts/:postId/tickets
+ * Get ticket status for a specific post
+ * Returns all tickets associated with the post and a status summary
+ */
+app.get('/api/agent-posts/:postId/tickets', async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    if (!postId) {
+      return res.status(400).json({
+        success: false,
+        error: 'Post ID is required',
+        code: 'MISSING_POST_ID'
+      });
+    }
+
+    // Get ticket status from main database (where work_queue_tickets are stored)
+    const ticketStatus = ticketStatusService.getPostTicketStatus(postId, db);
+
+    return res.json({
+      success: true,
+      data: ticketStatus,
+      meta: {
+        post_id: postId,
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Error in GET /api/agent-posts/:postId/tickets:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch ticket status',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/tickets/stats
+ * Get global ticket statistics across all posts
+ * Useful for dashboard/monitoring views
+ */
+app.get('/api/tickets/stats', async (req, res) => {
+  try {
+    const stats = ticketStatusService.getGlobalTicketStats(db);
+
+    return res.json({
+      success: true,
+      data: stats,
+      meta: {
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Error in GET /api/tickets/stats:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch ticket statistics',
       details: error.message
     });
   }
@@ -1264,7 +1560,7 @@ app.get('/api/agent-posts/:postId/comments', async (req, res) => {
 app.post('/api/agent-posts/:postId/comments', async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, author, parent_id, mentioned_users } = req.body;
+    const { content, author, author_agent, parent_id, mentioned_users } = req.body;
     const userId = req.headers['x-user-id'] || 'anonymous';
 
     // Validate required fields
@@ -1275,10 +1571,13 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
       });
     }
 
-    if (!author || !author.trim()) {
+    // Accept either author or author_agent for backward compatibility
+    const authorValue = author_agent || author || userId;
+
+    if (!authorValue || !authorValue.trim()) {
       return res.status(400).json({
         success: false,
-        error: 'Author is required'
+        error: 'Author or author_agent is required'
       });
     }
 
@@ -1287,7 +1586,8 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
       id: uuidv4(),
       post_id: postId,
       content: content.trim(),
-      author_agent: author.trim(),
+      author: author || authorValue.trim(),  // Backward compatibility
+      author_agent: authorValue.trim(),       // Primary field
       parent_id: parent_id || null,
       mentioned_users: mentioned_users || [],
       depth: 0
@@ -1347,6 +1647,140 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
 
   } catch (error) {
     console.error('❌ Error creating comment:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create comment',
+      details: error.message
+    });
+  }
+});
+
+// =============================================================================
+// COMMENTS API V1 ENDPOINTS - For frontend compatibility
+// =============================================================================
+
+/**
+ * GET /api/v1/agent-posts/:postId/comments
+ * Get all comments for a specific post (V1 endpoint for frontend)
+ */
+app.get('/api/v1/agent-posts/:postId/comments', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const userId = req.headers['x-user-id'] || 'anonymous';
+
+    // Get comments using database selector
+    const comments = await dbSelector.getCommentsByPostId(postId, userId);
+
+    console.log(`✅ Fetched ${comments.length} comments for post ${postId} from ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'} (V1 endpoint)`);
+
+    res.json({
+      success: true,
+      data: comments,
+      total: comments.length,
+      timestamp: new Date().toISOString(),
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
+    });
+
+  } catch (error) {
+    console.error('❌ Error fetching comments (V1):', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch comments',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * POST /api/v1/agent-posts/:postId/comments
+ * Create a new comment for a specific post (V1 endpoint for frontend)
+ */
+app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { content, author, author_agent, authorAgent, parent_id, mentioned_users } = req.body;
+    const userId = req.headers['x-user-id'] || 'anonymous';
+
+    // Validate required fields
+    if (!content || !content.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Content is required'
+      });
+    }
+
+    // Accept multiple field name variations for compatibility
+    const authorValue = author_agent || authorAgent || author || userId;
+
+    if (!authorValue || !authorValue.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Author or author_agent is required'
+      });
+    }
+
+    // Prepare comment data
+    const commentData = {
+      id: uuidv4(),
+      post_id: postId,
+      content: content.trim(),
+      author: author || authorValue.trim(),  // Backward compatibility
+      author_agent: authorValue.trim(),       // Primary field
+      parent_id: parent_id || null,
+      mentioned_users: mentioned_users || [],
+      depth: 0
+    };
+
+    // Create comment using database selector
+    const createdComment = await dbSelector.createComment(userId, commentData);
+
+    console.log(`✅ Created comment ${createdComment.id} for post ${postId} in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'} (V1 endpoint)`);
+
+    // Create work queue ticket for AVI orchestrator (Comment-to-Ticket Integration)
+    // CRITICAL: Check skipTicket parameter to prevent infinite loops
+    const skipTicket = req.body.skipTicket === true;
+
+    let ticket = null;
+    if (!skipTicket) {
+      try {
+        // Fetch parent post for context
+        const parentPost = await dbSelector.getPostById(postId);
+
+        ticket = await workQueueRepository.createTicket({
+          user_id: userId,
+          post_id: createdComment.id,
+          comment_id: createdComment.id,
+          content: content.trim(),
+          context: {
+            parent_post: parentPost ? {
+              id: parentPost.id,
+              content: parentPost.content,
+              author: parentPost.authorAgent
+            } : null,
+            comment: {
+              id: createdComment.id,
+              content: createdComment.content,
+              author: createdComment.author_agent
+            }
+          }
+        });
+
+        console.log(`✅ Created work queue ticket ${ticket.id} for comment ${createdComment.id}`);
+      } catch (ticketError) {
+        console.error('❌ Failed to create work queue ticket:', ticketError);
+        // Don't fail the entire request if ticket creation fails
+      }
+    }
+
+    res.status(201).json({
+      success: true,
+      data: createdComment,
+      ticket: ticket ? { id: ticket.id, status: ticket.status } : null,
+      source: dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'
+    });
+
+  } catch (error) {
+    console.error('❌ Error creating comment (V1):', error);
     res.status(500).json({
       success: false,
       error: 'Failed to create comment',
@@ -3630,6 +4064,122 @@ function formatUptime(seconds) {
   return parts.join(' ');
 }
 
+// ========================================
+// AVI PERSISTENT SESSION API (Phase 4 & 5)
+// Note: Using /api/avi/dm/* paths to avoid conflicts with existing /api/avi/* orchestrator routes
+// ========================================
+
+/**
+ * POST /api/avi/dm/chat - Direct messaging with AVI
+ * For AVI DM interface or manual testing
+ */
+app.post('/api/avi/dm/chat', async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    if (!message || !message.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Message is required'
+      });
+    }
+
+    console.log(`💬 AVI DM: "${message.substring(0, 50)}..."`);
+
+    // Get or initialize AVI session
+    const aviSession = getAviSession();
+
+    // Process message
+    const result = await aviSession.chat(message.trim(), {
+      includeSystemPrompt: !aviSession.sessionActive,
+      maxTokens: 2000
+    });
+
+    res.json({
+      success: true,
+      data: {
+        response: result.response,
+        tokensUsed: result.tokensUsed,
+        sessionId: result.sessionId,
+        sessionStatus: aviSession.getStatus()
+      }
+    });
+
+  } catch (error) {
+    console.error('❌ AVI DM error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to process AVI chat',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/avi/dm/status - Get AVI session status
+ */
+app.get('/api/avi/dm/status', (req, res) => {
+  const aviSession = getAviSession();
+  const status = aviSession.getStatus();
+
+  res.json({
+    success: true,
+    data: status
+  });
+});
+
+/**
+ * DELETE /api/avi/dm/session - Force cleanup AVI session
+ * Useful for testing or manual reset
+ */
+app.delete('/api/avi/dm/session', (req, res) => {
+  const aviSession = getAviSession();
+  const statusBefore = aviSession.getStatus();
+
+  aviSession.cleanup();
+
+  res.json({
+    success: true,
+    message: 'AVI session cleaned up',
+    previousSession: statusBefore
+  });
+});
+
+/**
+ * GET /api/avi/dm/metrics - Get AVI usage metrics (Phase 5)
+ */
+app.get('/api/avi/dm/metrics', (req, res) => {
+  const aviSession = getAviSession();
+  const status = aviSession.getStatus();
+
+  const metrics = {
+    session: {
+      active: status.active,
+      sessionId: status.sessionId,
+      uptime: status.lastActivity ? Date.now() - (status.lastActivity - status.idleTime) : 0
+    },
+    usage: {
+      totalInteractions: status.interactionCount,
+      totalTokens: status.totalTokensUsed,
+      averageTokensPerInteraction: status.averageTokensPerInteraction
+    },
+    cost: {
+      estimatedCost: (status.totalTokensUsed / 1000000) * 3, // $3/M tokens input
+      averageCostPerInteraction: (status.averageTokensPerInteraction / 1000000) * 3
+    },
+    efficiency: {
+      savingsVsSpawnPerQuestion: status.interactionCount > 0
+        ? Math.round((1 - (status.totalTokensUsed / (status.interactionCount * 30000))) * 100)
+        : 0
+    }
+  };
+
+  res.json({
+    success: true,
+    data: metrics
+  });
+});
+
 // Generate some initial streaming ticker messages with validated structure
 setTimeout(() => {
   const initialMessages = [
@@ -3682,6 +4232,24 @@ const server = app.listen(PORT, '0.0.0.0', async () => {
   // Log initial memory usage
   logMemoryUsage();
 
+  // Initialize WebSocket service for real-time updates
+  try {
+    console.log('\n📡 Initializing WebSocket service...');
+    websocketService.initialize(server, {
+      cors: {
+        origin: process.env.CORS_ORIGIN || '*',
+        methods: ['GET', 'POST'],
+        credentials: true
+      }
+    });
+    console.log('✅ WebSocket service initialized');
+    console.log('   🔌 WebSocket endpoint: ws://localhost:' + PORT + '/socket.io/');
+    console.log('   📢 Events: ticket:status:update, worker:lifecycle');
+  } catch (error) {
+    console.error('❌ Failed to initialize WebSocket service:', error.message);
+    console.warn('   Real-time updates will not be available');
+  }
+
   // Initialize Phase 5 Monitoring System
   monitoringService = new MonitoringService();
   alertingService = new AlertingService(null); // Will be set after init
@@ -3709,29 +4277,18 @@ const server = app.listen(PORT, '0.0.0.0', async () => {
     console.log('\n⚠️  Phase 5 Monitoring disabled (set AVI_MONITORING_ENABLED=true to enable)');
   }
 
-  // Start AVI Orchestrator (Phase 2: Always-on monitoring)
+  // Start AVI Orchestrator (Direct start)
   if (process.env.AVI_ORCHESTRATOR_ENABLED !== 'false') {
     try {
-      console.log('\n🤖 Starting AVI Orchestrator (Phase 2)...');
-
-      // Try to use new TypeScript orchestrator (Phase 2) with dynamic import
-      try {
-        console.log('   Attempting to load new orchestrator factory (TypeScript)...');
-        const orchestratorModule = await loadNewOrchestrator();
-        await orchestratorModule.startOrchestrator();
-        console.log('✅ AVI Orchestrator (Phase 2 TypeScript) started - monitoring for agent activity');
-      } catch (tsError) {
-        // Fall back to legacy orchestrator if TypeScript loading fails
-        console.warn('⚠️  Failed to load TypeScript orchestrator, falling back to legacy:', tsError.message);
-        console.log('   Using legacy orchestrator (Phase 1)');
-        await startLegacyOrchestrator({
-          maxWorkers: parseInt(process.env.AVI_MAX_WORKERS) || 5,
-          maxContextSize: parseInt(process.env.AVI_MAX_CONTEXT) || 50000,
-          pollInterval: parseInt(process.env.AVI_POLL_INTERVAL) || 5000,
-          healthCheckInterval: parseInt(process.env.AVI_HEALTH_CHECK_INTERVAL) || 30000
-        });
-        console.log('✅ AVI Orchestrator (Phase 1 Legacy) started - monitoring for agent activity');
-      }
+      console.log('\n🤖 Starting AVI Orchestrator...');
+      await startOrchestrator({
+        maxWorkers: parseInt(process.env.AVI_MAX_WORKERS) || 5,
+        maxContextSize: parseInt(process.env.AVI_MAX_CONTEXT) || 50000,
+        pollInterval: parseInt(process.env.AVI_POLL_INTERVAL) || 5000,
+        healthCheckInterval: parseInt(process.env.AVI_HEALTH_CHECK_INTERVAL) || 30000
+      }, proactiveWorkQueue, websocketService);
+      console.log('✅ AVI Orchestrator started - monitoring for proactive agents (link-logger, etc.)');
+      console.log('   📡 WebSocket events enabled for real-time ticket updates');
     } catch (error) {
       console.error('❌ Failed to start AVI Orchestrator:', error);
       console.error('   Server will continue running, but agents will not automatically respond');
@@ -3840,15 +4397,8 @@ async function gracefulShutdown(signal) {
   // Stop AVI Orchestrator
   try {
     console.log('🤖 Stopping AVI Orchestrator...');
-
-    // Try to stop TypeScript orchestrator first, fall back to legacy if needed
-    if (newOrchestratorModule) {
-      await newOrchestratorModule.stopOrchestrator();
-      console.log('✅ AVI Orchestrator (Phase 2 TypeScript) stopped');
-    } else {
-      await stopLegacyOrchestrator();
-      console.log('✅ AVI Orchestrator (Phase 1 Legacy) stopped');
-    }
+    await stopOrchestrator();
+    console.log('✅ AVI Orchestrator stopped');
   } catch (error) {
     console.warn('⚠️ Error stopping AVI Orchestrator:', error.message);
     // Continue with shutdown even if orchestrator stop fails

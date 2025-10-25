@@ -1,0 +1,160 @@
+<testsuites id="" name="" tests="4" failures="4" skipped="0" errors="0" time="69.47522099999999">
+<testsuite name="badge-realtime-update.spec.ts" timestamp="2025-10-24T22:09:18.251Z" hostname="chromium" tests="4" failures="4" skipped="0" time="56.985" errors="0">
+<testcase name="Badge Real-Time Updates - E2E › FR-001 + FR-002: Badge updates from pending → processing → completed in real-time" classname="badge-realtime-update.spec.ts" time="14.401">
+<failure message="badge-realtime-update.spec.ts:39:3 FR-001 + FR-002: Badge updates from pending → processing → completed in real-time" type="FAILURE">
+<![CDATA[  [chromium] › badge-realtime-update.spec.ts:39:3 › Badge Real-Time Updates - E2E › FR-001 + FR-002: Badge updates from pending → processing → completed in real-time 
+
+    TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="agent-feed"]') to be visible
+
+
+      29 |
+      30 |     // Wait for feed to load
+    > 31 |     await page.waitForSelector('[data-testid="agent-feed"]', { timeout: 10000 });
+         |                ^
+      32 |
+      33 |     console.log('✅ Feed loaded');
+      34 |   });
+        at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Badge Real-Time Updates - E2E › FR-003: Toast notification appears on status change" classname="badge-realtime-update.spec.ts" time="14.55">
+<failure message="badge-realtime-update.spec.ts:201:3 FR-003: Toast notification appears on status change" type="FAILURE">
+<![CDATA[  [chromium] › badge-realtime-update.spec.ts:201:3 › Badge Real-Time Updates - E2E › FR-003: Toast notification appears on status change 
+
+    TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="agent-feed"]') to be visible
+
+
+      29 |
+      30 |     // Wait for feed to load
+    > 31 |     await page.waitForSelector('[data-testid="agent-feed"]', { timeout: 10000 });
+         |                ^
+      32 |
+      33 |     console.log('✅ Feed loaded');
+      34 |   });
+        at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Badge Real-Time Updates - E2E › FR-007: No badge appears for interactive posts without tickets" classname="badge-realtime-update.spec.ts" time="13.632">
+<failure message="badge-realtime-update.spec.ts:245:3 FR-007: No badge appears for interactive posts without tickets" type="FAILURE">
+<![CDATA[  [chromium] › badge-realtime-update.spec.ts:245:3 › Badge Real-Time Updates - E2E › FR-007: No badge appears for interactive posts without tickets 
+
+    TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="agent-feed"]') to be visible
+
+
+      29 |
+      30 |     // Wait for feed to load
+    > 31 |     await page.waitForSelector('[data-testid="agent-feed"]', { timeout: 10000 });
+         |                ^
+      32 |
+      33 |     console.log('✅ Feed loaded');
+      34 |   });
+        at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Badge Real-Time Updates - E2E › PERF: Badge updates within 5 seconds of completion" classname="badge-realtime-update.spec.ts" time="14.402">
+<failure message="badge-realtime-update.spec.ts:282:3 PERF: Badge updates within 5 seconds of completion" type="FAILURE">
+<![CDATA[  [chromium] › badge-realtime-update.spec.ts:282:3 › Badge Real-Time Updates - E2E › PERF: Badge updates within 5 seconds of completion 
+
+    TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="agent-feed"]') to be visible
+
+
+      29 |
+      30 |     // Wait for feed to load
+    > 31 |     await page.waitForSelector('[data-testid="agent-feed"]', { timeout: 10000 });
+         |                ^
+      32 |
+      33 |     console.log('✅ Feed loaded');
+      34 |   });
+        at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

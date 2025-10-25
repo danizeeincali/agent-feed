@@ -26,31 +26,8 @@ const aviStateRepo = {
   }
 };
 
-const workQueueRepo = {
-  getNextPendingTicket: async () => null,
-  getTicketsByUser: async (userId, options = {}) => {
-    // Return empty array - no tickets in stub mode
-    console.log('📋 Fetching tickets for user:', userId, options);
-    return [];
-  },
-  markTicketInProgress: async () => {},
-  markTicketCompleted: async () => {},
-  assignTicket: async (ticketId, workerId) => {
-    console.log(`✅ Ticket ${ticketId} assigned to worker ${workerId}`);
-    return { ticketId, workerId, assigned: true };
-  },
-  completeTicket: async (ticketId, result) => {
-    console.log(`✅ Ticket ${ticketId} completed:`, result);
-    return { ticketId, completed: true, result };
-  },
-  failTicket: async (ticketId, error) => {
-    console.error(`❌ Ticket ${ticketId} failed:`, error);
-    return { ticketId, failed: true, error };
-  }
-};
-
 class AviOrchestrator {
-  constructor(config = {}) {
+  constructor(config = {}, workQueueRepository = null, websocketService = null) {
     this.maxWorkers = config.maxWorkers || 5;
     this.maxContextSize = config.maxContextSize || 50000;
     this.pollInterval = config.pollInterval || 5000; // 5 seconds
@@ -64,6 +41,33 @@ class AviOrchestrator {
 
     this.mainLoopTimer = null;
     this.healthCheckTimer = null;
+
+    // Use provided work queue repository or create stub for backward compatibility
+    this.workQueueRepo = workQueueRepository || this._createStubRepository();
+
+    // WebSocket service for real-time updates
+    this.websocketService = websocketService;
+  }
+
+  /**
+   * Create stub repository for backward compatibility
+   * @private
+   */
+  _createStubRepository() {
+    return {
+      getPendingTickets: async () => [],
+      updateTicketStatus: async (id, status) => {
+        console.log(`✅ Ticket ${id} status: ${status}`);
+      },
+      completeTicket: async (ticketId, result) => {
+        console.log(`✅ Ticket ${ticketId} completed:`, result);
+        return { ticketId, completed: true, result };
+      },
+      failTicket: async (ticketId, error) => {
+        console.error(`❌ Ticket ${ticketId} failed:`, error);
+        return { ticketId, failed: true, error };
+      }
+    };
   }
 
   /**
@@ -131,10 +135,9 @@ class AviOrchestrator {
       return; // At capacity
     }
 
-    // Get pending tickets
+    // Get pending tickets using real repository
     const availableSlots = this.maxWorkers - activeCount;
-    const tickets = await workQueueRepo.getTicketsByUser(null, {
-      status: 'pending',
+    const tickets = await this.workQueueRepo.getPendingTickets({
       limit: availableSlots
     });
 
@@ -159,14 +162,16 @@ class AviOrchestrator {
     try {
       console.log(`🤖 Spawning worker ${workerId} for ticket ${ticket.id}`);
 
-      // Mark ticket as assigned
-      await workQueueRepo.assignTicket(ticket.id.toString(), workerId);
+      // Mark ticket as in_progress
+      await this.workQueueRepo.updateTicketStatus(ticket.id.toString(), 'in_progress');
 
       // Create worker instance
       const worker = new AgentWorker({
         workerId,
         ticketId: ticket.id.toString(),
-        agentId: ticket.agent_id
+        agentId: ticket.agent_id,
+        workQueueRepo: this.workQueueRepo,
+        websocketService: this.websocketService
       });
 
       // Track worker
@@ -180,7 +185,7 @@ class AviOrchestrator {
           this.ticketsProcessed++;
 
           // Mark ticket as completed
-          await workQueueRepo.completeTicket(ticket.id.toString(), {
+          await this.workQueueRepo.completeTicket(ticket.id.toString(), {
             result: result.response,
             tokens_used: result.tokensUsed || 0
           });
@@ -188,8 +193,8 @@ class AviOrchestrator {
         .catch(async (error) => {
           console.error(`❌ Worker ${workerId} failed:`, error);
 
-          // Mark ticket as failed
-          await workQueueRepo.failTicket(ticket.id.toString(), error.message);
+          // Mark ticket as failed (with retry logic)
+          await this.workQueueRepo.failTicket(ticket.id.toString(), error.message);
         })
         .finally(() => {
           // Clean up worker
@@ -202,7 +207,7 @@ class AviOrchestrator {
 
     } catch (error) {
       console.error(`❌ Failed to spawn worker ${workerId}:`, error);
-      await workQueueRepo.failTicket(ticket.id.toString(), error.message);
+      await this.workQueueRepo.failTicket(ticket.id.toString(), error.message);
     }
   }
 
@@ -345,9 +350,9 @@ let orchestratorInstance = null;
 /**
  * Get or create orchestrator instance
  */
-export function getOrchestrator(config = {}) {
+export function getOrchestrator(config = {}, workQueueRepository = null, websocketService = null) {
   if (!orchestratorInstance) {
-    orchestratorInstance = new AviOrchestrator(config);
+    orchestratorInstance = new AviOrchestrator(config, workQueueRepository, websocketService);
   }
   return orchestratorInstance;
 }
@@ -355,8 +360,8 @@ export function getOrchestrator(config = {}) {
 /**
  * Start the orchestrator
  */
-export async function startOrchestrator(config = {}) {
-  const orchestrator = getOrchestrator(config);
+export async function startOrchestrator(config = {}, workQueueRepository = null, websocketService = null) {
+  const orchestrator = getOrchestrator(config, workQueueRepository, websocketService);
   await orchestrator.start();
   return orchestrator;
 }

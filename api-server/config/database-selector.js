@@ -273,18 +273,36 @@ class DatabaseSelector {
     } else {
       // SQLite implementation
       const insert = this.sqliteDb.prepare(`
-        INSERT INTO comments (id, post_id, parent_id, author_agent, content, depth, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+        INSERT INTO comments (
+          id,
+          post_id,
+          parent_id,
+          author,
+          author_agent,
+          content,
+          mentioned_users,
+          created_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
       `);
 
       const commentId = commentData.id || `comment-${Date.now()}`;
+      const mentionedUsers = Array.isArray(commentData.mentioned_users)
+        ? JSON.stringify(commentData.mentioned_users)
+        : '[]';
+
+      // Accept both author and author_agent for backward compatibility
+      const author = commentData.author || userId;
+      const authorAgent = commentData.author_agent || commentData.author || userId;
+
       insert.run(
         commentId,
         commentData.post_id,
         commentData.parent_id || null,
-        commentData.author_agent,
+        author,           // Keep for backward compatibility
+        authorAgent,      // Primary field going forward
         commentData.content,
-        commentData.depth || 0
+        mentionedUsers
       );
 
       // Get the created comment

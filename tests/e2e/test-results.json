@@ -70,21 +70,21 @@
   },
   "suites": [
     {
-      "title": "connection-status-fix-validation.spec.ts",
-      "file": "connection-status-fix-validation.spec.ts",
+      "title": "badge-realtime-update.spec.ts",
+      "file": "badge-realtime-update.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Connection Status Fix - End-to-End Validation",
-          "file": "connection-status-fix-validation.spec.ts",
-          "line": 12,
+          "title": "Badge Real-Time Updates - E2E",
+          "file": "badge-realtime-update.spec.ts",
+          "line": 25,
           "column": 6,
           "specs": [
             {
-              "title": "1. Load application in browser",
-              "ok": true,
+              "title": "FR-001 + FR-002: Badge updates from pending → processing → completed in real-time",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -97,144 +97,68 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1910,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== TEST 1: Loading Application ===\n"
+                      "status": "failed",
+                      "duration": 14401,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                          "column": 16,
+                          "line": 31
                         },
+                        "snippet": "  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });"
+                      },
+                      "errors": [
                         {
-                          "text": "[BROWSER DEBUG]: [vite] connecting...\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:443/?token=LNMwf-rtRVDK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: [vite] server connection lost. Polling for restart...\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER INFO]: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔗 API Service initialized with base URL: /api\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Creating new MentionService instance\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 MentionServiceImpl constructor called\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔍 Constructor: agents array initialized: {hasAgents: true, isArray: true, length: 13, firstAgent: Chief of Staff}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ MentionService instance created, agents length: 13\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔍 MonitoringApiService initialized with base URL: /api/monitoring\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App.tsx loading...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: Loading SocialMediaFeed...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: main.tsx: File loading...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: main.tsx: Imports complete, starting application...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: Creating React root...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: Rendering application with error boundaries...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: ✅ Application started successfully\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App component rendering...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering loading state\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: Initial useEffect triggered\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: Filter changed, reloading posts {type: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RouteWrapper: feed mounted\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App component mounted!\n"
-                        },
-                        {
-                          "text": "✓ Application loaded successfully\n"
-                        },
-                        {
-                          "text": "✓ Screenshot saved: 01-app-loaded.png\n"
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                            "column": 16,
+                            "line": 31
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n\n  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16"
                         }
                       ],
-                      "stderr": [
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        }
-                      ],
+                      "stdout": [],
+                      "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-21T01:38:10.892Z",
+                      "startTime": "2025-10-24T22:09:19.171Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-08b60-ng-→-completed-in-real-time-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                        "column": 16,
+                        "line": 31
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "5fd2998ebecb1a5815cb-bb8a63604ed8e6f2d6d4",
-              "file": "connection-status-fix-validation.spec.ts",
-              "line": 40,
+              "id": "ba106e8da4062c2b1967-1f81337c25397b36b2c5",
+              "file": "badge-realtime-update.spec.ts",
+              "line": 39,
               "column": 3
             },
             {
-              "title": "2. Check connection status indicator",
-              "ok": true,
+              "title": "FR-003: Toast notification appears on status change",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -245,218 +169,70 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 1,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 12118,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== TEST 2: Connection Status Indicator ===\n"
+                      "status": "failed",
+                      "duration": 14550,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                          "column": 16,
+                          "line": 31
                         },
+                        "snippet": "  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });"
+                      },
+                      "errors": [
                         {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering loading state\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /filter-data. Retrying in 1000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ HTTP API connection established\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📦 Raw API response: {success: true, data: Array(5), total: 5, posts: Array(5)}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 5, totalCount: 5}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ Valid posts array: {validPostsLength: 5, firstPostId: test-post-1, firstPostTitle: Production Validation Test - High Activity}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📝 Setting posts array with 5 posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🏁 loadPosts finished - loading set to false\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 DEBUG: Fetching suggestions {mentionQuery: null, debouncedQuery: , isDropdownOpen: false}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ⏹️ DEBUG: Skipping fetch - dropdown closed\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Attempting WebSocket reconnection...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Request timeout after 10000ms for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Request timeout after 10000ms for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 2/4): /filter-data. Retrying in 2000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "✓ Found connection status with selector: text=/connected/i\n"
-                        },
-                        {
-                          "text": "Connection status - Has \"Connected\": true\n"
-                        },
-                        {
-                          "text": "Connection status - Has \"Disconnected\": false\n"
-                        },
-                        {
-                          "text": "✓ Connection status indicator verified\n"
-                        },
-                        {
-                          "text": "✓ Screenshot saved: 02-connected-status.png\n"
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                            "column": 16,
+                            "line": 31
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n\n  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16"
                         }
                       ],
-                      "stderr": [
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        }
-                      ],
+                      "stdout": [],
+                      "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-21T01:38:13.103Z",
+                      "startTime": "2025-10-24T22:09:37.053Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-5dee4-on-appears-on-status-change-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                        "column": 16,
+                        "line": 31
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "5fd2998ebecb1a5815cb-12c4299527a11e37d9d4",
-              "file": "connection-status-fix-validation.spec.ts",
-              "line": 65,
+              "id": "ba106e8da4062c2b1967-3962d739c28ed07d3fdb",
+              "file": "badge-realtime-update.spec.ts",
+              "line": 201,
               "column": 3
             },
             {
-              "title": "3. Verify API is working - /api/agent-posts endpoint",
-              "ok": true,
+              "title": "FR-007: No badge appears for interactive posts without tickets",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -467,518 +243,70 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 2,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 25784,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== TEST 3: API Endpoint Validation ===\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 2/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 2000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 2/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 2000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed\n"
-                        },
-                        {
-                          "text": "[BROWSER DEBUG]: [vite] connecting...\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:443/?token=LNMwf-rtRVDK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: [vite] server connection lost. Polling for restart...\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER INFO]: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔗 API Service initialized with base URL: /api\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Creating new MentionService instance\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 MentionServiceImpl constructor called\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔍 Constructor: agents array initialized: {hasAgents: true, isArray: true, length: 13, firstAgent: Chief of Staff}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ MentionService instance created, agents length: 13\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔍 MonitoringApiService initialized with base URL: /api/monitoring\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App.tsx loading...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: Loading SocialMediaFeed...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: main.tsx: File loading...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: main.tsx: Imports complete, starting application...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: Creating React root...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: Rendering application with error boundaries...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: ✅ Application started successfully\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App component rendering...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering loading state\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: Initial useEffect triggered\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: Filter changed, reloading posts {type: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RouteWrapper: feed mounted\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.\n"
-                        },
-                        {
-                          "text": "[API REQUEST] GET http://localhost:5173/api/agent-posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App component mounted!\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering loading state\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /filter-data. Retrying in 1000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📦 Raw API response: {success: true, data: Array(5), total: 5, posts: Array(5)}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 5, totalCount: 5}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ Valid posts array: {validPostsLength: 5, firstPostId: test-post-1, firstPostTitle: Production Validation Test - High Activity}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📝 Setting posts array with 5 posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🏁 loadPosts finished - loading set to false\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[API RESPONSE] http://localhost:5173/api/agent-posts - Status: 200\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ HTTP API connection established\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 DEBUG: Fetching suggestions {mentionQuery: null, debouncedQuery: , isDropdownOpen: false}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ⏹️ DEBUG: Skipping fetch - dropdown closed\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Attempting WebSocket reconnection...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Request timeout after 10000ms for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Request timeout after 10000ms for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 2/4): /filter-data. Retrying in 2000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📦 Raw API response: {success: true, data: Array(5), total: 5, posts: Array(5)}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 5, totalCount: 5}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ Valid posts array: {validPostsLength: 5, firstPostId: test-post-1, firstPostTitle: Production Validation Test - High Activity}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📝 Setting posts array with 5 posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🏁 loadPosts finished - loading set to false\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 3/4): /filter-data. Retrying in 4000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Attempting WebSocket reconnection...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📦 Raw API response: {success: true, data: Array(5), total: 5, posts: Array(5)}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 5, totalCount: 5}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ Valid posts array: {validPostsLength: 5, firstPostId: test-post-1, firstPostTitle: Production Validation Test - High Activity}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📝 Setting posts array with 5 posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🏁 loadPosts finished - loading set to false\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "API Response Status: 200\n"
-                        },
-                        {
-                          "text": "✓ API returned 200 OK (not 500)\n"
-                        },
-                        {
-                          "text": "Response body type: object\n"
-                        },
-                        {
-                          "text": "Has posts array: false\n"
-                        },
-                        {
-                          "text": "✓ Screenshot saved: 03-network-200-ok.png\n"
+                      "status": "failed",
+                      "duration": 13632,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                          "column": 16,
+                          "line": 31
+                        },
+                        "snippet": "  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                            "column": 16,
+                            "line": 31
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n\n  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16"
                         }
                       ],
-                      "stderr": [
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "Failed to parse response body: ExpectError: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveProperty\u001b[2m(\u001b[22m\u001b[32mpath\u001b[39m\u001b[2m)\u001b[22m\n\nExpected path: \u001b[32m\"posts\"\u001b[39m\nReceived path: \u001b[31m[]\u001b[39m\n\nReceived value: \u001b[31m{\"data\": [{\"authorAgent\": \"ValidationAgent\", \"content\": \"This post has many comments for testing the counter display\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\"comments\\\":42,\\\"likes\\\":15,\\\"shares\\\":3,\\\"views\\\":127}\", \"id\": \"test-post-1\", \"last_activity_at\": null, \"metadata\": \"{\\\"tags\\\":[\\\"testing\\\",\\\"validation\\\"],\\\"type\\\":\\\"status\\\"}\", \"publishedAt\": \"2025-10-16T23:39:56.780Z\", \"title\": \"Production Validation Test - High Activity\"}, {\"authorAgent\": \"TestAgent\", \"content\": \"Testing comment counter with moderate engagement\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\"comments\\\":8,\\\"likes\\\":5,\\\"shares\\\":1,\\\"views\\\":45}\", \"id\": \"test-post-2\", \"last_activity_at\": null, \"metadata\": \"{\\\"tags\\\":[\\\"testing\\\"],\\\"type\\\":\\\"update\\\"}\", \"publishedAt\": \"2025-10-16T22:39:56.780Z\", \"title\": \"Comment Counter Test - Medium Activity\"}, {\"authorAgent\": \"AnnouncementAgent\", \"content\": \"This post has no comments yet\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\"comments\\\":0,\\\"likes\\\":2,\\\"shares\\\":0,\\\"views\\\":10}\", \"id\": \"test-post-3\", \"last_activity_at\": null, \"metadata\": \"{\\\"tags\\\":[\\\"announcement\\\"],\\\"type\\\":\\\"announcement\\\"}\", \"publishedAt\": \"2025-10-16T21:39:56.780Z\", \"title\": \"Zero Comments Test\"}, {\"authorAgent\": \"AnalysisAgent\", \"content\": \"Testing counter display with exactly one comment\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\"comments\\\":1,\\\"likes\\\":3,\\\"shares\\\":0,\\\"views\\\":22}\", \"id\": \"test-post-4\", \"last_activity_at\": null, \"metadata\": \"{\\\"tags\\\":[\\\"analysis\\\"],\\\"type\\\":\\\"analysis\\\"}\", \"publishedAt\": \"2025-10-16T20:39:56.780Z\", \"title\": \"Single Comment Test\"}, {\"authorAgent\": \"ReportAgent\", \"content\": \"Testing counter with a large number of comments\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\"comments\\\":999,\\\"likes\\\":50,\\\"shares\\\":12,\\\"views\\\":543}\", \"id\": \"test-post-5\", \"last_activity_at\": null, \"metadata\": \"{\\\"tags\\\":[\\\"report\\\",\\\"important\\\"],\\\"type\\\":\\\"report\\\"}\", \"publishedAt\": \"2025-10-16T19:39:56.780Z\", \"title\": \"Large Number Test\"}], \"limit\": 20, \"offset\": 0, \"source\": \"SQLite\", \"success\": true, \"total\": 5}\u001b[39m\n    at \u001b[90m/workspaces/agent-feed/\u001b[39mtests/e2e/connection-status-fix-validation.spec.ts:165:30 {\n  matcherResult: {\n    message: \u001b[32m'\\x1B[2mexpect(\\x1B[22m\\x1B[31mreceived\\x1B[39m\\x1B[2m).\\x1B[22mtoHaveProperty\\x1B[2m(\\x1B[22m\\x1B[32mpath\\x1B[39m\\x1B[2m)\\x1B[22m\\n'\u001b[39m +\n      \u001b[32m'\\n'\u001b[39m +\n      \u001b[32m'Expected path: \\x1B[32m\"posts\"\\x1B[39m\\n'\u001b[39m +\n      \u001b[32m'Received path: \\x1B[31m[]\\x1B[39m\\n'\u001b[39m +\n      \u001b[32m'\\n'\u001b[39m +\n      \u001b[32m'Received value: \\x1B[31m{\"data\": [{\"authorAgent\": \"ValidationAgent\", \"content\": \"This post has many comments for testing the counter display\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":42,\\\\\"likes\\\\\":15,\\\\\"shares\\\\\":3,\\\\\"views\\\\\":127}\", \"id\": \"test-post-1\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"testing\\\\\",\\\\\"validation\\\\\"],\\\\\"type\\\\\":\\\\\"status\\\\\"}\", \"publishedAt\": \"2025-10-16T23:39:56.780Z\", \"title\": \"Production Validation Test - High Activity\"}, {\"authorAgent\": \"TestAgent\", \"content\": \"Testing comment counter with moderate engagement\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":8,\\\\\"likes\\\\\":5,\\\\\"shares\\\\\":1,\\\\\"views\\\\\":45}\", \"id\": \"test-post-2\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"testing\\\\\"],\\\\\"type\\\\\":\\\\\"update\\\\\"}\", \"publishedAt\": \"2025-10-16T22:39:56.780Z\", \"title\": \"Comment Counter Test - Medium Activity\"}, {\"authorAgent\": \"AnnouncementAgent\", \"content\": \"This post has no comments yet\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":0,\\\\\"likes\\\\\":2,\\\\\"shares\\\\\":0,\\\\\"views\\\\\":10}\", \"id\": \"test-post-3\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"announcement\\\\\"],\\\\\"type\\\\\":\\\\\"announcement\\\\\"}\", \"publishedAt\": \"2025-10-16T21:39:56.780Z\", \"title\": \"Zero Comments Test\"}, {\"authorAgent\": \"AnalysisAgent\", \"content\": \"Testing counter display with exactly one comment\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":1,\\\\\"likes\\\\\":3,\\\\\"shares\\\\\":0,\\\\\"views\\\\\":22}\", \"id\": \"test-post-4\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"analysis\\\\\"],\\\\\"type\\\\\":\\\\\"analysis\\\\\"}\", \"publishedAt\": \"2025-10-16T20:39:56.780Z\", \"title\": \"Single Comment Test\"}, {\"authorAgent\": \"ReportAgent\", \"content\": \"Testing counter with a large number of comments\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":999,\\\\\"likes\\\\\":50,\\\\\"shares\\\\\":12,\\\\\"views\\\\\":543}\", \"id\": \"test-post-5\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"report\\\\\",\\\\\"important\\\\\"],\\\\\"type\\\\\":\\\\\"report\\\\\"}\", \"publishedAt\": \"2025-10-16T19:39:56.780Z\", \"title\": \"Large Number Test\"}], \"limit\": 20, \"offset\": 0, \"source\": \"SQLite\", \"success\": true, \"total\": 5}\\x1B[39m'\u001b[39m,\n    pass: \u001b[33mfalse\u001b[39m\n  },\n  [\u001b[32mSymbol(step)\u001b[39m]: {\n    category: \u001b[32m'expect'\u001b[39m,\n    apiName: \u001b[32m'expect.toHaveProperty'\u001b[39m,\n    title: \u001b[32m'Expect \"toHaveProperty\"'\u001b[39m,\n    params: { expected: \u001b[32m'posts'\u001b[39m },\n    infectParentStepsWithError: \u001b[90mundefined\u001b[39m,\n    stepId: \u001b[32m'expect@26'\u001b[39m,\n    group: \u001b[90mundefined\u001b[39m,\n    boxedStack: \u001b[90mundefined\u001b[39m,\n    location: {\n      file: \u001b[32m'/workspaces/agent-feed/tests/e2e/connection-status-fix-validation.spec.ts'\u001b[39m,\n      line: \u001b[33m165\u001b[39m,\n      column: \u001b[33m30\u001b[39m\n    },\n    steps: [],\n    attachmentIndices: [],\n    info: TestStepInfoImpl {\n      annotations: [],\n      _testInfo: \u001b[36m[TestInfoImpl]\u001b[39m,\n      _stepId: \u001b[32m'expect@26'\u001b[39m,\n      _title: \u001b[32m'Expect \"toHaveProperty\"'\u001b[39m,\n      _parentStep: \u001b[90mundefined\u001b[39m,\n      skip: \u001b[36m[Function (anonymous)]\u001b[39m\n    },\n    recoverFromStepError: \u001b[36m[AsyncFunction: recoverFromStepError]\u001b[39m,\n    complete: \u001b[36m[Function: complete]\u001b[39m,\n    endWallTime: \u001b[33m1761010731020\u001b[39m,\n    error: {\n      message: \u001b[32m'Error: \\x1B[2mexpect(\\x1B[22m\\x1B[31mreceived\\x1B[39m\\x1B[2m).\\x1B[22mtoHaveProperty\\x1B[2m(\\x1B[22m\\x1B[32mpath\\x1B[39m\\x1B[2m)\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Expected path: \\x1B[32m\"posts\"\\x1B[39m\\n'\u001b[39m +\n        \u001b[32m'Received path: \\x1B[31m[]\\x1B[39m\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Received value: \\x1B[31m{\"data\": [{\"authorAgent\": \"ValidationAgent\", \"content\": \"This post has many comments for testing the counter display\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":42,\\\\\"likes\\\\\":15,\\\\\"shares\\\\\":3,\\\\\"views\\\\\":127}\", \"id\": \"test-post-1\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"testing\\\\\",\\\\\"validation\\\\\"],\\\\\"type\\\\\":\\\\\"status\\\\\"}\", \"publishedAt\": \"2025-10-16T23:39:56.780Z\", \"title\": \"Production Validation Test - High Activity\"}, {\"authorAgent\": \"TestAgent\", \"content\": \"Testing comment counter with moderate engagement\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":8,\\\\\"likes\\\\\":5,\\\\\"shares\\\\\":1,\\\\\"views\\\\\":45}\", \"id\": \"test-post-2\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"testing\\\\\"],\\\\\"type\\\\\":\\\\\"update\\\\\"}\", \"publishedAt\": \"2025-10-16T22:39:56.780Z\", \"title\": \"Comment Counter Test - Medium Activity\"}, {\"authorAgent\": \"AnnouncementAgent\", \"content\": \"This post has no comments yet\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":0,\\\\\"likes\\\\\":2,\\\\\"shares\\\\\":0,\\\\\"views\\\\\":10}\", \"id\": \"test-post-3\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"announcement\\\\\"],\\\\\"type\\\\\":\\\\\"announcement\\\\\"}\", \"publishedAt\": \"2025-10-16T21:39:56.780Z\", \"title\": \"Zero Comments Test\"}, {\"authorAgent\": \"AnalysisAgent\", \"content\": \"Testing counter display with exactly one comment\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":1,\\\\\"likes\\\\\":3,\\\\\"shares\\\\\":0,\\\\\"views\\\\\":22}\", \"id\": \"test-post-4\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"analysis\\\\\"],\\\\\"type\\\\\":\\\\\"analysis\\\\\"}\", \"publishedAt\": \"2025-10-16T20:39:56.780Z\", \"title\": \"Single Comment Test\"}, {\"authorAgent\": \"ReportAgent\", \"content\": \"Testing counter with a large number of comments\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":999,\\\\\"likes\\\\\":50,\\\\\"shares\\\\\":12,\\\\\"views\\\\\":543}\", \"id\": \"test-post-5\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"report\\\\\",\\\\\"important\\\\\"],\\\\\"type\\\\\":\\\\\"report\\\\\"}\", \"publishedAt\": \"2025-10-16T19:39:56.780Z\", \"title\": \"Large Number Test\"}], \"limit\": 20, \"offset\": 0, \"source\": \"SQLite\", \"success\": true, \"total\": 5}\\x1B[39m'\u001b[39m,\n      stack: \u001b[32m'Error: \\x1B[2mexpect(\\x1B[22m\\x1B[31mreceived\\x1B[39m\\x1B[2m).\\x1B[22mtoHaveProperty\\x1B[2m(\\x1B[22m\\x1B[32mpath\\x1B[39m\\x1B[2m)\\x1B[22m\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Expected path: \\x1B[32m\"posts\"\\x1B[39m\\n'\u001b[39m +\n        \u001b[32m'Received path: \\x1B[31m[]\\x1B[39m\\n'\u001b[39m +\n        \u001b[32m'\\n'\u001b[39m +\n        \u001b[32m'Received value: \\x1B[31m{\"data\": [{\"authorAgent\": \"ValidationAgent\", \"content\": \"This post has many comments for testing the counter display\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":42,\\\\\"likes\\\\\":15,\\\\\"shares\\\\\":3,\\\\\"views\\\\\":127}\", \"id\": \"test-post-1\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"testing\\\\\",\\\\\"validation\\\\\"],\\\\\"type\\\\\":\\\\\"status\\\\\"}\", \"publishedAt\": \"2025-10-16T23:39:56.780Z\", \"title\": \"Production Validation Test - High Activity\"}, {\"authorAgent\": \"TestAgent\", \"content\": \"Testing comment counter with moderate engagement\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":8,\\\\\"likes\\\\\":5,\\\\\"shares\\\\\":1,\\\\\"views\\\\\":45}\", \"id\": \"test-post-2\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"testing\\\\\"],\\\\\"type\\\\\":\\\\\"update\\\\\"}\", \"publishedAt\": \"2025-10-16T22:39:56.780Z\", \"title\": \"Comment Counter Test - Medium Activity\"}, {\"authorAgent\": \"AnnouncementAgent\", \"content\": \"This post has no comments yet\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":0,\\\\\"likes\\\\\":2,\\\\\"shares\\\\\":0,\\\\\"views\\\\\":10}\", \"id\": \"test-post-3\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"announcement\\\\\"],\\\\\"type\\\\\":\\\\\"announcement\\\\\"}\", \"publishedAt\": \"2025-10-16T21:39:56.780Z\", \"title\": \"Zero Comments Test\"}, {\"authorAgent\": \"AnalysisAgent\", \"content\": \"Testing counter display with exactly one comment\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":1,\\\\\"likes\\\\\":3,\\\\\"shares\\\\\":0,\\\\\"views\\\\\":22}\", \"id\": \"test-post-4\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"analysis\\\\\"],\\\\\"type\\\\\":\\\\\"analysis\\\\\"}\", \"publishedAt\": \"2025-10-16T20:39:56.780Z\", \"title\": \"Single Comment Test\"}, {\"authorAgent\": \"ReportAgent\", \"content\": \"Testing counter with a large number of comments\", \"created_at\": \"2025-10-16 23:39:56\", \"engagement\": \"{\\\\\"comments\\\\\":999,\\\\\"likes\\\\\":50,\\\\\"shares\\\\\":12,\\\\\"views\\\\\":543}\", \"id\": \"test-post-5\", \"last_activity_at\": null, \"metadata\": \"{\\\\\"tags\\\\\":[\\\\\"report\\\\\",\\\\\"important\\\\\"],\\\\\"type\\\\\":\\\\\"report\\\\\"}\", \"publishedAt\": \"2025-10-16T19:39:56.780Z\", \"title\": \"Large Number Test\"}], \"limit\": 20, \"offset\": 0, \"source\": \"SQLite\", \"success\": true, \"total\": 5}\\x1B[39m\\n'\u001b[39m +\n        \u001b[32m'    at /workspaces/agent-feed/tests/e2e/connection-status-fix-validation.spec.ts:165:30'\u001b[39m,\n      cause: \u001b[90mundefined\u001b[39m\n    }\n  }\n}\n"
-                        }
-                      ],
+                      "stdout": [],
+                      "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-21T01:38:25.240Z",
+                      "startTime": "2025-10-24T22:09:54.411Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-88248-ctive-posts-without-tickets-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                        "column": 16,
+                        "line": 31
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "5fd2998ebecb1a5815cb-a1a31a2867304d55bec2",
-              "file": "connection-status-fix-validation.spec.ts",
-              "line": 115,
+              "id": "ba106e8da4062c2b1967-f46171bb0e5c4c4bb411",
+              "file": "badge-realtime-update.spec.ts",
+              "line": 245,
               "column": 3
             },
             {
-              "title": "4. Verify posts are loading in UI",
-              "ok": true,
+              "title": "PERF: Badge updates within 5 seconds of completion",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -989,843 +317,65 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 0,
+                      "workerIndex": 3,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2204,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== TEST 4: Posts Loading Validation ===\n"
+                      "status": "failed",
+                      "duration": 14402,
+                      "error": {
+                        "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n",
+                        "stack": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                          "column": 16,
+                          "line": 31
                         },
+                        "snippet": "  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });"
+                      },
+                      "errors": [
                         {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "✓ Found 5 posts using selector: article\n"
-                        },
-                        {
-                          "text": "Page has error messages: false\n"
-                        },
-                        {
-                          "text": "Page has failed messages: false\n"
-                        },
-                        {
-                          "text": "Page has SqliteError: false\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: API request failed after 4 attempts: /filter-data Error: Request timeout after 5000ms for /filter-data\n    at ApiService.request (http://localhost:5173/src/services/api.ts:94:25)\n    at async ApiService.getFilterData (http://localhost:5173/src/services/api.ts:825:24)\n    at async Promise.all (index 0)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:214:29\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: API Error in getFilterData: Error: Request timeout after 5000ms for /filter-data\n    at ApiService.request (http://localhost:5173/src/services/api.ts:94:25)\n    at async ApiService.getFilterData (http://localhost:5173/src/services/api.ts:825:24)\n    at async Promise.all (index 0)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:214:29\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "✓ Posts section verified\n"
-                        },
-                        {
-                          "text": "✓ Screenshot saved: 04-posts-loaded.png\n"
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                            "column": 16,
+                            "line": 31
+                          },
+                          "message": "TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"agent-feed\"]') to be visible\u001b[22m\n\n\n  29 |\n  30 |     // Wait for feed to load\n> 31 |     await page.waitForSelector('[data-testid=\"agent-feed\"]', { timeout: 10000 });\n     |                ^\n  32 |\n  33 |     console.log('✅ Feed loaded');\n  34 |   });\n    at /workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts:31:16"
                         }
                       ],
-                      "stderr": [
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        }
-                      ],
+                      "stdout": [],
+                      "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-21T01:38:51.044Z",
+                      "startTime": "2025-10-24T22:10:12.264Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/badge-realtime-update-Badg-0fc83-hin-5-seconds-of-completion-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/badge-realtime-update.spec.ts",
+                        "column": 16,
+                        "line": 31
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
-              "id": "5fd2998ebecb1a5815cb-1a29c3d33b4cc9af0377",
-              "file": "connection-status-fix-validation.spec.ts",
-              "line": 179,
-              "column": 3
-            },
-            {
-              "title": "5. Check console for errors",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 25812,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== TEST 5: Console Error Validation ===\n"
-                        },
-                        {
-                          "text": "[BROWSER DEBUG]: [vite] connecting...\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:443/?token=LNMwf-rtRVDK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: [vite] server connection lost. Polling for restart...\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER INFO]: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔗 API Service initialized with base URL: /api\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Creating new MentionService instance\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 MentionServiceImpl constructor called\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔍 Constructor: agents array initialized: {hasAgents: true, isArray: true, length: 13, firstAgent: Chief of Staff}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ MentionService instance created, agents length: 13\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔍 MonitoringApiService initialized with base URL: /api/monitoring\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App.tsx loading...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: Loading SocialMediaFeed...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: main.tsx: File loading...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: main.tsx: Imports complete, starting application...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: Creating React root...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: Rendering application with error boundaries...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: AgentLink: ✅ Application started successfully\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App component rendering...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering loading state\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: Initial useEffect triggered\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: Filter changed, reloading posts {type: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RouteWrapper: feed mounted\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.\n"
-                        },
-                        {
-                          "text": "[API REQUEST] GET http://localhost:5173/api/agent-posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: DEBUG: App component mounted!\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Calling apiService.getAgentPosts...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering loading state\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /filter-data. Retrying in 1000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[API RESPONSE] http://localhost:5173/api/agent-posts - Status: 200\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ HTTP API connection established\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📦 Raw API response: {success: true, data: Array(5), total: 5, posts: Array(5)}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 5, totalCount: 5}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ Valid posts array: {validPostsLength: 5, firstPostId: test-post-1, firstPostTitle: Production Validation Test - High Activity}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📝 Setting posts array with 5 posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🏁 loadPosts finished - loading set to false\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 DEBUG: Fetching suggestions {mentionQuery: null, debouncedQuery: , isDropdownOpen: false}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ⏹️ DEBUG: Skipping fetch - dropdown closed\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Attempting WebSocket reconnection...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Request timeout after 10000ms for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Request timeout after 10000ms for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 2/4): /filter-data. Retrying in 2000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📦 Raw API response: {success: true, data: Array(5), total: 5, posts: Array(5)}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 5, totalCount: 5}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ Valid posts array: {validPostsLength: 5, firstPostId: test-post-1, firstPostTitle: Production Validation Test - High Activity}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📝 Setting posts array with 5 posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🏁 loadPosts finished - loading set to false\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER WARNING]: API request failed (attempt 3/4): /filter-data. Retrying in 4000ms... Request timeout after 5000ms for /filter-data\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Attempting WebSocket reconnection...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📦 Raw API response: {success: true, data: Array(5), total: 5, posts: Array(5)}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 5, totalCount: 5}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: ✅ Valid posts array: {validPostsLength: 5, firstPostId: test-post-1, firstPostTitle: Production Validation Test - High Activity}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 📝 Setting posts array with 5 posts\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🏁 loadPosts finished - loading set to false\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "\nTotal console messages: 118\n"
-                        },
-                        {
-                          "text": "Console errors: 33\n"
-                        },
-                        {
-                          "text": "SqliteError in console: false\n"
-                        },
-                        {
-                          "text": "\"no such table\" in console: false\n"
-                        },
-                        {
-                          "text": "Connection errors: true\n"
-                        },
-                        {
-                          "text": "\n⚠ Console Errors Found:\n"
-                        },
-                        {
-                          "text": "  - WebSocket connection to 'ws://localhost:443/?token=LNMwf-rtRVDK' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "  - Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "  - Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "  - Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "  - Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "✓ Console validation complete\n"
-                        },
-                        {
-                          "text": "✓ Screenshot saved: 05-console-clean.png\n"
-                        }
-                      ],
-                      "stderr": [
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        }
-                      ],
-                      "retry": 0,
-                      "startTime": "2025-10-21T01:38:53.289Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "5fd2998ebecb1a5815cb-c097c33dc7f90efe8896",
-              "file": "connection-status-fix-validation.spec.ts",
-              "line": 229,
-              "column": 3
-            },
-            {
-              "title": "6. Direct API health check",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 5328,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== TEST 6: Backend Health Check ===\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: API request failed after 4 attempts: /filter-data Error: Request timeout after 5000ms for /filter-data\n    at ApiService.request (http://localhost:5173/src/services/api.ts:94:25)\n    at async ApiService.getFilterData (http://localhost:5173/src/services/api.ts:825:24)\n    at async Promise.all (index 0)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:214:29\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: API Error in getFilterData: Error: Request timeout after 5000ms for /filter-data\n    at ApiService.request (http://localhost:5173/src/services/api.ts:94:25)\n    at async ApiService.getFilterData (http://localhost:5173/src/services/api.ts:825:24)\n    at async Promise.all (index 0)\n    at async http://localhost:5173/src/components/RealSocialMediaFeed.tsx:214:29\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 5, postsType: object, postsIsArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 About to render posts: {postsExists: true, postsLength: 5, postsType: object, isArray: true}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 0 : {id: test-post-1, title: Production Validation Test - High Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":42,\"likes\":15,\"shares\":3,\"views\":127}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 1 : {id: test-post-2, title: Comment Counter Test - Medium Activity, comments: undefined, hasCommentsField: false, engagement: {\"comments\":8,\"likes\":5,\"shares\":1,\"views\":45}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 2 : {id: test-post-3, title: Zero Comments Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":2,\"shares\":0,\"views\":10}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 3 : {id: test-post-4, title: Single Comment Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":3,\"shares\":0,\"views\":22}}\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🎨 Rendering post 4 : {id: test-post-5, title: Large Number Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":999,\"likes\":50,\"shares\":12,\"views\":543}}\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔄 Attempting WebSocket reconnection...\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 Attempting WebSocket connection to: ws://localhost:5173/ws\n"
-                        },
-                        {
-                          "text": "Backend Health Response:\n"
-                        },
-                        {
-                          "text": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": \"critical\",\n    \"timestamp\": \"2025-10-21T01:39:24.449Z\",\n    \"version\": \"1.0.0\",\n    \"uptime\": {\n      \"seconds\": 864,\n      \"formatted\": \"14m 24s\"\n    },\n    \"memory\": {\n      \"rss\": 132,\n      \"heapTotal\": 40,\n      \"heapUsed\": 38,\n      \"heapPercentage\": 94,\n      \"external\": 6,\n      \"arrayBuffers\": 1,\n      \"unit\": \"MB\"\n    },\n    \"resources\": {\n      \"sseConnections\": 0,\n      \"tickerMessages\": 3,\n      \"databaseConnected\": true,\n      \"agentPagesDbConnected\": true,\n      \"fileWatcherActive\": true\n    },\n    \"warnings\": [\n      \"Heap usage exceeds 90%\"\n    ]\n  }\n}\n"
-                        },
-                        {
-                          "text": "✓ Backend health check passed\n"
-                        },
-                        {
-                          "text": "✓ Both databases connected\n"
-                        }
-                      ],
-                      "stderr": [
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:5173/api/filter-data - net::ERR_ABORTED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        }
-                      ],
-                      "retry": 0,
-                      "startTime": "2025-10-21T01:39:19.118Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "5fd2998ebecb1a5815cb-305a8ffde5fe31828621",
-              "file": "connection-status-fix-validation.spec.ts",
-              "line": 290,
-              "column": 3
-            },
-            {
-              "title": "7. Direct API agent-posts check",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 5012,
-                      "errors": [],
-                      "stdout": [
-                        {
-                          "text": "\n=== TEST 7: Direct Agent Posts API Check ===\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: ❌ WebSocket error: Event\n"
-                        },
-                        {
-                          "text": "[BROWSER LOG]: 🔌 WebSocket connection closed\n"
-                        },
-                        {
-                          "text": "Response Status: 200\n"
-                        },
-                        {
-                          "text": "Agent Posts Response:\n"
-                        },
-                        {
-                          "text": "- Success: true\n"
-                        },
-                        {
-                          "text": "- Data count: 5\n"
-                        },
-                        {
-                          "text": "- Posts count: 0\n"
-                        },
-                        {
-                          "text": "- Has pagination: false\n"
-                        },
-                        {
-                          "text": "✓ Agent posts endpoint working correctly\n"
-                        },
-                        {
-                          "text": "[BROWSER ERROR]: Failed to load resource: net::ERR_CONNECTION_REFUSED\n"
-                        }
-                      ],
-                      "stderr": [
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        },
-                        {
-                          "text": "[REQUEST FAILED]: http://localhost:443/ - net::ERR_CONNECTION_REFUSED\n"
-                        }
-                      ],
-                      "retry": 0,
-                      "startTime": "2025-10-21T01:39:24.463Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "5fd2998ebecb1a5815cb-5e07feb614ea04a363e2",
-              "file": "connection-status-fix-validation.spec.ts",
-              "line": 309,
+              "id": "ba106e8da4062c2b1967-6024f4b0866c9ab145f0",
+              "file": "badge-realtime-update.spec.ts",
+              "line": 282,
               "column": 3
             }
           ]
@@ -1835,11 +385,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-21T01:38:09.928Z",
-    "duration": 79765.277,
-    "expected": 7,
+    "startTime": "2025-10-24T22:09:17.713Z",
+    "duration": 69475.22099999999,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 4,
     "flaky": 0
   }
 }

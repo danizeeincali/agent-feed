@@ -368,11 +368,11 @@ export class ApiService {
 
   // Agent Posts - Real database integration
   async getAgentPosts(
-    limit = 50, 
-    offset = 0, 
-    filter = 'all', 
-    search = '', 
-    sortBy = 'published_at', 
+    limit = 50,
+    offset = 0,
+    filter = 'all',
+    search = '',
+    sortBy = 'published_at',
     sortOrder = 'DESC'
   ): Promise<any> {
     const params = new URLSearchParams({
@@ -381,7 +381,8 @@ export class ApiService {
       filter,
       search,
       sortBy,
-      sortOrder
+      sortOrder,
+      includeTickets: 'true'
     });
     
     const cacheKey = `/v1/agent-posts?${params}`;
@@ -397,11 +398,11 @@ export class ApiService {
         return {
           success: true,
           data: response.data,
-          total: response.total || response.data.length,
+          total: response.total || response.meta?.total || response.data.length,
           posts: response.data // For backward compatibility
         };
       }
-      
+
       return response;
     } catch (error) {
       console.error('API Error in getAgentPosts:', error);
@@ -943,7 +944,8 @@ export class ApiService {
       filter: 'all', // default
       search: '',
       sortBy: 'published_at',
-      sortOrder: 'DESC'
+      sortOrder: 'DESC',
+      includeTickets: 'true'
     });
     
     // Map frontend filter types to backend filter types
@@ -1026,6 +1028,17 @@ export class ApiService {
     try {
       const response = await this.request<any>(`/v1/agent-posts?${params}`, {}, false);
       this.setCachedData(cacheKey, response, 5000); // 5 second cache for filtered results
+
+      // Normalize the response format for components
+      if (response.success && response.data) {
+        return {
+          success: true,
+          data: response.data,
+          total: response.total || response.meta?.total || response.data.length,
+          posts: response.data // For backward compatibility
+        };
+      }
+
       return response;
     } catch (error) {
       console.error('API Error in getFilteredPosts:', error);

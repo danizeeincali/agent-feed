@@ -1,6 +1,7 @@
 {
   "name": "agent-feed-production-claude",
   "version": "1.0.0",
+  "type": "module",
   "description": "Production Claude instance for debugging and testing",
   "scripts": {
     "start": "claude --dangerously-skip-permissions",

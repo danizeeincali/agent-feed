@@ -1,0 +1,603 @@
+/**
+ * TicketStatusBadge Component Unit Tests
+ *
+ * Comprehensive test suite for ticket status badge components
+ * Tests all status types, agent displays, animations, and accessibility
+ */
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { TicketStatusBadge, TicketStatusList } from '../TicketStatusBadge';
+
+describe('TicketStatusBadge', () => {
+  describe('Status Type Rendering', () => {
+    it('renders pending status correctly', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['link-logger-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.getByText(/waiting for/i)).toBeInTheDocument();
+      expect(screen.getByText(/link logger/i)).toBeInTheDocument();
+    });
+
+    it('renders processing status with animation', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="processing"
+          agents={['link-logger-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByText(/analyzing/i)).toBeInTheDocument();
+      expect(screen.getByText(/link logger/i)).toBeInTheDocument();
+
+      // Check for animated spinner
+      const spinner = container.querySelector('.animate-spin');
+      expect(spinner).toBeInTheDocument();
+    });
+
+    it('renders completed status correctly', () => {
+      render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['analyzer-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByText(/analyzed by/i)).toBeInTheDocument();
+      expect(screen.getByText(/analyzer/i)).toBeInTheDocument();
+    });
+
+    it('renders failed status correctly', () => {
+      render(
+        <TicketStatusBadge
+          status="failed"
+          agents={['link-logger-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByText(/analysis failed/i)).toBeInTheDocument();
+    });
+
+    it('applies correct color classes for pending status', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveClass('text-amber-600', 'bg-amber-50', 'border-amber-200');
+    });
+
+    it('applies correct color classes for processing status', () => {
+      render(
+        <TicketStatusBadge
+          status="processing"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveClass('text-blue-600', 'bg-blue-50', 'border-blue-200');
+    });
+
+    it('applies correct color classes for completed status', () => {
+      render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveClass('text-green-600', 'bg-green-50', 'border-green-200');
+    });
+
+    it('applies correct color classes for failed status', () => {
+      render(
+        <TicketStatusBadge
+          status="failed"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveClass('text-red-600', 'bg-red-50', 'border-red-200');
+    });
+
+  describe('Multiple Agents', () => {
+    it('displays "+N more" for multiple agents', () => {
+      render(
+        <TicketStatusBadge
+          status="processing"
+          agents={['link-logger-agent', 'analyzer-agent', 'moderator-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByText(/link logger/i)).toBeInTheDocument();
+      expect(screen.getByText(/\+2 more/i)).toBeInTheDocument();
+    });
+
+    it('shows first agent only when multiple agents present', () => {
+      render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['first-agent', 'second-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByText(/first/i)).toBeInTheDocument();
+      expect(screen.queryByText(/second/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/\+1 more/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Ticket Count', () => {
+    it('displays count badge when count > 1', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['link-logger-agent']}
+          count={3}
+        />
+      );
+
+      expect(screen.getByLabelText(/3 total tickets/i)).toBeInTheDocument();
+    });
+
+    it('does not display count badge when count = 1', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['link-logger-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.queryByLabelText(/total tickets/i)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('has proper ARIA labels', () => {
+      render(
+        <TicketStatusBadge
+          status="processing"
+          agents={['link-logger-agent']}
+          count={1}
+        />
+      );
+
+      const statusElement = screen.getByRole('status');
+      expect(statusElement).toHaveAttribute('aria-label');
+      expect(statusElement).toHaveAttribute('aria-live', 'polite');
+    });
+
+    it('includes aria-hidden on icon', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="processing"
+          agents={['link-logger-agent']}
+          count={1}
+        />
+      );
+
+      const icon = container.querySelector('svg');
+      expect(icon).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  describe('Agent Name Formatting', () => {
+    it('removes -agent suffix from agent names', () => {
+      render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['link-logger-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByText(/link logger/i)).toBeInTheDocument();
+      expect(screen.queryByText(/link-logger-agent/i)).not.toBeInTheDocument();
+    });
+
+    it('replaces hyphens with spaces in agent names', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['my-custom-agent']}
+          count={1}
+        />
+      );
+
+      expect(screen.getByText(/my custom/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Invalid Status', () => {
+    it('returns null and warns for invalid status', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const { container } = render(
+        <TicketStatusBadge
+          status="invalid-status"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      expect(container.firstChild).toBeNull();
+      expect(consoleSpy).toHaveBeenCalledWith('Invalid ticket status: invalid-status');
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('Animation Effects', () => {
+    it('does not apply spin animation to pending status', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const icon = container.querySelector('svg');
+      expect(icon).not.toHaveClass('animate-spin');
+    });
+
+    it('does not apply spin animation to completed status', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const icon = container.querySelector('svg');
+      expect(icon).not.toHaveClass('animate-spin');
+    });
+
+    it('does not apply spin animation to failed status', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="failed"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const icon = container.querySelector('svg');
+      expect(icon).not.toHaveClass('animate-spin');
+    });
+
+    it('applies transition classes for smooth animations', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveClass('transition-all', 'duration-200');
+    });
+  });
+
+  describe('Custom Styling', () => {
+    it('accepts and applies custom className', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['test-agent']}
+          count={1}
+          className="custom-class"
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveClass('custom-class');
+    });
+
+    it('merges custom className with base classes', () => {
+      render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['test-agent']}
+          count={1}
+          className="extra-padding"
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveClass('extra-padding');
+      expect(badge).toHaveClass('text-green-600');
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('handles empty agents array gracefully', () => {
+      render(
+        <TicketStatusBadge
+          status="pending"
+          agents={[]}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveTextContent('agent');
+    });
+
+    it('uses default agent when no agents provided', () => {
+      render(
+        <TicketStatusBadge
+          status="processing"
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveTextContent('agent');
+    });
+
+    it('handles large count numbers', () => {
+      render(
+        <TicketStatusBadge
+          status="processing"
+          agents={['test-agent']}
+          count={999}
+        />
+      );
+
+      const countBadge = screen.getByLabelText(/999 total tickets/i);
+      expect(countBadge).toHaveTextContent('999');
+    });
+
+    it('shows failed status without agent information', () => {
+      render(
+        <TicketStatusBadge
+          status="failed"
+          agents={[]}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveTextContent('Analysis failed');
+      expect(badge).not.toHaveTextContent(' - ');
+    });
+
+    it('shows failed status with agent information', () => {
+      render(
+        <TicketStatusBadge
+          status="failed"
+          agents={['error-agent']}
+          count={1}
+        />
+      );
+
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveTextContent('Analysis failed');
+      expect(badge).toHaveTextContent('error');
+    });
+  });
+
+  describe('No Emoji Verification', () => {
+    const emojiRegex = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/u;
+
+    it('does not render emojis in pending status', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="pending"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      expect(container.textContent).not.toMatch(emojiRegex);
+    });
+
+    it('does not render emojis in processing status', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="processing"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      expect(container.textContent).not.toMatch(emojiRegex);
+    });
+
+    it('does not render emojis in completed status', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      expect(container.textContent).not.toMatch(emojiRegex);
+    });
+
+    it('does not render emojis in failed status', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="failed"
+          agents={['test-agent']}
+          count={1}
+        />
+      );
+
+      expect(container.textContent).not.toMatch(emojiRegex);
+    });
+
+    it('does not render emojis in agent names', () => {
+      const { container } = render(
+        <TicketStatusBadge
+          status="completed"
+          agents={['multi-word-agent-name']}
+          count={1}
+        />
+      );
+
+      expect(container.textContent).not.toMatch(emojiRegex);
+    });
+  });
+});
+
+describe('TicketStatusList', () => {
+  it('renders multiple ticket badges grouped by status', () => {
+    const tickets = [
+      { status: 'processing', agent: 'link-logger-agent' },
+      { status: 'processing', agent: 'analyzer-agent' },
+      { status: 'completed', agent: 'moderator-agent' }
+    ];
+
+    render(<TicketStatusList tickets={tickets} />);
+
+    // Should have 2 badges (one for processing, one for completed)
+    const badges = screen.getAllByRole('status');
+    expect(badges).toHaveLength(2);
+  });
+
+  it('returns null when no tickets provided', () => {
+    const { container } = render(<TicketStatusList tickets={[]} />);
+    expect(container.firstChild).toBeNull();
+  });
+
+  it('groups tickets correctly by status', () => {
+    const tickets = [
+      { status: 'pending', agent: 'agent-1' },
+      { status: 'pending', agent: 'agent-2' },
+      { status: 'processing', agent: 'agent-3' }
+    ];
+
+    render(<TicketStatusList tickets={tickets} />);
+
+    expect(screen.getByText(/agent 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/\+1 more/i)).toBeInTheDocument(); // For pending
+    expect(screen.getByText(/agent 3/i)).toBeInTheDocument();
+  });
+
+  it('has proper ARIA region label', () => {
+    const tickets = [
+      { status: 'pending', agent: 'test-agent' }
+    ];
+
+    render(<TicketStatusList tickets={tickets} />);
+
+    const region = screen.getByRole('region');
+    expect(region).toHaveAttribute('aria-label', 'Ticket statuses');
+  });
+
+  describe('Complex Grouping Scenarios', () => {
+    it('handles mixed status tickets correctly', () => {
+      const tickets = [
+        { status: 'pending', agent: 'agent-1' },
+        { status: 'processing', agent: 'agent-2' },
+        { status: 'pending', agent: 'agent-3' },
+        { status: 'completed', agent: 'agent-4' },
+        { status: 'processing', agent: 'agent-5' }
+      ];
+
+      render(<TicketStatusList tickets={tickets} />);
+
+      const badges = screen.getAllByRole('status');
+      expect(badges).toHaveLength(3); // pending, processing, completed
+    });
+
+    it('maintains correct agent count per status', () => {
+      const tickets = [
+        { status: 'pending', agent: 'agent-1' },
+        { status: 'pending', agent: 'agent-2' },
+        { status: 'processing', agent: 'agent-3' },
+        { status: 'processing', agent: 'agent-4' },
+        { status: 'processing', agent: 'agent-5' }
+      ];
+
+      render(<TicketStatusList tickets={tickets} />);
+
+      expect(screen.getByText(/\+1 more/i)).toBeInTheDocument();
+      expect(screen.getByText(/\+2 more/i)).toBeInTheDocument();
+    });
+
+    it('handles single ticket per status', () => {
+      const tickets = [
+        { status: 'pending', agent: 'pending-agent' },
+        { status: 'processing', agent: 'processing-agent' },
+        { status: 'completed', agent: 'completed-agent' },
+        { status: 'failed', agent: 'failed-agent' }
+      ];
+
+      render(<TicketStatusList tickets={tickets} />);
+
+      const badges = screen.getAllByRole('status');
+      expect(badges).toHaveLength(4); // All 4 statuses
+      expect(screen.queryByText(/more/i)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Custom Styling', () => {
+    it('accepts custom className', () => {
+      const tickets = [
+        { status: 'pending', agent: 'test-agent' }
+      ];
+
+      render(<TicketStatusList tickets={tickets} className="custom-list" />);
+
+      const region = screen.getByRole('region');
+      expect(region).toHaveClass('custom-list');
+    });
+
+    it('applies base flex layout classes', () => {
+      const tickets = [
+        { status: 'pending', agent: 'test-agent' }
+      ];
+
+      render(<TicketStatusList tickets={tickets} />);
+
+      const region = screen.getByRole('region');
+      expect(region).toHaveClass('flex', 'flex-wrap', 'gap-2');
+    });
+  });
+
+  describe('No Emoji Verification', () => {
+    const emojiRegex = /[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E0}-\u{1F1FF}]/u;
+
+    it('does not render emojis in ticket list', () => {
+      const tickets = [
+        { status: 'pending', agent: 'agent-1' },
+        { status: 'processing', agent: 'agent-2' },
+        { status: 'completed', agent: 'agent-3' },
+        { status: 'failed', agent: 'agent-4' }
+      ];
+
+      const { container } = render(<TicketStatusList tickets={tickets} />);
+
+      expect(container.textContent).not.toMatch(emojiRegex);
+    });
+  });
+});

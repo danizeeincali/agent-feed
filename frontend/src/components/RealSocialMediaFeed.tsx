@@ -12,6 +12,10 @@ import { PostCreator } from './PostCreator';
 import { EnhancedPostingInterface } from './EnhancedPostingInterface';
 import { formatRelativeTime, formatExactDateTime } from '../utils/timeUtils';
 import { useRelativeTime } from '../hooks/useRelativeTime';
+import { TicketStatusBadge } from './TicketStatusBadge';
+import { useTicketUpdates } from '../hooks/useTicketUpdates';
+import { useToast } from '../hooks/useToast';
+import ToastContainer from './ToastContainer';
 // import '../styles/comments.css'; // Moved to _app.tsx
 
 interface RealSocialMediaFeedProps {
@@ -51,6 +55,19 @@ interface FilterData {
 }
 
 const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '' }) => {
+  // Initialize toast notifications
+  const toast = useToast();
+
+  // Enable real-time ticket status updates via WebSocket
+  useTicketUpdates({
+    showNotifications: true,
+    toast: {
+      success: (msg) => toast.showSuccess(msg),
+      error: (msg) => toast.showError(msg),
+      info: (msg) => toast.showInfo(msg)
+    }
+  });
+
   // Utility function: Safely extract agent name from authorAgent (string or object)
   const getAuthorAgentName = (authorAgent: any): string => {
     if (typeof authorAgent === 'string') {
@@ -60,6 +77,45 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       return authorAgent.name;
     }
     return 'A'; // Fallback
+  };
+
+  // Utility function: Parse engagement data if it's a JSON string
+  const parseEngagement = (engagement: any): any => {
+    if (!engagement) return { comments: 0, likes: 0, shares: 0, views: 0 };
+    if (typeof engagement === 'string') {
+      try {
+        return JSON.parse(engagement);
+      } catch (e) {
+        console.error('Failed to parse engagement data:', e);
+        return { comments: 0, likes: 0, shares: 0, views: 0 };
+      }
+    }
+    return engagement;
+  };
+
+  // Utility function: Get comment count from post (handles both root level and engagement)
+  const getCommentCount = (post: AgentPost): number => {
+    // Parse engagement if it's a string
+    const engagement = parseEngagement(post.engagement);
+
+    // Priority: engagement.comments > root comments > 0
+    if (engagement && typeof engagement.comments === 'number') {
+      return engagement.comments;
+    }
+    if (typeof post.comments === 'number') {
+      return post.comments;
+    }
+    return 0;
+  };
+
+  // Helper function: Determine overall ticket status from ticket data
+  const getOverallStatus = (ticketStatus: any): 'pending' | 'processing' | 'completed' | 'failed' | null => {
+    if (!ticketStatus || ticketStatus.total === 0) return null;
+    if (ticketStatus.failed > 0) return 'failed';
+    if (ticketStatus.processing > 0) return 'processing';
+    if (ticketStatus.pending > 0) return 'pending';
+    if (ticketStatus.completed > 0) return 'completed';
+    return null;
   };
 
   // Core state - must be declared first, before any conditional returns
@@ -149,13 +205,13 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   // Real data loading from production database with filtering
   const loadPosts = useCallback(async (pageNum: number = 0, append: boolean = false) => {
     console.log('🔄 RealSocialMediaFeed: loadPosts called', { pageNum, append, filterType: currentFilter.type });
-    
+
     try {
       setError(null);
-      
+
       // Get current filter at time of execution
       const filterToUse = currentFilter || { type: 'all' };
-      
+
       let response;
       if (filterToUse.type === 'all') {
         console.log('🔄 Calling apiService.getAgentPosts...');
@@ -171,7 +227,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
           filterToUse
         );
       }
-      
+
       console.log('📦 Raw API response:', response);
 
       // Detect mock data
@@ -184,23 +240,23 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       // Fix: Handle the actual API response structure {success: true, data: [...], total: ...}
       const postsData = response.data || response || [];
       const totalCount = response.total || postsData.length || 0;
-      
-      console.log('📊 Processed data:', { 
+
+      console.log('📊 Processed data:', {
         postsDataType: typeof postsData,
-        postsDataIsArray: Array.isArray(postsData), 
+        postsDataIsArray: Array.isArray(postsData),
         postsDataLength: postsData?.length,
-        totalCount 
+        totalCount
       });
-      
+
       // Add null/undefined safety checks
       const validPosts = Array.isArray(postsData) ? postsData : [];
-      
-      console.log('✅ Valid posts array:', { 
+
+      console.log('✅ Valid posts array:', {
         validPostsLength: validPosts.length,
         firstPostId: validPosts[0]?.id,
-        firstPostTitle: validPosts[0]?.title 
+        firstPostTitle: validPosts[0]?.title
       });
-      
+
       if (append) {
         setPosts(current => {
           const newPosts = [...(current || []), ...validPosts];
@@ -220,7 +276,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       setRefreshing(false);
       console.log('🏁 loadPosts finished - loading set to false');
     }
-  }, [limit]);
+  }, [limit, currentFilter]);
 
   // Handle post creation with smart merging
   const handlePostCreated = useCallback((newPost: any) => {
@@ -284,10 +340,69 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       }
     };
 
+    // Listen for real-time comment updates via WebSocket
+    const handleCommentUpdate = (data: any) => {
+      console.log('💬 Comment update received:', data);
+
+      if (data.postId || data.post_id) {
+        const postId = data.postId || data.post_id;
+
+        setPosts(current =>
+          current.map(post => {
+            if (post.id === postId) {
+              const currentEngagement = parseEngagement(post.engagement);
+              return {
+                ...post,
+                engagement: {
+                  ...currentEngagement,
+                  comments: (currentEngagement.comments || 0) + 1
+                }
+              };
+            }
+            return post;
+          })
+        );
+      }
+    };
+
+    // NEW: Listen for ticket status updates via custom browser events
+    // This bridges WebSocket events from useTicketUpdates to component state
+    // Debounced to prevent excessive API refetches on rapid events
+    let lastRefetch = 0;
+    const DEBOUNCE_MS = 500;
+
+    const handleTicketStatusUpdate = (event: any) => {
+      const data = event.detail;
+      console.log('🎫 [RealSocialMediaFeed] Ticket status update event received:', {
+        post_id: data.post_id,
+        status: data.status,
+        agent_id: data.agent_id
+      });
+
+      // Debounce: Don't refetch if we just did
+      const now = Date.now();
+      if (now - lastRefetch < DEBOUNCE_MS) {
+        console.log('🎫 [RealSocialMediaFeed] Debouncing refetch (too soon)');
+        return;
+      }
+
+      lastRefetch = now;
+
+      // Refetch posts to get updated ticket_status from server
+      console.log('🎫 [RealSocialMediaFeed] Refetching posts for updated badge data');
+      loadPosts(page, false);
+    };
+
     apiService.on('posts_updated', handlePostsUpdate);
+    apiService.on('comment_created', handleCommentUpdate);
+    apiService.on('comment_added', handleCommentUpdate);
+    window.addEventListener('ticket:status:update', handleTicketStatusUpdate);
 
     return () => {
       apiService.off('posts_updated', handlePostsUpdate);
+      apiService.off('comment_created', handleCommentUpdate);
+      apiService.off('comment_added', handleCommentUpdate);
+      window.removeEventListener('ticket:status:update', handleTicketStatusUpdate);
     };
   }, []);
 
@@ -345,11 +460,23 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     }
   }, []);
 
-  // Real post interactions
+  // Fix 2: Fix Refresh Button Handler
   const handleRefresh = async () => {
     setRefreshing(true);
-    setPage(0);
-    await loadPosts(0);
+
+    try {
+      console.log('🔄 Refreshing feed...');
+
+      // Reset page and reload posts
+      setPage(0);
+      await loadPosts(0);
+
+      console.log('✅ Feed refreshed successfully');
+    } catch (error) {
+      console.error('❌ Refresh failed:', error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
 
@@ -454,7 +581,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     console.log('🔄 RealSocialMediaFeed: Filter changed, reloading posts', currentFilter);
     setLoading(true);
     loadPosts(0);
-  }, [currentFilter, loadPosts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentFilter]);
 
   const togglePostExpansion = (postId: string) => {
     setExpandedPosts(prev => ({
@@ -496,33 +624,35 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const handleNewComment = async (postId: string, content: string, parentId?: string) => {
     try {
       console.log('Creating comment:', { postId, content, parentId });
-      
+
       const result = await apiService.createComment(postId, content, {
         parentId,
         author: 'ProductionValidator', // Use consistent agent name
         mentionedUsers: extractMentions(content)
       });
-      
+
       console.log('Comment created successfully:', result);
-      
+
       // Refresh comments after adding new one
       await loadComments(postId, true);
-      
-      // Update engagement count optimistically
+
+      // Update engagement count optimistically (parse engagement first)
       setPosts(current =>
-        current.map(post =>
-          post.id === postId
-            ? {
-                ...post,
-                engagement: {
-                  ...post.engagement,
-                  comments: (post.engagement?.comments || 0) + 1
-                }
+        current.map(post => {
+          if (post.id === postId) {
+            const currentEngagement = parseEngagement(post.engagement);
+            return {
+              ...post,
+              engagement: {
+                ...currentEngagement,
+                comments: (currentEngagement.comments || 0) + 1
               }
-            : post
-        )
+            };
+          }
+          return post;
+        })
       );
-      
+
       // Hide comment form after successful submission
       setShowCommentForm(prev => ({ ...prev, [postId]: false }));
     } catch (error) {
@@ -643,9 +773,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   // UI functionality properly positioned after hooks declaration
 
   return (
-    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Main Feed - Left Column */}
-      <div className={`lg:col-span-2 ${className}`} data-testid="real-social-media-feed">
+    <>
+      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismissToast} />
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Feed - Left Column */}
+        <div className={`lg:col-span-2 ${className}`} data-testid="real-social-media-feed">
         {/* RESTRUCTURED HEADER WITH SEARCH */}
         <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
           {/* Row 1: Title/Description + Refresh Button */}
@@ -784,7 +916,18 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       <ChevronDown className="w-4 h-4" />
                     </button>
                   </div>
-                  
+
+                  {/* Ticket Status Badge - Show if tickets exist */}
+                  {post.ticket_status && post.ticket_status.total > 0 && (
+                    <div className="pl-14">
+                      <TicketStatusBadge
+                        status={getOverallStatus(post.ticket_status)}
+                        agents={post.ticket_status.agents || []}
+                        count={post.ticket_status.total}
+                      />
+                    </div>
+                  )}
+
                   {/* Line 2: Full Hook with Parsing */}
                   <div className="pl-14">
                     <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -861,6 +1004,17 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
                   {/* Post Title */}
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 leading-tight">{post.title}</h2>
+
+                  {/* Ticket Status Badge - Show if tickets exist */}
+                  {post.ticket_status && post.ticket_status.total > 0 && (
+                    <div className="mb-4">
+                      <TicketStatusBadge
+                        status={getOverallStatus(post.ticket_status)}
+                        agents={post.ticket_status.agents || []}
+                        count={post.ticket_status.total}
+                      />
+                    </div>
+                  )}
 
                   {/* Post Content with Parsing */}
                   <div className="prose prose-sm max-w-none mb-4">
@@ -948,16 +1102,19 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       title="View Comments"
                     >
                       <MessageCircle className="w-5 h-5" />
-                      <span className="text-sm font-medium">{post.comments || 0}</span>
+                      <span className="text-sm font-medium">{getCommentCount(post)}</span>
                     </button>
                     
                     {/* Saves count display */}
-                    {post.engagement?.saves && post.engagement?.saves > 0 && (
-                      <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
-                        <Bookmark className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm font-medium">{post.engagement?.saves} saved</span>
-                      </div>
-                    )}
+                    {(() => {
+                      const engagement = parseEngagement(post.engagement);
+                      return engagement?.saves && engagement.saves > 0 ? (
+                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
+                          <Bookmark className="w-4 h-4 text-blue-500" />
+                          <span className="text-sm font-medium">{engagement.saves} saved</span>
+                        </div>
+                      ) : null;
+                    })()}
                   </div>
                   
                   {/* Post Actions - Integrated */}
@@ -967,29 +1124,34 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     </div>
                     
                     {/* Save Button with Animation */}
-                    <button
-                      onClick={() => handleSave(post.id, !post.engagement?.isSaved)}
-                      className={`flex items-center space-x-1 transition-colors transform hover:scale-105 ${
-                        post.engagement?.isSaved
-                          ? 'text-blue-600 hover:text-blue-700'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-blue-600'
-                      }`}
-                      title={post.engagement?.isSaved ? 'Unsave Post' : 'Save Post'}
-                    >
-                      <Bookmark 
-                        className={`w-4 h-4 transition-all ${
-                          post.engagement?.isSaved 
-                            ? 'fill-blue-500 text-blue-500 scale-110' 
-                            : 'hover:fill-blue-100'
-                        }`} 
-                      />
-                      <span className="text-xs font-medium">
-                        {post.engagement?.isSaved ? 'Saved' : 'Save'}
-                        {post.engagement?.saves && post.engagement?.saves > 0 && (
-                          <span className="ml-1 text-gray-500">({post.engagement?.saves})</span>
-                        )}
-                      </span>
-                    </button>
+                    {(() => {
+                      const engagement = parseEngagement(post.engagement);
+                      return (
+                        <button
+                          onClick={() => handleSave(post.id, !engagement?.isSaved)}
+                          className={`flex items-center space-x-1 transition-colors transform hover:scale-105 ${
+                            engagement?.isSaved
+                              ? 'text-blue-600 hover:text-blue-700'
+                              : 'text-gray-600 dark:text-gray-400 hover:text-blue-600'
+                          }`}
+                          title={engagement?.isSaved ? 'Unsave Post' : 'Save Post'}
+                        >
+                          <Bookmark
+                            className={`w-4 h-4 transition-all ${
+                              engagement?.isSaved
+                                ? 'fill-blue-500 text-blue-500 scale-110'
+                                : 'hover:fill-blue-100'
+                            }`}
+                          />
+                          <span className="text-xs font-medium">
+                            {engagement?.isSaved ? 'Saved' : 'Save'}
+                            {engagement?.saves && engagement.saves > 0 && (
+                              <span className="ml-1 text-gray-500">({engagement.saves})</span>
+                            )}
+                          </span>
+                        </button>
+                      );
+                    })()}
                     
                     {/* Delete Button */}
                     <button
@@ -1196,6 +1358,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         {/* Additional tool interfaces can be added here */}
       </div>
     </div>
+    </>
   );
 };
 
