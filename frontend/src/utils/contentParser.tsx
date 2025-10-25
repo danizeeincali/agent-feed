@@ -1,6 +1,7 @@
 import React from 'react';
 import LinkPreview from '../components/LinkPreview';
 import EnhancedLinkPreview from '../components/EnhancedLinkPreview';
+import { MarkdownContent } from '../components/MarkdownContent';
 
 export interface ParsedContent {
   type: 'text' | 'mention' | 'hashtag' | 'url' | 'link-preview';
@@ -20,6 +21,7 @@ export interface ContentParserOptions {
   previewDisplayMode?: 'card' | 'thumbnail' | 'inline' | 'embedded' | 'thumbnail-summary';
   showThumbnailsOnly?: boolean;
   className?: string;
+  enableMarkdown?: boolean; // NEW: Feature flag for markdown rendering (default: true)
 }
 
 export const parseContent = (content: string): ParsedContent[] => {
@@ -114,6 +116,16 @@ export const parseContent = (content: string): ParsedContent[] => {
   return parts;
 };
 
+/**
+ * Render content with markdown support
+ *
+ * Strategy:
+ * 1. Check if content has markdown syntax AND markdown is enabled
+ * 2. If YES: Use MarkdownContent component (preserves @mentions, #hashtags, URLs)
+ * 3. If NO: Use existing parseContent/renderParsedContent flow
+ *
+ * This maintains backward compatibility while adding markdown support.
+ */
 export const renderParsedContent = (
   parsedContent: ParsedContent[],
   options: ContentParserOptions = {}
@@ -125,8 +137,50 @@ export const renderParsedContent = (
     useEnhancedPreviews = true,
     previewDisplayMode = 'card',
     showThumbnailsOnly = false,
-    className = ''
+    className = '',
+    enableMarkdown = true // Default: markdown enabled
   } = options;
+
+  // Reconstruct original content from parsed parts
+  const originalContent = parsedContent.map(part => part.content).join('');
+
+  // Check if we should use markdown rendering
+  // Conditions: markdown enabled AND content has markdown syntax
+  if (enableMarkdown && hasMarkdown(originalContent)) {
+    // Extract URLs for link previews (from parsed content)
+    const urlParts = parsedContent.filter(part => part.type === 'url');
+    const urls = urlParts.map(part => part.data?.url || part.content);
+
+    return (
+      <div className={className}>
+        {/* Render markdown content with custom styling */}
+        <div className="mb-4">
+          <MarkdownContent content={originalContent} />
+        </div>
+
+        {/* Render link previews separately (below markdown content) */}
+        {enableLinkPreviews && urls.length > 0 && (
+          <div className="space-y-3">
+            {urls.map((url, index) => {
+              return useEnhancedPreviews ? (
+                <EnhancedLinkPreview
+                  key={index}
+                  url={url}
+                  displayMode={previewDisplayMode}
+                  showThumbnailOnly={showThumbnailsOnly}
+                />
+              ) : (
+                <LinkPreview key={index} url={url} />
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Fallback to existing non-markdown rendering
+  // This preserves backward compatibility for plain text posts
 
   const linkPreviews: string[] = [];
 
@@ -272,6 +326,36 @@ export const hasSpecialContent = (content: string): boolean => {
   const mentionRegex = new RegExp('@([a-zA-Z0-9_-]+)');
   const hashtagRegex = new RegExp('#([a-zA-Z0-9_-]+)');
   const urlRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)');
-  
+
   return mentionRegex.test(content) || hashtagRegex.test(content) || urlRegex.test(content);
+};
+
+/**
+ * Detect if content contains markdown syntax
+ *
+ * Checks for common markdown patterns:
+ * - Headers (# ## ### etc)
+ * - Bold (**text**)
+ * - Italic (*text* or _text_)
+ * - Code (`code` or ```code```)
+ * - Lists (- item or 1. item)
+ * - Blockquotes (> text)
+ * - Links ([text](url))
+ */
+export const hasMarkdown = (content: string): boolean => {
+  const markdownPatterns = [
+    /\*\*[^*]+\*\*/,           // Bold
+    /\*[^*\s][^*]*\*/,         // Italic (not empty)
+    /`[^`]+`/,                 // Inline code
+    /^#{1,6}\s/m,              // Headers
+    /^\s*[-*+]\s/m,            // Unordered lists
+    /^\s*\d+\.\s/m,            // Ordered lists
+    /^>\s/m,                   // Blockquotes
+    /\[([^\]]+)\]\(([^)]+)\)/, // Links
+    /```[\s\S]*?```/,          // Code blocks
+    /^---+$/m,                 // Horizontal rules
+    /~~[^~]+~~/,               // Strikethrough (GFM)
+  ];
+
+  return markdownPatterns.some(pattern => pattern.test(content));
 };

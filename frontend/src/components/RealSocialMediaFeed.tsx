@@ -937,7 +937,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         enableLinkPreviews: true,
                         useEnhancedPreviews: true,
                         previewDisplayMode: 'thumbnail-summary',
-                        showThumbnailsOnly: false
+                        showThumbnailsOnly: false,
+                        enableMarkdown: true // Enable markdown rendering
                       })}
                     </div>
                   </div>
@@ -1026,7 +1027,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         useEnhancedPreviews: true,
                         previewDisplayMode: 'card',
                         showThumbnailsOnly: false,
-                        className: 'space-y-2'
+                        className: 'space-y-2',
+                        enableMarkdown: true // Enable markdown rendering
                       })}
                     </div>
                   </div>

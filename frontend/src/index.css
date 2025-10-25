@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Markdown Styling */
+@import './styles/markdown.css';
+
 /* Toast and Dialog Animations */
 @keyframes slide-in {
   from {
