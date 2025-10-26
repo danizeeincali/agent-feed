@@ -218,10 +218,12 @@ class TokenAnalyticsWriter {
       const sql = `
         INSERT INTO token_analytics (
           id, timestamp, sessionId, operation, model,
-          inputTokens, outputTokens, totalTokens, estimatedCost
+          inputTokens, outputTokens, totalTokens, estimatedCost,
+          cacheReadTokens, cacheCreationTokens
         ) VALUES (
           @id, @timestamp, @sessionId, @operation, @model,
-          @inputTokens, @outputTokens, @totalTokens, @estimatedCost
+          @inputTokens, @outputTokens, @totalTokens, @estimatedCost,
+          @cacheReadTokens, @cacheCreationTokens
         )
       `;
 
@@ -235,7 +237,9 @@ class TokenAnalyticsWriter {
         inputTokens: metrics.inputTokens,
         outputTokens: metrics.outputTokens,
         totalTokens: metrics.totalTokens,
-        estimatedCost: metrics.estimatedCost
+        estimatedCost: metrics.estimatedCost,
+        cacheReadTokens: metrics.cacheReadTokens || 0,
+        cacheCreationTokens: metrics.cacheCreationTokens || 0
       };
 
       console.log('🔍 [TokenAnalyticsWriter] Executing database write with params:', params);

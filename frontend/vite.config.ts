@@ -82,27 +82,9 @@ export default defineConfig({
           });
         }
       },
-      // CRITICAL FIX: WebSocket proxy for backend WebSocket server - FIXED TO PORT 3001 FOR SPARC COMPLETION
-      '/ws': {
-        target: 'http://127.0.0.1:3001', // Force IPv4 to avoid IPv6 connection issues
-        ws: true,           // Enable WebSocket proxying
-        changeOrigin: true, // Change origin headers to match target
-        secure: false,
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('🔍 SPARC DEBUG: WebSocket /ws proxy request:', req.url, '->', proxyReq.path);
-          });
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('🔍 SPARC DEBUG: WebSocket /ws proxy response:', req.url, '->', proxyRes.statusCode);
-          });
-          proxy.on('error', (err, _req, _res) => {
-            console.log('🔍 SPARC DEBUG: WebSocket /ws proxy error:', err.message);
-          });
-          proxy.on('upgrade', (req, socket, head) => {
-            console.log('🔍 SPARC DEBUG: WebSocket /ws upgrade request:', req.url);
-          });
-        }
-      },
+      // SOCKET.IO PROXY REMOVED: Socket.IO client connects DIRECTLY to localhost:3001
+      // Direct connection prevents Vite proxy issues with WebSocket upgrade
+      // See frontend/src/services/socket.js for direct connection configuration
       // Terminal WebSocket proxy
       '/terminal': {
         target: 'http://127.0.0.1:3001', // Force IPv4 to avoid IPv6 connection issues
@@ -115,6 +97,36 @@ export default defineConfig({
           });
           proxy.on('error', (err, _req, _res) => {
             console.log('🔍 SPARC DEBUG: WebSocket /terminal proxy error:', err.message);
+          });
+        }
+      },
+      // SSE Streaming Ticker proxy - CRITICAL FIX for 6-second disconnections
+      '/streaming-ticker': {
+        target: 'http://127.0.0.1:3001',
+        changeOrigin: true,
+        secure: false,
+        // SSE connections need long timeout to support keepalive
+        timeout: 0, // No timeout for SSE (keepalive maintains connection)
+        proxyTimeout: 0, // No proxy timeout
+        followRedirects: false, // SSE should not redirect
+        xfwd: true,
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            // Ensure SSE headers are preserved
+            proxyReq.setHeader('Accept', 'text/event-stream');
+            proxyReq.setHeader('Cache-Control', 'no-cache');
+            proxyReq.setHeader('Connection', 'keep-alive');
+            console.log('🔍 SPARC DEBUG: SSE proxy request:', req.method, req.url, '->', proxyReq.path);
+          });
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            // Ensure SSE response headers are set correctly
+            proxyRes.headers['cache-control'] = 'no-cache';
+            proxyRes.headers['connection'] = 'keep-alive';
+            proxyRes.headers['content-type'] = 'text/event-stream';
+            console.log('🔍 SPARC DEBUG: SSE proxy response:', req.url, '->', proxyRes.statusCode);
+          });
+          proxy.on('error', (err, req, res) => {
+            console.error('🔍 SPARC DEBUG: SSE proxy error:', err.message);
           });
         }
       },

@@ -65,7 +65,7 @@ export class RealTimeManager {
       // Try WebSocket first
       if (this.webSocketManager) {
         const wsResult = await this.webSocketManager.connect({
-          url: 'wss://production-api.agent-feed.com/ws',
+          url: 'wss://production-api.agent-feed.com/socket.io',
           protocols: ['agent-feed-protocol-v1'],
           timeout: 10000
         });

@@ -372,7 +372,7 @@ export const useAgentOrchestration = (options: UseAgentOrchestrationOptions = {}
     if (!enableRealTime) return;
 
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${wsProtocol}//${window.location.host}/ws/agents`;
+    const wsUrl = `${wsProtocol}//${window.location.host}/socket.io/agents`;
     
     let ws: WebSocket;
     let reconnectAttempts = 0;

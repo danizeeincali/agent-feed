@@ -39,7 +39,7 @@ export const useDualInstanceWebSocket = () => {
   const connect = () => {
     try {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `${protocol}//${window.location.host}/ws/dual-instance`;
+      const wsUrl = `${protocol}//${window.location.host}/socket.io/dual-instance`;
       
       wsRef.current = new WebSocket(wsUrl);
       setConnectionStatus('connecting');

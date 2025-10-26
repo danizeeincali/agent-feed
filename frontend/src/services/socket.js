@@ -20,6 +20,8 @@ const getBackendUrl = () => {
                           window.location.hostname === '127.0.0.1';
 
     if (isDevelopment) {
+      // DIRECT CONNECTION: Socket.IO connects directly to backend, bypassing Vite proxy
+      // This prevents connection instability and ensures WebSocket upgrade works correctly
       return 'http://localhost:3001';
     }
 

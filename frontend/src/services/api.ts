@@ -271,7 +271,7 @@ export class ApiService {
 
       // Use current host and port - Vite proxy will handle routing
       const wsPort = port ? `:${port}` : '';
-      const wsUrl = `${wsProtocol}//${hostname}${wsPort}/ws`;
+      const wsUrl = `${wsProtocol}//${hostname}${wsPort}/socket.io`;
 
       console.log('🔌 Attempting WebSocket connection to:', wsUrl);
       this.wsConnection = new WebSocket(wsUrl);

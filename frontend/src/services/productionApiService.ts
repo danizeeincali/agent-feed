@@ -377,7 +377,7 @@ class ProductionApiService {
 
   private connectWebSocket(): void {
     try {
-      const wsUrl = this.baseURL.replace('http', 'ws') + '/ws';
+      const wsUrl = this.baseURL.replace('http', 'ws') + '/socket.io';
       console.log('🔌 Connecting to WebSocket:', wsUrl);
       
       this.wsConnection = new WebSocket(wsUrl);

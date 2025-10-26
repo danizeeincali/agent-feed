@@ -7,12 +7,14 @@
 
 import { query } from '@anthropic-ai/claude-code';
 import { broadcastToolActivity, formatToolAction } from '../api/routes/claude-code-sdk.js';
+import { TelemetryService } from './TelemetryService.js';
 
 class ClaudeCodeSDKManager {
   constructor() {
     this.workingDirectory = '/workspaces/agent-feed/prod';
     this.initialized = false;
     this.sessions = new Map();
+    this.telemetry = null; // Will be initialized with db and sse
 
     // Full tool access configuration
     this.allowedTools = [
@@ -31,6 +33,15 @@ class ClaudeCodeSDKManager {
     this.permissionMode = 'bypassPermissions';
 
     this.init();
+  }
+
+  /**
+   * Initialize TelemetryService with database and SSE stream
+   * Must be called after database is ready
+   */
+  initializeTelemetry(db, sseStream) {
+    this.telemetry = new TelemetryService(db, sseStream);
+    console.log('✅ TelemetryService initialized in ClaudeCodeSDKManager');
   }
 
   async init() {
@@ -150,15 +161,47 @@ class ClaudeCodeSDKManager {
   async createStreamingChat(userInput, options = {}) {
     if (!this.initialized) await this.init();
 
+    const sessionId = options.sessionId || `session_${Date.now()}`;
+    const agentId = `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     try {
       console.log(`🚀 Starting Claude Code session with official SDK`);
       console.log(`📁 Working Directory: ${this.workingDirectory}`);
       console.log(`🛠️ Tools: ${this.allowedTools.join(', ')}`);
 
+      // Capture agent started
+      if (this.telemetry) {
+        await this.telemetry.captureAgentStarted(
+          agentId,
+          sessionId,
+          'streaming_chat',
+          userInput,
+          this.model
+        );
+      }
+
+      const startTime = Date.now();
       const result = await this.queryClaudeCode(userInput, options);
+      const endTime = Date.now();
 
       if (result.success && result.messages.length > 0) {
         const lastMessage = result.messages[result.messages.length - 1];
+
+        // Extract token and cost information from messages
+        const tokens = this.extractTokenMetrics(result.messages);
+        const cost = this.calculateCost(tokens);
+
+        // Capture agent completed
+        if (this.telemetry) {
+          await this.telemetry.captureAgentCompleted(agentId, {
+            sessionId,
+            duration: endTime - startTime,
+            tokens,
+            cost,
+            messageCount: result.messages.length
+          });
+        }
+
         return [{
           type: 'assistant',
           content: this.extractContent(lastMessage),
@@ -177,6 +220,12 @@ class ClaudeCodeSDKManager {
 
     } catch (error) {
       console.error('Claude Code streaming chat error:', error);
+
+      // Capture agent failed
+      if (this.telemetry) {
+        await this.telemetry.captureAgentFailed(agentId, error);
+      }
+
       throw error;
     }
   }
@@ -217,10 +266,50 @@ class ClaudeCodeSDKManager {
   async executeHeadlessTask(prompt, options = {}) {
     if (!this.initialized) await this.init();
 
+    const sessionId = options.sessionId || `session_${Date.now()}`;
+    const agentId = `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     try {
+      console.log(`🚀 Starting headless task with Claude Code SDK`);
+      console.log(`📁 Working Directory: ${this.workingDirectory}`);
+      console.log(`🛠️ Tools: ${this.allowedTools.join(', ')}`);
+
+      // Capture agent started
+      if (this.telemetry) {
+        await this.telemetry.captureAgentStarted(
+          agentId,
+          sessionId,
+          'headless_task',
+          this.sanitizePrompt(prompt),
+          this.model
+        );
+      }
+
+      const startTime = Date.now();
       const result = await this.queryClaudeCode(prompt, options);
+      const endTime = Date.now();
 
       if (result.success) {
+        // Extract token and cost information from messages
+        const tokens = this.extractTokenMetrics(result.messages);
+        const cost = this.calculateCost(tokens);
+
+        // Track tool executions from messages
+        if (this.telemetry) {
+          await this.captureToolExecutionsFromMessages(result.messages, agentId);
+        }
+
+        // Capture agent completed
+        if (this.telemetry) {
+          await this.telemetry.captureAgentCompleted(agentId, {
+            sessionId,
+            duration: endTime - startTime,
+            tokens,
+            cost,
+            messageCount: result.messages.length
+          });
+        }
+
         return {
           output: JSON.stringify({
             messages: result.messages,
@@ -235,6 +324,12 @@ class ClaudeCodeSDKManager {
 
     } catch (error) {
       console.error('Headless task error:', error);
+
+      // Capture agent failed
+      if (this.telemetry) {
+        await this.telemetry.captureAgentFailed(agentId, error);
+      }
+
       throw new Error('Background task failed. Please check configuration.');
     }
   }
@@ -322,6 +417,116 @@ class ClaudeCodeSDKManager {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Extract token metrics from SDK messages
+   */
+  extractTokenMetrics(messages) {
+    let totalInputTokens = 0;
+    let totalOutputTokens = 0;
+
+    messages.forEach(msg => {
+      if (msg.type === 'result' && msg.usage) {
+        totalInputTokens += msg.usage.input_tokens || 0;
+        totalOutputTokens += msg.usage.output_tokens || 0;
+      }
+    });
+
+    return {
+      input: totalInputTokens,
+      output: totalOutputTokens,
+      total: totalInputTokens + totalOutputTokens
+    };
+  }
+
+  /**
+   * Calculate cost based on token metrics
+   * Claude Sonnet 4 pricing: $3/MTok input, $15/MTok output
+   */
+  calculateCost(tokens) {
+    const inputCost = (tokens.input / 1000000) * 3.0;
+    const outputCost = (tokens.output / 1000000) * 15.0;
+    return inputCost + outputCost;
+  }
+
+  /**
+   * Track tool execution with telemetry
+   */
+  async trackToolExecution(toolName, toolInput, executeFunction) {
+    const startTime = Date.now();
+    let output = null;
+    let error = null;
+
+    try {
+      output = await executeFunction();
+    } catch (err) {
+      error = err;
+      throw err;
+    } finally {
+      const endTime = Date.now();
+
+      if (this.telemetry) {
+        await this.telemetry.captureToolExecution(
+          toolName,
+          toolInput,
+          output || { error: error?.message },
+          startTime,
+          endTime
+        );
+      }
+    }
+
+    return output;
+  }
+
+  /**
+   * Capture tool executions from SDK messages
+   */
+  async captureToolExecutionsFromMessages(messages, agentId) {
+    for (const message of messages) {
+      if (message.type === 'assistant' && message.message?.content) {
+        const content = Array.isArray(message.message.content)
+          ? message.message.content
+          : [message.message.content];
+
+        for (const block of content) {
+          if (typeof block === 'object' && block.type === 'tool_use') {
+            const toolName = block.name;
+            const toolInput = block.input;
+
+            console.log(`🔧 Capturing tool execution: ${toolName}`);
+
+            if (this.telemetry) {
+              await this.telemetry.captureToolExecution(
+                toolName,
+                toolInput,
+                { block_id: block.id },
+                Date.now(),
+                Date.now()
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Sanitize prompt to remove sensitive information
+   */
+  sanitizePrompt(prompt) {
+    if (!prompt || typeof prompt !== 'string') return prompt;
+
+    // Remove API keys, tokens, passwords
+    let sanitized = prompt;
+    sanitized = sanitized.replace(/sk-ant-[a-zA-Z0-9_-]+/g, 'sk-***REDACTED***');
+    sanitized = sanitized.replace(/sk-[a-zA-Z0-9]{20,}/g, 'sk-***REDACTED***');
+    sanitized = sanitized.replace(/token[=:\s]+[a-zA-Z0-9_-]+/gi, 'token=***REDACTED***');
+    sanitized = sanitized.replace(/password[=:]\s*[^\s]+/gi, 'password=***REDACTED***');
+    sanitized = sanitized.replace(/apikey[=:]\s*[^\s]+/gi, 'apikey=***REDACTED***');
+
+    return sanitized;
   }
 }
 

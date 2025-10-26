@@ -5,7 +5,8 @@ class StreamingTickerManager extends EventEmitter {
     super();
     this.connections = new Map();
     this.isRunning = false;
-    this.connectionTimeout = 30000; // 30 seconds
+    this.keepaliveInterval = 30000; // 30 seconds keepalive
+    this.maxConnectionAge = 3600000; // 1 hour max connection age (prevent memory leaks)
   }
 
   // SSE Connection Management
@@ -21,41 +22,84 @@ class StreamingTickerManager extends EventEmitter {
       'Access-Control-Allow-Headers': 'Cache-Control'
     });
 
-    // Store connection
+    // Setup keepalive/heartbeat interval (prevents SSE timeout)
+    const keepaliveInterval = setInterval(() => {
+      if (this.connections.has(connectionId)) {
+        // Send SSE comment as keepalive (doesn't trigger events)
+        try {
+          res.write(': keepalive\n\n');
+        } catch (error) {
+          console.error(`Keepalive failed for ${connectionId}:`, error);
+          clearInterval(keepaliveInterval);
+          this.connections.delete(connectionId);
+        }
+      } else {
+        clearInterval(keepaliveInterval);
+      }
+    }, this.keepaliveInterval);
+
+    // Setup heartbeat with actual data (for connection monitoring)
+    const heartbeatInterval = setInterval(() => {
+      if (this.connections.has(connectionId)) {
+        this.sendToConnection(connectionId, {
+          type: 'heartbeat',
+          data: {
+            timestamp: Date.now(),
+            connectionId,
+            uptime: Date.now() - Date.now() // Will be set correctly in sendToConnection
+          }
+        });
+      } else {
+        clearInterval(heartbeatInterval);
+      }
+    }, 45000); // Send heartbeat every 45 seconds
+
+    // Store connection with cleanup intervals
     this.connections.set(connectionId, {
       response: res,
       userId,
       createdAt: Date.now(),
-      lastActivity: Date.now()
+      lastActivity: Date.now(),
+      keepaliveInterval,
+      heartbeatInterval
     });
 
     // Send initial connection event
     this.sendToConnection(connectionId, {
       type: 'connection',
-      data: { status: 'connected', connectionId }
+      data: { status: 'connected', connectionId, timestamp: Date.now() }
     });
-
-    // Setup heartbeat
-    const heartbeat = setInterval(() => {
-      this.sendToConnection(connectionId, {
-        type: 'heartbeat',
-        data: { timestamp: Date.now() }
-      });
-    }, 15000);
 
     // Handle connection close
     req.on('close', () => {
-      clearInterval(heartbeat);
+      console.log(`SSE connection closed by client: ${connectionId}`);
+      clearInterval(keepaliveInterval);
+      clearInterval(heartbeatInterval);
       this.connections.delete(connectionId);
       this.emit('connectionClosed', connectionId);
     });
 
-    // Handle timeout
-    setTimeout(() => {
+    // Handle connection errors
+    req.on('error', (error) => {
+      console.error(`SSE connection error for ${connectionId}:`, error);
+      clearInterval(keepaliveInterval);
+      clearInterval(heartbeatInterval);
+      this.connections.delete(connectionId);
+    });
+
+    // Set maximum connection age to prevent memory leaks
+    const maxAgeTimeout = setTimeout(() => {
       if (this.connections.has(connectionId)) {
+        console.log(`Closing long-lived connection ${connectionId} after max age`);
         this.closeConnection(connectionId);
       }
-    }, this.connectionTimeout);
+    }, this.maxConnectionAge);
+
+    // Store timeout reference for cleanup
+    const connection = this.connections.get(connectionId);
+    if (connection) {
+      connection.maxAgeTimeout = maxAgeTimeout;
+    }
 
     return connectionId;
   }
@@ -65,6 +109,12 @@ class StreamingTickerManager extends EventEmitter {
     const connection = this.connections.get(connectionId);
     if (connection) {
       try {
+        // Add connection metadata to heartbeat messages
+        if (message.type === 'heartbeat') {
+          message.data.uptime = Date.now() - connection.createdAt;
+          message.data.lastActivity = connection.lastActivity;
+        }
+
         const eventData = `data: ${JSON.stringify(message)}\n\n`;
         connection.response.write(eventData);
         connection.lastActivity = Date.now();
@@ -94,11 +144,24 @@ class StreamingTickerManager extends EventEmitter {
     const connection = this.connections.get(connectionId);
     if (connection) {
       try {
+        // Clear all intervals and timeouts
+        if (connection.keepaliveInterval) {
+          clearInterval(connection.keepaliveInterval);
+        }
+        if (connection.heartbeatInterval) {
+          clearInterval(connection.heartbeatInterval);
+        }
+        if (connection.maxAgeTimeout) {
+          clearTimeout(connection.maxAgeTimeout);
+        }
+
+        // Close the response stream
         connection.response.end();
       } catch (error) {
         console.error(`Error closing connection ${connectionId}:`, error);
       }
       this.connections.delete(connectionId);
+      console.log(`Connection ${connectionId} closed and cleaned up`);
     }
   }
 

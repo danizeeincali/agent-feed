@@ -180,6 +180,12 @@ export function initializeWithDatabase(db) {
   if (db) {
     tokenAnalyticsWriter = new TokenAnalyticsWriter(db);
     console.log('✅ TokenAnalyticsWriter initialized with database connection');
+
+    // Initialize telemetry for ClaudeCodeSDKManager
+    const claudeCodeManager = getClaudeCodeSDKManager();
+    const sseStream = { broadcast: broadcastToSSE };
+    claudeCodeManager.initializeTelemetry(db, sseStream);
+    console.log('✅ TelemetryService initialized with database and SSE stream');
   } else {
     console.warn('⚠️ TokenAnalyticsWriter not initialized - database unavailable');
   }
@@ -195,6 +201,8 @@ router.post('/streaming-chat', async (req, res) => {
   console.log('📡 Request body:', JSON.stringify(req.body, null, 2));
   console.log('📡 Request headers:', JSON.stringify(req.headers, null, 2));
 
+  const sessionId = `avi_dm_${Date.now()}_${crypto.randomUUID()}`;
+
   try {
     const { message, options = {} } = req.body;
 
@@ -208,6 +216,22 @@ router.post('/streaming-chat', async (req, res) => {
 
     console.log('✅ Claude Code SDK: Valid message received:', message.substring(0, 100));
 
+    const claudeCodeManager = getClaudeCodeSDKManager();
+
+    // Capture session started
+    if (claudeCodeManager.telemetry) {
+      await claudeCodeManager.telemetry.captureSessionStarted(sessionId, 'api_request');
+    }
+
+    // Capture prompt submitted
+    if (claudeCodeManager.telemetry) {
+      await claudeCodeManager.telemetry.capturePromptSubmitted(
+        sessionId,
+        message,
+        'claude-sonnet-4-20250514'
+      );
+    }
+
     // Send initial processing message to ticker
     broadcastToSSE({
       type: 'tool_activity',
@@ -218,8 +242,6 @@ router.post('/streaming-chat', async (req, res) => {
         priority: 'medium'
       }
     });
-
-    const claudeCodeManager = getClaudeCodeSDKManager();
 
     // Send activity update
     broadcastToSSE({
@@ -232,41 +254,68 @@ router.post('/streaming-chat', async (req, res) => {
       }
     });
 
+    // Pass sessionId to createStreamingChat
+    options.sessionId = sessionId;
     const responses = await claudeCodeManager.createStreamingChat(message, options);
 
     console.log('🔍 Claude Code Responses:', JSON.stringify(responses, null, 2));
 
-    // Generate unique session ID for token analytics tracking
-    const sessionId = options.sessionId || `avi_dm_${Date.now()}_${crypto.randomUUID()}`;
+    // Capture session ended (success)
+    if (claudeCodeManager.telemetry) {
+      await claudeCodeManager.telemetry.captureSessionEnded(sessionId, 'completed');
+    }
 
-    // Track token usage analytics (async, non-blocking)
-    if (tokenAnalyticsWriter && responses && responses.length > 0) {
-      // Extract the messages array from the response
+    // Track token usage analytics (async, non-blocking) with comprehensive debug logging
+    console.log('🔍 [ANALYTICS DEBUG] Starting token analytics tracking');
+    console.log('🔍 [ANALYTICS DEBUG] Has writer:', !!tokenAnalyticsWriter);
+    console.log('🔍 [ANALYTICS DEBUG] Has responses:', !!responses);
+    console.log('🔍 [ANALYTICS DEBUG] Responses length:', responses?.length);
+
+    if (!tokenAnalyticsWriter) {
+      console.warn('⚠️ [ANALYTICS SKIP] TokenAnalyticsWriter not initialized');
+      console.warn('⚠️ [ANALYTICS SKIP] This means database connection failed during server startup');
+      // Continue - don't block response
+    } else if (!responses || responses.length === 0) {
+      console.warn('⚠️ [ANALYTICS SKIP] No responses to process');
+      console.warn('⚠️ [ANALYTICS SKIP] SDK may have failed or returned empty result');
+    } else {
       const firstResponse = responses[0];
+      console.log('🔍 [ANALYTICS DEBUG] First response keys:', Object.keys(firstResponse || {}));
+      console.log('🔍 [ANALYTICS DEBUG] First response type:', typeof firstResponse);
+
       const messages = firstResponse?.messages || [];
+      console.log('🔍 [ANALYTICS DEBUG] Messages found:', messages.length);
+      console.log('🔍 [ANALYTICS DEBUG] Messages types:', messages.map(m => m?.type));
 
-      console.log('🔍 Token Analytics Debug:', {
-        responsesLength: responses.length,
-        hasMessages: !!messages.length,
-        messageTypes: messages.map(m => m.type),
-        sessionId
-      });
+      if (messages.length === 0) {
+        console.warn('⚠️ [ANALYTICS SKIP] No messages in response');
+        console.warn('⚠️ [ANALYTICS DEBUG] Response structure:', JSON.stringify(firstResponse, null, 2).substring(0, 500));
+        console.warn('⚠️ [ANALYTICS DEBUG] Full response keys:', Object.keys(firstResponse || {}).join(', '));
+      } else {
+        console.log('🔍 [ANALYTICS DEBUG] Calling writeTokenMetrics with', messages.length, 'messages for session:', sessionId);
+        console.log('🔍 [ANALYTICS DEBUG] Message IDs:', messages.map(m => m?.id || 'no-id').join(', '));
 
-      if (messages.length > 0) {
+        // Call writeTokenMetrics asynchronously
         tokenAnalyticsWriter.writeTokenMetrics(messages, sessionId)
           .then(() => {
-            console.log('✅ Token analytics written successfully for session:', sessionId);
+            console.log('✅ [ANALYTICS SUCCESS] Token analytics written successfully for session:', sessionId);
+            console.log('✅ [ANALYTICS SUCCESS] Processed', messages.length, 'messages');
+            console.log('✅ [ANALYTICS SUCCESS] Timestamp:', new Date().toISOString());
           })
           .catch(error => {
-            console.error('⚠️ Token analytics write failed (non-blocking):', error.message);
-            console.error('⚠️ Error stack:', error.stack);
+            console.error('❌ [ANALYTICS ERROR] Token analytics write failed:', error.message);
+            console.error('❌ [ANALYTICS ERROR] Stack trace:', error.stack);
+            console.error('❌ [ANALYTICS ERROR] Session ID:', sessionId);
+            console.error('❌ [ANALYTICS ERROR] Messages count:', messages.length);
+            console.error('❌ [ANALYTICS ERROR] First message sample:', JSON.stringify(messages[0], null, 2).substring(0, 300));
+            console.error('❌ [ANALYTICS ERROR] Error name:', error.name);
+            console.error('❌ [ANALYTICS ERROR] Error code:', error.code);
+            // Don't throw - analytics failure should not block API response
           });
-      } else {
-        console.warn('⚠️ Token analytics skipped - no messages in response');
       }
-    } else if (!tokenAnalyticsWriter) {
-      console.warn('⚠️ Token analytics skipped - writer not initialized');
     }
+
+    console.log('🔍 [ANALYTICS DEBUG] Analytics tracking section completed (async operation may still be running)');
 
     // Extract the actual response content
     let responseContent = 'No response received';
@@ -312,6 +361,12 @@ router.post('/streaming-chat', async (req, res) => {
       message: error.message,
       type: error.constructor.name
     });
+
+    // Capture session ended (failed)
+    const claudeCodeManager = getClaudeCodeSDKManager();
+    if (claudeCodeManager.telemetry) {
+      await claudeCodeManager.telemetry.captureSessionEnded(sessionId, 'failed');
+    }
 
     // Send error message to ticker
     broadcastToSSE({
@@ -491,6 +546,111 @@ router.get('/health', async (req, res) => {
       success: false,
       healthy: false,
       error: 'Health check failed',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/claude-code/analytics/health
+ * Health check for analytics tracking system
+ */
+console.log('🔧 DEBUG: Registering GET /analytics/health route...');
+router.get('/analytics/health', async (req, res) => {
+  try {
+    // Check if tokenAnalyticsWriter is initialized
+    const writerInitialized = !!tokenAnalyticsWriter;
+
+    let lastWrite = null;
+    let totalRecords = 0;
+    let status = 'unknown';
+    let timeSinceLastWrite = 'never';
+    let dbError = null;
+
+    if (writerInitialized && tokenAnalyticsWriter.db) {
+      try {
+        // Get last write timestamp and total records
+        const lastRecord = tokenAnalyticsWriter.db.prepare(`
+          SELECT MAX(timestamp) as lastWrite, COUNT(*) as totalRecords
+          FROM token_analytics
+        `).get();
+
+        lastWrite = lastRecord?.lastWrite;
+        totalRecords = lastRecord?.totalRecords || 0;
+
+        if (lastWrite) {
+          const lastWriteDate = new Date(lastWrite);
+          const now = new Date();
+          const diffMs = now - lastWriteDate;
+          const diffMinutes = Math.floor(diffMs / 60000);
+
+          if (diffMinutes < 60) {
+            timeSinceLastWrite = `${diffMinutes} minutes ago`;
+          } else if (diffMinutes < 1440) {
+            const hours = Math.floor(diffMinutes / 60);
+            timeSinceLastWrite = `${hours} hour${hours > 1 ? 's' : ''} ago`;
+          } else {
+            const days = Math.floor(diffMinutes / 1440);
+            timeSinceLastWrite = `${days} day${days > 1 ? 's' : ''} ago`;
+          }
+
+          // Determine health status based on time since last write
+          if (diffMinutes > 2880) {
+            status = 'critical'; // No write for 2+ days
+          } else if (diffMinutes > 1440) {
+            status = 'unhealthy'; // No write for 1+ day
+          } else if (diffMinutes > 120) {
+            status = 'degraded'; // No write for 2+ hours
+          } else {
+            status = 'healthy';
+          }
+        } else {
+          status = 'unhealthy';
+          timeSinceLastWrite = 'no records found';
+        }
+      } catch (error) {
+        dbError = error.message;
+        status = 'error';
+      }
+    } else {
+      status = 'not_initialized';
+    }
+
+    const responseData = {
+      success: true,
+      health: {
+        status,
+        writerInitialized,
+        lastWrite,
+        timeSinceLastWrite,
+        totalRecords,
+        dbError
+      },
+      recommendations: []
+    };
+
+    // Add recommendations based on status
+    if (status === 'not_initialized') {
+      responseData.recommendations.push('TokenAnalyticsWriter not initialized - check database connection');
+    } else if (status === 'critical' || status === 'unhealthy') {
+      responseData.recommendations.push('No recent analytics writes detected - investigate SDK integration');
+      responseData.recommendations.push('Check server logs for analytics errors');
+    } else if (status === 'degraded') {
+      responseData.recommendations.push('Analytics writes may be delayed - monitor for improvement');
+    } else if (status === 'healthy') {
+      responseData.recommendations.push('Analytics system operating normally');
+    }
+
+    // Set appropriate HTTP status code
+    const httpStatus = status === 'healthy' || status === 'degraded' ? 200 : 503;
+
+    res.status(httpStatus).json(responseData);
+
+  } catch (error) {
+    console.error('Analytics health check error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Analytics health check failed',
       details: error.message
     });
   }

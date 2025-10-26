@@ -97,7 +97,7 @@ export class AviDMService {
       baseUrl: config.baseUrl || 'http://localhost:3001', // SPARC FIX: Remove /api to avoid double /api/api prefix
       timeout: config.timeout || 300000, // 5 minutes for Claude Code SDK variable performance (15-17s + buffer)
       retryAttempts: config.retryAttempts || 3,
-      websocketUrl: config.websocketUrl || 'ws://localhost:3001/ws',
+      websocketUrl: config.websocketUrl || 'ws://localhost:3001/socket.io',
       apiKey: config.apiKey,
       rateLimits: {
         messagesPerMinute: 30,

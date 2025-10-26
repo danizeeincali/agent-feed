@@ -1,0 +1,496 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/tests/e2e/playwright.config.ts",
+    "rootDir": "/workspaces/agent-feed/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "/workspaces/agent-feed/tests/results/html-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/workspaces/agent-feed/tests/results/test-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/tests/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "websocket-fix-validation.spec.ts",
+      "file": "websocket-fix-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "WebSocket Fix Validation - Comprehensive E2E Tests",
+          "file": "websocket-fix-validation.spec.ts",
+          "line": 11,
+          "column": 6,
+          "specs": [
+            {
+              "title": "1. Browser Console Monitoring - Zero WebSocket Errors",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 130957,
+                      "error": {
+                        "message": "Error: Found WebSocket errors: WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m43\u001b[39m\nReceived array:  \u001b[31m[\"WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", …]\u001b[39m",
+                        "stack": "Error: Found WebSocket errors: WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m43\u001b[39m\nReceived array:  \u001b[31m[\"WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", …]\u001b[39m\n    at /workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts:82:72",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts",
+                          "column": 72,
+                          "line": 82
+                        },
+                        "snippet": "  80 |\n  81 |     // Assert zero WebSocket errors\n> 82 |     expect(wsErrors, `Found WebSocket errors: ${wsErrors.join(', ')}`).toHaveLength(0);\n     |                                                                        ^\n  83 |   });\n  84 |\n  85 |   test('2. SSE Connection Stability - 90 Second Test', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts",
+                            "column": 72,
+                            "line": 82
+                          },
+                          "message": "Error: Found WebSocket errors: WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m0\u001b[39m\nReceived length: \u001b[31m43\u001b[39m\nReceived array:  \u001b[31m[\"WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", \"❌ WebSocket error: Event\", \"WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response\", …]\u001b[39m\n\n  80 |\n  81 |     // Assert zero WebSocket errors\n> 82 |     expect(wsErrors, `Found WebSocket errors: ${wsErrors.join(', ')}`).toHaveLength(0);\n     |                                                                        ^\n  83 |   });\n  84 |\n  85 |   test('2. SSE Connection Stability - 90 Second Test', async ({ page }) => {\n    at /workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts:82:72"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "\n🧪 TEST 1: Browser Console Monitoring (2 minutes)\n"
+                        },
+                        {
+                          "text": "⏱️  Monitoring console for 120 seconds...\n"
+                        },
+                        {
+                          "text": "   10s elapsed... Errors: 17\n"
+                        },
+                        {
+                          "text": "   20s elapsed... Errors: 36\n"
+                        },
+                        {
+                          "text": "   30s elapsed... Errors: 52\n"
+                        },
+                        {
+                          "text": "   40s elapsed... Errors: 64\n"
+                        },
+                        {
+                          "text": "   50s elapsed... Errors: 79\n"
+                        },
+                        {
+                          "text": "   60s elapsed... Errors: 93\n"
+                        },
+                        {
+                          "text": "   70s elapsed... Errors: 104\n"
+                        },
+                        {
+                          "text": "   80s elapsed... Errors: 118\n"
+                        },
+                        {
+                          "text": "   90s elapsed... Errors: 133\n"
+                        },
+                        {
+                          "text": "   100s elapsed... Errors: 145\n"
+                        },
+                        {
+                          "text": "   110s elapsed... Errors: 159\n"
+                        },
+                        {
+                          "text": "   120s elapsed... Errors: 173\n"
+                        },
+                        {
+                          "text": "✅ WebSocket errors found: 43\n"
+                        },
+                        {
+                          "text": "📊 Total console errors: 173\n"
+                        },
+                        {
+                          "text": "💾 Logs saved to: /workspaces/agent-feed/tests/results/console-logs.json\n"
+                        },
+                        {
+                          "text": "\n📋 GENERATING FINAL VALIDATION REPORT\n"
+                        },
+                        {
+                          "text": "✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-26T03:49:34.090Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts",
+                        "column": 72,
+                        "line": 82
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "84573a1da0568c7d4deb-b209920107e525dd684c",
+              "file": "websocket-fix-validation.spec.ts",
+              "line": 40,
+              "column": 3
+            },
+            {
+              "title": "2. SSE Connection Stability - 90 Second Test",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 35461,
+                      "error": {
+                        "message": "Error: \"Connection lost\" message appeared at 30s\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m",
+                        "stack": "Error: \"Connection lost\" message appeared at 30s\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n    at /workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts:123:95",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts",
+                          "column": 95,
+                          "line": 123
+                        },
+                        "snippet": "  121 |\n  122 |       // Assert no \"Connection lost\" message\n> 123 |       expect(connectionLostVisible, `\"Connection lost\" message appeared at ${(i + 1) * 10}s`).toBe(false);\n      |                                                                                               ^\n  124 |     }\n  125 |\n  126 |     // Save connection monitoring data"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts",
+                            "column": 95,
+                            "line": 123
+                          },
+                          "message": "Error: \"Connection lost\" message appeared at 30s\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n\n  121 |\n  122 |       // Assert no \"Connection lost\" message\n> 123 |       expect(connectionLostVisible, `\"Connection lost\" message appeared at ${(i + 1) * 10}s`).toBe(false);\n      |                                                                                               ^\n  124 |     }\n  125 |\n  126 |     // Save connection monitoring data\n    at /workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts:123:95"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "\n🧪 TEST 2: SSE Connection Stability (90 seconds)\n"
+                        },
+                        {
+                          "text": "⏱️  Waiting for SSE connection...\n"
+                        },
+                        {
+                          "text": "✅ SSE Connected\n"
+                        },
+                        {
+                          "text": "   10s: Connected | Connection lost visible: false\n"
+                        },
+                        {
+                          "text": "   20s: Connected | Connection lost visible: false\n"
+                        },
+                        {
+                          "text": "   30s: Disconnected | Connection lost visible: true\n"
+                        },
+                        {
+                          "text": "\n📋 GENERATING FINAL VALIDATION REPORT\n"
+                        },
+                        {
+                          "text": "✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-26T03:51:50.753Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts",
+                        "column": 95,
+                        "line": 123
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "84573a1da0568c7d4deb-c3c6a0909c3eb6e791dd",
+              "file": "websocket-fix-validation.spec.ts",
+              "line": 85,
+              "column": 3
+            },
+            {
+              "title": "3. LiveActivityFeed Functionality Test",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14224,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n🧪 TEST 3: LiveActivityFeed Functionality\n"
+                        },
+                        {
+                          "text": "⏱️  Waiting for feed to load...\n"
+                        },
+                        {
+                          "text": "✅ Activity feed container found\n"
+                        },
+                        {
+                          "text": "📡 Connection status: Connected\n"
+                        },
+                        {
+                          "text": "📊 Feed items visible: 95\n"
+                        },
+                        {
+                          "text": "🔄 Triggering test event via API...\n"
+                        },
+                        {
+                          "text": "✅ API call response: 404 (ok: false)\n"
+                        },
+                        {
+                          "text": "📊 Feed items after API call: 95\n"
+                        },
+                        {
+                          "text": "✅ Feed functionality verified\n"
+                        },
+                        {
+                          "text": "💾 Feed state saved to: /workspaces/agent-feed/tests/results/feed-state.json\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-26T03:52:29.134Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-68297-vityFeed-Functionality-Test-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-68297-vityFeed-Functionality-Test-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-68297-vityFeed-Functionality-Test-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "84573a1da0568c7d4deb-45157e022b4d9646397e",
+              "file": "websocket-fix-validation.spec.ts",
+              "line": 144,
+              "column": 3
+            },
+            {
+              "title": "4. WebSocket Connection Health - Network Tab Analysis",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14760,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "\n🧪 TEST 4: WebSocket Connection Health\n"
+                        },
+                        {
+                          "text": "⏱️  Waiting for WebSocket connection...\n"
+                        },
+                        {
+                          "text": "📊 Total WebSocket-related requests: 0\n"
+                        },
+                        {
+                          "text": "✅ Successful connections (101/200): 0\n"
+                        },
+                        {
+                          "text": "🔌 socket.io connections: 0\n"
+                        },
+                        {
+                          "text": "⚠️  Old /ws connections: 0\n"
+                        },
+                        {
+                          "text": "❌ Failed connections: 0\n"
+                        },
+                        {
+                          "text": "💾 Network analysis saved to: /workspaces/agent-feed/tests/results/network-analysis.json\n"
+                        },
+                        {
+                          "text": "\n📋 GENERATING FINAL VALIDATION REPORT\n"
+                        },
+                        {
+                          "text": "✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-26T03:52:44.013Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-d44ad-alth---Network-Tab-Analysis-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-d44ad-alth---Network-Tab-Analysis-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/tests/e2e/test-results/websocket-fix-validation-W-d44ad-alth---Network-Tab-Analysis-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "84573a1da0568c7d4deb-141009b064fe80652d34",
+              "file": "websocket-fix-validation.spec.ts",
+              "line": 216,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-10-26T03:49:32.333Z",
+    "duration": 206846.538,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

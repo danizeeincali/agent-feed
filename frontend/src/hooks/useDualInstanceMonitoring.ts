@@ -46,7 +46,7 @@ interface ConfirmationRequest {
 
 export function useDualInstanceMonitoring() {
   const queryClient = useQueryClient();
-  const { socket, isConnected } = useWebSocketSingleton({ url: '/ws' });
+  const { socket, isConnected } = useWebSocketSingleton({ url: '/socket.io' });
 
   // Fetch instance status
   const { data: status, isLoading: statusLoading } = useQuery<DualInstanceStatus>({

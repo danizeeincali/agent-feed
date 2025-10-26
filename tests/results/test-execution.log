@@ -1,0 +1,305 @@
+
+Running 4 tests using 1 worker
+
+
+📋 GENERATING FINAL VALIDATION REPORT
+✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md
+  ✘  1 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:40:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 1. Browser Console Monitoring - Zero WebSocket Errors (12ms)
+
+📋 GENERATING FINAL VALIDATION REPORT
+✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md
+  ✘  2 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:85:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 2. SSE Connection Stability - 90 Second Test (7ms)
+
+📋 GENERATING FINAL VALIDATION REPORT
+✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md
+  ✘  3 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:144:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 3. LiveActivityFeed Functionality Test (21ms)
+
+📋 GENERATING FINAL VALIDATION REPORT
+✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md
+  ✘  4 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:216:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 4. WebSocket Connection Health - Network Tab Analysis (17ms)
+
+
+  1) [chromium] › tests/e2e/websocket-fix-validation.spec.ts:40:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 1. Browser Console Monitoring - Zero WebSocket Errors 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+    [2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-Al2Pap --remote-debugging-pipe --no-startup-window[22m
+    [2m  - <launched> pid=194234[22m
+    [2m  - [pid=194234][err] [194234:194348:1026/033912.829742:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory[22m
+    [2m  - [pid=194234][err] [194234:194234:1026/033913.039901:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY[22m
+    [2m  - [pid=194234][err] [194234:194234:1026/033913.039932:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.[22m
+    [2m  - [pid=194234] <gracefully close start>[22m
+    [2m  - [pid=194234] <kill>[22m
+    [2m  - [pid=194234] <will force kill>[22m
+    [2m  - [pid=194234] <process did exit: exitCode=1, signal=null>[22m
+    [2m  - [pid=194234] starting temporary directories cleanup[22m
+    [2m  - [pid=194234] finished temporary directories cleanup[22m
+    [2m  - [pid=194234] <gracefully close end>[22m
+
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/e2e/websocket-fix-validation.spec.ts:85:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 2. SSE Connection Stability - 90 Second Test 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+    [2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-K6Nhdv --remote-debugging-pipe --no-startup-window[22m
+    [2m  - <launched> pid=194659[22m
+    [2m  - [pid=194659][err] [194659:194659:1026/033918.866782:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY[22m
+    [2m  - [pid=194659][err] [194659:194659:1026/033918.866832:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.[22m
+    [2m  - [pid=194659] <gracefully close start>[22m
+    [2m  - [pid=194659] <kill>[22m
+    [2m  - [pid=194659] <will force kill>[22m
+    [2m  - [pid=194659] <process did exit: exitCode=1, signal=null>[22m
+    [2m  - [pid=194659] starting temporary directories cleanup[22m
+    [2m  - [pid=194659] finished temporary directories cleanup[22m
+    [2m  - [pid=194659] <gracefully close end>[22m
+
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests/e2e/websocket-fix-validation.spec.ts:144:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 3. LiveActivityFeed Functionality Test 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+    [2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-mhbNjr --remote-debugging-pipe --no-startup-window[22m
+    [2m  - <launched> pid=195044[22m
+    [2m  - [pid=195044][err] [195044:195108:1026/033925.131712:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory[22m
+    [2m  - [pid=195044][err] [195044:195044:1026/033925.132796:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY[22m
+    [2m  - [pid=195044][err] [195044:195044:1026/033925.132805:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.[22m
+    [2m  - [pid=195044] <gracefully close start>[22m
+    [2m  - [pid=195044] <kill>[22m
+    [2m  - [pid=195044] <will force kill>[22m
+    [2m  - [pid=195044] <process did exit: exitCode=1, signal=null>[22m
+    [2m  - [pid=195044] starting temporary directories cleanup[22m
+    [2m  - [pid=195044] finished temporary directories cleanup[22m
+    [2m  - [pid=195044] <gracefully close end>[22m
+
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-68297-vityFeed-Functionality-Test-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/e2e/test-results/websocket-fix-validation-W-68297-vityFeed-Functionality-Test-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests/e2e/websocket-fix-validation.spec.ts:216:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 4. WebSocket Connection Health - Network Tab Analysis 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    ╔════════════════════════════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like you launched a headed browser without having a XServer running.                     ║
+    ║ Set either 'headless: true' or use 'xvfb-run <your-playwright-app>' before running Playwright. ║
+    ║                                                                                                ║
+    ║ <3 Playwright Team                                                                             ║
+    ╚════════════════════════════════════════════════════════════════════════════════════════════════╝
+    Call log:
+    [2m  - <launching> /home/codespace/.cache/ms-playwright/chromium-1193/chrome-linux/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-bBfc4O --remote-debugging-pipe --no-startup-window[22m
+    [2m  - <launched> pid=195617[22m
+    [2m  - [pid=195617][err] [195617:195641:1026/033928.507622:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory[22m
+    [2m  - [pid=195617][err] [195617:195617:1026/033928.513967:ERROR:ui/ozone/platform/x11/ozone_platform_x11.cc:249] Missing X server or $DISPLAY[22m
+    [2m  - [pid=195617][err] [195617:195617:1026/033928.513984:ERROR:ui/aura/env.cc:257] The platform failed to initialize.  Exiting.[22m
+    [2m  - [pid=195617] <gracefully close start>[22m
+    [2m  - [pid=195617] <kill>[22m
+    [2m  - [pid=195617] <will force kill>[22m
+    [2m  - [pid=195617] <process did exit: exitCode=1, signal=null>[22m
+    [2m  - [pid=195617] starting temporary directories cleanup[22m
+    [2m  - [pid=195617] finished temporary directories cleanup[22m
+    [2m  - [pid=195617] <gracefully close end>[22m
+
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-d44ad-alth---Network-Tab-Analysis-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/e2e/test-results/websocket-fix-validation-W-d44ad-alth---Network-Tab-Analysis-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium] › tests/e2e/websocket-fix-validation.spec.ts:40:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 1. Browser Console Monitoring - Zero WebSocket Errors 
+    [chromium] › tests/e2e/websocket-fix-validation.spec.ts:85:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 2. SSE Connection Stability - 90 Second Test 
+    [chromium] › tests/e2e/websocket-fix-validation.spec.ts:144:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 3. LiveActivityFeed Functionality Test 
+    [chromium] › tests/e2e/websocket-fix-validation.spec.ts:216:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 4. WebSocket Connection Health - Network Tab Analysis 
+
+[36m  Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.[39m
+
+Running 4 tests using 1 worker
+
+
+🧪 TEST 1: Browser Console Monitoring (2 minutes)
+⏱️  Monitoring console for 120 seconds...
+   10s elapsed... Errors: 17
+   20s elapsed... Errors: 36
+   30s elapsed... Errors: 52
+   40s elapsed... Errors: 64
+   50s elapsed... Errors: 79
+   60s elapsed... Errors: 93
+   70s elapsed... Errors: 104
+   80s elapsed... Errors: 118
+   90s elapsed... Errors: 133
+   100s elapsed... Errors: 145
+   110s elapsed... Errors: 159
+   120s elapsed... Errors: 173
+✅ WebSocket errors found: 43
+📊 Total console errors: 173
+💾 Logs saved to: /workspaces/agent-feed/tests/results/console-logs.json
+
+📋 GENERATING FINAL VALIDATION REPORT
+✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md
+  ✘  1 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:40:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 1. Browser Console Monitoring - Zero WebSocket Errors (2.2m)
+
+🧪 TEST 2: SSE Connection Stability (90 seconds)
+⏱️  Waiting for SSE connection...
+✅ SSE Connected
+   10s: Connected | Connection lost visible: false
+   20s: Connected | Connection lost visible: false
+   30s: Disconnected | Connection lost visible: true
+
+📋 GENERATING FINAL VALIDATION REPORT
+✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md
+  ✘  2 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:85:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 2. SSE Connection Stability - 90 Second Test (35.5s)
+
+🧪 TEST 3: LiveActivityFeed Functionality
+⏱️  Waiting for feed to load...
+✅ Activity feed container found
+📡 Connection status: Connected
+📊 Feed items visible: 95
+🔄 Triggering test event via API...
+✅ API call response: 404 (ok: false)
+📊 Feed items after API call: 95
+✅ Feed functionality verified
+💾 Feed state saved to: /workspaces/agent-feed/tests/results/feed-state.json
+  ✓  3 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:144:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 3. LiveActivityFeed Functionality Test (14.2s)
+
+🧪 TEST 4: WebSocket Connection Health
+⏱️  Waiting for WebSocket connection...
+📊 Total WebSocket-related requests: 0
+✅ Successful connections (101/200): 0
+🔌 socket.io connections: 0
+⚠️  Old /ws connections: 0
+❌ Failed connections: 0
+💾 Network analysis saved to: /workspaces/agent-feed/tests/results/network-analysis.json
+
+📋 GENERATING FINAL VALIDATION REPORT
+✅ Final report generated: /workspaces/agent-feed/tests/results/VALIDATION-REPORT.md
+  ✓  4 [chromium] › tests/e2e/websocket-fix-validation.spec.ts:216:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 4. WebSocket Connection Health - Network Tab Analysis (14.8s)
+
+
+  1) [chromium] › tests/e2e/websocket-fix-validation.spec.ts:40:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 1. Browser Console Monitoring - Zero WebSocket Errors 
+
+    Error: Found WebSocket errors: WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event, WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response, ❌ WebSocket error: Event
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoHaveLength[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected length: [32m0[39m
+    Received length: [31m43[39m
+    Received array:  [31m["WebSocket connection to 'ws://localhost:443/?token=kapqYspcZ5G8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED", "WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response", "❌ WebSocket error: Event", "WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response", "❌ WebSocket error: Event", "WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response", "❌ WebSocket error: Event", "WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response", "❌ WebSocket error: Event", "WebSocket connection to 'ws://localhost:5173/socket.io' failed: Connection closed before receiving a handshake response", …][39m
+
+      80 |
+      81 |     // Assert zero WebSocket errors
+    > 82 |     expect(wsErrors, `Found WebSocket errors: ${wsErrors.join(', ')}`).toHaveLength(0);
+         |                                                                        ^
+      83 |   });
+      84 |
+      85 |   test('2. SSE Connection Stability - 90 Second Test', async ({ page }) => {
+        at /workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts:82:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/e2e/test-results/websocket-fix-validation-W-97071-ing---Zero-WebSocket-Errors-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests/e2e/websocket-fix-validation.spec.ts:85:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 2. SSE Connection Stability - 90 Second Test 
+
+    Error: "Connection lost" message appeared at 30s
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mfalse[39m
+    Received: [31mtrue[39m
+
+      121 |
+      122 |       // Assert no "Connection lost" message
+    > 123 |       expect(connectionLostVisible, `"Connection lost" message appeared at ${(i + 1) * 10}s`).toBe(false);
+          |                                                                                               ^
+      124 |     }
+      125 |
+      126 |     // Save connection monitoring data
+        at /workspaces/agent-feed/tests/e2e/websocket-fix-validation.spec.ts:123:95
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace tests/e2e/test-results/websocket-fix-validation-W-94f25--Stability---90-Second-Test-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › tests/e2e/websocket-fix-validation.spec.ts:40:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 1. Browser Console Monitoring - Zero WebSocket Errors 
+    [chromium] › tests/e2e/websocket-fix-validation.spec.ts:85:3 › WebSocket Fix Validation - Comprehensive E2E Tests › 2. SSE Connection Stability - 90 Second Test 
+  2 passed (3.4m)
+
+[36m  Serving HTML report at http://localhost:9323. Press Ctrl+C to quit.[39m

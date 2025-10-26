@@ -24,6 +24,8 @@ import SafeFeedWrapper from './components/SafeFeedWrapper';
 import RealAgentManager from './components/RealAgentManager';
 import IsolatedRealAgentManager from './components/IsolatedRealAgentManager';
 import RealActivityFeed from './components/RealActivityFeed';
+import { LiveActivityFeed } from './components/LiveActivityFeed';
+import './components/LiveActivityFeed.css';
 import EnhancedAgentManagerWrapper from './components/EnhancedAgentManagerWrapper';
 // import AgentManagerDebug from './components/AgentManagerDebug';
 import RealAnalytics from './components/RealAnalytics';
@@ -291,7 +293,7 @@ const App: React.FC = () => {
                   <Route path="/activity" element={
                     <RouteErrorBoundary routeName="Activity">
                       <Suspense fallback={<FallbackComponents.ActivityFallback />}>
-                        <RealActivityFeed />
+                        <LiveActivityFeed />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

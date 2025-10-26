@@ -548,7 +548,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     if (!enableRealTime) return;
     
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const ws = new WebSocket(`${protocol}//${window.location.host}/api/ws/comments/${postId}`);
+    const ws = new WebSocket(`${protocol}//${window.location.host}/api/socket.io/comments/${postId}`);
     
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);

@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
+import { createServer } from 'http';
 import { loadAgent, loadAllAgents } from './services/agent-loader.service.js';
 import Database from 'better-sqlite3';
 import { fileURLToPath } from 'url';
@@ -667,8 +668,9 @@ const sseHeartbeats = new Map(); // Track heartbeat intervals for cleanup
 // Configuration: Memory management limits
 const MAX_SSE_CONNECTIONS = 50; // Prevent unbounded connection growth
 const MAX_TICKER_MESSAGES = 100; // Maximum messages to keep in memory
-const HEARTBEAT_INTERVAL = 30000; // 30 seconds
-const CONNECTION_TIMEOUT = 300000; // 5 minutes idle timeout
+const KEEPALIVE_INTERVAL = 30000; // 30 seconds - SSE comment keepalive to prevent proxy timeout
+const HEARTBEAT_INTERVAL = 45000; // 45 seconds - Heartbeat data event for client health monitoring
+const CONNECTION_TIMEOUT = 3600000; // 1 hour idle timeout (increased from 5 minutes)
 
 // Export for testing
 export { streamingTickerMessages };
@@ -695,7 +697,10 @@ const validateSSEMessage = (message) => {
       timestamp: message.timestamp || message.data?.timestamp || Date.now(),
       tool: message.data?.tool || message.tool,
       action: message.data?.action || message.action,
-      connectionId: message.connectionId || message.data?.connectionId
+      connectionId: message.connectionId || message.data?.connectionId,
+      // Preserve heartbeat/connection health fields
+      uptime: message.uptime || message.data?.uptime,
+      lastActivity: message.lastActivity || message.data?.lastActivity
     }
   };
 
@@ -2572,23 +2577,43 @@ app.get('/api/streaming-ticker/stream', (req, res) => {
   // Add to connections set
   sseConnections.add(res);
 
-  // Track last activity time for connection timeout
+  // Track last activity time for connection timeout and connection start time
   let lastActivity = Date.now();
+  const connectionStart = Date.now();
 
-  // Send heartbeat every 30 seconds
+  // DUAL-LAYER KEEPALIVE SYSTEM:
+  // Layer 1: SSE comment keepalive (prevents proxy/intermediary timeout)
+  const keepalive = setInterval(() => {
+    if (res.writableEnded || res.destroyed) {
+      clearInterval(keepalive);
+      return;
+    }
+
+    try {
+      // Send SSE comment (doesn't trigger client events, just keeps connection alive)
+      res.write(': keepalive\n\n');
+    } catch (error) {
+      console.error('⚠️ Error sending keepalive:', error.message);
+      clearInterval(keepalive);
+    }
+  }, KEEPALIVE_INTERVAL);
+
+  // Layer 2: Heartbeat data events (for client-side health monitoring)
   const heartbeat = setInterval(() => {
     if (res.writableEnded || res.destroyed) {
       clearInterval(heartbeat);
+      clearInterval(keepalive);
       sseConnections.delete(res);
       sseHeartbeats.delete(res);
       return;
     }
 
-    // Check for idle timeout (5 minutes)
+    // Check for idle timeout (1 hour max connection age)
     const idleTime = Date.now() - lastActivity;
     if (idleTime > CONNECTION_TIMEOUT) {
       console.log(`⏱️ SSE connection timed out after ${Math.round(idleTime / 1000)}s idle`);
       clearInterval(heartbeat);
+      clearInterval(keepalive);
       sseConnections.delete(res);
       sseHeartbeats.delete(res);
       try {
@@ -2601,24 +2626,28 @@ app.get('/api/streaming-ticker/stream', (req, res) => {
     }
 
     try {
+      const uptime = Date.now() - connectionStart;
       const heartbeatMessage = validateSSEMessage({
         type: 'heartbeat',
         message: 'Connection alive',
         priority: 'low',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        uptime: uptime, // Connection uptime in milliseconds
+        lastActivity: lastActivity
       });
       res.write(`data: ${JSON.stringify(heartbeatMessage)}\n\n`);
       lastActivity = Date.now();
     } catch (error) {
       console.error('⚠️ Error sending heartbeat:', error.message);
       clearInterval(heartbeat);
+      clearInterval(keepalive);
       sseConnections.delete(res);
       sseHeartbeats.delete(res);
     }
   }, HEARTBEAT_INTERVAL);
 
-  // Store heartbeat interval for cleanup
-  sseHeartbeats.set(res, heartbeat);
+  // Store both intervals for cleanup
+  sseHeartbeats.set(res, { heartbeat, keepalive });
 
   // Send recent messages with validation
   const recentMessages = streamingTickerMessages.slice(-10);
@@ -2634,9 +2663,10 @@ app.get('/api/streaming-ticker/stream', (req, res) => {
 
   // Handle client disconnect - CRITICAL for preventing memory leaks
   req.on('close', () => {
-    const heartbeatInterval = sseHeartbeats.get(res);
-    if (heartbeatInterval) {
-      clearInterval(heartbeatInterval);
+    const intervals = sseHeartbeats.get(res);
+    if (intervals) {
+      if (intervals.heartbeat) clearInterval(intervals.heartbeat);
+      if (intervals.keepalive) clearInterval(intervals.keepalive);
       sseHeartbeats.delete(res);
     }
     sseConnections.delete(res);
@@ -4219,8 +4249,30 @@ setTimeout(() => {
 let monitoringService = null;
 let alertingService = null;
 
+// CRITICAL FIX: Create HTTP server and initialize Socket.IO BEFORE listening
+// This prevents 400 Bad Request errors on /socket.io endpoint
+const httpServer = createServer(app);
+
+// Initialize WebSocket service BEFORE server starts listening
+try {
+  console.log('📡 Initializing WebSocket service (Socket.IO)...');
+  websocketService.initialize(httpServer, {
+    cors: {
+      origin: process.env.CORS_ORIGIN || '*',
+      methods: ['GET', 'POST'],
+      credentials: true
+    }
+  });
+  console.log('✅ WebSocket service initialized BEFORE server listen');
+  console.log('   🔌 WebSocket endpoint will be: ws://localhost:' + PORT + '/socket.io/');
+  console.log('   📢 Events: ticket:status:update, worker:lifecycle');
+} catch (error) {
+  console.error('❌ Failed to initialize WebSocket service:', error.message);
+  console.warn('   Real-time updates will not be available');
+}
+
 // Start server
-const server = app.listen(PORT, '0.0.0.0', async () => {
+httpServer.listen(PORT, '0.0.0.0', async () => {
   console.log(`🚀 API Server running on http://0.0.0.0:${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/health`);
   console.log(`🤖 Agents API: http://localhost:${PORT}/api/agents`);
@@ -4228,27 +4280,10 @@ const server = app.listen(PORT, '0.0.0.0', async () => {
   console.log(`📊 Streaming Ticker SSE: http://localhost:${PORT}/api/streaming-ticker/stream`);
   console.log(`📄 Dynamic Pages API: http://localhost:${PORT}/api/agent-pages/agents/:agentId/pages`);
   console.log(`📈 All analytics APIs available`);
+  console.log(`🔌 Socket.IO ready at: ws://localhost:${PORT}/socket.io/`);
 
   // Log initial memory usage
   logMemoryUsage();
-
-  // Initialize WebSocket service for real-time updates
-  try {
-    console.log('\n📡 Initializing WebSocket service...');
-    websocketService.initialize(server, {
-      cors: {
-        origin: process.env.CORS_ORIGIN || '*',
-        methods: ['GET', 'POST'],
-        credentials: true
-      }
-    });
-    console.log('✅ WebSocket service initialized');
-    console.log('   🔌 WebSocket endpoint: ws://localhost:' + PORT + '/socket.io/');
-    console.log('   📢 Events: ticket:status:update, worker:lifecycle');
-  } catch (error) {
-    console.error('❌ Failed to initialize WebSocket service:', error.message);
-    console.warn('   Real-time updates will not be available');
-  }
 
   // Initialize Phase 5 Monitoring System
   monitoringService = new MonitoringService();
@@ -4351,7 +4386,7 @@ async function gracefulShutdown(signal) {
   console.log(`\n🛑 ${signal} received, starting graceful shutdown...`);
 
   // Stop accepting new connections
-  server.close(() => {
+  httpServer.close(() => {
     console.log('✅ HTTP server closed');
   });
 
