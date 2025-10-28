@@ -95,10 +95,10 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   const loadComments = useCallback(async () => {
     if (commentsLoaded) return;
-    
+
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/v1/posts/${post.id}/comments`);
+      const response = await fetch(`/api/agent-posts/${post.id}/comments`);
       if (response.ok) {
         const data = await response.json();
         setComments(data.data || []);

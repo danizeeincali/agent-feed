@@ -19,10 +19,11 @@ import dbSelector from './config/database-selector.js';
 import aviControlRouter from './routes/avi-control.js';
 import monitoringRouter from './routes/monitoring.js';
 import reasoningBankRouter from './routes/reasoningbank.js';
+import userSettingsRouter, { initializeUserSettingsRoutes } from './routes/user-settings.js';
 // Phase 5: Monitoring service integration
 import { MonitoringService, AlertingService } from './services/monitoring-service.js';
-// Work queue repository for post-to-ticket integration
-import workQueueRepository from './repositories/postgres/work-queue.repository.js';
+// Work queue repository - dynamically selects SQLite or PostgreSQL
+import workQueueSelector from './config/work-queue-selector.js';
 
 // Proactive agent work queue (for link-logger, etc.)
 import { WorkQueueRepository } from './repositories/work-queue-repository.js';
@@ -73,13 +74,17 @@ try {
 
 // Initialize proactive agent work queue (for link-logger, follow-ups, etc.)
 const proactiveWorkQueue = new WorkQueueRepository(db);
-console.log('✅ Proactive agent work queue initialized');
+console.log('✅ Proactive agent work queue initialized (SQLite for proactive agents)');
 
 // Track file watcher for cleanup
 let fileWatcher = null;
 
 // Initialize database selector (PostgreSQL or SQLite based on environment)
 await dbSelector.initialize();
+
+// Initialize work queue selector (must be called after database connections are established)
+workQueueSelector.initialize(db);
+console.log('✅ Work queue selector initialized');
 
 // Note: System agent templates already seeded in database (Phase 1: AVI Architecture)
 // Templates are stored in config/system/agent-templates/*.json
@@ -101,6 +106,12 @@ if (db) {
   feedbackLoop.setDatabase(db);
   initializeFeedbackRoutes(db);
   console.log('✅ Feedback loop system initialized');
+}
+
+// Initialize user settings routes with database
+if (db) {
+  initializeUserSettingsRoutes(db);
+  console.log('✅ User settings system initialized');
 }
 
 // Initialize auto-registration middleware for agent pages
@@ -342,6 +353,9 @@ app.use('/api/monitoring', monitoringRouter);
 
 // Mount ReasoningBank routes (Memory System)
 app.use('/api/reasoningbank', reasoningBankRouter);
+
+// User Settings routes
+app.use('/api/user-settings', userSettingsRouter);
 
 // ============================================================================
 // SECURITY & AUTHENTICATION ROUTES
@@ -1116,7 +1130,7 @@ app.post('/api/v1/agent-posts', async (req, res) => {
       // Helper to sanitize content (remove null bytes that break PostgreSQL JSONB)
       const sanitize = (str) => str ? str.replace(/\u0000/g, '') : '';
 
-      ticket = await workQueueRepository.createTicket({
+      ticket = await workQueueSelector.repository.createTicket({
         user_id: userId,
         post_id: createdPost.id,
         post_content: createdPost.content,
@@ -1614,7 +1628,7 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
         // Fetch parent post for context
         const parentPost = await dbSelector.getPostById(postId);
 
-        ticket = await workQueueRepository.createTicket({
+        ticket = await workQueueSelector.repository.createTicket({
           user_id: userId,
           post_id: createdComment.id, // Use comment ID as ticket identifier
           post_content: createdComment.content,
@@ -1751,7 +1765,7 @@ app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
         // Fetch parent post for context
         const parentPost = await dbSelector.getPostById(postId);
 
-        ticket = await workQueueRepository.createTicket({
+        ticket = await workQueueSelector.repository.createTicket({
           user_id: userId,
           post_id: createdComment.id,
           comment_id: createdComment.id,
@@ -4316,13 +4330,15 @@ httpServer.listen(PORT, '0.0.0.0', async () => {
   if (process.env.AVI_ORCHESTRATOR_ENABLED !== 'false') {
     try {
       console.log('\n🤖 Starting AVI Orchestrator...');
+      // Use workQueueSelector.repository for post/comment tickets (respects USE_POSTGRES)
+      // This ensures orchestrator uses the same database mode as the rest of the app
       await startOrchestrator({
         maxWorkers: parseInt(process.env.AVI_MAX_WORKERS) || 5,
         maxContextSize: parseInt(process.env.AVI_MAX_CONTEXT) || 50000,
         pollInterval: parseInt(process.env.AVI_POLL_INTERVAL) || 5000,
         healthCheckInterval: parseInt(process.env.AVI_HEALTH_CHECK_INTERVAL) || 30000
-      }, proactiveWorkQueue, websocketService);
-      console.log('✅ AVI Orchestrator started - monitoring for proactive agents (link-logger, etc.)');
+      }, workQueueSelector.repository, websocketService);
+      console.log(`✅ AVI Orchestrator started - using ${workQueueSelector.usePostgres ? 'PostgreSQL' : 'SQLite'} work queue`);
       console.log('   📡 WebSocket events enabled for real-time ticket updates');
     } catch (error) {
       console.error('❌ Failed to start AVI Orchestrator:', error);

@@ -251,6 +251,39 @@ class WorkQueueRepository {
   }
 
   /**
+   * Get pending tickets (orchestrator compatibility method)
+   * @param {object} options - Query options
+   * @param {number} [options.limit=5] - Maximum number of tickets to return
+   * @param {string} [options.agent_id] - Optional filter by agent_id
+   * @returns {Promise<Array>} List of pending tickets
+   */
+  async getPendingTickets(options = {}) {
+    const { limit = 5, agent_id = null } = options;
+
+    let query = `
+      SELECT * FROM work_queue
+      WHERE status = 'pending'
+    `;
+
+    const values = [];
+    if (agent_id) {
+      query += ' AND assigned_agent = $1';
+      values.push(agent_id);
+    }
+
+    query += ` ORDER BY priority DESC, created_at ASC LIMIT $${values.length + 1}`;
+    values.push(limit);
+
+    console.log(`🔍 [WorkQueueRepository] getPendingTickets query:`, { limit, agent_id });
+    const result = await postgresManager.query(query, values);
+    console.log(`📊 [WorkQueueRepository] Query result: ${result.rows.length} tickets found`);
+    if (result.rows.length > 0) {
+      console.log(`   First ticket: ID=${result.rows[0].id}, status=${result.rows[0].status}, priority=${result.rows[0].priority}`);
+    }
+    return result.rows;
+  }
+
+  /**
    * Get all pending tickets (for orchestrator)
    * @param {object} options - Query options (status, limit, offset)
    * @returns {Promise<Array>} List of pending tickets

@@ -211,6 +211,36 @@ export class WorkQueueRepository {
   }
 
   /**
+   * Get all pending tickets (orchestrator compatibility method)
+   * This method provides PostgreSQL-compatible interface for the AVI orchestrator
+   * @param {Object} options - Query options
+   * @param {string} [options.status='pending'] - Ticket status filter
+   * @param {number} [options.limit=100] - Maximum number of tickets to return
+   * @param {number} [options.offset=0] - Pagination offset
+   * @returns {Promise<Array>} Array of pending tickets ordered by priority and creation time
+   */
+  async getAllPendingTickets(options = {}) {
+    const { status = 'pending', limit = 100, offset = 0 } = options;
+
+    const stmt = this.db.prepare(`
+      SELECT * FROM work_queue_tickets
+      WHERE status = ?
+      ORDER BY priority ASC, created_at ASC
+      LIMIT ? OFFSET ?
+    `);
+
+    console.log(`🔍 [SQLiteWorkQueueRepository] getAllPendingTickets query:`, { status, limit, offset });
+    const tickets = stmt.all(status, limit, offset);
+    console.log(`📊 [SQLiteWorkQueueRepository] Query result: ${tickets.length} tickets found`);
+
+    if (tickets.length > 0) {
+      console.log(`   First ticket: ID=${tickets[0].id}, status=${tickets[0].status}, priority=${tickets[0].priority}`);
+    }
+
+    return tickets.map(ticket => this._deserializeTicket(ticket));
+  }
+
+  /**
    * Deserialize a ticket from the database
    * Parses JSON fields (metadata, result)
    * @private

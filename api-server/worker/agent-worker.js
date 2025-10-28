@@ -18,6 +18,8 @@ class AgentWorker {
     this.status = 'idle';
     this.apiBaseUrl = config.apiBaseUrl || 'http://localhost:3001';
     this.postId = null; // Will be set when ticket is fetched
+    this.mode = config.mode || 'post'; // 'post' or 'comment'
+    this.commentContext = config.context || null; // Comment context for comment mode
   }
 
   /**
@@ -105,7 +107,17 @@ class AgentWorker {
     }
 
     // Validate required fields
-    const requiredFields = ['id', 'agent_id', 'url', 'post_id', 'content'];
+    // URL is now OPTIONAL - only validate core required fields
+    const requiredFields = ['id', 'agent_id', 'post_id', 'content'];
+
+    // Check if this is a comment ticket (has metadata.type === 'comment')
+    const isCommentTicket = ticket.metadata && ticket.metadata.type === 'comment';
+
+    // Comment tickets require metadata field
+    if (isCommentTicket) {
+      requiredFields.push('metadata');
+    }
+
     const missingFields = requiredFields.filter(field => !ticket[field]);
 
     if (missingFields.length > 0) {
@@ -124,6 +136,15 @@ class AgentWorker {
    * @returns {Promise<Object>} Frontmatter object with posts_as_self flag
    */
   async readAgentFrontmatter(agentId, agentsDir = '/workspaces/agent-feed/prod/.claude/agents') {
+    // Check for system identity first (Λvi)
+    const { getSystemIdentity } = await import('./system-identity.js');
+    const systemIdentity = getSystemIdentity(agentId);
+
+    if (systemIdentity) {
+      return systemIdentity;
+    }
+
+    // Regular agent - read from file system
     const agentPath = path.join(agentsDir, `${agentId}.md`);
 
     try {
@@ -456,26 +477,47 @@ class AgentWorker {
   async processURL(ticket) {
     const url = ticket.url;
     const agentId = ticket.agent_id;
+    const content = ticket.content;
+    const isTextPost = !url || url === null || url === '';
 
-    // Load agent instructions
-    const agentInstructionsPath = path.join(
-      '/workspaces/agent-feed/prod/.claude/agents',
-      `${agentId}.md`
-    );
+    // Check for system identity (Λvi) - use lightweight prompt
+    const { getSystemPrompt } = await import('./system-identity.js');
+    const systemPrompt = getSystemPrompt(agentId);
 
     let agentInstructions;
-    try {
-      agentInstructions = await fs.readFile(agentInstructionsPath, 'utf-8');
-    } catch (error) {
-      throw new Error(
-        `Failed to load agent instructions for ${agentId} at ${agentInstructionsPath}: ${error.message}`
+
+    if (systemPrompt) {
+      // Use lightweight system prompt (< 500 tokens)
+      agentInstructions = systemPrompt;
+    } else {
+      // Load full agent instructions from file
+      const agentInstructionsPath = path.join(
+        '/workspaces/agent-feed/prod/.claude/agents',
+        `${agentId}.md`
       );
+
+      try {
+        agentInstructions = await fs.readFile(agentInstructionsPath, 'utf-8');
+      } catch (error) {
+        throw new Error(
+          `Failed to load agent instructions for ${agentId} at ${agentInstructionsPath}: ${error.message}`
+        );
+      }
     }
 
     // Execute headless task with Claude Code SDK (using dynamic import)
     const { getClaudeCodeSDKManager } = await import('../../prod/src/services/ClaudeCodeSDKManager.js');
     const sdkManager = getClaudeCodeSDKManager();
-    const prompt = `${agentInstructions}\n\nProcess this URL: ${url}\n\nProvide your analysis and intelligence summary.`;
+
+    // Build prompt based on whether this is a text post or URL post
+    let prompt;
+    if (isTextPost) {
+      // Text post - answer the question/respond to content
+      prompt = `${agentInstructions}\n\nRespond to this question/content:\n${content}\n\nProvide a helpful and informative response.`;
+    } else {
+      // URL post - process the URL
+      prompt = `${agentInstructions}\n\nProcess this URL: ${url}\n\nProvide your analysis and intelligence summary.`;
+    }
 
     const result = await sdkManager.executeHeadlessTask(prompt);
 
@@ -502,8 +544,13 @@ class AgentWorker {
       }
     }
 
+    // Build title based on post type
+    const title = isTextPost
+      ? `Response: ${content.substring(0, 50)}${content.length > 50 ? '...' : ''}`
+      : `Intelligence: ${url}`;
+
     return {
-      title: `Intelligence: ${url}`,
+      title: title,
       summary: summary,
       tokensUsed: tokensUsed,
       completedAt: Date.now()
@@ -541,9 +588,17 @@ class AgentWorker {
       skipTicket: true  // Prevent infinite loop - don't create ticket for agent response
     };
 
+    // Determine correct post_id for API endpoint
+    // For comment tickets: use metadata.parent_post_id
+    // For regular post tickets: use ticket.post_id
+    const isCommentTicket = ticket.metadata?.type === 'comment';
+    const postId = isCommentTicket
+      ? ticket.metadata.parent_post_id  // Use parent post for comments
+      : ticket.post_id;                  // Use post_id for regular posts
+
     // Use built-in fetch (Node.js 18+)
     const response = await fetch(
-      `${this.apiBaseUrl}/api/agent-posts/${ticket.post_id}/comments`,
+      `${this.apiBaseUrl}/api/agent-posts/${postId}/comments`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -565,6 +620,108 @@ class AgentWorker {
       ...result.data,
       comment_id: result.data?.id
     };
+  }
+
+  /**
+   * Process comment and generate reply
+   * @returns {Promise<Object>} Result with success, reply, agent, commentId
+   */
+  async processComment() {
+    if (this.mode !== 'comment') {
+      throw new Error('Worker not in comment mode');
+    }
+
+    const { comment, parentPost } = this.commentContext;
+
+    console.log(`💬 Processing comment: ${comment.id}`);
+    console.log(`   Content: ${comment.content}`);
+    console.log(`   Agent: ${this.agentId}`);
+
+    try {
+      // Build prompt for agent
+      const prompt = this.buildCommentPrompt(comment, parentPost);
+
+      // Call agent (reuse existing agent invocation logic)
+      const response = await this.invokeAgent(prompt);
+
+      return {
+        success: true,
+        reply: response,
+        agent: this.agentId,
+        commentId: comment.id
+      };
+    } catch (error) {
+      console.error(`❌ Failed to process comment:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Build prompt for agent to respond to comment
+   * @param {Object} comment - Comment object
+   * @param {Object} parentPost - Parent post object
+   * @returns {string} Prompt for agent
+   */
+  buildCommentPrompt(comment, parentPost) {
+    let prompt = `You are ${this.agentId} responding to a user comment.\n\n`;
+
+    if (parentPost) {
+      prompt += `Context (Parent Post):\nTitle: ${parentPost.title}\nContent: ${parentPost.contentBody}\n\n`;
+    }
+
+    prompt += `User Comment:\n${comment.content}\n\n`;
+    prompt += `Please provide a helpful, concise response to this comment.`;
+
+    return prompt;
+  }
+
+  /**
+   * Invoke agent with prompt (uses Claude Code SDK)
+   * @param {string} prompt - Prompt for agent
+   * @returns {Promise<string>} Agent response
+   */
+  async invokeAgent(prompt) {
+    // Check for system identity (Λvi) - use lightweight prompt
+    const { getSystemPrompt } = await import('./system-identity.js');
+    const systemPrompt = getSystemPrompt(this.agentId);
+
+    let agentInstructions;
+
+    if (systemPrompt) {
+      // Use lightweight system prompt (< 500 tokens)
+      agentInstructions = systemPrompt;
+    } else {
+      // Load full agent instructions from file
+      const agentInstructionsPath = path.join(
+        '/workspaces/agent-feed/prod/.claude/agents',
+        `${this.agentId}.md`
+      );
+
+      try {
+        agentInstructions = await fs.readFile(agentInstructionsPath, 'utf-8');
+      } catch (error) {
+        throw new Error(
+          `Failed to load agent instructions for ${this.agentId} at ${agentInstructionsPath}: ${error.message}`
+        );
+      }
+    }
+
+    // Execute headless task with Claude Code SDK
+    const { getClaudeCodeSDKManager } = await import('../../prod/src/services/ClaudeCodeSDKManager.js');
+    const sdkManager = getClaudeCodeSDKManager();
+    const fullPrompt = `${agentInstructions}\n\n${prompt}`;
+
+    const result = await sdkManager.executeHeadlessTask(fullPrompt);
+
+    if (!result.success) {
+      throw new Error(`Claude Code SDK execution failed: ${result.error}`);
+    }
+
+    // Extract response from SDK result
+    const messages = result.messages || [];
+    const response = this.extractFromTextMessages(messages);
+
+    return response || 'No response available';
   }
 
   async start() {

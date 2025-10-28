@@ -193,6 +193,51 @@ class WebSocketService {
   }
 
   /**
+   * Broadcast comment added event
+   * @param {Object} payload - Comment event payload
+   */
+  broadcastCommentAdded(payload) {
+    if (!this.io || !this.initialized) {
+      console.warn('WebSocket not initialized');
+      return;
+    }
+
+    const { postId, commentId, parentCommentId, author, content } = payload;
+
+    // Broadcast to all clients subscribed to this post
+    this.io.to(`post:${postId}`).emit('comment:added', {
+      postId,
+      commentId,
+      parentCommentId,
+      author,
+      content,
+      timestamp: new Date().toISOString()
+    });
+
+    console.log(`📡 Broadcasted comment:added for post ${postId}`);
+  }
+
+  /**
+   * Broadcast comment updated event
+   * @param {Object} payload - Comment event payload
+   */
+  broadcastCommentUpdated(payload) {
+    if (!this.io || !this.initialized) {
+      console.warn('WebSocket not initialized');
+      return;
+    }
+
+    const { postId, commentId } = payload;
+
+    this.io.to(`post:${postId}`).emit('comment:updated', {
+      ...payload,
+      timestamp: payload.timestamp || new Date().toISOString()
+    });
+
+    console.log(`📡 Broadcasted comment:updated for post ${postId}`);
+  }
+
+  /**
    * Get connection statistics
    * @returns {Object} Connection stats
    */

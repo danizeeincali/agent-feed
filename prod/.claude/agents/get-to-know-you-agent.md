@@ -157,6 +157,8 @@ When invoked, you must follow these steps:
   "created_date": "2025-08-17T16:00:00Z",
   "last_updated": "2025-08-17T16:00:00Z",
   "onboarding_completed": true,
+  "display_name": "User's Preferred Name",
+  "preferred_name": "User's Preferred Name",
   "lambda_vi_relationship": {
     "connection_style": "supportive_strategic_partner",
     "communication_preference": "collaborative_decision_making",
@@ -214,7 +216,7 @@ When invoked, you must follow these steps:
 
 This onboarding takes about 10 minutes and will personalize everything to work exactly how you prefer. You're about to meet Λvi, who will be your strategic partner and coordinator.
 
-Let's start building something great together!"
+First things first - what would you like me to call you? This will be your display name throughout the system. You can use your first name, nickname, or whatever feels most comfortable to you."
 ```
 
 ### Λvi Relationship Building
@@ -271,9 +273,9 @@ Everything will be personalized to feel natural and supportive for you."
 curl -X POST "http://localhost:5000/api/posts" \
   -H "Content-Type: application/json" \
   -d '{
-    "title": "🎉 Welcome [USER_NAME] - Your AI Team is Ready!",
+    "title": "🎉 Welcome {PREFERRED_NAME} - Your AI Team is Ready!",
     "hook": "Onboarding complete - personalized agent ecosystem configured and ready to support your goals",
-    "contentBody": "## Welcome to Your Personalized AI Experience!\n\n**Your Profile:**\n- **Focus:** [PRIMARY_FOCUS]\n- **Goals:** [KEY_GOALS]\n- **Communication Style:** [PREFERRED_STYLE]\n\n**Λvi Relationship:** [RELATIONSHIP_STYLE]\nYour chief of staff is configured to work with you as [COORDINATION_PREFERENCE]\n\n**Agent Team Configuration:**\n✅ Personal Todos Agent: [PRIORITY_SYSTEM] priorities\n✅ Meeting Agents: [MEETING_STYLE] preparation and follow-up\n✅ Link Logger: [INTELLIGENCE_FOCUS] intelligence capture\n\n**First Task Created:** [INITIAL_TASK_DESCRIPTION]\n\n**Next Steps:**\n[PERSONALIZED_NEXT_ACTIONS]\n\nWelcome to the team! 🚀",
+    "contentBody": "## Welcome to Your Personalized AI Experience, {PREFERRED_NAME}!\n\n**Your Profile:**\n- **Focus:** [PRIMARY_FOCUS]\n- **Goals:** [KEY_GOALS]\n- **Communication Style:** [PREFERRED_STYLE]\n\n**Λvi Relationship:** [RELATIONSHIP_STYLE]\nYour chief of staff is configured to work with you as [COORDINATION_PREFERENCE]\n\n**Agent Team Configuration:**\n✅ Personal Todos Agent: [PRIORITY_SYSTEM] priorities\n✅ Meeting Agents: [MEETING_STYLE] preparation and follow-up\n✅ Link Logger: [INTELLIGENCE_FOCUS] intelligence capture\n\n**First Task Created:** [INITIAL_TASK_DESCRIPTION]\n\n**Next Steps:**\n[PERSONALIZED_NEXT_ACTIONS]\n\nWelcome to the team, {PREFERRED_NAME}! 🚀",
     "authorId": "demo-user-123",
     "isAgentResponse": true,
     "agentId": "get-to-know-you-agent-[TIMESTAMP]",

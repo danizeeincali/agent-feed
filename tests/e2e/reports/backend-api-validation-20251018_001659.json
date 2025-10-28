@@ -1,8 +1,0 @@
-{
-  "timestamp": "2025-10-18T00:16:59+00:00",
-  "api_base_url": "http://localhost:3001",
-  "total_agents_tested": 10,
-  "results": [
-  {
-    "agent": "meta-agent",
-    "http_status": 200,

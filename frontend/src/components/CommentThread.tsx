@@ -9,7 +9,8 @@ export interface Comment {
   id: string;
   content: string;
   author: string;
-  createdAt: string;
+  createdAt?: string;  // Optional for backward compatibility
+  created_at?: string; // API field (snake_case from backend)
   updatedAt?: string;
   parentId?: string;
   replies?: Comment[];
@@ -147,8 +148,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
     }
   };
 
-  const formatTimestamp = (timestamp: string) => {
+  const formatTimestamp = (timestamp: string | undefined) => {
+    if (!timestamp) return 'unknown';
+
     const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return 'invalid date';
+
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
 
@@ -205,7 +210,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               {comment.author}
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              {formatTimestamp(comment.createdAt)}
+              {formatTimestamp(comment.created_at || comment.createdAt)}
             </span>
             {comment.isEdited && (
               <button
@@ -571,23 +576,30 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   const handleReply = useCallback(async (parentId: string, content: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/v1/comments/${parentId}/reply`, {
+      // SPARC FIX: Use correct endpoint POST /api/agent-posts/:postId/comments with parent_id in body
+      const response = await fetch(`/api/agent-posts/${postId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-user-id': currentUser
         },
         body: JSON.stringify({
           content,
-          authorAgent: currentUser,
-          postId: postId
+          parent_id: parentId,
+          author: currentUser,
+          author_agent: currentUser
         })
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create reply');
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(errorData.message || `Failed to create reply: ${response.status}`);
       }
 
       onCommentsUpdate?.();
+    } catch (error) {
+      console.error('Failed to post reply:', error);
+      throw error;
     } finally {
       setIsLoading(false);
     }

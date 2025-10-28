@@ -162,6 +162,13 @@ class AviOrchestrator {
     try {
       console.log(`🤖 Spawning worker ${workerId} for ticket ${ticket.id}`);
 
+      // Check if this is a comment ticket
+      const isComment = ticket.post_metadata && ticket.post_metadata.type === 'comment';
+
+      if (isComment) {
+        return await this.processCommentTicket(ticket, workerId);
+      }
+
       // Mark ticket as in_progress
       await this.workQueueRepo.updateTicketStatus(ticket.id.toString(), 'in_progress');
 
@@ -208,6 +215,174 @@ class AviOrchestrator {
     } catch (error) {
       console.error(`❌ Failed to spawn worker ${workerId}:`, error);
       await this.workQueueRepo.failTicket(ticket.id.toString(), error.message);
+    }
+  }
+
+  /**
+   * Process comment ticket with specialized routing
+   */
+  async processCommentTicket(ticket, workerId) {
+    console.log(`💬 Processing comment ticket: ${ticket.id}`);
+
+    try {
+      // Extract comment metadata
+      const metadata = ticket.post_metadata || {};
+      const commentId = ticket.post_id;
+      const parentPostId = metadata.parent_post_id;
+      const parentCommentId = metadata.parent_comment_id;
+      const content = ticket.post_content;
+
+      // Mark ticket as in_progress
+      await this.workQueueRepo.updateTicketStatus(ticket.id.toString(), 'in_progress');
+
+      // Load parent post context
+      let parentPost = null;
+      try {
+        const { default: dbSelector } = await import('../config/database-selector.js');
+        parentPost = await dbSelector.getPostById(parentPostId);
+      } catch (error) {
+        console.warn('⚠️ Failed to load parent post:', error);
+      }
+
+      // Route to appropriate agent
+      const agent = this.routeCommentToAgent(content, metadata);
+      console.log(`🎯 Routing comment to agent: ${agent}`);
+
+      // Spawn worker in comment mode
+      const worker = new AgentWorker({
+        workerId,
+        ticketId: ticket.id.toString(),
+        agentId: agent,
+        mode: 'comment',
+        context: {
+          comment: {
+            id: commentId,
+            content: content,
+            author: ticket.post_author,
+            parentPostId: parentPostId,
+            parentCommentId: parentCommentId
+          },
+          parentPost: parentPost,
+          ticket: ticket
+        },
+        workQueueRepo: this.workQueueRepo,
+        websocketService: this.websocketService
+      });
+
+      // Track worker
+      this.activeWorkers.set(workerId, worker);
+      this.workersSpawned++;
+
+      // Process comment and generate reply
+      worker.processComment()
+        .then(async (result) => {
+          console.log(`✅ Worker ${workerId} completed comment processing`);
+          this.ticketsProcessed++;
+
+          // Post reply to API
+          if (result.success && result.reply) {
+            await this.postCommentReply(parentPostId, commentId, agent, result.reply);
+          }
+
+          // Complete ticket
+          await this.workQueueRepo.completeTicket(ticket.id.toString(), result);
+        })
+        .catch(async (error) => {
+          console.error(`❌ Worker ${workerId} failed:`, error);
+          await this.workQueueRepo.failTicket(ticket.id.toString(), error.message);
+        })
+        .finally(() => {
+          // Clean up worker
+          this.activeWorkers.delete(workerId);
+          console.log(`🗑️ Worker ${workerId} destroyed (${this.activeWorkers.size} active)`);
+        });
+
+      // Update context size estimate
+      this.contextSize += 2000; // Rough estimate per ticket
+
+    } catch (error) {
+      console.error(`❌ Failed to process comment ticket:`, error);
+      await this.workQueueRepo.failTicket(ticket.id.toString(), error.message);
+    }
+  }
+
+  /**
+   * Route comment to appropriate agent based on content
+   */
+  routeCommentToAgent(content, metadata) {
+    const lowerContent = content.toLowerCase();
+
+    // Check for agent mentions
+    if (lowerContent.includes('@page-builder') || lowerContent.includes('page-builder-agent')) {
+      return 'page-builder-agent';
+    }
+    if (lowerContent.includes('@skills') || lowerContent.includes('skills-architect')) {
+      return 'skills-architect-agent';
+    }
+    if (lowerContent.includes('@agent-architect') || lowerContent.includes('create agent')) {
+      return 'agent-architect-agent';
+    }
+
+    // Keyword-based routing
+    const keywords = this.extractKeywords(lowerContent);
+
+    if (keywords.some(k => ['page', 'component', 'ui', 'layout', 'tool'].includes(k))) {
+      return 'page-builder-agent';
+    }
+    if (keywords.some(k => ['skill', 'template', 'pattern'].includes(k))) {
+      return 'skills-architect-agent';
+    }
+    if (keywords.some(k => ['agent', 'create', 'build'].includes(k))) {
+      return 'agent-architect-agent';
+    }
+
+    // Default to Avi
+    return 'avi';
+  }
+
+  /**
+   * Extract keywords from text for routing
+   */
+  extractKeywords(text) {
+    const words = text.split(/\s+/);
+    const stopWords = ['the', 'a', 'an', 'what', 'how', 'does', 'is', 'are', 'have', 'has'];
+    return words.filter(w => w.length > 3 && !stopWords.includes(w));
+  }
+
+  /**
+   * Post comment reply to API
+   */
+  async postCommentReply(postId, commentId, agent, replyContent) {
+    try {
+      const response = await fetch(`http://localhost:3001/api/agent-posts/${postId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: replyContent,
+          author_agent: agent,
+          parent_id: commentId,
+          skipTicket: true  // CRITICAL: Prevent infinite loop
+        })
+      });
+
+      const data = await response.json();
+      console.log(`✅ Posted reply as ${agent}:`, data.data.id);
+
+      // Broadcast via WebSocket
+      if (this.websocketService && this.websocketService.isInitialized()) {
+        this.websocketService.broadcastCommentAdded({
+          postId: postId,
+          commentId: data.data.id,
+          parentCommentId: commentId,
+          author: agent,
+          content: replyContent
+        });
+      }
+
+      return data;
+    } catch (error) {
+      console.error('❌ Failed to post comment reply:', error);
+      throw error;
     }
   }
 
