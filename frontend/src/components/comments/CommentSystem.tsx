@@ -70,10 +70,11 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [expandedThreads, setExpandedThreads] = useState<Set<string>>(new Set());
   const [selectedAgentConversation, setSelectedAgentConversation] = useState<string | null>(null);
-  
+
   // Custom hooks for comment management
   const {
     comments,
+    setComments, // CRITICAL: Expose setComments so WebSocket handler can update state
     agentConversations,
     loading,
     error,
@@ -92,13 +93,48 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
   useRealtimeComments(postId, {
     enabled: enableRealtime,
     onCommentAdded: (comment) => {
-      // Handle new comment from WebSocket
+      console.log('[CommentSystem] 📨 Real-time comment received:', comment.id, 'from', comment.author.id);
+
+      // CRITICAL FIX: Add the new comment to state immediately
+      // This ensures UI updates in real-time without page refresh
+      setComments((prevComments) => {
+        console.log('[CommentSystem] 📊 Previous comment count:', prevComments.length);
+
+        // Check if comment already exists (prevent duplicates)
+        const exists = prevComments.some(c => c.id === comment.id);
+        if (exists) {
+          console.log('[CommentSystem] ⚠️ Comment already exists, skipping duplicate:', comment.id);
+          return prevComments;
+        }
+
+        // Add new comment to the tree
+        const updatedComments = [...prevComments, comment];
+        console.log('[CommentSystem] ✅ Added comment, new count:', updatedComments.length);
+
+        return updatedComments;
+      });
     },
     onCommentUpdated: (comment) => {
-      // Handle comment update from WebSocket
+      console.log('[CommentSystem] 🔄 Real-time comment update:', comment.id);
+
+      // Update existing comment in state
+      setComments((prevComments) => {
+        return prevComments.map(c => c.id === comment.id ? comment : c);
+      });
     },
     onAgentResponse: (response) => {
-      // Handle agent response from WebSocket
+      console.log('[CommentSystem] 🤖 Real-time agent response:', response.id, 'from', response.author.id);
+
+      // Add agent response to state
+      setComments((prevComments) => {
+        const exists = prevComments.some(c => c.id === response.id);
+        if (exists) {
+          console.log('[CommentSystem] ⚠️ Agent response already exists:', response.id);
+          return prevComments;
+        }
+
+        return [...prevComments, response];
+      });
     }
   });
 

@@ -1,0 +1,38 @@
+{
+  "streaming": {
+    "maxChunks": {
+      "simple": 20,
+      "complex": 200,
+      "default": 100
+    },
+    "maxResponseSize": 50000,
+    "timeouts": {
+      "simple": 60000,
+      "complex": 300000,
+      "default": 120000
+    }
+  },
+  "detection": {
+    "loopThreshold": 10,
+    "loopWindow": 10000,
+    "stagnantThreshold": 30000,
+    "healthCheckInterval": 10000
+  },
+  "recovery": {
+    "circuitBreakerThreshold": 3,
+    "circuitBreakerWindow": 60000,
+    "circuitBreakerResetTimeout": 300000,
+    "emergencyMonitorInterval": 15000,
+    "costAlertThreshold": 0.50
+  },
+  "workerHealth": {
+    "maxRuntime": 600000,
+    "heartbeatTimeout": 60000,
+    "maxChunks": 100
+  },
+  "costTracking": {
+    "costPerMinute": 0.05,
+    "costPerChunk": 0.001,
+    "alertThreshold": 0.50
+  }
+}

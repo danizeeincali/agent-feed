@@ -1,0 +1,166 @@
+<testsuites id="" name="" tests="4" failures="4" skipped="0" errors="0" time="57.460344">
+<testsuite name="websocket-and-conversation-validation.spec.ts" timestamp="2025-10-29T00:31:24.968Z" hostname="chromium" tests="4" failures="4" skipped="0" time="50.788" errors="0">
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Fix #1: Real-Time Comment Display Without Refresh" classname="websocket-and-conversation-validation.spec.ts" time="13.417">
+<failure message="websocket-and-conversation-validation.spec.ts:37:3 Fix #1: Real-Time Comment Display Without Refresh" type="FAILURE">
+<![CDATA[  [chromium] › websocket-and-conversation-validation.spec.ts:37:3 › Critical Fixes: WebSocket & Conversation Context › Fix #1: Real-Time Comment Display Without Refresh 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Create Post"), a[href*="/create"]')
+
+
+      40 |     // Step 1: Create a test post
+      41 |     console.log('Step 1: Creating test post...');
+    > 42 |     await page.click('button:has-text("Create Post"), a[href*="/create"]', { timeout: 10000 });
+         |                ^
+      43 |     await page.waitForURL(/.*\/create/, { timeout: 10000 });
+      44 |
+      45 |     await page.fill('input[name="title"], textarea[placeholder*="title" i]', 'WebSocket Test Post');
+        at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:42:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[🧪 TEST: Real-time comment display (no refresh needed)
+Step 1: Creating test post...
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Fix #2: Multi-Turn Conversation Context" classname="websocket-and-conversation-validation.spec.ts" time="12.48">
+<failure message="websocket-and-conversation-validation.spec.ts:94:3 Fix #2: Multi-Turn Conversation Context" type="FAILURE">
+<![CDATA[  [chromium] › websocket-and-conversation-validation.spec.ts:94:3 › Critical Fixes: WebSocket & Conversation Context › Fix #2: Multi-Turn Conversation Context 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Create Post"), a[href*="/create"]')
+
+
+       97 |     // Step 1: Create a test post for conversation
+       98 |     console.log('Step 1: Creating conversation test post...');
+    >  99 |     await page.click('button:has-text("Create Post"), a[href*="/create"]', { timeout: 10000 });
+          |                ^
+      100 |     await page.waitForURL(/.*\/create/, { timeout: 10000 });
+      101 |
+      102 |     await page.fill('input[name="title"], textarea[placeholder*="title" i]', 'Conversation Context Test');
+        at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:99:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[🧪 TEST: Multi-turn conversation context (agent memory)
+Step 1: Creating conversation test post...
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Combined Test: Real-Time Multi-Turn Conversation" classname="websocket-and-conversation-validation.spec.ts" time="12.479">
+<failure message="websocket-and-conversation-validation.spec.ts:185:3 Combined Test: Real-Time Multi-Turn Conversation" type="FAILURE">
+<![CDATA[  [chromium] › websocket-and-conversation-validation.spec.ts:185:3 › Critical Fixes: WebSocket & Conversation Context › Combined Test: Real-Time Multi-Turn Conversation 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Create Post"), a[href*="/create"]')
+
+
+      187 |
+      188 |     // Create post
+    > 189 |     await page.click('button:has-text("Create Post"), a[href*="/create"]', { timeout: 10000 });
+          |                ^
+      190 |     await page.waitForURL(/.*\/create/, { timeout: 10000 });
+      191 |
+      192 |     await page.fill('input[name="title"], textarea[placeholder*="title" i]', 'Combined Test');
+        at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:189:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[🧪 TEST: Combined - Real-time updates WITH conversation context
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Regression: No Duplicate Avi Responses" classname="websocket-and-conversation-validation.spec.ts" time="12.412">
+<failure message="websocket-and-conversation-validation.spec.ts:220:3 Regression: No Duplicate Avi Responses" type="FAILURE">
+<![CDATA[  [chromium] › websocket-and-conversation-validation.spec.ts:220:3 › Critical Fixes: WebSocket & Conversation Context › Regression: No Duplicate Avi Responses 
+
+    TimeoutError: page.click: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('button:has-text("Create Post"), a[href*="/create"]')
+
+
+      222 |
+      223 |     // Create post
+    > 224 |     await page.click('button:has-text("Create Post"), a[href*="/create"]', { timeout: 10000 });
+          |                ^
+      225 |     await page.waitForURL(/.*\/create/, { timeout: 10000 });
+      226 |
+      227 |     await page.fill('input[name="title"], textarea[placeholder*="title" i]', 'Duplicate Test');
+        at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:224:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[🧪 REGRESSION TEST: Verify no duplicate Avi responses
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

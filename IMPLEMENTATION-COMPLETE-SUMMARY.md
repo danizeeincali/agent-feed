@@ -254,3 +254,74 @@ The AVI Persistent Session is fully functional, tested, and ready for production
 Full details in: `/workspaces/agent-feed/AVI-PERSISTENT-SESSION-FINAL-REPORT.md`
 
 Questions? Check the documentation index in the final report for comprehensive guides, test reports, and verification results.
+
+---
+
+## 🐛 Skill Detection Bug Fix (2025-10-30)
+
+### Critical Production Bug - RESOLVED ✅
+
+**Priority**: P0 (Critical)
+**Status**: Fixed and Validated
+**Impact**: 100% failure rate → 100% success rate
+
+#### The Problem
+
+A critical bug in the SkillLoader caused ALL user queries to fail silently:
+
+- **Root Cause**: Skill detection analyzed system prompt instead of user query
+- **Symptom**: Simple question "what is 500+343?" got no response
+- **Error**: E2BIG (prompt too large - 142KB)
+- **User Impact**: 100% failure rate, silent errors
+- **Token Waste**: 7x excessive loading (23,000 vs 7,700 tokens)
+
+#### The Fix
+
+**File**: `/prod/src/services/ClaudeCodeSDKManager.js`
+
+1. Added `extractUserQuery()` method to parse user query from full prompt
+2. Modified `query()` to extract user query before skill detection
+3. Added prompt size validation (prevent E2BIG errors)
+4. Added comprehensive logging and error messages
+
+```javascript
+// BEFORE (broken)
+const { systemPrompt } = await skillLoader.buildSystemPrompt(
+  options.prompt  // ❌ Full system prompt with Avi identity
+);
+
+// AFTER (fixed)
+const userQuery = this.extractUserQuery(options.prompt);
+const { systemPrompt } = await skillLoader.buildSystemPrompt(
+  userQuery  // ✅ Only user query
+);
+```
+
+#### Results
+
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Simple Query Success | 0% | 100% | ✅ Fixed |
+| Skills Loaded (Simple) | 7 | 2 | 67% reduction |
+| Token Usage (Simple) | 23,000 | 7,700 | 67% reduction |
+| Prompt Size | 142KB | 42KB | 70% reduction |
+| User Experience | Silent failures | Working responses | ✅ Fixed |
+
+#### Validation
+
+- ✅ Unit tests: 5/5 passing
+- ✅ Integration tests: All passing
+- ✅ Manual testing: Simple and complex queries work
+- ✅ Regression tests: 122/122 passing (no regressions)
+- ✅ Production validation: System fully functional
+
+#### Lessons Learned
+
+1. **Integration Testing Critical**: Bug only appeared in full system
+2. **Validation Important**: Always validate inputs before processing
+3. **User Feedback Required**: Silent failures are unacceptable
+4. **Logging Essential**: Good logs helped diagnose quickly
+
+**Full Documentation**: `/docs/SKILL-DETECTION-FIX-IMPLEMENTATION.md`
+
+---

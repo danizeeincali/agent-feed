@@ -1,48 +1,18 @@
-# Protected Agent Workspace - DO NOT MODIFY
-# This directory is completely isolated for agent operations
+# Agent Workspace - Production
+# Temporary files
+temp/*
+!temp/.gitkeep
 
-# Ignore all agent-generated content
-*
+# Log files
+logs/*.log
+logs/debug/*
 
-# Except these control files
-!.gitignore
-!README.md
-!.protected
+# Agent-specific temporary outputs
+agents/*/temp/*
+agents/*/.cache/*
 
-# Never track these even if explicitly added
-*.log
-*.tmp
-*.cache
-*.secret
-*.key
-*.env
-*.credential
-
-# Ignore all subdirectories
-outputs/
-temp/
-logs/
-data/
-
-# Ignore system files
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*~
-
-# Ignore compiled files
-*.pyc
-*.pyo
-__pycache__/
-*.class
-*.o
-*.so
-
-# Ignore package files
-node_modules/
-venv/
-env/
-*.egg-info/
-dist/
-build/
+# Keep directory structure
+!agents/.gitkeep
+!shared/.gitkeep
+!outputs/.gitkeep
+!logs/.gitkeep

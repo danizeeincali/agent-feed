@@ -14,9 +14,9 @@ export default defineConfig({
     // Test match patterns
     include: ['tests/**/*.test.js'],
 
-    // Increased timeouts for integration tests
-    testTimeout: 30000,
-    hookTimeout: 30000,
+    // Increased timeouts for integration tests (90s for real Claude SDK calls)
+    testTimeout: 90000,
+    hookTimeout: 90000,
 
     // Coverage configuration
     coverage: {

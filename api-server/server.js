@@ -18,6 +18,7 @@ import feedbackLoop from './services/feedback-loop.js';
 import dbSelector from './config/database-selector.js';
 import aviControlRouter from './routes/avi-control.js';
 import monitoringRouter from './routes/monitoring.js';
+import streamingMonitoringRouter from './routes/streaming-monitoring.js';
 import reasoningBankRouter from './routes/reasoningbank.js';
 import userSettingsRouter, { initializeUserSettingsRoutes } from './routes/user-settings.js';
 // Phase 5: Monitoring service integration
@@ -350,6 +351,9 @@ app.use('/api/avi', aviControlRouter);
 
 // Mount Phase 5 Monitoring routes
 app.use('/api/monitoring', monitoringRouter);
+
+// Mount Streaming Loop Protection Monitoring routes
+app.use('/api/streaming-monitoring', streamingMonitoringRouter);
 
 // Mount ReasoningBank routes (Memory System)
 app.use('/api/reasoningbank', reasoningBankRouter);
@@ -1125,40 +1129,47 @@ app.post('/api/v1/agent-posts', async (req, res) => {
     console.log(`✅ Post created in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}:`, createdPost.id);
 
     // Create work queue ticket for AVI orchestrator (Post-to-Ticket Integration)
+    // SKIP ticket creation if this is a direct AVI question (handled by AVI DM system)
     let ticket = null;
-    try {
-      // Helper to sanitize content (remove null bytes that break PostgreSQL JSONB)
-      const sanitize = (str) => str ? str.replace(/\u0000/g, '') : '';
+    const isDirectAviQuestion = isAviQuestion(content);
 
-      ticket = await workQueueSelector.repository.createTicket({
-        user_id: userId,
-        post_id: createdPost.id,
-        post_content: createdPost.content,
-        post_author: createdPost.author_agent,
-        post_metadata: {
-          // Spread business metadata first (allows overrides)
-          ...metadata,
+    if (!isDirectAviQuestion) {
+      try {
+        // Helper to sanitize content (remove null bytes that break PostgreSQL JSONB)
+        const sanitize = (str) => str ? str.replace(/\u0000/g, '') : '';
 
-          // Outcome posting metadata (for WorkContextExtractor)
-          // These fields enable outcome comment posting for post-originated tickets
-          type: 'post',
-          parent_post_id: createdPost.id,  // Post replies to itself (top-level comment)
-          parent_post_title: sanitize(createdPost.title) || '',
-          parent_post_content: sanitize(createdPost.content) || '',
+        ticket = await workQueueSelector.repository.createTicket({
+          user_id: userId,
+          post_id: createdPost.id,
+          post_content: createdPost.content,
+          post_author: createdPost.author_agent,
+          post_metadata: {
+            // Spread business metadata first (allows overrides)
+            ...metadata,
 
-          // Existing metadata (override to ensure correctness)
-          title: createdPost.title,
-          tags: createdPost.tags || [],
-        },
-        assigned_agent: null, // Let orchestrator assign
-        priority: 5 // Default medium priority
-      });
+            // Outcome posting metadata (for WorkContextExtractor)
+            // These fields enable outcome comment posting for post-originated tickets
+            type: 'post',
+            parent_post_id: createdPost.id,  // Post replies to itself (top-level comment)
+            parent_post_title: sanitize(createdPost.title) || '',
+            parent_post_content: sanitize(createdPost.content) || '',
 
-      console.log(`✅ Work ticket created for orchestrator: ticket-${ticket.id}`);
-    } catch (ticketError) {
-      console.error('❌ Failed to create work ticket:', ticketError);
-      // Log error but don't fail the post creation
-      // This maintains backward compatibility
+            // Existing metadata (override to ensure correctness)
+            title: createdPost.title,
+            tags: createdPost.tags || [],
+          },
+          assigned_agent: null, // Let orchestrator assign
+          priority: 5 // Default medium priority
+        });
+
+        console.log(`✅ Work ticket created for orchestrator: ticket-${ticket.id}`);
+      } catch (ticketError) {
+        console.error('❌ Failed to create work ticket:', ticketError);
+        // Log error but don't fail the post creation
+        // This maintains backward compatibility
+      }
+    } else {
+      console.log(`⏭️ Skipping ticket creation - Post is direct AVI question (handled by AVI DM)`);
     }
 
     // Process URLs for proactive agents (link-logger, follow-ups, etc.)
@@ -1617,6 +1628,23 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
 
     console.log(`✅ Created comment ${createdComment.id} for post ${postId} in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'}`);
 
+    // Broadcast comment via WebSocket for real-time updates
+    try {
+      if (websocketService && websocketService.broadcastCommentAdded) {
+        websocketService.broadcastCommentAdded({
+          postId: postId,
+          commentId: createdComment.id,
+          parentCommentId: parent_id || null,
+          author: createdComment.author_agent || userId,
+          content: createdComment.content,
+          comment: createdComment  // Full comment object for frontend
+        });
+      }
+    } catch (wsError) {
+      console.error('❌ Failed to broadcast comment via WebSocket:', wsError);
+      // Don't fail the request if WebSocket broadcast fails
+    }
+
     // Create work queue ticket for AVI orchestrator (Comment-to-Ticket Integration)
     // CRITICAL: Check skipTicket parameter to prevent infinite loops
     // When agents post outcomes, they set skipTicket=true to avoid creating new tickets
@@ -1754,6 +1782,23 @@ app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
     const createdComment = await dbSelector.createComment(userId, commentData);
 
     console.log(`✅ Created comment ${createdComment.id} for post ${postId} in ${dbSelector.usePostgres ? 'PostgreSQL' : 'SQLite'} (V1 endpoint)`);
+
+    // Broadcast comment via WebSocket for real-time updates
+    try {
+      if (websocketService && websocketService.broadcastCommentAdded) {
+        websocketService.broadcastCommentAdded({
+          postId: postId,
+          commentId: createdComment.id,
+          parentCommentId: parent_id || null,
+          author: createdComment.author_agent || userId,
+          content: createdComment.content,
+          comment: createdComment  // Full comment object for frontend
+        });
+      }
+    } catch (wsError) {
+      console.error('❌ Failed to broadcast comment via WebSocket:', wsError);
+      // Don't fail the request if WebSocket broadcast fails
+    }
 
     // Create work queue ticket for AVI orchestrator (Comment-to-Ticket Integration)
     // CRITICAL: Check skipTicket parameter to prevent infinite loops

@@ -405,46 +405,192 @@ class AgentWorker {
   }
 
   /**
-   * Extract intelligence from text messages (existing method)
+   * Extract intelligence from text messages (ENHANCED for system identities)
+   *
+   * This method handles multiple response formats:
+   * 1. Assistant messages (type='assistant') - standard Claude Code responses
+   * 2. Text messages (type='text') - system identity responses
+   * 3. Role-based messages (role='assistant') - alternative format
+   * 4. Direct response field - fallback for direct text responses
+   *
    * @param {Array} messages - SDK response messages
+   * @param {Object} result - Full SDK result object (optional, for fallback)
    * @returns {string} Extracted intelligence
    */
-  extractFromTextMessages(messages) {
+  extractFromTextMessages(messages, result = null) {
+    // Early return if no messages
     if (!messages || messages.length === 0) {
+      // Fallback: Check if result has direct response field
+      if (result?.response && typeof result.response === 'string') {
+        const directResponse = result.response.trim();
+        console.log('📝 Extracted from result.response:', directResponse.substring(0, 100));
+        return directResponse;
+      }
       return '';
     }
 
+    // Method 1: Try assistant messages (type='assistant') - existing logic
     const assistantMessages = messages.filter(m => m.type === 'assistant');
-
-    const intelligence = assistantMessages
-      .map(msg => {
-        if (typeof msg === 'string') return msg;
-        if (msg.text) return msg.text;
-        if (msg.content) {
-          if (typeof msg.content === 'string') return msg.content;
-          if (Array.isArray(msg.content)) {
-            return msg.content
-              .filter(block => block.type === 'text')
-              .map(block => block.text)
-              .join('\n');
+    if (assistantMessages.length > 0) {
+      const intelligence = assistantMessages
+        .map(msg => {
+          if (typeof msg === 'string') return msg;
+          if (msg.text) return msg.text;
+          if (msg.content) {
+            if (typeof msg.content === 'string') return msg.content;
+            if (Array.isArray(msg.content)) {
+              return msg.content
+                .filter(block => block.type === 'text')
+                .map(block => block.text)
+                .join('\n');
+            }
           }
-        }
-        if (msg.message?.content) return msg.message.content;
-        return '';
-      })
-      .filter(text => typeof text === 'string' && text.trim())
-      .join('\n\n');
+          if (msg.message?.content) return msg.message.content;
+          return '';
+        })
+        .filter(text => typeof text === 'string' && text.trim())
+        .join('\n\n');
 
-    return intelligence;
+      if (intelligence.trim()) {
+        console.log('📝 Extracted from assistant messages:', intelligence.substring(0, 100));
+        return intelligence.trim();
+      }
+    }
+
+    // Method 1.5: Try nested message.content arrays
+    const nestedMessages = messages.filter(m => m.message?.content && Array.isArray(m.message.content));
+    if (nestedMessages.length > 0) {
+      const intelligence = nestedMessages
+        .map(msg =>
+          msg.message.content
+            .filter(block => block.type === 'text')
+            .map(block => block.text)
+            .join('\n\n')
+        )
+        .filter(text => text.trim())
+        .join('\n\n');
+
+      if (intelligence.trim()) {
+        console.log('✅ Extracted from nested message.content array:', intelligence.substring(0, 100));
+        return intelligence.trim();
+      }
+    }
+
+    // Method 2: Try text messages (type='text') - for system identities
+    const textMessages = messages.filter(m =>
+      m.type === 'text' || (m.text && !m.type) || (m.content && m.type !== 'user')
+    );
+    if (textMessages.length > 0) {
+      const intelligence = textMessages
+        .map(msg => {
+          if (typeof msg === 'string') return msg;
+          if (msg.text) return msg.text;
+          if (msg.content) {
+            if (typeof msg.content === 'string') return msg.content;
+            if (Array.isArray(msg.content)) {
+              return msg.content
+                .filter(block => block.type === 'text')
+                .map(block => block.text)
+                .join('\n');
+            }
+          }
+          return '';
+        })
+        .filter(text => typeof text === 'string' && text.trim())
+        .join('\n\n');
+
+      if (intelligence.trim()) {
+        console.log('📝 Extracted from text messages:', intelligence.substring(0, 100));
+        return intelligence.trim();
+      }
+    }
+
+    // Method 3: Try role-based messages (role='assistant')
+    const roleMessages = messages.filter(m => m.role === 'assistant');
+    if (roleMessages.length > 0) {
+      const intelligence = roleMessages
+        .map(msg => {
+          if (typeof msg === 'string') return msg;
+          if (msg.text) return msg.text;
+          if (msg.content) {
+            if (typeof msg.content === 'string') return msg.content;
+            if (Array.isArray(msg.content)) {
+              return msg.content
+                .filter(block => block.type === 'text')
+                .map(block => block.text)
+                .join('\n');
+            }
+          }
+          if (msg.message) {
+            if (typeof msg.message === 'string') return msg.message;
+            if (msg.message.content) return msg.message.content;
+          }
+          return '';
+        })
+        .filter(text => typeof text === 'string' && text.trim())
+        .join('\n\n');
+
+      if (intelligence.trim()) {
+        console.log('📝 Extracted from role messages:', intelligence.substring(0, 100));
+        return intelligence.trim();
+      }
+    }
+
+    // Method 4: Last resort - concatenate all non-user message text
+    const allMessages = messages.filter(m => m.type !== 'user' && m.role !== 'user');
+    if (allMessages.length > 0) {
+      const intelligence = allMessages
+        .map(msg => {
+          if (typeof msg === 'string') return msg;
+          if (msg.text) return msg.text;
+          if (msg.content) {
+            if (typeof msg.content === 'string') return msg.content;
+            if (Array.isArray(msg.content)) {
+              return msg.content
+                .filter(block => block.type === 'text')
+                .map(block => block.text)
+                .join('\n');
+            }
+          }
+          if (msg.message) {
+            if (typeof msg.message === 'string') return msg.message;
+            if (msg.message.content) return msg.message.content;
+          }
+          return '';
+        })
+        .filter(text => typeof text === 'string' && text.trim())
+        .join('\n\n');
+
+      if (intelligence.trim()) {
+        console.log('📝 Extracted from all messages (last resort):', intelligence.substring(0, 100));
+        return intelligence.trim();
+      }
+    }
+
+    // Method 5: Final fallback - check result object directly
+    if (result?.response && typeof result.response === 'string') {
+      const directResponse = result.response.trim();
+      console.log('📝 Extracted from result.response (final fallback):', directResponse.substring(0, 100));
+      return directResponse;
+    }
+
+    // Log diagnostic information if nothing was extracted
+    console.error('❌ Failed to extract response from messages');
+    console.error('   Message count:', messages.length);
+    console.error('   Message types:', messages.map(m => m.type || m.role || 'unknown'));
+    console.error('   First message sample:', JSON.stringify(messages[0], null, 2).substring(0, 200));
+
+    return '';
   }
 
   /**
    * Extract intelligence with workspace fallback logic
    * @param {string} agentId - Agent identifier
    * @param {Array} messages - SDK response messages
+   * @param {Object} result - Full SDK result object (optional, for fallback)
    * @returns {Promise<string>} Extracted intelligence
    */
-  async extractIntelligence(agentId, messages) {
+  async extractIntelligence(agentId, messages, result = null) {
     // 1. Check agent configuration
     const frontmatter = await this.readAgentFrontmatter(agentId);
 
@@ -459,13 +605,130 @@ class AgentWorker {
     }
 
     // 3. For posts_as_self: false agents or fallback, use text messages
-    const textIntelligence = this.extractFromTextMessages(messages);
+    const textIntelligence = this.extractFromTextMessages(messages, result);
     if (textIntelligence) {
       return textIntelligence;
     }
 
     // 4. Last resort fallback
     return 'No summary available';
+  }
+
+  /**
+   * Get conversation thread context for enhanced prompts
+   * @param {string} postId - Post ID
+   * @param {number} limit - Number of recent comments
+   * @returns {Promise<Object>} Thread context
+   */
+  async getThreadContext(postId, limit = 3) {
+    try {
+      const { default: dbSelector } = await import('../config/database-selector.js');
+
+      // Initialize database if not already initialized
+      if (!dbSelector.sqliteDb && !dbSelector.usePostgres) {
+        await dbSelector.initialize();
+      }
+
+      // Get parent post
+      const post = await dbSelector.getPostById(postId);
+      if (!post) {
+        return { post: null, recentComments: [] };
+      }
+
+      // Get recent comments
+      const allComments = await dbSelector.getCommentsByPostId(postId);
+
+      // Sort by created_at DESC and limit
+      const recentComments = allComments
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .slice(0, limit)
+        .map(c => ({
+          author: c.author_agent || c.author,
+          content: c.content,
+          created_at: c.created_at
+        }));
+
+      // Parse metadata safely
+      let metadata = {};
+      if (post.metadata) {
+        try {
+          metadata = typeof post.metadata === 'string'
+            ? JSON.parse(post.metadata)
+            : post.metadata;
+        } catch (e) {
+          metadata = {};
+        }
+      }
+
+      return {
+        post: {
+          title: post.title || 'Untitled',
+          author: post.authorAgent || post.author_agent || 'Unknown',
+          content: post.content || '',
+          created_at: post.publishedAt || post.published_at || post.created_at,
+          tags: metadata.tags || []
+        },
+        recentComments: recentComments
+      };
+    } catch (error) {
+      console.error('Failed to get thread context:', error);
+      return { post: null, recentComments: [] };
+    }
+  }
+
+  /**
+   * Walk up the parent_id chain to build full conversation thread
+   * @param {string} commentId - Starting comment ID
+   * @param {number} maxDepth - Maximum depth to traverse (prevent infinite loops)
+   * @returns {Promise<Array>} Array of comments from root to current, chronologically
+   */
+  async getConversationChain(commentId, maxDepth = 20) {
+    const chain = [];
+    let currentId = commentId;
+    let depth = 0;
+
+    try {
+      const { default: dbSelector } = await import('../config/database-selector.js');
+
+      // Initialize database if needed
+      if (!dbSelector.sqliteDb && !dbSelector.usePostgres) {
+        await dbSelector.initialize();
+      }
+
+      // Walk up the chain until we hit root (parent_id = null) or max depth
+      while (currentId && depth < maxDepth) {
+        const comment = await dbSelector.getCommentById(currentId);
+
+        if (!comment) {
+          console.warn(`⚠️ Comment ${currentId} not found, stopping chain walk`);
+          break;
+        }
+
+        // Add to chain (will reverse later for chronological order)
+        chain.push({
+          id: comment.id,
+          author: comment.author_agent || comment.author,
+          content: comment.content,
+          created_at: comment.created_at,
+          parent_id: comment.parent_id
+        });
+
+        // Move to parent
+        currentId = comment.parent_id;
+        depth++;
+      }
+
+      // Reverse chain so oldest is first (chronological order)
+      const chronologicalChain = chain.reverse();
+
+      console.log(`🔗 Built conversation chain: ${chronologicalChain.length} messages (depth: ${depth})`);
+
+      return chronologicalChain;
+
+    } catch (error) {
+      console.error('❌ Failed to get conversation chain:', error);
+      return [];
+    }
   }
 
   /**
@@ -509,25 +772,159 @@ class AgentWorker {
     const { getClaudeCodeSDKManager } = await import('../../prod/src/services/ClaudeCodeSDKManager.js');
     const sdkManager = getClaudeCodeSDKManager();
 
+    // Get conversation context for enhanced prompts
+    const context = await this.getThreadContext(ticket.post_id);
+
+    // NEW: If this is a comment reply, get the full conversation chain
+    let conversationChain = [];
+
+    // Check if this is a comment (post_id contains comment ID)
+    if (ticket.post_id && ticket.post_id.startsWith('comment-')) {
+      try {
+        // Import database selector to check if comment has parent
+        const { default: dbSelector } = await import('../config/database-selector.js');
+
+        if (!dbSelector.sqliteDb && !dbSelector.usePostgres) {
+          await dbSelector.initialize();
+        }
+
+        const comment = await dbSelector.getCommentById(ticket.post_id);
+
+        if (comment && comment.parent_id) {
+          // This is a threaded reply - get full conversation chain
+          conversationChain = await this.getConversationChain(ticket.post_id);
+          console.log(`💬 Conversation chain for comment ${ticket.post_id}: ${conversationChain.length} messages`);
+        }
+      } catch (error) {
+        console.error('❌ Error checking comment for conversation chain:', error);
+      }
+    }
+
     // Build prompt based on whether this is a text post or URL post
     let prompt;
     if (isTextPost) {
-      // Text post - answer the question/respond to content
-      prompt = `${agentInstructions}\n\nRespond to this question/content:\n${content}\n\nProvide a helpful and informative response.`;
+      // Build enhanced prompt with conversation chain
+      prompt = `${agentInstructions}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CONVERSATION CONTEXT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 ORIGINAL POST by ${context.post?.author || 'User'}
+   Title: "${context.post?.title || 'Untitled'}"
+   ${context.post?.tags?.length > 0 ? `Tags: ${context.post.tags.join(', ')}` : ''}
+
+   ${context.post?.content || ''}
+
+${conversationChain.length > 0 ? `
+🔗 CONVERSATION THREAD (${conversationChain.length} messages):
+${conversationChain.map((msg, i) =>
+  `   ${i + 1}. ${msg.author}:
+      ${msg.content}`
+).join('\n\n')}
+` : ''}
+
+${context.recentComments.length > 0 && conversationChain.length === 0 ? `
+🔄 RECENT ACTIVITY ON POST (${context.recentComments.length} comments):
+${context.recentComments.map((c, i) =>
+  `   ${i + 1}. ${c.author}: ${c.content.substring(0, 100)}${c.content.length > 100 ? '...' : ''}`
+).join('\n')}
+` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CURRENT MESSAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${content}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMPORTANT: You have the FULL conversation history above. Reference previous messages naturally.
+
+Please provide a natural, conversational response that:
+1. References the full conversation history when relevant
+2. Maintains context from previous messages in this thread
+3. Acts like you remember what was just discussed
+4. Continues the conversation naturally without repeating context unnecessarily
+5. If asked to perform an operation on "it" or "this" or "that", look at the previous message to understand what the user is referring to`;
     } else {
-      // URL post - process the URL
-      prompt = `${agentInstructions}\n\nProcess this URL: ${url}\n\nProvide your analysis and intelligence summary.`;
+      // URL processing with context
+      prompt = `${agentInstructions}
+
+Context: Post "${context.post?.title || 'URL Analysis Request'}" by ${context.post?.author || 'User'}
+
+Process this URL: ${url}
+
+Provide your analysis and intelligence summary in a conversational tone.`;
     }
 
-    const result = await sdkManager.executeHeadlessTask(prompt);
+    // Execute with protection wrapper to prevent infinite loops
+    const { executeProtectedQuery, buildUserFacingMessage } = await import('./worker-protection.js');
 
-    if (!result.success) {
-      throw new Error(`Claude Code SDK execution failed: ${result.error}`);
+    const protectionResult = await executeProtectedQuery(prompt, {
+      workerId: this.workerId,
+      ticketId: this.ticketId,
+      sdkManager: sdkManager,
+      streamingResponse: false // SDK returns complete result, not streaming
+    });
+
+    // Add diagnostic logging for SDK response structure
+    console.log('🔍 SDK Result Structure (processURL):', {
+      success: protectionResult.success,
+      terminated: protectionResult.terminated,
+      reason: protectionResult.reason,
+      messageCount: protectionResult.messages?.length || 0,
+      messageTypes: protectionResult.messages?.map(m => m.type || m.role || 'unknown') || [],
+      chunkCount: protectionResult.chunkCount,
+      responseSize: protectionResult.responseSize
+    });
+
+    // Handle protection termination
+    if (protectionResult.terminated) {
+      const userMessage = buildUserFacingMessage(protectionResult.reason, {
+        chunkCount: protectionResult.chunkCount,
+        maxChunks: protectionResult.maxChunks,
+        responseSize: protectionResult.responseSize,
+        timeoutMs: protectionResult.timeoutMs
+      });
+
+      console.error(`⚠️ Query terminated by protection system: ${protectionResult.reason}`);
+
+      // Use partial response if available, otherwise use user message
+      const summary = protectionResult.partialResponse || userMessage;
+
+      // Return partial result - this will be posted as a comment
+      return {
+        title: `⚠️ Query Auto-Stopped`,
+        summary: summary,
+        tokensUsed: 0,
+        completedAt: Date.now(),
+        terminated: true,
+        reason: protectionResult.reason
+      };
     }
+
+    if (!protectionResult.success) {
+      throw new Error(`Claude Code SDK execution failed: ${protectionResult.error || 'Unknown error'}`);
+    }
+
+    // Use messages from protection result
+    const result = {
+      success: protectionResult.success,
+      messages: protectionResult.messages
+    };
 
     // Extract intelligence from SDK response using new extraction logic
     const messages = result.messages || [];
-    const summary = await this.extractIntelligence(agentId, messages);
+    const summary = await this.extractIntelligence(agentId, messages, result);
+
+    // Log extraction failure for diagnostics
+    if (!summary || summary === 'No summary available') {
+      console.error('❌ Failed to extract intelligence in processURL()');
+      console.error('   AgentId:', agentId);
+      console.error('   Messages:', JSON.stringify(messages.slice(0, 2), null, 2));
+      console.error('   Full result keys:', Object.keys(result));
+    }
 
     // Calculate token usage from response
     let tokensUsed = 0;
@@ -638,8 +1035,25 @@ class AgentWorker {
     console.log(`   Agent: ${this.agentId}`);
 
     try {
-      // Build prompt for agent
-      const prompt = this.buildCommentPrompt(comment, parentPost);
+      // Check if this is a threaded reply and get conversation chain
+      let conversationChain = [];
+      if (comment.parentCommentId) {
+        try {
+          const { default: dbSelector } = await import('../config/database-selector.js');
+
+          if (!dbSelector.sqliteDb && !dbSelector.usePostgres) {
+            await dbSelector.initialize();
+          }
+
+          conversationChain = await this.getConversationChain(comment.id);
+          console.log(`💬 Conversation chain for comment ${comment.id}: ${conversationChain.length} messages`);
+        } catch (error) {
+          console.error('❌ Failed to get conversation chain:', error);
+        }
+      }
+
+      // Build prompt for agent with conversation chain
+      const prompt = this.buildCommentPrompt(comment, parentPost, conversationChain);
 
       // Call agent (reuse existing agent invocation logic)
       const response = await this.invokeAgent(prompt);
@@ -660,17 +1074,43 @@ class AgentWorker {
    * Build prompt for agent to respond to comment
    * @param {Object} comment - Comment object
    * @param {Object} parentPost - Parent post object
+   * @param {Array} conversationChain - Conversation chain (default: [])
    * @returns {string} Prompt for agent
    */
-  buildCommentPrompt(comment, parentPost) {
+  buildCommentPrompt(comment, parentPost, conversationChain = []) {
     let prompt = `You are ${this.agentId} responding to a user comment.\n\n`;
 
     if (parentPost) {
-      prompt += `Context (Parent Post):\nTitle: ${parentPost.title}\nContent: ${parentPost.contentBody}\n\n`;
+      prompt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+      prompt += `ORIGINAL POST\n`;
+      prompt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+      prompt += `Title: ${parentPost.title}\n`;
+      prompt += `${parentPost.contentBody}\n\n`;
     }
 
-    prompt += `User Comment:\n${comment.content}\n\n`;
+    // Add conversation chain if this is a threaded reply
+    if (conversationChain.length > 0) {
+      prompt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+      prompt += `CONVERSATION THREAD (${conversationChain.length} messages):\n`;
+      prompt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+      conversationChain.forEach((msg, i) => {
+        prompt += `${i + 1}. ${msg.author}:\n   ${msg.content}\n\n`;
+      });
+    }
+
+    prompt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+    prompt += `CURRENT MESSAGE\n`;
+    prompt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    prompt += `${comment.content}\n\n`;
+    prompt += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
     prompt += `Please provide a helpful, concise response to this comment.`;
+
+    // Add conversation awareness instruction
+    if (conversationChain.length > 0) {
+      prompt += `\n\nIMPORTANT: You have the FULL conversation history above. Reference previous messages naturally without repeating context.`;
+    }
 
     return prompt;
   }
@@ -706,20 +1146,60 @@ class AgentWorker {
       }
     }
 
-    // Execute headless task with Claude Code SDK
+    // Execute headless task with Claude Code SDK using protection
     const { getClaudeCodeSDKManager } = await import('../../prod/src/services/ClaudeCodeSDKManager.js');
     const sdkManager = getClaudeCodeSDKManager();
     const fullPrompt = `${agentInstructions}\n\n${prompt}`;
 
-    const result = await sdkManager.executeHeadlessTask(fullPrompt);
+    // Execute with protection wrapper
+    const { executeProtectedQuery, buildUserFacingMessage } = await import('./worker-protection.js');
 
-    if (!result.success) {
-      throw new Error(`Claude Code SDK execution failed: ${result.error}`);
+    const protectionResult = await executeProtectedQuery(fullPrompt, {
+      workerId: this.workerId || `comment-worker-${Date.now()}`,
+      ticketId: this.ticketId || `comment-ticket-${Date.now()}`,
+      sdkManager: sdkManager,
+      streamingResponse: false
+    });
+
+    // Add diagnostic logging for SDK response structure
+    console.log('🔍 SDK Result Structure:', {
+      success: protectionResult.success,
+      terminated: protectionResult.terminated,
+      reason: protectionResult.reason,
+      messageCount: protectionResult.messages?.length || 0,
+      messageTypes: protectionResult.messages?.map(m => m.type || m.role || 'unknown') || [],
+      chunkCount: protectionResult.chunkCount,
+      responseSize: protectionResult.responseSize
+    });
+
+    // Handle protection termination
+    if (protectionResult.terminated) {
+      const userMessage = buildUserFacingMessage(protectionResult.reason, {
+        chunkCount: protectionResult.chunkCount,
+        responseSize: protectionResult.responseSize
+      });
+
+      console.error(`⚠️ Comment query terminated: ${protectionResult.reason}`);
+
+      // Use partial response if available
+      return protectionResult.partialResponse || userMessage;
     }
 
-    // Extract response from SDK result
-    const messages = result.messages || [];
-    const response = this.extractFromTextMessages(messages);
+    if (!protectionResult.success) {
+      throw new Error(`Claude Code SDK execution failed: ${protectionResult.error}`);
+    }
+
+    // Extract response from SDK result (pass full result object for fallback)
+    const messages = protectionResult.messages || [];
+    const result = { success: true, messages: messages };
+    const response = this.extractFromTextMessages(messages, result);
+
+    // Log extraction failure for diagnostics
+    if (!response || response === '') {
+      console.error('❌ Failed to extract response in invokeAgent()');
+      console.error('   Messages:', JSON.stringify(messages.slice(0, 2), null, 2));
+      console.error('   Full result keys:', Object.keys(result));
+    }
 
     return response || 'No response available';
   }

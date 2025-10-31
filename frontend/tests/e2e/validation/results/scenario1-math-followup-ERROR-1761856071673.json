@@ -1,0 +1,169 @@
+{
+  "scenario": "math-follow-up",
+  "steps": [],
+  "screenshots": [
+    "/workspaces/agent-feed/frontend/tests/e2e/validation/screenshots/error-scenario1-1761856070689.png"
+  ],
+  "consoleLogs": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856040834
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856041840
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856042854
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856043848
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856044893
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856045895
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856046943
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856047941
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856048946
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856049959
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856050968
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856051990
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856053010
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856054034
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856055035
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856056038
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856057075
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856058068
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856059073
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856060092
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856061086
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856062102
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856063110
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856064124
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856065124
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856066135
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856067134
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856068143
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856069149
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856070162
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856071547
+    }
+  ],
+  "backendLogs": "🔧 DEBUG: Registering POST /streaming-chat route...\n🔧 DEBUG: Registering POST /background-task route...\n🔧 DEBUG: Registering POST /session route...\n🔧 DEBUG: Registering GET /session/:sessionId route...\n🔧 DEBUG: Registering DELETE /session/:sessionId route...\n🔧 DEBUG: Registering GET /health route...\n🔧 DEBUG: Registering GET /analytics/health route...\n🔧 DEBUG: Registering GET /status route...\n🔧 DEBUG: Registering GET /cost-tracking route...\n🔧 DEBUG: Registering GET /token-usage route...\n🔧 DEBUG: Registering GET /analytics route...\n🔧 DEBUG: Registering GET /optimization route...\n[dotenv@17.2.3] injecting env (51) from ../.env -- tip: ⚙️  override existing env vars with { override: true }\n📊 Database Mode: SQLite\n📂 Agent Source: Filesystem\n⚠️  Failed to load compiled TypeScript monitoring modules. Using fallback implementation.\nRun `npm run build` to compile TypeScript sources.\n❌ Failed to load monitoring modules: Cannot find module 'ts-node'\nRequire stack:\n- /workspaces/agent-feed/api-server/services/monitoring-service.js\n📋 Work Queue Mode: SQLite\n✅ Token analytics database connected: /workspaces/agent-feed/database.db\n✅ Agent pages database connected: /workspaces/agent-feed/data/agent-pages.db\n✅ Proactive agent work queue initialized (SQLite for proactive agents)\n✅ SQLite connections established\n✅ SQLite work queue repository initialized\n✅ Work queue selector initialized\n✅ TokenAnalyticsWriter initialized with database connection\n✅ Claude Code SDK Manager initialized with official SDK\n📁 Working Directory: /workspaces/agent-feed/prod\n🤖 Model: claude-sonnet-4-20250514\n🛠️ Tools Available: Bash, Read, Write, Edit, MultiEdit, Grep, Glob, WebFetch, WebSearch\n🔓 Permission Mode: bypassPermissions\n✅ [TelemetryService] Initialized: { hasDatabase: true, hasSSEStream: true, initialized: true }\n✅ TelemetryService initialized in ClaudeCodeSDKManager\n✅ TelemetryService initialized with database and SSE stream\n✅ Feedback loop system initialized\n✅ UserSettingsService prepared statements initialized\n✅ User settings routes initialized with database\n✅ User settings system initialized\n📡 Auto-registration middleware initialized\n   Watching: /workspaces/agent-feed/data/agent-pages\n✅ Agent Pages routes initialized with database\n✅ Security configuration loaded\n✅ Minimal security middleware initialized (single-user mode)\n✅ Security and authentication routes initialized\n📡 Initializing WebSocket service (Socket.IO)...\nWebSocket service initialized\n✅ WebSocket service initialized BEFORE server listen\n   🔌 WebSocket endpoint will be: ws://localhost:3001/socket.io/\n   📢 Events: ticket:status:update, worker:lifecycle\n🚀 API Server running on http://0.0.0.0:3001\n📡 Health check: http://localhost:3001/health\n🤖 Agents API: http://localhost:3001/api/agents\n📝 Templates API: http://localhost:3001/api/templates\n📊 Streaming Ticker SSE: http://localhost:3001/api/streaming-ticker/stream\n📄 Dynamic Pages API: http://localhost:3001/api/agent-pages/agents/:agentId/pages\n📈 All analytics APIs available\n🔌 Socket.IO ready at: ws://localhost:3001/socket.io/\n💾 Memory Usage:\n   RSS: 98 MB\n   Heap Total: 56 MB\n   Heap Used: 29 MB\n   External: 4 MB\n   Array Buffers: 0 MB\n\n📊 Initializing Phase 5 Monitoring System...\n🔍 Initializing Phase 5 monitoring services...\n⚠️  Using mock MetricsCollector\n✅ MetricsCollector started (5s intervals)\n⚠️  Using mock HealthMonitor\n✅ HealthMonitor started\n⚠️  Using mock AlertManager\n✅ AlertManager started\n✅ Phase 5 monitoring fully initialized\n✅ Phase 5 Monitoring System active\n   📈 Metrics API: http://localhost:3001/api/monitoring/metrics\n   🏥 Health API: http://localhost:3001/api/monitoring/health\n   🚨 Alerts API: http://localhost:3001/api/monitoring/alerts\n\n🤖 Starting AVI Orchestrator...\n🚀 Starting AVI Orchestrator...\n✅ AVI marked as running\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:24:05.584Z\n}\n✅ AVI Orchestrator started successfully\n   Max Workers: 5\n   Poll Interval: 5000ms\n   Max Context: 50000 tokens\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n✅ AVI Orchestrator started - using SQLite work queue\n   📡 WebSocket events enabled for real-time ticket updates\n   ✅ Watcher ready\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:24:35.584Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:25:05.586Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:25:35.587Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:26:05.588Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n🎫 Found 16 tickets for 20 posts\nWebSocket client connected: O1Pku9Fv4wV1wz5_AAAB\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\nWebSocket client connected: oH--djglHnwThOY3AAAD\nWebSocket client disconnected: O1Pku9Fv4wV1wz5_AAAB, reason: client namespace disconnect\nWebSocket client disconnected: oH--djglHnwThOY3AAAD, reason: client namespace disconnect\nWebSocket client connected: 2wJslSKJhPTgzXP1AAAJ\nWebSocket client connected: 36uHj3G9IEBnsIN5AAAL\n⚠️ High memory usage: 25MB / 28MB (91%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:26:35.595Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 25MB / 28MB (91%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:27:05.596Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\nWebSocket client disconnected: 36uHj3G9IEBnsIN5AAAL, reason: transport close\nWebSocket client disconnected: 2wJslSKJhPTgzXP1AAAJ, reason: transport close\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\nWebSocket client connected: SBHmNl9OSh0Yky5rAAAN\n🎫 Found 16 tickets for 20 posts\nWebSocket client disconnected: SBHmNl9OSh0Yky5rAAAN, reason: client namespace disconnect\n🎫 Found 16 tickets for 20 posts\nWebSocket client connected: vMuAFeNDMxU_e-6UAAAQ\nWebSocket client connected: 1s32BYdnH3Vzkea_AAAS\nWebSocket client disconnected: vMuAFeNDMxU_e-6UAAAQ, reason: client namespace disconnect\nWebSocket client connected: C4KLR77M1nwfk_51AAAV\n⚠️ High memory usage: 26MB / 29MB (89%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:27:35.604Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n",
+  "error": {
+    "message": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"title\"], input[placeholder*=\"Title\"]').first()\u001b[22m\n",
+    "stack": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"title\"], input[placeholder*=\"Title\"]').first()\u001b[22m\n\n    at /workspaces/agent-feed/frontend/tests/e2e/validation/conversation-memory-validation.spec.ts:141:24"
+  }
+}

@@ -90,13 +90,18 @@ if (process.env.NODE_ENV === 'development') {
 
 // Export utility functions for room subscriptions
 export const subscribeToPost = (postId) => {
-  if (socket.connected) {
-    socket.emit('subscribe:post', postId);
-  }
+  console.log('[Socket] 📨 Emitting subscribe:post for', postId, '| Socket connected:', socket.connected);
+  socket.emit('subscribe:post', postId);
+
+  // Verify subscription with timeout
+  setTimeout(() => {
+    console.log('[Socket] 🔍 Subscription verification after 1s - socket.connected:', socket.connected);
+  }, 1000);
 };
 
 export const unsubscribeFromPost = (postId) => {
   if (socket.connected) {
+    console.log('[Socket] 📭 Emitting unsubscribe:post for', postId);
     socket.emit('unsubscribe:post', postId);
   }
 };

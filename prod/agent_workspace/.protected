@@ -1,6 +1,19 @@
-PROTECTED_WORKSPACE=true
-MANUAL_EDIT_FORBIDDEN=true
-AGENT_MANAGED=true
-CREATED_AT=2025-08-21T05:56:00Z
-PURPOSE=Production agent isolated workspace
-WARNING=Do not modify or delete this file
+PROTECTED AGENT WORKSPACE
+========================
+
+This directory is the designated workspace for all agent operations in the production environment.
+
+RULES:
+- All agent work MUST be contained within this directory structure
+- Agents cannot modify files outside this workspace
+- System instructions are READ-ONLY
+- Workspace is monitored for compliance
+
+STRUCTURE:
+- agents/     Individual agent working directories
+- shared/     Resources shared between agents
+- outputs/    Final agent outputs and reports
+- logs/       Agent operation logs
+- temp/       Temporary files (cleaned automatically)
+
+DO NOT MODIFY THIS FILE

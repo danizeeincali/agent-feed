@@ -22,6 +22,7 @@ interface UseCommentThreadingOptions {
 
 interface UseCommentThreadingReturn {
   comments: CommentTreeNode[];
+  setComments: React.Dispatch<React.SetStateAction<CommentTreeNode[]>>; // CRITICAL: Expose for WebSocket updates
   agentConversations: AgentConversation[];
   loading: boolean;
   error: string | null;
@@ -567,6 +568,7 @@ export const useCommentThreading = (
 
   return {
     comments,
+    setComments, // CRITICAL: Expose setComments for WebSocket real-time updates
     agentConversations,
     loading,
     error,

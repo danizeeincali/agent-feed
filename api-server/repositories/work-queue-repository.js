@@ -252,4 +252,67 @@ export class WorkQueueRepository {
       result: ticket.result ? JSON.parse(ticket.result) : null
     };
   }
+
+  /**
+   * Get all failed tickets matching a specific error pattern
+   * @param {string} errorPattern - Error pattern to search for
+   * @returns {Array} List of failed tickets with matching errors
+   */
+  getTicketsByError(errorPattern) {
+    const stmt = this.db.prepare(`
+      SELECT * FROM work_queue_tickets
+      WHERE status = 'failed'
+        AND last_error LIKE ?
+      ORDER BY created_at DESC
+    `);
+
+    const tickets = stmt.all(`%${errorPattern}%`);
+    return tickets.map(ticket => this._deserializeTicket(ticket));
+  }
+
+  /**
+   * Reset a ticket to pending state with retry_count = 0
+   * Useful for manually retrying failed tickets after bug fixes
+   * @param {string} id - Ticket ID
+   * @returns {Object} Updated ticket
+   */
+  resetTicketForRetry(id) {
+    const stmt = this.db.prepare(`
+      UPDATE work_queue_tickets
+      SET status = 'pending',
+          retry_count = 0,
+          last_error = NULL,
+          assigned_at = NULL,
+          completed_at = NULL
+      WHERE id = ?
+    `);
+
+    stmt.run(id);
+    return this.getTicket(id);
+  }
+
+  /**
+   * Reset multiple tickets at once for efficiency
+   * @param {Array<string>} ticketIds - Array of ticket IDs
+   * @returns {number} Number of tickets reset
+   */
+  batchResetTickets(ticketIds) {
+    if (!ticketIds || ticketIds.length === 0) {
+      return 0;
+    }
+
+    const placeholders = ticketIds.map(() => '?').join(',');
+    const stmt = this.db.prepare(`
+      UPDATE work_queue_tickets
+      SET status = 'pending',
+          retry_count = 0,
+          last_error = NULL,
+          assigned_at = NULL,
+          completed_at = NULL
+      WHERE id IN (${placeholders})
+    `);
+
+    const result = stmt.run(...ticketIds);
+    return result.changes;
+  }
 }

@@ -11,6 +11,9 @@
  */
 
 import AgentWorker from '../worker/agent-worker.js';
+import { getEmergencyMonitor } from '../services/emergency-monitor.js';
+import { getHealthMonitor } from '../services/worker-health-monitor.js';
+import { TicketValidator } from './ticket-validator.js';
 
 // Stub repositories for Phase 2 - Complete implementation
 const aviStateRepo = {
@@ -47,6 +50,10 @@ class AviOrchestrator {
 
     // WebSocket service for real-time updates
     this.websocketService = websocketService;
+
+    // Emergency monitor for streaming loop protection
+    this.emergencyMonitor = getEmergencyMonitor();
+    this.healthMonitor = getHealthMonitor();
   }
 
   /**
@@ -86,11 +93,23 @@ class AviOrchestrator {
       // Mark as running in database
       await aviStateRepo.markRunning();
 
+      // Retry any tickets that failed due to known bugs
+      const retriedCount = await this.retryFailedCommentTickets();
+      if (retriedCount > 0) {
+        console.log(`🔄 Retrying ${retriedCount} failed comment tickets`);
+      }
+
       // Start main monitoring loop
       this.startMainLoop();
 
       // Start health monitoring
       this.startHealthMonitoring();
+
+      // Start emergency monitor for streaming loop protection
+      this.emergencyMonitor.start(async (worker) => {
+        // Kill callback - handle worker termination
+        await this.handleWorkerKill(worker);
+      });
 
       console.log('✅ AVI Orchestrator started successfully');
       console.log(`   Max Workers: ${this.maxWorkers}`);
@@ -163,7 +182,7 @@ class AviOrchestrator {
       console.log(`🤖 Spawning worker ${workerId} for ticket ${ticket.id}`);
 
       // Check if this is a comment ticket
-      const isComment = ticket.post_metadata && ticket.post_metadata.type === 'comment';
+      const isComment = ticket.metadata && ticket.metadata.type === 'comment';
 
       if (isComment) {
         return await this.processCommentTicket(ticket, workerId);
@@ -225,12 +244,23 @@ class AviOrchestrator {
     console.log(`💬 Processing comment ticket: ${ticket.id}`);
 
     try {
+      // Validate ticket fields before processing
+      const validator = new TicketValidator();
+      validator.validateCommentTicket(ticket);
+
       // Extract comment metadata
-      const metadata = ticket.post_metadata || {};
+      const metadata = ticket.metadata || {};
       const commentId = ticket.post_id;
       const parentPostId = metadata.parent_post_id;
       const parentCommentId = metadata.parent_comment_id;
-      const content = ticket.post_content;
+
+      // FIX: Use ticket.content instead of ticket.post_content
+      const content = ticket.content;
+
+      // Additional safety check
+      if (!content) {
+        throw new Error('Missing ticket.content field');
+      }
 
       // Mark ticket as in_progress
       await this.workQueueRepo.updateTicketStatus(ticket.id.toString(), 'in_progress');
@@ -387,6 +417,85 @@ class AviOrchestrator {
   }
 
   /**
+   * Retry failed comment tickets that failed due to specific bugs
+   * Specifically targets the "Cannot read properties of undefined (reading 'toLowerCase')" error
+   * @returns {Promise<number>} Number of tickets retried
+   */
+  async retryFailedCommentTickets() {
+    try {
+      // Get all failed tickets with the specific error
+      const errorPattern = "Cannot read properties of undefined (reading 'toLowerCase')";
+      const failedTickets = await this.workQueueRepo.getTicketsByError(errorPattern);
+
+      if (failedTickets.length === 0) {
+        return 0;
+      }
+
+      console.log(`🔍 Found ${failedTickets.length} failed tickets matching error pattern`);
+
+      // Filter tickets that haven't exceeded max retries
+      const ticketsToRetry = failedTickets.filter(ticket => {
+        const retryCount = ticket.retry_count || 0;
+        return retryCount < 5; // Allow up to 5 retries for bug-related failures
+      });
+
+      if (ticketsToRetry.length === 0) {
+        console.log('⚠️ All failed tickets have exceeded max retry count');
+        return 0;
+      }
+
+      // Batch reset tickets for efficiency
+      const ticketIds = ticketsToRetry.map(t => t.id);
+      const resetCount = await this.workQueueRepo.batchResetTickets(ticketIds);
+
+      console.log(`✅ Reset ${resetCount} tickets for retry`);
+      return resetCount;
+
+    } catch (error) {
+      console.error('❌ Error retrying failed comment tickets:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Handle worker kill from emergency monitor
+   */
+  async handleWorkerKill(worker) {
+    try {
+      console.log(`💀 Handling emergency kill for worker ${worker.workerId}`);
+
+      // Remove from active workers
+      const workerInstance = this.activeWorkers.get(worker.workerId);
+      if (workerInstance) {
+        this.activeWorkers.delete(worker.workerId);
+      }
+
+      // Update ticket status to failed
+      if (worker.ticketId) {
+        await this.workQueueRepo.failTicket(worker.ticketId, `Auto-killed: ${worker.reason}`);
+      }
+
+      // Notify via WebSocket if available
+      if (this.websocketService && this.websocketService.isInitialized()) {
+        this.websocketService.broadcastToAll({
+          type: 'worker_killed',
+          data: {
+            workerId: worker.workerId,
+            ticketId: worker.ticketId,
+            reason: worker.reason,
+            runtime: worker.runtime,
+            timestamp: Date.now()
+          }
+        });
+      }
+
+      console.log(`✅ Worker ${worker.workerId} kill handled successfully`);
+    } catch (error) {
+      console.error(`❌ Error handling worker kill:`, error);
+    }
+  }
+
+  /**
    * Health monitoring loop - check context size and restart if needed
    */
   startHealthMonitoring() {
@@ -462,6 +571,11 @@ class AviOrchestrator {
 
     console.log('🛑 Stopping AVI Orchestrator...');
     this.running = false;
+
+    // Stop emergency monitor
+    if (this.emergencyMonitor) {
+      this.emergencyMonitor.stop();
+    }
 
     // Stop timers
     if (this.mainLoopTimer) {

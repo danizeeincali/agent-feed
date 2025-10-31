@@ -489,6 +489,99 @@ class WorkQueueRepository {
     const result = await postgresManager.query(query, values);
     return result.rows;
   }
+
+  /**
+   * Get all failed tickets matching a specific error pattern
+   * @param {string} errorPattern - Error pattern to search for
+   * @returns {Promise<Array>} List of failed tickets with matching errors
+   */
+  async getTicketsByError(errorPattern) {
+    const query = `
+      SELECT * FROM work_queue
+      WHERE status = 'failed'
+        AND error_message LIKE $1
+      ORDER BY created_at DESC
+    `;
+
+    const result = await postgresManager.query(query, [`%${errorPattern}%`]);
+    return result.rows;
+  }
+
+  /**
+   * Reset a ticket to pending state with retry_count = 0
+   * Useful for manually retrying failed tickets after bug fixes
+   * @param {number} ticketId - Ticket ID
+   * @returns {Promise<object>} Updated ticket
+   */
+  async resetTicketForRetry(ticketId) {
+    const query = `
+      UPDATE work_queue
+      SET status = 'pending',
+          retry_count = 0,
+          worker_id = NULL,
+          assigned_at = NULL,
+          started_at = NULL,
+          error_message = NULL,
+          updated_at = NOW()
+      WHERE id = $1
+      RETURNING *
+    `;
+
+    const result = await postgresManager.query(query, [ticketId]);
+    if (result.rows.length === 0) {
+      throw new Error(`Ticket ${ticketId} not found`);
+    }
+    return result.rows[0];
+  }
+
+  /**
+   * Reset multiple tickets at once for efficiency
+   * @param {Array<number>} ticketIds - Array of ticket IDs
+   * @returns {Promise<number>} Number of tickets reset
+   */
+  async batchResetTickets(ticketIds) {
+    if (!ticketIds || ticketIds.length === 0) {
+      return 0;
+    }
+
+    const query = `
+      UPDATE work_queue
+      SET status = 'pending',
+          retry_count = 0,
+          worker_id = NULL,
+          assigned_at = NULL,
+          started_at = NULL,
+          error_message = NULL,
+          updated_at = NOW()
+      WHERE id = ANY($1)
+      RETURNING id
+    `;
+
+    const result = await postgresManager.query(query, [ticketIds]);
+    return result.rows.length;
+  }
+
+  /**
+   * Update ticket status (orchestrator compatibility)
+   * @param {number|string} ticketId - Ticket ID
+   * @param {string} status - New status
+   * @returns {Promise<object>} Updated ticket
+   */
+  async updateTicketStatus(ticketId, status) {
+    const query = `
+      UPDATE work_queue
+      SET status = $1,
+          updated_at = NOW()
+      WHERE id = $2
+      RETURNING *
+    `;
+
+    const result = await postgresManager.query(query, [status, ticketId]);
+    if (result.rows.length === 0) {
+      throw new Error(`Ticket ${ticketId} not found`);
+    }
+    return result.rows[0];
+  }
 }
 
 export default new WorkQueueRepository();

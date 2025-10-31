@@ -1,0 +1,10 @@
+{
+  "id": "test-page-accessible-c824ad4f-790d-4615-89a3-ac1cf1322c85",
+  "agent_id": "test-agent-5f32df5d-f64e-4e66-ae4e-e7f51dd109df",
+  "title": "Accessibility Test Page",
+  "page_type": "dynamic",
+  "content_type": "component",
+  "content_value": "{\"type\":\"dashboard\",\"widgets\":[{\"type\":\"chart\",\"data\":{\"values\":[1,2,3]}},{\"type\":\"table\",\"data\":{\"rows\":[]}}]}",
+  "status": "published",
+  "version": 1
+}

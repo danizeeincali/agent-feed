@@ -54,6 +54,9 @@ export const useRealtimeComments = (
     onConnectionChange
   });
 
+  // Track subscription state to prevent duplicate subscriptions
+  const subscribedRef = useRef(false);
+
   // Update refs when callbacks change
   useEffect(() => {
     callbacksRef.current = {
@@ -189,14 +192,15 @@ export const useRealtimeComments = (
    * Handle connection status changes
    */
   const handleConnect = useCallback(() => {
-    console.log('[Realtime] WebSocket connected');
+    console.log('[Realtime] ✅ Socket connected, subscribing to post:', postId);
 
     if (callbacksRef.current.onConnectionChange) {
       callbacksRef.current.onConnectionChange(true);
     }
 
-    // Subscribe to post-specific room when connected
+    // Subscribe immediately on connect
     subscribeToPost(postId);
+    subscribedRef.current = true;
   }, [postId]);
 
   const handleDisconnect = useCallback(() => {
@@ -235,10 +239,18 @@ export const useRealtimeComments = (
 
     // Connect to WebSocket if not already connected
     if (!socket.connected) {
+      console.log('[Realtime] ⏳ Socket not connected, connecting now...');
       socket.connect();
+      // handleConnect will subscribe when connection completes
     } else {
-      // Already connected, subscribe immediately
-      subscribeToPost(postId);
+      // Already connected - subscribe immediately if not already subscribed
+      if (!subscribedRef.current) {
+        console.log('[Realtime] ✅ Socket already connected, subscribing immediately');
+        subscribeToPost(postId);
+        subscribedRef.current = true;
+      } else {
+        console.log('[Realtime] ℹ️ Already subscribed to post:', postId);
+      }
     }
 
     // Register connection event listeners
@@ -257,6 +269,9 @@ export const useRealtimeComments = (
     // Cleanup function - remove listeners and unsubscribe
     return () => {
       console.log('[Realtime] Cleaning up real-time comments for post:', postId);
+
+      // Reset subscription state
+      subscribedRef.current = false;
 
       // Remove all event listeners
       socket.off('connect', handleConnect);

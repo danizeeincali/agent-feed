@@ -174,6 +174,48 @@ class MemoryRepository {
   }
 
   /**
+   * Get a single comment by ID
+   * @param {string} commentId - Comment ID
+   * @param {string} userId - User ID
+   * @returns {Promise<object|null>} Comment or null
+   */
+  async getCommentById(commentId, userId = 'anonymous') {
+    const query = `
+      SELECT
+        id,
+        agent_name as author_agent,
+        post_id,
+        content,
+        metadata,
+        created_at
+      FROM agent_memories
+      WHERE user_id = $1 AND metadata->>'comment_id' = $2 AND metadata->>'type' = 'comment'
+    `;
+
+    const result = await postgresManager.query(query, [userId, commentId]);
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    const row = result.rows[0];
+    return {
+      id: row.metadata.comment_id,
+      post_id: row.post_id,
+      parent_id: row.metadata.parent_id || null,
+      author: row.author_agent, // For backward compatibility
+      author_agent: row.author_agent,
+      content: row.content,
+      depth: row.metadata.depth || 0,
+      thread_path: row.metadata.thread_path || '',
+      created_at: row.created_at,
+      likes: row.metadata.likes || 0,
+      mentioned_users: row.metadata.mentioned_users || [],
+      metadata: row.metadata.original_metadata || {}
+    };
+  }
+
+  /**
    * Create a new comment
    * @param {string} userId - User ID
    * @param {object} commentData - Comment data

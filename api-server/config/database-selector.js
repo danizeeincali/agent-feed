@@ -262,6 +262,30 @@ class DatabaseSelector {
   }
 
   /**
+   * Get a single comment by ID
+   * @param {string} commentId - Comment ID
+   * @param {string} userId - User ID
+   * @returns {Promise<object|null>} Comment or null
+   */
+  async getCommentById(commentId, userId = 'anonymous') {
+    // Handle invalid input
+    if (!commentId || typeof commentId !== 'string') {
+      return null;
+    }
+
+    if (this.usePostgres) {
+      return await memoryRepo.getCommentById(commentId, userId);
+    } else {
+      // SQLite implementation
+      const comment = this.sqliteDb.prepare(`
+        SELECT * FROM comments WHERE id = ?
+      `).get(commentId);
+
+      return comment || null;
+    }
+  }
+
+  /**
    * Create a comment
    * @param {string} userId - User ID
    * @param {object} commentData - Comment data
