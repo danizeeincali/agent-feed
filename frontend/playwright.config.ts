@@ -212,6 +212,20 @@ export default defineConfig({
       },
       testDir: './tests/e2e/page-verification',
     },
+
+    /* Real-time Comments E2E Tests - Chrome with screenshots */
+    {
+      name: 'realtime-comments',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        viewport: { width: 1920, height: 1080 },
+        screenshot: 'on',
+        video: 'on',
+        trace: 'on',
+      },
+      testDir: './src/tests/e2e',
+    },
   ],
 
   /* Run your local dev server before starting the tests */

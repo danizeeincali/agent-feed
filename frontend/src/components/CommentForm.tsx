@@ -12,6 +12,9 @@ interface CommentFormProps {
   parentId?: string;
   currentUser?: string;
   onCommentAdded?: () => void;
+  onOptimisticAdd?: (comment: any) => void;
+  onOptimisticRemove?: (tempId: string) => void;
+  onCommentConfirmed?: (realComment: any, tempId: string) => void;
   placeholder?: string;
   className?: string;
   autoFocus?: boolean;
@@ -30,6 +33,9 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   parentId,
   currentUser = 'current-user',
   onCommentAdded,
+  onOptimisticAdd,
+  onOptimisticRemove,
+  onCommentConfirmed,
   placeholder = 'Provide technical analysis or feedback...',
   className,
   autoFocus = false,
@@ -75,6 +81,21 @@ export const CommentForm: React.FC<CommentFormProps> = ({
     setIsSubmitting(true);
     setError('');
 
+    // Create optimistic comment with temporary ID
+    const tempId = `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const contentHasMarkdown = hasMarkdown(content.trim());
+    const tempComment = {
+      id: tempId,
+      content: content.trim(),
+      content_type: contentHasMarkdown ? 'markdown' : 'text',
+      author: currentUser,
+      author_agent: currentUser,
+      created_at: new Date().toISOString(),
+      post_id: postId,
+      parent_id: parentId || null,
+      _optimistic: true  // Mark as temporary
+    };
+
     // PHASE 2: Get original count for rollback
     let originalCount: number | undefined;
     if (updatePostInList && !parentId) {
@@ -89,24 +110,27 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       }
     }
 
+    // Add optimistically (instant UI feedback)
+    onOptimisticAdd?.(tempComment);
+
     try {
       console.log('[CommentForm] Submitting comment via API service:', {
         postId,
         content: content.trim(),
         parentId,
         author: currentUser,
-        hasOptimisticUpdates: !!(updatePostInList && refetchPost)
+        tempId,
+        hasOptimisticUpdates: !!(onOptimisticAdd && onCommentConfirmed)
       });
 
       // PHASE 2: Step 1 - Optimistic update (instant UI feedback)
       if (updatePostInList && originalCount !== undefined && !parentId) {
         const optimisticCount = originalCount + 1;
-        console.log('[CommentForm] Optimistic update:', { postId, from: originalCount, to: optimisticCount });
+        console.log('[CommentForm] Optimistic counter update:', { postId, from: originalCount, to: optimisticCount });
         updatePostInList(postId, { comments: optimisticCount });
       }
 
       // PHASE 2: Step 2 - Create comment via API with content_type detection
-      const contentHasMarkdown = hasMarkdown(content.trim());
       const result = await apiService.createComment(postId, content.trim(), {
         parentId: parentId || undefined,
         author: currentUser,
@@ -117,6 +141,11 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       console.log('[CommentForm] Comment submitted with content_type:', contentHasMarkdown ? 'markdown' : 'text');
 
       console.log('[CommentForm] Comment submitted successfully:', result);
+
+      // Confirm with real comment
+      if (result.success && result.data) {
+        onCommentConfirmed?.(result.data, tempId);
+      }
 
       // PHASE 2: Step 3 - Refetch to confirm with server (if available)
       if (refetchPost && !parentId) {
@@ -142,6 +171,9 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       onCommentAdded?.();
     } catch (error) {
       console.error('[CommentForm] Comment submission failed:', error);
+
+      // Remove optimistic comment on error
+      onOptimisticRemove?.(tempId);
 
       // PHASE 2: Rollback optimistic update on error
       if (updatePostInList && originalCount !== undefined && !parentId) {

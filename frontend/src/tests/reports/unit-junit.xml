@@ -1,91 +1,107 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="31" failures="0" errors="0" time="9.431">
-    <testsuite name="src/components/comments/__tests__/CommentThread.markdown.test.tsx" timestamp="2025-11-01T00:01:01.425Z" hostname="codespaces-005acc" tests="31" failures="0" errors="0" skipped="0" time="2.418">
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Basic markdown elements &gt; renders bold markdown correctly" time="0.178">
+<testsuites name="vitest tests" tests="17" failures="17" errors="0" time="3.226">
+    <testsuite name="src/tests/unit/PostCard.realtime.test.tsx" timestamp="2025-11-01T04:49:23.019Z" hostname="codespaces-005acc" tests="17" failures="17" errors="0" skipped="0" time="0.016">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Socket.IO Connection Lifecycle &gt; should connect to Socket.IO on mount if not connected" time="0.003">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Basic markdown elements &gt; renders italic markdown correctly" time="0.024">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Socket.IO Connection Lifecycle &gt; should subscribe to post room on mount" time="0">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Basic markdown elements &gt; renders inline code markdown correctly" time="0.086">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Socket.IO Connection Lifecycle &gt; should register Socket.IO event listeners" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Basic markdown elements &gt; renders strikethrough markdown correctly" time="0.057">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Socket.IO Connection Lifecycle &gt; should unsubscribe and cleanup on unmount" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Complex markdown elements &gt; renders unordered lists correctly" time="0.051">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Real-time Comment Events &gt; should increment counter when comment:created event received" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Complex markdown elements &gt; renders ordered lists correctly" time="0.049">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Real-time Comment Events &gt; should ignore events for other posts" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Complex markdown elements &gt; renders headings correctly" time="0.11">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Real-time Comment Events &gt; should decrement counter on comment:deleted event" time="0">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Complex markdown elements &gt; renders blockquotes correctly" time="0.076">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Real-time Comment Events &gt; should reload comments when comment:updated event received" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Complex markdown elements &gt; renders code blocks correctly" time="0.298">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Comment Counter Display &gt; should display &quot;Comment&quot; when count is 0" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Mentions and hashtags within markdown &gt; renders mentions in markdown content" time="0.087">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Comment Counter Display &gt; should display count when &gt; 0" time="0">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Mentions and hashtags within markdown &gt; renders hashtags in markdown content" time="0.077">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Comment Counter Display &gt; should update counter after loading comments from API" time="0.002">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Mentions and hashtags within markdown &gt; renders mentions and hashtags together with markdown" time="0.05">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Stale Closure Prevention &gt; should reload comments multiple times without stale closure bug" time="0">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Mentions and hashtags within markdown &gt; preserves markdown in mentions" time="0.044">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Stale Closure Prevention &gt; should handle rapid events without closure issues" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Plain text comments (no markdown) &gt; renders plain text without markdown processing" time="0.036">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Comment Loading &gt; should show loading state when fetching" time="0">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Plain text comments (no markdown) &gt; does not process asterisks as markdown in plain text" time="0.051">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; Comment Loading &gt; should handle fetch errors gracefully" time="0">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Plain text comments (no markdown) &gt; preserves backticks in plain text" time="0.039">
-            <system-out>
-[CommentThread] Auto-detected markdown in comment: test-comment-1
-
-            </system-out>
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; handleCommentsUpdate Implementation &gt; should have no circular dependencies" time="0.001">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Auto-detection of markdown &gt; auto-detects markdown in agent comments" time="0.035">
-            <system-out>
-[CommentThread] Auto-detected markdown in agent comment: test-comment-1
-
-            </system-out>
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Auto-detection of markdown &gt; auto-detects markdown in user comments with markdown syntax" time="0.062">
-            <system-out>
-[CommentThread] Auto-detected markdown in comment: test-comment-1
-
-            </system-out>
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Edge cases &gt; handles empty content gracefully" time="0.031">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Edge cases &gt; handles special characters in markdown" time="0.053">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Edge cases &gt; handles very long markdown content" time="0.048">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Edge cases &gt; expands and collapses long markdown content" time="0.192">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Edge cases &gt; handles markdown with line breaks" time="0.054">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Edge cases &gt; handles malformed markdown gracefully" time="0.094">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Mixed content scenarios &gt; combines all elements: markdown, mentions, hashtags, URLs" time="0.156">
-            <system-err>
-Backend preview API unavailable, using fallback: Failed to parse URL from /api/v1/link-preview?url=https%3A%2F%2Fexample.com
-
-            </system-err>
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Mixed content scenarios &gt; handles complex nested markdown" time="0.058">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Mixed content scenarios &gt; preserves markdown in multi-level comment threads" time="0.105">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; URL and link handling &gt; renders URLs as clickable links in markdown" time="0.054">
-            <system-err>
-Backend preview API unavailable, using fallback: Failed to parse URL from /api/v1/link-preview?url=https%3A%2F%2Fexample.com
-
-            </system-err>
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; URL and link handling &gt; renders markdown links correctly" time="0.067">
-            <system-err>
-Backend preview API unavailable, using fallback: Failed to parse URL from /api/v1/link-preview?url=https%3A%2F%2Fexample.com)
-
-            </system-err>
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Performance and rendering &gt; renders without throwing errors" time="0.029">
-        </testcase>
-        <testcase classname="src/components/comments/__tests__/CommentThread.markdown.test.tsx" name="CommentThread Markdown Rendering &gt; Performance and rendering &gt; handles rapid content updates" time="0.041">
+        <testcase classname="src/tests/unit/PostCard.realtime.test.tsx" name="PostCard Real-time Comments &gt; handleCommentsUpdate Implementation &gt; should reset state before fetching" time="0">
+            <failure message="createMockSocket is not defined" type="ReferenceError">
+ReferenceError: createMockSocket is not defined
+ ❯ src/tests/unit/PostCard.realtime.test.tsx:70:5
+            </failure>
         </testcase>
     </testsuite>
 </testsuites>

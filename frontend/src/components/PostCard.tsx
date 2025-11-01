@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
-import { useWebSocket } from '../hooks/useWebSocket';
+import { socket } from '../services/socket';
 import { useToast } from '../hooks/useToast';
 import { cn } from '../utils/cn';
 import { renderParsedContent, parseContent } from '../utils/contentParser';
@@ -49,6 +49,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
+  const [optimisticComments, setOptimisticComments] = useState<any[]>([]);
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [engagementState, setEngagementState] = useState({
@@ -59,7 +60,7 @@ export const PostCard: React.FC<PostCardProps> = ({
     comments: post.comments || 0
   });
 
-  const { socket, isConnected, subscribe, unsubscribe } = useWebSocket();
+  const [isConnected, setIsConnected] = useState(socket.connected);
   const toast = useToast();
 
   const businessImpact = post.metadata?.businessImpact || 5;
@@ -96,28 +97,47 @@ export const PostCard: React.FC<PostCardProps> = ({
     return 'Minimal Impact';
   };
 
-  const loadComments = useCallback(async () => {
-    if (commentsLoaded) return;
+  // Define handleCommentsUpdate FIRST to avoid dependency order issues
+  const handleCommentsUpdate = useCallback(async () => {
+    console.log('[PostCard] handleCommentsUpdate called for post:', post.id);
 
+    // Reset state
+    setCommentsLoaded(false);
     setIsLoading(true);
+
     try {
       const response = await fetch(`/api/agent-posts/${post.id}/comments`);
       if (response.ok) {
         const data = await response.json();
+        console.log('[PostCard] Loaded', data.data?.length || 0, 'comments');
+
         setComments(data.data || []);
         setCommentsLoaded(true);
-        // Update comment count
+
+        // Update comment count from actual data
         setEngagementState(prev => ({
           ...prev,
           comments: data.data?.length || prev.comments
         }));
+      } else {
+        console.error('[PostCard] Failed to load comments:', response.status);
       }
     } catch (error) {
-      console.error('Failed to load comments:', error);
+      console.error('[PostCard] Error loading comments:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [post.id, commentsLoaded]);
+  }, [post.id]); // Only depends on post.id - NO circular dependency
+
+  const loadComments = useCallback(async () => {
+    if (commentsLoaded) {
+      console.log('[PostCard] Comments already loaded, skipping');
+      return;
+    }
+
+    console.log('[PostCard] Loading comments for first time');
+    await handleCommentsUpdate();
+  }, [commentsLoaded, handleCommentsUpdate]);
 
   const handleCommentsToggle = () => {
     setShowComments(!showComments);
@@ -126,54 +146,113 @@ export const PostCard: React.FC<PostCardProps> = ({
     }
   };
 
-  const handleCommentsUpdate = useCallback(() => {
-    setCommentsLoaded(false);
-    loadComments();
-  }, [loadComments]);
+  // Optimistic comment handlers
+  const handleOptimisticAdd = useCallback((tempComment: any) => {
+    console.log('[PostCard] Adding optimistic comment:', tempComment.id);
+    setOptimisticComments(prev => [...prev, tempComment]);
+    setEngagementState(prev => ({
+      ...prev,
+      comments: prev.comments + 1
+    }));
+  }, []);
 
-  // WebSocket integration for real-time updates
+  const handleOptimisticRemove = useCallback((tempId: string) => {
+    console.log('[PostCard] Removing optimistic comment:', tempId);
+    setOptimisticComments(prev => prev.filter(c => c.id !== tempId));
+    setEngagementState(prev => ({
+      ...prev,
+      comments: Math.max(0, prev.comments - 1)
+    }));
+  }, []);
+
+  const handleCommentConfirmed = useCallback((realComment: any, tempId: string) => {
+    console.log('[PostCard] Confirming comment:', tempId, '→', realComment.id);
+    // Remove optimistic
+    setOptimisticComments(prev => prev.filter(c => c.id !== tempId));
+    // Add real comment (will come from WebSocket event or next fetch)
+  }, []);
+
+  // Combine real and optimistic comments for display
+  const allComments = React.useMemo(() =>
+    [...comments, ...optimisticComments],
+    [comments, optimisticComments]
+  );
+
+  // Socket.IO integration for real-time updates
   useEffect(() => {
-    if (!socket || !isConnected) return;
+    // Connect Socket.IO if not already connected
+    if (!socket.connected) {
+      console.log('[PostCard] Connecting Socket.IO for post:', post.id);
+      socket.connect();
+    }
 
-    // Subscribe to post-specific updates
-    const handlePostUpdate = (data: any) => {
-      if (data.postId === post.id) {
-        if (data.type === 'engagement') {
-          setEngagementState(prev => ({
-            ...prev,
-            ...data.engagement
-          }));
-        }
-      }
+    // Track connection state
+    const handleConnect = () => {
+      console.log('[PostCard] Socket.IO connected');
+      setIsConnected(true);
     };
 
-    const handleCommentUpdate = (data: any) => {
+    const handleDisconnect = () => {
+      console.log('[PostCard] Socket.IO disconnected');
+      setIsConnected(false);
+    };
+
+    // Subscribe to events
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+
+    // Subscribe to post-specific room
+    socket.emit('subscribe:post', post.id);
+    console.log('[PostCard] Subscribed to post room:', post.id);
+
+    // Handle comment events
+    const handleCommentCreated = (data: any) => {
+      console.log('[PostCard] Received comment:created event', data);
       if (data.postId === post.id) {
-        if (data.type === 'comment_created' || data.type === 'comment_updated' || data.type === 'comment_deleted') {
+        // Update counter immediately
+        setEngagementState(prev => ({
+          ...prev,
+          comments: prev.comments + 1
+        }));
+
+        // If comments are showing, reload
+        if (showComments) {
           handleCommentsUpdate();
         }
       }
     };
 
-    // Subscribe to events
-    subscribe('post:update', handlePostUpdate);
-    subscribe('comment:created', handleCommentUpdate);
-    subscribe('comment:added', handleCommentUpdate); // Backwards compatibility
-    subscribe('comment:updated', handleCommentUpdate);
-    subscribe('comment:deleted', handleCommentUpdate);
+    const handleCommentUpdated = (data: any) => {
+      if (data.postId === post.id) {
+        handleCommentsUpdate();
+      }
+    };
 
-    // Subscribe to post-specific room
-    socket.emit('subscribe:post', post.id);
+    const handleCommentDeleted = (data: any) => {
+      if (data.postId === post.id) {
+        setEngagementState(prev => ({
+          ...prev,
+          comments: Math.max(0, prev.comments - 1)
+        }));
+        handleCommentsUpdate();
+      }
+    };
 
+    socket.on('comment:created', handleCommentCreated);
+    socket.on('comment:updated', handleCommentUpdated);
+    socket.on('comment:deleted', handleCommentDeleted);
+
+    // Cleanup
     return () => {
-      unsubscribe('post:update', handlePostUpdate);
-      unsubscribe('comment:created', handleCommentUpdate);
-      unsubscribe('comment:added', handleCommentUpdate); // Backwards compatibility
-      unsubscribe('comment:updated', handleCommentUpdate);
-      unsubscribe('comment:deleted', handleCommentUpdate);
+      console.log('[PostCard] Cleaning up Socket.IO listeners for post:', post.id);
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('comment:created', handleCommentCreated);
+      socket.off('comment:updated', handleCommentUpdated);
+      socket.off('comment:deleted', handleCommentDeleted);
       socket.emit('unsubscribe:post', post.id);
     };
-  }, [socket, isConnected, post.id, subscribe, unsubscribe, handleCommentsUpdate]);
+  }, [post.id, showComments, handleCommentsUpdate]);
 
   const handleEngagement = useCallback(async (type: 'bookmark' | 'share') => {
     try {
@@ -362,6 +441,9 @@ export const PostCard: React.FC<PostCardProps> = ({
             <CommentForm
               postId={post.id}
               onCommentAdded={handleCommentsUpdate}
+              onOptimisticAdd={handleOptimisticAdd}
+              onOptimisticRemove={handleOptimisticRemove}
+              onCommentConfirmed={handleCommentConfirmed}
               className="mb-4"
               updatePostInList={updatePostInList}
               refetchPost={refetchPost}
@@ -375,7 +457,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             ) : (
               <CommentThread
                 postId={post.id}
-                comments={comments}
+                comments={allComments}
                 onCommentsUpdate={handleCommentsUpdate}
               />
             )}
