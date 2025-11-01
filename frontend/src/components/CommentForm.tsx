@@ -5,6 +5,7 @@ import { extractMentions } from '../utils/commentUtils';
 import { apiService } from '../services/api';
 import { MentionInput, MentionInputRef, MentionSuggestion } from './MentionInput';
 import { MentionService } from '../services/MentionService';
+import { hasMarkdown } from '../utils/contentParser';
 
 interface CommentFormProps {
   postId: string;
@@ -104,12 +105,16 @@ export const CommentForm: React.FC<CommentFormProps> = ({
         updatePostInList(postId, { comments: optimisticCount });
       }
 
-      // PHASE 2: Step 2 - Create comment via API
+      // PHASE 2: Step 2 - Create comment via API with content_type detection
+      const contentHasMarkdown = hasMarkdown(content.trim());
       const result = await apiService.createComment(postId, content.trim(), {
         parentId: parentId || undefined,
         author: currentUser,
-        mentionedUsers: useMentionInput ? MentionService.extractMentions(content) : extractMentions(content)
+        mentionedUsers: useMentionInput ? MentionService.extractMentions(content) : extractMentions(content),
+        contentType: contentHasMarkdown ? 'markdown' : 'text'  // FRONTEND FIX: Detect and send content_type
       });
+
+      console.log('[CommentForm] Comment submitted with content_type:', contentHasMarkdown ? 'markdown' : 'text');
 
       console.log('[CommentForm] Comment submitted successfully:', result);
 

@@ -1,0 +1,179 @@
+{
+  "scenario": "math-follow-up",
+  "steps": [],
+  "screenshots": [
+    "/workspaces/agent-feed/frontend/tests/e2e/validation/screenshots/error-scenario1-1761944847024.png"
+  ],
+  "consoleLogs": [
+    {
+      "type": "log",
+      "text": "[Socket.IO] Connected to server: AwhfbBiKHLIq_kU7AADV",
+      "timestamp": 1761944816777
+    },
+    {
+      "type": "log",
+      "text": "[useTicketUpdates] WebSocket connected: {message: WebSocket connection established, timestamp: 2025-10-31T21:06:56.711Z}",
+      "timestamp": 1761944816777
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944817671
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944818692
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944819697
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944820699
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944821713
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944822735
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944823770
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944824776
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944825784
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944826791
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944827799
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944828807
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944829834
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944830837
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944831872
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944832875
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944833911
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944834910
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944836037
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944837058
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944838060
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944839083
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944840113
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944841097
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944842107
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944843127
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944844139
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944845142
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944846152
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944847165
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761944848280
+    }
+  ],
+  "backendLogs": "  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:01:27.733Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 28MB / 30MB (93%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:01:57.738Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\nWebSocket client disconnected: bdOlOq5fJtfyaleAAAC1, reason: client namespace disconnect\nWebSocket client connected: Yp23b5Ns6BfoXiymAAC3\n⚠️ High memory usage: 28MB / 30MB (93%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:02:27.739Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 28MB / 30MB (93%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:02:57.747Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\nWebSocket client disconnected: Yp23b5Ns6BfoXiymAAC3, reason: client namespace disconnect\nWebSocket client connected: YkIOWdJ94y9xWd4SAAC5\n⚠️ High memory usage: 27MB / 30MB (91%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:03:27.751Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 27MB / 30MB (91%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:03:57.750Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\nWebSocket client disconnected: YkIOWdJ94y9xWd4SAAC5, reason: client namespace disconnect\nWebSocket client connected: E8qrytMS89uGWMF_AAC7\n⚠️ High memory usage: 28MB / 30MB (92%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:04:27.750Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 28MB / 30MB (92%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:04:57.758Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\nWebSocket client disconnected: E8qrytMS89uGWMF_AAC7, reason: client namespace disconnect\nWebSocket client connected: J9PYhpiytHOM_oVGAAC9\n⚠️ High memory usage: 28MB / 30MB (92%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:05:27.758Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\n⚠️ High memory usage: 28MB / 30MB (94%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:05:57.758Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\n🎫 Found 6 tickets for 20 posts\nWebSocket client connected: d33o2cNCLAUnnIqaAAC_\n🎫 Found 6 tickets for 20 posts\nWebSocket client disconnected: d33o2cNCLAUnnIqaAAC_, reason: client namespace disconnect\n🎫 Found 6 tickets for 20 posts\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\nWebSocket client connected: VmiOecIMOzh2M1icAADE\nWebSocket client disconnected: VmiOecIMOzh2M1icAADE, reason: transport close\nWebSocket client disconnected: J9PYhpiytHOM_oVGAAC9, reason: client namespace disconnect\nWebSocket client connected: 8NwPrUxyDWMbEoxMAADG\n⚠️ High memory usage: 28MB / 30MB (94%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:06:27.770Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n🎫 Found 6 tickets for 20 posts\n🎫 Found 6 tickets for 20 posts\nWebSocket client connected: pMm8Xbq7L4qrCwVlAADI\nWebSocket client disconnected: pMm8Xbq7L4qrCwVlAADI, reason: client namespace disconnect\nWebSocket client connected: 3aq4kqb3f0dM0WfgAADL\n❌ Page comprehensive-dashboard not found for agent personal-todos-agent\nWebSocket client disconnected: 3aq4kqb3f0dM0WfgAADL, reason: transport close\n🎫 Found 6 tickets for 20 posts\n🎫 Found 6 tickets for 20 posts\nWebSocket client connected: 3Pg7bmcAkEBOCRWzAADN\nWebSocket client disconnected: 3Pg7bmcAkEBOCRWzAADN, reason: client namespace disconnect\nWebSocket client connected: WeCHVC-ThQJO5L2zAADR\n🎫 Found 6 tickets for 20 posts\n🎫 Found 6 tickets for 20 posts\nWebSocket client connected: pNADmMgEBcLMj3YSAADT\nWebSocket client disconnected: pNADmMgEBcLMj3YSAADT, reason: client namespace disconnect\nWebSocket client connected: AwhfbBiKHLIq_kU7AADV\nWebSocket client disconnected: WeCHVC-ThQJO5L2zAADR, reason: transport close\n⚠️ High memory usage: 28MB / 30MB (93%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:06:57.770Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n🎫 Found 6 tickets for 20 posts\n🎫 Found 6 tickets for 20 posts\nWebSocket client connected: FflA7wMnGgvCHI3DAADX\n🎫 Found 6 tickets for 20 posts\nWebSocket client disconnected: FflA7wMnGgvCHI3DAADX, reason: client namespace disconnect\nWebSocket client connected: V48BNE9-YBigenyfAADb\nWebSocket client disconnected: V48BNE9-YBigenyfAADb, reason: transport close\n🎫 Found 6 tickets for 20 posts\n🎫 Found 6 tickets for 20 posts\nWebSocket client connected: ArjzHhRwg4AbAyFtAADd\nWebSocket client disconnected: ArjzHhRwg4AbAyFtAADd, reason: client namespace disconnect\nWebSocket client connected: bM43tjU7jeMdtAEpAADf\nWebSocket client disconnected: 8NwPrUxyDWMbEoxMAADG, reason: client namespace disconnect\nWebSocket client connected: 8OYX8MvHuFs_kvIYAADh\n🎫 Found 6 tickets for 20 posts\n🎫 Found 6 tickets for 20 posts\nWebSocket client connected: YfQegckeBLN95yYuAADj\nWebSocket client disconnected: YfQegckeBLN95yYuAADj, reason: client namespace disconnect\nWebSocket client connected: rY_WR4i_KAK7sAUIAADm\n⚠️ High memory usage: 28MB / 31MB (93%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-31T21:07:27.774Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n",
+  "error": {
+    "message": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"title\"], input[placeholder*=\"Title\"]').first()\u001b[22m\n",
+    "stack": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"title\"], input[placeholder*=\"Title\"]').first()\u001b[22m\n\n    at /workspaces/agent-feed/frontend/tests/e2e/validation/conversation-memory-validation.spec.ts:141:24"
+  }
+}

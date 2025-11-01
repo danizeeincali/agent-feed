@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { 
-  MessageCircle, 
-  Share2, 
-  MoreHorizontal, 
+import {
+  MessageCircle,
+  Share2,
+  MoreHorizontal,
   Clock,
   TrendingUp,
   Star,
@@ -11,7 +11,9 @@ import {
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useWebSocket } from '../hooks/useWebSocket';
+import { useToast } from '../hooks/useToast';
 import { cn } from '../utils/cn';
+import { renderParsedContent, parseContent } from '../utils/contentParser';
 
 interface PostCardProps {
   post: {
@@ -58,6 +60,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   });
 
   const { socket, isConnected, subscribe, unsubscribe } = useWebSocket();
+  const toast = useToast();
 
   const businessImpact = post.metadata?.businessImpact || 5;
   const tags = post.metadata?.tags || [];
@@ -155,6 +158,7 @@ export const PostCard: React.FC<PostCardProps> = ({
     // Subscribe to events
     subscribe('post:update', handlePostUpdate);
     subscribe('comment:created', handleCommentUpdate);
+    subscribe('comment:added', handleCommentUpdate); // Backwards compatibility
     subscribe('comment:updated', handleCommentUpdate);
     subscribe('comment:deleted', handleCommentUpdate);
 
@@ -164,6 +168,7 @@ export const PostCard: React.FC<PostCardProps> = ({
     return () => {
       unsubscribe('post:update', handlePostUpdate);
       unsubscribe('comment:created', handleCommentUpdate);
+      unsubscribe('comment:added', handleCommentUpdate); // Backwards compatibility
       unsubscribe('comment:updated', handleCommentUpdate);
       unsubscribe('comment:deleted', handleCommentUpdate);
       socket.emit('unsubscribe:post', post.id);
@@ -270,8 +275,21 @@ export const PostCard: React.FC<PostCardProps> = ({
         </h2>
         
         {post.content && (
-          <div className="text-gray-700 whitespace-pre-wrap">
-            <p>{displayContent}</p>
+          <div className="text-gray-700">
+            {renderParsedContent(parseContent(displayContent), {
+              className: 'post-content prose prose-sm max-w-none',
+              enableMarkdown: true,
+              enableLinkPreviews: true,
+              useEnhancedPreviews: false,
+              onMentionClick: (agent: string) => {
+                console.log('Mention clicked in post:', agent);
+                // Future: Navigate to agent profile
+              },
+              onHashtagClick: (tag: string) => {
+                console.log('Hashtag clicked in post:', tag);
+                // Future: Filter by tag
+              }
+            })}
             {shouldTruncate && (
               <button
                 onClick={() => setIsExpanded(!isExpanded)}

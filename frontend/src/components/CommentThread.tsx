@@ -4,6 +4,7 @@ import { cn } from '../utils/cn';
 import { CommentModerationPanel } from './CommentModerationPanel';
 import { buildCommentTree, CommentTreeNode } from '../utils/commentUtils';
 import { MentionInput } from './MentionInput';
+import { hasMarkdown, renderParsedContent, parseContent } from '../utils/contentParser';
 
 export interface Comment {
   id: string;
@@ -269,7 +270,17 @@ const CommentItem: React.FC<CommentItemProps> = ({
           {comment.isDeleted ? (
             <span className="italic text-gray-500 dark:text-gray-400">[This comment has been deleted]</span>
           ) : (
-            renderMentions(comment.content)
+            renderParsedContent(parseContent(comment.content), {
+              enableMarkdown: true,
+              onMentionClick: (agent: string) => {
+                console.log('Mention clicked in comment:', agent);
+              },
+              onHashtagClick: (tag: string) => {
+                console.log('Hashtag clicked in comment:', tag);
+              },
+              className: 'comment-content prose prose-sm max-w-none',
+              enableLinkPreviews: false
+            })
           )}
         </div>
         
@@ -577,6 +588,8 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     setIsLoading(true);
     try {
       // SPARC FIX: Use correct endpoint POST /api/agent-posts/:postId/comments with parent_id in body
+      // FRONTEND FIX: Detect markdown and send content_type
+      const contentHasMarkdown = hasMarkdown(content);
       const response = await fetch(`/api/agent-posts/${postId}/comments`, {
         method: 'POST',
         headers: {
@@ -587,9 +600,12 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
           content,
           parent_id: parentId,
           author: currentUser,
-          author_agent: currentUser
+          author_agent: currentUser,
+          content_type: contentHasMarkdown ? 'markdown' : 'text'  // FRONTEND FIX: Send content_type
         })
       });
+
+      console.log('[CommentThread] Reply submitted with content_type:', contentHasMarkdown ? 'markdown' : 'text');
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));

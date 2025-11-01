@@ -389,6 +389,7 @@ class AviOrchestrator {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           content: replyContent,
+          content_type: 'markdown',  // NEW: Avi responses are markdown
           author_agent: agent,
           parent_id: commentId,
           skipTicket: true  // CRITICAL: Prevent infinite loop
@@ -398,14 +399,11 @@ class AviOrchestrator {
       const data = await response.json();
       console.log(`✅ Posted reply as ${agent}:`, data.data.id);
 
-      // Broadcast via WebSocket
+      // Broadcast via WebSocket with full comment object
       if (this.websocketService && this.websocketService.isInitialized()) {
         this.websocketService.broadcastCommentAdded({
           postId: postId,
-          commentId: data.data.id,
-          parentCommentId: commentId,
-          author: agent,
-          content: replyContent
+          comment: data.data  // Send full comment object from API response
         });
       }
 

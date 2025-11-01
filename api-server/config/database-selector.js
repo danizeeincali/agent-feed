@@ -304,10 +304,11 @@ class DatabaseSelector {
           author,
           author_agent,
           content,
+          content_type,
           mentioned_users,
           created_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
       `);
 
       const commentId = commentData.id || `comment-${Date.now()}`;
@@ -319,6 +320,9 @@ class DatabaseSelector {
       const author = commentData.author || userId;
       const authorAgent = commentData.author_agent || commentData.author || userId;
 
+      // Default content_type to 'text' if not provided
+      const contentType = commentData.content_type || 'text';
+
       insert.run(
         commentId,
         commentData.post_id,
@@ -326,6 +330,7 @@ class DatabaseSelector {
         author,           // Keep for backward compatibility
         authorAgent,      // Primary field going forward
         commentData.content,
+        contentType,      // NEW: content_type support
         mentionedUsers
       );
 

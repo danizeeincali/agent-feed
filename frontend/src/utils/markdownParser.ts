@@ -7,6 +7,8 @@
  * @module utils/markdownParser
  */
 
+import { MARKDOWN_PATTERNS, hasMarkdownSyntax } from './markdownConstants';
+
 /**
  * Special token representing a mention, hashtag, or URL
  */
@@ -56,17 +58,8 @@ const PLACEHOLDER_PREFIX_HASHTAG = '___HASHTAG_';
 const PLACEHOLDER_PREFIX_URL = '___URL_';
 const PLACEHOLDER_SUFFIX = '___';
 
-// Markdown detection patterns
-const MARKDOWN_PATTERNS = [
-  /\*\*[^*]+\*\*/,      // Bold
-  /\*[^*]+\*/,          // Italic
-  /`[^`]+`/,            // Inline code
-  /^#{1,6}\s/m,         // Headers
-  /^\s*[-*+]\s/m,       // Unordered lists
-  /^\s*\d+\.\s/m,       // Ordered lists
-  /^>\s/m,              // Blockquotes
-  /\[([^\]]+)\]\(([^)]+)\)/  // Links
-];
+// Markdown detection patterns imported from markdownConstants.ts
+// This ensures 1:1 parity with contentParser.tsx detection logic
 
 /**
  * Extracts special tokens from content and replaces them with safe placeholders.
@@ -310,16 +303,17 @@ export function sanitizeMarkdown(content: string): string {
 /**
  * Detects if content contains markdown syntax.
  *
+ * Uses centralized pattern definitions from markdownConstants.ts
+ * to ensure consistency with contentParser.tsx detection logic.
+ *
  * @param content - Content to analyze
  * @returns True if markdown syntax is detected
+ *
+ * @see {@link markdownConstants.hasMarkdownSyntax} for the underlying implementation
+ * @see {@link markdownConstants.MARKDOWN_PATTERNS} for the pattern definitions
  */
 export function detectMarkdownSyntax(content: string): boolean {
-  for (const pattern of MARKDOWN_PATTERNS) {
-    if (pattern.test(content)) {
-      return true;
-    }
-  }
-  return false;
+  return hasMarkdownSyntax(content);
 }
 
 // Helper Functions

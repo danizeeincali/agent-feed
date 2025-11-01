@@ -202,19 +202,16 @@ class WebSocketService {
       return;
     }
 
-    const { postId, commentId, parentCommentId, author, content } = payload;
+    const { postId, comment } = payload;
 
-    // Broadcast to all clients subscribed to this post
-    this.io.to(`post:${postId}`).emit('comment:added', {
+    // Broadcast full comment object to all clients subscribed to this post
+    // This includes all fields needed by frontend (id, content_type, author_type, etc.)
+    this.io.to(`post:${postId}`).emit('comment:created', {
       postId,
-      commentId,
-      parentCommentId,
-      author,
-      content,
-      timestamp: new Date().toISOString()
+      comment: comment  // Send full comment object with all database fields
     });
 
-    console.log(`📡 Broadcasted comment:added for post ${postId}`);
+    console.log(`📡 Broadcasted comment:created for post ${postId}, comment ID: ${comment?.id}`);
   }
 
   /**

@@ -114,6 +114,10 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({
         return updatedComments;
       });
     },
+    onToast: (type, message) => {
+      // Toast notifications handled by hook
+      console.log(`[CommentSystem] Toast: ${type} - ${message}`);
+    },
     onCommentUpdated: (comment) => {
       console.log('[CommentSystem] 🔄 Real-time comment update:', comment.id);
 

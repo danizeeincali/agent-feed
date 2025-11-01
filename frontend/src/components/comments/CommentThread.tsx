@@ -14,11 +14,11 @@ import {
   Zap
 } from 'lucide-react';
 import { CommentTreeNode } from './CommentSystem';
-import { CommentForm } from './CommentForm';
+import { CommentForm } from '../CommentForm';
 import { ReactionsPanel } from './ReactionsPanel';
 import { AgentBadge } from './AgentBadge';
 import { formatTimeAgo } from '../../utils/timeUtils';
-import { renderParsedContent, parseContent } from '../../utils/contentParser';
+import { renderParsedContent, parseContent, hasMarkdown } from '../../utils/contentParser';
 
 interface CommentThreadProps {
   comment: CommentTreeNode;
@@ -67,6 +67,39 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   const isDeepThread = depth >= maxDepth;
   const shouldTruncateContent = comment.content.length > 500 && !showMore;
 
+  const displayContent = shouldTruncateContent
+    ? comment.content.substring(0, 500) + '...'
+    : comment.content;
+
+  /**
+   * Determine if comment should render as markdown
+   *
+   * Strategy:
+   * 1. Check explicit contentType='markdown' (primary)
+   * 2. Check if agent response with markdown syntax (fallback)
+   * 3. Check if any content has markdown syntax (safety net)
+   */
+  const shouldRenderMarkdown = useMemo(() => {
+    // Primary: Explicit markdown type
+    if (comment.contentType === 'markdown') {
+      return true;
+    }
+
+    // Fallback: Agent responses likely to have markdown
+    if (comment.author.type === 'agent' && hasMarkdown(displayContent)) {
+      console.log('[CommentThread] Auto-detected markdown in agent comment:', comment.id);
+      return true;
+    }
+
+    // Safety net: Any markdown syntax (future-ready for user markdown)
+    if (hasMarkdown(displayContent)) {
+      console.log('[CommentThread] Auto-detected markdown in comment:', comment.id);
+      return true;
+    }
+
+    return false;
+  }, [comment.contentType, comment.author.type, comment.id, displayContent]);
+
   // Calculate thread indentation
   const indentationLevel = Math.min(depth, 6); // Max 6 levels of visual indentation
   const indentationClass = `ml-${indentationLevel * 4}`;
@@ -93,17 +126,13 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
 
   const handleAgentResponse = useCallback(async (agentType: string) => {
     if (!onAgentResponse) return;
-    
+
     try {
       await onAgentResponse(comment.id, agentType);
     } catch (error) {
       console.error('Failed to trigger agent response:', error);
     }
   }, [comment.id, onAgentResponse]);
-
-  const displayContent = shouldTruncateContent 
-    ? comment.content.substring(0, 500) + '...'
-    : comment.content;
 
   return (
     <div className={`comment-thread ${className}`} data-comment-id={comment.id}>
@@ -191,9 +220,10 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
         {/* Comment Content */}
         <div className="comment-content px-4 pb-3">
           <div className="prose prose-sm max-w-none text-gray-800 dark:text-gray-200 leading-relaxed">
-            {comment.contentType === 'markdown' ? (
+            {shouldRenderMarkdown ? (
               renderParsedContent(parseContent(displayContent), {
-                className: 'comment-parsed-content'
+                className: 'comment-parsed-content',
+                enableMarkdown: true
               })
             ) : (
               <p className="whitespace-pre-wrap">{displayContent}</p>

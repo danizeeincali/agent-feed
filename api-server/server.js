@@ -1590,7 +1590,7 @@ app.get('/api/agent-posts/:postId/comments', async (req, res) => {
 app.post('/api/agent-posts/:postId/comments', async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, author, author_agent, parent_id, mentioned_users } = req.body;
+    const { content, author, author_agent, parent_id, mentioned_users, content_type } = req.body;
     const userId = req.headers['x-user-id'] || 'anonymous';
 
     // Validate required fields
@@ -1616,6 +1616,8 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
       id: uuidv4(),
       post_id: postId,
       content: content.trim(),
+      // Smart default: markdown for agents, text for users (unless explicitly overridden)
+      content_type: content_type || (authorValue.trim() !== 'anonymous' && authorValue.trim() !== userId ? 'markdown' : 'text'),
       author: author || authorValue.trim(),  // Backward compatibility
       author_agent: authorValue.trim(),       // Primary field
       parent_id: parent_id || null,
@@ -1745,7 +1747,7 @@ app.get('/api/v1/agent-posts/:postId/comments', async (req, res) => {
 app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content, author, author_agent, authorAgent, parent_id, mentioned_users } = req.body;
+    const { content, author, author_agent, authorAgent, parent_id, mentioned_users, content_type } = req.body;
     const userId = req.headers['x-user-id'] || 'anonymous';
 
     // Validate required fields
@@ -1771,6 +1773,8 @@ app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
       id: uuidv4(),
       post_id: postId,
       content: content.trim(),
+      // Smart default: markdown for agents, text for users (unless explicitly overridden)
+      content_type: content_type || (authorValue.trim() !== 'anonymous' && authorValue.trim() !== userId ? 'markdown' : 'text'),
       author: author || authorValue.trim(),  // Backward compatibility
       author_agent: authorValue.trim(),       // Primary field
       parent_id: parent_id || null,

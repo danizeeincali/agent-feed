@@ -10,6 +10,7 @@ interface UseRealtimeCommentsOptions {
   onAgentResponse?: (response: CommentTreeNode) => void;
   onReactionUpdate?: (commentId: string, reactions: Record<string, number>) => void;
   onConnectionChange?: (connected: boolean) => void;
+  onToast?: (type: 'success' | 'error' | 'info' | 'warning', message: string) => void;
 }
 
 /**
@@ -41,7 +42,8 @@ export const useRealtimeComments = (
     onCommentDeleted,
     onAgentResponse,
     onReactionUpdate,
-    onConnectionChange
+    onConnectionChange,
+    onToast
   } = options;
 
   // Store callbacks in refs to avoid re-creating listeners on every render
@@ -51,7 +53,8 @@ export const useRealtimeComments = (
     onCommentDeleted,
     onAgentResponse,
     onReactionUpdate,
-    onConnectionChange
+    onConnectionChange,
+    onToast
   });
 
   // Track subscription state to prevent duplicate subscriptions
@@ -65,9 +68,10 @@ export const useRealtimeComments = (
       onCommentDeleted,
       onAgentResponse,
       onReactionUpdate,
-      onConnectionChange
+      onConnectionChange,
+      onToast
     };
-  }, [onCommentAdded, onCommentUpdated, onCommentDeleted, onAgentResponse, onReactionUpdate, onConnectionChange]);
+  }, [onCommentAdded, onCommentUpdated, onCommentDeleted, onAgentResponse, onReactionUpdate, onConnectionChange, onToast]);
 
   /**
    * Transform API comment data to CommentTreeNode format
@@ -117,6 +121,15 @@ export const useRealtimeComments = (
       try {
         const comment = transformComment(data.comment || data);
         callbacksRef.current.onCommentAdded(comment);
+
+        // Trigger toast notification
+        if (callbacksRef.current.onToast) {
+          const isAgent = comment.author.type === 'agent';
+          const authorName = comment.author.name || comment.author.id;
+          callbacksRef.current.onToast('info',
+            `${isAgent ? '🤖' : '👤'} ${authorName} commented`
+          );
+        }
       } catch (err) {
         console.error('[Realtime] Error handling comment added:', err);
       }

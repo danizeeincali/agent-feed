@@ -2,6 +2,7 @@ import React from 'react';
 import LinkPreview from '../components/LinkPreview';
 import EnhancedLinkPreview from '../components/EnhancedLinkPreview';
 import { MarkdownContent } from '../components/MarkdownContent';
+import { hasMarkdownSyntax } from './markdownConstants';
 
 export interface ParsedContent {
   type: 'text' | 'mention' | 'hashtag' | 'url' | 'link-preview';
@@ -155,7 +156,14 @@ export const renderParsedContent = (
       <div className={className}>
         {/* Render markdown content with custom styling */}
         <div className="mb-4">
-          <MarkdownContent content={originalContent} />
+          <MarkdownContent
+            content={originalContent}
+            onMentionClick={onMentionClick}
+            onHashtagClick={onHashtagClick}
+            enableLinkPreviews={enableLinkPreviews}
+            enableMarkdown={true}
+            className={className}
+          />
         </div>
 
         {/* Render link previews separately (below markdown content) */}
@@ -333,29 +341,15 @@ export const hasSpecialContent = (content: string): boolean => {
 /**
  * Detect if content contains markdown syntax
  *
- * Checks for common markdown patterns:
- * - Headers (# ## ### etc)
- * - Bold (**text**)
- * - Italic (*text* or _text_)
- * - Code (`code` or ```code```)
- * - Lists (- item or 1. item)
- * - Blockquotes (> text)
- * - Links ([text](url))
+ * Uses centralized pattern definitions from markdownConstants.ts
+ * to ensure consistency across the application.
+ *
+ * @param content - Text content to analyze
+ * @returns true if markdown syntax detected
+ *
+ * @see {@link markdownConstants.hasMarkdownSyntax} for the underlying implementation
+ * @see {@link markdownConstants.MARKDOWN_PATTERNS} for the pattern definitions
  */
 export const hasMarkdown = (content: string): boolean => {
-  const markdownPatterns = [
-    /\*\*[^*]+\*\*/,           // Bold
-    /\*[^*\s][^*]*\*/,         // Italic (not empty)
-    /`[^`]+`/,                 // Inline code
-    /^#{1,6}\s/m,              // Headers
-    /^\s*[-*+]\s/m,            // Unordered lists
-    /^\s*\d+\.\s/m,            // Ordered lists
-    /^>\s/m,                   // Blockquotes
-    /\[([^\]]+)\]\(([^)]+)\)/, // Links
-    /```[\s\S]*?```/,          // Code blocks
-    /^---+$/m,                 // Horizontal rules
-    /~~[^~]+~~/,               // Strikethrough (GFM)
-  ];
-
-  return markdownPatterns.some(pattern => pattern.test(content));
+  return hasMarkdownSyntax(content);
 };

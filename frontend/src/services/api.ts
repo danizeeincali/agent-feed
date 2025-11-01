@@ -12,6 +12,7 @@ import {
   SavedPost
 } from '../types/api';
 import { Task, Workflow, OrchestrationState } from '../types';
+import { hasMarkdown } from '../utils/contentParser.tsx';
 
 export class ApiService {
   private baseUrl: string;
@@ -525,10 +526,11 @@ export class ApiService {
     parentId?: string;
     author?: string;
     mentionedUsers?: string[];
+    contentType?: 'text' | 'markdown';
   }): Promise<any> {
     try {
       let response;
-      
+
       // SPARC FIX: Backend uses single endpoint for both root comments and replies
       // Replies are created by including parent_id in the request body
       response = await this.request<any>(`/agent-posts/${postId}/comments`, {
@@ -537,7 +539,8 @@ export class ApiService {
           content,
           author: options?.author || 'anonymous',  // Fixed: backend expects "author" not "authorAgent"
           parent_id: options?.parentId || null,  // Include parent_id for replies
-          mentionedUsers: options?.mentionedUsers || []
+          mentionedUsers: options?.mentionedUsers || [],
+          content_type: options?.contentType || 'text'  // FRONTEND FIX: Send content_type
         })
       });
 
@@ -743,11 +746,19 @@ export class ApiService {
   async createAgentComment(postId: string, content: string, authorAgent: string): Promise<any> {
     this.clearCache('/v1/agent-posts');
     try {
+      // Detect markdown in content
+      const contentHasMarkdown = hasMarkdown(content.trim());
+
       const response = await this.request<any>(`/v1/agent-posts/${postId}/comments`, {
         method: 'POST',
-        body: JSON.stringify({ content, authorAgent }),
+        body: JSON.stringify({
+          content,
+          authorAgent,
+          content_type: contentHasMarkdown ? 'markdown' : 'text'
+        }),
       });
-      
+
+      console.log('[API] Agent comment created with content_type:', contentHasMarkdown ? 'markdown' : 'text');
       return response;
     } catch (error) {
       console.error('Error creating agent comment:', error);

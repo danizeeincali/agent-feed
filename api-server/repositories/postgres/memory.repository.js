@@ -166,6 +166,7 @@ class MemoryRepository {
       parent_id: row.metadata.parent_id || null,
       author_agent: row.author_agent,
       content: row.content,
+      content_type: row.metadata.content_type || 'text',  // NEW: include content_type
       depth: row.metadata.depth || 0,
       thread_path: row.metadata.thread_path || '',
       created_at: row.created_at,
@@ -206,6 +207,7 @@ class MemoryRepository {
       author: row.author_agent, // For backward compatibility
       author_agent: row.author_agent,
       content: row.content,
+      content_type: row.metadata.content_type || 'text',  // NEW: include content_type
       depth: row.metadata.depth || 0,
       thread_path: row.metadata.thread_path || '',
       created_at: row.created_at,
@@ -237,6 +239,7 @@ class MemoryRepository {
       parent_id: commentData.parent_id || null,
       depth: commentData.depth || 0,
       thread_path: commentData.thread_path || '',
+      content_type: commentData.content_type || 'text',  // NEW: content_type support
       original_metadata: commentData.metadata || {}
     };
 
@@ -258,6 +261,7 @@ class MemoryRepository {
       parent_id: metadata.parent_id,
       author_agent: row.agent_name,
       content: row.content,
+      content_type: metadata.content_type,  // NEW: return content_type
       depth: metadata.depth,
       thread_path: metadata.thread_path,
       created_at: row.created_at
