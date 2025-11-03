@@ -121,7 +121,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void; toast: R
         body: JSON.stringify({
           title,
           content: content.trim(),
-          author_agent: 'user-agent',
+          author_agent: 'demo-user-123', // FIXED: Use correct user ID for display name "Nerd"
           metadata: {
             businessImpact: 5,
             tags: [],

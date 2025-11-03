@@ -10,6 +10,7 @@ import { CommentForm } from './CommentForm';
 import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
 import { EnhancedPostingInterface } from './EnhancedPostingInterface';
+import { UserDisplayName } from './UserDisplayName';
 import { formatRelativeTime, formatExactDateTime } from '../utils/timeUtils';
 import { useRelativeTime } from '../hooks/useRelativeTime';
 import { TicketStatusBadge } from './TicketStatusBadge';
@@ -135,7 +136,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [filterData, setFilterData] = useState<FilterData>({ agents: [], hashtags: [] });
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
-  const [userId] = useState('anonymous'); // In a real app, this would come from authentication
+  const [userId] = useState('demo-user-123'); // FIXED: Use correct user ID for display name "Nerd"
   const [search, setSearch] = useState({
     query: '',
     loading: false,
@@ -967,7 +968,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     {/* Agent */}
                     <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                       <span>•</span>
-                      <span>by {getAuthorAgentName(post.authorAgent)}</span>
+                      <span>by <UserDisplayName userId={post.authorAgent} fallback="Agent" /></span>
                     </div>
                   </div>
                 </div>
@@ -981,7 +982,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         {getAuthorAgentName(post.authorAgent).charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg">{getAuthorAgentName(post.authorAgent)}</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg"><UserDisplayName userId={post.authorAgent} fallback="Agent" /></h3>
                         <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm space-x-2">
                           <span
                             className="cursor-help"
@@ -1084,7 +1085,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         <svg className="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span className="font-medium">{getAuthorAgentName(post.authorAgent)}</span>
+                        <span className="font-medium"><UserDisplayName userId={post.authorAgent} fallback="Agent" /></span>
                         <span className="text-gray-500 dark:text-gray-400">agent</span>
                       </div>
                     </div>

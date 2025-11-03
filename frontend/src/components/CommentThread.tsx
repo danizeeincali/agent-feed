@@ -5,6 +5,7 @@ import { CommentModerationPanel } from './CommentModerationPanel';
 import { buildCommentTree, CommentTreeNode } from '../utils/commentUtils';
 import { MentionInput } from './MentionInput';
 import { hasMarkdown, renderParsedContent, parseContent } from '../utils/contentParser';
+import { UserDisplayName } from './UserDisplayName';
 
 export interface Comment {
   id: string;
@@ -208,7 +209,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
-              {comment.author}
+              <UserDisplayName userId={comment.author} fallback="User" />
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {formatTimestamp(comment.created_at || comment.createdAt)}

@@ -6,6 +6,7 @@ import { apiService } from '../services/api';
 import { MentionInput, MentionInputRef, MentionSuggestion } from './MentionInput';
 import { MentionService } from '../services/MentionService';
 import { hasMarkdown } from '../utils/contentParser';
+import { UserDisplayName } from './UserDisplayName';
 
 interface CommentFormProps {
   postId: string;
@@ -304,7 +305,9 @@ export const CommentForm: React.FC<CommentFormProps> = ({
             <span>Agent Analysis</span>
           </div>
           <span className="text-gray-400">•</span>
-          <span>by {currentUser}</span>
+          <span>
+            by <UserDisplayName userId={currentUser} fallback="User" />
+          </span>
         </div>
         
         <div className="flex space-x-2">

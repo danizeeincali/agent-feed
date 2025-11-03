@@ -24,12 +24,12 @@ class UserSettingsService {
       // Get user settings
       this.getSettingsStmt = this.db.prepare(`
         SELECT
-          id,
           user_id,
           display_name,
-          username,
-          profile_data,
-          preferences,
+          display_name_style,
+          onboarding_completed,
+          onboarding_completed_at,
+          profile_json,
           created_at,
           updated_at
         FROM user_settings
@@ -41,17 +41,17 @@ class UserSettingsService {
         UPDATE user_settings
         SET
           display_name = COALESCE(?, display_name),
-          username = COALESCE(?, username),
-          profile_data = COALESCE(?, profile_data),
-          preferences = COALESCE(?, preferences),
-          updated_at = CURRENT_TIMESTAMP
+          display_name_style = COALESCE(?, display_name_style),
+          profile_json = COALESCE(?, profile_json),
+          onboarding_completed = COALESCE(?, onboarding_completed),
+          onboarding_completed_at = COALESCE(?, onboarding_completed_at)
         WHERE user_id = ?
       `);
 
       // Insert user settings (for new users)
       this.insertSettingsStmt = this.db.prepare(`
-        INSERT INTO user_settings (user_id, display_name, username, profile_data, preferences)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO user_settings (user_id, display_name, display_name_style, profile_json, onboarding_completed, onboarding_completed_at)
+        VALUES (?, ?, ?, ?, ?, ?)
       `);
 
       console.log('✅ UserSettingsService prepared statements initialized');
@@ -77,8 +77,7 @@ class UserSettingsService {
       // Parse JSON fields
       return {
         ...settings,
-        profile_data: settings.profile_data ? JSON.parse(settings.profile_data) : {},
-        preferences: settings.preferences ? JSON.parse(settings.preferences) : {}
+        profile_json: settings.profile_json ? JSON.parse(settings.profile_json) : {}
       };
     } catch (error) {
       console.error('Error getting user settings:', error);
@@ -91,30 +90,30 @@ class UserSettingsService {
    * @param {string} userId - User ID
    * @param {Object} updates - Settings to update
    * @param {string} updates.display_name - Display name
-   * @param {string} updates.username - Username
-   * @param {Object} updates.profile_data - Profile data
-   * @param {Object} updates.preferences - User preferences
+   * @param {string} updates.display_name_style - Display name style
+   * @param {Object} updates.profile_json - Profile data
    * @returns {Object} Updated settings
    */
   updateUserSettings(userId = 'demo-user-123', updates = {}) {
     try {
       const {
         display_name,
-        username,
-        profile_data,
-        preferences
+        display_name_style,
+        profile_json,
+        onboarding_completed,
+        onboarding_completed_at
       } = updates;
 
       // Stringify JSON fields if provided
-      const profileDataJson = profile_data ? JSON.stringify(profile_data) : null;
-      const preferencesJson = preferences ? JSON.stringify(preferences) : null;
+      const profileJsonStr = profile_json ? JSON.stringify(profile_json) : null;
 
       // Update settings
       const result = this.updateSettingsStmt.run(
         display_name || null,
-        username || null,
-        profileDataJson,
-        preferencesJson,
+        display_name_style || null,
+        profileJsonStr,
+        onboarding_completed !== undefined ? onboarding_completed : null,
+        onboarding_completed_at || null,
         userId
       );
 
@@ -122,10 +121,11 @@ class UserSettingsService {
       if (result.changes === 0) {
         this.insertSettingsStmt.run(
           userId,
-          display_name || null,
-          username || null,
-          profileDataJson || '{}',
-          preferencesJson || '{}'
+          display_name || 'User',
+          display_name_style || null,
+          profileJsonStr || '{}',
+          onboarding_completed !== undefined ? onboarding_completed : 0,
+          onboarding_completed_at || null
         );
       }
 
@@ -177,7 +177,7 @@ class UserSettingsService {
 
     return this.updateUserSettings(userId, {
       display_name,
-      profile_data: profileData
+      profile_json: profileData
     });
   }
 

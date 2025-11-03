@@ -71,7 +71,7 @@ const EmergencyMinimalApp: React.FC = () => {
           </summary>
           <div className="mt-4 p-4 bg-gray-100 rounded-lg text-xs font-mono">
             <div>Location: {window.location.href}</div>
-            <div>User Agent: {navigator.userAgent.substring(0, 80)}...</div>
+            <div>Browser: {navigator.userAgent.substring(0, 80)}...</div>
             <div>Timestamp: {new Date().toISOString()}</div>
             <div>Local Storage Items: {localStorage.length}</div>
           </div>

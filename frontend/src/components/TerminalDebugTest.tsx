@@ -134,7 +134,7 @@ export const TerminalDebugTest: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm font-mono">
             <div>
               <h3 className="font-bold text-gray-300 mb-2">Browser Info</h3>
-              <p>User Agent: {navigator.userAgent}</p>
+              <p>Browser: {navigator.userAgent}</p>
               <p>Platform: {navigator.platform}</p>
               <p>Language: {navigator.language}</p>
             </div>

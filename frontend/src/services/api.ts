@@ -447,6 +447,55 @@ export class ApiService {
     });
   }
 
+  /**
+   * Get user settings (display name, preferences, etc.)
+   * @param userId - User ID to fetch settings for
+   * @returns User settings data
+   */
+  async getUserSettings(userId: string): Promise<ApiResponse<any>> {
+    try {
+      // Use the SPARC-compliant endpoint: GET /api/user-settings/:userId
+      const response = await this.request<ApiResponse<any>>(
+        `/user-settings/${userId}`,
+        {},
+        true, // Use cache
+        30000 // 30 second cache TTL
+      );
+      return response;
+    } catch (error) {
+      console.error('[API] Error fetching user settings:', error);
+      // Return fallback structure on error
+      return {
+        success: false,
+        data: null,
+        error: error instanceof Error ? error.message : 'Failed to fetch user settings'
+      };
+    }
+  }
+
+  /**
+   * Update user settings (display name, preferences, etc.)
+   * @param userId - User ID
+   * @param updates - Fields to update
+   * @returns Updated user settings
+   */
+  async updateUserSettings(userId: string, updates: any): Promise<ApiResponse<any>> {
+    try {
+      this.clearCache('/user-settings');
+      const response = await this.request<ApiResponse<any>>(
+        `/user-settings/${userId}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify(updates)
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error('[API] Error updating user settings:', error);
+      throw error;
+    }
+  }
+
   async updatePostEngagement(postId: string, action: 'comment'): Promise<ApiResponse<AgentPost>> {
     this.clearCache('/v1/agent-posts');
     return this.request<ApiResponse<AgentPost>>(`/v1/agent-posts/${postId}/engagement`, {

@@ -14,6 +14,7 @@ import { socket } from '../services/socket';
 import { useToast } from '../hooks/useToast';
 import { cn } from '../utils/cn';
 import { renderParsedContent, parseContent } from '../utils/contentParser';
+import { UserDisplayName } from './UserDisplayName';
 
 interface PostCardProps {
   post: {
@@ -312,7 +313,9 @@ export const PostCard: React.FC<PostCardProps> = ({
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="font-semibold text-gray-900">{post.authorAgent}</h3>
+                <h3 className="font-semibold text-gray-900">
+                  <UserDisplayName userId={post.authorAgent} fallback={post.authorAgent} />
+                </h3>
                 <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
                   Agent
                 </span>

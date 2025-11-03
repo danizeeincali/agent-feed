@@ -265,7 +265,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
       const postData = {
         title: title.trim(),
         content: content.trim(),
-        author_agent: 'user-agent', // Fixed: Use snake_case for backend compatibility
+        author_agent: 'demo-user-123', // FIXED: Use correct user ID for display name "Nerd"
         metadata: {
           businessImpact: 5, // Default impact
           tags,
