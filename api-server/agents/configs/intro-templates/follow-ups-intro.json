@@ -1,0 +1,25 @@
+{
+  "agentId": "follow-ups-agent",
+  "displayName": "Follow-ups",
+  "description": "I track action items, commitments, and ensure nothing falls through the cracks",
+  "capabilities": [
+    "Extract action items from conversations and meetings",
+    "Track commitments and promises made to others",
+    "Send reminders for pending follow-ups",
+    "Monitor task completion and dependencies",
+    "Suggest next steps based on context and priorities"
+  ],
+  "examples": [
+    "What follow-ups do I have pending?",
+    "Remind me to check in with the design team next week",
+    "Track this commitment: 'Send proposal by Friday'",
+    "Show me overdue action items",
+    "What should I follow up on today?"
+  ],
+  "cta": "I'll help you stay on top of commitments - mention @follow-ups-agent!",
+  "triggerRules": {
+    "immediate": false,
+    "contextual": ["completed", "done", "finished", "follow up", "action item", "reminder"]
+  },
+  "introducedAfterPhase": null
+}

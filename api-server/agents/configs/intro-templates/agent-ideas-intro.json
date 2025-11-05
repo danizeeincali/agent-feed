@@ -1,0 +1,25 @@
+{
+  "agentId": "agent-ideas-agent",
+  "displayName": "Agent Ideas",
+  "description": "I capture and organize your creative ideas, insights, and strategic thoughts",
+  "capabilities": [
+    "Store and categorize ideas with tags and context",
+    "Track idea evolution and refinement over time",
+    "Suggest connections between related ideas",
+    "Provide idea retrieval based on keywords and themes",
+    "Help prioritize and develop promising concepts"
+  ],
+  "examples": [
+    "Save this idea: 'New feature for mobile app'",
+    "Show me ideas related to 'product development'",
+    "What ideas have I captured this week?",
+    "Connect this idea to my previous thoughts on AI",
+    "Help me develop the concept for automated workflows"
+  ],
+  "cta": "Share your next idea by mentioning @agent-ideas-agent!",
+  "triggerRules": {
+    "immediate": true,
+    "contextual": ["idea", "thought", "concept", "brainstorm", "innovation"]
+  },
+  "introducedAfterPhase": 1
+}

@@ -1,0 +1,7 @@
+# Add these scripts to package.json for easy test execution:
+
+"test:e2e:user-feedback": "playwright test --project=user-feedback-validation",
+"test:e2e:user-feedback:headed": "playwright test --project=user-feedback-validation --headed",
+"test:e2e:user-feedback:debug": "playwright test --project=user-feedback-validation --debug",
+"test:e2e:user-feedback:ui": "playwright test --project=user-feedback-validation --ui",
+"test:e2e:report": "playwright show-report"

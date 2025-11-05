@@ -11,12 +11,14 @@ import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
 import { EnhancedPostingInterface } from './EnhancedPostingInterface';
 import { UserDisplayName } from './UserDisplayName';
+import { AuthorDisplayName } from './AuthorDisplayName';
 import { formatRelativeTime, formatExactDateTime } from '../utils/timeUtils';
 import { useRelativeTime } from '../hooks/useRelativeTime';
 import { TicketStatusBadge } from './TicketStatusBadge';
 import { useTicketUpdates } from '../hooks/useTicketUpdates';
 import { useToast } from '../hooks/useToast';
 import ToastContainer from './ToastContainer';
+import { useUser } from '../contexts/UserContext';
 // import '../styles/comments.css'; // Moved to _app.tsx
 
 interface RealSocialMediaFeedProps {
@@ -56,6 +58,9 @@ interface FilterData {
 }
 
 const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '' }) => {
+  // Get current user from context
+  const { userId } = useUser();
+
   // Initialize toast notifications
   const toast = useToast();
 
@@ -78,6 +83,30 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       return authorAgent.name;
     }
     return 'A'; // Fallback
+  };
+
+  // Agent display name mapping
+  const AGENT_DISPLAY_NAMES: Record<string, string> = {
+    'lambda-vi': 'Λvi',
+    'get-to-know-you-agent': 'Get-to-Know-You',
+    'system': 'System Guide'
+  };
+
+  // Get display-friendly agent name (maps agent IDs to readable names)
+  const getAgentDisplayName = (authorAgent: string): string => {
+    return AGENT_DISPLAY_NAMES[authorAgent] || authorAgent;
+  };
+
+  /**
+   * Get avatar letter for agent with special mappings
+   */
+  const getAgentAvatarLetter = (authorAgent: string): string => {
+    const avatarMap: Record<string, string> = {
+      'lambda-vi': 'Λ',
+      'get-to-know-you-agent': 'G',
+      'system': 'S'
+    };
+    return avatarMap[authorAgent] || authorAgent.charAt(0).toUpperCase();
   };
 
   // Utility function: Parse engagement data if it's a JSON string
@@ -136,7 +165,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [filterData, setFilterData] = useState<FilterData>({ agents: [], hashtags: [] });
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [filterStats, setFilterStats] = useState<FilterStats | null>(null);
-  const [userId] = useState('demo-user-123'); // FIXED: Use correct user ID for display name "Nerd"
   const [search, setSearch] = useState({
     query: '',
     loading: false,
@@ -443,8 +471,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         const matchesHashtag = !hasHashtagFilter ||
           filter.hashtags!.some(tag => post.tags?.includes(tag) || extractHashtags(post.content).includes(tag));
         const matchesSaved = !hasSavedFilter || post.engagement?.isSaved === true;
-        const matchesMyPosts = !hasMyPostsFilter || post.authorAgent === 'ProductionValidator'; // Demo user
-        
+        const matchesMyPosts = !hasMyPostsFilter || post.authorAgent === userId;
+
         // Apply combination mode (AND/OR logic)
         if (filter.combinationMode === 'OR') {
           return matchesAgent || matchesHashtag || matchesSaved || matchesMyPosts;
@@ -454,8 +482,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       case 'saved':
         return post.engagement?.isSaved === true;
       case 'myposts':
-        // Filter posts by current user - for demo, filtering by ProductionValidator
-        return post.authorAgent === 'ProductionValidator';
+        // Filter posts by current user
+        return post.authorAgent === userId;
       default:
         return true;
     }
@@ -628,7 +656,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
       const result = await apiService.createComment(postId, content, {
         parentId,
-        author: 'ProductionValidator', // Use consistent agent name
+        author: userId,
+        author_user_id: userId,
         mentionedUsers: extractMentions(content)
       });
 
@@ -671,18 +700,49 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     return { characterCount, wordCount, readingTime };
   };
 
-  const getHookContent = (content: string): string => {
+  const getHookContent = (content: string, title?: string): string => {
+    // If title provided, check if content starts with duplicate title
+    if (title) {
+      const lines = content.split('\n');
+      let startIndex = 0;
+
+      // Skip HTML comments
+      while (startIndex < lines.length && lines[startIndex].trim().startsWith('<!--')) {
+        startIndex++;
+      }
+
+      // Check if first non-comment line is markdown heading matching title
+      if (startIndex < lines.length) {
+        const firstLine = lines[startIndex].trim();
+        // Remove markdown heading syntax (# ## ### etc)
+        const cleanedLine = firstLine.replace(/^#+\s*/, '').trim();
+        const cleanedTitle = title.trim();
+
+        // If titles match, skip to next paragraph
+        if (cleanedLine.toLowerCase() === cleanedTitle.toLowerCase()) {
+          // Find first non-empty line after title
+          startIndex++;
+          while (startIndex < lines.length && lines[startIndex].trim() === '') {
+            startIndex++;
+          }
+          // Reconstruct content starting from body
+          content = lines.slice(startIndex).join('\n');
+        }
+      }
+    }
+
+    // Continue with existing URL handling logic
     // Smart extraction that preserves URLs - use simple splitting first
     const sentences = content.split(/(?<=[.!?])\s+/);
-    
+
     if (sentences.length === 0) return content;
-    
+
     let hookContent = sentences[0];
-    
+
     // Create fresh regex to avoid state issues
     const urlRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)', 'i');
     const hasUrl = urlRegex.test(hookContent);
-    
+
     if (hasUrl) {
       // If there's a URL in the first sentence, include it fully
       return hookContent;
@@ -698,35 +758,35 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         }
       }
     }
-    
+
     // If still too long, truncate but keep URLs intact
     if (hookContent.length > 300) {
       const globalUrlRegex = new RegExp('(https?:\\/\\/[^\\s<>"{}|\\\\^`\\[\\]]+)', 'g');
       const urls = hookContent.match(globalUrlRegex) || [];
-      
+
       if (urls.length > 0) {
         // Try to keep the first URL and some surrounding context
         const firstUrlIndex = hookContent.indexOf(urls[0]);
         const beforeUrl = hookContent.substring(0, firstUrlIndex).trim();
         const afterUrl = hookContent.substring(firstUrlIndex + urls[0].length).trim();
-        
+
         // Keep reasonable context around the URL
         const maxBeforeLength = 100;
         const maxAfterLength = 100;
-        
-        let finalBefore = beforeUrl.length > maxBeforeLength 
-          ? '...' + beforeUrl.substring(beforeUrl.length - maxBeforeLength) 
+
+        let finalBefore = beforeUrl.length > maxBeforeLength
+          ? '...' + beforeUrl.substring(beforeUrl.length - maxBeforeLength)
           : beforeUrl;
-          
-        let finalAfter = afterUrl.length > maxAfterLength 
-          ? afterUrl.substring(0, maxAfterLength) + '...' 
+
+        let finalAfter = afterUrl.length > maxAfterLength
+          ? afterUrl.substring(0, maxAfterLength) + '...'
           : afterUrl;
-        
+
         const result = `${finalBefore} ${urls[0]} ${finalAfter}`.trim();
         return result;
       }
     }
-    
+
     return hookContent;
   };
 
@@ -776,6 +836,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   return (
     <>
       <ToastContainer toasts={toast.toasts} onDismiss={toast.dismissToast} />
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Feed - Left Column */}
         <div className={`lg:col-span-2 ${className}`} data-testid="real-social-media-feed">
@@ -903,7 +964,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Line 1: Avatar and Title */}
                   <div className="flex items-center space-x-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md flex-shrink-0">
-                      {getAuthorAgentName(post.authorAgent).charAt(0).toUpperCase()}
+                      {getAgentAvatarLetter(post.authorAgent)}
                     </div>
                     <div className="flex-grow min-w-0">
                       <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{post.title}</h2>
@@ -929,10 +990,19 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     </div>
                   )}
 
-                  {/* Line 2: Full Hook with Parsing */}
+                  {/* Line 2: Constrained Hook Preview with CSS Line Clamp */}
                   <div className="pl-14">
-                    <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                      {renderParsedContent(parseContent(getHookContent(post.content)), {
+                    <div
+                      className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed overflow-hidden cursor-pointer"
+                      style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        maxHeight: '4.5rem' /* 3 lines at 1.5rem line-height */
+                      }}
+                      onClick={() => togglePostExpansion(post.id)}
+                    >
+                      {renderParsedContent(parseContent(getHookContent(post.content, post.title)), {
                         onMentionClick: handleMentionClick,
                         onHashtagClick: handleHashtagClick,
                         enableLinkPreviews: true,
@@ -942,8 +1012,9 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         enableMarkdown: true // Enable markdown rendering
                       })}
                     </div>
+
                   </div>
-                  
+
                   {/* Line 3: Metrics */}
                   <div className="pl-14 flex items-center space-x-6 mt-4 !mb-4">
                     {/* Time (Relative with Tooltip) */}
@@ -968,7 +1039,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                     {/* Agent */}
                     <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                       <span>•</span>
-                      <span>by <UserDisplayName userId={post.authorAgent} fallback="Agent" /></span>
+                      <span>by <AuthorDisplayName authorId={post.authorAgent} /></span>
                     </div>
                   </div>
                 </div>
@@ -979,10 +1050,10 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md">
-                        {getAuthorAgentName(post.authorAgent).charAt(0).toUpperCase()}
+                        {getAgentAvatarLetter(post.authorAgent)}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg"><UserDisplayName userId={post.authorAgent} fallback="Agent" /></h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg"><AuthorDisplayName authorId={post.authorAgent} /></h3>
                         <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm space-x-2">
                           <span
                             className="cursor-help"
@@ -1003,9 +1074,6 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                       <ChevronUp className="w-5 h-5" />
                     </button>
                   </div>
-
-                  {/* Post Title */}
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 leading-tight">{post.title}</h2>
 
                   {/* Ticket Status Badge - Show if tickets exist */}
                   {post.ticket_status && post.ticket_status.total > 0 && (
@@ -1085,8 +1153,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                         <svg className="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span className="font-medium"><UserDisplayName userId={post.authorAgent} fallback="Agent" /></span>
-                        <span className="text-gray-500 dark:text-gray-400">agent</span>
+                        <span className="font-medium"><AuthorDisplayName authorId={post.authorAgent} /></span>
+                        <span className="text-gray-500 dark:text-gray-400">author</span>
                       </div>
                     </div>
                   </div>

@@ -11,7 +11,9 @@ import GlobalErrorBoundary from './components/GlobalErrorBoundary';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import AsyncErrorBoundary from './components/AsyncErrorBoundary';
 import { VideoPlaybackProvider } from './contexts/VideoPlaybackContext';
+import { UserProvider } from './contexts/UserContext';
 import { useDarkMode } from './hooks/useDarkMode';
+import { useSystemInitialization } from './hooks/useSystemInitialization';
 
 // Import components directly to fix loading issue - with error handling
 try {
@@ -211,9 +213,29 @@ const App: React.FC = () => {
   // Enable automatic dark mode detection
   useDarkMode();
 
+  // Initialize system for first-time users
+  const { isInitializing, isInitialized, error } = useSystemInitialization('demo-user-123');
+
   useEffect(() => {
     console.log('DEBUG: App component mounted!');
   }, []);
+
+  // Show loading state during initialization
+  if (isInitializing) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-700 dark:text-gray-300 text-lg">Setting up your workspace...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Log error but don't block the app
+  if (error) {
+    console.error('Initialization error:', error);
+  }
 
   // SSR-safe router selection
   const Router = typeof window !== 'undefined' ? BrowserRouter : MemoryRouter;
@@ -221,15 +243,16 @@ const App: React.FC = () => {
   return (
     <GlobalErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <VideoPlaybackProvider>
-          <WebSocketProvider config={{
-            autoConnect: true,
-            reconnectAttempts: 3,
-            reconnectInterval: 2000,
-            heartbeatInterval: 20000,
-          }}>
-            <Router>
-            <Layout>
+        <UserProvider defaultUserId="demo-user-123">
+          <VideoPlaybackProvider>
+            <WebSocketProvider config={{
+              autoConnect: true,
+              reconnectAttempts: 3,
+              reconnectInterval: 2000,
+              heartbeatInterval: 20000,
+            }}>
+              <Router>
+              <Layout>
               <ErrorBoundary fallbackRender={({ error }) => (
                 <div className="p-4 border border-red-200 bg-red-50 text-red-700 rounded-md">
                   <h2>Error in AppRouter</h2>
@@ -316,10 +339,11 @@ const App: React.FC = () => {
                   </Routes>
                 </Suspense>
               </ErrorBoundary>
-            </Layout>
-            </Router>
-          </WebSocketProvider>
-        </VideoPlaybackProvider>
+              </Layout>
+              </Router>
+            </WebSocketProvider>
+          </VideoPlaybackProvider>
+        </UserProvider>
       </QueryClientProvider>
     </GlobalErrorBoundary>
   );

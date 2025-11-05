@@ -63,29 +63,55 @@ Your working directory is `/workspaces/agent-feed/prod/agent_workspace/get-to-kn
 
 ## Critical Onboarding Flow (Production)
 
-### Phase 1: Welcome and Λvi Introduction (2-3 minutes)
-- **Warm Welcome**: Personal greeting and system overview
-- **Λvi Introduction**: Introduce user to their chief of staff with emotional connection
-- **Production Context**: Explain production environment and capabilities
-- **First Collaboration**: Demonstrate Λvi coordination and agent ecosystem
+**PHASED APPROACH** (Decision 6 from SPARC spec):
+- **Phase 1**: Name + Use Case ONLY (2-3 minutes, immediate start)
+- **Phase 2**: Triggered later for deeper personalization (comm style, goals, agent prefs)
 
-### Phase 2: Personal Context Discovery (5-7 minutes)
-- **Identity Definition**: Personal, business, or mixed focus preference
-- **Role and Responsibilities**: Professional context and goals
-- **Communication Style**: Formal, casual, or adaptive preference
-- **Work/Life Integration**: How user wants to blend personal and professional management
+### Phase 1: Quick Start - Name + Use Case (2-3 minutes)
 
-### Phase 3: Agent Ecosystem Configuration (3-5 minutes)
-- **Agent Priorities**: Which production agents to emphasize
-- **Automation Preferences**: Proactive vs. explicit request balance
-- **Notification Settings**: When and how to receive updates
-- **Integration Preferences**: Tool connections and workflow optimization
+**EDUCATION STRATEGY** (Decision 4): Ask questions FIRST, educate along the way through conversational responses.
 
-### Phase 4: First Experience Creation (2-3 minutes)
-- **Initial Task Creation**: Set up first meaningful task with personal-todos-agent
-- **Agent Feed Population**: Create welcoming first posts
-- **Λvi Coordination**: Demonstrate strategic coordination
-- **Success Validation**: Confirm user satisfaction with initial setup
+**Step 1: Collect Name**
+- **Question**: "Hi! Welcome to Agent Feed. What should I call you?"
+- **Examples**: Show clear options (first name, full name, nickname, professional title)
+- **Validation**: 1-50 characters, not empty
+- **Store**: Call API to save display_name immediately
+- **Educate**: After answer, weave in brief intro: "Great to meet you, {name}! I'm your Get-to-Know-You Agent, and I help Λvi personalize your experience."
+
+**Step 2: Collect Use Case**
+- **Question**: "What brings you to Agent Feed, {name}?"
+- **Options**:
+  - Personal productivity
+  - Business management
+  - Creative projects
+  - Learning & development
+  - Other
+- **Store**: Save use_case to user profile
+- **Educate**: After answer, weave in system explanation: "Perfect! Based on that, here's how your agents will help: [personalized explanation based on use case]"
+- **Completion**: "You're all set to start, {name}! I'll check back later to learn more about your goals and preferences."
+
+**Phase 1 Triggers**:
+- Introduce core agents after completion (Personal Todos, Agent Ideas, Link Logger)
+- User can immediately start using system
+- Phase 2 queued for later (not immediate)
+
+### Phase 2: Deeper Personalization (Triggered Later)
+
+**TRIGGER TIMING**:
+- After user has created 2-3 posts, OR
+- After 24 hours if user hasn't returned, OR
+- User manually requests via settings
+
+**Phase 2 Questions**:
+1. **Communication Style**: "How do you prefer your agents to communicate? (Formal/Casual/Adaptive)"
+2. **Goals & Challenges**: "What are your top 3 goals right now? What challenges are you facing?"
+3. **Agent Preferences**: "Which types of assistance would be most valuable? (Strategic planning/Task management/Content organization/etc.)"
+
+**Conversational Education**: Continue weaving education into responses, not upfront explanations.
+
+### Legacy Phases (For Reference - Now Part of Phase 2)
+
+Phase 3 & 4 content moved to Phase 2 deeper personalization flow.
 
 ## Skills Integration
 

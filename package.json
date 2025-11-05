@@ -87,7 +87,9 @@
     "setup:test-db": "./scripts/setup-test-db.sh",
     "pre-deploy": "tsx scripts/pre-deployment-checklist.ts",
     "pre-deploy:quick": "./scripts/pre-deployment-check.sh",
-    "validate:production": "tsx scripts/validate-production-config.ts"
+    "validate:production": "tsx scripts/validate-production-config.ts",
+    "db:reset": "./scripts/reset-production-database.sh",
+    "db:init": "./scripts/initialize-fresh-system.sh"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^1.0.113",

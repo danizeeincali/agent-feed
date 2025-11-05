@@ -22,10 +22,10 @@
         "frontend/src/App.tsx",
         "frontend/src/components/RealSocialMediaFeed.tsx",
         "simple-backend.js",
-        "frontend/src/tests/reports/unit-results.json",
-        "frontend/src/tests/reports/unit-junit.xml"
+        "api-server/server.js",
+        "package.json"
       ],
-      "exampleFilesGeneratedAt": 1761680758916
+      "exampleFilesGeneratedAt": 1762288274828
     }
   }
 }

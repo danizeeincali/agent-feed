@@ -116,7 +116,9 @@ class DatabaseSelector {
       const limit = options.limit || 100;
       const offset = options.offset || 0;
 
-      // Fixed: Column name is publishedAt (camelCase), not published_at (snake_case)
+      // Use publishedAt for correct chronological order (newest first)
+      // publishedAt has millisecond precision and proper staggering for onboarding posts
+      // created_at only has second precision which causes identical timestamps
       const posts = this.sqliteDb.prepare(`
         SELECT * FROM agent_posts
         ORDER BY publishedAt DESC
@@ -252,9 +254,16 @@ class DatabaseSelector {
     if (this.usePostgres) {
       return await memoryRepo.getCommentsByPostId(postId, userId);
     } else {
-      // SQLite implementation
+      // SQLite implementation - Join with user_settings for display names
       const comments = this.sqliteDb.prepare(`
-        SELECT * FROM comments WHERE post_id = ? ORDER BY created_at ASC
+        SELECT
+          c.*,
+          COALESCE(u.display_name, c.author, c.author_agent, 'Unknown') as display_name,
+          u.display_name_style
+        FROM comments c
+        LEFT JOIN user_settings u ON c.author_user_id = u.user_id
+        WHERE c.post_id = ?
+        ORDER BY c.created_at ASC
       `).all(postId);
 
       return comments;
@@ -303,12 +312,13 @@ class DatabaseSelector {
           parent_id,
           author,
           author_agent,
+          author_user_id,
           content,
           content_type,
           mentioned_users,
           created_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
       `);
 
       const commentId = commentData.id || `comment-${Date.now()}`;
@@ -320,6 +330,9 @@ class DatabaseSelector {
       const author = commentData.author || userId;
       const authorAgent = commentData.author_agent || commentData.author || userId;
 
+      // NEW: Store the user_id for proper display name lookup
+      const authorUserId = commentData.user_id || commentData.author_user_id || userId;
+
       // Default content_type to 'text' if not provided
       const contentType = commentData.content_type || 'text';
 
@@ -329,14 +342,21 @@ class DatabaseSelector {
         commentData.parent_id || null,
         author,           // Keep for backward compatibility
         authorAgent,      // Primary field going forward
+        authorUserId,     // NEW: Store user_id for display name lookup
         commentData.content,
         contentType,      // NEW: content_type support
         mentionedUsers
       );
 
-      // Get the created comment
+      // Get the created comment with joined user display name
       const comment = this.sqliteDb.prepare(`
-        SELECT * FROM comments WHERE id = ?
+        SELECT
+          c.*,
+          COALESCE(u.display_name, c.author, c.author_agent, 'Unknown') as display_name,
+          u.display_name_style
+        FROM comments c
+        LEFT JOIN user_settings u ON c.author_user_id = u.user_id
+        WHERE c.id = ?
       `).get(commentId);
 
       return comment;

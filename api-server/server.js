@@ -21,6 +21,10 @@ import monitoringRouter from './routes/monitoring.js';
 import streamingMonitoringRouter from './routes/streaming-monitoring.js';
 import reasoningBankRouter from './routes/reasoningbank.js';
 import userSettingsRouter, { initializeUserSettingsRoutes } from './routes/user-settings.js';
+import onboardingRouter from './routes/onboarding/index.js';
+import systemInitializationRouter, { initializeSystemRoutes } from './routes/system-initialization.js';
+import agentIntroductionRouter from './routes/agents-introduction.js';
+import bridgesRouter, { initializeBridgeRoutes } from './routes/bridges.js';
 // Phase 5: Monitoring service integration
 import { MonitoringService, AlertingService } from './services/monitoring-service.js';
 // Work queue repository - dynamically selects SQLite or PostgreSQL
@@ -115,6 +119,18 @@ if (db) {
   console.log('✅ User settings system initialized');
 }
 
+// Initialize system initialization routes with database
+if (db) {
+  initializeSystemRoutes(db);
+  console.log('✅ System initialization routes ready');
+}
+
+// Initialize bridge routes with database
+if (db) {
+  initializeBridgeRoutes(db);
+  console.log('✅ Bridge routes initialized');
+}
+
 // Initialize auto-registration middleware for agent pages
 if (agentPagesDb) {
   fileWatcher = initializeAutoRegistration(agentPagesDb, AGENT_PAGES_DIR);
@@ -124,6 +140,10 @@ if (agentPagesDb) {
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Make database available to all routes via app.locals
+app.locals.db = db;
+app.locals.agentPagesDb = agentPagesDb;
 
 // Load security configuration
 let securityConfig;
@@ -360,6 +380,18 @@ app.use('/api/reasoningbank', reasoningBankRouter);
 
 // User Settings routes
 app.use('/api/user-settings', userSettingsRouter);
+
+// Onboarding routes
+app.use('/api/onboarding', onboardingRouter);
+
+// System initialization routes
+app.use('/api/system', systemInitializationRouter);
+
+// Agent introduction routes
+app.use('/api/agents', agentIntroductionRouter);
+
+// Bridge routes (Hemingway Bridge engagement system)
+app.use('/api/bridges', bridgesRouter);
 
 // ============================================================================
 // SECURITY & AUTHENTICATION ROUTES
@@ -1041,7 +1073,7 @@ app.get('/api/agents/:slug', async (req, res) => {
 
 app.get('/api/agent-posts', async (req, res) => {
   try {
-    const { limit = 20, offset = 0, filter = 'all', search = '', sortBy = 'published_at', sortOrder = 'DESC' } = req.query;
+    const { limit = 20, offset = 0, filter = 'all', search = '', sortBy = 'created_at', sortOrder = 'DESC' } = req.query;
     const userId = req.query.userId || 'anonymous';
 
     // Validate and sanitize inputs
@@ -1219,7 +1251,7 @@ app.get('/api/v1/agent-posts', async (req, res) => {
       offset = 0,
       filter = 'all',
       search = '',
-      sortBy = 'published_at',
+      sortBy = 'created_at',
       sortOrder = 'DESC'
     } = req.query;
     const userId = req.query.userId || 'anonymous';
@@ -1620,6 +1652,7 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
       content_type: content_type || (authorValue.trim() !== 'anonymous' && authorValue.trim() !== userId ? 'markdown' : 'text'),
       author: author || authorValue.trim(),  // Backward compatibility
       author_agent: authorValue.trim(),       // Primary field
+      user_id: userId,                        // NEW: Store user_id for proper display name lookup
       parent_id: parent_id || null,
       mentioned_users: mentioned_users || [],
       depth: 0
@@ -1777,6 +1810,7 @@ app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
       content_type: content_type || (authorValue.trim() !== 'anonymous' && authorValue.trim() !== userId ? 'markdown' : 'text'),
       author: author || authorValue.trim(),  // Backward compatibility
       author_agent: authorValue.trim(),       // Primary field
+      user_id: userId,                        // NEW: Store user_id for proper display name lookup
       parent_id: parent_id || null,
       mentioned_users: mentioned_users || [],
       depth: 0

@@ -1,0 +1,25 @@
+{
+  "agentId": "link-logger-agent",
+  "displayName": "Link Logger",
+  "description": "I help you save, organize, and retrieve important URLs and web resources",
+  "capabilities": [
+    "Save links with automatic metadata extraction",
+    "Categorize URLs by topic, project, or custom tags",
+    "Extract key information from web pages",
+    "Provide searchable link archive with full-text search",
+    "Suggest related links based on your interests"
+  ],
+  "examples": [
+    "Save this article: https://example.com/article",
+    "Show me links about 'machine learning'",
+    "What resources have I saved this month?",
+    "Find that GitHub repo I saved last week",
+    "Tag this link as 'research' and 'AI'"
+  ],
+  "cta": "Share a URL in your next post and I'll help organize it!",
+  "triggerRules": {
+    "immediate": true,
+    "contextual": ["http", "https", "url", "link", "article", "resource"]
+  },
+  "introducedAfterPhase": 1
+}

@@ -226,6 +226,22 @@ export default defineConfig({
       },
       testDir: './src/tests/e2e',
     },
+
+    /* User Feedback Validation E2E Tests - Chrome with screenshots */
+    {
+      name: 'user-feedback-validation',
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        viewport: { width: 1920, height: 1080 },
+        screenshot: 'on',
+        video: 'on',
+        trace: 'on',
+        baseURL: 'http://localhost:3001',
+      },
+      testDir: './src/tests/e2e',
+      testMatch: '**/user-feedback-validation.spec.ts',
+    },
   ],
 
   /* Run your local dev server before starting the tests */

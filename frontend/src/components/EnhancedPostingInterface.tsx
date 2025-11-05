@@ -10,6 +10,7 @@ import { useToast } from '../hooks/useToast';
 import ToastContainer from './ToastContainer';
 import SystemCommandWarningDialog from './SystemCommandWarningDialog';
 import { detectRiskyContent } from '../utils/detectRiskyContent';
+import { useUser } from '../contexts/UserContext';
 // Removed AviDirectChatSDK import - using built-in Avi chat component
 
 type PostingTab = 'post' | 'quick' | 'avi';
@@ -84,6 +85,7 @@ export const EnhancedPostingInterface: React.FC<EnhancedPostingInterfaceProps> =
 
 // Simple Quick Post Component
 const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void; toast: ReturnType<typeof useToast> }> = ({ onPostCreated, toast }) => {
+  const { userId } = useUser();
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedMentions, setSelectedMentions] = useState<MentionSuggestion[]>([]);
@@ -121,7 +123,7 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void; toast: R
         body: JSON.stringify({
           title,
           content: content.trim(),
-          author_agent: 'demo-user-123', // FIXED: Use correct user ID for display name "Nerd"
+          author_agent: userId,
           metadata: {
             businessImpact: 5,
             tags: [],

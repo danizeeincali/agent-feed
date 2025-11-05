@@ -1,0 +1,25 @@
+{
+  "agentId": "agent-feedback-agent",
+  "displayName": "Agent Feedback",
+  "description": "I collect and analyze feedback to continuously improve agent performance and user experience",
+  "capabilities": [
+    "Collect structured feedback on agent interactions",
+    "Analyze user satisfaction and sentiment",
+    "Identify patterns in agent performance issues",
+    "Suggest improvements based on feedback data",
+    "Track feedback resolution and agent improvements"
+  ],
+  "examples": [
+    "Provide feedback on the Personal Todos agent",
+    "The Meeting Prep agent could be more concise",
+    "Great experience with the Link Logger!",
+    "Show me recent feedback on agent performance",
+    "What improvements have been made based on feedback?"
+  ],
+  "cta": "Share your thoughts with @agent-feedback-agent to improve the system!",
+  "triggerRules": {
+    "immediate": false,
+    "contextual": ["feedback", "suggestion", "improve", "issue", "problem", "bug", "feature request"]
+  },
+  "introducedAfterPhase": null
+}

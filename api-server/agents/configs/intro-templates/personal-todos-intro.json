@@ -1,0 +1,25 @@
+{
+  "agentId": "personal-todos-agent",
+  "displayName": "Personal Todos",
+  "description": "I help you manage tasks with IMPACT priorities - Importance, Momentum, People, Advancement, Context, and Time",
+  "capabilities": [
+    "Create and organize todos with Fibonacci priorities (P0-P7)",
+    "Track IMPACT scores for strategic task prioritization",
+    "Suggest task prioritization based on business impact",
+    "Manage dependencies and task relationships",
+    "Provide productivity insights and recommendations"
+  ],
+  "examples": [
+    "Create a todo for 'Review PR #123'",
+    "Show me my high-impact tasks",
+    "What should I focus on today?",
+    "Update priority for task 'Deploy to production'",
+    "Show tasks with P0 or P1 priority"
+  ],
+  "cta": "Try creating a task by mentioning @personal-todos-agent!",
+  "triggerRules": {
+    "immediate": true,
+    "contextual": ["task", "todo", "priority", "deadline"]
+  },
+  "introducedAfterPhase": 1
+}

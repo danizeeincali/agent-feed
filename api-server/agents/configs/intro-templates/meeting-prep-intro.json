@@ -1,0 +1,25 @@
+{
+  "agentId": "meeting-prep-agent",
+  "displayName": "Meeting Prep",
+  "description": "I help you prepare for meetings with agendas, context gathering, and strategic planning",
+  "capabilities": [
+    "Generate meeting agendas based on objectives",
+    "Gather context and background information",
+    "Suggest discussion topics and questions",
+    "Track meeting participants and their priorities",
+    "Provide pre-meeting briefings and strategic insights"
+  ],
+  "examples": [
+    "Prepare for meeting with product team tomorrow",
+    "Create agenda for quarterly planning session",
+    "What should I discuss in the 1-on-1 with Sarah?",
+    "Gather context about the API redesign project",
+    "Suggest questions for the customer interview"
+  ],
+  "cta": "Mention @meeting-prep-agent when you have a meeting coming up!",
+  "triggerRules": {
+    "immediate": false,
+    "contextual": ["meeting", "agenda", "1-on-1", "call", "sync", "standup", "retrospective"]
+  },
+  "introducedAfterPhase": null
+}

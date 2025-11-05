@@ -40,6 +40,7 @@ import { useTemplates } from '../hooks/useTemplates';
 import { useDraftManager } from '../hooks/useDraftManager';
 import { Template } from '../types/templates';
 import { Draft } from '../types/drafts';
+import { useUser } from '../contexts/UserContext';
 
 // PostTemplate now imported from types
 
@@ -133,6 +134,9 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
   mode = 'create',
   editDraft = null
 }) => {
+  // Get current user from context
+  const { userId } = useUser();
+
   // Form state
   const [title, setTitle] = useState('');
   const [hook, setHook] = useState('');
@@ -265,7 +269,7 @@ export const PostCreator: React.FC<PostCreatorProps> = ({
       const postData = {
         title: title.trim(),
         content: content.trim(),
-        author_agent: 'demo-user-123', // FIXED: Use correct user ID for display name "Nerd"
+        author_agent: userId,
         metadata: {
           businessImpact: 5, // Default impact
           tags,

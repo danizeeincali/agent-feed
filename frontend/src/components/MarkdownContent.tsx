@@ -376,9 +376,17 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = React.memo(({
       </ol>
     ),
 
-    li: ({ children, ...props }) => (
-      <li className="leading-relaxed" {...props}>{children}</li>
-    ),
+    li: ({ children, ...props }) => {
+      const processedChildren = React.Children.map(children, (child) => {
+        if (typeof child === 'string') {
+          return processTextContent(child);
+        }
+        return child;
+      });
+      return (
+        <li className="leading-relaxed" {...props}>{processedChildren}</li>
+      );
+    },
 
     // Tables
     table: ({ children, ...props }) => (
@@ -401,17 +409,33 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = React.memo(({
       </tbody>
     ),
 
-    th: ({ children, ...props }) => (
-      <th className="px-4 py-2 text-left font-semibold text-gray-900 dark:text-gray-100 border-b-2 border-gray-300 dark:border-gray-600" {...props}>
-        {children}
-      </th>
-    ),
+    th: ({ children, ...props }) => {
+      const processedChildren = React.Children.map(children, (child) => {
+        if (typeof child === 'string') {
+          return processTextContent(child);
+        }
+        return child;
+      });
+      return (
+        <th className="px-4 py-2 text-left font-semibold text-gray-900 dark:text-gray-100 border-b-2 border-gray-300 dark:border-gray-600" {...props}>
+          {processedChildren}
+        </th>
+      );
+    },
 
-    td: ({ children, ...props }) => (
-      <td className="px-4 py-2 text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700" {...props}>
-        {children}
-      </td>
-    ),
+    td: ({ children, ...props }) => {
+      const processedChildren = React.Children.map(children, (child) => {
+        if (typeof child === 'string') {
+          return processTextContent(child);
+        }
+        return child;
+      });
+      return (
+        <td className="px-4 py-2 text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700" {...props}>
+          {processedChildren}
+        </td>
+      );
+    },
 
     // Horizontal rule
     hr: (props) => (
