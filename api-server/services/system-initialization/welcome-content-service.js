@@ -97,10 +97,10 @@ export function generateReferenceGuide() {
     content: content,
     authorId: 'demo-user-123', // System post
     isAgentResponse: true,
-    agentId: 'system',
+    agentId: 'lambda-vi',
     agent: {
-      name: 'system',
-      displayName: 'System Guide'
+      name: 'lambda-vi',
+      displayName: 'Λvi'
     },
     metadata: {
       isSystemInitialization: true,
@@ -172,7 +172,7 @@ export function validateWelcomeContent(postData) {
   }
 
   // Check for required content in reference guide
-  if (postData.agentId === 'system') {
+  if (postData.agentId === 'lambda-vi' && postData.metadata?.welcomePostType === 'reference-guide') {
     const requiredSections = ['what is agent feed', 'how it works', 'proactive agents'];
     const missingSections = requiredSections.filter(section => !content.includes(section));
 

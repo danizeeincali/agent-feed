@@ -15,6 +15,7 @@ import { useToast } from '../hooks/useToast';
 import { cn } from '../utils/cn';
 import { renderParsedContent, parseContent } from '../utils/contentParser';
 import { UserDisplayName } from './UserDisplayName';
+import { parseEngagement } from '../utils/engagementUtils';
 
 interface PostCardProps {
   post: {
@@ -29,7 +30,15 @@ interface PostCardProps {
       tags?: string[];
       hook?: string;
     };
-    // Engagement data from AgentLink API
+    // Engagement data from database (JSON string or object)
+    engagement?: string | {
+      comments?: number;
+      likes?: number;
+      shares?: number;
+      views?: number;
+      bookmarks?: number;
+    };
+    // Legacy engagement fields (for backward compatibility)
     bookmarks?: number;
     shares?: number;
     views?: number;
@@ -53,12 +62,15 @@ export const PostCard: React.FC<PostCardProps> = ({
   const [optimisticComments, setOptimisticComments] = useState<any[]>([]);
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [engagementState, setEngagementState] = useState({
-    bookmarked: false,
-    bookmarks: post.bookmarks || 0,
-    shares: post.shares || 0,
-    views: post.views || 0,
-    comments: post.comments || 0
+  const [engagementState, setEngagementState] = useState(() => {
+    const parsedEngagement = parseEngagement(post.engagement);
+    return {
+      bookmarked: false,
+      bookmarks: post.bookmarks || parsedEngagement.bookmarks || 0,
+      shares: post.shares || parsedEngagement.shares || 0,
+      views: post.views || parsedEngagement.views || 0,
+      comments: parsedEngagement.comments || 0
+    };
   });
 
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -181,16 +193,14 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   // Socket.IO integration for real-time updates
   useEffect(() => {
-    // Connect Socket.IO if not already connected
-    if (!socket.connected) {
-      console.log('[PostCard] Connecting Socket.IO for post:', post.id);
-      socket.connect();
-    }
-
     // Track connection state
     const handleConnect = () => {
       console.log('[PostCard] Socket.IO connected');
       setIsConnected(true);
+
+      // ✅ FIX: Subscribe to room AFTER connection confirmed
+      socket.emit('subscribe:post', post.id);
+      console.log('[PostCard] Subscribed to post room:', post.id);
     };
 
     const handleDisconnect = () => {
@@ -198,13 +208,19 @@ export const PostCard: React.FC<PostCardProps> = ({
       setIsConnected(false);
     };
 
-    // Subscribe to events
+    // Subscribe to events FIRST
     socket.on('connect', handleConnect);
     socket.on('disconnect', handleDisconnect);
 
-    // Subscribe to post-specific room
-    socket.emit('subscribe:post', post.id);
-    console.log('[PostCard] Subscribed to post room:', post.id);
+    // Connect Socket.IO if not already connected
+    if (!socket.connected) {
+      console.log('[PostCard] Connecting Socket.IO for post:', post.id);
+      socket.connect();
+    } else {
+      // Already connected, subscribe immediately
+      socket.emit('subscribe:post', post.id);
+      console.log('[PostCard] Subscribed to post room (already connected):', post.id);
+    }
 
     // Handle comment events
     const handleCommentCreated = (data: any) => {
@@ -251,9 +267,11 @@ export const PostCard: React.FC<PostCardProps> = ({
       socket.off('comment:created', handleCommentCreated);
       socket.off('comment:updated', handleCommentUpdated);
       socket.off('comment:deleted', handleCommentDeleted);
-      socket.emit('unsubscribe:post', post.id);
+      if (socket.connected) {
+        socket.emit('unsubscribe:post', post.id);
+      }
     };
-  }, [post.id, showComments, handleCommentsUpdate]);
+  }, [post.id]); // ✅ Removed showComments and handleCommentsUpdate to prevent re-subscription loops
 
   const handleEngagement = useCallback(async (type: 'bookmark' | 'share') => {
     try {

@@ -56,18 +56,19 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
   /**
    * Test 1: Post Array Order Verification (25% coverage)
    * Validates that createAllWelcomePosts() returns posts in correct chronological order
-   * Expected order: [Λvi Welcome, Onboarding, Reference Guide]
+   * Expected order: [Reference Guide, Onboarding, Λvi Welcome]
+   * (Oldest to newest for database insertion, will display reversed in DESC feed)
    */
   describe('Post Array Order Verification', () => {
-    it('should return posts in correct chronological order: Λvi, Onboarding, Reference', () => {
+    it('should return posts in correct chronological order: Reference, Onboarding, Λvi', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
 
       // Assert - Verify array order by agentId
       expect(posts).toHaveLength(3);
-      expect(posts[0].agentId).toBe('lambda-vi'); // First (oldest)
-      expect(posts[1].agentId).toBe('get-to-know-you-agent'); // Second (middle)
-      expect(posts[2].agentId).toBe('system'); // Third (newest)
+      expect(posts[0].agentId).toBe('lambda-vi'); // First (oldest) - Reference guide by Λvi
+      expect(posts[1].agentId).toBe('get-to-know-you-agent'); // Second (middle) - Onboarding
+      expect(posts[2].agentId).toBe('lambda-vi'); // Third (newest) - Λvi welcome
     });
 
     it('should maintain array order regardless of display name', () => {
@@ -78,11 +79,11 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       // Assert - Order should be consistent
       expect(postsWithoutName[0].agentId).toBe('lambda-vi');
       expect(postsWithoutName[1].agentId).toBe('get-to-know-you-agent');
-      expect(postsWithoutName[2].agentId).toBe('system');
+      expect(postsWithoutName[2].agentId).toBe('lambda-vi');
 
       expect(postsWithName[0].agentId).toBe('lambda-vi');
       expect(postsWithName[1].agentId).toBe('get-to-know-you-agent');
-      expect(postsWithName[2].agentId).toBe('system');
+      expect(postsWithName[2].agentId).toBe('lambda-vi');
     });
   });
 
@@ -114,11 +115,11 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
   });
 
   /**
-   * Test 3: First Post Validation - Λvi Welcome (10% coverage)
-   * Validates the first post is Λvi's welcome message
+   * Test 3: First Post Validation - Reference Guide (10% coverage)
+   * Validates the first post is Λvi's reference guide (oldest timestamp)
    */
-  describe('First Post - Λvi Welcome Validation', () => {
-    it('should have Λvi welcome as the first post with correct agent details', () => {
+  describe('First Post - Reference Guide Validation', () => {
+    it('should have reference guide as the first post with correct agent details', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
       const firstPost = posts[0];
@@ -130,18 +131,19 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       expect(firstPost.isAgentResponse).toBe(true);
     });
 
-    it('should have correct metadata for Λvi welcome post', () => {
+    it('should have correct metadata for reference guide post', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
       const firstPost = posts[0];
 
       // Assert - Metadata
       expect(firstPost.metadata.isSystemInitialization).toBe(true);
-      expect(firstPost.metadata.welcomePostType).toBe('avi-welcome');
+      expect(firstPost.metadata.welcomePostType).toBe('reference-guide');
+      expect(firstPost.metadata.isSystemDocumentation).toBe(true);
       expect(firstPost.metadata.createdAt).toBeDefined();
     });
 
-    it('should contain required content in Λvi welcome post', () => {
+    it('should contain required content in reference guide post', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
       const firstPost = posts[0];
@@ -149,7 +151,7 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       // Assert - Content validation
       expect(firstPost.content).toBeDefined();
       expect(firstPost.content.length).toBeGreaterThan(0);
-      expect(firstPost.title).toBe('Welcome to Agent Feed!');
+      expect(firstPost.title).toBe('📚 How Agent Feed Works');
     });
   });
 
@@ -196,35 +198,34 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
   });
 
   /**
-   * Test 5: Third Post Validation - System Reference Guide (10% coverage)
-   * Validates the third post is the system reference guide
+   * Test 5: Third Post Validation - Λvi Welcome (10% coverage)
+   * Validates the third post is Λvi's welcome message (newest timestamp)
    */
-  describe('Third Post - System Reference Guide Validation', () => {
-    it('should have System reference guide as the third post with correct agent details', () => {
+  describe('Third Post - Λvi Welcome Validation', () => {
+    it('should have Λvi welcome as the third post with correct agent details', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
       const thirdPost = posts[2];
 
       // Assert - Agent details
-      expect(thirdPost.agentId).toBe('system');
-      expect(thirdPost.agent.name).toBe('system');
-      expect(thirdPost.agent.displayName).toBe('System Guide');
+      expect(thirdPost.agentId).toBe('lambda-vi');
+      expect(thirdPost.agent.name).toBe('lambda-vi');
+      expect(thirdPost.agent.displayName).toBe('Λvi');
       expect(thirdPost.isAgentResponse).toBe(true);
     });
 
-    it('should have correct metadata for reference guide post', () => {
+    it('should have correct metadata for Λvi welcome post', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
       const thirdPost = posts[2];
 
       // Assert - Metadata
       expect(thirdPost.metadata.isSystemInitialization).toBe(true);
-      expect(thirdPost.metadata.welcomePostType).toBe('reference-guide');
-      expect(thirdPost.metadata.isSystemDocumentation).toBe(true);
+      expect(thirdPost.metadata.welcomePostType).toBe('avi-welcome');
       expect(thirdPost.metadata.createdAt).toBeDefined();
     });
 
-    it('should contain required content in reference guide post', () => {
+    it('should contain required content in Λvi welcome post', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
       const thirdPost = posts[2];
@@ -232,7 +233,7 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       // Assert - Content validation
       expect(thirdPost.content).toBeDefined();
       expect(thirdPost.content.length).toBeGreaterThan(0);
-      expect(thirdPost.title).toBe('📚 How Agent Feed Works');
+      expect(thirdPost.title).toBe('Welcome to Agent Feed!');
     });
   });
 
@@ -245,10 +246,10 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
 
-      // Assert - All welcome post types
-      expect(posts[0].metadata.welcomePostType).toBe('avi-welcome');
-      expect(posts[1].metadata.welcomePostType).toBe('onboarding-phase1');
-      expect(posts[2].metadata.welcomePostType).toBe('reference-guide');
+      // Assert - All welcome post types in array order
+      expect(posts[0].metadata.welcomePostType).toBe('reference-guide'); // Oldest
+      expect(posts[1].metadata.welcomePostType).toBe('onboarding-phase1'); // Middle
+      expect(posts[2].metadata.welcomePostType).toBe('avi-welcome'); // Newest
     });
 
     it('should have isSystemInitialization flag set to true for all posts', () => {
@@ -278,22 +279,22 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
 
-      // Assert - Λvi post metadata
+      // Assert - Reference guide metadata (posts[0])
       expect(posts[0].metadata).toHaveProperty('isSystemInitialization');
       expect(posts[0].metadata).toHaveProperty('welcomePostType');
+      expect(posts[0].metadata).toHaveProperty('isSystemDocumentation');
       expect(posts[0].metadata).toHaveProperty('createdAt');
 
-      // Assert - Onboarding post metadata
+      // Assert - Onboarding post metadata (posts[1])
       expect(posts[1].metadata).toHaveProperty('isSystemInitialization');
       expect(posts[1].metadata).toHaveProperty('welcomePostType');
       expect(posts[1].metadata).toHaveProperty('onboardingPhase');
       expect(posts[1].metadata).toHaveProperty('onboardingStep');
       expect(posts[1].metadata).toHaveProperty('createdAt');
 
-      // Assert - Reference guide metadata
+      // Assert - Λvi welcome post metadata (posts[2])
       expect(posts[2].metadata).toHaveProperty('isSystemInitialization');
       expect(posts[2].metadata).toHaveProperty('welcomePostType');
-      expect(posts[2].metadata).toHaveProperty('isSystemDocumentation');
       expect(posts[2].metadata).toHaveProperty('createdAt');
     });
   });
@@ -307,10 +308,10 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       // Arrange & Act
       const posts = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
 
-      // Assert - All titles
-      expect(posts[0].title).toBe('Welcome to Agent Feed!');
-      expect(posts[1].title).toBe("Hi! Let's Get Started");
-      expect(posts[2].title).toBe('📚 How Agent Feed Works');
+      // Assert - All titles in array order
+      expect(posts[0].title).toBe('📚 How Agent Feed Works'); // Reference guide
+      expect(posts[1].title).toBe("Hi! Let's Get Started"); // Onboarding
+      expect(posts[2].title).toBe('Welcome to Agent Feed!'); // Avi welcome
     });
 
     it('should have non-empty titles for all posts', () => {
@@ -330,10 +331,10 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       const posts1 = welcomeContentService.createAllWelcomePosts(TEST_USER_ID, TEST_DISPLAY_NAME);
       const posts2 = welcomeContentService.createAllWelcomePosts('other-user', 'Other User');
 
-      // Assert - Titles should be consistent
-      expect(posts1[0].title).toBe(posts2[0].title);
-      expect(posts1[1].title).toBe(posts2[1].title);
-      expect(posts1[2].title).toBe(posts2[2].title);
+      // Assert - Titles should be consistent (order matters)
+      expect(posts1[0].title).toBe(posts2[0].title); // Reference guide
+      expect(posts1[1].title).toBe(posts2[1].title); // Onboarding
+      expect(posts1[2].title).toBe(posts2[2].title); // Avi welcome
     });
   });
 
@@ -432,9 +433,11 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       const posts1 = welcomeContentService.createAllWelcomePosts('user-1', 'User One');
       const posts2 = welcomeContentService.createAllWelcomePosts('user-2', 'User Two');
 
-      // Assert - Different user IDs but same order
-      expect(posts1[0].authorId).toBe('user-1');
-      expect(posts2[0].authorId).toBe('user-2');
+      // Assert - Reference guide (posts[0]) uses demo-user-123, welcome posts (posts[2]) use passed userId
+      expect(posts1[0].authorId).toBe('demo-user-123'); // Reference guide
+      expect(posts2[0].authorId).toBe('demo-user-123'); // Reference guide
+      expect(posts1[2].authorId).toBe('user-1'); // Avi welcome
+      expect(posts2[2].authorId).toBe('user-2'); // Avi welcome
       expect(posts1[0].agentId).toBe('lambda-vi');
       expect(posts2[0].agentId).toBe('lambda-vi');
     });
@@ -449,7 +452,7 @@ describe('Welcome Post Order - TDD Unit Tests', () => {
       calls.forEach(posts => {
         expect(posts[0].agentId).toBe('lambda-vi');
         expect(posts[1].agentId).toBe('get-to-know-you-agent');
-        expect(posts[2].agentId).toBe('system');
+        expect(posts[2].agentId).toBe('lambda-vi');
       });
     });
   });

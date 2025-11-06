@@ -273,7 +273,7 @@ export const useRealtimeComments = (
     socket.on('reconnect', handleReconnect);
 
     // Register comment event listeners
-    socket.on('comment:added', handleCommentAdded);
+    socket.on('comment:created', handleCommentAdded);
     socket.on('comment:updated', handleCommentUpdated);
     socket.on('comment:deleted', handleCommentDeleted);
     socket.on('comment:reaction', handleCommentReaction);
@@ -291,7 +291,7 @@ export const useRealtimeComments = (
       socket.off('disconnect', handleDisconnect);
       socket.off('connect_error', handleConnectError);
       socket.off('reconnect', handleReconnect);
-      socket.off('comment:added', handleCommentAdded);
+      socket.off('comment:created', handleCommentAdded);
       socket.off('comment:updated', handleCommentUpdated);
       socket.off('comment:deleted', handleCommentDeleted);
       socket.off('comment:reaction', handleCommentReaction);

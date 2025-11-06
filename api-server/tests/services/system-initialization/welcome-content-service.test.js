@@ -148,8 +148,8 @@ describe('Welcome Content Service', () => {
       expect(post).toBeDefined();
       expect(post.title).toBe('📚 How Agent Feed Works');
       expect(post.isAgentResponse).toBe(true);
-      expect(post.agentId).toBe('system');
-      expect(post.agent.displayName).toBe('System Guide');
+      expect(post.agentId).toBe('lambda-vi');
+      expect(post.agent.displayName).toBe('Λvi');
       expect(post.metadata.welcomePostType).toBe('reference-guide');
       expect(post.metadata.isSystemDocumentation).toBe(true);
     });
@@ -209,16 +209,16 @@ describe('Welcome Content Service', () => {
 
       expect(posts[0].agentId).toBe('lambda-vi');
       expect(posts[1].agentId).toBe('get-to-know-you-agent');
-      expect(posts[2].agentId).toBe('system');
+      expect(posts[2].agentId).toBe('lambda-vi');
     });
 
     it('should create posts with correct types', () => {
       const userId = 'test-user-123';
       const posts = welcomeContentService.createAllWelcomePosts(userId);
 
-      expect(posts[0].metadata.welcomePostType).toBe('avi-welcome');
-      expect(posts[1].metadata.welcomePostType).toBe('onboarding-phase1');
-      expect(posts[2].metadata.welcomePostType).toBe('reference-guide');
+      expect(posts[0].metadata.welcomePostType).toBe('reference-guide'); // Oldest
+      expect(posts[1].metadata.welcomePostType).toBe('onboarding-phase1'); // Middle
+      expect(posts[2].metadata.welcomePostType).toBe('avi-welcome'); // Newest
     });
 
     it('should all be marked as agent responses', () => {
@@ -327,8 +327,8 @@ describe('Welcome Content Service', () => {
       const stats = welcomeContentService.getWelcomePostStats(posts);
 
       expect(stats.totalPosts).toBe(3);
-      expect(stats.postTypes).toEqual(['avi-welcome', 'onboarding-phase1', 'reference-guide']);
-      expect(stats.agents).toEqual(['lambda-vi', 'get-to-know-you-agent', 'system']);
+      expect(stats.postTypes).toEqual(['reference-guide', 'onboarding-phase1', 'avi-welcome']); // Array order: oldest to newest
+      expect(stats.agents).toEqual(['lambda-vi', 'get-to-know-you-agent', 'lambda-vi']);
       expect(stats.totalContentLength).toBeGreaterThan(0);
       expect(stats.averageContentLength).toBeGreaterThan(0);
     });
@@ -377,14 +377,14 @@ describe('Welcome Content Service', () => {
       const userId = 'test-user-123';
       const posts = welcomeContentService.createAllWelcomePosts(userId);
 
-      // Λvi: CTA to Get-to-Know-You agent
-      expect(posts[0].content.toLowerCase()).toContain('reaching out');
+      // posts[0] = Reference guide: Explains how to get started
+      expect(posts[0].content.toLowerCase()).toMatch(/create|mention|reply/);
 
-      // Onboarding: Ask for name
+      // posts[1] = Onboarding: Ask for name
       expect(posts[1].content.toLowerCase()).toMatch(/reply|tell/);
 
-      // Reference: Explains how to get started
-      expect(posts[2].content.toLowerCase()).toMatch(/create|mention|reply/);
+      // posts[2] = Λvi welcome: CTA to Get-to-Know-You agent
+      expect(posts[2].content.toLowerCase()).toContain('reaching out');
     });
   });
 

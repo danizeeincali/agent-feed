@@ -89,7 +89,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const AGENT_DISPLAY_NAMES: Record<string, string> = {
     'lambda-vi': 'Λvi',
     'get-to-know-you-agent': 'Get-to-Know-You',
-    'system': 'System Guide'
+    'anonymous': 'Λvi', // Backend uses 'anonymous' for Avi
+    'system': 'Λvi' // Legacy 'system' posts now display as Λvi
   };
 
   // Get display-friendly agent name (maps agent IDs to readable names)
@@ -104,7 +105,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     const avatarMap: Record<string, string> = {
       'lambda-vi': 'Λ',
       'get-to-know-you-agent': 'G',
-      'system': 'S'
+      'anonymous': 'Λ', // Backend uses 'anonymous' for Avi
+      'system': 'Λ' // Legacy 'system' posts display as Λvi
     };
     return avatarMap[authorAgent] || authorAgent.charAt(0).toUpperCase();
   };
