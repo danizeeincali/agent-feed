@@ -6,7 +6,8 @@ import {
   Clock,
   TrendingUp,
   Star,
-  Bot
+  Bot,
+  Sparkles
 } from 'lucide-react';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
@@ -16,6 +17,8 @@ import { cn } from '../utils/cn';
 import { renderParsedContent, parseContent } from '../utils/contentParser';
 import { UserDisplayName } from './UserDisplayName';
 import { parseEngagement } from '../utils/engagementUtils';
+import { IntroductionPrompt } from './IntroductionPrompt';
+import { apiService } from '../services/api';
 
 interface PostCardProps {
   post: {
@@ -29,6 +32,10 @@ interface PostCardProps {
       businessImpact?: number;
       tags?: string[];
       hook?: string;
+      isSystemInitialization?: boolean;
+      isIntroduction?: boolean;
+      introductionSequence?: number;
+      welcomePostType?: 'avi-welcome' | 'onboarding-phase1' | 'reference-guide';
     };
     // Engagement data from database (JSON string or object)
     engagement?: string | {
@@ -307,21 +314,76 @@ export const PostCard: React.FC<PostCardProps> = ({
     }
   }, [post.id, socket, isConnected]);
 
+  // Handle quick response from introduction prompt
+  const handleQuickResponse = useCallback(async (postId: string, response: string) => {
+    try {
+      // Create a comment with the quick response
+      await apiService.createComment(postId, response, {
+        author: 'current-user', // In a real app, get from auth context
+        author_user_id: 'current-user'
+      });
+
+      // Show success toast
+      toast.showSuccess('Response sent!');
+
+      // Refresh comments
+      if (showComments) {
+        await handleCommentsUpdate();
+      } else {
+        // Auto-open comments to show the response
+        setShowComments(true);
+        await handleCommentsUpdate();
+      }
+    } catch (error) {
+      console.error('Failed to send quick response:', error);
+      toast.showError('Failed to send response. Please try again.');
+    }
+  }, [toast, showComments, handleCommentsUpdate]);
+
   const truncateContent = (content: string, maxLength: number = 280) => {
     if (content.length <= maxLength) return content;
     return content.substring(0, maxLength) + '...';
   };
 
   const shouldTruncate = post.content && post.content.length > 280;
-  const displayContent = shouldTruncate && !isExpanded 
-    ? truncateContent(post.content || '', 280) 
+  const displayContent = shouldTruncate && !isExpanded
+    ? truncateContent(post.content || '', 280)
     : post.content || '';
+
+  // Check if this is an introduction post
+  const isIntroductionPost = post.metadata?.isIntroduction ||
+                            post.metadata?.isSystemInitialization ||
+                            post.metadata?.welcomePostType === 'onboarding-phase1';
+
+  // If this is an introduction post, use the special IntroductionPrompt component
+  if (isIntroductionPost && !isExpanded) {
+    return (
+      <IntroductionPrompt
+        postId={post.id}
+        title={post.title}
+        content={post.content || ''}
+        agentName={post.authorAgent}
+        agentId={post.authorAgent}
+        onQuickResponse={handleQuickResponse}
+        className={className}
+      />
+    );
+  }
 
   return (
     <div className={cn(
       'bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-200',
+      isIntroductionPost && 'ring-2 ring-blue-200 dark:ring-blue-800',
       className
     )}>
+      {/* Introduction badge for expanded view */}
+      {isIntroductionPost && (
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-4 py-2 flex items-center space-x-2">
+          <Sparkles className="w-3 h-3" />
+          <span>Agent Introduction</span>
+        </div>
+      )}
+
       {/* Header */}
       <div className="p-4 border-b border-gray-100">
         <div className="flex items-start justify-between">

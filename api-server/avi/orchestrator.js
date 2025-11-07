@@ -14,6 +14,8 @@ import AgentWorker from '../worker/agent-worker.js';
 import { getEmergencyMonitor } from '../services/emergency-monitor.js';
 import { getHealthMonitor } from '../services/worker-health-monitor.js';
 import { TicketValidator } from './ticket-validator.js';
+import { SequentialIntroductionOrchestrator } from '../services/agents/sequential-introduction-orchestrator.js';
+import { createAgentVisibilityService } from '../services/agent-visibility-service.js';
 
 // Stub repositories for Phase 2 - Complete implementation
 const aviStateRepo = {
@@ -30,11 +32,12 @@ const aviStateRepo = {
 };
 
 class AviOrchestrator {
-  constructor(config = {}, workQueueRepository = null, websocketService = null) {
+  constructor(config = {}, workQueueRepository = null, websocketService = null, database = null) {
     this.maxWorkers = config.maxWorkers || 5;
     this.maxContextSize = config.maxContextSize || 50000;
     this.pollInterval = config.pollInterval || 5000; // 5 seconds
     this.healthCheckInterval = config.healthCheckInterval || 30000; // 30 seconds
+    this.introductionCheckInterval = config.introductionCheckInterval || 30000; // 30 seconds
 
     this.running = false;
     this.activeWorkers = new Map(); // workerId -> worker instance
@@ -44,6 +47,7 @@ class AviOrchestrator {
 
     this.mainLoopTimer = null;
     this.healthCheckTimer = null;
+    this.introductionCheckTimer = null;
 
     // Use provided work queue repository or create stub for backward compatibility
     this.workQueueRepo = workQueueRepository || this._createStubRepository();
@@ -54,6 +58,10 @@ class AviOrchestrator {
     // Emergency monitor for streaming loop protection
     this.emergencyMonitor = getEmergencyMonitor();
     this.healthMonitor = getHealthMonitor();
+
+    // Sequential Introduction Orchestrator
+    this.introOrchestrator = database ? new SequentialIntroductionOrchestrator(database) : null;
+    this.database = database;
   }
 
   /**
@@ -105,6 +113,11 @@ class AviOrchestrator {
       // Start health monitoring
       this.startHealthMonitoring();
 
+      // Start introduction queue monitoring
+      if (this.introOrchestrator) {
+        this.startIntroductionMonitoring();
+      }
+
       // Start emergency monitor for streaming loop protection
       this.emergencyMonitor.start(async (worker) => {
         // Kill callback - handle worker termination
@@ -115,6 +128,9 @@ class AviOrchestrator {
       console.log(`   Max Workers: ${this.maxWorkers}`);
       console.log(`   Poll Interval: ${this.pollInterval}ms`);
       console.log(`   Max Context: ${this.maxContextSize} tokens`);
+      if (this.introOrchestrator) {
+        console.log(`   Introduction Check: ${this.introductionCheckInterval}ms`);
+      }
     } catch (error) {
       console.error('❌ Failed to start orchestrator:', error);
       this.running = false;
@@ -494,6 +510,200 @@ class AviOrchestrator {
   }
 
   /**
+   * Introduction queue monitoring loop - check for agents to introduce
+   * Runs every 30 seconds to detect user engagement and trigger introductions
+   */
+  startIntroductionMonitoring() {
+    const introCheck = async () => {
+      if (!this.running) return;
+
+      try {
+        await this.checkIntroductionQueue();
+      } catch (error) {
+        console.error('❌ Error in introduction check:', error);
+      }
+
+      // Schedule next check
+      this.introductionCheckTimer = setTimeout(introCheck, this.introductionCheckInterval);
+    };
+
+    // Start introduction checks
+    introCheck();
+  }
+
+  /**
+   * Check introduction queue for agents ready to be introduced
+   * Called every 30 seconds by the introduction monitoring loop
+   */
+  async checkIntroductionQueue() {
+    try {
+      // Get all users (in production, would be more selective)
+      const users = this.database.prepare(`
+        SELECT DISTINCT user_id FROM user_settings
+      `).all();
+
+      for (const user of users) {
+        const userId = user.user_id;
+
+        // Get next agent to introduce based on engagement
+        const nextAgent = this.introOrchestrator.getNextAgentToIntroduce(userId);
+
+        if (nextAgent) {
+          // CRITICAL: Double-check with AgentVisibilityService to block system agents
+          const visibilityService = createAgentVisibilityService(this.database);
+          const canIntroduce = visibilityService.canIntroduceAgent(userId, nextAgent.agent_id);
+
+          if (!canIntroduce) {
+            console.log(`🚫 Blocked introduction of ${nextAgent.agent_id} (system agent or already exposed)`);
+            continue;
+          }
+
+          console.log(`📋 User ${userId} ready for agent introduction: ${nextAgent.agent_id}`);
+
+          // Create work queue ticket for introduction
+          await this.createIntroductionTicket(userId, nextAgent);
+        }
+
+        // Check for special workflow triggers in recent posts
+        await this.checkWorkflowTriggers(userId);
+      }
+    } catch (error) {
+      console.error('❌ Error checking introduction queue:', error);
+    }
+  }
+
+  /**
+   * Create work queue ticket for agent introduction
+   * @param {string} userId - User ID
+   * @param {Object} agentInfo - Agent information from introduction queue
+   */
+  async createIntroductionTicket(userId, agentInfo) {
+    try {
+      // Check if ticket already exists for this introduction
+      const existingTickets = await this.workQueueRepo.getPendingTickets({
+        agent_id: agentInfo.agent_id,
+        limit: 100
+      });
+
+      const alreadyQueued = existingTickets.some(ticket =>
+        ticket.metadata?.type === 'introduction' &&
+        ticket.metadata?.userId === userId
+      );
+
+      if (alreadyQueued) {
+        console.log(`⏭️  Introduction ticket already queued for ${agentInfo.agent_id}`);
+        return;
+      }
+
+      // Create introduction post placeholder
+      const { nanoid } = await import('nanoid');
+      const postId = `intro-${Date.now()}-${nanoid(8)}`;
+
+      const introPost = this.database.prepare(`
+        INSERT INTO agent_posts (id, title, content, authorAgent, publishedAt, metadata, engagement)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        postId,
+        `Introducing ${agentInfo.agent_id}`,
+        `[Introduction in progress...]`,
+        agentInfo.agent_id,
+        new Date().toISOString(),
+        JSON.stringify({ isIntroduction: true, pending: true }),
+        JSON.stringify({ likes: 0, comments: 0, shares: 0 })
+      );
+
+      // Create introduction ticket with post_id
+      const ticket = this.workQueueRepo.createTicket({
+        agent_id: agentInfo.agent_id,
+        user_id: userId,
+        post_id: postId,
+        content: `Introduce yourself to user ${userId} in post ${postId}`,
+        priority: 'P2', // Medium priority
+        metadata: {
+          type: 'introduction',
+          userId: userId,
+          agentId: agentInfo.agent_id,
+          method: agentInfo.method || 'post',
+          queueId: agentInfo.id,
+          postId: postId
+        }
+      });
+
+      console.log(`✅ Created introduction post ${postId} and ticket for ${agentInfo.agent_id}: ${ticket.id}`);
+    } catch (error) {
+      console.error('❌ Error creating introduction ticket:', error);
+    }
+  }
+
+  /**
+   * Check for special workflow triggers (PageBuilder showcase, Agent Builder tutorial)
+   * @param {string} userId - User ID
+   */
+  async checkWorkflowTriggers(userId) {
+    try {
+      // Get user's recent posts to check for trigger keywords
+      const recentPosts = this.database.prepare(`
+        SELECT id, title, content FROM agent_posts
+        WHERE authorAgent = ?
+        ORDER BY created_at DESC
+        LIMIT 5
+      `).all(userId);
+
+      for (const post of recentPosts) {
+        const context = `${post.title || ''} ${post.content}`;
+        const trigger = this.introOrchestrator.checkSpecialWorkflowTriggers(userId, context);
+
+        if (trigger) {
+          console.log(`🎯 Special workflow trigger detected: ${trigger.workflow}`);
+
+          // Check if workflow already started
+          const existingWorkflow = this.database.prepare(`
+            SELECT id FROM agent_workflows
+            WHERE user_id = ? AND agent_id = ? AND workflow_type = 'showcase'
+            AND status IN ('pending', 'active')
+          `).get(userId, trigger.agentId);
+
+          if (!existingWorkflow) {
+            // Create workflow ticket
+            await this.createWorkflowTicket(userId, trigger, post.id);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error checking workflow triggers:', error);
+    }
+  }
+
+  /**
+   * Create work queue ticket for special workflow
+   * @param {string} userId - User ID
+   * @param {Object} trigger - Workflow trigger information
+   * @param {string} postId - Triggering post ID
+   */
+  async createWorkflowTicket(userId, trigger, postId) {
+    try {
+      const ticket = this.workQueueRepo.createTicket({
+        agent_id: trigger.agentId,
+        user_id: userId,
+        content: `Start ${trigger.workflow} for user ${userId}`,
+        priority: 'P1', // High priority for workflows
+        post_id: postId,
+        metadata: {
+          type: 'workflow',
+          workflow: trigger.workflow,
+          userId: userId,
+          agentId: trigger.agentId,
+          triggerPostId: postId
+        }
+      });
+
+      console.log(`✅ Created workflow ticket for ${trigger.workflow}: ${ticket.id}`);
+    } catch (error) {
+      console.error('❌ Error creating workflow ticket:', error);
+    }
+  }
+
+  /**
    * Health monitoring loop - check context size and restart if needed
    */
   startHealthMonitoring() {
@@ -584,6 +794,10 @@ class AviOrchestrator {
       clearTimeout(this.healthCheckTimer);
       this.healthCheckTimer = null;
     }
+    if (this.introductionCheckTimer) {
+      clearTimeout(this.introductionCheckTimer);
+      this.introductionCheckTimer = null;
+    }
 
     // Wait for active workers to finish (with timeout)
     const timeout = 30000; // 30 seconds
@@ -637,9 +851,9 @@ let orchestratorInstance = null;
 /**
  * Get or create orchestrator instance
  */
-export function getOrchestrator(config = {}, workQueueRepository = null, websocketService = null) {
+export function getOrchestrator(config = {}, workQueueRepository = null, websocketService = null, database = null) {
   if (!orchestratorInstance) {
-    orchestratorInstance = new AviOrchestrator(config, workQueueRepository, websocketService);
+    orchestratorInstance = new AviOrchestrator(config, workQueueRepository, websocketService, database);
   }
   return orchestratorInstance;
 }
@@ -647,8 +861,8 @@ export function getOrchestrator(config = {}, workQueueRepository = null, websock
 /**
  * Start the orchestrator
  */
-export async function startOrchestrator(config = {}, workQueueRepository = null, websocketService = null) {
-  const orchestrator = getOrchestrator(config, workQueueRepository, websocketService);
+export async function startOrchestrator(config = {}, workQueueRepository = null, websocketService = null, database = null) {
+  const orchestrator = getOrchestrator(config, workQueueRepository, websocketService, database);
   await orchestrator.start();
   return orchestrator;
 }

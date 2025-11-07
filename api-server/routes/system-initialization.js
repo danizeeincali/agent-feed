@@ -13,10 +13,12 @@
 import express from 'express';
 import welcomeContentService from '../services/system-initialization/welcome-content-service.js';
 import FirstTimeSetupService from '../services/system-initialization/first-time-setup-service.js';
+import SystemInitializationService from '../services/system-initialization/system-initialization.service.js';
 
 const router = express.Router();
 let db;
 let setupService;
+let systemInitService;
 
 /**
  * Initialize system initialization routes with database
@@ -30,12 +32,58 @@ export function initializeSystemRoutes(database) {
 
   db = database;
   setupService = new FirstTimeSetupService(database);
+  systemInitService = new SystemInitializationService(database);
   console.log('✅ System initialization routes initialized with database');
 }
 
 /**
  * POST /api/system/initialize
- * Trigger system initialization for a new user - Creates REAL POSTS in database
+ * Comprehensive system reset and initialization
+ *
+ * Body:
+ * - userId (optional) - User ID, defaults to 'demo-user-123'
+ * - confirmReset (required) - Must be true to proceed with reset
+ *
+ * Returns:
+ * - success: boolean
+ * - operations: detailed status of all reset operations
+ * - postsCreated: number of welcome posts created
+ * - postIds: array of created post IDs
+ * - errors: array of errors (if any)
+ */
+router.post('/initialize', async (req, res) => {
+  try {
+    const { userId = 'demo-user-123', confirmReset = false } = req.body;
+
+    if (!systemInitService) {
+      return res.status(500).json({
+        success: false,
+        error: 'System initialization service not initialized'
+      });
+    }
+
+    // Execute comprehensive system initialization
+    const result = systemInitService.initializeSystem(userId, confirmReset);
+
+    // Return appropriate status code based on result
+    if (!result.success) {
+      return res.status(result.error === 'Reset confirmation required' ? 400 : 500).json(result);
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error('❌ System initialization error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to initialize system',
+      details: error.message
+    });
+  }
+});
+
+/**
+ * POST /api/system/initialize-first-time
+ * Legacy endpoint - Initialize system for new user (idempotent, no reset)
  *
  * Body:
  * - userId (optional) - User ID, defaults to 'demo-user-123'
@@ -47,7 +95,7 @@ export function initializeSystemRoutes(database) {
  * - postIds: array of created post IDs
  * - alreadyInitialized: boolean (if user already has posts)
  */
-router.post('/initialize', async (req, res) => {
+router.post('/initialize-first-time', async (req, res) => {
   try {
     const { userId = 'demo-user-123', displayName = null } = req.body;
 
@@ -58,7 +106,7 @@ router.post('/initialize', async (req, res) => {
       });
     }
 
-    // Initialize system with post creation
+    // Initialize system with post creation (idempotent)
     const result = await setupService.initializeSystemWithPosts(userId, displayName);
 
     if (result.alreadyInitialized) {
@@ -80,7 +128,7 @@ router.post('/initialize', async (req, res) => {
       details: result.details
     });
   } catch (error) {
-    console.error('❌ System initialization error:', error);
+    console.error('❌ First-time initialization error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to initialize system',
@@ -91,61 +139,30 @@ router.post('/initialize', async (req, res) => {
 
 /**
  * GET /api/system/state
- * Get current system state
+ * Get comprehensive system state with all table counts
  *
  * Query params:
  * - userId (optional) - User ID to check, defaults to 'demo-user-123'
  *
  * Returns:
- * - initialized: boolean indicating if system is initialized
- * - userExists: boolean indicating if user settings exist
- * - onboardingCompleted: boolean indicating if onboarding is complete
+ * - tableCounts: counts of all relevant tables
+ * - userEngagement: user engagement data
+ * - userExposures: count of agent exposures
+ * - introductionQueue: introduction queue entries
  */
 router.get('/state', async (req, res) => {
   try {
     const { userId = 'demo-user-123' } = req.query;
 
-    if (!db) {
+    if (!systemInitService) {
       return res.status(500).json({
         success: false,
-        error: 'Database not available'
+        error: 'System initialization service not initialized'
       });
     }
 
-    // Check if user settings exist
-    const userSettings = db.prepare(`
-      SELECT
-        user_id,
-        display_name,
-        onboarding_completed,
-        onboarding_completed_at,
-        created_at
-      FROM user_settings
-      WHERE user_id = ?
-    `).get(userId);
-
-    // Check if welcome posts exist
-    const welcomePostsCount = db.prepare(`
-      SELECT COUNT(*) as count
-      FROM agent_posts
-      WHERE json_extract(metadata, '$.userId') = ?
-        AND json_extract(metadata, '$.isSystemInitialization') = 1
-    `).get(userId)?.count || 0;
-
-    const state = {
-      initialized: !!userSettings,
-      userExists: !!userSettings,
-      onboardingCompleted: userSettings?.onboarding_completed === 1,
-      hasWelcomePosts: welcomePostsCount >= 3,
-      userSettings: userSettings ? {
-        userId: userSettings.user_id,
-        displayName: userSettings.display_name,
-        onboardingCompleted: userSettings.onboarding_completed === 1,
-        onboardingCompletedAt: userSettings.onboarding_completed_at,
-        createdAt: userSettings.created_at
-      } : null,
-      welcomePostsCount
-    };
+    // Get comprehensive system state
+    const state = systemInitService.getSystemState(userId);
 
     res.json({
       success: true,

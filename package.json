@@ -89,7 +89,9 @@
     "pre-deploy:quick": "./scripts/pre-deployment-check.sh",
     "validate:production": "tsx scripts/validate-production-config.ts",
     "db:reset": "./scripts/reset-production-database.sh",
-    "db:init": "./scripts/initialize-fresh-system.sh"
+    "db:init": "./scripts/initialize-fresh-system.sh",
+    "cache:cleanup": "bash scripts/cleanup-claude-cache.sh",
+    "cache:cleanup:dry-run": "bash scripts/cleanup-claude-cache.sh --dry-run"
   },
   "dependencies": {
     "@anthropic-ai/claude-code": "^1.0.113",

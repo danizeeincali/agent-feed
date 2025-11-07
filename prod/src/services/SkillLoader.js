@@ -26,16 +26,18 @@ export class SkillLoader {
    * Initialize SkillLoader
    * @param {Object} options - Configuration options
    * @param {string} options.manifestPath - Path to skills manifest file
-   * @param {number} options.tokenBudget - Maximum token budget (default: 25000)
+   * @param {number} options.tokenBudget - Maximum token budget (default: 2000 for metadata-only)
    * @param {boolean} options.enableCaching - Enable skill content caching (default: true)
    * @param {number} options.cacheTTL - Cache TTL in seconds (default: 3600)
+   * @param {boolean} options.lazyLoad - Load only metadata by default (default: true)
    */
   constructor(options = {}) {
     this.manifestPath = options.manifestPath ||
       '/workspaces/agent-feed/prod/agent_workspace/skills/avi/skills-manifest.json';
-    this.tokenBudget = options.tokenBudget || 25000;
+    this.tokenBudget = options.tokenBudget || 2000; // Reduced from 25000 for metadata-only
     this.enableCaching = options.enableCaching !== false;
     this.cacheTTL = options.cacheTTL || 3600;
+    this.lazyLoad = options.lazyLoad !== false; // Default to lazy loading
 
     // Internal state
     this.manifest = null;
@@ -45,7 +47,7 @@ export class SkillLoader {
 
     console.log('📚 SkillLoader initialized');
     console.log(`📁 Manifest: ${this.manifestPath}`);
-    console.log(`💰 Token Budget: ${this.tokenBudget}`);
+    console.log(`💰 Token Budget: ${this.tokenBudget} (${this.lazyLoad ? 'metadata-only mode' : 'full content mode'})`);
     console.log(`🗃️ Caching: ${this.enableCaching ? 'Enabled' : 'Disabled'}`);
   }
 

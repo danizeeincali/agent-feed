@@ -14,6 +14,7 @@
 
 import { query } from '@anthropic-ai/claude-code';
 import { getSkillLoader } from './SkillLoader.js';
+import { createTokenBudgetGuard } from '../../../api-server/services/token-budget-guard.js';
 
 export class ClaudeCodeSDKManager {
   constructor() {
@@ -27,13 +28,17 @@ export class ClaudeCodeSDKManager {
       ]
     };
 
-    // Initialize SkillLoader
+    // Initialize SkillLoader with lazy-loading (metadata-only)
     this.skillLoader = getSkillLoader({
       manifestPath: '/workspaces/agent-feed/prod/agent_workspace/skills/avi/skills-manifest.json',
-      tokenBudget: 25000,
+      tokenBudget: 2000, // Reduced from 25000 for metadata-only mode
       enableCaching: true,
-      cacheTTL: 3600
+      cacheTTL: 3600,
+      lazyLoad: true // Enable lazy-loading by default
     });
+
+    // Initialize token budget guard
+    this.tokenGuard = createTokenBudgetGuard(30000); // 30K token max per conversation
 
     this.initialized = true;
     console.log('✅ Claude Code SDK Manager initialized');
@@ -152,10 +157,11 @@ export class ClaudeCodeSDKManager {
       // Build system prompt with skill loading (if enabled)
       // CRITICAL: Use currentMessage for skill detection to avoid false positives
       // But send FULL userContent to Claude (includes conversation thread)
+      // DEFAULT: Disabled to save tokens (must explicitly opt-in)
       let systemPrompt = '';
       let skillMetadata = null;
 
-      if (options.enableSkillLoading !== false) {
+      if (options.enableSkillLoading === true) {
         try {
           console.log('📚 Building system prompt with skill loading...');
           console.log('🔍 Detecting skills based on CURRENT MESSAGE only (not full conversation)...');

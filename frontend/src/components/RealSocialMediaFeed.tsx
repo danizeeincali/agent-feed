@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Plus, Edit3, Search } from 'lucide-react';
+import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Plus, Edit3, Search, Sparkles } from 'lucide-react';
 import { apiService } from '../services/api';
 import { AgentPost, ApiResponse, FilterStats } from '../types/api';
 import FilterPanel, { FilterOptions } from './FilterPanel';
@@ -19,6 +19,7 @@ import { useTicketUpdates } from '../hooks/useTicketUpdates';
 import { useToast } from '../hooks/useToast';
 import ToastContainer from './ToastContainer';
 import { useUser } from '../contexts/UserContext';
+import { IntroductionPrompt } from './IntroductionPrompt';
 // import '../styles/comments.css'; // Moved to _app.tsx
 
 interface RealSocialMediaFeedProps {
@@ -694,6 +695,29 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     }
   };
 
+  // Handle quick response from introduction prompt
+  const handleQuickResponse = useCallback(async (postId: string, response: string) => {
+    try {
+      // Create a comment with the quick response
+      await apiService.createComment(postId, response, {
+        author: userId,
+        author_user_id: userId
+      });
+
+      // Show success toast
+      toast.showSuccess('Response sent!');
+
+      // Refresh comments
+      await loadComments(postId, true);
+
+      // Auto-open comments to show the response
+      setShowComments(prev => ({ ...prev, [postId]: true }));
+    } catch (error) {
+      console.error('Failed to send quick response:', error);
+      toast.showError('Failed to send response. Please try again.');
+    }
+  }, [userId, toast]);
+
   const calculatePostMetrics = (content: string): PostMetrics => {
     const characterCount = content.length;
     const wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
@@ -956,9 +980,38 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
             const isExpanded = expandedPosts[post.id] || false;
             const postMetrics = calculatePostMetrics(post.content || '');
             const { truncated, isTruncated } = truncateContent(post.content || '');
-            
+
+            // Check if this is an introduction post
+            const isIntroductionPost = post.metadata?.isIntroduction ||
+                                      post.metadata?.isSystemInitialization ||
+                                      post.metadata?.welcomePostType === 'onboarding-phase1';
+
+            // If this is an introduction post and not expanded, use the special IntroductionPrompt component
+            if (isIntroductionPost && !isExpanded) {
+              return (
+                <IntroductionPrompt
+                  key={post.id}
+                  postId={post.id}
+                  title={post.title}
+                  content={post.content || ''}
+                  agentName={getAgentDisplayName(post.authorAgent)}
+                  agentId={post.authorAgent}
+                  onQuickResponse={handleQuickResponse}
+                  className="mb-6"
+                />
+              );
+            }
+
             return (
-          <article key={post.id} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden" data-testid="post-card">
+          <article key={post.id} className={`bg-white dark:bg-gray-900 border ${isIntroductionPost ? 'border-blue-300 dark:border-blue-700 ring-2 ring-blue-200 dark:ring-blue-800' : 'border-gray-200 dark:border-gray-700'} rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden`} data-testid="post-card">
+            {/* Introduction badge for expanded view */}
+            {isIntroductionPost && (
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-4 py-2 flex items-center space-x-2">
+                <Sparkles className="w-3 h-3" />
+                <span>Agent Introduction</span>
+              </div>
+            )}
+
             <div className="p-6">
               {!isExpanded ? (
                 // Collapsed View - Multi-line layout

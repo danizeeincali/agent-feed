@@ -43,6 +43,7 @@ import DynamicPageRenderer from './components/DynamicPageRenderer';
 import { WebSocketProvider } from './context/WebSocketSingletonContext';
 import { DraftManager } from './components/DraftManager';
 import DebugPostsDisplay from './components/DebugPostsDisplay';
+import CostDashboard from './components/monitoring/CostDashboard';
 // import './styles/agents.css'; // Moved to _app.tsx
 import {
   Activity,
@@ -102,6 +103,7 @@ const Layout: React.FC<LayoutProps> = memo(({ children }) => {
     // { name: 'Workflows', href: '/workflows', icon: Workflow }, // REMOVED: TDD GREEN Phase
     { name: 'Live Activity', href: '/activity', icon: GitBranch },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Cost Monitoring', href: '/settings/cost-monitoring', icon: SettingsIcon },
   ], []);
 
   return (
@@ -331,6 +333,13 @@ const App: React.FC = () => {
                     <RouteErrorBoundary routeName="DebugPosts">
                       <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Debug Posts..." />}>
                         <DebugPostsDisplay />
+                      </Suspense>
+                    </RouteErrorBoundary>
+                  } />
+                  <Route path="/settings/cost-monitoring" element={
+                    <RouteErrorBoundary routeName="CostMonitoring">
+                      <Suspense fallback={<FallbackComponents.LoadingFallback message="Loading Cost Monitoring..." />}>
+                        <CostDashboard />
                       </Suspense>
                     </RouteErrorBoundary>
                   } />

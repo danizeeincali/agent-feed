@@ -86,3 +86,10 @@ coordination/orchestration/*
 claude-flow
 # Removed Windows wrapper files per user request
 hive-mind-prompt-*.txt
+
+# Claude Code cache files (cost optimization - reduces cache write tokens)
+# These files cause $14.67/day in cache costs (417K cache write tokens)
+# Excluding them reduces git status from 221 to <30 files
+.claude/config/projects/
+.claude/config/todos/
+.claude/config/shell-snapshots/

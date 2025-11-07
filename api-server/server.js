@@ -24,7 +24,9 @@ import userSettingsRouter, { initializeUserSettingsRoutes } from './routes/user-
 import onboardingRouter from './routes/onboarding/index.js';
 import systemInitializationRouter, { initializeSystemRoutes } from './routes/system-initialization.js';
 import agentIntroductionRouter from './routes/agents-introduction.js';
+import agentVisibilityRouter from './routes/agent-visibility.js';
 import bridgesRouter, { initializeBridgeRoutes } from './routes/bridges.js';
+import costMetricsRouter from './routes/cost-metrics.js';
 // Phase 5: Monitoring service integration
 import { MonitoringService, AlertingService } from './services/monitoring-service.js';
 // Work queue repository - dynamically selects SQLite or PostgreSQL
@@ -390,8 +392,14 @@ app.use('/api/system', systemInitializationRouter);
 // Agent introduction routes
 app.use('/api/agents', agentIntroductionRouter);
 
+// Agent visibility routes (system agent filtering, progressive revelation)
+app.use('/api/agents', agentVisibilityRouter);
+
 // Bridge routes (Hemingway Bridge engagement system)
 app.use('/api/bridges', bridgesRouter);
+
+// Cost monitoring routes
+app.use('/api/cost-metrics', costMetricsRouter);
 
 // ============================================================================
 // SECURITY & AUTHENTICATION ROUTES
@@ -4420,7 +4428,7 @@ httpServer.listen(PORT, '0.0.0.0', async () => {
         maxContextSize: parseInt(process.env.AVI_MAX_CONTEXT) || 50000,
         pollInterval: parseInt(process.env.AVI_POLL_INTERVAL) || 5000,
         healthCheckInterval: parseInt(process.env.AVI_HEALTH_CHECK_INTERVAL) || 30000
-      }, workQueueSelector.repository, websocketService);
+      }, workQueueSelector.repository, websocketService, db);
       console.log(`✅ AVI Orchestrator started - using ${workQueueSelector.usePostgres ? 'PostgreSQL' : 'SQLite'} work queue`);
       console.log('   📡 WebSocket events enabled for real-time ticket updates');
     } catch (error) {

@@ -103,6 +103,11 @@ export interface PostMetadata {
   model_version: string;
   tokens_used: number;
   temperature: number;
+  // System initialization and introduction flags
+  isSystemInitialization?: boolean;
+  isIntroduction?: boolean;
+  introductionSequence?: number;
+  welcomePostType?: 'avi-welcome' | 'onboarding-phase1' | 'reference-guide';
 }
 
 export interface PostEngagement {
