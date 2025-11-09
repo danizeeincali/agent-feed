@@ -14,23 +14,9 @@ PRAGMA temp_store = MEMORY;
 -- Migration Strategy: Drop and Recreate with Data Preservation
 -- ============================================================================
 
--- Step 1: Backup existing data (if table exists)
--- Note: Check if table exists and has the correct schema
--- If already migrated (no 'username' column), skip backup
-CREATE TABLE IF NOT EXISTS user_settings_backup AS
-SELECT
-  user_id,
-  display_name,
-  onboarding_completed,
-  onboarding_completed_at,
-  profile_json,
-  created_at,
-  updated_at
-FROM user_settings
-WHERE 1=0;  -- Don't copy data, just create structure
-
--- Step 2: Drop old table (if exists)
+-- Step 1 & 2: Drop old tables if they exist (no backup needed for fresh installs)
 DROP TABLE IF EXISTS user_settings;
+DROP TABLE IF EXISTS user_settings_backup;
 
 -- Step 3: Create new table with STRICT mode
 -- ============================================================================
@@ -86,32 +72,13 @@ BEGIN
 END;
 
 -- ============================================================================
--- Step 4: Restore data from backup (if exists)
+-- Step 4: Restore data from backup (SKIPPED for fresh installs)
 -- ============================================================================
 
-INSERT OR IGNORE INTO user_settings (
-  user_id,
-  display_name,
-  display_name_style,
-  onboarding_completed,
-  onboarding_completed_at,
-  profile_json,
-  created_at,
-  updated_at
-)
-SELECT
-  user_id,
-  display_name,
-  NULL as display_name_style,
-  onboarding_completed,
-  onboarding_completed_at,
-  profile_json,
-  created_at,
-  updated_at
-FROM user_settings_backup
-WHERE EXISTS (SELECT 1 FROM sqlite_master WHERE type='table' AND name='user_settings_backup');
+-- Note: Backup restore removed as it requires user_settings_backup table
+-- to exist. For fresh installs, no restore is needed.
 
--- Step 5: Drop backup table
+-- Step 5: Drop backup table (if exists from manual migration)
 DROP TABLE IF EXISTS user_settings_backup;
 
 -- ============================================================================

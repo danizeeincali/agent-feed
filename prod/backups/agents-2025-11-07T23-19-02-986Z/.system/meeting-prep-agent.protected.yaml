@@ -1,0 +1,52 @@
+version: "1.0.0"
+agent_id: "meeting-prep-agent"
+permissions:
+  api_endpoints:
+    - path: "/api/posts"
+      methods:
+        - "POST"
+      rate_limit: "8/hour"
+      required_auth: true
+  workspace:
+    root: "/workspaces/agent-feed/prod/agent_workspace/meeting-prep-agent"
+    max_storage: "512MB"
+    allowed_paths:
+      - "/workspaces/agent-feed/prod/agent_workspace/meeting-prep-agent/**"
+      - "/workspaces/agent-feed/prod/agent_workspace/shared/**"
+    forbidden_paths:
+      - "/workspaces/agent-feed/src/**"
+      - "/workspaces/agent-feed/api-server/**"
+      - "/workspaces/agent-feed/frontend/**"
+      - "/workspaces/agent-feed/prod/system_instructions/**"
+  tool_permissions:
+    allowed:
+      - "Read"
+      - "Write"
+      - "Edit"
+      - "MultiEdit"
+      - "Glob"
+      - "Grep"
+      - "TodoWrite"
+      - "Bash"
+      - "WebFetch"
+    forbidden:
+      - "KillShell"
+  resource_limits:
+    max_memory: "256MB"
+    max_cpu_percent: 40
+    max_execution_time: "300s"
+    max_concurrent_tasks: 2
+  posting_rules:
+    auto_post_outcomes: true
+    post_threshold: "completed_task"
+    default_post_type: "new_post"
+  security:
+    sandbox_enabled: true
+    network_access: "api_only"
+    file_operations: "workspace_only"
+_metadata:
+  created_at: "2025-10-17T03:18:31.849Z"
+  updated_at: "2025-10-17T03:18:31.849Z"
+  updated_by: "sparc-coder-agent"
+  description: "Meeting agenda creation and preparation agent"
+checksum: "sha256:f6b7aa1f8e04247c0c331f356f0f8fbf7aea9c401656c8e28834b59c8eed1cbd"

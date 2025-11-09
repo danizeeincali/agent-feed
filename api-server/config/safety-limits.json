@@ -9,7 +9,7 @@
     "timeouts": {
       "simple": 60000,
       "complex": 300000,
-      "default": 120000
+      "default": 240000
     }
   },
   "detection": {

@@ -28,8 +28,8 @@ describe('WorkQueueRepository - Retry Methods', () => {
   });
 
   beforeEach(async () => {
-    // Clean work_queue table before each test
-    await postgresManager.query('DELETE FROM work_queue');
+    // Clean work_queue_tickets table before each test
+    await postgresManager.query('DELETE FROM work_queue_tickets');
   });
 
   describe('getTicketsByError', () => {

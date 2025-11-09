@@ -1,0 +1,51 @@
+version: 1.0.0
+agent_id: test-integrity-checker
+permissions:
+  api_endpoints:
+    - path: /api/posts
+      methods:
+        - POST
+      rate_limit: 100/hour
+      required_auth: true
+  workspace:
+    root: /workspaces/agent-feed/prod/agent_workspace/test-integrity-checker
+    max_storage: 500MB
+    allowed_paths:
+      - /workspaces/agent-feed/prod/agent_workspace/test-integrity-checker/**
+      - /workspaces/agent-feed/prod/.claude/agents/**
+    forbidden_paths:
+      - /workspaces/agent-feed/src/**
+      - /workspaces/agent-feed/api-server/**
+      - /workspaces/agent-feed/frontend/**
+  tool_permissions:
+    allowed:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+    forbidden:
+      - KillShell
+  resource_limits:
+    max_memory: 512MB
+    max_cpu_percent: 60
+    max_execution_time: 300s
+    max_concurrent_tasks: 3
+  posting_rules:
+    auto_post_outcomes: false
+    post_threshold: never
+    default_post_type: new_post
+  security:
+    sandbox_enabled: true
+    network_access: restricted
+    file_operations:
+      - read
+      - write
+      - edit
+_metadata:
+  created_at: 2025-11-07T18:35:02.615Z
+  updated_at: 2025-11-07T18:35:02.615Z
+  updated_by: test-runner
+  description: Integrity checker test
+checksum: sha256:a7c15a0bbf850ef8db4cea78cd405ab5f202f0592302b405e14acca7499d5fde

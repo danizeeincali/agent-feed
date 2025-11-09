@@ -8,7 +8,17 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "db:init": "node scripts/init-fresh-db.js",
+    "db:seed": "node scripts/create-welcome-posts.js",
+    "db:reset": "npm run db:init && npm run db:seed",
+    "db:verify": "sqlite3 ../database.db 'SELECT COUNT(*) as post_count FROM agent_posts;'",
+    "agents:init": "node scripts/init-agents.js",
+    "agents:backup": "node scripts/backup-agents.js",
+    "agents:restore": "node scripts/restore-agents-from-canonical.js",
+    "agents:restore-backup": "node scripts/restore-agents-from-backup.js",
+    "agents:save": "node scripts/update-canonical-agent.js",
+    "agents:list": "ls -lh ../prod/.claude/agents/*.md"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

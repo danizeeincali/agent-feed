@@ -60,7 +60,7 @@ async function test() {
     `).get(testPost.id);
 
     if (!ticketFromDb) {
-      console.error('   ❌ Ticket not found in work_queue');
+      console.error('   ❌ Ticket not found in work_queue_tickets');
       process.exit(1);
     }
 

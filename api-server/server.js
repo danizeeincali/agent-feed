@@ -1846,6 +1846,74 @@ app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
       // Don't fail the request if WebSocket broadcast fails
     }
 
+    // Check if this is a comment on a grace period post
+    // Detect user choice (continue, pause, simplify, cancel) and handle accordingly
+    try {
+      const parentPost = await dbSelector.getPostById(postId);
+
+      if (parentPost && parentPost.metadata) {
+        const metadata = typeof parentPost.metadata === 'string'
+          ? JSON.parse(parentPost.metadata)
+          : parentPost.metadata;
+
+        if (metadata.isGracePeriodPost && metadata.gracePeriodStateId) {
+          // Extract user choice from comment content
+          const choiceMatch = content.trim().toLowerCase().match(/\b(continue|pause|simplify|cancel)\b/);
+
+          if (choiceMatch) {
+            const choice = choiceMatch[1];
+            const stateId = metadata.gracePeriodStateId;
+
+            console.log(`🔔 Grace period choice detected: "${choice}" for state ${stateId}`);
+
+            // Import handleGracePeriodChoice from worker-protection
+            const { handleGracePeriodChoice } = await import('./worker/worker-protection.js');
+
+            // Handle the user's choice
+            const result = handleGracePeriodChoice(stateId, choice);
+
+            if (result.success) {
+              console.log(`✅ Grace period choice processed:`, result);
+
+              // Post confirmation reply as system
+              const confirmationData = {
+                id: uuidv4(),
+                post_id: postId,
+                content: result.message,
+                content_type: 'markdown',
+                author: 'system',
+                author_agent: 'grace-period-monitor',
+                user_id: 'system',
+                parent_id: createdComment.id, // Reply to user's comment
+                mentioned_users: [],
+                depth: 1
+              };
+
+              const confirmationComment = await dbSelector.createComment('system', confirmationData);
+              console.log(`✅ Posted confirmation reply: ${confirmationComment.id}`);
+
+              // Broadcast confirmation comment
+              if (websocketService && websocketService.broadcastCommentAdded) {
+                websocketService.broadcastCommentAdded({
+                  postId: postId,
+                  commentId: confirmationComment.id,
+                  parentCommentId: createdComment.id,
+                  author: 'grace-period-monitor',
+                  content: confirmationComment.content,
+                  comment: confirmationComment
+                });
+              }
+            } else {
+              console.error(`❌ Failed to process grace period choice:`, result.error);
+            }
+          }
+        }
+      }
+    } catch (gracePeriodError) {
+      console.error('❌ Error processing grace period comment:', gracePeriodError);
+      // Don't fail the comment creation if grace period processing fails
+    }
+
     // Create work queue ticket for AVI orchestrator (Comment-to-Ticket Integration)
     // CRITICAL: Check skipTicket parameter to prevent infinite loops
     const skipTicket = req.body.skipTicket === true;

@@ -75,7 +75,7 @@ beforeAll(() => {
       FOREIGN KEY (post_id) REFERENCES posts(id)
     );
 
-    CREATE TABLE IF NOT EXISTS work_queue (
+    CREATE TABLE IF NOT EXISTS work_queue_tickets (
       id TEXT PRIMARY KEY,
       agent_id TEXT NOT NULL,
       post_id TEXT NOT NULL,
@@ -98,7 +98,7 @@ beforeEach(() => {
   // Clean tables before each test (disable foreign keys temporarily)
   db.exec('PRAGMA foreign_keys = OFF;');
   db.exec('DELETE FROM comments;');
-  db.exec('DELETE FROM work_queue;');
+  db.exec('DELETE FROM work_queue_tickets;');
   db.exec('DELETE FROM posts;');
   db.exec('PRAGMA foreign_keys = ON;');
 });
@@ -153,7 +153,7 @@ describe('[REGRESSION-001] Duplicate Avi Response Prevention', () => {
     expect(commentCount.count).toBe(1);
 
     // 5. Verify no work queue ticket created (skipTicket: true)
-    const ticketCount = db.prepare('SELECT COUNT(*) as count FROM work_queue WHERE post_id = ?').get(postId);
+    const ticketCount = db.prepare('SELECT COUNT(*) as count FROM work_queue_tickets WHERE post_id = ?').get(postId);
     expect(ticketCount.count).toBe(0);
 
     // 6. Verify comment content is NOT "No summary available"
@@ -179,7 +179,7 @@ describe('[REGRESSION-001] Duplicate Avi Response Prevention', () => {
     `).run(commentId, 'Response content', 'avi', postId);
 
     // Verify no ticket created
-    const tickets = db.prepare('SELECT * FROM work_queue WHERE post_id = ?').all(postId);
+    const tickets = db.prepare('SELECT * FROM work_queue_tickets WHERE post_id = ?').all(postId);
     expect(tickets.length).toBe(0);
   });
 
@@ -347,12 +347,12 @@ describe('[REGRESSION-003] URL Processing with Link-Logger', () => {
     // 2. Create work ticket for URL processing
     const ticketId = 'ticket-001';
     db.prepare(`
-      INSERT INTO work_queue (id, agent_id, post_id, content, url, status)
+      INSERT INTO work_queue_tickets (id, agent_id, post_id, content, url, status)
       VALUES (?, ?, ?, ?, ?, ?)
     `).run(ticketId, 'link-logger', postId, url, url, 'pending');
 
     // 3. Verify ticket created
-    const ticket = db.prepare('SELECT * FROM work_queue WHERE id = ?').get(ticketId);
+    const ticket = db.prepare('SELECT * FROM work_queue_tickets WHERE id = ?').get(ticketId);
     expect(ticket).toBeDefined();
     expect(ticket.agent_id).toBe('link-logger');
     expect(ticket.url).toBe(url);
@@ -370,7 +370,7 @@ describe('[REGRESSION-003] URL Processing with Link-Logger', () => {
     `).run(postId, 'URL Post', 'https://example.com', 'user');
 
     db.prepare(`
-      INSERT INTO work_queue (id, agent_id, post_id, url, status)
+      INSERT INTO work_queue_tickets (id, agent_id, post_id, url, status)
       VALUES (?, ?, ?, ?, ?)
     `).run(ticketId, 'link-logger', postId, 'https://example.com', 'completed');
 
@@ -432,12 +432,12 @@ describe('[REGRESSION-004] General Post Processing', () => {
     // Create ticket (pending assignment - use placeholder)
     const ticketId = 'ticket-general-001';
     db.prepare(`
-      INSERT INTO work_queue (id, agent_id, post_id, content, status)
+      INSERT INTO work_queue_tickets (id, agent_id, post_id, content, status)
       VALUES (?, ?, ?, ?, ?)
     `).run(ticketId, 'unassigned', postId, content, 'pending');
 
     // Verify ticket created
-    const ticket = db.prepare('SELECT * FROM work_queue WHERE id = ?').get(ticketId);
+    const ticket = db.prepare('SELECT * FROM work_queue_tickets WHERE id = ?').get(ticketId);
     expect(ticket).toBeDefined();
     expect(ticket.status).toBe('pending');
 
@@ -473,12 +473,12 @@ describe('[REGRESSION-004] General Post Processing', () => {
     `).run(postId, 'Manual assignment test', 'user');
 
     db.prepare(`
-      INSERT INTO work_queue (id, agent_id, post_id, content, status)
+      INSERT INTO work_queue_tickets (id, agent_id, post_id, content, status)
       VALUES (?, ?, ?, ?, ?)
     `).run(ticketId, 'unassigned', postId, 'Test content', 'pending');
 
     // Verify agent_id is 'unassigned' (awaiting assignment)
-    const ticket = db.prepare('SELECT * FROM work_queue WHERE id = ?').get(ticketId);
+    const ticket = db.prepare('SELECT * FROM work_queue_tickets WHERE id = ?').get(ticketId);
     expect(ticket.agent_id).toBe('unassigned');
   });
 });
@@ -604,7 +604,7 @@ describe('[REGRESSION-006] End-to-End Integration', () => {
     expect(comments.length).toBe(1);
 
     // 4. Verify no duplicate ticket
-    const tickets = db.prepare('SELECT * FROM work_queue WHERE post_id = ?').all(postId);
+    const tickets = db.prepare('SELECT * FROM work_queue_tickets WHERE post_id = ?').all(postId);
     expect(tickets.length).toBe(0);
 
     // 5. Verify content is NOT fallback
@@ -633,7 +633,7 @@ describe('[REGRESSION-006] End-to-End Integration', () => {
     const ticketId = 'e2e-ticket-001';
 
     db.prepare(`
-      INSERT INTO work_queue (id, agent_id, post_id, content, status, metadata)
+      INSERT INTO work_queue_tickets (id, agent_id, post_id, content, status, metadata)
       VALUES (?, ?, ?, ?, ?, ?)
     `).run(ticketId, 'avi', postId, replyContent, 'pending', JSON.stringify({
       type: 'comment',

@@ -5,17 +5,19 @@
  */
 
 import { nanoid } from 'nanoid';
+import { createUserSettingsService } from '../user-settings-service.js';
 
 /**
  * Onboarding Flow Service Class
  * Manages transitions between Phase 1 (name + use case) and Phase 2 (deeper personalization)
  */
 class OnboardingFlowService {
-  constructor(database) {
+  constructor(database, userSettingsService = null) {
     if (!database) {
       throw new Error('Database instance is required for OnboardingFlowService');
     }
     this.db = database;
+    this.userSettingsService = userSettingsService || createUserSettingsService(database);
     this.initializeStatements();
   }
 
@@ -143,6 +145,18 @@ class OnboardingFlowService {
 
       // Store name in responses
       responses.name = name;
+
+      // CRITICAL FIX: Persist display name to user_settings table
+      // This ensures name appears system-wide (header, posts, comments)
+      try {
+        this.userSettingsService.setDisplayName(userId, name);
+        console.log(`✅ Display name persisted to user_settings: "${name}" for user ${userId}`);
+      } catch (displayNameError) {
+        console.error('❌ Failed to persist display name to user_settings:', displayNameError);
+        // Don't fail the entire onboarding if display name save fails
+        // But log it prominently for debugging
+        console.error('⚠️ Onboarding will continue but name may not display system-wide');
+      }
 
       // Update state to next step: use_case
       this.updateStateStmt.run(

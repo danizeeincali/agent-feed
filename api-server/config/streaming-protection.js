@@ -20,7 +20,7 @@ export const STREAMING_PROTECTION_CONFIG = {
   timeouts: {
     simple: 60000,    // 1 minute for simple queries
     complex: 300000,  // 5 minutes for complex queries
-    default: 120000   // 2 minutes for default queries
+    default: 240000   // 4 minutes for default queries (increased from 120000)
   },
 
   // Loop detection thresholds
@@ -29,6 +29,15 @@ export const STREAMING_PROTECTION_CONFIG = {
     loopWindowMs: 10000,         // Time window for loop detection (10s)
     stagnantThresholdMs: 30000,  // Stagnant stream threshold (30s)
     healthCheckIntervalMs: 10000 // Health check interval (10s)
+  },
+
+  // Grace period for planning mode (triggers before timeout)
+  gracePeriod: {
+    triggerAtPercentage: 0.8,     // Trigger at 80% of timeout (e.g., 192s for 240s timeout)
+    enablePlanningMode: true,      // Enable planning mode messaging
+    minStepsInPlan: 5,            // Minimum steps to create in plan
+    maxStepsInPlan: 10,           // Maximum steps in plan
+    messageTemplate: '⏳ This is taking longer than expected. Let me create a plan to break this into manageable steps...'
   },
 
   // Recovery and auto-kill settings

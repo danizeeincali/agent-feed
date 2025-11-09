@@ -1,0 +1,63 @@
+version: "1.0.0"
+agent_id: "page-builder-agent"
+permissions:
+  api_endpoints:
+    - path: "/api/agent-pages"
+      methods:
+        - "GET"
+        - "POST"
+        - "PUT"
+        - "DELETE"
+      rate_limit: "50/hour"
+      required_auth: true
+    - path: "/api/validate-components"
+      methods:
+        - "POST"
+      rate_limit: "100/hour"
+      required_auth: false
+    - path: "/api/agents/*/pages"
+      methods:
+        - "GET"
+        - "POST"
+        - "PUT"
+      rate_limit: "50/hour"
+      required_auth: true
+  workspace:
+    root: "/workspaces/agent-feed/prod/agent_workspace/page-builder-agent"
+    max_storage: "500MB"
+    allowed_paths:
+      - "/workspaces/agent-feed/prod/agent_workspace/page-builder-agent/**"
+      - "/workspaces/agent-feed/data/agent-pages/**"
+    forbidden_paths:
+      - "/workspaces/agent-feed/src/**"
+      - "/workspaces/agent-feed/api-server/**"
+      - "/workspaces/agent-feed/frontend/src/**"
+  tool_permissions:
+    allowed:
+      - "Read"
+      - "Write"
+      - "Edit"
+      - "MultiEdit"
+      - "Bash"
+      - "Grep"
+      - "Glob"
+      - "TodoWrite"
+    forbidden:
+      - "KillShell"
+      - "WebFetch"
+  resource_limits:
+    max_memory: "512MB"
+    max_cpu_percent: 50
+    max_execution_time: "300s"
+    max_concurrent_tasks: 3
+  posting_rules:
+    auto_post_outcomes: false
+    post_threshold: "never"
+    default_post_type: "new_post"
+_metadata:
+  created_at: "2025-10-17T02:38:00Z"
+  updated_at: "2025-10-17T02:38:00Z"
+  updated_by: "sparc-coder-agent"
+  description: "Protected configuration for page-builder-agent - centralized page
+    building infrastructure"
+checksum: "sha256:100fff7ef36504dfa77950097154d7c0a50af47c4d416bb90aa4d19e79e5ff2f"

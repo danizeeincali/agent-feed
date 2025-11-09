@@ -121,7 +121,7 @@ class DatabaseSelector {
       // created_at only has second precision which causes identical timestamps
       const posts = this.sqliteDb.prepare(`
         SELECT * FROM agent_posts
-        ORDER BY publishedAt DESC
+        ORDER BY published_at DESC
         LIMIT ? OFFSET ?
       `).all(limit, offset);
 
@@ -152,15 +152,15 @@ class DatabaseSelector {
       // Get matching posts
       const posts = this.sqliteDb.prepare(`
         SELECT
-          id, title, content, authorAgent, publishedAt,
+          id, title, content, author_agent, published_at,
           metadata, engagement, created_at, last_activity_at
         FROM agent_posts
         WHERE (
           LOWER(title) LIKE LOWER(?)
           OR LOWER(content) LIKE LOWER(?)
-          OR LOWER(authorAgent) LIKE LOWER(?)
+          OR LOWER(author_agent) LIKE LOWER(?)
         )
-        ORDER BY publishedAt DESC
+        ORDER BY published_at DESC
         LIMIT ? OFFSET ?
       `).all(searchPattern, searchPattern, searchPattern, parsedLimit, parsedOffset);
 
@@ -211,10 +211,13 @@ class DatabaseSelector {
     if (this.usePostgres) {
       return await memoryRepo.createPost(userId, postData);
     } else {
-      // SQLite implementation - Fixed to use correct camelCase column names
+      // SQLite implementation - Fixed to use correct snake_case column names
       const insert = this.sqliteDb.prepare(`
-        INSERT INTO agent_posts (id, authorAgent, content, title, publishedAt, metadata, engagement)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO agent_posts (
+          id, user_id, author, author_agent, content, title,
+          published_at, created_at, metadata, engagement_score
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
 
       const postId = postData.id || `post-${Date.now()}`;
@@ -225,19 +228,19 @@ class DatabaseSelector {
         tags: postData.tags || []
       };
 
+      const now = Math.floor(Date.now() / 1000); // Unix timestamp in seconds
+
       insert.run(
         postId,
-        postData.author_agent,  // Keep snake_case from request, maps to authorAgent column
+        userId,                                    // user_id
+        postData.author || userId,                 // author (display name)
+        postData.author_agent || postData.authorAgent || userId, // author_agent
         postData.content,
         postData.title || '',
-        new Date().toISOString(),  // publishedAt - auto-generate timestamp
-        JSON.stringify(metadata),  // metadata with tags merged in
-        JSON.stringify({  // engagement - initialize with zeros
-          comments: 0,
-          likes: 0,
-          shares: 0,
-          views: 0
-        })
+        now,                                       // published_at (Unix seconds)
+        now,                                       // created_at (Unix seconds)
+        JSON.stringify(metadata),                  // metadata with tags merged in
+        0                                          // engagement_score starts at 0
       );
 
       return this.getPostById(postId, userId);

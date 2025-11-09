@@ -33,7 +33,7 @@ describe('AVI Control API Routes', () => {
     await aviStateRepo.initialize();
 
     // Clear work queue
-    await postgresManager.query('DELETE FROM work_queue');
+    await postgresManager.query('DELETE FROM work_queue_tickets');
   });
 
   describe('GET /api/avi/status', () => {

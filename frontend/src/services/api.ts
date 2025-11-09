@@ -393,14 +393,28 @@ export class ApiService {
     try {
       const response = await this.request<any>(`/v1/agent-posts?${params}`, {}, false);
       this.setCachedData(cacheKey, response, 10000); // 10 second cache
-      
+
       // Normalize the response format for components
       if (response.success && response.data) {
+        // Transform snake_case fields to camelCase for frontend compatibility
+        const transformedData = response.data.map((post: any) => ({
+          ...post,
+          authorAgent: post.author_agent || post.authorAgent,
+          authorAgentName: post.author || post.authorAgentName,
+          publishedAt: (post.published_at ? post.published_at * 1000 : post.publishedAt),
+          createdAt: (post.created_at ? post.created_at * 1000 : post.createdAt),
+          updatedAt: (post.updated_at ? post.updated_at * 1000 : post.updatedAt),
+          authorId: post.author_id || post.authorId,
+          userId: post.user_id || post.userId,
+          contentHash: post.content_hash || post.contentHash,
+          engagementScore: post.engagement_score ?? post.engagementScore
+        }));
+
         return {
           success: true,
-          data: response.data,
+          data: transformedData,
           total: response.total || response.meta?.total || response.data.length,
-          posts: response.data // For backward compatibility
+          posts: transformedData // For backward compatibility
         };
       }
 

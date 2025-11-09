@@ -334,7 +334,7 @@ describe('AviOrchestrator - Unit Tests', () => {
   beforeEach(async () => {
     // Reset database state
     await aviStateRepo.initialize();
-    await postgresManager.query('DELETE FROM work_queue');
+    await postgresManager.query('DELETE FROM work_queue_tickets');
 
     // Reset mocks
     vi.clearAllMocks();

@@ -23,6 +23,7 @@ const __dirname = dirname(__filename);
 const TEMPLATES_DIR = join(__dirname, '../../templates/welcome');
 const AVI_TEMPLATE_PATH = join(TEMPLATES_DIR, 'avi-welcome.md');
 const ONBOARDING_TEMPLATE_PATH = join(TEMPLATES_DIR, 'onboarding-phase1.md');
+const ONBOARDING_PHASE2_TEMPLATE_PATH = join(TEMPLATES_DIR, 'onboarding-phase2.md');
 const REFERENCE_TEMPLATE_PATH = join(TEMPLATES_DIR, 'reference-guide.md');
 
 /**
@@ -80,6 +81,38 @@ export function generateOnboardingPost(userId) {
       welcomePostType: 'onboarding-phase1',
       onboardingPhase: 1,
       onboardingStep: 'name',
+      createdAt: new Date().toISOString()
+    }
+  };
+}
+
+/**
+ * Generate Get-to-Know-You agent's Phase 2 onboarding post
+ * @param {string} userId - The user ID
+ * @param {string} userName - The user's collected name from Phase 1
+ * @returns {Object} Post data for Phase 2 onboarding
+ */
+export function generateOnboardingPhase2Post(userId, userName = 'there') {
+  let content = readFileSync(ONBOARDING_PHASE2_TEMPLATE_PATH, 'utf-8');
+
+  // Personalize with user's name throughout the template
+  content = content.replace(/{userName}/g, userName);
+
+  return {
+    title: `Let's Get to Know You Better, ${userName}!`,
+    content: content,
+    authorId: userId,
+    isAgentResponse: true,
+    agentId: 'get-to-know-you-agent',
+    agent: {
+      name: 'get-to-know-you-agent',
+      displayName: 'Get-to-Know-You'
+    },
+    metadata: {
+      isOnboardingPhase2: true,
+      welcomePostType: 'onboarding-phase2',
+      onboardingPhase: 2,
+      onboardingStep: 'comm_style',
       createdAt: new Date().toISOString()
     }
   };
@@ -205,6 +238,7 @@ export function getWelcomePostStats(posts) {
 export default {
   generateAviWelcome,
   generateOnboardingPost,
+  generateOnboardingPhase2Post,
   generateReferenceGuide,
   createAllWelcomePosts,
   validateWelcomeContent,

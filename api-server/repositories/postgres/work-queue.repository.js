@@ -16,7 +16,7 @@ class WorkQueueRepository {
    */
   async createTicket(ticket) {
     const query = `
-      INSERT INTO work_queue (
+      INSERT INTO work_queue_tickets (
         user_id,
         post_id,
         post_content,
@@ -54,13 +54,13 @@ class WorkQueueRepository {
   async getNextTicket(userId = null) {
     const query = userId
       ? `
-        SELECT * FROM work_queue
+        SELECT * FROM work_queue_tickets
         WHERE status = 'pending' AND user_id = $1
         ORDER BY priority DESC, created_at ASC
         LIMIT 1
       `
       : `
-        SELECT * FROM work_queue
+        SELECT * FROM work_queue_tickets
         WHERE status = 'pending'
         ORDER BY priority DESC, created_at ASC
         LIMIT 1
@@ -80,7 +80,7 @@ class WorkQueueRepository {
    */
   async getTicketById(ticketId) {
     const query = `
-      SELECT * FROM work_queue
+      SELECT * FROM work_queue_tickets
       WHERE id = $1
     `;
 
@@ -96,7 +96,7 @@ class WorkQueueRepository {
    */
   async assignTicket(ticketId, workerId) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'assigned',
           worker_id = $1,
           assigned_at = NOW(),
@@ -119,7 +119,7 @@ class WorkQueueRepository {
    */
   async startProcessing(ticketId) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'processing',
           started_at = NOW(),
           updated_at = NOW()
@@ -142,7 +142,7 @@ class WorkQueueRepository {
    */
   async completeTicket(ticketId, result) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'completed',
           result = $1::jsonb,
           completed_at = NOW(),
@@ -169,7 +169,7 @@ class WorkQueueRepository {
    */
   async failTicket(ticketId, errorMessage, shouldRetry = true) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'failed',
           error_message = $1,
           retry_count = retry_count + 1,
@@ -200,7 +200,7 @@ class WorkQueueRepository {
    */
   async retryTicket(ticketId) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'pending',
           worker_id = NULL,
           assigned_at = NULL,
@@ -228,7 +228,7 @@ class WorkQueueRepository {
     const { status, limit = 100, offset = 0 } = options;
 
     let query = `
-      SELECT * FROM work_queue
+      SELECT * FROM work_queue_tickets
       WHERE user_id = $1
     `;
 
@@ -261,7 +261,7 @@ class WorkQueueRepository {
     const { limit = 5, agent_id = null } = options;
 
     let query = `
-      SELECT * FROM work_queue
+      SELECT * FROM work_queue_tickets
       WHERE status = 'pending'
     `;
 
@@ -292,7 +292,7 @@ class WorkQueueRepository {
     const { status = 'pending', limit = 100, offset = 0 } = options;
 
     let query = `
-      SELECT * FROM work_queue
+      SELECT * FROM work_queue_tickets
       WHERE status = $1
       ORDER BY priority DESC, created_at ASC
       LIMIT $2 OFFSET $3
@@ -319,7 +319,7 @@ class WorkQueueRepository {
     const { status, limit = 100, offset = 0 } = options;
 
     let query = `
-      SELECT * FROM work_queue
+      SELECT * FROM work_queue_tickets
       WHERE assigned_agent = $1
     `;
 
@@ -356,7 +356,7 @@ class WorkQueueRepository {
         COUNT(*) as total_count,
         AVG(EXTRACT(EPOCH FROM (completed_at - created_at)))::integer as avg_processing_time_seconds,
         MAX(created_at) as latest_ticket_time
-      FROM work_queue
+      FROM work_queue_tickets
     `;
 
     const result = await postgresManager.query(query);
@@ -370,8 +370,8 @@ class WorkQueueRepository {
    */
   async getPendingCount(userId = null) {
     const query = userId
-      ? `SELECT COUNT(*) as count FROM work_queue WHERE status = 'pending' AND user_id = $1`
-      : `SELECT COUNT(*) as count FROM work_queue WHERE status = 'pending'`;
+      ? `SELECT COUNT(*) as count FROM work_queue_tickets WHERE status = 'pending' AND user_id = $1`
+      : `SELECT COUNT(*) as count FROM work_queue_tickets WHERE status = 'pending'`;
 
     const result = userId
       ? await postgresManager.query(query, [userId])
@@ -387,7 +387,7 @@ class WorkQueueRepository {
    */
   async cleanupOldTickets(olderThanDays = 7) {
     const query = `
-      DELETE FROM work_queue
+      DELETE FROM work_queue_tickets
       WHERE status IN ('completed', 'failed')
         AND updated_at < NOW() - INTERVAL '${olderThanDays} days'
       RETURNING id
@@ -404,7 +404,7 @@ class WorkQueueRepository {
    */
   async getStuckTickets(timeoutMinutes = 30) {
     const query = `
-      SELECT * FROM work_queue
+      SELECT * FROM work_queue_tickets
       WHERE status IN ('assigned', 'processing')
         AND updated_at < NOW() - INTERVAL '${timeoutMinutes} minutes'
       ORDER BY updated_at ASC
@@ -421,7 +421,7 @@ class WorkQueueRepository {
    */
   async resetStuckTickets(timeoutMinutes = 30) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'pending',
           worker_id = NULL,
           assigned_at = NULL,
@@ -459,7 +459,7 @@ class WorkQueueRepository {
       .join(', ');
 
     const query = `
-      INSERT INTO work_queue (
+      INSERT INTO work_queue_tickets (
         user_id,
         post_id,
         post_content,
@@ -497,7 +497,7 @@ class WorkQueueRepository {
    */
   async getTicketsByError(errorPattern) {
     const query = `
-      SELECT * FROM work_queue
+      SELECT * FROM work_queue_tickets
       WHERE status = 'failed'
         AND error_message LIKE $1
       ORDER BY created_at DESC
@@ -515,7 +515,7 @@ class WorkQueueRepository {
    */
   async resetTicketForRetry(ticketId) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'pending',
           retry_count = 0,
           worker_id = NULL,
@@ -545,7 +545,7 @@ class WorkQueueRepository {
     }
 
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = 'pending',
           retry_count = 0,
           worker_id = NULL,
@@ -569,7 +569,7 @@ class WorkQueueRepository {
    */
   async updateTicketStatus(ticketId, status) {
     const query = `
-      UPDATE work_queue
+      UPDATE work_queue_tickets
       SET status = $1,
           updated_at = NOW()
       WHERE id = $2

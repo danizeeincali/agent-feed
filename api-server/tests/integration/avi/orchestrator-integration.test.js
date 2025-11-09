@@ -265,7 +265,7 @@ describe('Orchestrator Integration Tests', () => {
   beforeEach(async () => {
     // Clean database
     await aviStateRepo.initialize();
-    await postgresManager.query('DELETE FROM work_queue');
+    await postgresManager.query('DELETE FROM work_queue_tickets');
     await postgresManager.query('DELETE FROM agent_memories');
 
     // Reset mocks
@@ -347,7 +347,7 @@ describe('Orchestrator Integration Tests', () => {
 
       // Verify all tickets completed
       const allTickets = await postgresManager.query(
-        'SELECT * FROM work_queue WHERE status = $1',
+        'SELECT * FROM work_queue_tickets WHERE status = $1',
         ['completed']
       );
       expect(allTickets.rows.length).toBe(3);
@@ -493,7 +493,7 @@ describe('Orchestrator Integration Tests', () => {
 
       // All tickets should complete
       const completed = await postgresManager.query(
-        'SELECT COUNT(*) as count FROM work_queue WHERE status = $1',
+        'SELECT COUNT(*) as count FROM work_queue_tickets WHERE status = $1',
         ['completed']
       );
       expect(parseInt(completed.rows[0].count)).toBe(3);
@@ -544,11 +544,11 @@ describe('Orchestrator Integration Tests', () => {
 
       // Check results
       const ticket1 = await postgresManager.query(
-        'SELECT * FROM work_queue WHERE post_id = $1',
+        'SELECT * FROM work_queue_tickets WHERE post_id = $1',
         ['post-1']
       );
       const ticket2 = await postgresManager.query(
-        'SELECT * FROM work_queue WHERE post_id = $1',
+        'SELECT * FROM work_queue_tickets WHERE post_id = $1',
         ['post-2']
       );
 
@@ -613,7 +613,7 @@ describe('Orchestrator Integration Tests', () => {
 
       // Some should succeed
       const completed = await postgresManager.query(
-        'SELECT COUNT(*) as count FROM work_queue WHERE status = $1',
+        'SELECT COUNT(*) as count FROM work_queue_tickets WHERE status = $1',
         ['completed']
       );
       expect(parseInt(completed.rows[0].count)).toBeGreaterThan(0);

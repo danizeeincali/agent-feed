@@ -27,7 +27,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
   beforeEach(async () => {
     // Clean up any test data from previous runs
     if (testPostId) {
-      await postgresManager.query('DELETE FROM work_queue WHERE post_id = $1', [testPostId]);
+      await postgresManager.query('DELETE FROM work_queue_tickets WHERE post_id = $1', [testPostId]);
       await postgresManager.query('DELETE FROM agent_memories WHERE post_id = $1', [testPostId]);
     }
   });
@@ -35,7 +35,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
   afterAll(async () => {
     // Final cleanup
     if (testPostId) {
-      await postgresManager.query('DELETE FROM work_queue WHERE post_id = $1', [testPostId]);
+      await postgresManager.query('DELETE FROM work_queue_tickets WHERE post_id = $1', [testPostId]);
       await postgresManager.query('DELETE FROM agent_memories WHERE post_id = $1', [testPostId]);
     }
   });
@@ -65,7 +65,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
 
       // Assert - Ticket was created in database (REAL QUERY)
       const ticketQuery = await postgresManager.query(
-        'SELECT * FROM work_queue WHERE post_id = $1',
+        'SELECT * FROM work_queue_tickets WHERE post_id = $1',
         [testPostId]
       );
 
@@ -98,7 +98,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
 
       // Assert - Exactly 1 ticket
       const ticketCount = await postgresManager.query(
-        'SELECT COUNT(*) as count FROM work_queue WHERE post_id = $1',
+        'SELECT COUNT(*) as count FROM work_queue_tickets WHERE post_id = $1',
         [testPostId]
       );
 
@@ -123,7 +123,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
 
       // Assert - Priority is 5
       const ticket = await postgresManager.query(
-        'SELECT priority FROM work_queue WHERE post_id = $1',
+        'SELECT priority FROM work_queue_tickets WHERE post_id = $1',
         [testPostId]
       );
 
@@ -155,7 +155,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
 
       // Assert - All fields mapped correctly
       const ticket = await postgresManager.query(
-        'SELECT * FROM work_queue WHERE post_id = $1',
+        'SELECT * FROM work_queue_tickets WHERE post_id = $1',
         [testPostId]
       );
 
@@ -192,7 +192,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
 
       // Assert - Ticket still created with defaults
       const ticket = await postgresManager.query(
-        'SELECT * FROM work_queue WHERE post_id = $1',
+        'SELECT * FROM work_queue_tickets WHERE post_id = $1',
         [testPostId]
       );
 
@@ -257,7 +257,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
 
       // Assert - Orchestrator query pattern finds ticket
       const pendingTickets = await postgresManager.query(
-        'SELECT * FROM work_queue WHERE status = $1 ORDER BY priority DESC, created_at ASC',
+        'SELECT * FROM work_queue_tickets WHERE status = $1 ORDER BY priority DESC, created_at ASC',
         ['pending']
       );
 
@@ -285,7 +285,7 @@ describe('Post-to-Ticket Integration (NO MOCKS)', () => {
 
       // Assert - Has created_at timestamp
       const ticket = await postgresManager.query(
-        'SELECT created_at FROM work_queue WHERE post_id = $1',
+        'SELECT created_at FROM work_queue_tickets WHERE post_id = $1',
         [testPostId]
       );
 

@@ -25,8 +25,8 @@ describe('WorkQueueRepository', () => {
   });
 
   beforeEach(async () => {
-    // Clean work_queue table before each test
-    await postgresManager.query('DELETE FROM work_queue');
+    // Clean work_queue_tickets table before each test
+    await postgresManager.query('DELETE FROM work_queue_tickets');
   });
 
   describe('createTicket', () => {
@@ -447,7 +447,7 @@ describe('WorkQueueRepository', () => {
 
       // Manually set updated_at to 2 hours ago
       await postgresManager.query(
-        `UPDATE work_queue SET updated_at = NOW() - INTERVAL '2 hours' WHERE id = $1`,
+        `UPDATE work_queue_tickets SET updated_at = NOW() - INTERVAL '2 hours' WHERE id = $1`,
         [ticket.id]
       );
 
@@ -469,7 +469,7 @@ describe('WorkQueueRepository', () => {
 
       // Make it stuck
       await postgresManager.query(
-        `UPDATE work_queue SET updated_at = NOW() - INTERVAL '2 hours' WHERE id = $1`,
+        `UPDATE work_queue_tickets SET updated_at = NOW() - INTERVAL '2 hours' WHERE id = $1`,
         [ticket.id]
       );
 

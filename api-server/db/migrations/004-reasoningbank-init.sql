@@ -15,10 +15,19 @@
 -- UP: Apply migration
 -- ============================================================
 
+-- Step 1: Enable SQLite optimizations (MUST be before transaction)
+PRAGMA journal_mode = WAL;
+PRAGMA synchronous = NORMAL;
+PRAGMA cache_size = -64000;
+PRAGMA foreign_keys = ON;
+PRAGMA temp_store = MEMORY;
+PRAGMA mmap_size = 268435456;
+PRAGMA page_size = 4096;
+
 -- Transaction wrapper for atomic migration
 BEGIN TRANSACTION;
 
--- Step 1: Check if migration already applied
+-- Step 2: Check if migration already applied
 CREATE TABLE IF NOT EXISTS migration_history (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   version TEXT NOT NULL UNIQUE,
@@ -31,15 +40,6 @@ CREATE TABLE IF NOT EXISTS migration_history (
 -- Insert migration record
 INSERT OR IGNORE INTO migration_history (version, name, applied_at, status)
 VALUES ('004', 'reasoningbank-init', strftime('%s', 'now') * 1000, 'pending');
-
--- Step 2: Enable SQLite optimizations
-PRAGMA journal_mode = WAL;
-PRAGMA synchronous = NORMAL;
-PRAGMA cache_size = -64000;
-PRAGMA foreign_keys = ON;
-PRAGMA temp_store = MEMORY;
-PRAGMA mmap_size = 268435456;
-PRAGMA page_size = 4096;
 
 -- Step 3: Create core tables
 -- ============================================================

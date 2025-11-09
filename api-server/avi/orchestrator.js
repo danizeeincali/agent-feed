@@ -600,7 +600,7 @@ class AviOrchestrator {
       const postId = `intro-${Date.now()}-${nanoid(8)}`;
 
       const introPost = this.database.prepare(`
-        INSERT INTO agent_posts (id, title, content, authorAgent, publishedAt, metadata, engagement)
+        INSERT INTO agent_posts (id, title, content, author_agent, published_at, metadata, engagement)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `).run(
         postId,
@@ -644,7 +644,7 @@ class AviOrchestrator {
       // Get user's recent posts to check for trigger keywords
       const recentPosts = this.database.prepare(`
         SELECT id, title, content FROM agent_posts
-        WHERE authorAgent = ?
+        WHERE author_agent = ?
         ORDER BY created_at DESC
         LIMIT 5
       `).all(userId);

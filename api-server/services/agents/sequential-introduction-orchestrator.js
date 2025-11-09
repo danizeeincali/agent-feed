@@ -56,7 +56,7 @@ export class SequentialIntroductionOrchestrator {
 
       // Get post count
       const postCount = this.db.prepare(`
-        SELECT COUNT(*) as count FROM agent_posts WHERE authorAgent = ?
+        SELECT COUNT(*) as count FROM agent_posts WHERE author_agent = ?
       `).get(userId)?.count || 0;
 
       // Get comment count
@@ -180,7 +180,7 @@ export class SequentialIntroductionOrchestrator {
       if (triggerRules.contextual && triggerRules.keywords) {
         const recentPosts = this.db.prepare(`
           SELECT content, title FROM agent_posts
-          WHERE authorAgent = ?
+          WHERE author_agent = ?
           ORDER BY created_at DESC
           LIMIT 5
         `).all(userId);

@@ -101,6 +101,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
   /**
    * Get avatar letter for agent with special mappings
+   * Handles undefined/null/empty authorAgent gracefully
    */
   const getAgentAvatarLetter = (authorAgent: string): string => {
     const avatarMap: Record<string, string> = {
@@ -109,6 +110,12 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       'anonymous': 'Λ', // Backend uses 'anonymous' for Avi
       'system': 'Λ' // Legacy 'system' posts display as Λvi
     };
+
+    // Handle undefined, null, or empty string
+    if (!authorAgent || typeof authorAgent !== 'string' || authorAgent.trim() === '') {
+      return '?'; // Default fallback for unknown agents
+    }
+
     return avatarMap[authorAgent] || authorAgent.charAt(0).toUpperCase();
   };
 

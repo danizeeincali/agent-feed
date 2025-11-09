@@ -529,7 +529,7 @@ describe('Orchestrator E2E Tests', () => {
   beforeEach(async () => {
     // Clean database
     await aviStateRepo.initialize();
-    await postgresManager.query('DELETE FROM work_queue');
+    await postgresManager.query('DELETE FROM work_queue_tickets');
     await postgresManager.query('DELETE FROM agent_memories');
 
     // Create mock services
@@ -646,7 +646,7 @@ describe('Orchestrator E2E Tests', () => {
 
       await new Promise(resolve => setTimeout(resolve, 2500));
 
-      const tickets = await postgresManager.query('SELECT * FROM work_queue');
+      const tickets = await postgresManager.query('SELECT * FROM work_queue_tickets');
       expect(tickets.rows.length).toBe(3);
 
       const techTickets = tickets.rows.filter(t => t.assigned_agent === 'tech-guru');
@@ -682,7 +682,7 @@ describe('Orchestrator E2E Tests', () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       const tickets = await postgresManager.query(
-        'SELECT * FROM work_queue ORDER BY priority DESC'
+        'SELECT * FROM work_queue_tickets ORDER BY priority DESC'
       );
 
       expect(tickets.rows[0].post_id).toBe('post-high');
@@ -945,7 +945,7 @@ describe('Orchestrator E2E Tests', () => {
 
       // Some should succeed despite errors
       const completed = await postgresManager.query(
-        'SELECT COUNT(*) as count FROM work_queue WHERE status = $1',
+        'SELECT COUNT(*) as count FROM work_queue_tickets WHERE status = $1',
         ['completed']
       );
       expect(parseInt(completed.rows[0].count)).toBeGreaterThan(10);

@@ -1,0 +1,872 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SPARC API Contracts - Grace Period Handler & Agent Routing",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-07",
+
+  "definitions": {
+    "gracePeriod": {
+      "GracePeriodEvent": {
+        "type": "object",
+        "required": ["type", "timestamp", "timeoutMs", "elapsedMs", "remainingMs", "workerId", "ticketId", "currentState"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["GRACE_PERIOD_TRIGGERED"],
+            "description": "Event type identifier"
+          },
+          "timestamp": {
+            "type": "number",
+            "description": "Unix timestamp in milliseconds"
+          },
+          "timeoutMs": {
+            "type": "number",
+            "description": "Original timeout duration in milliseconds"
+          },
+          "elapsedMs": {
+            "type": "number",
+            "description": "Time elapsed since query start in milliseconds"
+          },
+          "remainingMs": {
+            "type": "number",
+            "description": "Time remaining until timeout in milliseconds"
+          },
+          "workerId": {
+            "type": "string",
+            "description": "Unique worker identifier"
+          },
+          "ticketId": {
+            "type": "string",
+            "description": "Unique ticket identifier"
+          },
+          "currentState": {
+            "$ref": "#/definitions/gracePeriod/WorkerState"
+          }
+        }
+      },
+
+      "WorkerState": {
+        "type": "object",
+        "required": ["messagesCollected", "chunkCount", "responseSize", "currentPhase", "estimatedCompletion", "todos"],
+        "properties": {
+          "messagesCollected": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/gracePeriod/Message"
+            },
+            "description": "All messages collected so far"
+          },
+          "chunkCount": {
+            "type": "number",
+            "description": "Number of streaming chunks received"
+          },
+          "responseSize": {
+            "type": "number",
+            "description": "Total response size in bytes"
+          },
+          "currentPhase": {
+            "type": "string",
+            "description": "Current execution phase (e.g., 'analyzing', 'implementing')"
+          },
+          "estimatedCompletion": {
+            "type": "number",
+            "description": "Estimated time to completion in milliseconds"
+          },
+          "todos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/gracePeriod/TodoItem"
+            },
+            "description": "TodoWrite items representing progress"
+          }
+        }
+      },
+
+      "Message": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["assistant", "user", "system", "result"]
+          },
+          "content": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "number"
+          }
+        }
+      },
+
+      "TodoItem": {
+        "type": "object",
+        "required": ["id", "content", "activeForm", "status", "priority"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique todo identifier"
+          },
+          "content": {
+            "type": "string",
+            "description": "Todo description (imperative form)"
+          },
+          "activeForm": {
+            "type": "string",
+            "description": "Todo description (present continuous form)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["completed", "in_progress", "pending"],
+            "description": "Current status of the todo"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Priority level"
+          },
+          "estimatedTime": {
+            "type": "number",
+            "description": "Estimated or actual time in milliseconds"
+          }
+        }
+      },
+
+      "UserChoiceRequest": {
+        "type": "object",
+        "required": ["type", "message", "timeRemaining", "options", "defaultAction", "defaultAfterMs"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["USER_CHOICE_REQUIRED"],
+            "description": "Request type identifier"
+          },
+          "message": {
+            "type": "string",
+            "description": "Formatted message to display to user"
+          },
+          "timeRemaining": {
+            "type": "number",
+            "description": "Time remaining until timeout in milliseconds"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/gracePeriod/UserOption"
+            },
+            "description": "Available user choices"
+          },
+          "defaultAction": {
+            "type": "string",
+            "enum": ["continue", "pause", "simplify"],
+            "description": "Default action if user doesn't respond"
+          },
+          "defaultAfterMs": {
+            "type": "number",
+            "description": "Milliseconds to wait before applying default action"
+          }
+        }
+      },
+
+      "UserOption": {
+        "type": "object",
+        "required": ["action", "label", "description", "icon", "consequence"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["continue", "pause", "simplify"],
+            "description": "Action identifier"
+          },
+          "label": {
+            "type": "string",
+            "description": "Display label for UI button"
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of what this action does"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Emoji or icon for visual identification"
+          },
+          "consequence": {
+            "type": "string",
+            "description": "Explanation of what happens if user chooses this"
+          }
+        }
+      },
+
+      "UserChoiceResponse": {
+        "type": "object",
+        "required": ["action", "timestamp", "workerId"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["continue", "pause", "simplify"],
+            "description": "User's chosen action"
+          },
+          "timestamp": {
+            "type": "number",
+            "description": "Unix timestamp of user's choice"
+          },
+          "workerId": {
+            "type": "string",
+            "description": "Worker ID this response is for"
+          }
+        }
+      },
+
+      "ContinueAction": {
+        "type": "object",
+        "properties": {
+          "extendTimeoutBy": {
+            "type": "number",
+            "default": 120000,
+            "description": "Milliseconds to extend timeout (default: 2 minutes)"
+          },
+          "newTimeoutMs": {
+            "type": "number",
+            "description": "New total timeout in milliseconds"
+          }
+        }
+      },
+
+      "PauseAction": {
+        "type": "object",
+        "required": ["saveState", "savedStateId", "resumeUrl", "expiresAt"],
+        "properties": {
+          "saveState": {
+            "type": "boolean",
+            "enum": [true],
+            "description": "Always true for pause action"
+          },
+          "savedStateId": {
+            "type": "string",
+            "description": "Unique identifier for saved state"
+          },
+          "resumeUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to resume this session"
+          },
+          "expiresAt": {
+            "type": "number",
+            "description": "Unix timestamp when saved state expires"
+          }
+        }
+      },
+
+      "SimplifyAction": {
+        "type": "object",
+        "required": ["reduceScopeTo", "priorityOnly", "estimatedCompletionMs"],
+        "properties": {
+          "reduceScopeTo": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Percentage of original scope to retain"
+          },
+          "priorityOnly": {
+            "type": "boolean",
+            "description": "Only complete high-priority items"
+          },
+          "estimatedCompletionMs": {
+            "type": "number",
+            "description": "Estimated time to completion with reduced scope"
+          }
+        }
+      },
+
+      "PersistedState": {
+        "type": "object",
+        "required": ["stateId", "workerId", "ticketId", "agentName", "timestamp", "expiresAt", "execution", "progress", "todos", "resumption"],
+        "properties": {
+          "stateId": {
+            "type": "string",
+            "description": "Unique state identifier"
+          },
+          "workerId": {
+            "type": "string"
+          },
+          "ticketId": {
+            "type": "string"
+          },
+          "agentName": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "number",
+            "description": "Unix timestamp when state was saved"
+          },
+          "expiresAt": {
+            "type": "number",
+            "description": "Unix timestamp when state expires (default: +24 hours)"
+          },
+          "execution": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string"
+              },
+              "complexity": {
+                "type": "string",
+                "enum": ["simple", "complex", "default"]
+              },
+              "elapsedMs": {
+                "type": "number"
+              },
+              "timeoutMs": {
+                "type": "number"
+              }
+            }
+          },
+          "progress": {
+            "type": "object",
+            "properties": {
+              "messagesCollected": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/gracePeriod/Message"
+                }
+              },
+              "chunkCount": {
+                "type": "number"
+              },
+              "responseSize": {
+                "type": "number"
+              },
+              "currentPhase": {
+                "type": "string"
+              },
+              "completedSteps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "pendingSteps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "todos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/gracePeriod/TodoItem"
+            }
+          },
+          "resumption": {
+            "type": "object",
+            "properties": {
+              "canResume": {
+                "type": "boolean"
+              },
+              "resumeFrom": {
+                "type": "string"
+              },
+              "contextSnapshot": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "agentRouting": {
+      "RoutingRequest": {
+        "type": "object",
+        "required": ["userRequest"],
+        "properties": {
+          "userRequest": {
+            "type": "string",
+            "description": "User's natural language request"
+          },
+          "context": {
+            "$ref": "#/definitions/agentRouting/RequestContext"
+          },
+          "preferences": {
+            "$ref": "#/definitions/agentRouting/UserPreferences"
+          }
+        }
+      },
+
+      "RequestContext": {
+        "type": "object",
+        "properties": {
+          "conversationHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/gracePeriod/Message"
+            }
+          },
+          "currentAgents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of currently active agents"
+          },
+          "recentWork": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/agentRouting/WorkContext"
+            }
+          }
+        }
+      },
+
+      "WorkContext": {
+        "type": "object",
+        "properties": {
+          "agent": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "number"
+          },
+          "outcome": {
+            "type": "string"
+          }
+        }
+      },
+
+      "UserPreferences": {
+        "type": "object",
+        "properties": {
+          "preferDirect": {
+            "type": "boolean",
+            "description": "Prefer direct routing over brainstorming"
+          },
+          "requestExplanation": {
+            "type": "boolean",
+            "description": "Request explanation of routing decision"
+          }
+        }
+      },
+
+      "RoutingDecision": {
+        "type": "object",
+        "required": ["validation"],
+        "properties": {
+          "primaryRoute": {
+            "$ref": "#/definitions/agentRouting/RouteInfo"
+          },
+          "alternativeRoutes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/agentRouting/RouteInfo"
+            }
+          },
+          "workflow": {
+            "$ref": "#/definitions/agentRouting/WorkflowDefinition"
+          },
+          "clarificationNeeded": {
+            "$ref": "#/definitions/agentRouting/ClarificationInfo"
+          },
+          "validation": {
+            "$ref": "#/definitions/agentRouting/ValidationResult"
+          }
+        }
+      },
+
+      "RouteInfo": {
+        "type": "object",
+        "required": ["agent", "confidence", "reasoning"],
+        "properties": {
+          "agent": {
+            "type": "string",
+            "description": "Agent name (e.g., 'agent-architect-agent')"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence score (0.0 - 1.0)"
+          },
+          "reasoning": {
+            "type": "string",
+            "description": "Human-readable explanation of routing decision"
+          }
+        }
+      },
+
+      "WorkflowDefinition": {
+        "type": "object",
+        "required": ["type", "steps"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["sequential", "parallel"],
+            "description": "Execution type"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/agentRouting/WorkflowStep"
+            }
+          }
+        }
+      },
+
+      "WorkflowStep": {
+        "type": "object",
+        "required": ["sequence", "agent", "action"],
+        "properties": {
+          "sequence": {
+            "type": "number",
+            "description": "Step number (1-indexed)"
+          },
+          "agent": {
+            "type": "string",
+            "description": "Agent to execute this step"
+          },
+          "action": {
+            "type": "string",
+            "description": "Action for agent to perform"
+          },
+          "input": {
+            "description": "Input data for this step"
+          },
+          "output": {
+            "type": "string",
+            "description": "Expected output type/format"
+          },
+          "handoffTo": {
+            "type": "string",
+            "description": "Agent to hand off to after completion"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Condition for conditional execution"
+          }
+        }
+      },
+
+      "ClarificationInfo": {
+        "type": "object",
+        "required": ["questions", "context"],
+        "properties": {
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Questions to ask the user"
+          },
+          "context": {
+            "type": "string",
+            "description": "Context for why clarification is needed"
+          },
+          "suggestedRoute": {
+            "type": "string",
+            "description": "Suggested agent if clarification confirms assumption"
+          }
+        }
+      },
+
+      "ValidationResult": {
+        "type": "object",
+        "required": ["requirementsComplete", "similarAgentExists", "skillsAvailable"],
+        "properties": {
+          "requirementsComplete": {
+            "type": "boolean",
+            "description": "All required information provided"
+          },
+          "similarAgentExists": {
+            "type": "boolean",
+            "description": "Similar agent already exists"
+          },
+          "skillsAvailable": {
+            "type": "boolean",
+            "description": "Required skills are available"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of validation issues if any"
+          }
+        }
+      },
+
+      "IntentClassification": {
+        "type": "object",
+        "required": ["primaryIntent", "confidence", "triggers"],
+        "properties": {
+          "primaryIntent": {
+            "type": "string",
+            "enum": ["BRAINSTORM", "CREATE_AGENT", "MODIFY_AGENT", "SYSTEM_ARCHITECTURE", "EVALUATE_FEASIBILITY", "UNCLEAR"],
+            "description": "Primary detected intent"
+          },
+          "secondaryIntents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional detected intents"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence in classification (0.0 - 1.0)"
+          },
+          "triggers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/agentRouting/KeywordTrigger"
+            }
+          },
+          "clarificationNeeded": {
+            "type": "boolean",
+            "description": "Whether clarifying questions are needed"
+          },
+          "suggestedQuestions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+
+      "KeywordTrigger": {
+        "type": "object",
+        "required": ["keyword", "intent", "weight", "confidence"],
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "description": "Matched keyword or phrase"
+          },
+          "intent": {
+            "type": "string",
+            "description": "Intent this keyword indicates"
+          },
+          "weight": {
+            "type": "number",
+            "description": "Weight of this keyword match"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Confidence tier (0.9=tier1, 0.7=tier2, 0.5=tier3)"
+          }
+        }
+      },
+
+      "HandoffPackage": {
+        "type": "object",
+        "required": ["handoffType", "sourceAgent", "targetAgent", "timestamp", "data", "validation"],
+        "properties": {
+          "handoffType": {
+            "type": "string",
+            "enum": ["IDEA_TO_CREATION", "ARCHITECTURE_TO_AGENT"],
+            "description": "Type of handoff"
+          },
+          "sourceAgent": {
+            "type": "string",
+            "description": "Agent initiating handoff"
+          },
+          "targetAgent": {
+            "type": "string",
+            "description": "Agent receiving handoff"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp"
+          },
+          "data": {
+            "description": "Handoff data (structure depends on handoffType)"
+          },
+          "validation": {
+            "type": "object",
+            "properties": {
+              "dataComplete": {
+                "type": "boolean"
+              },
+              "schemaVersion": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+
+      "IdeaToCreationHandoff": {
+        "type": "object",
+        "required": ["approvedIdea", "requirements", "constraints", "context"],
+        "properties": {
+          "approvedIdea": {
+            "type": "object",
+            "properties": {
+              "ideaId": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              },
+              "feasibilityScore": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10
+              }
+            }
+          },
+          "requirements": {
+            "type": "object",
+            "properties": {
+              "purpose": {
+                "type": "string"
+              },
+              "capabilities": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "tools": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "skills": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "constraints": {
+            "type": "object",
+            "properties": {
+              "tokenBudget": {
+                "type": "number"
+              },
+              "coordinatesWith": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "productionCompliance": {
+                "type": "boolean"
+              }
+            }
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "userNeed": {
+                "type": "string"
+              },
+              "ecosystemGap": {
+                "type": "string"
+              },
+              "businessImpact": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "examples": {
+    "gracePeriod": {
+      "event": {
+        "type": "GRACE_PERIOD_TRIGGERED",
+        "timestamp": 1699392000000,
+        "timeoutMs": 240000,
+        "elapsedMs": 192000,
+        "remainingMs": 48000,
+        "workerId": "worker-abc123",
+        "ticketId": "ticket-xyz789",
+        "currentState": {
+          "messagesCollected": [],
+          "chunkCount": 42,
+          "responseSize": 15360,
+          "currentPhase": "implementing",
+          "estimatedCompletion": 120000,
+          "todos": []
+        }
+      },
+      "userChoiceRequest": {
+        "type": "USER_CHOICE_REQUIRED",
+        "message": "⏳ This task is taking longer than expected...",
+        "timeRemaining": 48000,
+        "options": [
+          {
+            "action": "continue",
+            "label": "🚀 Continue",
+            "description": "Extend time by 2 minutes",
+            "icon": "🚀",
+            "consequence": "Total time: ~5 minutes"
+          }
+        ],
+        "defaultAction": "continue",
+        "defaultAfterMs": 48000
+      },
+      "userChoiceResponse": {
+        "action": "continue",
+        "timestamp": 1699392030000,
+        "workerId": "worker-abc123"
+      }
+    },
+    "agentRouting": {
+      "routingRequest": {
+        "userRequest": "Create a testing automation agent with E2E testing skills",
+        "context": {
+          "conversationHistory": [],
+          "currentAgents": ["coder", "reviewer", "tester"]
+        },
+        "preferences": {
+          "preferDirect": false,
+          "requestExplanation": true
+        }
+      },
+      "routingDecision": {
+        "primaryRoute": {
+          "agent": "agent-architect-agent",
+          "confidence": 0.95,
+          "reasoning": "Clear requirements provided: agent name, purpose, capabilities defined. Ready for immediate creation."
+        },
+        "validation": {
+          "requirementsComplete": true,
+          "similarAgentExists": false,
+          "skillsAvailable": false,
+          "issues": ["E2E testing skills need to be created first"]
+        }
+      },
+      "intentClassification": {
+        "primaryIntent": "CREATE_AGENT",
+        "secondaryIntents": [],
+        "confidence": 0.95,
+        "triggers": [
+          {
+            "keyword": "create agent",
+            "intent": "CREATE_AGENT",
+            "weight": 1.0,
+            "confidence": 0.9
+          }
+        ],
+        "clarificationNeeded": false
+      }
+    }
+  }
+}

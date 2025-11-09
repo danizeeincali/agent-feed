@@ -14,6 +14,7 @@ import express from 'express';
 import welcomeContentService from '../services/system-initialization/welcome-content-service.js';
 import FirstTimeSetupService from '../services/system-initialization/first-time-setup-service.js';
 import SystemInitializationService from '../services/system-initialization/system-initialization.service.js';
+import dbSelector from '../config/database-selector.js';
 
 const router = express.Router();
 let db;
@@ -22,18 +23,22 @@ let systemInitService;
 
 /**
  * Initialize system initialization routes with database
- * @param {Object} database - Better-sqlite3 database instance
+ * @param {Object} database - Better-sqlite3 database instance (DEPRECATED - uses dbSelector instead)
  */
 export function initializeSystemRoutes(database) {
-  if (!database) {
-    console.error('❌ Database not provided to system-initialization routes');
+  // Use dbSelector's database instance instead of passed parameter
+  // This ensures we use the same instance that has migrations applied
+  const connections = dbSelector.getRawConnections();
+
+  if (!connections || !connections.db) {
+    console.error('❌ dbSelector database not available');
     return;
   }
 
-  db = database;
-  setupService = new FirstTimeSetupService(database);
-  systemInitService = new SystemInitializationService(database);
-  console.log('✅ System initialization routes initialized with database');
+  db = connections.db;
+  setupService = new FirstTimeSetupService(connections.db);
+  systemInitService = new SystemInitializationService(connections.db);
+  console.log('✅ System initialization routes initialized with dbSelector database');
 }
 
 /**
