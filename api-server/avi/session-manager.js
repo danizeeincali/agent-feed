@@ -256,10 +256,8 @@ You are a proactive orchestrator and problem solver. Your mission is to make thi
     try {
       console.log(`💬 AVI interaction #${this.interactionCount}: "${userMessage.substring(0, 50)}..."`);
 
-      // Build prompt with context
-      const prompt = options.includeSystemPrompt
-        ? `${this.systemPrompt}\n\nUser: ${userMessage}`
-        : userMessage;
+      // Build prompt with context - ALWAYS include system prompt to enforce 3-pattern behavioral rules
+      const prompt = `${this.systemPrompt}\n\nUser: ${userMessage}`;
 
       // Execute through SDK (reuses session context)
       const result = await this.sdkManager.executeHeadlessTask(prompt, {
@@ -277,10 +275,44 @@ You are a proactive orchestrator and problem solver. Your mission is to make thi
 
       // Track tokens
       const tokensUsed = result.usage?.total_tokens || 1700;
+      const inputTokens = result.usage?.input_tokens || 1000;
+      const outputTokens = result.usage?.output_tokens || 700;
       this.totalTokensUsed += tokensUsed;
 
       console.log(`✅ AVI responded (${response.length} chars, ${tokensUsed} tokens)`);
       console.log(`   Total session tokens: ${this.totalTokensUsed}`);
+
+      // ✨ COST TRACKING: Write token usage to database
+      try {
+        const { tokenAnalyticsDB } = await import('../../src/database/token-analytics-db.js');
+        await tokenAnalyticsDB.insertTokenUsage({
+          session_id: this.sessionId,
+          user_id: 'system-avi',
+          request_id: `avi-${Date.now()}`,
+          message_id: `avi-msg-${Date.now()}`,
+          provider: 'anthropic',
+          model: 'claude-sonnet-4-20250514',
+          input_tokens: inputTokens,
+          output_tokens: outputTokens,
+          cached_tokens: result.usage?.cache_read_input_tokens || 0,
+          cost_input: Math.ceil((inputTokens * 0.003)), // Cents
+          cost_output: Math.ceil((outputTokens * 0.015)), // Cents
+          request_type: 'avi_chat',
+          component: 'avi-session-manager',
+          processing_time_ms: null,
+          message_content: userMessage.substring(0, 500),
+          response_content: response.substring(0, 500),
+          tools_used: null,
+          metadata: JSON.stringify({
+            interactionCount: this.interactionCount,
+            totalSessionTokens: this.totalTokensUsed
+          })
+        });
+        console.log('✅ [AVI-COST-TRACKING] Token usage written to database');
+      } catch (dbError) {
+        console.error('❌ [AVI-COST-TRACKING] Failed to write token usage:', dbError);
+        // Don't throw - continue even if cost tracking fails
+      }
 
       return {
         success: true,

@@ -1,0 +1,1 @@
+{"id":"7c4de02f-0570-4f84-882d-7ebe9d356507","timestamp":"2025-11-12T00:01:57.048Z","rule":{"id":"high_cpu","name":"High CPU Usage","metric":"system.cpu.usage","condition":"greater_than","threshold":80,"severity":"critical","duration":0},"currentValue":90,"threshold":80,"severity":"critical","acknowledged":false,"acknowledgedBy":null,"acknowledgedAt":null}

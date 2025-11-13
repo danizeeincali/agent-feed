@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { MessageCircle, Reply, ChevronDown, ChevronRight, User, Bot, Link, ArrowUp } from 'lucide-react';
+import { MessageCircle, Reply, ChevronDown, ChevronRight, User, Bot, Link, ArrowUp, CheckCircle } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { CommentModerationPanel } from './CommentModerationPanel';
 import { buildCommentTree, CommentTreeNode } from '../utils/commentUtils';
@@ -15,6 +15,9 @@ export interface Comment {
   created_at?: string; // API field (snake_case from backend)
   updatedAt?: string;
   parentId?: string;
+  author_user_id?: string;
+  author_agent?: string; // Agent identifier for agent comments
+  author_type?: 'agent' | 'user' | 'system'; // Database field
   replies?: Comment[];
   repliesCount: number;
   threadDepth: number;
@@ -88,6 +91,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const shouldIndent = depth < maxDepth;
   const isMaxDepth = depth >= maxDepth;
   const replyCount = comment.repliesCount || 0;
+
+  // Detect if comment is from an agent (for visual differentiation)
+  const isAgentComment = comment.authorType === 'agent' ||
+                        comment.author_agent?.startsWith('avi-') ||
+                        comment.author_agent?.endsWith('-agent') ||
+                        comment.author?.includes('agent') ||
+                        comment.author?.includes('avi');
   
   // Scroll to comment when highlighted
   useEffect(() => {
@@ -202,15 +212,33 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <div className={cn(
         'p-3 rounded-lg transition-colors relative group',
         shouldIndent && depth > 0 && 'ml-4',
-        comment.isDeleted ? 'bg-gray-50 dark:bg-gray-800' : 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800',
+        // Agent comment styling: Blue-tinted background with left border
+        isAgentComment && !comment.isDeleted && 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400',
+        // User comment styling: Default white background
+        !isAgentComment && !comment.isDeleted && 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800',
+        // Deleted comment styling
+        comment.isDeleted && 'bg-gray-50 dark:bg-gray-800',
+        // Highlighted styling
         isHighlighted && 'bg-blue-50 dark:bg-blue-900/30'
       )}>
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
+            {/* Agent/User Icon */}
+            {isAgentComment ? (
+              <Bot className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            ) : (
+              <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            )}
             <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
               <AuthorDisplayName authorId={comment.author_user_id || comment.author} fallback="User" />
             </span>
+            {/* Agent Badge */}
+            {isAgentComment && (
+              <span className="px-2 py-0.5 text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-full font-medium">
+                Agent
+              </span>
+            )}
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {formatTimestamp(comment.created_at || comment.createdAt)}
             </span>

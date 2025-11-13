@@ -119,13 +119,31 @@ class DatabaseSelector {
       // Use publishedAt for correct chronological order (newest first)
       // publishedAt has millisecond precision and proper staggering for onboarding posts
       // created_at only has second precision which causes identical timestamps
+      // JOIN with user_settings to get display_name
+      // 🔧 FIX: Add comment count via subquery so frontend can display accurate counts
       const posts = this.sqliteDb.prepare(`
-        SELECT * FROM agent_posts
-        ORDER BY published_at DESC
+        SELECT
+          posts.*,
+          COALESCE(user_settings.display_name, posts.author) as display_name,
+          (SELECT COUNT(*) FROM comments WHERE post_id = posts.id) as comments
+        FROM agent_posts posts
+        LEFT JOIN user_settings
+          ON posts.user_id = user_settings.user_id
+        ORDER BY posts.published_at DESC
         LIMIT ? OFFSET ?
       `).all(limit, offset);
 
-      return posts;
+      // 🔧 TIMESTAMP FIX: Ensure all timestamps are in milliseconds
+      return posts.map(post => {
+        // Convert Unix seconds to milliseconds if needed
+        if (post.created_at && post.created_at < 10000000000) {
+          post.created_at = post.created_at * 1000;
+        }
+        if (post.published_at && post.published_at < 10000000000) {
+          post.published_at = post.published_at * 1000;
+        }
+        return post;
+      });
     }
   }
 
@@ -149,18 +167,23 @@ class DatabaseSelector {
       // SQLite implementation
       const searchPattern = `%${sanitizedQuery}%`;
 
-      // Get matching posts
+      // Get matching posts - JOIN with user_settings for display_name
+      // 🔧 FIX: Add comment count via subquery so frontend can display accurate counts
       const posts = this.sqliteDb.prepare(`
         SELECT
-          id, title, content, author_agent, published_at,
-          metadata, engagement, created_at, last_activity_at
-        FROM agent_posts
+          posts.id, posts.title, posts.content, posts.author_agent, posts.published_at,
+          posts.metadata, posts.engagement, posts.created_at, posts.last_activity_at,
+          COALESCE(user_settings.display_name, posts.author) as display_name,
+          (SELECT COUNT(*) FROM comments WHERE post_id = posts.id) as comments
+        FROM agent_posts posts
+        LEFT JOIN user_settings
+          ON posts.user_id = user_settings.user_id
         WHERE (
-          LOWER(title) LIKE LOWER(?)
-          OR LOWER(content) LIKE LOWER(?)
-          OR LOWER(author_agent) LIKE LOWER(?)
+          LOWER(posts.title) LIKE LOWER(?)
+          OR LOWER(posts.content) LIKE LOWER(?)
+          OR LOWER(posts.author_agent) LIKE LOWER(?)
         )
-        ORDER BY published_at DESC
+        ORDER BY posts.published_at DESC
         LIMIT ? OFFSET ?
       `).all(searchPattern, searchPattern, searchPattern, parsedLimit, parsedOffset);
 
@@ -192,9 +215,17 @@ class DatabaseSelector {
     if (this.usePostgres) {
       return await memoryRepo.getPostById(postId, userId);
     } else {
-      // SQLite implementation
+      // SQLite implementation - JOIN with user_settings for display_name
+      // 🔧 FIX: Add comment count via subquery so frontend can display accurate counts
       const post = this.sqliteDb.prepare(`
-        SELECT * FROM agent_posts WHERE id = ?
+        SELECT
+          posts.*,
+          COALESCE(user_settings.display_name, posts.author) as display_name,
+          (SELECT COUNT(*) FROM comments WHERE post_id = posts.id) as comments
+        FROM agent_posts posts
+        LEFT JOIN user_settings
+          ON posts.user_id = user_settings.user_id
+        WHERE posts.id = ?
       `).get(postId);
 
       return post || null;
@@ -269,7 +300,15 @@ class DatabaseSelector {
         ORDER BY c.created_at ASC
       `).all(postId);
 
-      return comments;
+      // 🔧 TIMESTAMP FIX: Convert datetime strings to milliseconds for frontend
+      return comments.map(comment => {
+        if (comment.created_at && typeof comment.created_at === 'string') {
+          // Database stores datetime strings like '2025-11-11 23:14:46'
+          // Convert to Unix milliseconds for JavaScript Date compatibility
+          comment.created_at = new Date(comment.created_at + ' UTC').getTime();
+        }
+        return comment;
+      });
     }
   }
 
@@ -316,12 +355,13 @@ class DatabaseSelector {
           author,
           author_agent,
           author_user_id,
+          user_id,
           content,
           content_type,
           mentioned_users,
           created_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
       `);
 
       const commentId = commentData.id || `comment-${Date.now()}`;
@@ -345,7 +385,8 @@ class DatabaseSelector {
         commentData.parent_id || null,
         author,           // Keep for backward compatibility
         authorAgent,      // Primary field going forward
-        authorUserId,     // NEW: Store user_id for display name lookup
+        authorUserId,     // author_user_id - for backward compatibility
+        authorUserId,     // user_id - FOREIGN KEY constrained field
         commentData.content,
         contentType,      // NEW: content_type support
         mentionedUsers
@@ -377,11 +418,18 @@ class DatabaseSelector {
     if (this.usePostgres) {
       return await memoryRepo.getPostsByAgent(agentName, userId, limit);
     } else {
-      // SQLite implementation
+      // SQLite implementation - JOIN with user_settings for display_name
+      // 🔧 FIX: Add comment count via subquery so frontend can display accurate counts
       const posts = this.sqliteDb.prepare(`
-        SELECT * FROM agent_posts
-        WHERE author_agent = ?
-        ORDER BY published_at DESC
+        SELECT
+          posts.*,
+          COALESCE(user_settings.display_name, posts.author) as display_name,
+          (SELECT COUNT(*) FROM comments WHERE post_id = posts.id) as comments
+        FROM agent_posts posts
+        LEFT JOIN user_settings
+          ON posts.user_id = user_settings.user_id
+        WHERE posts.author_agent = ?
+        ORDER BY posts.published_at DESC
         LIMIT ?
       `).all(agentName, limit);
 

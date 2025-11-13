@@ -21,11 +21,12 @@
       "exampleFiles": [
         "frontend/src/App.tsx",
         "frontend/src/components/RealSocialMediaFeed.tsx",
-        "simple-backend.js",
         "api-server/server.js",
+        "simple-backend.js",
         "package.json"
       ],
-      "exampleFilesGeneratedAt": 1762288274828
+      "exampleFilesGeneratedAt": 1762902981149
     }
-  }
+  },
+  "sonnet45MigrationComplete": true
 }

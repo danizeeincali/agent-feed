@@ -1,0 +1,122 @@
+
+> agent-feed@0.1.0 test
+> jest --config jest.config.cjs tests/unit/claude-auth-manager-schema.test.js --no-coverage
+
+  console.log
+    [dotenv@17.2.3] injecting env (54) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    ✅ Auth method updated: test-user-123 -> user_api_key
+
+      at ClaudeAuthManager.updateAuthMethod (src/services/ClaudeAuthManager.cjs:302:15)
+
+  console.log
+    ✅ Auth method updated: test-user-123 -> user_api_key
+
+      at ClaudeAuthManager.updateAuthMethod (src/services/ClaudeAuthManager.cjs:302:15)
+
+  console.log
+    ✅ Auth method updated: test-user-123-oauth -> oauth
+
+      at ClaudeAuthManager.updateAuthMethod (src/services/ClaudeAuthManager.cjs:302:15)
+
+  console.log
+    ✅ Auth method updated: test-user-123-user_api_key -> user_api_key
+
+      at ClaudeAuthManager.updateAuthMethod (src/services/ClaudeAuthManager.cjs:302:15)
+
+  console.log
+    ✅ Auth method updated: test-user-123-platform_payg -> platform_payg
+
+      at ClaudeAuthManager.updateAuthMethod (src/services/ClaudeAuthManager.cjs:302:15)
+
+  console.log
+    ✅ Auth method updated: test-user-123 -> user_api_key
+
+      at ClaudeAuthManager.updateAuthMethod (src/services/ClaudeAuthManager.cjs:302:15)
+
+  console.log
+    ✅ Auth method updated: test-user-123 -> oauth
+
+      at ClaudeAuthManager.updateAuthMethod (src/services/ClaudeAuthManager.cjs:302:15)
+
+  console.error
+    Error getting auth config: TypeError: The database connection is not open
+        at Database.prepare (/workspaces/agent-feed/node_modules/better-sqlite3/lib/methods/wrappers.js:5:21)
+        at ClaudeAuthManager.getAuthConfig (/workspaces/agent-feed/src/services/ClaudeAuthManager.cjs:28:32)
+        at /workspaces/agent-feed/tests/unit/claude-auth-manager-schema.test.js:344:27
+        at Object.toThrow (/workspaces/agent-feed/node_modules/@jest/expect/node_modules/expect/build/index.js:202:58)
+        at Object.<anonymous> (/workspaces/agent-feed/tests/unit/claude-auth-manager-schema.test.js:345:18)
+        at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+        at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+        at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+        at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+        at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+        at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+        at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+        at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+        at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+        at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+        at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)
+
+      83 |       return config;
+      84 |     } catch (error) {
+    > 85 |       console.error('Error getting auth config:', error);
+         |               ^
+      86 |       throw error;
+      87 |     }
+      88 |   }
+
+      at ClaudeAuthManager.getAuthConfig (src/services/ClaudeAuthManager.cjs:85:15)
+      at tests/unit/claude-auth-manager-schema.test.js:344:27
+      at Object.toThrow (node_modules/@jest/expect/node_modules/expect/build/index.js:202:58)
+      at Object.<anonymous> (tests/unit/claude-auth-manager-schema.test.js:345:18)
+
+PASS tests/unit/claude-auth-manager-schema.test.js
+  ClaudeAuthManager - Database Schema Validation (TDD)
+    1. Schema Alignment Tests
+      ✓ should query user_claude_auth table (not user_settings) (52 ms)
+      ✓ should use correct column name: encrypted_api_key (not api_key) (7 ms)
+      ✓ should return OAuth config when auth_method = "oauth" (4 ms)
+      ✓ should return API key config when auth_method = "user_api_key" (2 ms)
+      ✓ should return platform PAYG config when auth_method = "platform_payg" (1 ms)
+      ✓ should fall back to platform PAYG when user not found (1 ms)
+    2. Real Database Tests
+      ✓ should insert test user into user_claude_auth table (1 ms)
+      ✓ should query returns correct auth_method (16 ms)
+      ✓ should retrieve encrypted API key correctly (2 ms)
+      ✓ should access OAuth token fields correctly (1 ms)
+      ✓ should not throw SQL errors during queries (1 ms)
+    3. updateAuthMethod Tests
+      ✓ should create new record in user_claude_auth (4 ms)
+      ✓ should update existing record correctly (3 ms)
+      ✓ should validate auth_method values (oauth, user_api_key, platform_payg) (8 ms)
+      ✓ should store encrypted_api_key correctly (3 ms)
+      ✓ should handle OAuth method update (4 ms)
+    4. Edge Cases
+      ✓ should return default config when user not found (1 ms)
+      ✓ should handle null API key correctly (3 ms)
+      ✓ should reject invalid auth_method via CHECK constraint (8 ms)
+      ✓ should handle database connection errors gracefully (14 ms)
+      ✓ should handle missing oauth_tokens field (4 ms)
+      ✓ should handle JSON in oauth_tokens field (4 ms)
+    5. Usage Billing Integration
+      ✓ should track usage in usage_billing table for platform_payg (1 ms)
+      ✓ should not track usage for user_api_key method
+      ✓ should query unbilled usage correctly (2 ms)
+    6. Schema Compliance Tests
+      ✓ should enforce STRICT table mode (1 ms)
+      ✓ should enforce NOT NULL constraints (3 ms)
+      ✓ should enforce PRIMARY KEY constraint (4 ms)
+      ✓ should allow nullable encrypted_api_key (1 ms)
+      ✓ should store updated_at timestamp correctly (101 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       30 passed, 30 total
+Snapshots:   0 total
+Time:        1.144 s, estimated 2 s
+Ran all test suites matching /tests\/unit\/claude-auth-manager-schema.test.js/i.

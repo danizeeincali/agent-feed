@@ -1,0 +1,114 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Feed" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e13]
+        - text: Feed
+      - link "Drafts" [ref=e15] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e16]
+        - text: Drafts
+      - link "Agents" [ref=e19] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e20]
+        - text: Agents
+      - link "Live Activity" [ref=e23] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e24]
+        - text: Live Activity
+      - link "Analytics" [ref=e28] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e29]
+        - text: Analytics
+      - link "Cost Monitoring" [ref=e31] [cursor=pointer]:
+        - /url: /settings/cost-monitoring
+        - img [ref=e32]
+        - text: Cost Monitoring
+      - link "Billing" [ref=e34] [cursor=pointer]:
+        - /url: /billing
+        - img [ref=e35]
+        - text: Billing
+      - link "Settings" [active] [ref=e37] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e38]
+        - text: Settings
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e45]: Connected
+        - img [ref=e46]
+      - generic [ref=e50]:
+        - img [ref=e51]
+        - generic [ref=e56]: "0"
+  - generic [ref=e57]:
+    - banner [ref=e58]:
+      - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e61]
+    - main [ref=e62]:
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - heading "Settings" [level=1] [ref=e66]:
+            - img [ref=e67]
+            - text: Settings
+          - paragraph [ref=e70]: Manage your account preferences and authentication
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - generic [ref=e73]:
+              - heading "Claude Code Authentication" [level=3] [ref=e74]:
+                - img [ref=e75]
+                - text: Claude Code Authentication
+              - paragraph [ref=e79]: Choose how you want to authenticate with Claude Code API
+            - generic [ref=e80]:
+              - generic [ref=e81]:
+                - generic [ref=e83] [cursor=pointer]:
+                  - radio [checked] [ref=e84]
+                  - generic [ref=e85]:
+                    - generic [ref=e86]:
+                      - img [ref=e87]
+                      - 'heading "Option A: OAuth (Claude CLI)" [level=3] [ref=e89]'
+                      - generic [ref=e90]: ✓ CLI Detected
+                    - paragraph [ref=e91]: Use your Claude CLI authentication. No API key needed.
+                    - generic [ref=e93]:
+                      - img [ref=e94]
+                      - generic [ref=e97]:
+                        - paragraph [ref=e98]: Claude CLI Login Detected
+                        - paragraph [ref=e99]: "Subscription: max"
+                    - button "Connect via Claude CLI" [ref=e101]:
+                      - img [ref=e102]
+                      - text: Connect via Claude CLI
+                - generic [ref=e105] [cursor=pointer]:
+                  - radio [ref=e106]
+                  - generic [ref=e107]:
+                    - generic [ref=e108]:
+                      - img [ref=e109]
+                      - 'heading "Option B: Your API Key" [level=3] [ref=e113]'
+                    - paragraph [ref=e114]: Use your own Anthropic API key. You'll be billed directly by Anthropic.
+                - generic [ref=e116] [cursor=pointer]:
+                  - radio [ref=e117]
+                  - generic [ref=e118]:
+                    - generic [ref=e119]:
+                      - img [ref=e120]
+                      - 'heading "Option C: Pay-as-you-go" [level=3] [ref=e122]'
+                    - paragraph [ref=e123]: We handle the API calls. You pay only for what you use with transparent pricing.
+              - button "Save Settings" [ref=e125] [cursor=pointer]
+          - generic [ref=e127]:
+            - heading "Privacy & Security" [level=3] [ref=e128]:
+              - img [ref=e129]
+              - text: Privacy & Security
+            - paragraph [ref=e131]: Manage your privacy settings and security preferences
+          - generic [ref=e133]:
+            - heading "Notifications" [level=3] [ref=e134]:
+              - img [ref=e135]
+              - text: Notifications
+            - paragraph [ref=e138]: Configure how you receive notifications
+          - generic [ref=e140]:
+            - heading "Appearance" [level=3] [ref=e141]:
+              - img [ref=e142]
+              - text: Appearance
+            - paragraph [ref=e148]: Customize the look and feel of your dashboard
+```

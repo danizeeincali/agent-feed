@@ -23,7 +23,7 @@ module.exports = defineConfig({
   /* Global test settings */
   use: {
     /* Base URL for frontend testing */
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:5173',
 
     /* Browser settings for real validation */
     headless: true, // Use headless mode for CI environment

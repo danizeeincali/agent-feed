@@ -1,0 +1,368 @@
+/* Settings Page Styles */
+.settings-page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.dark .settings-page {
+  background-color: #111827;
+}
+
+/* Authentication Card Styles */
+.auth-option-card {
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.auth-option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.auth-option-card.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.dark .auth-option-card.selected {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Radio Button Custom Styles */
+.auth-radio {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+/* API Key Input with Show/Hide Button */
+.api-key-input-container {
+  position: relative;
+}
+
+.api-key-toggle {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: #3b82f6;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.api-key-toggle:hover {
+  color: #2563eb;
+}
+
+/* Badge Styles for Auth Status */
+.auth-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.auth-status-badge.available {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.auth-status-badge.coming-soon {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.dark .auth-status-badge.available {
+  background-color: rgba(22, 163, 74, 0.2);
+  color: #86efac;
+}
+
+.dark .auth-status-badge.coming-soon {
+  background-color: rgba(251, 191, 36, 0.2);
+  color: #fde68a;
+}
+
+/* Info Box Styles */
+.info-box {
+  background-color: #eff6ff;
+  border-left: 4px solid #3b82f6;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-top: 0.75rem;
+}
+
+.dark .info-box {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-left-color: #60a5fa;
+}
+
+/* Billing Summary in Pay-as-you-go */
+.billing-summary {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.dark .billing-summary {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+/* Success/Error Alert Styles */
+.alert-success {
+  background-color: #dcfce7;
+  border-left: 4px solid #16a34a;
+  color: #166534;
+}
+
+.alert-error {
+  background-color: #fee2e2;
+  border-left: 4px solid #dc2626;
+  color: #991b1b;
+}
+
+.dark .alert-success {
+  background-color: rgba(22, 163, 74, 0.2);
+  color: #86efac;
+}
+
+.dark .alert-error {
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #fca5a5;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 1rem;
+  }
+
+  .auth-option-card {
+    padding: 1rem;
+  }
+}
+
+/* Billing Page Styles */
+.billing-page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.dark .billing-page {
+  background-color: #111827;
+}
+
+/* Summary Card Hover Effect */
+.summary-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Trend Indicator */
+.trend-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.trend-indicator.up {
+  color: #dc2626;
+}
+
+.trend-indicator.down {
+  color: #16a34a;
+}
+
+.trend-indicator.stable {
+  color: #6b7280;
+}
+
+/* Usage Table Styles */
+.usage-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.usage-table thead {
+  background-color: #f9fafb;
+}
+
+.dark .usage-table thead {
+  background-color: #1f2937;
+}
+
+.usage-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.usage-table td {
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+
+.usage-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dark .usage-table tbody tr {
+  border-bottom-color: #374151;
+}
+
+.usage-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.dark .usage-table tbody tr:hover {
+  background-color: #1f2937;
+}
+
+.usage-table tfoot {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.dark .usage-table tfoot {
+  background-color: #1f2937;
+}
+
+/* Period Selector Buttons */
+.period-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.period-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.period-button.active {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.period-button:not(.active) {
+  background-color: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.dark .period-button:not(.active) {
+  background-color: #1f2937;
+  color: #d1d5db;
+  border-color: #374151;
+}
+
+.period-button:not(.active):hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.dark .period-button:not(.active):hover {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+
+/* Export Button */
+.export-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Pricing Info Cards */
+.pricing-card {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+}
+
+.pricing-card.blue {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.pricing-card.green {
+  background-color: #dcfce7;
+  border-color: #bbf7d0;
+}
+
+.dark .pricing-card.blue {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.dark .pricing-card.green {
+  background-color: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.spinner-animation {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .usage-table {
+    font-size: 0.75rem;
+  }
+
+  .usage-table th,
+  .usage-table td {
+    padding: 0.5rem;
+  }
+
+  .period-selector {
+    flex-wrap: wrap;
+  }
+}

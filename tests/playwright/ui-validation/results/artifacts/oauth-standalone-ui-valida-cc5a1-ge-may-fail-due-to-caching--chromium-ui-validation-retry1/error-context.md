@@ -1,0 +1,59 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Feed" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e13]
+        - text: Feed
+      - link "Drafts" [ref=e15] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e16]
+        - text: Drafts
+      - link "Agents" [ref=e19] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e20]
+        - text: Agents
+      - link "Live Activity" [ref=e23] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e24]
+        - text: Live Activity
+      - link "Analytics" [ref=e28] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e29]
+        - text: Analytics
+      - link "Cost Monitoring" [ref=e31] [cursor=pointer]:
+        - /url: /settings/cost-monitoring
+        - img [ref=e32]
+        - text: Cost Monitoring
+      - link "Billing" [ref=e34] [cursor=pointer]:
+        - /url: /billing
+        - img [ref=e35]
+        - text: Billing
+      - link "Settings" [ref=e37] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e38]
+        - text: Settings
+    - generic [ref=e41]:
+      - generic [ref=e43]:
+        - generic [ref=e45]: Disconnected
+        - img [ref=e46]
+      - generic [ref=e54]:
+        - generic [ref=e55]: API connection failed
+        - button "Retry" [ref=e56] [cursor=pointer]
+  - generic [ref=e57]:
+    - banner [ref=e58]:
+      - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e61]
+    - main [ref=e62]:
+      - generic [ref=e63]:
+        - generic [ref=e64]: 🔍
+        - heading "Page Not Found" [level=2] [ref=e65]
+        - paragraph [ref=e66]: The page you're looking for doesn't exist.
+        - link "Go Home" [ref=e67] [cursor=pointer]:
+          - /url: /
+```

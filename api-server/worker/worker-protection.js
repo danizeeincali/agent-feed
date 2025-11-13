@@ -45,7 +45,8 @@ export async function executeProtectedQuery(query, options = {}) {
     sdkManager,
     streamingResponse = false,
     timeoutOverride = null,
-    postId = null
+    postId = null,
+    userId = 'system' // Extract userId for authentication
   } = options;
 
   // Classify query complexity and get safety limits
@@ -58,6 +59,7 @@ export async function executeProtectedQuery(query, options = {}) {
   console.log(`🛡️ Protected query execution:`, {
     workerId,
     ticketId,
+    userId,
     complexity,
     limits: {
       maxChunks: limits.maxChunks,
@@ -109,7 +111,7 @@ export async function executeProtectedQuery(query, options = {}) {
     const executePromise = (async () => {
       if (streamingResponse && sdkManager.executeHeadlessTask[Symbol.asyncIterator]) {
         // Streaming response (async generator)
-        for await (const message of sdkManager.executeHeadlessTask(query)) {
+        for await (const message of sdkManager.executeHeadlessTask(query, { userId })) {
           // Update heartbeat and chunk count
           chunkCount++;
           healthMonitor.updateHeartbeat(workerId, chunkCount);
@@ -223,7 +225,7 @@ export async function executeProtectedQuery(query, options = {}) {
         }
       } else {
         // Non-streaming response
-        const result = await sdkManager.executeHeadlessTask(query);
+        const result = await sdkManager.executeHeadlessTask(query, { userId });
 
         if (result.success && result.messages) {
           for (const message of result.messages) {

@@ -10,9 +10,7 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "reporter": [
       [
@@ -48,9 +46,7 @@
         "outputDir": "/workspaces/agent-feed/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "chromium",
         "name": "chromium",
         "testDir": "/workspaces/agent-feed/tests/e2e",
@@ -58,17 +54,222 @@
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 120000
+        "timeout": 30000
       }
     ],
     "shard": null,
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
-    "version": "1.55.1",
+    "version": "1.56.1",
     "workers": 1,
     "webServer": null
   },
   "suites": [
+    {
+      "title": "telemetry-ui-validation.spec.ts",
+      "file": "telemetry-ui-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Telemetry UI Validation - Schema Fix Verification",
+          "file": "telemetry-ui-validation.spec.ts",
+          "line": 86,
+          "column": 6,
+          "specs": [
+            {
+              "title": "01 - Load home page without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-3ef609ddbee0a37a3dd5",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 134,
+              "column": 3
+            },
+            {
+              "title": "02 - Navigate to Avi DM interface",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-18f17bfbb67553c3acf4",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "03 - Compose Avi DM message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-065f6897321406b43ef3",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 194,
+              "column": 3
+            },
+            {
+              "title": "04 - Verify backend logs clean (no schema errors)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-95ba9d06b0c15719bfd1",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 279,
+              "column": 3
+            },
+            {
+              "title": "05 - Verify database schema correct",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-cf97e3dffbebbf641f69",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 312,
+              "column": 3
+            },
+            {
+              "title": "06 - Check network for 500 errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-7f901327b7204b45138a",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 340,
+              "column": 3
+            },
+            {
+              "title": "07 - Verify frontend loads without JS errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-b7561894a2dd1cedf3f4",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 395,
+              "column": 3
+            },
+            {
+              "title": "08 - Comprehensive regression check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-8bf1da8e4a3d02c14645",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 429,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Telemetry Validation Summary Report",
+          "file": "telemetry-ui-validation.spec.ts",
+          "line": 500,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Generate comprehensive validation report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-110edf707fc58c787595",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 501,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
     {
       "title": "websocket-and-conversation-validation.spec.ts",
       "file": "websocket-and-conversation-validation.spec.ts",
@@ -84,78 +285,17 @@
           "specs": [
             {
               "title": "Fix #1: Real-Time Comment Display Without Refresh",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 120000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 13417,
-                      "error": {
-                        "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n",
-                        "stack": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:42:16",
-                        "location": {
-                          "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                          "column": 16,
-                          "line": 42
-                        },
-                        "snippet": "  40 |     // Step 1: Create a test post\n  41 |     console.log('Step 1: Creating test post...');\n> 42 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n     |                ^\n  43 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  44 |\n  45 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'WebSocket Test Post');"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                            "column": 16,
-                            "line": 42
-                          },
-                          "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n\n  40 |     // Step 1: Create a test post\n  41 |     console.log('Step 1: Creating test post...');\n> 42 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n     |                ^\n  43 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  44 |\n  45 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'WebSocket Test Post');\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:42:16"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "🧪 TEST: Real-time comment display (no refresh needed)\n"
-                        },
-                        {
-                          "text": "Step 1: Creating test post...\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-29T00:31:25.810Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-069e5-ent-Display-Without-Refresh-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                        "column": 16,
-                        "line": 42
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "1d577e83531231c1f68d-95b234de0c8ebbf176ee",
@@ -165,156 +305,37 @@
             },
             {
               "title": "Fix #2: Multi-Turn Conversation Context",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 120000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12480,
-                      "error": {
-                        "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n",
-                        "stack": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:99:16",
-                        "location": {
-                          "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                          "column": 16,
-                          "line": 99
-                        },
-                        "snippet": "   97 |     // Step 1: Create a test post for conversation\n   98 |     console.log('Step 1: Creating conversation test post...');\n>  99 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n      |                ^\n  100 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  101 |\n  102 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'Conversation Context Test');"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                            "column": 16,
-                            "line": 99
-                          },
-                          "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n\n   97 |     // Step 1: Create a test post for conversation\n   98 |     console.log('Step 1: Creating conversation test post...');\n>  99 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n      |                ^\n  100 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  101 |\n  102 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'Conversation Context Test');\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:99:16"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "🧪 TEST: Multi-turn conversation context (agent memory)\n"
-                        },
-                        {
-                          "text": "Step 1: Creating conversation test post...\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-29T00:31:42.376Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-f2f50-i-Turn-Conversation-Context-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                        "column": 16,
-                        "line": 99
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "1d577e83531231c1f68d-78f1421a44c745f28b8f",
               "file": "websocket-and-conversation-validation.spec.ts",
-              "line": 94,
+              "line": 96,
               "column": 3
             },
             {
               "title": "Combined Test: Real-Time Multi-Turn Conversation",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 120000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12479,
-                      "error": {
-                        "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n",
-                        "stack": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:189:16",
-                        "location": {
-                          "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                          "column": 16,
-                          "line": 189
-                        },
-                        "snippet": "  187 |\n  188 |     // Create post\n> 189 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n      |                ^\n  190 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  191 |\n  192 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'Combined Test');"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                            "column": 16,
-                            "line": 189
-                          },
-                          "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n\n  187 |\n  188 |     // Create post\n> 189 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n      |                ^\n  190 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  191 |\n  192 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'Combined Test');\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:189:16"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "🧪 TEST: Combined - Real-time updates WITH conversation context\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-29T00:31:55.924Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-3e94d-ime-Multi-Turn-Conversation-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                        "column": 16,
-                        "line": 189
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "1d577e83531231c1f68d-93341ee234a524b384ec",
@@ -324,80 +345,22 @@
             },
             {
               "title": "Regression: No Duplicate Avi Responses",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 120000,
+                  "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 12412,
-                      "error": {
-                        "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n",
-                        "stack": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:224:16",
-                        "location": {
-                          "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                          "column": 16,
-                          "line": 224
-                        },
-                        "snippet": "  222 |\n  223 |     // Create post\n> 224 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n      |                ^\n  225 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  226 |\n  227 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'Duplicate Test');"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                            "column": 16,
-                            "line": 224
-                          },
-                          "message": "TimeoutError: page.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Post\"), a[href*=\"/create\"]')\u001b[22m\n\n\n  222 |\n  223 |     // Create post\n> 224 |     await page.click('button:has-text(\"Create Post\"), a[href*=\"/create\"]', { timeout: 10000 });\n      |                ^\n  225 |     await page.waitForURL(/.*\\/create/, { timeout: 10000 });\n  226 |\n  227 |     await page.fill('input[name=\"title\"], textarea[placeholder*=\"title\" i]', 'Duplicate Test');\n    at /workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts:224:16"
-                        }
-                      ],
-                      "stdout": [
-                        {
-                          "text": "🧪 REGRESSION TEST: Verify no duplicate Avi responses\n"
-                        }
-                      ],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-29T00:32:09.770Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/workspaces/agent-feed/test-results/websocket-and-conversation-7ed20--No-Duplicate-Avi-Responses-chromium/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/workspaces/agent-feed/tests/e2e/websocket-and-conversation-validation.spec.ts",
-                        "column": 16,
-                        "line": 224
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "1d577e83531231c1f68d-6b9f861ccb0d8b23d47b",
               "file": "websocket-and-conversation-validation.spec.ts",
-              "line": 220,
+              "line": 218,
               "column": 3
             }
           ]
@@ -407,11 +370,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-29T00:31:24.928Z",
-    "duration": 57460.344,
+    "startTime": "2025-11-12T20:06:50.060Z",
+    "duration": 1000.0849999999998,
     "expected": 0,
-    "skipped": 0,
-    "unexpected": 4,
+    "skipped": 13,
+    "unexpected": 0,
     "flaky": 0
   }
 }

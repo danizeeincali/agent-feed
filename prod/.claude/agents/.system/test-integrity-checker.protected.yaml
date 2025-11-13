@@ -44,8 +44,8 @@ permissions:
       - write
       - edit
 _metadata:
-  created_at: 2025-11-08T06:13:44.072Z
-  updated_at: 2025-11-08T06:13:44.072Z
+  created_at: 2025-11-12T00:00:56.601Z
+  updated_at: 2025-11-12T00:00:56.601Z
   updated_by: test-runner
   description: Integrity checker test
-checksum: sha256:8c309bc071a892ccbc51f8d4dd0a45ba844bf0a21be3474cf427c07c60dc044c
+checksum: sha256:3351979a50436eb864b5c8d18f558dbdfab932ca292ae404f9186fd2c4624941

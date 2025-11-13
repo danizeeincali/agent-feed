@@ -1,0 +1,28 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="6" errors="0" time="0.07237000000000011">
+<testsuite name="auth-dm-post-flow.spec.js" timestamp="2025-11-10T02:27:28.024Z" hostname="chromium" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Authentication DM/Post Flow - OAuth &amp; API Key Validation › Scenario 1: OAuth user sends DM to Avi - SUCCESS" classname="auth-dm-post-flow.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication DM/Post Flow - OAuth &amp; API Key Validation › Scenario 2: API key user creates post - SUCCESS" classname="auth-dm-post-flow.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication DM/Post Flow - OAuth &amp; API Key Validation › Scenario 3: Unauthenticated user gets friendly error - SUCCESS" classname="auth-dm-post-flow.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication DM/Post Flow - OAuth &amp; API Key Validation › Scenario 4: Real OAuth detection from Settings - NO MOCKS" classname="auth-dm-post-flow.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication DM/Post Flow - OAuth &amp; API Key Validation › Bonus: Verify auth headers in network requests" classname="auth-dm-post-flow.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Test Execution Summary › Generate test execution report" classname="auth-dm-post-flow.spec.js" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

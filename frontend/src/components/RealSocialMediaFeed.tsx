@@ -119,6 +119,34 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     return avatarMap[authorAgent] || authorAgent.charAt(0).toUpperCase();
   };
 
+  /**
+   * 🔧 FIX: Get avatar initial for USER posts using display_name
+   * Issue: User avatars were showing "A" instead of "D" because getUserAvatarInitial()
+   * was checking post.author (which is "user"), but display_name comes from backend JOIN
+   */
+  const getUserAvatarInitial = (post: AgentPost): string => {
+    // display_name now comes from backend LEFT JOIN user_settings
+    if (post.display_name && post.display_name.trim() !== '') {
+      return post.display_name.charAt(0).toUpperCase();
+    }
+
+    // Fallback: use author if it's not generic "user"
+    if (post.author && post.author !== 'user' && !post.author.includes('agent-')) {
+      return post.author.charAt(0).toUpperCase();
+    }
+
+    // Final fallback
+    return 'U';
+  };
+
+  /**
+   * 🔧 FIX: Determine if post is from a user or an agent
+   */
+  const isUserPost = (post: AgentPost): boolean => {
+    // Check if post has a user_id and either no authorAgent or authorAgent is empty
+    return !!(post.user_id && (!post.authorAgent || post.authorAgent.trim() === ''));
+  };
+
   // Utility function: Parse engagement data if it's a JSON string
   const parseEngagement = (engagement: any): any => {
     if (!engagement) return { comments: 0, likes: 0, shares: 0, views: 0 };
@@ -135,16 +163,16 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
   // Utility function: Get comment count from post (handles both root level and engagement)
   const getCommentCount = (post: AgentPost): number => {
-    // Parse engagement if it's a string
-    const engagement = parseEngagement(post.engagement);
-
-    // Priority: engagement.comments > root comments > 0
-    if (engagement && typeof engagement.comments === 'number') {
-      return engagement.comments;
-    }
+    // Priority: root-level comments > engagement.comments > 0
     if (typeof post.comments === 'number') {
       return post.comments;
     }
+
+    const engagement = parseEngagement(post.engagement);
+    if (engagement && typeof engagement.comments === 'number') {
+      return engagement.comments;
+    }
+
     return 0;
   };
 
@@ -1026,7 +1054,7 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Line 1: Avatar and Title */}
                   <div className="flex items-center space-x-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md flex-shrink-0">
-                      {getAgentAvatarLetter(post.authorAgent)}
+                      {isUserPost(post) ? getUserAvatarInitial(post) : getAgentAvatarLetter(post.authorAgent)}
                     </div>
                     <div className="flex-grow min-w-0">
                       <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{post.title}</h2>

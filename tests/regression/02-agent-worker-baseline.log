@@ -1,0 +1,62 @@
+
+> agent-feed@0.1.0 test
+> jest --config jest.config.cjs tests/unit/agent-worker-userid-auth.test.js --no-coverage
+
+  console.log
+    [dotenv@17.2.3] injecting env (54) from .env -- tip: ⚙️  override existing env vars with { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+  console.log
+    
+    🧪 TDD Test Suite: Agent Worker User Authentication
+
+      at Object.<anonymous> (tests/unit/agent-worker-userid-auth.test.js:704:9)
+
+  console.log
+    📋 Testing userId propagation: ticket → worker → SDK → auth
+
+      at Object.<anonymous> (tests/unit/agent-worker-userid-auth.test.js:705:9)
+
+  console.log
+    ✅ Run with: npm run test -- agent-worker-userid-auth.test.js
+
+      at Object.<anonymous> (tests/unit/agent-worker-userid-auth.test.js:706:9)
+
+PASS tests/unit/agent-worker-userid-auth.test.js
+  Agent Worker - UserId Authentication Flow
+    Suite 1: userId Extraction from Ticket
+      ✓ should extract userId from ticket.user_id (8 ms)
+      ✓ should extract userId from ticket.metadata.user_id (fallback) (1 ms)
+      ✓ should default to "system" if no userId found (5 ms)
+      ✓ should handle null/undefined ticket metadata
+    Suite 2: userId Passed to SDK Manager
+      ✓ should pass userId to queryClaudeCode() (22 ms)
+      ✓ should pass userId to executeHeadlessTask() (6 ms)
+      ✓ should pass userId to createStreamingChat()
+    Suite 3: Auth Method Selection
+      ✓ OAuth user: Should use OAuth credentials (no ANTHROPIC_API_KEY) (5 ms)
+      ✓ API key user: Should use user's encrypted API key (4 ms)
+      ✓ System user: Should use platform's ANTHROPIC_API_KEY (29 ms)
+      ✓ Unauthenticated user: Should fail with clear error message (1 ms)
+    Suite 4: Integration Tests - Full Flow
+      ✓ Full flow: OAuth user sends DM → Uses OAuth credentials (1 ms)
+      ✓ Full flow: API key user creates post → Uses their API key
+      ✓ Full flow: Multiple users with different auth methods (1 ms)
+      ✓ Error handling: User not authenticated → Helpful error
+    Suite 5: Backward Compatibility
+      ✓ Tickets without userId → Should still work (defaults to "system") (3 ms)
+      ✓ Legacy tickets → Should not break existing functionality (1 ms)
+    Suite 6: Edge Cases & Error Handling
+      ✓ Should handle expired OAuth tokens gracefully (3 ms)
+      ✓ Should handle missing encrypted_api_key for user_api_key method (1 ms)
+      ✓ Should handle database errors gracefully (7 ms)
+    Suite 7: Performance & Concurrency
+      ✓ Should handle concurrent auth config requests (6 ms)
+      ✓ Should cache auth configs for repeated requests (future optimization) (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       22 passed, 22 total
+Snapshots:   0 total
+Time:        1.65 s, estimated 2 s
+Ran all test suites matching /tests\/unit\/agent-worker-userid-auth.test.js/i.

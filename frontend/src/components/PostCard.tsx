@@ -13,6 +13,7 @@ import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { socket } from '../services/socket';
 import { useToast } from '../hooks/useToast';
+import ToastContainer from './ToastContainer';
 import { cn } from '../utils/cn';
 import { renderParsedContent, parseContent } from '../utils/contentParser';
 import { UserDisplayName } from './UserDisplayName';
@@ -69,6 +70,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   const [optimisticComments, setOptimisticComments] = useState<any[]>([]);
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasNewComments, setHasNewComments] = useState(false);
   const [engagementState, setEngagementState] = useState(() => {
     const parsedEngagement = parseEngagement(post.engagement);
     return {
@@ -161,8 +163,13 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   const handleCommentsToggle = () => {
     setShowComments(!showComments);
-    if (!showComments && !commentsLoaded) {
-      loadComments();
+
+    // Clear new comment notification when expanding
+    if (!showComments) {
+      setHasNewComments(false);
+      if (!commentsLoaded) {
+        loadComments();
+      }
     }
   };
 
@@ -199,19 +206,35 @@ export const PostCard: React.FC<PostCardProps> = ({
   );
 
   // Socket.IO integration for real-time updates
+  // 🔧 FIX: Add socket reference guard to prevent duplicate connections
+  const socketConnectedRef = React.useRef(false);
+
   useEffect(() => {
+    // Prevent duplicate socket management
+    if (socketConnectedRef.current) {
+      console.log('⚠️ Socket already managed for post:', post.id);
+      return;
+    }
+    socketConnectedRef.current = true;
+
+    const effectStartTime = Date.now();
+    console.log('[PostCard] 🔌 useEffect START for post:', post.id, 'at', new Date().toISOString());
+
     // Track connection state
     const handleConnect = () => {
-      console.log('[PostCard] Socket.IO connected');
+      const connectTime = Date.now() - effectStartTime;
+      console.log(`[PostCard] ✅ Socket.IO connected after ${connectTime}ms, socket.id:`, socket.id);
       setIsConnected(true);
 
       // ✅ FIX: Subscribe to room AFTER connection confirmed
       socket.emit('subscribe:post', post.id);
-      console.log('[PostCard] Subscribed to post room:', post.id);
+      console.log('[PostCard] 📡 Subscribed to post room:', post.id);
     };
 
-    const handleDisconnect = () => {
-      console.log('[PostCard] Socket.IO disconnected');
+    const handleDisconnect = (reason: any) => {
+      const disconnectTime = Date.now() - effectStartTime;
+      console.error(`[PostCard] ❌ Socket.IO DISCONNECTED after ${disconnectTime}ms! Reason:`, reason);
+      console.error('[PostCard] ❌ Disconnect stack trace:', new Error().stack);
       setIsConnected(false);
     };
 
@@ -221,12 +244,13 @@ export const PostCard: React.FC<PostCardProps> = ({
 
     // Connect Socket.IO if not already connected
     if (!socket.connected) {
-      console.log('[PostCard] Connecting Socket.IO for post:', post.id);
+      console.log('[PostCard] ⚠️ Socket not connected, attempting to connect for post:', post.id);
       socket.connect();
     } else {
+      console.log('[PostCard] ✅ Socket already connected:', socket.id);
       // Already connected, subscribe immediately
       socket.emit('subscribe:post', post.id);
-      console.log('[PostCard] Subscribed to post room (already connected):', post.id);
+      console.log('[PostCard] 📡 Subscribed to post room (already connected):', post.id);
     }
 
     // Handle comment events
@@ -239,9 +263,59 @@ export const PostCard: React.FC<PostCardProps> = ({
           comments: prev.comments + 1
         }));
 
-        // If comments are showing, reload
-        if (showComments) {
-          handleCommentsUpdate();
+        // Add comment to list if full comment data provided
+        if (data.comment) {
+          console.log('[PostCard] Adding comment directly from WebSocket:', data.comment.id);
+
+          // Remove optimistic comment if it exists
+          setOptimisticComments(prev => prev.filter(c => !c._optimistic));
+
+          // Add real comment to list
+          setComments(prev => {
+            // Check if comment already exists (prevent duplicates)
+            if (prev.some(c => c.id === data.comment.id)) {
+              console.log('[PostCard] Comment already exists, skipping duplicate');
+              return prev;
+            }
+            return [...prev, data.comment];
+          });
+
+          // 🔔 TOAST NOTIFICATION: Detect agent response and show toast
+          // Use existing database fields for detection (author_type doesn't exist in schema)
+          const isAgentComment =
+            // Check if author field starts with 'agent-' prefix
+            data.comment.author?.toLowerCase().startsWith('agent-') ||
+            data.comment.author_agent?.toLowerCase().startsWith('agent-') ||
+
+            // Check for specific agent names
+            data.comment.author?.toLowerCase().includes('avi') ||
+            data.comment.author_agent?.toLowerCase().includes('avi') ||
+
+            // Check if user_id is an agent (agents use agent IDs as user_id)
+            data.comment.user_id?.toLowerCase().startsWith('agent-');
+
+          if (isAgentComment) {
+            // Use display_name if available, otherwise fallback to author fields
+            const agentName = data.comment.display_name ||
+                             data.comment.author ||
+                             data.comment.author_agent ||
+                             'Agent';
+
+            console.log('[PostCard] 🤖 Agent response detected, showing toast for:', agentName);
+            toast.showSuccess(`${agentName} responded to your comment`, 5000);
+          }
+
+          // Show notification badge if comments are collapsed
+          if (!showComments) {
+            console.log('[PostCard] Comments collapsed, showing new comment badge');
+            setHasNewComments(true);
+          }
+        } else {
+          // Fallback: Reload if full comment not provided (backward compatibility)
+          console.log('[PostCard] No comment data in WebSocket event, falling back to reload');
+          if (showComments) {
+            handleCommentsUpdate();
+          }
         }
       }
     };
@@ -268,15 +342,25 @@ export const PostCard: React.FC<PostCardProps> = ({
 
     // Cleanup
     return () => {
-      console.log('[PostCard] Cleaning up Socket.IO listeners for post:', post.id);
+      socketConnectedRef.current = false;
+      const cleanupTime = Date.now() - effectStartTime;
+      console.log(`[PostCard] 🧹 CLEANUP START for post: ${post.id} after ${cleanupTime}ms`);
+      console.log('[PostCard] 🧹 Cleanup stack trace:', new Error().stack);
+
       socket.off('connect', handleConnect);
       socket.off('disconnect', handleDisconnect);
       socket.off('comment:created', handleCommentCreated);
       socket.off('comment:updated', handleCommentUpdated);
       socket.off('comment:deleted', handleCommentDeleted);
+
       if (socket.connected) {
+        console.log('[PostCard] 📤 Unsubscribing from post:', post.id);
         socket.emit('unsubscribe:post', post.id);
+      } else {
+        console.log('[PostCard] ⚠️ Socket already disconnected during cleanup');
       }
+
+      console.log('[PostCard] ✅ CLEANUP COMPLETE for post:', post.id);
     };
   }, [post.id]); // ✅ Removed showComments and handleCommentsUpdate to prevent re-subscription loops
 
@@ -482,14 +566,20 @@ export const PostCard: React.FC<PostCardProps> = ({
       <div className="px-4 py-3 border-t border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <button 
+            <button
               onClick={handleCommentsToggle}
-              className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 transition-colors group"
+              className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 transition-colors group relative"
             >
               <MessageCircle className="w-4 h-4" />
               <span className="text-sm">
                 {engagementState.comments > 0 ? `${engagementState.comments} Comments` : 'Comment'}
               </span>
+              {hasNewComments && (
+                <span
+                  className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"
+                  title="New comments available"
+                />
+              )}
             </button>
             
             <button 
@@ -547,6 +637,9 @@ export const PostCard: React.FC<PostCardProps> = ({
           </div>
         </div>
       )}
+
+      {/* Toast Notifications Container */}
+      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismissToast} />
     </div>
   );
 };

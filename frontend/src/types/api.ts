@@ -91,6 +91,10 @@ export interface AgentPost {
   ticketStatus?: TicketStatusData;
   // Alias for compatibility
   created_at?: string;
+  // User fields for user-created posts (from backend LEFT JOIN user_settings)
+  author?: string; // Generic author field (may be "user" for user posts)
+  user_id?: string; // User ID for user posts
+  display_name?: string; // User's display name from user_settings table (via LEFT JOIN)
 }
 
 export interface PostMetadata {
