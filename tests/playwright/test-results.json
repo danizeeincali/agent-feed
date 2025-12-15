@@ -1,0 +1,484 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/playwright.config.question-routing.ts",
+    "rootDir": "/workspaces/agent-feed/tests/playwright",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "tests/playwright/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "tests/playwright/test-results.json"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests/playwright",
+        "testIgnore": [],
+        "testMatch": [
+          "question-routing-e2e.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "question-routing-e2e.spec.ts",
+      "file": "question-routing-e2e.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Question Routing to Avi - E2E Tests",
+          "file": "question-routing-e2e.spec.ts",
+          "line": 17,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Question WITHOUT avi mention routes to Avi and gets response",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 18652,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Found input with selector: textarea[placeholder*=\"What\"]\n"
+                        },
+                        {
+                          "text": "Waiting for Avi response...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:43:51.506Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-ff5ab-es-to-Avi-and-gets-response-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-ff5ab-es-to-Avi-and-gets-response-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-ff5ab-es-to-Avi-and-gets-response-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-d3d0d6effa0e4872d49a",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 30,
+              "column": 3
+            },
+            {
+              "title": "API directly: Question should be routed to Avi",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5401,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "API Response: {\n  \"success\": true,\n  \"data\": {\n    \"id\": \"post-1764042270374\",\n    \"user_id\": \"anonymous\",\n    \"author\": \"anonymous\",\n    \"author_id\": null,\n    \"author_agent\": \"test-user\",\n    \"content\": \"What is the weather like in Los Gatos today?\",\n    \"title\": \"Weather Question Test\",\n    \"metadata\": \"{\\\"postType\\\":\\\"quick\\\",\\\"wordCount\\\":9,\\\"readingTime\\\":1,\\\"isAgentResponse\\\":false,\\\"tags\\\":[]}\",\n    \"published_at\": 1764042270,\n    \"created_at\": 1764042270,\n    \"updated_at\": null,\n    \"engagement_score\": 0,\n    \"content_hash\": null,\n    \"display_name\": \"anonymous\",\n    \"comments\": 0\n  },\n  \"ticket\": null,\n  \"message\": \"Post created successfully\",\n  \"source\": \"SQLite\"\n}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:44:25.692Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-945ff-ion-should-be-routed-to-Avi-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-945ff-ion-should-be-routed-to-Avi-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-945ff-ion-should-be-routed-to-Avi-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-975ba607f740714e915d",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 132,
+              "column": 3
+            },
+            {
+              "title": "API: @link-logger mention should NOT route to Avi",
+              "ok": true,
+              "tags": [
+                "link-logger"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6930,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:44:31.354Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-10d74-ion-should-NOT-route-to-Avi-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-10d74-ion-should-NOT-route-to-Avi-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-10d74-ion-should-NOT-route-to-Avi-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-7b544d287fcf8f3cc3f3",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 164,
+              "column": 3
+            },
+            {
+              "title": "API: URL content should NOT route to Avi",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10705,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:44:38.489Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-2489b-ent-should-NOT-route-to-Avi-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-2489b-ent-should-NOT-route-to-Avi-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-2489b-ent-should-NOT-route-to-Avi-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-23eec51813b21e7148ae",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "Frontend: Processing pills show generic \"Waiting for agents\" text",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 59944,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:44:49.414Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-5be85-ric-Waiting-for-agents-text-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-5be85-ric-Waiting-for-agents-text-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Quest-5be85-ric-Waiting-for-agents-text-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-e433a5f1d392c22853d0",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 210,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Regression Tests - Existing Functionality",
+          "file": "question-routing-e2e.spec.ts",
+          "line": 230,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Posts with explicit \"avi\" mention still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5383,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:45:50.445Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Regre-04430-icit-avi-mention-still-work-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-8d16f03c5be498f1a930",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 232,
+              "column": 3
+            },
+            {
+              "title": "Posts with lambda character λvi still work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5063,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:45:55.876Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Regre-13a09-da-character-λvi-still-work-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-904399a57f3952da9b17",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 253,
+              "column": 3
+            },
+            {
+              "title": "Non-question posts should NOT trigger Avi",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5029,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T03:46:01.000Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/question-routing-e2e-Regre-6a8ab-osts-should-NOT-trigger-Avi-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "3a880b8d3c9bc73d0657-2cd6778b7cfd49b1fcad",
+              "file": "question-routing-e2e.spec.ts",
+              "line": 274,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-11-25T03:43:50.416Z",
+    "duration": 135776.361,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

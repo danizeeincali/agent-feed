@@ -22,7 +22,8 @@
     "drag-and-drop-images": 2,
     "double-esc-code-restore": 2,
     "continue": 2,
-    "shift-tab": 2
+    "shift-tab": 2,
+    "default-permission-mode-config": 3
   },
   "cachedStatsigGates": {
     "tengu_disable_bypass_permissions_mode": false,

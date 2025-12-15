@@ -1,0 +1,83 @@
+2025-11-25T00:13:09.689Z [DEBUG] Watching for changes in setting files /workspaces/agent-feed/.claude/settings.json, /workspaces/agent-feed/.claude/settings.local.json...
+2025-11-25T00:13:09.702Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-11-25T00:13:09.702Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-11-25T00:13:09.703Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-11-25T00:13:09.703Z [DEBUG] [LSP SERVER MANAGER] initialize() called
+2025-11-25T00:13:09.703Z [DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+2025-11-25T00:13:09.720Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029589720
+2025-11-25T00:13:09.720Z [DEBUG] Preserving file permissions: 100600
+2025-11-25T00:13:09.723Z [DEBUG] Temp file written successfully, size: 986 bytes
+2025-11-25T00:13:09.724Z [DEBUG] Applied original permissions to temp file
+2025-11-25T00:13:09.724Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029589720 to /workspaces/agent-feed/.claude/config/.claude.json
+2025-11-25T00:13:09.724Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-11-25T00:13:09.725Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-11-25T00:13:09.728Z [DEBUG] Total LSP servers loaded: 0
+2025-11-25T00:13:09.757Z [DEBUG] Loading skills from directories: managed=/etc/claude-code/.claude/skills, user=/workspaces/agent-feed/.claude/config/skills, project=/workspaces/agent-feed/.claude/skills
+2025-11-25T00:13:09.757Z [DEBUG] >>>>> getPluginSkills CALLED <<<<<
+2025-11-25T00:13:09.804Z [DEBUG] Metrics opt-out check failed: No API key available
+2025-11-25T00:13:09.808Z [DEBUG] Creating shell snapshot for bash (/bin/bash)
+2025-11-25T00:13:09.808Z [DEBUG] Looking for shell config file: /home/codespace/.bashrc
+2025-11-25T00:13:09.808Z [DEBUG] Snapshots directory: /workspaces/agent-feed/.claude/config/shell-snapshots
+2025-11-25T00:13:09.809Z [DEBUG] Creating snapshot at: /workspaces/agent-feed/.claude/config/shell-snapshots/snapshot-bash-1764029589808-ow83ru.sh
+2025-11-25T00:13:09.809Z [DEBUG] Shell binary exists: true
+2025-11-25T00:13:09.809Z [DEBUG] Execution timeout: 10000ms
+2025-11-25T00:13:09.811Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/todos/e7bea928-a31a-4b0b-aaf9-2615e29f5003-agent-e7bea928-a31a-4b0b-aaf9-2615e29f5003.json.tmp.28591.1764029589811
+2025-11-25T00:13:09.814Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-11-25T00:13:09.814Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/todos/e7bea928-a31a-4b0b-aaf9-2615e29f5003-agent-e7bea928-a31a-4b0b-aaf9-2615e29f5003.json.tmp.28591.1764029589811 to /workspaces/agent-feed/.claude/config/todos/e7bea928-a31a-4b0b-aaf9-2615e29f5003-agent-e7bea928-a31a-4b0b-aaf9-2615e29f5003.json
+2025-11-25T00:13:09.814Z [DEBUG] File /workspaces/agent-feed/.claude/config/todos/e7bea928-a31a-4b0b-aaf9-2615e29f5003-agent-e7bea928-a31a-4b0b-aaf9-2615e29f5003.json written atomically
+2025-11-25T00:13:09.834Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2025-11-25T00:13:09.834Z [DEBUG] LSP manager initialized with 0 servers
+2025-11-25T00:13:09.836Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-11-25T00:13:09.836Z [DEBUG] Total plugin skills loaded: 0
+2025-11-25T00:13:09.836Z [DEBUG] Total plugin commands loaded: 0
+2025-11-25T00:13:09.838Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-11-25T00:13:09.839Z [DEBUG] LSP server manager initialized successfully
+2025-11-25T00:13:09.839Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-11-25T00:13:09.840Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+2025-11-25T00:13:09.840Z [DEBUG] Metrics check failed, defaulting to disabled
+2025-11-25T00:13:09.840Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills
+2025-11-25T00:13:09.883Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029589883
+2025-11-25T00:13:09.883Z [DEBUG] Preserving file permissions: 100600
+2025-11-25T00:13:09.890Z [DEBUG] Temp file written successfully, size: 1016 bytes
+2025-11-25T00:13:09.890Z [DEBUG] Applied original permissions to temp file
+2025-11-25T00:13:09.890Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029589883 to /workspaces/agent-feed/.claude/config/.claude.json
+2025-11-25T00:13:09.890Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-11-25T00:13:10.401Z [DEBUG] Install: Starting installation process (force=false, target=undefined)
+2025-11-25T00:13:10.402Z [DEBUG] Install: Calling installLatest(force=true, target=undefined, forceReinstall=false)
+2025-11-25T00:13:10.420Z [DEBUG] Git remote URL: https://github.com/danizeeincali/agent-feed
+2025-11-25T00:13:10.420Z [DEBUG] Parsed repository: danizeeincali/agent-feed from https://github.com/danizeeincali/agent-feed
+2025-11-25T00:13:10.420Z [DEBUG] Parsed repository: danizeeincali/agent-feed from URL: https://github.com/danizeeincali/agent-feed
+2025-11-25T00:13:10.432Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029590432
+2025-11-25T00:13:10.433Z [DEBUG] Preserving file permissions: 100600
+2025-11-25T00:13:10.455Z [DEBUG] Temp file written successfully, size: 1115 bytes
+2025-11-25T00:13:10.455Z [DEBUG] Applied original permissions to temp file
+2025-11-25T00:13:10.455Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029590432 to /workspaces/agent-feed/.claude/config/.claude.json
+2025-11-25T00:13:10.455Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-11-25T00:13:10.455Z [DEBUG] Added /workspaces/agent-feed to tracked paths for repo danizeeincali/agent-feed
+2025-11-25T00:13:10.511Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029590511
+2025-11-25T00:13:10.511Z [DEBUG] Preserving file permissions: 100600
+2025-11-25T00:13:10.519Z [DEBUG] Temp file written successfully, size: 41683 bytes
+2025-11-25T00:13:10.519Z [DEBUG] Applied original permissions to temp file
+2025-11-25T00:13:10.519Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029590511 to /workspaces/agent-feed/.claude/config/.claude.json
+2025-11-25T00:13:10.519Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-11-25T00:13:10.709Z [DEBUG] Checking for native installer update to version 2.0.52
+2025-11-25T00:13:10.793Z [DEBUG] Downloading native installer version 2.0.52
+2025-11-25T00:13:10.982Z [DEBUG] Shell snapshot created successfully (46196 bytes)
+2025-11-25T00:13:11.817Z [DEBUG] rg error (signal=null, code=2, stderr: rg: Resource temporarily unavailable (os error 11)
+), 5405 results
+2025-11-25T00:13:12.029Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/home/codespace/.claude/downloads/claude-2.0.52-linux-x64)
+2025-11-25T00:13:20.124Z [DEBUG] Successfully updated to version 2.0.52
+2025-11-25T00:13:20.127Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029600127
+2025-11-25T00:13:20.127Z [DEBUG] Preserving file permissions: 100600
+2025-11-25T00:13:20.134Z [DEBUG] Temp file written successfully, size: 41724 bytes
+2025-11-25T00:13:20.134Z [DEBUG] Applied original permissions to temp file
+2025-11-25T00:13:20.134Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.28591.1764029600127 to /workspaces/agent-feed/.claude/config/.claude.json
+2025-11-25T00:13:20.134Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-11-25T00:13:20.136Z [DEBUG] Native installer: Set installMethod to "native" and disabled legacy auto-updater for protection
+2025-11-25T00:13:20.136Z [DEBUG] Install: installLatest returned version=2.0.52, wasUpdated=true, lockFailed=false
+2025-11-25T00:13:20.141Z [DEBUG] Install: Setup launcher completed with 0 messages
+2025-11-25T00:13:20.141Z [DEBUG] Install: Cleaning up npm installations after successful install
+2025-11-25T00:13:20.546Z [DEBUG] Removed global npm installation of @anthropic-ai/claude-code
+2025-11-25T00:13:20.554Z [DEBUG] Removed local installation at /home/codespace/.claude/local
+2025-11-25T00:13:20.554Z [DEBUG] Cleaned up 2 npm installation(s)
+2025-11-25T00:13:20.555Z [DEBUG] Install: Shell PATH already configured

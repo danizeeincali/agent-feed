@@ -1,0 +1,150 @@
+# Plan: Fix Pills Not Showing & Comments Require Refresh
+
+## USER REPORT
+- Pills don't appear at all when replying to comments
+- Comments require manual page refresh to appear
+
+## ROOT CAUSES IDENTIFIED (3 Agent Investigation)
+
+### Issue 1: Race Condition - Comment Reload Clears Pill State
+**File:** `RealSocialMediaFeed.tsx` - `handleNewComment()` (line 806)
+
+After creating a comment:
+1. Comment ID is added to `processingComments` ✅
+2. `loadComments(postId, true)` is called IMMEDIATELY ❌
+3. Fresh comments are fetched from server
+4. The new comment may not be in the server's response yet (race condition)
+5. Pills never render because `processingComments` state is orphaned
+
+### Issue 2: Comments Only Reload When Visible
+**File:** `RealSocialMediaFeed.tsx` (lines 751-763)
+
+```typescript
+if (showComments[postId]) {
+  loadCommentsRef.current(postId, true);  // Only if visible
+} else {
+  // Just clears cache - never reloads
+  delete updated[postId];
+}
+```
+
+If user posts when comments are collapsed, the cache is cleared but comments never reload.
+
+### Issue 3: handleReply Does NOT Add Comment to processingComments
+**File:** `CommentThread.tsx` - `handleReply()` (line 809-852)
+
+The `handleReply` function:
+1. Calls `onProcessingChange?.(parentId, true)` - adds **PARENT** comment ID ❌
+2. Should add the **NEW** comment ID to processingComments
+3. Currently tracks the wrong ID
+
+### Issue 4: WebSocket Events May Not Fire for Direct Replies
+When using `handleReply` in CommentThread:
+- API creates comment
+- Work queue ticket is created
+- BUT orchestrator may not emit 'waiting' state immediately
+- Frontend never receives the state to show pill
+
+---
+
+## FIX STRATEGY
+
+### Fix 1: Add Optimistic Comment to UI Immediately
+**File:** `CommentThread.tsx` - `handleReply()`
+
+After successful API response, immediately add the new comment to local state:
+```typescript
+// After API success
+const newComment = response.data;
+// Add to local comments array immediately (optimistic update)
+setLocalComments(prev => [...prev, newComment]);
+// Also add to processingComments with the ACTUAL comment ID
+onProcessingChange?.(newComment.id, true);
+```
+
+### Fix 2: Fix processingComments Tracking in handleNewComment
+**File:** `RealSocialMediaFeed.tsx` - `handleNewComment()`
+
+```typescript
+// Line 806 - DON'T reload immediately
+// Instead, add the new comment to local state first
+setPostComments(prev => ({
+  ...prev,
+  [postId]: [...(prev[postId] || []), result.data]
+}));
+
+// Keep processingComments tracking the new comment ID
+// Wait for WebSocket 'complete' event to clear it
+```
+
+### Fix 3: Emit 'waiting' State Immediately on Comment Creation
+**File:** `api-server/server.js` - POST `/api/agent-posts/:postId/comments`
+
+After creating comment, emit the initial state:
+```javascript
+// Line ~1728 - After comment creation
+websocketService.emitCommentState({
+  commentId: createdComment.id,
+  postId: postId,
+  state: 'waiting',
+  timestamp: Date.now()
+});
+```
+
+### Fix 4: Force Reload When Comments Section Opens
+**File:** `RealSocialMediaFeed.tsx` - toggle comments handler
+
+When opening comments section, always fetch fresh data:
+```typescript
+const handleToggleComments = (postId) => {
+  setShowComments(prev => ({...prev, [postId]: !prev[postId]}));
+  if (!showComments[postId]) {
+    // Opening - force fresh fetch
+    loadComments(postId, true);
+  }
+};
+```
+
+---
+
+## IMPLEMENTATION ORDER
+
+| Priority | File | Change | Purpose |
+|----------|------|--------|---------|
+| 1 | `server.js:~1728` | Emit `comment:state:waiting` immediately after comment creation | Backend sends pill trigger |
+| 2 | `RealSocialMediaFeed.tsx:806` | Don't reload immediately, add optimistic comment | Prevent race condition |
+| 3 | `CommentThread.tsx:809-852` | Track new comment ID, not parent ID | Correct pill association |
+| 4 | `RealSocialMediaFeed.tsx` | Force reload when comments section opens | Fix cached/stale comments |
+
+---
+
+## EXPECTED BEHAVIOR AFTER FIX
+
+1. User posts reply → API creates comment
+2. Backend immediately emits `comment:state:waiting`
+3. Frontend receives event → adds to `commentStates` map
+4. Pill renders immediately (yellow "Waiting for agents...")
+5. Orchestrator processes → emits analyzed/responding/complete states
+6. Pills transition through colors
+7. On `complete` → wait 2.5s → reload comments → clear pill
+8. Agent response appears in UI
+
+---
+
+## CRITICAL FILES TO MODIFY
+
+1. `/workspaces/agent-feed/api-server/server.js` - emit waiting state on creation
+2. `/workspaces/agent-feed/frontend/src/components/RealSocialMediaFeed.tsx` - fix handleNewComment
+3. `/workspaces/agent-feed/frontend/src/components/CommentThread.tsx` - fix handleReply ID tracking
+
+---
+
+## TESTING CHECKLIST
+
+- [ ] Reply to comment → pill appears immediately
+- [ ] Pill shows "Waiting for agents..." (yellow)
+- [ ] Pill transitions through states (if visible long enough)
+- [ ] Pill shows "Complete" (green) for 2+ seconds
+- [ ] Comment appears without page refresh
+- [ ] Agent response appears automatically
+- [ ] No console errors

@@ -1,0 +1,172 @@
+# Plan: Fix Pills Not Showing & Comments Need Refresh
+
+## DEEP INVESTIGATION FINDINGS
+
+After thorough code analysis, the previous fixes were WRONG. Here are the REAL root causes:
+
+---
+
+## Bug 1: Processing Pills Not Showing
+
+### REAL Root Cause
+The pill rendering at `CommentThread.tsx` line 248 requires:
+```typescript
+if (currentState || isProcessing) { /* render pill */ }
+```
+
+Where:
+- `currentState` = `commentStates.get(comment.id)` - **ALWAYS EMPTY**
+- `isProcessing` = `processingComments.has(comment.id)` - **ONLY HAS POST IDs, NOT COMMENT IDs**
+
+**Why `commentStates` is empty:**
+- Backend is NOT emitting `comment:state:waiting` events when comments are created
+- The Map never gets populated
+
+**Why `processingComments` doesn't work:**
+- Set only contains POST IDs (added at line 774)
+- Pills check for COMMENT IDs, not POST IDs
+- Mismatch = pill never renders
+
+### Fix Required
+**Option A (Backend fix - BEST):** Emit comment state events
+```javascript
+// In server.js after comment creation (line ~1720)
+websocketService.emitCommentState(createdComment.id, postId, 'waiting');
+```
+
+**Option B (Frontend fix):** Add comment IDs to processingComments Set
+```typescript
+// When comment is being processed, add COMMENT id not POST id
+setProcessingComments(prev => new Set(prev).add(commentId));
+```
+
+---
+
+## Bug 2: Comments Require Page Refresh
+
+### REAL Root Cause: STALE CLOSURE BUG
+
+The `useEffect` at line 723-764 has a **stale closure** problem:
+
+```typescript
+const loadComments = useCallback(async (...) => {
+  // ... logic
+}, [userId, loadingComments]);  // ← Depends on loadingComments STATE
+
+useEffect(() => {
+  const handleCommentCreated = (...) => {
+    loadComments(postId, true);  // ← Uses loadComments
+  };
+  apiService.on('comment:created', handleCommentCreated);
+  return () => apiService.off('comment:created', handleCommentCreated);
+}, [showComments, loadComments]);  // ← Depends on loadComments FUNCTION
+```
+
+**What happens:**
+1. Comment created → `loadComments()` called
+2. `loadComments` sets `loadingComments` state
+3. State change causes `loadComments` function reference to change
+4. useEffect re-runs, re-registers listener with STALE closure
+5. Next comment event → old handler fires with old references
+6. **Result:** Events received but UI doesn't update
+
+### Fix Required
+Remove `loadComments` from useEffect dependency, use ref instead:
+
+```typescript
+// Create stable ref for loadComments
+const loadCommentsRef = useRef(loadComments);
+useEffect(() => { loadCommentsRef.current = loadComments; }, [loadComments]);
+
+// In useEffect, use ref instead
+useEffect(() => {
+  const handleCommentCreated = (data) => {
+    // ... update engagement
+    if (showComments[postId]) {
+      loadCommentsRef.current(postId, true);  // ← Use ref
+    }
+  };
+  apiService.on('comment:created', handleCommentCreated);
+  return () => apiService.off('comment:created', handleCommentCreated);
+}, [showComments]);  // ← Remove loadComments from deps
+```
+
+---
+
+## Bug 3: Multiple WebSocket Connections (Root Issue)
+
+### Finding
+THREE separate Socket.IO connections exist:
+1. `socketManager.ts` - **ORPHANED**, never used
+2. `socket.js` - Used by useTicketUpdates, doesn't listen for comment events
+3. `api.ts` - Actively used for comments
+
+This creates race conditions and connection instability (explains "Connected/Disconnected" flicker).
+
+### Fix Required
+Consolidate to single connection in `api.ts`, remove redundant files.
+
+---
+
+## Implementation Plan
+
+### Step 1: Fix Stale Closure (Comments Refresh)
+**File:** `frontend/src/components/RealSocialMediaFeed.tsx`
+
+1. Add ref for loadComments function (around line 700):
+```typescript
+const loadCommentsRef = useRef(loadComments);
+useEffect(() => { loadCommentsRef.current = loadComments; }, [loadComments]);
+```
+
+2. Update useEffect dependency array (line 764):
+```typescript
+}, [showComments]);  // Remove loadComments
+```
+
+3. Use ref in handler (line 747):
+```typescript
+loadCommentsRef.current(postId, true);
+```
+
+### Step 2: Fix Pills (Backend Event Emission)
+**File:** `api-server/server.js`
+
+After comment creation (around line 1720), add:
+```javascript
+// Emit processing state for pills
+if (websocketService && websocketService.emitCommentState) {
+  websocketService.emitCommentState(createdComment.id, postId, 'waiting');
+}
+```
+
+### Step 3: Fix Pills (Frontend Fallback)
+**File:** `frontend/src/components/RealSocialMediaFeed.tsx`
+
+When creating comment, track COMMENT id:
+```typescript
+// In handleNewComment, add the actual comment ID to processing
+setProcessingComments(prev => {
+  const next = new Set(prev);
+  next.add(result.data.id);  // Add COMMENT id, not POST id
+  return next;
+});
+```
+
+---
+
+## Critical Files
+
+| Priority | File | Change |
+|----------|------|--------|
+| 1 | `RealSocialMediaFeed.tsx` | Fix stale closure with useRef |
+| 2 | `server.js` | Emit comment:state events |
+| 3 | `RealSocialMediaFeed.tsx` | Track comment IDs for pills |
+
+---
+
+## Testing
+
+1. Create comment → pill should appear immediately
+2. Avi responds → comment appears WITHOUT refresh
+3. Expand/collapse → single click works

@@ -1,0 +1,464 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/playwright.config.ui-bug-fixes.ts",
+    "rootDir": "/workspaces/agent-feed/tests/playwright",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "tests/playwright/ui-bug-fixes-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "tests/playwright/ui-bug-fixes-results.json"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests/playwright",
+        "testIgnore": [],
+        "testMatch": [
+          "ui-bug-fixes-e2e.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "ui-bug-fixes-e2e.spec.ts",
+      "file": "ui-bug-fixes-e2e.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Bug Fixes E2E Validation",
+          "file": "ui-bug-fixes-e2e.spec.ts",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Bug 2: Page loads within reasonable time (parallelized calls)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 21040,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Page load time: 2606ms\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T04:53:47.965Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-5ddaf-le-time-parallelized-calls--chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-5ddaf-le-time-parallelized-calls--chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-5ddaf-le-time-parallelized-calls--chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c77101a41c716bbd8b86-ab35b47427e6fe5ed023",
+              "file": "ui-bug-fixes-e2e.spec.ts",
+              "line": 20,
+              "column": 3
+            },
+            {
+              "title": "Bug 3: Single click expands/collapses comment section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4423,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T04:54:09.449Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-13bff-s-collapses-comment-section-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-13bff-s-collapses-comment-section-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-13bff-s-collapses-comment-section-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c77101a41c716bbd8b86-1c67c6bfe3de54820110",
+              "file": "ui-bug-fixes-e2e.spec.ts",
+              "line": 43,
+              "column": 3
+            },
+            {
+              "title": "Bug 1: Comment count updates in real-time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4237,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Found 20 posts\n"
+                        },
+                        {
+                          "text": "Initial comment indicators: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T04:54:14.011Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-5fa58--count-updates-in-real-time-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-5fa58--count-updates-in-real-time-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-5fa58--count-updates-in-real-time-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c77101a41c716bbd8b86-d9d4c053f11d3a23bc7b",
+              "file": "ui-bug-fixes-e2e.spec.ts",
+              "line": 82,
+              "column": 3
+            },
+            {
+              "title": "API: Verify backend is responding correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 59344,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Backend returned 5 posts\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T04:54:18.428Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-b747a-end-is-responding-correctly-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-b747a-end-is-responding-correctly-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-b747a-end-is-responding-correctly-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c77101a41c716bbd8b86-9c605b3e21a6d401db4e",
+              "file": "ui-bug-fixes-e2e.spec.ts",
+              "line": 108,
+              "column": 3
+            },
+            {
+              "title": "No JavaScript errors on page load",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 53503,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T04:55:18.480Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-371e9-aScript-errors-on-page-load-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-371e9-aScript-errors-on-page-load-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Bug-Fixes-371e9-aScript-errors-on-page-load-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c77101a41c716bbd8b86-a7797d4137ed43a097ab",
+              "file": "ui-bug-fixes-e2e.spec.ts",
+              "line": 125,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Regression Tests",
+          "file": "ui-bug-fixes-e2e.spec.ts",
+          "line": 149,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Previous fixes still work: Auto-question routing to Avi",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5374,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Auto-question routing regression test passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T04:56:12.800Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Regressio-60e43-uto-question-routing-to-Avi-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c77101a41c716bbd8b86-cb1619b169380568aaca",
+              "file": "ui-bug-fixes-e2e.spec.ts",
+              "line": 150,
+              "column": 3
+            },
+            {
+              "title": "WebSocket connection is established",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8857,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "WebSocket connection test completed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T04:56:18.251Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Regressio-81490-t-connection-is-established-chromium/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Regressio-81490-t-connection-is-established-chromium/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/workspaces/agent-feed/test-results/ui-bug-fixes-e2e-Regressio-81490-t-connection-is-established-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c77101a41c716bbd8b86-d7986ae2ea858fbeddf7",
+              "file": "ui-bug-fixes-e2e.spec.ts",
+              "line": 172,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-11-25T04:53:46.935Z",
+    "duration": 160656.995,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

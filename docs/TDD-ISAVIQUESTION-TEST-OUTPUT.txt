@@ -1,0 +1,204 @@
+================================================================================
+TDD TEST EXECUTION RESULTS: isAviQuestion() Bug Fix
+================================================================================
+
+Test File: /workspaces/agent-feed/tests/unit/isAviQuestion.test.js
+Date: 2025-11-13
+Status: PRE-FIX (Bug Confirmed)
+
+================================================================================
+
+SUMMARY:
+--------
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 31 passed, 39 total
+Time:        1.167 s
+
+EXPECTED BEHAVIOR:
+- 8 tests currently failing will PASS after fix
+- 31 tests passing will continue to PASS after fix
+
+================================================================================
+
+DETAILED RESULTS:
+-----------------
+
+isAviQuestion() - TDD Test Suite
+
+  ✅ Should return TRUE for explicit AVI mentions
+    ✓ returns true for lowercase "avi" (3 ms)
+    ✓ returns true for uppercase "AVI"
+    ✓ returns true for mixed case "AvI"
+    ✓ returns true for mixed case "aVi" (1 ms)
+    ✓ returns true for lambda character "λvi"
+    ✓ returns true for uppercase lambda "ΛVI"
+    ✓ returns true for "avi" in middle of sentence
+    ✓ returns true for "avi" at end of sentence
+
+  ❌ Should return FALSE for questions WITHOUT "avi" or "λvi"
+    ✕ returns false for generic question with single "?" (3 ms)
+    ✕ returns false for question with double "??" (1 ms)
+    ✕ returns false for multiple questions (1 ms)
+    ✕ returns false for rhetorical question (1 ms)
+    ✕ returns false for confused input "???"
+    ✕ returns false for question without avi mention (2 ms)
+    ✕ returns false for help request without avi (1 ms)
+
+  ✅ Should return FALSE for URL content (already handled)
+    ✓ returns false for content with http:// URL (1 ms)
+    ✓ returns false for content with https:// URL
+    ✓ returns false for content with www. URL
+    ✓ returns false for URL with avi in query parameter (1 ms)
+
+  ✅ Edge Cases - Word Boundaries
+    ✓ returns false for word containing "avi" - aviation (1 ms)
+    ✓ returns false for word containing "avi" - navigate
+    ✓ returns false for word containing "avi" - behavior
+    ✓ returns false for lambda character in "λviation" (edge case)
+
+  ✅ Empty and Null Cases
+    ✓ returns false for empty string
+    ✓ handles undefined gracefully (1 ms)
+    ✓ handles null gracefully (1 ms)
+
+  ✅ Should still match command patterns (existing functionality)
+    ✓ returns true for "what" command without avi (1 ms)
+    ✓ returns true for "status" command without avi
+    ✓ returns true for "help" command without avi (2 ms)
+    ✓ returns true for "show me" pattern without avi (1 ms)
+    ✓ returns true for "tell me" pattern without avi (1 ms)
+
+  ✅/❌ Real-World Scenarios
+    ✓ AVI question with polite greeting
+    ✓ Lambda character with question (3 ms)
+    ✕ Generic question should not route to AVI (1 ms)
+    ✓ Link with question mark should go to link-logger
+    ✓ Question about aviation (word boundary issue) (2 ms)
+    ✓ Direct avi address without question mark
+    ✓ Status command should work
+
+  ✅ Test Summary
+    ✓ EXPECTED FAILURES with current buggy implementation (16 ms)
+
+================================================================================
+
+FAILING TEST DETAILS:
+---------------------
+
+1. ❌ returns false for generic question with single "?"
+
+   Input:    "What is the weather?"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:93
+
+2. ❌ returns false for question with double "??"
+
+   Input:    "Really??"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:99
+
+3. ❌ returns false for multiple questions
+
+   Input:    "Where are you? What time is it?"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:105
+
+4. ❌ returns false for rhetorical question
+
+   Input:    "Is this even working?"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:111
+
+5. ❌ returns false for confused input "???"
+
+   Input:    "???"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:117
+
+6. ❌ returns false for question without avi mention
+
+   Input:    "Can you help me with this task?"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:123
+
+7. ❌ returns false for help request without avi
+
+   Input:    "How do I fix this bug?"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:129
+
+8. ❌ Generic question should not route to AVI
+
+   Input:    "Is the build complete?"
+   Expected: false
+   Received: true
+
+   Location: tests/unit/isAviQuestion.test.js:234
+
+================================================================================
+
+CONSOLE OUTPUT:
+---------------
+
+🐛 CURRENT BUGGY BEHAVIOR:
+Questions without "avi" return TRUE (incorrect): true
+Expected: All should be FALSE after fix
+
+================================================================================
+
+THE FIX:
+--------
+
+File: /workspaces/agent-feed/api-server/server.js
+Lines: 276-279
+
+REMOVE THIS CODE BLOCK:
+  // Pattern 2: Question marks
+  if (content.includes('?')) {
+    return true;
+  }
+
+That's the entire fix!
+
+================================================================================
+
+POST-FIX EXPECTATION:
+---------------------
+
+After removing the buggy code block:
+
+Test Suites: 1 passed, 1 total
+Tests:       39 passed, 39 total
+
+All 8 failing tests will become passing ✅
+
+================================================================================
+
+RUN COMMAND:
+------------
+
+npx jest tests/unit/isAviQuestion.test.js --config jest.config.cjs --verbose --no-coverage
+
+================================================================================
+
+STATUS: ✅ TDD TESTS DELIVERED
+- Bug confirmed and documented
+- 39 comprehensive tests written
+- Fix path clearly identified
+- Ready for implementation
+
+================================================================================

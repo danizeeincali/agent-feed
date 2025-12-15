@@ -1,0 +1,149 @@
+# Plan: Fix Three UI/UX Bugs
+
+## Problem Summary
+User reports three issues after the auto-question routing fix was completed:
+
+1. **Comments require refresh** - "Waiting for agents" shows but comments don't appear until page refresh
+2. **"Loading workspace" slow** - App takes longer to load than expected
+3. **Comments collapse on first click** - Must click twice to expand/collapse comments
+
+---
+
+## Bug 1: Comments Require Page Refresh
+
+### Root Cause
+In `RealSocialMediaFeed.tsx` (lines 742-746), when a `comment:created` WebSocket event arrives, the handler only reloads comments if the section is already visible:
+
+```typescript
+if (showComments[postId]) {
+  loadComments(postId, true);
+}
+// Missing: else clause - comment is silently ignored if section is collapsed!
+```
+
+**Flow that fails:**
+1. Comment created → WebSocket broadcasts `comment:created`
+2. Frontend receives event → checks `showComments[postId]`
+3. If comments section is collapsed → **loadComments() is never called**
+4. User must refresh to see the new comment
+
+### Fix Location
+**File:** `frontend/src/components/RealSocialMediaFeed.tsx`
+- Lines 742-746: Add logic to update comment count even when section is collapsed
+- Lines 722-748: `handleCommentCreated` callback
+
+### Implementation
+```typescript
+// Always update comment count in posts state
+setPosts(prev => prev.map(p =>
+  p.id === postId ? { ...p, comments: (p.comments || 0) + 1 } : p
+));
+
+// Only reload comments if section is visible
+if (showComments[postId]) {
+  loadComments(postId, true);
+}
+```
+
+---
+
+## Bug 2: "Loading workspace" Slow
+
+### Root Cause
+Multiple sequential operations during initialization:
+
+1. **System state check** (`GET /api/system/state`) - sequential
+2. **System initialize** (`POST /api/system/initialize`) - 6 sequential DB operations
+3. **Welcome posts created one at a time** (3 posts sequentially)
+4. **Feed + filters loaded sequentially** in same useEffect
+
+### Fix Locations
+**File:** `frontend/src/hooks/useSystemInitialization.ts`
+- Lines 27-75: No `Promise.all` - sequential API calls
+
+**File:** `frontend/src/components/RealSocialMediaFeed.tsx`
+- Lines 405-406: `loadPosts()` and `loadFilterData()` called sequentially
+
+**File:** `api-server/services/system-initialization/system-initialization.service.js`
+- Lines 496-530: Welcome posts created in loop (one at a time)
+
+### Implementation
+1. Parallelize frontend API calls:
+```typescript
+// In RealSocialMediaFeed.tsx useEffect
+await Promise.all([loadPosts(0), loadFilterData()]);
+```
+
+2. Parallelize welcome post creation:
+```typescript
+// In system-initialization.service.js
+await Promise.all(welcomePosts.map(post => createPost(post)));
+```
+
+---
+
+## Bug 3: Comments Collapse on First Click
+
+### Root Cause
+Race condition between state updates and WebSocket events in `CommentThread.tsx`.
+
+**Lines 102-103** have flawed logic:
+```typescript
+const isCollapsed = threadState.collapsed.has(comment.id);
+const isExpanded = threadState.expanded.has(comment.id) || !isCollapsed;
+```
+
+When first click fires:
+1. `setThreadState()` adds comment to `collapsed` Set
+2. React batches the state update
+3. If WebSocket event triggers re-render before state settles...
+4. The calculation uses stale `threadState` from previous render
+5. **Result:** UI doesn't collapse until second click
+
+### Fix Location
+**File:** `frontend/src/components/CommentThread.tsx`
+- Lines 102-103: Simplify expansion logic
+- Lines 885-921: Toggle handler
+- Lines 720-787: WebSocket listeners causing re-renders
+
+### Implementation
+Option A: Use ref for immediate state (no batching delay):
+```typescript
+const threadStateRef = useRef(threadState);
+useEffect(() => { threadStateRef.current = threadState; }, [threadState]);
+```
+
+Option B: Simplify logic - single source of truth:
+```typescript
+const isExpanded = !threadState.collapsed.has(comment.id);
+// Remove the dual expanded/collapsed Set logic
+```
+
+---
+
+## Critical Files Summary
+
+| Bug | File | Lines | Change |
+|-----|------|-------|--------|
+| 1 | `RealSocialMediaFeed.tsx` | 742-746 | Update count even if collapsed |
+| 2 | `RealSocialMediaFeed.tsx` | 405-406 | Parallelize loadPosts + loadFilterData |
+| 2 | `system-initialization.service.js` | 496-530 | Parallelize welcome post creation |
+| 3 | `CommentThread.tsx` | 102-103 | Fix dual source of truth |
+
+---
+
+## Implementation Order
+
+1. **Bug 3 (Double-click)** - Quick fix, high user frustration
+2. **Bug 1 (Comments refresh)** - Quick fix, core functionality
+3. **Bug 2 (Loading slow)** - Optimization, less urgent
+
+---
+
+## Testing Plan
+
+| Bug | Test |
+|-----|------|
+| 1 | Post a comment → verify it appears without refresh |
+| 2 | Refresh app → measure load time improvement |
+| 3 | Click expand/collapse → verify single click works |

@@ -1,0 +1,174 @@
+# Plan: Auto-Route Questions to Avi & Generic Processing Pills
+
+## Problem Summary
+When user posts "What is the weather like in los gatos?":
+1. The post is created successfully
+2. "Waiting for Avi" pill appears
+3. But Avi never responds because `isAviQuestion()` requires explicit "avi" mention
+
+## User Requirements
+1. **Avi should auto-respond to ALL questions** that don't explicitly @mention another agent
+2. **Change pills to generic "Waiting for agents"** instead of Avi-specific text
+
+---
+
+## Implementation Plan
+
+### Part 1: Backend - Auto-Route Questions to Avi
+
+**File: `/workspaces/agent-feed/api-server/server.js`**
+
+#### 1.1 Modify `isAviQuestion()` function (lines 263-278)
+
+Replace the current logic with question detection:
+
+```javascript
+function isAviQuestion(content) {
+  const lowerContent = content.toLowerCase();
+
+  // Priority 1: Skip if contains URL (goes to link-logger)
+  if (containsURL(content)) {
+    return false;
+  }
+
+  // Priority 2: Check for explicit @mention of another agent
+  // Pattern: @agent-name or @agent (not @avi)
+  const agentMentionPattern = /@(link-logger|personal-todos|follow-ups|meeting-prep|page-builder|skills|get-to-know-you|feedback|ideas)(-agent)?\b/i;
+  if (agentMentionPattern.test(content)) {
+    return false; // Route to mentioned agent, not Avi
+  }
+
+  // Priority 3: Explicit Avi mention - always route to Avi
+  if (lowerContent.includes('avi') || lowerContent.includes('λvi')) {
+    return true;
+  }
+
+  // Priority 4: Question detection - route to Avi as default responder
+  // Check for question mark
+  if (content.includes('?')) {
+    return true;
+  }
+
+  // Check for question words at start
+  const questionPattern = /^(what|how|why|when|where|who|which|can|could|would|should|is|are|do|does|will)\b/i;
+  if (questionPattern.test(content.trim())) {
+    return true;
+  }
+
+  return false;
+}
+```
+
+#### 1.2 Add word boundary fix for "avi" detection
+
+To prevent false positives like "aviation" or "navigate":
+
+```javascript
+// More precise avi detection (add before the includes check)
+const aviPattern = /\bavi\b|\bλvi\b|@avi\b/i;
+if (aviPattern.test(content)) {
+  return true;
+}
+```
+
+---
+
+### Part 2: Frontend - Generic Processing Pills
+
+**Key Finding:** Most frontend text is already generic. The main changes needed:
+
+#### 2.1 File: `/workspaces/agent-feed/frontend/src/components/AviTypingIndicator.tsx`
+
+Update aria-labels from Avi-specific to generic:
+
+| Line | Current | Change To |
+|------|---------|-----------|
+| 119 | `aria-label="Avi is thinking"` | `aria-label="Agent is processing"` |
+| 165 | `aria-label="Avi is typing"` | `aria-label="Agent is responding"` |
+| 208 | `is typing...` | `processing...` |
+
+#### 2.2 File: `/workspaces/agent-feed/frontend/src/components/CommentThread.tsx` (lines 73-78)
+
+Optional enhancement - make processing states more explicit:
+
+```typescript
+const stateConfig = {
+  waiting: { text: 'Waiting for agents...' },  // Was: 'Waiting...'
+  analyzed: { text: 'Analyzing...' },
+  responding: { text: 'Responding...' },
+  complete: { text: 'Complete' }
+};
+```
+
+#### 2.3 Already Generic (No Changes Needed)
+
+- `TicketStatusBadge.jsx` - Uses dynamic agent names: "Waiting for [agent-name]"
+- `EnhancedPostingInterface.tsx` - Toasts use "Agent is analyzing..."
+- `RealSocialMediaFeed.tsx` - Processing indicators are generic
+
+---
+
+### Part 3: Testing
+
+#### 3.1 Update existing test file
+**File: `/workspaces/agent-feed/tests/unit/isAviQuestion.test.js`**
+
+Add new test cases:
+```javascript
+// Questions should trigger Avi
+expect(isAviQuestion('What is the weather?')).toBe(true);
+expect(isAviQuestion('How do I do this')).toBe(true);
+expect(isAviQuestion('Can you help me')).toBe(true);
+
+// @mentions should NOT trigger Avi
+expect(isAviQuestion('@link-logger check this')).toBe(false);
+expect(isAviQuestion('@personal-todos add task')).toBe(false);
+
+// Word boundary - should NOT trigger
+expect(isAviQuestion('aviation news today')).toBe(false);
+expect(isAviQuestion('navigate to settings')).toBe(false);
+```
+
+---
+
+## Critical Files Summary
+
+| File | Change Type |
+|------|-------------|
+| `api-server/server.js` (lines 263-278) | Modify `isAviQuestion()` to detect questions |
+| `frontend/src/components/AviTypingIndicator.tsx` | Update aria-labels to generic |
+| `frontend/src/components/CommentThread.tsx` | Optional: Update state text |
+| `tests/unit/isAviQuestion.test.js` | Add test cases for new behavior |
+
+---
+
+## Implementation Order
+
+1. Modify `isAviQuestion()` in `server.js`
+2. Update `AviTypingIndicator.tsx` aria-labels
+3. Update `CommentThread.tsx` state text (optional)
+4. Add/update unit tests
+5. Manual testing: post question without "avi" mention
+
+---
+
+## Edge Cases Handled
+
+| Scenario | Behavior |
+|----------|----------|
+| "What is the weather?" | Routes to Avi (question detected) |
+| "@link-logger check this url" | Routes to link-logger (explicit mention) |
+| "https://example.com cool site" | Routes to link-logger (URL detected) |
+| "Avi help me" | Routes to Avi (explicit mention) |
+| "aviation news" | Does NOT route to Avi (word boundary) |
+| "How do I navigate" | Routes to Avi (question, "navigate" doesn't trigger) |
+
+---
+
+## Risks & Mitigations
+
+| Risk | Mitigation |
+|------|------------|
+| Too many questions routed to Avi | Can add rate limiting later if needed |
+| False positive question detection | Conservative patterns, question mark is primary signal |
+| Breaking existing behavior | Word boundary fix prevents "aviation" false positives |

@@ -1,0 +1,61 @@
+2025-11-25T02:11:52.390Z [DEBUG] Watching for changes in setting files /workspaces/agent-feed/.claude/settings.json, /workspaces/agent-feed/.claude/settings.local.json...
+2025-11-25T02:11:52.404Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-11-25T02:11:52.404Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-11-25T02:11:52.404Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-11-25T02:11:52.404Z [DEBUG] [LSP SERVER MANAGER] initialize() called
+2025-11-25T02:11:52.404Z [DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+2025-11-25T02:11:52.422Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-11-25T02:11:52.424Z [DEBUG] Total LSP servers loaded: 0
+2025-11-25T02:11:52.444Z [DEBUG] Loading skills from directories: managed=/etc/claude-code/.claude/skills, user=/workspaces/agent-feed/.claude/config/skills, project=/workspaces/agent-feed/.claude/skills
+2025-11-25T02:11:52.444Z [DEBUG] >>>>> getPluginSkills CALLED <<<<<
+2025-11-25T02:11:52.489Z [DEBUG] Metrics opt-out check failed: No API key available
+2025-11-25T02:11:52.495Z [DEBUG] Creating shell snapshot for bash (/bin/bash)
+2025-11-25T02:11:52.495Z [DEBUG] Looking for shell config file: /home/codespace/.bashrc
+2025-11-25T02:11:52.495Z [DEBUG] Snapshots directory: /workspaces/agent-feed/.claude/config/shell-snapshots
+2025-11-25T02:11:52.496Z [DEBUG] Creating snapshot at: /workspaces/agent-feed/.claude/config/shell-snapshots/snapshot-bash-1764036712495-pjr7ju.sh
+2025-11-25T02:11:52.496Z [DEBUG] Shell binary exists: true
+2025-11-25T02:11:52.496Z [DEBUG] Execution timeout: 10000ms
+2025-11-25T02:11:52.498Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/todos/6ba3b6fb-6a3a-4aad-ba3f-77a97668e274-agent-6ba3b6fb-6a3a-4aad-ba3f-77a97668e274.json.tmp.16202.1764036712498
+2025-11-25T02:11:52.505Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-11-25T02:11:52.505Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/todos/6ba3b6fb-6a3a-4aad-ba3f-77a97668e274-agent-6ba3b6fb-6a3a-4aad-ba3f-77a97668e274.json.tmp.16202.1764036712498 to /workspaces/agent-feed/.claude/config/todos/6ba3b6fb-6a3a-4aad-ba3f-77a97668e274-agent-6ba3b6fb-6a3a-4aad-ba3f-77a97668e274.json
+2025-11-25T02:11:52.506Z [DEBUG] File /workspaces/agent-feed/.claude/config/todos/6ba3b6fb-6a3a-4aad-ba3f-77a97668e274-agent-6ba3b6fb-6a3a-4aad-ba3f-77a97668e274.json written atomically
+2025-11-25T02:11:52.528Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2025-11-25T02:11:52.528Z [DEBUG] LSP manager initialized with 0 servers
+2025-11-25T02:11:52.530Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-11-25T02:11:52.530Z [DEBUG] Total plugin skills loaded: 0
+2025-11-25T02:11:52.530Z [DEBUG] Total plugin commands loaded: 0
+2025-11-25T02:11:52.530Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-11-25T02:11:52.530Z [DEBUG] LSP server manager initialized successfully
+2025-11-25T02:11:52.530Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-11-25T02:11:52.533Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+2025-11-25T02:11:52.533Z [DEBUG] Metrics check failed, defaulting to disabled
+2025-11-25T02:11:52.534Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills
+2025-11-25T02:11:52.614Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/.claude.json.tmp.16202.1764036712614
+2025-11-25T02:11:52.614Z [DEBUG] Preserving file permissions: 100600
+2025-11-25T02:11:52.626Z [DEBUG] Temp file written successfully, size: 41724 bytes
+2025-11-25T02:11:52.626Z [DEBUG] Applied original permissions to temp file
+2025-11-25T02:11:52.626Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.16202.1764036712614 to /workspaces/agent-feed/.claude/config/.claude.json
+2025-11-25T02:11:52.626Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-11-25T02:11:52.778Z [DEBUG] Writing to temp file: /workspaces/agent-feed/.claude/config/.claude.json.tmp.16202.1764036712778
+2025-11-25T02:11:52.778Z [DEBUG] Preserving file permissions: 100600
+2025-11-25T02:11:52.786Z [DEBUG] Temp file written successfully, size: 41724 bytes
+2025-11-25T02:11:52.786Z [DEBUG] Applied original permissions to temp file
+2025-11-25T02:11:52.786Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.16202.1764036712778 to /workspaces/agent-feed/.claude/config/.claude.json
+2025-11-25T02:11:52.786Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-11-25T02:11:52.819Z [DEBUG] Install: Starting installation process (force=false, target=undefined)
+2025-11-25T02:11:52.819Z [DEBUG] Install: Calling installLatest(force=true, target=undefined, forceReinstall=false)
+2025-11-25T02:11:52.830Z [DEBUG] Git remote URL: https://github.com/danizeeincali/agent-feed
+2025-11-25T02:11:52.830Z [DEBUG] Parsed repository: danizeeincali/agent-feed from https://github.com/danizeeincali/agent-feed
+2025-11-25T02:11:52.830Z [DEBUG] Parsed repository: danizeeincali/agent-feed from URL: https://github.com/danizeeincali/agent-feed
+2025-11-25T02:11:52.831Z [DEBUG] Path /workspaces/agent-feed already tracked for repo danizeeincali/agent-feed
+2025-11-25T02:11:52.980Z [DEBUG] Checking for native installer update to version 2.0.53
+2025-11-25T02:11:52.987Z [DEBUG] Version 2.0.53 already installed, updating symlink
+2025-11-25T02:11:52.988Z [DEBUG] Successfully updated to version 2.0.53
+2025-11-25T02:11:52.988Z [DEBUG] Install: installLatest returned version=2.0.53, wasUpdated=true, lockFailed=false
+2025-11-25T02:11:53.000Z [DEBUG] Install: Setup launcher completed with 0 messages
+2025-11-25T02:11:53.000Z [DEBUG] Install: Cleaning up npm installations after successful install
+2025-11-25T02:11:53.655Z [DEBUG] Shell snapshot created successfully (46196 bytes)
+2025-11-25T02:11:54.387Z [DEBUG] Removed global npm installation of @anthropic-ai/claude-code
+2025-11-25T02:11:54.387Z [DEBUG] Cleaned up 1 npm installation(s)
+2025-11-25T02:11:54.388Z [DEBUG] Install: Shell PATH already configured
+2025-11-25T02:11:54.469Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/home/codespace/.claude/downloads/claude-2.0.53-linux-x64)

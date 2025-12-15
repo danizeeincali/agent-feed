@@ -1,0 +1,112 @@
+# Plan: Fix Pills Flash & Disappear
+
+## LATEST INVESTIGATION (User Reported: "UI flashed and disappeared")
+
+The pills ARE appearing but disappear almost immediately. This is caused by **premature comment reload clearing the pill state**.
+
+---
+
+## ROOT CAUSE: Immediate Comment Reload on 'complete' Event
+
+**File:** `frontend/src/components/CommentThread.tsx` (lines 756-789)
+
+When `comment:state:complete` fires, TWO things happen simultaneously:
+1. `onStateChange(commentId, 'complete')` → pill briefly appears
+2. `onCommentsUpdate()` → **IMMEDIATELY reloads comments, causing re-render**
+
+The re-render happens in ~50ms, orphaning the pill state before user sees it.
+
+### Problematic Code (lines 756-770):
+```typescript
+socket.on('comment:state:complete', (data: any) => {
+  onStateChange?.(data.commentId, 'complete');  // ✅ Pill appears
+  onCommentsUpdate?.();                          // ❌ IMMEDIATE RELOAD - kills pill
+  setTimeout(() => {
+    onStateChange?.(data.commentId, null);      // Clears after 2s (never seen)
+  }, 2000);
+});
+```
+
+### Secondary Issue: DUPLICATE Listeners (lines 773-789)
+There's a fallback `comment:state` listener that does the SAME thing:
+```typescript
+socket.on('comment:state', (data: any) => {
+  if (data.state === 'complete') {
+    onCommentsUpdate?.();  // ❌ ANOTHER reload trigger
+  }
+});
+```
+If both events fire, comments reload TWICE causing race conditions.
+
+---
+
+## FIX STRATEGY
+
+### Fix 1: Delay Comment Reload Until Pill Is Visible
+**File:** `frontend/src/components/CommentThread.tsx`
+
+Change the 'complete' handler to delay the reload:
+```typescript
+socket.on('comment:state:complete', (data: any) => {
+  if (data.postId === postId) {
+    onStateChange?.(data.commentId, 'complete');
+
+    // DELAY the comment reload until AFTER pill displays (2 seconds)
+    setTimeout(() => {
+      onCommentsUpdate?.();
+      onStateChange?.(data.commentId, null);
+    }, 2000);  // Show pill for 2 seconds THEN reload
+  }
+});
+```
+
+### Fix 2: Remove Duplicate Listener
+**File:** `frontend/src/components/CommentThread.tsx`
+
+Remove or consolidate the fallback `comment:state` listener (lines 773-789) to prevent double-reloads.
+
+### Fix 3: Alternative - Reload on Agent Response Instead
+Instead of reloading on 'complete', wait for the actual agent response comment:
+```typescript
+// Don't reload on 'complete' - let comment:created handle it
+socket.on('comment:state:complete', (data: any) => {
+  if (data.postId === postId) {
+    onStateChange?.(data.commentId, 'complete');
+    // DON'T call onCommentsUpdate here
+    setTimeout(() => {
+      onStateChange?.(data.commentId, null);
+    }, 3000);  // Clear pill after 3 seconds
+  }
+});
+```
+The `comment:created` event (for the agent's response) will naturally reload comments.
+
+---
+
+## Implementation Order
+
+| Priority | File | Change |
+|----------|------|--------|
+| 1 | `CommentThread.tsx:756-770` | Delay `onCommentsUpdate()` call by 2-3 seconds |
+| 2 | `CommentThread.tsx:773-789` | Remove duplicate `comment:state` listener or consolidate |
+| 3 | Verify | Pills should now stay visible for 2+ seconds |
+
+---
+
+## Expected Behavior After Fix
+
+1. User posts comment
+2. "Waiting for agents..." pill appears (yellow)
+3. Pill transitions through states: analyzed → responding → complete
+4. **Pill stays visible for 2-3 seconds** on 'complete' state
+5. Comments reload and show agent's response
+6. Pill disappears
+
+---
+
+## Testing
+
+1. Reply to a comment → pill should appear and STAY visible for 2+ seconds
+2. Watch pill transition through states (if fast enough to see)
+3. Verify comments reload AFTER pill display time
+4. No flashing/flickering behavior
