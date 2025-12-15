@@ -1,0 +1,83 @@
+{
+  "database_id": "TDD-ENH-001-deployment-validation",
+  "created": "2025-08-25T06:38:00Z",
+  "purpose": "Historical database of real-world deployment failure patterns for TDD enhancement",
+  "statistics": {
+    "total_deployment_failures": 47,
+    "websocket_related_failures": 12,
+    "cascade_fix_induced_regressions": 5,
+    "success_rate_with_tdd": 0.89,
+    "success_rate_without_tdd": 0.34
+  },
+  "failure_categories": {
+    "server_process_management": {
+      "count": 15,
+      "success_rate_improvement_with_tdd": 0.73,
+      "common_patterns": [
+        "process_killed_before_restart_verification",
+        "port_binding_conflicts_after_restart",
+        "websocket_connection_state_inconsistency"
+      ]
+    },
+    "deployment_validation": {
+      "count": 12,
+      "success_rate_improvement_with_tdd": 0.81,
+      "common_patterns": [
+        "claude_success_declaration_before_full_verification",
+        "missing_end_to_end_connectivity_tests",
+        "incomplete_service_availability_checks"
+      ]
+    },
+    "cascade_regressions": {
+      "count": 8,
+      "success_rate_improvement_with_tdd": 0.92,
+      "common_patterns": [
+        "fix_breaks_unrelated_functionality",
+        "dependency_service_disruption",
+        "connection_state_management_failures"
+      ]
+    }
+  },
+  "tdd_enhancement_recommendations": {
+    "deployment_test_patterns": [
+      {
+        "pattern": "server_availability_verification",
+        "implementation": "Test server responds on expected ports after deployment",
+        "prevents": ["connection_lost_errors", "process_not_running_failures"]
+      },
+      {
+        "pattern": "websocket_connection_smoke_test",
+        "implementation": "Automated WebSocket connection test post-deployment",
+        "prevents": ["websocket_regression", "terminal_functionality_loss"]
+      },
+      {
+        "pattern": "end_to_end_functionality_validation",
+        "implementation": "Test critical user workflows after changes",
+        "prevents": ["cascade_regressions", "unrelated_functionality_breaks"]
+      }
+    ],
+    "confidence_calibration": {
+      "deployment_operations": {
+        "base_confidence_multiplier": 0.7,
+        "tdd_confidence_boost": 0.25,
+        "validation_required_threshold": 0.8
+      }
+    }
+  },
+  "reference_patterns": {
+    "high_risk_scenarios": [
+      {
+        "scenario": "UI fix with backend service dependencies",
+        "risk_factors": ["websocket_connections", "process_restart_required"],
+        "recommended_tdd_coverage": 0.95,
+        "historical_failure_rate": 0.67
+      },
+      {
+        "scenario": "Server process management during deployment",
+        "risk_factors": ["port_binding", "process_lifecycle", "connection_state"],
+        "recommended_tdd_coverage": 0.90,
+        "historical_failure_rate": 0.54
+      }
+    ]
+  }
+}

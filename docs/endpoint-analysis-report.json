@@ -1,0 +1,130 @@
+{
+  "analysisId": "endpoint-gap-analysis-20250826",
+  "timestamp": "2025-08-26T21:06:45Z",
+  "swarmConfiguration": {
+    "topology": "hierarchical",
+    "agentCount": 5,
+    "memoryNamespace": "endpoint-analysis",
+    "coordinationMode": "realtime"
+  },
+  "frontendAnalysis": {
+    "sourceFile": "/workspaces/agent-feed/frontend/src/components/ClaudeInstanceManager.tsx",
+    "identifiedEndpoints": {
+      "missing": [
+        {
+          "endpoint": "/api/claude/instances",
+          "method": "GET",
+          "line": 114,
+          "purpose": "Fetch all Claude instances",
+          "currentStatus": "MISSING - not implemented in simple-backend.js"
+        },
+        {
+          "endpoint": "/api/claude/instances",
+          "method": "POST", 
+          "line": 169,
+          "purpose": "Create new Claude instance",
+          "currentStatus": "MISSING - not implemented in simple-backend.js"
+        },
+        {
+          "endpoint": "/api/claude/instances/{instanceId}",
+          "method": "DELETE",
+          "line": 227,
+          "purpose": "Terminate Claude instance",
+          "currentStatus": "MISSING - not implemented in simple-backend.js"
+        }
+      ],
+      "implemented": [
+        {
+          "endpoint": "/api/v1/claude/instances",
+          "method": "POST",
+          "line": 87,
+          "status": "IMPLEMENTED but path mismatch - frontend expects /api/claude/instances"
+        },
+        {
+          "endpoint": "/api/v1/claude/instances/{instanceId}",
+          "method": "DELETE", 
+          "line": 116,
+          "status": "IMPLEMENTED but path mismatch - frontend expects /api/claude/instances/{instanceId}"
+        }
+      ]
+    }
+  },
+  "backendAnalysis": {
+    "sourceFile": "/workspaces/agent-feed/simple-backend.js",
+    "criticalGaps": [
+      {
+        "issue": "Endpoint path mismatch",
+        "details": "Frontend calls /api/claude/* but backend implements /api/v1/claude/*",
+        "impact": "HIGH - All 4 Claude instance buttons will fail",
+        "priority": "CRITICAL"
+      },
+      {
+        "issue": "Missing GET /api/claude/instances endpoint",
+        "details": "Frontend fetchInstances() calls this but backend doesn't implement it",
+        "impact": "HIGH - Instance list won't load",
+        "priority": "CRITICAL"
+      },
+      {
+        "issue": "Terminal streaming endpoint mismatch",
+        "details": "Frontend expects specific SSE endpoints for terminal streaming",
+        "impact": "MEDIUM - Terminal output may not stream properly",
+        "priority": "HIGH"
+      }
+    ]
+  },
+  "swarmCoordination": {
+    "agentRoles": {
+      "specification-agent": {
+        "status": "SPAWNED",
+        "task": "Analyze frontend API contract requirements",
+        "memoryKey": "missing-endpoints"
+      },
+      "nld-pattern-agent": {
+        "status": "SPAWNED", 
+        "task": "Pattern detection for endpoint mapping",
+        "memoryKey": "endpoint-patterns"
+      },
+      "tdd-london-swarm": {
+        "status": "SPAWNED",
+        "task": "Create comprehensive test suites",
+        "memoryKey": "endpoint-tests"
+      },
+      "backend-dev": {
+        "status": "SPAWNED",
+        "task": "Implement missing HTTP/SSE endpoints",
+        "memoryKey": "backend-implementation"
+      },
+      "production-validator": {
+        "status": "SPAWNED",
+        "task": "E2E validation of all 4 buttons",
+        "memoryKey": "e2e-validation"
+      }
+    }
+  },
+  "immediateActions": [
+    {
+      "action": "Fix endpoint path mismatch",
+      "priority": "CRITICAL",
+      "agent": "backend-dev",
+      "details": "Add /api/claude/* routes that mirror /api/v1/claude/* functionality"
+    },
+    {
+      "action": "Implement missing GET endpoint",
+      "priority": "CRITICAL", 
+      "agent": "backend-dev",
+      "details": "Add GET /api/claude/instances to return instance list"
+    },
+    {
+      "action": "Create comprehensive test coverage",
+      "priority": "HIGH",
+      "agent": "tdd-london-swarm",
+      "details": "Test all 4 Claude instance button scenarios with mocks"
+    },
+    {
+      "action": "Validate end-to-end functionality",
+      "priority": "HIGH",
+      "agent": "production-validator",
+      "details": "Ensure all buttons work with real backend integration"
+    }
+  ]
+}

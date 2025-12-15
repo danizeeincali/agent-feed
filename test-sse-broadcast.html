@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terminal SSE Broadcast Test</title>
+    <style>
+        body { 
+            font-family: 'Courier New', monospace; 
+            background: #1a1a1a; 
+            color: #00ff00; 
+            margin: 20px; 
+        }
+        .terminal { 
+            background: #000; 
+            border: 2px solid #333; 
+            padding: 20px; 
+            border-radius: 8px; 
+            min-height: 400px; 
+            white-space: pre-wrap; 
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .input-section { 
+            margin: 20px 0; 
+        }
+        input[type="text"] { 
+            background: #333; 
+            color: #00ff00; 
+            border: 1px solid #555; 
+            padding: 10px; 
+            font-family: 'Courier New', monospace; 
+            width: 60%;
+        }
+        button { 
+            background: #007700; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            margin: 0 5px; 
+            cursor: pointer; 
+            font-family: 'Courier New', monospace;
+        }
+        button:hover { background: #009900; }
+        .status { 
+            background: #222; 
+            border: 1px solid #444; 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin-bottom: 20px;
+        }
+        .connected { color: #00ff00; }
+        .disconnected { color: #ff0000; }
+        .event-count { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <h1>Terminal SSE Broadcast Test</h1>
+    
+    <div class="status">
+        <strong>Connection Status:</strong> <span id="connectionStatus" class="disconnected">Disconnected</span><br>
+        <strong>Events Received:</strong> <span id="eventCount" class="event-count">0</span><br>
+        <strong>Instance ID:</strong> <span id="instanceId">claude-test-sse</span>
+    </div>
+
+    <div class="input-section">
+        <input type="text" id="terminalInput" placeholder="Type command here (e.g., 'hello', 'echo test', 'ls')" />
+        <button onclick="sendInput()">Send Input</button>
+        <button onclick="sendTestCommands()">Run Test Commands</button>
+        <button onclick="clearTerminal()">Clear</button>
+    </div>
+
+    <div class="terminal" id="terminal">
+        Terminal Output:\n
+    </div>
+
+    <script>
+        let eventSource = null;
+        let eventCount = 0;
+        const instanceId = 'claude-test-sse';
+        const terminal = document.getElementById('terminal');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const eventCountElement = document.getElementById('eventCount');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : '📨';
+            terminal.textContent += `[${timestamp}] ${prefix} ${message}\n`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            log('Connecting to SSE stream...', 'info');
+            eventSource = new EventSource(`http://localhost:3000/api/claude/instances/${instanceId}/terminal/stream`);
+
+            eventSource.onopen = () => {
+                connectionStatus.textContent = 'Connected';
+                connectionStatus.className = 'connected';
+                log('SSE connection established', 'success');
+            };
+
+            eventSource.onmessage = (event) => {
+                eventCount++;
+                eventCountElement.textContent = eventCount;
+                
+                try {
+                    const data = JSON.parse(event.data);
+                    handleSSEEvent(data);
+                } catch (error) {
+                    log(`Error parsing SSE data: ${error.message}`, 'error');
+                }
+            };
+
+            eventSource.onerror = (error) => {
+                connectionStatus.textContent = 'Error';
+                connectionStatus.className = 'disconnected';
+                log('SSE connection error', 'error');
+            };
+        }
+
+        function handleSSEEvent(data) {
+            switch (data.type) {
+                case 'connected':
+                    log(`Connected to instance: ${data.instanceId}`, 'success');
+                    break;
+                    
+                case 'input_echo':
+                    // Show input echo (what user typed)
+                    terminal.textContent += `$ ${data.data}`;
+                    break;
+                    
+                case 'output':
+                    // Show command output and new prompt
+                    terminal.textContent += `\n${data.data}`;
+                    break;
+                    
+                case 'heartbeat':
+                    // Show heartbeat less prominently
+                    log(`Heartbeat: ${data.data.trim()}`, 'info');
+                    break;
+                    
+                default:
+                    log(`Unknown event type: ${data.type}`, 'info');
+            }
+            
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        async function sendInput() {
+            const input = document.getElementById('terminalInput').value;
+            if (!input.trim()) return;
+
+            log(`Sending input: "${input}"`, 'info');
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/claude/instances/${instanceId}/terminal/input`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    log(`Input sent successfully`, 'success');
+                } else {
+                    log(`Input failed: ${result.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                log(`Error sending input: ${error.message}`, 'error');
+            }
+
+            // Clear input field
+            document.getElementById('terminalInput').value = '';
+        }
+
+        async function sendTestCommands() {
+            const testCommands = [
+                'Hello',
+                'echo Hello World',
+                'ls',
+                'pwd',
+                'whoami',
+                'help'
+            ];
+
+            log('Running test command sequence...', 'info');
+
+            for (const command of testCommands) {
+                document.getElementById('terminalInput').value = command;
+                await sendInput();
+                // Wait a bit between commands
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+
+            log('Test command sequence completed', 'success');
+        }
+
+        function clearTerminal() {
+            terminal.textContent = 'Terminal Output:\n';
+            eventCount = 0;
+            eventCountElement.textContent = eventCount;
+        }
+
+        // Handle Enter key in input field
+        document.getElementById('terminalInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendInput();
+            }
+        });
+
+        // Auto-connect on page load
+        window.onload = () => {
+            log('Terminal SSE Broadcast Test initialized', 'success');
+            log('Click "Connect" to start SSE stream and test input echo', 'info');
+            connectSSE();
+        };
+
+        // Cleanup on page unload
+        window.onbeforeunload = () => {
+            if (eventSource) {
+                eventSource.close();
+            }
+        };
+    </script>
+
+    <br>
+    <div class="status">
+        <h3>Test Instructions:</h3>
+        <ol>
+            <li>The SSE connection should auto-connect when the page loads</li>
+            <li>Type commands in the input field and press Enter or click "Send Input"</li>
+            <li>Watch for input echo (your typed command) and command output</li>
+            <li>Try test commands: "Hello", "echo test", "ls", "pwd", "whoami", "help"</li>
+            <li>Use "Run Test Commands" to automatically test all commands</li>
+        </ol>
+        
+        <h3>Expected Behavior:</h3>
+        <ul>
+            <li>✅ Input echo: Your typed command should appear after $</li>
+            <li>✅ Command output: Response should appear on next line</li>
+            <li>✅ New prompt: $ should appear for next command</li>
+            <li>✅ Real-time: No page refresh needed</li>
+        </ul>
+    </div>
+</body>
+</html>

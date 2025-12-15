@@ -1,0 +1,284 @@
+{
+  "timestamp": "2025-09-23T23:01:17.823Z",
+  "status": "failed",
+  "tests": {
+    "serverStatus": {
+      "status": "passed",
+      "url": "http://localhost:5173"
+    },
+    "pageRendering": {
+      "status": "passed",
+      "analysis": {
+        "hasContent": true,
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(0, 0, 0)",
+        "fontFamily": "\"Times New Roman\"",
+        "titleText": "Agent Feed - Claude Code Orchestration",
+        "elementCount": 136,
+        "hasCSS": true,
+        "cssFiles": []
+      }
+    },
+    "performance": {
+      "status": "passed",
+      "metrics": {
+        "domContentLoaded": 0,
+        "loadComplete": 0,
+        "totalResources": 109,
+        "cssResources": 5,
+        "totalCSSSize": 98517,
+        "cssLoadTime": 44.899999998509884
+      }
+    },
+    "responsive": {
+      "status": "passed",
+      "results": {
+        "mobile": {
+          "viewport": {
+            "name": "mobile",
+            "width": 375,
+            "height": 667
+          },
+          "responsive": true,
+          "metrics": {
+            "scrollWidth": 375,
+            "clientWidth": 375,
+            "hasHorizontalScroll": false
+          }
+        },
+        "tablet": {
+          "viewport": {
+            "name": "tablet",
+            "width": 768,
+            "height": 1024
+          },
+          "responsive": true,
+          "metrics": {
+            "scrollWidth": 768,
+            "clientWidth": 768,
+            "hasHorizontalScroll": false
+          }
+        },
+        "desktop": {
+          "viewport": {
+            "name": "desktop",
+            "width": 1920,
+            "height": 1080
+          },
+          "responsive": true,
+          "metrics": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "hasHorizontalScroll": false
+          }
+        }
+      }
+    },
+    "console": {
+      "status": "failed",
+      "errorCount": 22,
+      "warningCount": 14,
+      "cssErrorCount": 0
+    }
+  },
+  "performance": {
+    "domContentLoaded": 0,
+    "loadComplete": 0,
+    "totalResources": 109,
+    "cssResources": 5,
+    "totalCSSSize": 98517,
+    "cssLoadTime": 44.899999998509884
+  },
+  "console": {
+    "errors": [
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:443/?token=Xcjq3Uux_FaU' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:39.349Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:39.360Z"
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Connection closed before receiving a handshake response",
+        "timestamp": "2025-09-23T23:01:39.908Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:39.912Z"
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: JSHandle@object",
+        "timestamp": "2025-09-23T23:01:39.913Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:39.917Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:39.917Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:39.918Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "timestamp": "2025-09-23T23:01:39.918Z"
+      },
+      {
+        "type": "error",
+        "text": "❌ API connection failed: JSHandle@error",
+        "timestamp": "2025-09-23T23:01:39.918Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:40.361Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:40.915Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:40.918Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:40.919Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:40.919Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:41.363Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:42.364Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:42.919Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:42.923Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:42.924Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:42.924Z"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-09-23T23:01:43.366Z"
+      }
+    ],
+    "warnings": [
+      {
+        "type": "warning",
+        "text": "⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+        "timestamp": "2025-09-23T23:01:39.901Z"
+      },
+      {
+        "type": "warning",
+        "text": "⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.",
+        "timestamp": "2025-09-23T23:01:39.901Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed",
+        "timestamp": "2025-09-23T23:01:39.912Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 1/4): /filter-data. Retrying in 1000ms... Network error for /filter-data: Connection failed",
+        "timestamp": "2025-09-23T23:01:39.917Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 1/4): /filter-stats?user_id=anonymous. Retrying in 1000ms... Network error for /filter-stats?user_id=anonymous: Connection failed",
+        "timestamp": "2025-09-23T23:01:39.917Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 1/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 1000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed",
+        "timestamp": "2025-09-23T23:01:39.918Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 2/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 2000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed",
+        "timestamp": "2025-09-23T23:01:40.915Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 2/4): /filter-data. Retrying in 2000ms... Network error for /filter-data: Connection failed",
+        "timestamp": "2025-09-23T23:01:40.919Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 2/4): /filter-stats?user_id=anonymous. Retrying in 2000ms... Network error for /filter-stats?user_id=anonymous: Connection failed",
+        "timestamp": "2025-09-23T23:01:40.919Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 2/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 2000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed",
+        "timestamp": "2025-09-23T23:01:40.919Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 3/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 4000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed",
+        "timestamp": "2025-09-23T23:01:42.919Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 3/4): /filter-data. Retrying in 4000ms... Network error for /filter-data: Connection failed",
+        "timestamp": "2025-09-23T23:01:42.924Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 3/4): /filter-stats?user_id=anonymous. Retrying in 4000ms... Network error for /filter-stats?user_id=anonymous: Connection failed",
+        "timestamp": "2025-09-23T23:01:42.924Z"
+      },
+      {
+        "type": "warning",
+        "text": "API request failed (attempt 3/4): /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC. Retrying in 4000ms... Network error for /v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC: Connection failed",
+        "timestamp": "2025-09-23T23:01:42.924Z"
+      }
+    ],
+    "cssRelated": []
+  },
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "timestamp": "2025-11-06T06:55:47.539Z",
+  "baseline": {
+    "dailyCostUSD": 14.67,
+    "cacheWriteTokens": 417312,
+    "cacheReadTokens": 1122240,
+    "totalFiles": 968,
+    "staleFiles": 551,
+    "directorySize": "26M",
+    "gitStatusFiles": 223
+  },
+  "target": {
+    "dailyCostUSD": 3,
+    "cacheWriteTokens": 60000,
+    "minCostReduction": 0.8,
+    "maxFiles": 150,
+    "maxGitStatusFiles": 30,
+    "minCacheHitRatio": 0.5
+  },
+  "results": {
+    "gitStatus": {
+      "passed": false,
+      "fileCount": 615,
+      "reduction": "-175.78%",
+      "baseline": 223,
+      "target": 30
+    },
+    "fileCleanup": {
+      "passed": false,
+      "totalFiles": 418,
+      "staleFiles": 1,
+      "directorySize": "19M",
+      "reduction": "56.82%",
+      "baseline": 968,
+      "target": 150
+    },
+    "costReduction": {
+      "passed": null,
+      "skipped": true,
+      "reason": "API server not running"
+    },
+    "functionality": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "Core files exist",
+          "passed": true
+        },
+        {
+          "name": "Package scripts exist",
+          "passed": true
+        },
+        {
+          "name": "Server.js syntax valid",
+          "passed": false
+        }
+      ]
+    },
+    "performance": {
+      "passed": true,
+      "gitStatusMs": 292,
+      "target": 1000
+    }
+  },
+  "summary": {
+    "passed": 1,
+    "failed": 3,
+    "skipped": 1
+  }
+}

@@ -1,0 +1,19 @@
+🔚 Executing session-end hook...
+📊 Summary generation: ENABLED
+💾 State persistence: ENABLED
+📈 Metrics export: ENABLED
+[2025-11-05T04:43:21.230Z] INFO [memory-store] Initialized SQLite at: /workspaces/agent-feed/.swarm/memory.db
+  💾 Full session state persisted
+  📈 Session metrics exported
+
+📊 SESSION SUMMARY:
+  📋 Tasks: 104
+  ✏️  Edits: 1000
+  🔧 Commands: 1000
+  🤖 Agents: 0
+  ⏱️  Duration: 67885 minutes
+  📈 Success Rate: 100%
+  🏃 Tasks/min: 0
+  ✏️  Edits/min: 0.01
+  💾 Session saved to .swarm/memory.db
+✅ ✅ Session-end hook completed

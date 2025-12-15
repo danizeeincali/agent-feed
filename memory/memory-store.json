@@ -1,0 +1,72 @@
+{
+  "default": [
+    {
+      "key": "architect_requirements",
+      "value": "Single-user middleware requirement: Auto-provide default user ID for all API requests. No authentication needed. System defaults to 'single-user' context. Components: middleware layer, user context manager, API interceptor. No external auth deps. Security: simplified for single-user mode.",
+      "namespace": "default",
+      "timestamp": 1755550458645
+    },
+    {
+      "key": "debug_issue_analysis",
+      "value": "Redis connection failure causing XHR polling errors. Redis service not running, causing ECONNREFUSED errors on agent-feed service. Need to implement graceful fallback for missing Redis.",
+      "namespace": "default",
+      "timestamp": 1755664087198
+    },
+    {
+      "key": "spec-pseudocode_requirements",
+      "value": "Enhanced agent manager with 3 tabs (Production, Development, Unified), filtering by system type, showing active/inactive agents, WebSocket integration for real-time updates, agent activation/deactivation controls",
+      "namespace": "default",
+      "timestamp": 1755697118909
+    },
+    {
+      "key": "architect_analysis",
+      "value": "Analyzed existing codebase: Found 4 Claude command variants (1. prod/claude 2. skip-permissions 3. skip-permissions -c 4. skip-permissions --resume). Current implementation uses partial child_process.spawn() but needs complete real process architecture. Frontend uses HTTP/SSE for communication. Backend has activeProcesses Map for tracking.",
+      "namespace": "default",
+      "timestamp": 1756263766904
+    },
+    {
+      "key": "spec-pseudocode_analysis",
+      "value": "Analyzed current PostCreator, QuickPost, Comment components and MentionInput - found existing @ mention system with mock data, needs API integration and autocomplete enhancement",
+      "namespace": "default",
+      "timestamp": 1757289536012
+    },
+    {
+      "key": "spec-pseudocode_completion",
+      "value": "Completed SPARC Specification and Pseudocode analysis for @ mention system - created 4 comprehensive phase documents covering requirements, algorithms, architecture, and testing strategy",
+      "namespace": "default",
+      "timestamp": 1757290284371
+    }
+  ],
+  "sse-debug": [
+    {
+      "key": "sse_analysis/frontend_findings",
+      "value": "Frontend SSE Interface Analysis: EnhancedSSEInterface uses useSSEClaudeInstance hook to connect to instances. Messages are processed in useEffect (lines 182-201) converting terminal output to chat messages. Key finding: Claude AI responses should be coming through SSE output stream but are not reaching frontend UI. The component correctly processes 'output' type messages from SSE stream into chat messages.",
+      "namespace": "sse-debug",
+      "timestamp": 1756858889254
+    },
+    {
+      "key": "sse_analysis/backend_findings",
+      "value": "Backend SSE Analysis: Backend has comprehensive SSE implementation with multiple broadcast functions: broadcastIncrementalOutput(), broadcastToConnections(), safelyBroadcastOutput(). Claude AI responses ARE being generated and should be broadcast via SSE. Key issue: Line 955 shows SSE fallback only used when NO WebSocket connections. This may be causing Claude responses to not reach frontend via SSE.",
+      "namespace": "sse-debug",
+      "timestamp": 1756858907809
+    },
+    {
+      "key": "sse_analysis/hook_findings",
+      "value": "Frontend Hook Analysis: useSSEClaudeInstance hook uses SSEClaudeInstanceManager. Key message processing: handleInstanceOutput() callback (lines 94-114) receives content and creates InstanceOutputMessage objects. Messages only added to output state if instanceId matches selectedInstanceId. Event is triggered by 'instance:output' event from manager.",
+      "namespace": "sse-debug",
+      "timestamp": 1756858931925
+    },
+    {
+      "key": "sse_analysis/critical_findings",
+      "value": "🚨 CRITICAL ISSUE IDENTIFIED: Backend Line 955 shows SSE fallback only used when NO WebSocket connections exist. Frontend SSE Manager has robust message handling in handleSSEMessage() (lines 378-436) but may not be receiving messages. Root cause: Backend prioritizes WebSocket over SSE, but frontend only uses SSE. Message flow broken between backend broadcast logic and frontend SSE consumption.",
+      "namespace": "sse-debug",
+      "timestamp": 1756858946174
+    },
+    {
+      "key": "sse_analysis/test_results",
+      "value": "🧪 SWARM TEST RESULTS: SSE connection establishes successfully (Status: 200) and receives initial connection messages. However, backend server appears to shut down during processing. Key finding: Command input reaches backend and triggers pipe-based Claude AI processing, but server shuts down before response can be broadcast via SSE. This explains why Claude AI responses don't reach frontend.",
+      "namespace": "sse-debug",
+      "timestamp": 1756859093893
+    }
+  ]
+}

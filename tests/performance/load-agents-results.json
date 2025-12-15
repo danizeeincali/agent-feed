@@ -1,0 +1,138 @@
+{
+  "summary": {
+    "avgColdLoad": 4.180092000001213,
+    "avgCachedLoad": 0.0021757692313538147,
+    "avgIntegrityCheck": 4.610807307691944,
+    "avgConfigSize": 1.4912860576923077,
+    "batchTime": 34.02197399999568,
+    "speedupFactor": 1921.2019086234905
+  },
+  "targets": {
+    "coldLoad": {
+      "target": 200,
+      "actual": 4.180092000001213,
+      "passed": true
+    },
+    "cachedLoad": {
+      "target": 5,
+      "actual": 0.0021757692313538147,
+      "passed": true
+    },
+    "integrityCheck": {
+      "target": 5,
+      "actual": 4.610807307691944,
+      "passed": true
+    },
+    "batchLoad": {
+      "target": 3000,
+      "actual": 34.02197399999568,
+      "passed": true
+    }
+  },
+  "metrics": [
+    {
+      "agent": "agent-feedback-agent",
+      "coldLoadTime": 4.86750100000063,
+      "cachedLoadTime": 0.0021940000005997717,
+      "integrityCheckTime": 2.329725999996299,
+      "configSize": 1.48046875,
+      "memoryUsed": 2.0378952026367188
+    },
+    {
+      "agent": "agent-ideas-agent",
+      "coldLoadTime": 4.393817999996827,
+      "cachedLoadTime": 0.002033999997365754,
+      "integrityCheckTime": 2.69564900000114,
+      "configSize": 1.4697265625,
+      "memoryUsed": 1.8749771118164062
+    },
+    {
+      "agent": "dynamic-page-testing-agent",
+      "coldLoadTime": 9.680574000005436,
+      "cachedLoadTime": 0.0020139999978709966,
+      "integrityCheckTime": 10.20292199999676,
+      "configSize": 1.5283203125,
+      "memoryUsed": -8.573104858398438
+    },
+    {
+      "agent": "follow-ups-agent",
+      "coldLoadTime": 2.1994830000039656,
+      "cachedLoadTime": 0.0021150000029592775,
+      "integrityCheckTime": 1.8455230000035954,
+      "configSize": 1.3671875,
+      "memoryUsed": 1.887176513671875
+    },
+    {
+      "agent": "get-to-know-you-agent",
+      "coldLoadTime": 2.588341999995464,
+      "cachedLoadTime": 0.002024000001256354,
+      "integrityCheckTime": 6.411651999995229,
+      "configSize": 1.474609375,
+      "memoryUsed": 1.8890533447265625
+    },
+    {
+      "agent": "link-logger-agent",
+      "coldLoadTime": 4.439824000000954,
+      "cachedLoadTime": 0.0025139999997918494,
+      "integrityCheckTime": 16.059411000002,
+      "configSize": 1.6513671875,
+      "memoryUsed": 2.011871337890625
+    },
+    {
+      "agent": "meeting-next-steps-agent",
+      "coldLoadTime": 4.744602000006125,
+      "cachedLoadTime": 0.0026950000028591603,
+      "integrityCheckTime": 6.13350299999729,
+      "configSize": 1.5146484375,
+      "memoryUsed": 1.9281387329101562
+    },
+    {
+      "agent": "meeting-prep-agent",
+      "coldLoadTime": 6.7335129999992205,
+      "cachedLoadTime": 0.0022440000029746443,
+      "integrityCheckTime": 3.0438189999986207,
+      "configSize": 1.48046875,
+      "memoryUsed": 1.909576416015625
+    },
+    {
+      "agent": "meta-agent",
+      "coldLoadTime": 5.5003579999975045,
+      "cachedLoadTime": 0.0019739999988814816,
+      "integrityCheckTime": 1.3497480000005453,
+      "configSize": 1.306640625,
+      "memoryUsed": 1.7680740356445312
+    },
+    {
+      "agent": "meta-update-agent",
+      "coldLoadTime": 4.368811000000278,
+      "cachedLoadTime": 0.0019739999988814816,
+      "integrityCheckTime": 4.360796000000846,
+      "configSize": 1.6298828125,
+      "memoryUsed": 2.0031661987304688
+    },
+    {
+      "agent": "page-builder-agent",
+      "coldLoadTime": 1.6245810000036727,
+      "cachedLoadTime": 0.002033999997365754,
+      "integrityCheckTime": 2.368569000005664,
+      "configSize": 1.669921875,
+      "memoryUsed": 2.1982650756835938
+    },
+    {
+      "agent": "page-verification-agent",
+      "coldLoadTime": 2.0986850000044797,
+      "cachedLoadTime": 0.00209500000346452,
+      "integrityCheckTime": 1.9429759999984526,
+      "configSize": 1.4306640625,
+      "memoryUsed": 1.8013916015625
+    },
+    {
+      "agent": "personal-todos-agent",
+      "coldLoadTime": 1.1011040000012144,
+      "cachedLoadTime": 0.002374000003328547,
+      "integrityCheckTime": 1.1962009999988368,
+      "configSize": 1.3828125,
+      "memoryUsed": 1.8324432373046875
+    }
+  ]
+}

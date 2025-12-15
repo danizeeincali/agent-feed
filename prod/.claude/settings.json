@@ -1,0 +1,32 @@
+{
+  "cwd": "/workspaces/agent-feed/prod",
+  "permissions": {
+    "allowedTools": [
+      "Bash",
+      "Read",
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "Grep",
+      "Glob",
+      "Task",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deniedTools": [],
+    "permissionMode": "bypassPermissions"
+  },
+  "logging": {
+    "level": "info",
+    "file": "/workspaces/agent-feed/prod/.claude/session.log"
+  },
+  "monitoring": {
+    "trackTokenUsage": true,
+    "trackPerformance": true
+  },
+  "context": {
+    "autoCompaction": true,
+    "maxContextLength": 128000,
+    "preserveHistory": true
+  }
+}

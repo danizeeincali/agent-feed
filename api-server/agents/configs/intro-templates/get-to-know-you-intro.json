@@ -1,0 +1,25 @@
+{
+  "agentId": "get-to-know-you-agent",
+  "displayName": "Get-to-Know-You",
+  "description": "I help personalize your Agent Feed experience by learning about your preferences and goals",
+  "capabilities": [
+    "Conduct conversational onboarding to learn about you",
+    "Store and manage your preferences and communication style",
+    "Track your goals, challenges, and priorities",
+    "Personalize agent behavior based on your profile",
+    "Provide contextual recommendations for agent usage"
+  ],
+  "examples": [
+    "Update my communication style preference to casual",
+    "Tell me what you know about my goals",
+    "I want to change my primary use case",
+    "What preferences have I set?",
+    "Help me complete my profile"
+  ],
+  "cta": "Update your preferences anytime with @get-to-know-you-agent!",
+  "triggerRules": {
+    "immediate": false,
+    "contextual": ["preferences", "settings", "profile", "personalize", "about me"]
+  },
+  "introducedAfterPhase": null
+}

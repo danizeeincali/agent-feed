@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Connection Test</title>
+    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .connected { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .connecting { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .disconnected { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0.25rem;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        .test-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .test-panel {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        h3 { margin-top: 0; color: #495057; }
+    </style>
+</head>
+<body>
+    <h1>🔌 WebSocket Connection Test</h1>
+    
+    <div class="test-grid">
+        <div class="test-panel">
+            <h3>Direct Backend Connection (Port 3001)</h3>
+            <div id="direct-status" class="status disconnected">Disconnected</div>
+            <button onclick="connectDirect()">Connect</button>
+            <button onclick="disconnectDirect()">Disconnect</button>
+            <button onclick="pingDirect()">Ping</button>
+        </div>
+        
+        <div class="test-panel">
+            <h3>Frontend Proxy Connection (Port 3000)</h3>
+            <div id="proxy-status" class="status disconnected">Disconnected</div>
+            <button onclick="connectProxy()">Connect</button>
+            <button onclick="disconnectProxy()">Disconnect</button>
+            <button onclick="pingProxy()">Ping</button>
+        </div>
+    </div>
+    
+    <div class="log" id="log">
+        <strong>Connection Test Log</strong><br>
+        <em>Ready to test connections...</em><br>
+    </div>
+    
+    <script>
+        let directSocket = null;
+        let proxySocket = null;
+        
+        function log(message) {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logEl.innerHTML += `[${timestamp}] ${message}<br>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function updateStatus(type, status) {
+            const element = document.getElementById(`${type}-status`);
+            element.className = `status ${status}`;
+            element.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+        }
+        
+        function connectDirect() {
+            if (directSocket) {
+                directSocket.disconnect();
+            }
+            
+            log('🔌 Connecting to backend directly (http://localhost:3001)');
+            updateStatus('direct', 'connecting');
+            
+            directSocket = io('http://localhost:3001', {
+                transports: ['polling', 'websocket'],
+                timeout: 10000
+            });
+            
+            directSocket.on('connect', () => {
+                log('✅ Direct connection established - Socket ID: ' + directSocket.id);
+                log('   Transport: ' + directSocket.io.engine.transport.name);
+                updateStatus('direct', 'connected');
+                
+                // Register as frontend client
+                directSocket.emit('registerFrontend', {
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    url: window.location.href
+                });
+            });
+            
+            directSocket.on('connect_error', (error) => {
+                log('❌ Direct connection failed: ' + error.message);
+                updateStatus('direct', 'disconnected');
+            });
+            
+            directSocket.on('disconnect', (reason) => {
+                log('🔌 Direct connection disconnected: ' + reason);
+                updateStatus('direct', 'disconnected');
+            });
+            
+            directSocket.on('pong', (data) => {
+                log('📡 Direct pong received: ' + JSON.stringify(data));
+            });
+            
+            directSocket.onAny((eventName, ...args) => {
+                if (eventName !== 'pong') {
+                    log(`📨 Direct event '${eventName}': ` + JSON.stringify(args));
+                }
+            });
+        }
+        
+        function connectProxy() {
+            if (proxySocket) {
+                proxySocket.disconnect();
+            }
+            
+            log('🔌 Connecting through frontend proxy (http://localhost:3000)');
+            updateStatus('proxy', 'connecting');
+            
+            proxySocket = io('http://localhost:3000', {
+                transports: ['polling', 'websocket'],
+                timeout: 10000
+            });
+            
+            proxySocket.on('connect', () => {
+                log('✅ Proxy connection established - Socket ID: ' + proxySocket.id);
+                log('   Transport: ' + proxySocket.io.engine.transport.name);
+                updateStatus('proxy', 'connected');
+                
+                // Register as frontend client
+                proxySocket.emit('registerFrontend', {
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    url: window.location.href
+                });
+            });
+            
+            proxySocket.on('connect_error', (error) => {
+                log('❌ Proxy connection failed: ' + error.message);
+                updateStatus('proxy', 'disconnected');
+            });
+            
+            proxySocket.on('disconnect', (reason) => {
+                log('🔌 Proxy connection disconnected: ' + reason);
+                updateStatus('proxy', 'disconnected');
+            });
+            
+            proxySocket.on('pong', (data) => {
+                log('📡 Proxy pong received: ' + JSON.stringify(data));
+            });
+            
+            proxySocket.onAny((eventName, ...args) => {
+                if (eventName !== 'pong') {
+                    log(`📨 Proxy event '${eventName}': ` + JSON.stringify(args));
+                }
+            });
+        }
+        
+        function disconnectDirect() {
+            if (directSocket) {
+                directSocket.disconnect();
+                log('🔌 Direct connection manually disconnected');
+            }
+        }
+        
+        function disconnectProxy() {
+            if (proxySocket) {
+                proxySocket.disconnect();
+                log('🔌 Proxy connection manually disconnected');
+            }
+        }
+        
+        function pingDirect() {
+            if (directSocket && directSocket.connected) {
+                log('📡 Sending ping to direct connection');
+                directSocket.emit('ping');
+            } else {
+                log('⚠️  Direct connection not available');
+            }
+        }
+        
+        function pingProxy() {
+            if (proxySocket && proxySocket.connected) {
+                log('📡 Sending ping to proxy connection');
+                proxySocket.emit('ping');
+            } else {
+                log('⚠️  Proxy connection not available');
+            }
+        }
+        
+        // Auto-start tests when page loads
+        window.addEventListener('load', () => {
+            log('🚀 Starting automatic connection tests...');
+            setTimeout(connectDirect, 1000);
+            setTimeout(connectProxy, 3000);
+        });
+    </script>
+</body>
+</html>

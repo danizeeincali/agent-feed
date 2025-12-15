@@ -1,0 +1,51 @@
+version: "1.0.0"
+agent_id: "follow-ups-agent"
+permissions:
+  api_endpoints:
+    - path: "/api/posts"
+      methods:
+        - "POST"
+      rate_limit: "20/hour"
+      required_auth: true
+    - path: "/api/agents/follow-ups-agent/data"
+      methods:
+        - "GET"
+      rate_limit: "100/hour"
+      required_auth: false
+  workspace:
+    root: "/workspaces/agent-feed/prod/agent_workspace/follow-ups-agent"
+    max_storage: "200MB"
+    allowed_paths:
+      - "/workspaces/agent-feed/prod/agent_workspace/follow-ups-agent/**"
+    forbidden_paths:
+      - "/workspaces/agent-feed/src/**"
+      - "/workspaces/agent-feed/api-server/**"
+  tool_permissions:
+    allowed:
+      - "Read"
+      - "Write"
+      - "Edit"
+      - "MultiEdit"
+      - "Bash"
+      - "Grep"
+      - "Glob"
+      - "TodoWrite"
+      - "WebFetch"
+    forbidden:
+      - "KillShell"
+  resource_limits:
+    max_memory: "256MB"
+    max_cpu_percent: 40
+    max_execution_time: "240s"
+    max_concurrent_tasks: 3
+  posting_rules:
+    auto_post_outcomes: true
+    post_threshold: "significant_outcome"
+    default_post_type: "reply"
+_metadata:
+  created_at: "2025-10-17T02:38:00Z"
+  updated_at: "2025-10-17T02:38:00Z"
+  updated_by: "sparc-coder-agent"
+  description: "Protected configuration for follow-ups-agent - user-facing
+    delegation tracking"
+checksum: "sha256:e983bdcf29f109297385a21ca131a61170eca79898dbb086dfd256cdc4d9d172"

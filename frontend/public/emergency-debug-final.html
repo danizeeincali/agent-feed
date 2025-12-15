@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 ULTRA EMERGENCY MENTION DEBUG</title>
+    <style>
+        body { font-family: system-ui; padding: 20px; background: #f0f0f0; }
+        .debug-section { 
+            background: white; 
+            padding: 20px; 
+            margin: 10px 0; 
+            border-radius: 8px; 
+            border: 3px solid #007bff;
+        }
+        .working { border-color: #28a745; background: #f8fff8; }
+        .broken { border-color: #dc3545; background: #fff8f8; }
+        .test-input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #ccc; 
+            border-radius: 4px;
+            font-size: 14px;
+            min-height: 100px;
+        }
+        .debug-output {
+            background: #000;
+            color: #00ff00;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: scroll;
+            margin: 10px 0;
+        }
+        .test-controls {
+            margin: 10px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .test-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .test-button:hover { background: #0056b3; }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 ULTRA EMERGENCY: MENTION SYSTEM RUNTIME COMPARISON</h1>
+    
+    <div class="status warning">
+        <strong>MISSION:</strong> Identify the ACTUAL runtime differences between working MentionInputDemo vs broken PostCreator/CommentForm
+    </div>
+    
+    <div class="comparison-grid">
+        <!-- Working MentionInputDemo Test -->
+        <div class="debug-section working">
+            <h2>✅ WORKING: MentionInputDemo Reference</h2>
+            <p><strong>URL:</strong> <a href="/mention-demo" target="_blank">/mention-demo</a></p>
+            
+            <div class="test-controls">
+                <button class="test-button" onclick="testMentionDemo()">Test @ Detection</button>
+                <button class="test-button" onclick="inspectMentionDemo()">Inspect DOM</button>
+                <button class="test-button" onclick="traceMentionDemoEvents()">Trace Events</button>
+            </div>
+            
+            <!-- Runtime Test Input -->
+            <h3>🔬 Runtime Test</h3>
+            <textarea 
+                id="demo-test" 
+                class="test-input" 
+                placeholder="Type @ here to test mention detection..."
+                onkeyup="debugMentionInput('demo', this)"
+                onfocus="logEvent('demo', 'focus')"
+                onblur="logEvent('demo', 'blur')"
+            ></textarea>
+            
+            <div id="demo-debug" class="debug-output"></div>
+            <div id="demo-status" class="status"></div>
+        </div>
+        
+        <!-- Broken PostCreator Test -->
+        <div class="debug-section broken">
+            <h2>❌ BROKEN: PostCreator Integration</h2>
+            <p><strong>URL:</strong> <a href="/" target="_blank">/ (main feed)</a></p>
+            
+            <div class="test-controls">
+                <button class="test-button" onclick="testPostCreator()">Test @ Detection</button>
+                <button class="test-button" onclick="inspectPostCreator()">Inspect DOM</button>
+                <button class="test-button" onclick="tracePostCreatorEvents()">Trace Events</button>
+            </div>
+            
+            <!-- Runtime Test Input -->
+            <h3>🔬 Runtime Test</h3>
+            <textarea 
+                id="creator-test" 
+                class="test-input" 
+                placeholder="Simulating PostCreator MentionInput behavior..."
+                onkeyup="debugMentionInput('creator', this)"
+                onfocus="logEvent('creator', 'focus')"
+                onblur="logEvent('creator', 'blur')"
+            ></textarea>
+            
+            <div id="creator-debug" class="debug-output"></div>
+            <div id="creator-status" class="status"></div>
+        </div>
+    </div>
+    
+    <!-- Global Debug Output -->
+    <div class="debug-section">
+        <h2>🔍 LIVE COMPARISON ANALYSIS</h2>
+        <div class="test-controls">
+            <button class="test-button" onclick="runFullComparison()">🚨 RUN FULL COMPARISON</button>
+            <button class="test-button" onclick="clearDebugLogs()">Clear Logs</button>
+            <button class="test-button" onclick="exportDebugData()">Export Debug Data</button>
+        </div>
+        <div id="global-debug" class="debug-output"></div>
+        <div id="comparison-results" class="status"></div>
+    </div>
+    
+    <script>
+        // Global debug state
+        const debugState = {
+            demoEvents: [],
+            creatorEvents: [],
+            comparisons: [],
+            timestamps: {}
+        };
+        
+        // Utility functions
+        function logEvent(context, event, data = {}) {
+            const timestamp = Date.now();
+            const logEntry = { context, event, data, timestamp };
+            
+            if (context === 'demo') {
+                debugState.demoEvents.push(logEntry);
+            } else {
+                debugState.creatorEvents.push(logEntry);
+            }
+            
+            const logElement = document.getElementById(`${context}-debug`);
+            if (logElement) {
+                logElement.innerHTML += `[${new Date().toLocaleTimeString()}] ${event.toUpperCase()}: ${JSON.stringify(data)}\n`;
+                logElement.scrollTop = logElement.scrollHeight;
+            }
+            
+            // Global log
+            const globalLog = document.getElementById('global-debug');
+            if (globalLog) {
+                globalLog.innerHTML += `[${context.toUpperCase()}] ${event}: ${JSON.stringify(data)}\n`;
+                globalLog.scrollTop = globalLog.scrollHeight;
+            }
+        }
+        
+        function debugMentionInput(context, element) {
+            const value = element.value;
+            const cursorPos = element.selectionStart;
+            const hasAt = value.includes('@');
+            const textBeforeCursor = value.substring(0, cursorPos);
+            const atMatch = textBeforeCursor.match(/@(\w*)$/);
+            
+            const debugData = {
+                value: value,
+                cursorPos: cursorPos,
+                hasAt: hasAt,
+                textBeforeCursor: textBeforeCursor,
+                atMatch: atMatch ? atMatch[0] : null,
+                queryAfterAt: atMatch ? atMatch[1] : null,
+                valueLength: value.length
+            };
+            
+            logEvent(context, 'keyup_analysis', debugData);
+            
+            // Update status
+            const statusEl = document.getElementById(`${context}-status`);
+            if (hasAt && atMatch) {
+                statusEl.className = 'status success';
+                statusEl.innerHTML = `✅ @ DETECTED! Query: "${debugData.queryAfterAt || ''}" | Cursor: ${cursorPos}`;
+            } else if (hasAt) {
+                statusEl.className = 'status warning';  
+                statusEl.innerHTML = `⚠️ @ found but not triggering | Cursor: ${cursorPos}`;
+            } else {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = `❌ No @ detected | Cursor: ${cursorPos}`;
+            }
+        }
+        
+        // Test functions
+        async function testMentionDemo() {
+            logEvent('demo', 'test_start', { url: '/mention-demo' });
+            
+            try {
+                // Try to access the demo page
+                const response = await fetch('/mention-demo');
+                if (response.ok) {
+                    logEvent('demo', 'demo_accessible', { status: response.status });
+                    window.open('/mention-demo', '_blank');
+                } else {
+                    logEvent('demo', 'demo_error', { status: response.status });
+                }
+            } catch (error) {
+                logEvent('demo', 'demo_fetch_error', { error: error.message });
+            }
+        }
+        
+        async function testPostCreator() {
+            logEvent('creator', 'test_start', { url: '/' });
+            
+            try {
+                // Try to access the main page
+                const response = await fetch('/');
+                if (response.ok) {
+                    logEvent('creator', 'main_page_accessible', { status: response.status });
+                    window.open('/', '_blank');
+                } else {
+                    logEvent('creator', 'main_page_error', { status: response.status });
+                }
+            } catch (error) {
+                logEvent('creator', 'main_page_fetch_error', { error: error.message });
+            }
+        }
+        
+        function inspectMentionDemo() {
+            // Open dev tools focused on mention demo
+            logEvent('demo', 'inspect_dom', { action: 'opening_devtools' });
+            
+            // Provide inspection guidance
+            const guidance = `
+🔍 MentionInputDemo DOM Inspection:
+1. Look for MentionInput component in the DOM
+2. Check if dropdown container exists
+3. Verify event handlers are attached
+4. Check React component tree
+5. Look for mention suggestions rendering
+
+Key selectors to inspect:
+- textarea[placeholder*="agents"]
+- div[role="listbox"]
+- ul with suggestions
+- .mention-dropdown or similar
+            `;
+            
+            alert(guidance);
+        }
+        
+        function inspectPostCreator() {
+            // Open dev tools focused on post creator
+            logEvent('creator', 'inspect_dom', { action: 'opening_devtools' });
+            
+            // Provide inspection guidance
+            const guidance = `
+🔍 PostCreator DOM Inspection:
+1. Find the PostCreator form
+2. Look for MentionInput in content area
+3. Check if MentionInput is properly rendered
+4. Verify textarea has mention event handlers
+5. Check for dropdown containers
+
+Key selectors to inspect:
+- form textarea (content field)
+- MentionInput component
+- Any mention-related divs
+- React component props and state
+            `;
+            
+            alert(guidance);
+        }
+        
+        function runFullComparison() {
+            logEvent('global', 'full_comparison_start');
+            
+            const comparison = {
+                demoEventCount: debugState.demoEvents.length,
+                creatorEventCount: debugState.creatorEvents.length,
+                demoAtEvents: debugState.demoEvents.filter(e => e.data.hasAt).length,
+                creatorAtEvents: debugState.creatorEvents.filter(e => e.data.hasAt).length,
+                timestamp: Date.now()
+            };
+            
+            debugState.comparisons.push(comparison);
+            
+            const resultsEl = document.getElementById('comparison-results');
+            if (comparison.demoAtEvents > 0 && comparison.creatorAtEvents === 0) {
+                resultsEl.className = 'status error';
+                resultsEl.innerHTML = '🚨 CRITICAL: Demo detects @, Creator doesn\'t!';
+            } else if (comparison.demoAtEvents === comparison.creatorAtEvents) {
+                resultsEl.className = 'status success';
+                resultsEl.innerHTML = '✅ Both systems detecting @ equally';
+            } else {
+                resultsEl.className = 'status warning';
+                resultsEl.innerHTML = '⚠️ Different @ detection behavior';
+            }
+            
+            logEvent('global', 'comparison_complete', comparison);
+        }
+        
+        function clearDebugLogs() {
+            document.getElementById('demo-debug').innerHTML = '';
+            document.getElementById('creator-debug').innerHTML = '';
+            document.getElementById('global-debug').innerHTML = '';
+            document.getElementById('demo-status').innerHTML = '';
+            document.getElementById('creator-status').innerHTML = '';
+            document.getElementById('comparison-results').innerHTML = '';
+            
+            debugState.demoEvents = [];
+            debugState.creatorEvents = [];
+            debugState.comparisons = [];
+        }
+        
+        function exportDebugData() {
+            const exportData = {
+                debugState: debugState,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                url: window.location.href
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mention-debug-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Auto-initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            logEvent('global', 'debug_page_loaded', { 
+                url: window.location.href,
+                timestamp: Date.now()
+            });
+            
+            // Auto-focus first test input
+            document.getElementById('demo-test').focus();
+        });
+        
+        // Window monitoring
+        window.addEventListener('focus', () => logEvent('global', 'window_focus'));
+        window.addEventListener('blur', () => logEvent('global', 'window_blur'));
+    </script>
+</body>
+</html>

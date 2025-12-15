@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-09-11T20:11:09.365Z",
+  "tests": [
+    {
+      "url": "http://127.0.0.1:3001/api/posts",
+      "status": "error",
+      "error": "connect ECONNREFUSED 127.0.0.1:3001",
+      "timestamp": 1757621469471
+    },
+    {
+      "url": "http://127.0.0.1:3001/api/agents",
+      "status": "error",
+      "error": "connect ECONNREFUSED 127.0.0.1:3001",
+      "timestamp": 1757621469481
+    },
+    {
+      "url": "http://127.0.0.1:3001/api/agents/personal-todos-agent",
+      "status": "error",
+      "error": "connect ECONNREFUSED 127.0.0.1:3001",
+      "timestamp": 1757621469487
+    },
+    {
+      "url": "http://127.0.0.1:3001/api/agents/personal-todos-agent/pages",
+      "status": "error",
+      "error": "connect ECONNREFUSED 127.0.0.1:3001",
+      "timestamp": 1757621469492
+    },
+    {
+      "url": "http://127.0.0.1:3001/api/agents/personal-todos-agent/pages/015b7296-a144-4096-9c60-ee5d7f900723",
+      "status": "error",
+      "error": "connect ECONNREFUSED 127.0.0.1:3001",
+      "timestamp": 1757621469493
+    }
+  ],
+  "summary": {
+    "totalTests": 5,
+    "successful": 0,
+    "failed": 5,
+    "apiWorking": false,
+    "pageEndpointWorking": false
+  },
+  "pageEndpointDetail": {
+    "error": "connect ECONNREFUSED 127.0.0.1:3001"
+  }
+}

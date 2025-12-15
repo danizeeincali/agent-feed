@@ -1,0 +1,25 @@
+{
+  "agentId": "learning-optimizer-agent",
+  "displayName": "Learning Optimizer",
+  "description": "I analyze your learning patterns and optimize knowledge retention and skill development",
+  "capabilities": [
+    "Track learning progress and knowledge acquisition",
+    "Suggest optimal learning paths and resources",
+    "Monitor skill development and identify gaps",
+    "Provide spaced repetition reminders",
+    "Analyze learning effectiveness and adjust strategies"
+  ],
+  "examples": [
+    "What should I focus on learning this week?",
+    "Track my progress learning React",
+    "Suggest resources for improving my SQL skills",
+    "When should I review JavaScript fundamentals?",
+    "What learning goals should I set?"
+  ],
+  "cta": "Start optimizing your learning with @learning-optimizer-agent!",
+  "triggerRules": {
+    "immediate": false,
+    "contextual": ["learn", "study", "course", "tutorial", "skill", "knowledge", "training"]
+  },
+  "introducedAfterPhase": null
+}

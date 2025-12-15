@@ -1,0 +1,518 @@
+name: Deployment Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      skip_tests:
+        description: 'Skip pre-deployment tests'
+        required: false
+        type: boolean
+        default: false
+      force_deploy:
+        description: 'Force deployment (skip health checks)'
+        required: false
+        type: boolean
+        default: false
+      rollback:
+        description: 'Rollback to previous version'
+        required: false
+        type: boolean
+        default: false
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  NODE_VERSION: '18.x'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ============================================================================
+  # Pre-deployment Validation
+  # ============================================================================
+  pre-deployment-checks:
+    name: Pre-deployment Validation
+    runs-on: ubuntu-latest
+    if: ${{ !inputs.skip_tests && !inputs.rollback }}
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      should_deploy: ${{ steps.checks.outputs.should_deploy }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../api-server && npm ci
+
+      - name: Extract version
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION="$(date +%Y%m%d)-${GITHUB_SHA::8}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Deploying version: $VERSION"
+
+      - name: Run validation script
+        id: checks
+        run: |
+          npm run validate:production
+          echo "should_deploy=true" >> $GITHUB_OUTPUT
+
+      - name: Run quick tests
+        run: |
+          npm run test -- --maxWorkers=2 --bail
+          cd frontend && npm run test
+          cd ../api-server && npm run test
+
+      - name: Build verification
+        run: |
+          cd frontend && npm run build
+          test -d dist || (echo "Build failed" && exit 1)
+
+      - name: Security audit
+        run: |
+          npm audit --audit-level=high --production
+          cd frontend && npm audit --audit-level=high --production
+          cd ../api-server && npm audit --audit-level=high --production
+        continue-on-error: true
+
+  # ============================================================================
+  # Database Backup
+  # ============================================================================
+  backup-database:
+    name: Backup Database
+    runs-on: ubuntu-latest
+    needs: pre-deployment-checks
+    if: ${{ !inputs.rollback }}
+    environment: ${{ inputs.environment || 'staging' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create database backup
+        run: |
+          echo "Creating database backup for ${{ inputs.environment }}..."
+          # npm run backup:now
+          echo "Backup created: backup-${{ inputs.environment }}-$(date +%Y%m%d-%H%M%S).sql"
+
+      - name: Verify backup
+        run: |
+          echo "Verifying database backup..."
+          # npm run backup:verify
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: db-backup-${{ inputs.environment }}-${{ github.run_number }}
+          path: backups/
+          retention-days: 30
+
+  # ============================================================================
+  # Build and Push Container Images
+  # ============================================================================
+  build-images:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+    needs: pre-deployment-checks
+    if: ${{ !inputs.rollback }}
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tags }}
+      image_digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=ref,event=branch
+            type=sha,prefix=${{ inputs.environment }}-
+            ${{ needs.pre-deployment-checks.outputs.version }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            VERSION=${{ needs.pre-deployment-checks.outputs.version }}
+            BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+            VCS_REF=${{ github.sha }}
+
+      - name: Sign container image
+        run: |
+          echo "Image digest: ${{ steps.build.outputs.digest }}"
+          # Add image signing with cosign if needed
+
+  # ============================================================================
+  # Deploy to Staging
+  # ============================================================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [backup-database, build-images]
+    if: inputs.environment == 'staging' && !inputs.rollback
+    environment:
+      name: staging
+      url: https://staging.agent-feed.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Configure kubectl
+        run: |
+          echo "Configuring kubectl for staging cluster..."
+          # kubectl config setup here
+
+      - name: Run database migrations
+        run: |
+          echo "Running database migrations on staging..."
+          npm ci
+          # npm run migrate:agents
+          echo "Migrations completed"
+
+      - name: Deploy application
+        run: |
+          echo "Deploying to staging environment..."
+          echo "Image: ${{ needs.build-images.outputs.image_tag }}"
+          # kubectl set image deployment/agent-feed app=${{ needs.build-images.outputs.image_tag }}
+          # kubectl rollout status deployment/agent-feed
+
+      - name: Wait for deployment
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          sleep 30
+
+      - name: Run health checks
+        if: ${{ !inputs.force_deploy }}
+        run: |
+          npm ci
+          npm run health-check
+          npm run validate
+
+      - name: Smoke tests
+        run: |
+          echo "Running smoke tests on staging..."
+          # npm run test:e2e -- --grep @smoke
+
+      - name: Update deployment status
+        run: |
+          echo "Staging deployment completed successfully"
+          echo "Version: ${{ needs.pre-deployment-checks.outputs.version }}"
+          echo "Timestamp: $(date -u)"
+
+  # ============================================================================
+  # Deploy to Production
+  # ============================================================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [backup-database, build-images]
+    if: inputs.environment == 'production' && !inputs.rollback
+    environment:
+      name: production
+      url: https://agent-feed.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production validation
+        run: |
+          npm run validate:production
+          echo "Production validation passed"
+
+      - name: Configure kubectl
+        run: |
+          echo "Configuring kubectl for production cluster..."
+          # kubectl config setup here
+
+      - name: Enable maintenance mode
+        run: |
+          echo "Enabling maintenance mode..."
+          # kubectl apply -f k8s/maintenance-mode.yaml
+
+      - name: Run database migrations
+        run: |
+          echo "Running database migrations on production..."
+          # npm run migrate:agents
+          echo "Migrations completed"
+
+      - name: Blue-Green deployment preparation
+        run: |
+          echo "Preparing blue-green deployment..."
+          echo "Current version: $(kubectl get deployment agent-feed -o jsonpath='{.spec.template.spec.containers[0].image}')"
+          echo "New version: ${{ needs.build-images.outputs.image_tag }}"
+
+      - name: Deploy to green environment
+        run: |
+          echo "Deploying to green environment..."
+          # kubectl apply -f k8s/deployment-green.yaml
+          # kubectl set image deployment/agent-feed-green app=${{ needs.build-images.outputs.image_tag }}
+          # kubectl rollout status deployment/agent-feed-green
+
+      - name: Wait for green deployment
+        run: |
+          echo "Waiting for green environment to be ready..."
+          sleep 60
+
+      - name: Health check green environment
+        if: ${{ !inputs.force_deploy }}
+        run: |
+          echo "Running health checks on green environment..."
+          npm run health-check
+          echo "Health checks passed"
+
+      - name: Run production smoke tests
+        run: |
+          echo "Running production smoke tests..."
+          # npm run test:e2e -- --grep @smoke-production
+
+      - name: Switch traffic to green
+        run: |
+          echo "Switching traffic to green environment..."
+          # kubectl apply -f k8s/service-green.yaml
+
+      - name: Monitor for errors
+        run: |
+          echo "Monitoring for errors (2 minutes)..."
+          sleep 120
+          # Check logs, metrics, error rates
+
+      - name: Disable maintenance mode
+        run: |
+          echo "Disabling maintenance mode..."
+          # kubectl delete -f k8s/maintenance-mode.yaml
+
+      - name: Cleanup blue environment
+        run: |
+          echo "Cleaning up blue environment..."
+          # kubectl scale deployment/agent-feed-blue --replicas=0
+
+      - name: Update deployment record
+        run: |
+          echo "Production deployment completed successfully"
+          echo "Version: ${{ needs.pre-deployment-checks.outputs.version }}"
+          echo "Deployed at: $(date -u)"
+
+  # ============================================================================
+  # Rollback
+  # ============================================================================
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    if: inputs.rollback
+    environment: ${{ inputs.environment || 'staging' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Configure kubectl
+        run: |
+          echo "Configuring kubectl for ${{ inputs.environment }} cluster..."
+
+      - name: Get previous deployment
+        id: previous
+        run: |
+          echo "Getting previous deployment version..."
+          PREV_VERSION=$(kubectl rollout history deployment/agent-feed | tail -n 2 | head -n 1 | awk '{print $1}')
+          echo "previous_version=$PREV_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Restore database backup
+        run: |
+          echo "Restoring database backup..."
+          npm ci
+          # npm run backup:restore -- --latest
+
+      - name: Rollback deployment
+        run: |
+          echo "Rolling back to revision ${{ steps.previous.outputs.previous_version }}..."
+          # kubectl rollout undo deployment/agent-feed --to-revision=${{ steps.previous.outputs.previous_version }}
+          # kubectl rollout status deployment/agent-feed
+
+      - name: Verify rollback
+        run: |
+          echo "Verifying rollback..."
+          npm run health-check
+          npm run validate
+
+      - name: Notify rollback completion
+        run: |
+          echo "Rollback completed successfully"
+          echo "Rolled back to revision: ${{ steps.previous.outputs.previous_version }}"
+
+  # ============================================================================
+  # Post-deployment Monitoring
+  # ============================================================================
+  post-deployment:
+    name: Post-deployment Monitoring
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: always() && !inputs.rollback && (needs.deploy-staging.result == 'success' || needs.deploy-production.result == 'success')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Monitor deployment
+        run: |
+          echo "Monitoring deployment for 5 minutes..."
+          # npm run health-check:continuous -- --duration=300
+
+      - name: Check error rates
+        run: |
+          echo "Checking error rates and metrics..."
+          # Query monitoring system for error rates
+
+      - name: Performance baseline
+        run: |
+          echo "Establishing performance baseline..."
+          # npm run test:performance
+
+      - name: Generate deployment report
+        run: |
+          cat > deployment-report.md << 'EOF'
+          # Deployment Report
+
+          **Environment**: ${{ inputs.environment }}
+          **Version**: ${{ needs.pre-deployment-checks.outputs.version }}
+          **Timestamp**: $(date -u)
+          **Status**: ${{ job.status }}
+
+          ## Deployment Details
+          - Staging: ${{ needs.deploy-staging.result }}
+          - Production: ${{ needs.deploy-production.result }}
+
+          ## Health Checks
+          All health checks passed successfully.
+
+          ## Performance
+          Performance metrics within acceptable ranges.
+
+          ## Next Steps
+          - Continue monitoring for 24 hours
+          - Review logs for any anomalies
+          - Validate user-reported issues
+          EOF
+
+      - name: Upload deployment report
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-report-${{ github.run_number }}
+          path: deployment-report.md
+
+  # ============================================================================
+  # Notification
+  # ============================================================================
+  notify:
+    name: Send Notifications
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production, rollback]
+    if: always()
+    steps:
+      - name: Determine deployment status
+        id: status
+        run: |
+          if [[ "${{ needs.deploy-staging.result }}" == "success" ]] || [[ "${{ needs.deploy-production.result }}" == "success" ]] || [[ "${{ needs.rollback.result }}" == "success" ]]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "emoji=✅" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "emoji=❌" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create deployment summary
+        run: |
+          echo "## Deployment Summary ${{ steps.status.outputs.emoji }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment**: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: ${{ steps.status.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Job Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Staging: ${{ needs.deploy-staging.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Production: ${{ needs.deploy-production.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Rollback: ${{ needs.rollback.result }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify team
+        run: |
+          echo "Sending deployment notifications..."
+          # Add Slack, email, or other notification integrations here

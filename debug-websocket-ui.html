@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket UI Debug Test</title>
+    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            line-height: 1.6;
+            background: #f8fafc;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .panel {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .connected { 
+            background: #dcfce7; 
+            color: #166534; 
+            border: 1px solid #bbf7d0; 
+        }
+        .connecting { 
+            background: #fef3c7; 
+            color: #92400e; 
+            border: 1px solid #fde68a; 
+        }
+        .disconnected { 
+            background: #fee2e2; 
+            color: #991b1b; 
+            border: 1px solid #fecaca; 
+        }
+        .log {
+            background: #1f2937;
+            color: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.25rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        button:hover { background: #2563eb; }
+        button:disabled { background: #6b7280; cursor: not-allowed; }
+        h1 { color: #1f2937; margin-bottom: 0.5rem; }
+        h3 { margin-top: 0; color: #374151; }
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .connected .indicator { background: #10b981; animation: pulse 2s infinite; }
+        .connecting .indicator { background: #f59e0b; animation: spin 1s linear infinite; }
+        .disconnected .indicator { background: #ef4444; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .stats {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 14px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔌 WebSocket UI Integration Debug</h1>
+    <p><em>Replicating the exact frontend WebSocket integration to identify UI connection issues</em></p>
+    
+    <div class="container">
+        <div class="panel">
+            <h3>Connection Status Component</h3>
+            <div id="connection-status" class="status disconnected">
+                <span class="indicator"></span>
+                <span>Disconnected</span>
+            </div>
+            
+            <button onclick="testConnection()">Test Connection</button>
+            <button onclick="manualReconnect()">Manual Reconnect</button>
+            <button onclick="disconnect()">Disconnect</button>
+            
+            <div class="stats" id="connection-stats" style="display: none;">
+                <strong>Connection Stats</strong>
+                <div class="stats-grid">
+                    <div>Users: <span id="stat-users">0</span></div>
+                    <div>Rooms: <span id="stat-rooms">0</span></div>
+                    <div>Attempt: <span id="stat-attempt">0</span></div>
+                    <div>Transport: <span id="stat-transport">-</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h3>WebSocket Singleton Context</h3>
+            <div id="context-info">
+                <p><strong>Socket ID:</strong> <span id="socket-id">None</span></p>
+                <p><strong>Connection State:</strong> <span id="connection-state">DISCONNECTED</span></p>
+                <p><strong>Last Error:</strong> <span id="last-error">None</span></p>
+            </div>
+            
+            <button onclick="sendPing()">Send Ping</button>
+            <button onclick="subscribeToFeed()">Subscribe Feed</button>
+            <button onclick="requestStatus()">Request Status</button>
+        </div>
+    </div>
+    
+    <div class="log" id="debug-log">
+        <strong>Debug Log - Replicating React Component Behavior</strong><br>
+        <em>Starting WebSocket integration test...</em><br>
+    </div>
+    
+    <script>
+        let socket = null;
+        let connectionState = {
+            isConnected: false,
+            isConnecting: false,
+            reconnectAttempt: 0,
+            lastConnected: null,
+            connectionError: null
+        };
+        let systemStats = null;
+        let reconnectAttempts = 0;
+        const MAX_RECONNECT_ATTEMPTS = 3;
+        
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('debug-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const emoji = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warn' ? '⚠️' : '📝';
+            logEl.innerHTML += `[${timestamp}] ${emoji} ${message}<br>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function updateConnectionStatus(status, text) {
+            const element = document.getElementById('connection-status');
+            const indicator = element.querySelector('.indicator');
+            const textSpan = element.querySelector('span:last-child');
+            
+            element.className = `status ${status}`;
+            textSpan.textContent = text;
+            
+            // Update context info
+            document.getElementById('connection-state').textContent = status.toUpperCase();
+            document.getElementById('socket-id').textContent = socket ? socket.id : 'None';
+        }
+        
+        function updateStats() {
+            if (systemStats) {
+                document.getElementById('stat-users').textContent = systemStats.connectedUsers || 0;
+                document.getElementById('stat-rooms').textContent = systemStats.activeRooms || 0;
+                document.getElementById('connection-stats').style.display = 'block';
+            }
+            
+            document.getElementById('stat-attempt').textContent = reconnectAttempts;
+            document.getElementById('stat-transport').textContent = socket && socket.io ? socket.io.engine.transport.name : '-';
+        }
+        
+        function testConnection() {
+            log('🚀 Starting connection test - replicating WebSocketSingletonProvider behavior');
+            
+            if (socket) {
+                socket.disconnect();
+                socket = null;
+            }
+            
+            // Reset state
+            connectionState = {
+                isConnected: false,
+                isConnecting: true,
+                reconnectAttempt: reconnectAttempts,
+                lastConnected: null,
+                connectionError: null
+            };
+            
+            updateConnectionStatus('connecting', 'Connecting...');
+            log('📡 Creating Socket.IO connection to http://localhost:3001 (direct backend)');
+            
+            socket = io('http://localhost:3001', {
+                transports: ['polling', 'websocket'],
+                timeout: 15000,
+                autoConnect: true,
+                reconnection: true,
+                reconnectionAttempts: MAX_RECONNECT_ATTEMPTS,
+                reconnectionDelay: 2000,
+                forceNew: true
+            });
+            
+            // Connection success
+            socket.on('connect', () => {
+                log(`✅ Connected successfully - Socket ID: ${socket.id}`, 'success');
+                log(`   Transport: ${socket.io.engine.transport.name}`);
+                
+                connectionState.isConnected = true;
+                connectionState.isConnecting = false;
+                connectionState.lastConnected = new Date().toISOString();
+                connectionState.connectionError = null;
+                reconnectAttempts = 0;
+                
+                updateConnectionStatus('connected', 'Connected');
+                updateStats();
+                
+                // Register as frontend client (replicating WebSocket manager)
+                socket.emit('registerFrontend', {
+                    timestamp: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    url: window.location.href
+                });
+                
+                log('📝 Registered as frontend client');
+            });
+            
+            // Connection error
+            socket.on('connect_error', (error) => {
+                log(`❌ Connection error: ${error.message}`, 'error');
+                
+                connectionState.isConnected = false;
+                connectionState.isConnecting = false;
+                connectionState.connectionError = error.message;
+                reconnectAttempts++;
+                
+                updateConnectionStatus('disconnected', 'Connection Failed');
+                document.getElementById('last-error').textContent = error.message;
+                updateStats();
+            });
+            
+            // Disconnection
+            socket.on('disconnect', (reason) => {
+                log(`🔌 Disconnected: ${reason}`, 'warn');
+                
+                connectionState.isConnected = false;
+                connectionState.isConnecting = false;
+                
+                updateConnectionStatus('disconnected', 'Disconnected');
+                updateStats();
+            });
+            
+            // System stats (replicating backend broadcast)
+            socket.on('system:stats', (stats) => {
+                log(`📊 System stats received: ${JSON.stringify(stats)}`);
+                systemStats = stats;
+                updateStats();
+            });
+            
+            // Pong response
+            socket.on('pong', (data) => {
+                log(`📡 Pong received: ${JSON.stringify(data)}`);
+            });
+            
+            // Generic event listener
+            socket.onAny((eventName, ...args) => {
+                if (!['system:stats', 'pong'].includes(eventName)) {
+                    log(`📨 Event '${eventName}': ${JSON.stringify(args)}`);
+                }
+            });
+        }
+        
+        function manualReconnect() {
+            if (socket) {
+                log('🔄 Manual reconnect requested');
+                socket.disconnect();
+                setTimeout(() => testConnection(), 1000);
+            } else {
+                testConnection();
+            }
+        }
+        
+        function disconnect() {
+            if (socket) {
+                log('🛑 Manual disconnect');
+                socket.disconnect();
+                socket = null;
+                updateConnectionStatus('disconnected', 'Disconnected');
+                document.getElementById('connection-stats').style.display = 'none';
+            }
+        }
+        
+        function sendPing() {
+            if (socket && socket.connected) {
+                log('📡 Sending ping...');
+                socket.emit('ping');
+            } else {
+                log('⚠️ Cannot ping - not connected', 'warn');
+            }
+        }
+        
+        function subscribeToFeed() {
+            if (socket && socket.connected) {
+                const feedId = 'test-feed-123';
+                log(`📡 Subscribing to feed: ${feedId}`);
+                socket.emit('subscribe:feed', feedId);
+            } else {
+                log('⚠️ Cannot subscribe - not connected', 'warn');
+            }
+        }
+        
+        function requestStatus() {
+            if (socket && socket.connected) {
+                log('📡 Requesting agent status...');
+                socket.emit('agent:status:request');
+            } else {
+                log('⚠️ Cannot request status - not connected', 'warn');
+            }
+        }
+        
+        // Auto-start test when page loads (replicating React component mount)
+        window.addEventListener('load', () => {
+            log('🚀 Page loaded - auto-starting connection test (replicating autoConnect: true)');
+            setTimeout(testConnection, 1000);
+        });
+    </script>
+</body>
+</html>

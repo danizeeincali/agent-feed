@@ -1,0 +1,62 @@
+
+> agent-feed-api@1.0.0 test
+> vitest run tests/empty-database-integration.test.js
+
+
+ RUN  v3.2.4 /workspaces/agent-feed/api-server
+
+stdout | tests/empty-database-integration.test.js > Comprehensive Database Integration Tests > 7. Performance Metrics > should measure GET /api/agent-posts response time
+GET /api/agent-posts response time: 6ms
+
+stdout | tests/empty-database-integration.test.js > Comprehensive Database Integration Tests > 7. Performance Metrics > should measure POST /api/v1/agent-posts response time
+POST /api/v1/agent-posts response time: 4ms
+
+stdout | tests/empty-database-integration.test.js > Comprehensive Database Integration Tests > 7. Performance Metrics > should measure POST comment response time
+POST comment response time: 3ms
+
+ ❯ tests/empty-database-integration.test.js (16 tests | 1 failed) 135ms
+   ✓ Comprehensive Database Integration Tests > 1. GET /api/agent-posts with database state > should return success: true 35ms
+   ✓ Comprehensive Database Integration Tests > 1. GET /api/agent-posts with database state > should return valid total count 4ms
+   ✓ Comprehensive Database Integration Tests > 1. GET /api/agent-posts with database state > should return data array 2ms
+   ✓ Comprehensive Database Integration Tests > 2. POST /api/v1/agent-posts (create first post) > should successfully create the first post 4ms
+   ✓ Comprehensive Database Integration Tests > 2. POST /api/v1/agent-posts (create first post) > should return created post with correct fields 5ms
+   ✓ Comprehensive Database Integration Tests > 2. POST /api/v1/agent-posts (create first post) > should initialize engagement with zeros 4ms
+   × Comprehensive Database Integration Tests > 3. GET /api/agent-posts after creating posts > should return at least 3 posts 7ms
+     → expected [ { …(9) }, { …(9) }, { …(9) }, …(17) ] to have a length of 25 but got 20
+   ✓ Comprehensive Database Integration Tests > 3. GET /api/agent-posts after creating posts > should return posts with correct data structure 8ms
+   ✓ Comprehensive Database Integration Tests > 4. POST /api/agent-posts/:postId/comments > should successfully create a comment 6ms
+   ✓ Comprehensive Database Integration Tests > 4. POST /api/agent-posts/:postId/comments > should increment engagement.comments to 1 (trigger verification) 3ms
+   ✓ Comprehensive Database Integration Tests > 4. POST /api/agent-posts/:postId/comments > should increment comments count for multiple comments 10ms
+   ✓ Comprehensive Database Integration Tests > 5. Data Persistence Validation > should persist post data correctly 3ms
+   ✓ Comprehensive Database Integration Tests > 5. Data Persistence Validation > should maintain engagement data through API calls 5ms
+   ✓ Comprehensive Database Integration Tests > 7. Performance Metrics > should measure GET /api/agent-posts response time 9ms
+   ✓ Comprehensive Database Integration Tests > 7. Performance Metrics > should measure POST /api/v1/agent-posts response time 5ms
+   ✓ Comprehensive Database Integration Tests > 7. Performance Metrics > should measure POST comment response time 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/empty-database-integration.test.js > Comprehensive Database Integration Tests > 3. GET /api/agent-posts after creating posts > should return at least 3 posts
+AssertionError: expected [ { …(9) }, { …(9) }, { …(9) }, …(17) ] to have a length of 25 but got 20
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 25[39m
+[31m+ 20[39m
+
+ ❯ tests/empty-database-integration.test.js:136:34
+    134|       expect(response.body.success).toBe(true);
+    135|       expect(response.body.total).toBeGreaterThanOrEqual(3);
+    136|       expect(response.body.data).toHaveLength(response.body.total);
+       |                                  ^
+    137|     });
+    138| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 15 passed (16)
+   Start at  17:02:14
+   Duration  572ms (transform 80ms, setup 0ms, collect 151ms, tests 135ms, environment 0ms, prepare 105ms)
+

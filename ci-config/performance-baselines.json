@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2024-09-03T04:00:00.000Z",
+  "environment": "ci",
+  "baselines": {
+    "claudeResponseTime": {
+      "average": 1800,
+      "p95": 2800,
+      "p99": 3500,
+      "min": 900,
+      "max": 4200,
+      "sampleSize": 1000
+    },
+    "sseDeliveryTime": {
+      "average": 85,
+      "p95": 140,
+      "p99": 180,
+      "min": 45,
+      "max": 220,
+      "sampleSize": 2000
+    },
+    "memoryPerInstance": {
+      "average": 41943040,
+      "peak": 62914560,
+      "min": 20971520,
+      "max": 83886080,
+      "sampleSize": 500
+    },
+    "instanceCreationTime": {
+      "average": 2500,
+      "p95": 4000,
+      "p99": 5500,
+      "min": 1200,
+      "max": 6800,
+      "sampleSize": 300
+    },
+    "errorRate": {
+      "average": 0.005,
+      "max": 0.012,
+      "sampleSize": 10000
+    },
+    "concurrentConnections": {
+      "maxSupported": 75,
+      "averageStable": 50,
+      "degradationThreshold": 85
+    }
+  },
+  "metadata": {
+    "nodeVersion": "18.17.0",
+    "platform": "linux",
+    "cpuCores": 4,
+    "memoryGB": 16,
+    "testFramework": "claude-ai-performance-monitor-v1.0"
+  }
+}

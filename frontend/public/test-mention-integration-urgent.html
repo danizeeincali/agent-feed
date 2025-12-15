@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 URGENT: @ Mention Integration Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-red-100 border-l-4 border-red-500 p-4 mb-6">
+            <div class="flex">
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">
+                        <strong>🚨 URGENT TEST REQUIRED:</strong> All 5 swarm agents have applied their fixes. 
+                        Test immediately to confirm @ mention dropdowns now appear!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="text-3xl font-bold text-gray-900 mb-6">@ Mention Integration Test</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- QuickPost - WORKING -->
+            <div class="bg-green-50 p-6 rounded-lg border-2 border-green-200">
+                <h2 class="text-xl font-semibold text-green-800 mb-4">✅ QuickPost (Working)</h2>
+                <div class="space-y-3">
+                    <p class="text-green-700"><strong>Location:</strong> <a href="/posting" class="underline">http://localhost:5173/posting</a></p>
+                    <p class="text-green-700"><strong>Action:</strong> Type @ in Quick Post field</p>
+                    <p class="text-green-700"><strong>Expected:</strong> Dropdown with debug menu appears</p>
+                    <div class="bg-green-100 p-2 rounded text-xs">
+                        ✅ Shows: "🚨 EMERGENCY DEBUG: Dropdown Open | Query: "" | Suggestions: 8"
+                    </div>
+                </div>
+            </div>
+
+            <!-- PostCreator - SHOULD NOW WORK -->
+            <div class="bg-yellow-50 p-6 rounded-lg border-2 border-yellow-200">
+                <h2 class="text-xl font-semibold text-yellow-800 mb-4">🔄 PostCreator (Fixed?)</h2>
+                <div class="space-y-3">
+                    <p class="text-yellow-700"><strong>Location:</strong> <a href="/" class="underline">http://localhost:5173/</a></p>
+                    <p class="text-yellow-700"><strong>Action:</strong> Click "Start a post..." → Type @</p>
+                    <p class="text-yellow-700"><strong>Expected:</strong> Dropdown should now appear</p>
+                    <div class="bg-yellow-100 p-2 rounded text-xs">
+                        🎯 Should now show dropdown with debug menu
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments - SHOULD NOW WORK -->
+            <div class="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+                <h2 class="text-xl font-semibold text-blue-800 mb-4">🔄 Comments (Fixed?)</h2>
+                <div class="space-y-3">
+                    <p class="text-blue-700"><strong>Location:</strong> Any post reply</p>
+                    <p class="text-blue-700"><strong>Action:</strong> Click reply on post → Type @</p>
+                    <p class="text-blue-700"><strong>Expected:</strong> Dropdown should now appear</p>
+                    <div class="bg-blue-100 p-2 rounded text-xs">
+                        🎯 Should now show dropdown with debug menu
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg border">
+            <h2 class="text-xl font-semibold mb-4">🔍 Testing Instructions</h2>
+            <ol class="list-decimal list-inside space-y-2 mb-4">
+                <li><strong>Open browser developer tools</strong> (F12) and go to Console tab</li>
+                <li><strong>Test QuickPost first</strong> (should work as control test)</li>
+                <li><strong>Test PostCreator</strong> - Look for dropdown with debug menu</li>
+                <li><strong>Test Comments</strong> - Look for dropdown with debug menu</li>
+                <li><strong>Report results</strong> - Which ones show the debug dropdown?</li>
+            </ol>
+            
+            <div class="bg-gray-100 p-4 rounded">
+                <h3 class="font-semibold mb-2">✅ Success Criteria:</h3>
+                <p class="text-sm">When you type @ in ANY component, you should see:</p>
+                <code class="block mt-2 p-2 bg-gray-800 text-green-400 text-xs rounded">
+🚨 EMERGENCY DEBUG: Dropdown Open | Query: "" | Suggestions: 8 | Context: [component-type]
+                </code>
+            </div>
+        </div>
+
+        <div class="mt-6 bg-orange-50 p-4 rounded border-l-4 border-orange-400">
+            <h3 class="font-semibold text-orange-800">⚡ Immediate Action Required</h3>
+            <p class="text-orange-700">
+                All concurrent swarm agents have applied their fixes. The @ mention system should now work 
+                across ALL components. Please test and report which components now show the dropdown!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-check if running on correct URLs
+        console.log('🧪 @ Mention Integration Test Page Loaded');
+        console.log('🔗 Frontend running at: http://localhost:5173/');
+        console.log('🔗 Backend running at: http://localhost:3000/');
+        console.log('✨ Ready for immediate testing!');
+    </script>
+</body>
+</html>

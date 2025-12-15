@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 PRODUCTION VALIDATION: Comment @ Mention System</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .validation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            color: white;
+            border-radius: 8px;
+        }
+        .validation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .component-test {
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        .component-header {
+            padding: 15px 20px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .postcreator { background: linear-gradient(135deg, #2ed573, #1ed85f); }
+        .commentform { background: linear-gradient(135deg, #ff6b6b, #ee5a52); }
+        .quickpost { background: linear-gradient(135deg, #3742fa, #2f32ca); }
+        
+        .test-area {
+            padding: 20px;
+            background: white;
+        }
+        .test-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .test-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+        }
+        .status {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.warning { background: #fff3cd; color: #856404; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        
+        .debug-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f3f4;
+            border-radius: 6px;
+            border-left: 4px solid #007bff;
+        }
+        .debug-panel h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .debug-panel pre {
+            margin: 0;
+            font-size: 11px;
+            color: #666;
+            white-space: pre-wrap;
+        }
+        
+        .checklist {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .checklist h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .checklist-item input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+        .checklist-item.checked {
+            color: #28a745;
+            text-decoration: line-through;
+        }
+        
+        .regression-tracker {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="validation-container">
+        <div class="header">
+            <h1>🚨 PRODUCTION VALIDATION: Comment @ Mention System</h1>
+            <p>Regression Prevention Mission: Ensure CommentForm @ mentions work identical to PostCreator</p>
+        </div>
+
+        <div class="validation-grid">
+            <!-- PostCreator (Working Baseline) -->
+            <div class="component-test">
+                <div class="component-header postcreator">
+                    <span>✅</span>
+                    <h3>PostCreator (WORKING BASELINE)</h3>
+                </div>
+                <div class="test-area">
+                    <textarea id="postcreator-test" class="test-input" placeholder="Type @ to test PostCreator mentions..."></textarea>
+                    <div id="postcreator-status" class="status info">Type @ to validate dropdown appears</div>
+                    <div class="debug-panel">
+                        <h4>PostCreator Debug Info:</h4>
+                        <pre id="postcreator-debug">Status: Ready for testing</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CommentForm (To Be Fixed) -->
+            <div class="component-test">
+                <div class="component-header commentform">
+                    <span>❌</span>
+                    <h3>CommentForm (NEEDS FIX)</h3>
+                </div>
+                <div class="test-area">
+                    <textarea id="commentform-test" class="test-input" placeholder="Type @ to test CommentForm mentions..."></textarea>
+                    <div id="commentform-status" class="status error">@ mentions not functional</div>
+                    <div class="debug-panel">
+                        <h4>CommentForm Debug Info:</h4>
+                        <pre id="commentform-debug">Status: Missing MentionInput integration</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QuickPost (Working Reference) -->
+            <div class="component-test">
+                <div class="component-header quickpost">
+                    <span>✅</span>
+                    <h3>QuickPost (WORKING REFERENCE)</h3>
+                </div>
+                <div class="test-area">
+                    <textarea id="quickpost-test" class="test-input" placeholder="Type @ to test QuickPost mentions..."></textarea>
+                    <div id="quickpost-status" class="status success">Working @ mention integration</div>
+                    <div class="debug-panel">
+                        <h4>QuickPost Debug Info:</h4>
+                        <pre id="quickpost-debug">Status: Clean MentionInput integration pattern</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="checklist">
+            <h3>🔍 Production Validation Checklist</h3>
+            <div class="checklist-item">
+                <input type="checkbox" id="check1">
+                <label for="check1">PostCreator shows "🚨 EMERGENCY DEBUG: Dropdown Open" when @ typed</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check2">
+                <label for="check2">CommentForm shows identical debug dropdown when @ typed</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check3">
+                <label for="check3">QuickPost shows debug dropdown consistently</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check4">
+                <label for="check4">All components show identical agent suggestions</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check5">
+                <label for="check5">Dropdown positioning works correctly in all layouts</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check6">
+                <label for="check6">Mention selection inserts correctly in all contexts</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check7">
+                <label for="check7">Keyboard navigation works in all dropdowns</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="check8">
+                <label for="check8">No JavaScript errors in console during @ mention usage</label>
+            </div>
+        </div>
+
+        <div class="regression-tracker">
+            <h3>🛡️ Regression Prevention Strategy</h3>
+            <div id="regression-notes">
+                <strong>Critical Patterns from Working Components:</strong>
+                <ul>
+                    <li>Direct MentionInput usage with clean layout hierarchy</li>
+                    <li>Emergency debug dropdown with high z-index</li>
+                    <li>Consistent mentionContext prop usage</li>
+                    <li>No overlapping overlays or z-index conflicts</li>
+                    <li>Proper MentionService integration</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate mention testing functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = ['postcreator-test', 'commentform-test', 'quickpost-test'];
+            
+            inputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                const statusDiv = document.getElementById(inputId.replace('-test', '-status'));
+                const debugDiv = document.getElementById(inputId.replace('-test', '-debug'));
+                
+                input.addEventListener('input', function(e) {
+                    const value = e.target.value;
+                    const hasAt = value.includes('@');
+                    
+                    if (inputId === 'postcreator-test') {
+                        if (hasAt) {
+                            statusDiv.className = 'status success';
+                            statusDiv.textContent = '✅ Debug dropdown should appear (working baseline)';
+                            debugDiv.textContent = `PostCreator: @ detected, MentionInput should show emergency debug dropdown`;
+                        } else {
+                            statusDiv.className = 'status info';
+                            statusDiv.textContent = 'Type @ to validate dropdown appears';
+                            debugDiv.textContent = 'Status: Ready for testing';
+                        }
+                    } else if (inputId === 'commentform-test') {
+                        if (hasAt) {
+                            statusDiv.className = 'status error';
+                            statusDiv.textContent = '❌ BROKEN: No dropdown appears (needs fix)';
+                            debugDiv.textContent = `CommentForm: @ detected but MentionInput not properly integrated. Missing dropdown.`;
+                        } else {
+                            statusDiv.className = 'status error';
+                            statusDiv.textContent = '@ mentions not functional';
+                            debugDiv.textContent = 'Status: Missing MentionInput integration';
+                        }
+                    } else if (inputId === 'quickpost-test') {
+                        if (hasAt) {
+                            statusDiv.className = 'status success';
+                            statusDiv.textContent = '✅ Debug dropdown appears correctly';
+                            debugDiv.textContent = `QuickPost: @ detected, showing debug dropdown as expected`;
+                        } else {
+                            statusDiv.className = 'status success';
+                            statusDiv.textContent = 'Working @ mention integration';
+                            debugDiv.textContent = 'Status: Clean MentionInput integration pattern';
+                        }
+                    }
+                });
+            });
+
+            // Checklist functionality
+            const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const item = this.parentElement;
+                    if (this.checked) {
+                        item.classList.add('checked');
+                    } else {
+                        item.classList.remove('checked');
+                    }
+                    
+                    // Calculate completion percentage
+                    const totalChecks = checkboxes.length;
+                    const completedChecks = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length;
+                    const percentage = Math.round((completedChecks / totalChecks) * 100);
+                    
+                    // Update header with progress
+                    const header = document.querySelector('.header h1');
+                    header.textContent = `🚨 PRODUCTION VALIDATION: Comment @ Mention System (${percentage}% Complete)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+
+> agent-feed-api@1.0.0 test
+> vitest run tests/cache-optimization/cost-monitoring.test.js
+
+
+ RUN  v3.2.4 /workspaces/agent-feed/api-server
+
+stdout | tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service
+✅ Database connected: /workspaces/agent-feed/data/agent-pages.db
+
+stderr | tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should trigger alert when cost exceeds $5/day
+⚠️ Cost threshold exceeded: $14.67/day (threshold: $5)
+
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should track cache write tokens 23ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should calculate daily cost from tokens 3ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should trigger alert when cost exceeds $5/day 3ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should not trigger alert when cost is below threshold 1ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should calculate cache hit ratio 4ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should handle zero cache write tokens in hit ratio 4ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should provide 7-day cost trend 14ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should integrate with database for persistence 4ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should handle API errors gracefully 9ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should aggregate daily metrics correctly 6ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should calculate cost savings from cache usage 2ms
+ ✓ tests/cache-optimization/cost-monitoring.test.js > Cost Monitoring Service > should get comprehensive cost summary 5ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  07:08:05
+   Duration  2.21s (transform 344ms, setup 0ms, collect 408ms, tests 399ms, environment 0ms, prepare 637ms)
+

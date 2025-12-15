@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency App Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const EmergencyTestApp = () => {
+            const [status, setStatus] = useState('initializing');
+            const [logs, setLogs] = useState([]);
+
+            const addLog = (message) => {
+                const timestamp = new Date().toLocaleTimeString();
+                setLogs(prev => [...prev, `[${timestamp}] ${message}`]);
+                console.log(`Emergency Test: ${message}`);
+            };
+
+            useEffect(() => {
+                addLog('Emergency app mounted');
+                setStatus('running');
+
+                // Test fetch to local server
+                fetch('/api/health')
+                    .then(response => {
+                        addLog(`API health check: ${response.status}`);
+                        return response.json();
+                    })
+                    .then(data => {
+                        addLog('API response received');
+                        setStatus('connected');
+                    })
+                    .catch(error => {
+                        addLog(`API error: ${error.message}`);
+                        setStatus('api-error');
+                    });
+            }, []);
+
+            const testActions = [
+                {
+                    label: 'Test Console Output',
+                    action: () => {
+                        console.log('Emergency test console output');
+                        addLog('Console test executed');
+                    }
+                },
+                {
+                    label: 'Test LocalStorage',
+                    action: () => {
+                        try {
+                            localStorage.setItem('test', 'emergency-test');
+                            const value = localStorage.getItem('test');
+                            addLog(`LocalStorage test: ${value}`);
+                            localStorage.removeItem('test');
+                        } catch (error) {
+                            addLog(`LocalStorage error: ${error.message}`);
+                        }
+                    }
+                },
+                {
+                    label: 'Force Reload',
+                    action: () => {
+                        addLog('Triggering reload...');
+                        setTimeout(() => window.location.reload(), 1000);
+                    }
+                }
+            ];
+
+            const getStatusColor = () => {
+                switch (status) {
+                    case 'initializing': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                    case 'running': return 'bg-blue-100 text-blue-800 border-blue-200';
+                    case 'connected': return 'bg-green-100 text-green-800 border-green-200';
+                    case 'api-error': return 'bg-red-100 text-red-800 border-red-200';
+                    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-50 p-4">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+                            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                                🚨 Emergency Production Validation Test
+                            </h1>
+
+                            <div className={`inline-block px-3 py-1 rounded border text-sm font-medium ${getStatusColor()}`}>
+                                Status: {status}
+                            </div>
+
+                            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {testActions.map((test, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={test.action}
+                                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                                    >
+                                        {test.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-lg shadow-lg p-6">
+                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Activity Log</h2>
+                            <div className="bg-gray-900 text-green-400 p-4 rounded font-mono text-sm max-h-64 overflow-y-auto">
+                                {logs.length === 0 ? (
+                                    <div className="text-gray-500">No logs yet...</div>
+                                ) : (
+                                    logs.map((log, index) => (
+                                        <div key={index} className="mb-1">{log}</div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="mt-6 bg-white rounded-lg shadow-lg p-6">
+                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Environment Info</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <strong>URL:</strong> {window.location.href}
+                                </div>
+                                <div>
+                                    <strong>User Agent:</strong> {navigator.userAgent.substring(0, 50)}...
+                                </div>
+                                <div>
+                                    <strong>Screen:</strong> {screen.width}x{screen.height}
+                                </div>
+                                <div>
+                                    <strong>Timestamp:</strong> {new Date().toISOString()}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Mount the app
+        try {
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(<EmergencyTestApp />);
+            console.log('✅ Emergency test app mounted successfully');
+        } catch (error) {
+            console.error('❌ Failed to mount emergency test app:', error);
+            document.getElementById('root').innerHTML = `
+                <div style="padding: 20px; color: red; font-family: monospace;">
+                    <h1>Emergency Test Failed</h1>
+                    <p>Error: ${error.message}</p>
+                    <button onclick="window.location.reload()" style="background: #dc2626; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                        Reload
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

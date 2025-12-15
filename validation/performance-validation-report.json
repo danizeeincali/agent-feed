@@ -1,0 +1,97 @@
+{
+  "timestamp": "2025-09-23T03:32:40.497Z",
+  "metrics": {
+    "loadTime": {
+      "average": 9,
+      "minimum": 3,
+      "maximum": 32,
+      "samples": [
+        32,
+        3,
+        3,
+        3,
+        4
+      ]
+    },
+    "responseSizes": {
+      "/": 890,
+      "/vite.svg": 890,
+      "/api/health": 0,
+      "/api/agents": 0
+    },
+    "concurrentLoad": {
+      "totalRequests": 10,
+      "successful": 10,
+      "failed": 0,
+      "totalTime": 44,
+      "averageResponseTime": 30.9,
+      "results": [
+        {
+          "success": true,
+          "time": 19,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 24,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 24,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 33,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 33,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 35,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 37,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 37,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 32,
+          "status": 200
+        },
+        {
+          "success": true,
+          "time": 35,
+          "status": 200
+        }
+      ]
+    },
+    "memoryUsage": {
+      "rss": 48586752,
+      "heapTotal": 7823360,
+      "heapUsed": 5493784,
+      "external": 1762641,
+      "timestamp": "2025-09-23T03:32:41.112Z"
+    }
+  },
+  "summary": {
+    "loadTimeMs": 9,
+    "responseTimeMs": 30.9,
+    "totalSize": 1780,
+    "recommendations": [],
+    "score": 100,
+    "grade": "A"
+  }
+}

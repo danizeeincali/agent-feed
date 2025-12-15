@@ -1,0 +1,256 @@
+{
+  "toolConfiguration": {
+    "environment": "production",
+    "restrictedAccess": true,
+    "auditEnabled": true,
+    "validationRequired": true
+  },
+  "availableTools": {
+    "fileOperations": {
+      "Read": {
+        "enabled": true,
+        "restrictions": {
+          "allowedPaths": [
+            "/workspaces/agent-feed/prod/**"
+          ],
+          "blockedPaths": [
+            "/workspaces/agent-feed/src/**",
+            "/workspaces/agent-feed/frontend/**",
+            "/workspaces/agent-feed/business/**",
+            "/workspaces/agent-feed/.claude/**",
+            "/workspaces/agent-feed/docs/**",
+            "/workspaces/agent-feed/tests/**"
+          ],
+          "maxFileSize": "100MB",
+          "rateLimitPerHour": 10000
+        }
+      },
+      "Write": {
+        "enabled": true,
+        "restrictions": {
+          "allowedPaths": [
+            "/workspaces/agent-feed/prod/agent_workspace/**",
+            "/workspaces/agent-feed/prod/logs/**",
+            "/workspaces/agent-feed/prod/temp/**"
+          ],
+          "blockedPaths": [
+            "/workspaces/agent-feed/prod/system_instructions/**",
+            "/workspaces/agent-feed/prod/config/**",
+            "/workspaces/agent-feed/prod/security/**"
+          ],
+          "maxFileSize": "50MB",
+          "requireConfirmation": true,
+          "rateLimitPerHour": 5000
+        }
+      },
+      "Edit": {
+        "enabled": true,
+        "restrictions": {
+          "allowedPaths": [
+            "/workspaces/agent-feed/prod/agent_workspace/**"
+          ],
+          "maxEditsPerFile": 100,
+          "requireBackup": true,
+          "rateLimitPerHour": 2000
+        }
+      },
+      "MultiEdit": {
+        "enabled": true,
+        "restrictions": {
+          "allowedPaths": [
+            "/workspaces/agent-feed/prod/agent_workspace/**"
+          ],
+          "maxFilesPerOperation": 10,
+          "maxEditsPerFile": 50,
+          "requireConfirmation": true,
+          "rateLimitPerHour": 500
+        }
+      },
+      "Glob": {
+        "enabled": true,
+        "restrictions": {
+          "allowedPaths": [
+            "/workspaces/agent-feed/prod/**"
+          ],
+          "maxResults": 10000,
+          "rateLimitPerHour": 5000
+        }
+      },
+      "Grep": {
+        "enabled": true,
+        "restrictions": {
+          "allowedPaths": [
+            "/workspaces/agent-feed/prod/**"
+          ],
+          "maxResults": 5000,
+          "rateLimitPerHour": 3000
+        }
+      }
+    },
+    "systemOperations": {
+      "Bash": {
+        "enabled": true,
+        "restrictions": {
+          "allowedCommands": [
+            "node",
+            "npm",
+            "git",
+            "curl",
+            "wget",
+            "cat",
+            "ls",
+            "cd",
+            "mkdir",
+            "rm",
+            "cp",
+            "mv",
+            "grep",
+            "find",
+            "awk",
+            "sed",
+            "sort",
+            "uniq",
+            "wc",
+            "head",
+            "tail"
+          ],
+          "blockedCommands": [
+            "sudo",
+            "su",
+            "chmod",
+            "chown",
+            "systemctl",
+            "service",
+            "kill",
+            "killall",
+            "pkill",
+            "reboot",
+            "shutdown",
+            "mount",
+            "umount"
+          ],
+          "workingDirectoryRestricted": true,
+          "allowedDirectories": [
+            "/workspaces/agent-feed/prod"
+          ],
+          "timeout": 300000,
+          "requireConfirmation": true,
+          "rateLimitPerHour": 1000
+        }
+      },
+      "BashOutput": {
+        "enabled": true,
+        "restrictions": {
+          "rateLimitPerHour": 2000
+        }
+      },
+      "KillBash": {
+        "enabled": true,
+        "restrictions": {
+          "requireConfirmation": true,
+          "rateLimitPerHour": 100
+        }
+      }
+    },
+    "webOperations": {
+      "WebFetch": {
+        "enabled": true,
+        "restrictions": {
+          "allowedDomains": [
+            "api.github.com",
+            "docs.claude.ai",
+            "localhost",
+            "127.0.0.1"
+          ],
+          "rateLimitPerHour": 500,
+          "timeout": 30000,
+          "maxResponseSize": "10MB"
+        }
+      },
+      "WebSearch": {
+        "enabled": false,
+        "restrictions": {
+          "disabled": "Security policy - web search disabled in production"
+        }
+      }
+    },
+    "specializedTools": {
+      "TodoWrite": {
+        "enabled": true,
+        "restrictions": {
+          "maxTodosPerOperation": 50,
+          "rateLimitPerHour": 1000
+        }
+      },
+      "NotebookEdit": {
+        "enabled": true,
+        "restrictions": {
+          "allowedPaths": [
+            "/workspaces/agent-feed/prod/agent_workspace/**"
+          ],
+          "rateLimitPerHour": 200
+        }
+      }
+    }
+  },
+  "toolPolicies": {
+    "globalPolicies": {
+      "auditAllOperations": true,
+      "requireExplicitApproval": false,
+      "blockDangerousOperations": true,
+      "enforceRateLimits": true,
+      "validatePathAccess": true,
+      "logAllActivity": true
+    },
+    "securityPolicies": {
+      "preventDataExfiltration": true,
+      "blockSystemModification": true,
+      "restrictNetworkAccess": true,
+      "validateFileOperations": true,
+      "encryptSensitiveData": true
+    },
+    "performancePolicies": {
+      "maxConcurrentOperations": 10,
+      "operationTimeouts": true,
+      "resourceLimitingEnabled": true,
+      "backgroundOperationsLimited": true
+    }
+  },
+  "monitoring": {
+    "toolUsageTracking": true,
+    "performanceMetrics": true,
+    "errorTracking": true,
+    "securityMonitoring": true,
+    "alerting": {
+      "enabled": true,
+      "thresholds": {
+        "rateLimitExceeded": true,
+        "unauthorizedAccess": true,
+        "suspiciousActivity": true,
+        "performanceDegradation": true
+      }
+    }
+  },
+  "integration": {
+    "mcpTools": {
+      "enabled": true,
+      "namespace": "mcp__claude-flow",
+      "restrictedToProduction": true,
+      "allowedOperations": [
+        "swarm_init",
+        "agent_spawn",
+        "task_orchestrate",
+        "swarm_status",
+        "agent_metrics",
+        "memory_usage",
+        "neural_status"
+      ]
+    },
+    "agentLink": {
+      "enabled": true,
+      "apiIntegration": true,
+      "webhookSupport": true,
+      "realTimeSync": true
+    }
+  }
+}

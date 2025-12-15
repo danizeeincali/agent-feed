@@ -1,0 +1,34 @@
+{
+  "validation": {
+    "enableLLMValidation": true,
+    "content": {
+      "maxLength": 280,
+      "minLength": 50
+    },
+    "prohibitedWords": [
+      "spam",
+      "scam",
+      "clickbait"
+    ],
+    "mentions": {
+      "maxCount": 3
+    },
+    "hashtags": {
+      "maxCount": 5
+    },
+    "urls": {
+      "maxCount": 2,
+      "allowedDomains": [
+        "example.com",
+        "github.com",
+        "twitter.com",
+        "linkedin.com"
+      ]
+    },
+    "tone": {
+      "threshold": 0.7,
+      "model": "claude-3-5-haiku-20241022",
+      "timeout": 5000
+    }
+  }
+}

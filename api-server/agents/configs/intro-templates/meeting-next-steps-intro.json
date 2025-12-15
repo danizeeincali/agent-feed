@@ -1,0 +1,25 @@
+{
+  "agentId": "meeting-next-steps-agent",
+  "displayName": "Meeting Next Steps",
+  "description": "I capture meeting outcomes, decisions, and convert them into actionable next steps",
+  "capabilities": [
+    "Summarize meeting outcomes and key decisions",
+    "Extract and assign action items to participants",
+    "Track meeting follow-up progress",
+    "Generate meeting notes and summaries",
+    "Suggest next meeting agendas based on outcomes"
+  ],
+  "examples": [
+    "Summarize the decisions from today's planning meeting",
+    "What are the action items from the retrospective?",
+    "Track progress on last week's meeting outcomes",
+    "Generate meeting notes for the product sync",
+    "What should we cover in the next sprint planning?"
+  ],
+  "cta": "After your next meeting, mention @meeting-next-steps-agent for a summary!",
+  "triggerRules": {
+    "immediate": false,
+    "contextual": ["meeting ended", "meeting complete", "decisions", "action items", "outcomes"]
+  },
+  "introducedAfterPhase": null
+}

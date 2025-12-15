@@ -1,0 +1,270 @@
+# Prometheus Configuration for Production Monitoring
+# Comprehensive metrics collection, alerting, and service discovery
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'production'
+    region: 'us-east-1'
+    environment: 'prod'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+      scheme: http
+      timeout: 10s
+      api_version: v2
+
+# Rule files for alerting
+rule_files:
+  - "alerts/*.yml"
+  - "recording/*.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Application metrics
+  - job_name: 'application'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: 
+        - 'app:3000'
+        - 'app:3001'
+        - 'app:3002'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 'app:3000'
+
+  # Node Exporter for system metrics
+  - job_name: 'node'
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+        - 'node-exporter:9100'
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: '(.*):(.*)'
+        target_label: __address__
+        replacement: '${1}:9100'
+      - source_labels: [__address__]
+        regex: '(.*):(.*)'
+        target_label: instance
+        replacement: '${1}'
+
+  # Database metrics (PostgreSQL)
+  - job_name: 'postgres'
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+        - 'postgres-exporter:9187'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: '(.*):(.*)'
+        replacement: '${1}'
+
+  # Redis metrics
+  - job_name: 'redis'
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+        - 'redis-exporter:9121'
+
+  # Nginx metrics
+  - job_name: 'nginx'
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+        - 'nginx-exporter:9113'
+
+  # Kubernetes metrics (if running on k8s)
+  - job_name: 'kubernetes-apiservers'
+    kubernetes_sd_configs:
+      - role: endpoints
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+
+  - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+      - role: node
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics
+
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name
+
+  # Custom application metrics
+  - job_name: 'metrics-collector'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['metrics-collector:8080']
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'system_.*'
+        target_label: category
+        replacement: 'system'
+      - source_labels: [__name__]
+        regex: 'application_.*'
+        target_label: category
+        replacement: 'application'
+
+  # Performance benchmarker metrics
+  - job_name: 'performance-benchmarker'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['performance-analyzer:8081']
+
+  # Security manager metrics
+  - job_name: 'security-manager'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['security-manager:8082']
+
+  # Health monitor metrics
+  - job_name: 'health-monitor'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['health-monitor:8083']
+
+  # Alert manager metrics
+  - job_name: 'alert-manager'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['alert-manager:8084']
+
+  # External services monitoring
+  - job_name: 'external-services'
+    scrape_interval: 60s
+    metrics_path: '/probe'
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        - 'https://api.example.com/health'
+        - 'https://auth.example.com/health'
+        - 'https://cdn.example.com/health'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 'blackbox-exporter:9115'
+
+  # Custom business metrics
+  - job_name: 'business-metrics'
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['business-metrics-exporter:8085']
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'business_.*'
+        target_label: department
+        replacement: 'product'
+
+# Remote write configuration (for long-term storage)
+remote_write:
+  - url: "https://prometheus-remote-storage.example.com/api/v1/write"
+    name: "long-term-storage"
+    write_relabel_configs:
+      - source_labels: [__name__]
+        regex: '(node_|container_|kubernetes_).*'
+        action: drop
+    queue_config:
+      capacity: 2500
+      max_shards: 200
+      min_shards: 1
+      max_samples_per_send: 500
+      batch_send_deadline: 5s
+      min_backoff: 30ms
+      max_backoff: 100ms
+    metadata_config:
+      send: true
+      send_interval: 30s
+
+# Storage configuration
+storage:
+  tsdb:
+    path: /prometheus/data
+    retention.time: 15d
+    retention.size: 50GB
+    wal-compression: true
+
+# Query configuration
+query:
+  timeout: 2m
+  max_concurrency: 20
+  max_samples: 50000000
+
+# Web configuration
+web:
+  enable-lifecycle: true
+  enable-admin-api: true
+  console.templates: /etc/prometheus/consoles
+  console.libraries: /etc/prometheus/console_libraries
+  external-url: "https://prometheus.example.com"
+
+# Feature flags
+feature_flags:
+  - exemplar-storage
+  - memory-snapshot-on-shutdown
+  - expand-external-labels
+  - new-service-discovery-manager
+
+# Exemplar configuration
+exemplar_config:
+  max_exemplars: 100000
+
+# Tracing configuration
+tracing:
+  endpoint: "jaeger:14268/api/traces"
+  sampling_fraction: 0.1

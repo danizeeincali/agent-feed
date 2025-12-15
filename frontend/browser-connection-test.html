@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Connection Test</title>
+</head>
+<body>
+    <h1>WebSocket Connection Test</h1>
+    <div id="status">Testing...</div>
+    
+    <script type="module">
+        // Simple WebSocket connection test
+        const socket = new WebSocket('ws://localhost:3001');
+        const statusEl = document.getElementById('status');
+        
+        socket.onopen = () => {
+            statusEl.innerHTML = '✅ WebSocket Connected!';
+            console.log('WebSocket connection established');
+        };
+        
+        socket.onclose = (event) => {
+            statusEl.innerHTML = `❌ WebSocket Closed: ${event.code} ${event.reason}`;
+            console.log('WebSocket connection closed:', event);
+        };
+        
+        socket.onerror = (error) => {
+            statusEl.innerHTML = '❌ WebSocket Error';
+            console.error('WebSocket error:', error);
+        };
+        
+        // Test with socket.io client
+        import('https://cdn.socket.io/4.7.5/socket.io.esm.min.js').then(({ io }) => {
+            const ioSocket = io('http://localhost:3001');
+            
+            ioSocket.on('connect', () => {
+                statusEl.innerHTML += '<br>✅ Socket.IO Connected!';
+                console.log('Socket.IO connected:', ioSocket.id);
+            });
+            
+            ioSocket.on('disconnect', (reason) => {
+                statusEl.innerHTML += '<br>❌ Socket.IO Disconnected: ' + reason;
+                console.log('Socket.IO disconnected:', reason);
+            });
+            
+            ioSocket.on('connect_error', (error) => {
+                statusEl.innerHTML += '<br>❌ Socket.IO Connection Error: ' + error.message;
+                console.error('Socket.IO connection error:', error);
+            });
+        }).catch(err => {
+            console.error('Failed to load Socket.IO:', err);
+            statusEl.innerHTML += '<br>❌ Failed to load Socket.IO';
+        });
+    </script>
+</body>
+</html>

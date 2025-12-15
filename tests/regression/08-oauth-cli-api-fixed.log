@@ -1,0 +1,366 @@
+
+> agent-feed@0.1.0 test
+> jest --config jest.config.cjs tests/unit/oauth-cli-backend-api.test.js --no-coverage
+
+  console.log
+    [dotenv@17.2.3] injecting env (54) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+      at _log (node_modules/dotenv/lib/main.js:142:11)
+
+FAIL tests/unit/oauth-cli-backend-api.test.js
+  OAuth CLI Detection
+    ✕ 1.1 should have /oauth/detect-cli endpoint (1 ms)
+    ✕ 1.2 should return detected field as boolean (3 ms)
+    ✕ 1.3 should return method when CLI detected
+    ✕ 1.4 should return 200 status for detect-cli (1 ms)
+    ✕ 1.5 should include message field
+  OAuth Auto-Connect Endpoint
+    ✕ 2.1 should have /oauth/auto-connect endpoint
+    ✕ 2.2 should return success field
+    ✕ 2.3 should store OAuth token in database when CLI available
+    ✕ 2.4 should return error when CLI not detected
+    ✕ 2.5 should return method field on success
+    ✕ 2.6 should use demo-user-123 as default userId
+  Auth Settings Endpoints
+    ✕ 3.1 should GET /auth-settings (1 ms)
+    ✕ 3.2 should POST /auth-settings with oauth
+    ✕ 3.3 should retrieve stored auth settings
+    ✕ 3.4 should validate invalid auth method
+    ✕ 3.5 should support user_api_key method
+    ✕ 3.6 should support platform_payg method
+  Full OAuth CLI Integration Flow
+    ✕ 4.1 should complete detection -> auto-connect -> retrieve flow (1 ms)
+    ✕ 4.2 should handle multiple users independently
+    ✕ 4.3 should persist OAuth tokens across requests
+    ✕ 4.4 should allow auth method switching
+    ✕ 4.5 should have /test endpoint for verification
+  OAuth Backend API Summary
+    ✕ SUMMARY: All OAuth backend API endpoints working correctly
+
+  ● OAuth CLI Detection › 1.1 should have /oauth/detect-cli endpoint
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth CLI Detection › 1.2 should return detected field as boolean
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth CLI Detection › 1.3 should return method when CLI detected
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth CLI Detection › 1.4 should return 200 status for detect-cli
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth CLI Detection › 1.5 should include message field
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth Auto-Connect Endpoint › 2.1 should have /oauth/auto-connect endpoint
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth Auto-Connect Endpoint › 2.2 should return success field
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth Auto-Connect Endpoint › 2.3 should store OAuth token in database when CLI available
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth Auto-Connect Endpoint › 2.4 should return error when CLI not detected
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth Auto-Connect Endpoint › 2.5 should return method field on success
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth Auto-Connect Endpoint › 2.6 should use demo-user-123 as default userId
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Auth Settings Endpoints › 3.1 should GET /auth-settings
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Auth Settings Endpoints › 3.2 should POST /auth-settings with oauth
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Auth Settings Endpoints › 3.3 should retrieve stored auth settings
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Auth Settings Endpoints › 3.4 should validate invalid auth method
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Auth Settings Endpoints › 3.5 should support user_api_key method
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Auth Settings Endpoints › 3.6 should support platform_payg method
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Full OAuth CLI Integration Flow › 4.1 should complete detection -> auto-connect -> retrieve flow
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Full OAuth CLI Integration Flow › 4.2 should handle multiple users independently
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Full OAuth CLI Integration Flow › 4.3 should persist OAuth tokens across requests
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Full OAuth CLI Integration Flow › 4.4 should allow auth method switching
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● Full OAuth CLI Integration Flow › 4.5 should have /test endpoint for verification
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+  ● OAuth Backend API Summary › SUMMARY: All OAuth backend API endpoints working correctly
+
+    TypeError: A dynamic import callback was invoked without --experimental-vm-modules
+
+      48 |
+      49 |   // Mount the auth routes using dynamic import for ESM compatibility
+    > 50 |   const { default: claudeAuthRoutes } = await import('../../api-server/routes/auth/claude-auth.js');
+         |                                         ^
+      51 |   testApp.use('/api/claude-code', claudeAuthRoutes);
+      52 | });
+      53 |
+
+      at Object.<anonymous> (tests/unit/oauth-cli-backend-api.test.js:50:41)
+
+Test Suites: 1 failed, 1 total
+Tests:       23 failed, 23 total
+Snapshots:   0 total
+Time:        1.459 s, estimated 2 s
+Ran all test suites matching /tests\/unit\/oauth-cli-backend-api.test.js/i.

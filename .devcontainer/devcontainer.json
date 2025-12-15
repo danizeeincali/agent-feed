@@ -1,0 +1,39 @@
+{
+  "name": "Agent Feed Development",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18",
+  
+  "forwardPorts": [3000, 5173],
+  
+  "portsAttributes": {
+    "3000": {
+      "label": "Agent Feed API",
+      "visibility": "public",
+      "protocol": "http",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Agent Feed Frontend", 
+      "visibility": "public",
+      "protocol": "http",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  
+  "postCreateCommand": "npm install",
+  "shutdownAction": "none"
+}

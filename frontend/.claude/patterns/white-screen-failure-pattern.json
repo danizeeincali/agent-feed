@@ -1,0 +1,188 @@
+{
+  "pattern_id": "react_white_screen_001",
+  "failure_type": "white_screen_rendering_failure",
+  "timestamp": "2025-08-22T06:23:28.010Z",
+  "context": {
+    "framework": "React",
+    "bundler": "Vite",
+    "features": ["WebSocket", "Router", "TanStack Query", "Error Boundaries"],
+    "task_description": "One-button Claude instance launcher with terminal control",
+    "user_report": "everything is a white screen when opening in browser"
+  },
+  "root_cause_analysis": {
+    "primary_causes": [
+      {
+        "type": "import_resolution_failure",
+        "description": "Absolute import paths using '@/' not properly resolved",
+        "severity": "critical",
+        "symptoms": ["Blank white screen", "No visible console errors to user", "App fails to mount"],
+        "files_affected": [
+          "src/App.tsx",
+          "src/components/**/*.tsx",
+          "src/context/**/*.tsx",
+          "src/utils/**/*.ts"
+        ]
+      },
+      {
+        "type": "missing_component_hooks",
+        "description": "Components referenced in imports don't exist or have wrong exports",
+        "severity": "critical",
+        "symptoms": ["Module not found errors", "Component undefined errors"],
+        "files_affected": [
+          "src/hooks/useWebSocketSingleton.ts",
+          "src/context/WebSocketSingletonContext.tsx"
+        ]
+      },
+      {
+        "type": "error_boundary_masking",
+        "description": "Error boundaries catch errors but don't display meaningful feedback",
+        "severity": "medium",
+        "symptoms": ["Silent failures", "No error indication to user"]
+      }
+    ],
+    "contributing_factors": [
+      "Complex nested import dependencies",
+      "Path alias configuration mismatch",
+      "Missing TypeScript path mapping",
+      "Vite resolver configuration issues"
+    ]
+  },
+  "symptoms_observed": {
+    "user_visible": [
+      "Completely white/blank screen",
+      "No loading indicators",
+      "No error messages visible",
+      "Browser appears to load page successfully"
+    ],
+    "developer_console": [
+      "Import resolution errors",
+      "Module not found warnings",
+      "Component mounting failures",
+      "React rendering exceptions"
+    ],
+    "network_tab": [
+      "Static assets load correctly",
+      "JavaScript bundles load but fail to execute",
+      "No API calls initiated"
+    ]
+  },
+  "resolution_steps": {
+    "immediate_fixes": [
+      {
+        "step": "Fix import path resolution",
+        "action": "Update vite.config.ts with correct path aliases",
+        "code_change": "Configure @ alias to resolve to src directory"
+      },
+      {
+        "step": "Create missing hook implementations",
+        "action": "Implement useWebSocketSingleton hook with proper TypeScript types",
+        "code_change": "Add actual hook logic with connection management"
+      },
+      {
+        "step": "Verify component exports",
+        "action": "Ensure all imported components have proper default/named exports",
+        "code_change": "Add missing export statements"
+      }
+    ],
+    "validation_tests": [
+      "npm run build succeeds without errors",
+      "npm run dev shows app loading",
+      "Browser console shows no import errors",
+      "App renders basic layout and navigation"
+    ]
+  },
+  "prevention_measures": {
+    "development_practices": [
+      {
+        "category": "import_validation",
+        "measures": [
+          "Use TypeScript strict mode for import checking",
+          "Add ESLint rules for import resolution",
+          "Configure IDE for path alias validation",
+          "Use absolute imports consistently"
+        ]
+      },
+      {
+        "category": "component_architecture",
+        "measures": [
+          "Implement component existence tests",
+          "Use barrel exports for cleaner imports",
+          "Add runtime component validation",
+          "Create component dependency mapping"
+        ]
+      },
+      {
+        "category": "error_handling",
+        "measures": [
+          "Add development-only error displays",
+          "Implement error boundary logging",
+          "Add component loading status indicators",
+          "Create fallback UI for failed imports"
+        ]
+      }
+    ],
+    "tooling_setup": [
+      "Configure Vite path aliases properly",
+      "Add TypeScript path mapping in tsconfig.json",
+      "Set up import resolution validation in CI",
+      "Add bundle analysis for missing dependencies"
+    ],
+    "testing_strategy": [
+      "Unit tests for component imports",
+      "Integration tests for routing",
+      "E2E tests for full page loads",
+      "Visual regression tests for UI rendering"
+    ]
+  },
+  "tdd_patterns": {
+    "recommended_tests": [
+      {
+        "type": "import_validation_test",
+        "description": "Test that all components can be imported without errors",
+        "test_code": "describe('Component Imports', () => { it('should import all components without errors', async () => { await import('./App'); }); });"
+      },
+      {
+        "type": "component_mounting_test",
+        "description": "Test that main App component mounts successfully",
+        "test_code": "it('should mount App component', () => { render(<App />); expect(screen.getByTestId('app-root')).toBeInTheDocument(); });"
+      },
+      {
+        "type": "routing_test",
+        "description": "Test that routing works and doesn't cause white screen",
+        "test_code": "it('should navigate between routes', () => { render(<App />); fireEvent.click(screen.getByText('Dashboard')); expect(screen.getByTestId('dashboard')).toBeInTheDocument(); });"
+      }
+    ],
+    "failure_detection_patterns": [
+      "Monitor for blank page renders",
+      "Check for unhandled promise rejections",
+      "Validate all imports at build time",
+      "Test component lazy loading"
+    ]
+  },
+  "effectiveness_metrics": {
+    "claude_confidence": 0.95,
+    "user_success_rate": 0.0,
+    "tdd_factor": 0.3,
+    "effectiveness_score": 0.095
+  },
+  "neural_training_data": {
+    "input_features": [
+      "React framework",
+      "Vite bundler", 
+      "TypeScript",
+      "Path aliases",
+      "WebSocket integration",
+      "Complex routing"
+    ],
+    "failure_labels": [
+      "import_resolution_failure",
+      "white_screen_render",
+      "component_mount_failure"
+    ],
+    "resolution_patterns": [
+      "fix_vite_config",
+      "implement_missing_hooks",
+      "verify_exports"
+    ]
+  }
+}

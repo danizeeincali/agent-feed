@@ -1,0 +1,380 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/playwright.config.ts",
+    "rootDir": "/workspaces/agent-feed/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "tests/e2e/playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "tests/e2e/test-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "tests/e2e/junit-results.xml"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "telemetry-ui-validation.spec.ts",
+      "file": "telemetry-ui-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Telemetry UI Validation - Schema Fix Verification",
+          "file": "telemetry-ui-validation.spec.ts",
+          "line": 86,
+          "column": 6,
+          "specs": [
+            {
+              "title": "01 - Load home page without errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-3ef609ddbee0a37a3dd5",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 134,
+              "column": 3
+            },
+            {
+              "title": "02 - Navigate to Avi DM interface",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-18f17bfbb67553c3acf4",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "03 - Compose Avi DM message",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-065f6897321406b43ef3",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 194,
+              "column": 3
+            },
+            {
+              "title": "04 - Verify backend logs clean (no schema errors)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-95ba9d06b0c15719bfd1",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 279,
+              "column": 3
+            },
+            {
+              "title": "05 - Verify database schema correct",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-cf97e3dffbebbf641f69",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 312,
+              "column": 3
+            },
+            {
+              "title": "06 - Check network for 500 errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-7f901327b7204b45138a",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 340,
+              "column": 3
+            },
+            {
+              "title": "07 - Verify frontend loads without JS errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-b7561894a2dd1cedf3f4",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 395,
+              "column": 3
+            },
+            {
+              "title": "08 - Comprehensive regression check",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-8bf1da8e4a3d02c14645",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 429,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Telemetry Validation Summary Report",
+          "file": "telemetry-ui-validation.spec.ts",
+          "line": 500,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Generate comprehensive validation report",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "a0f8fbf879de67c43e21-110edf707fc58c787595",
+              "file": "telemetry-ui-validation.spec.ts",
+              "line": 501,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "websocket-and-conversation-validation.spec.ts",
+      "file": "websocket-and-conversation-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Critical Fixes: WebSocket & Conversation Context",
+          "file": "websocket-and-conversation-validation.spec.ts",
+          "line": 16,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Fix #1: Real-Time Comment Display Without Refresh",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1d577e83531231c1f68d-95b234de0c8ebbf176ee",
+              "file": "websocket-and-conversation-validation.spec.ts",
+              "line": 37,
+              "column": 3
+            },
+            {
+              "title": "Fix #2: Multi-Turn Conversation Context",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1d577e83531231c1f68d-78f1421a44c745f28b8f",
+              "file": "websocket-and-conversation-validation.spec.ts",
+              "line": 96,
+              "column": 3
+            },
+            {
+              "title": "Combined Test: Real-Time Multi-Turn Conversation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1d577e83531231c1f68d-93341ee234a524b384ec",
+              "file": "websocket-and-conversation-validation.spec.ts",
+              "line": 185,
+              "column": 3
+            },
+            {
+              "title": "Regression: No Duplicate Avi Responses",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1d577e83531231c1f68d-6b9f861ccb0d8b23d47b",
+              "file": "websocket-and-conversation-validation.spec.ts",
+              "line": 218,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-11-12T20:06:50.060Z",
+    "duration": 1000.0849999999998,
+    "expected": 0,
+    "skipped": 13,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,56 @@
+version: "1.0.0"
+agent_id: "dynamic-page-testing-agent"
+permissions:
+  api_endpoints:
+    - path: "/api/posts"
+      methods:
+        - "POST"
+      rate_limit: "10/hour"
+      required_auth: true
+    - path: "/api/agent-pages"
+      methods:
+        - "GET"
+      rate_limit: "100/hour"
+      required_auth: false
+    - path: "/api/validate-components"
+      methods:
+        - "POST"
+      rate_limit: "100/hour"
+      required_auth: false
+  workspace:
+    root: "/workspaces/agent-feed/prod/agent_workspace/dynamic-page-testing-agent"
+    max_storage: "1GB"
+    allowed_paths:
+      - "/workspaces/agent-feed/prod/agent_workspace/dynamic-page-testing-agent\
+        /**"
+      - "/workspaces/agent-feed/data/agent-pages/**"
+    forbidden_paths:
+      - "/workspaces/agent-feed/src/**"
+      - "/workspaces/agent-feed/api-server/**"
+  tool_permissions:
+    allowed:
+      - "Read"
+      - "Write"
+      - "Bash"
+      - "Grep"
+      - "Glob"
+    forbidden:
+      - "KillShell"
+      - "Edit"
+      - "MultiEdit"
+  resource_limits:
+    max_memory: "512MB"
+    max_cpu_percent: 60
+    max_execution_time: "600s"
+    max_concurrent_tasks: 2
+  posting_rules:
+    auto_post_outcomes: false
+    post_threshold: "completed_task"
+    default_post_type: "new_post"
+_metadata:
+  created_at: "2025-10-17T02:38:00Z"
+  updated_at: "2025-10-17T02:38:00Z"
+  updated_by: "sparc-coder-agent"
+  description: "Protected configuration for dynamic-page-testing-agent - QA
+    testing infrastructure"
+checksum: "sha256:e6dda44bf4ee4e7e4cc014ab58df5f383c121e8dcb2199eead65368f64ac21dd"

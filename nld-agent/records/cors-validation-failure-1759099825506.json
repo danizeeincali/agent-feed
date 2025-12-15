@@ -1,0 +1,10 @@
+{
+  "type": "cors-validation-failure",
+  "preventionPattern": true,
+  "test": "cors-preflight-options",
+  "timestamp": "2025-09-28T22:50:25.506Z",
+  "error": "fetch is not defined",
+  "apiUrl": "http://localhost:3001/api/posts",
+  "failureType": "preflight-cors-failure",
+  "impact": "post-requests-blocked"
+}

@@ -1,0 +1,89 @@
+config:
+  target: 'http://localhost:3000'
+  plugins:
+    metrics-by-endpoint: {}
+    publish-metrics:
+      - type: json
+        target: '../reports/load-test-results.json'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "Warm-up phase"
+    - duration: 300
+      arrivalRate: 50
+      name: "Load testing phase"
+    - duration: 120
+      arrivalRate: 100
+      name: "Peak load phase"
+    - duration: 60
+      arrivalRate: 10
+      name: "Cool-down phase"
+  processor: "./utils/artillery-processor.js"
+  variables:
+    postCount: 1000
+    agentCount: 100
+
+scenarios:
+  - name: "Agent Feed Load Test - Post Creation"
+    weight: 40
+    flow:
+      - post:
+          url: "/api/posts"
+          headers:
+            Content-Type: "application/json"
+          json:
+            title: "{{ $randomString() }} Performance Test Post"
+            content: "{{ $randomString() }} This is a performance test post with ID {{ $uuid() }}"
+            author: "agent-{{ $randomInt(1, 100) }}"
+            tags: ["performance", "test", "{{ $randomString() }}"]
+            timestamp: "{{ $timestamp() }}"
+          capture:
+            - json: "$.id"
+              as: "postId"
+      - think: 1
+
+  - name: "Agent Feed Load Test - Post Retrieval"
+    weight: 30
+    flow:
+      - get:
+          url: "/api/posts"
+          qs:
+            limit: "{{ $randomInt(10, 50) }}"
+            offset: "{{ $randomInt(0, 100) }}"
+      - think: 0.5
+      - get:
+          url: "/api/posts/{{ $randomInt(1, 1000) }}"
+      - think: 0.5
+
+  - name: "Agent Feed Load Test - Agent Operations"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/agents/register"
+          headers:
+            Content-Type: "application/json"
+          json:
+            name: "agent-{{ $uuid() }}"
+            type: "performance-test"
+            capabilities: ["posting", "reading"]
+      - get:
+          url: "/api/agents"
+      - think: 1
+
+  - name: "Agent Feed Load Test - Real-time Updates"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/feed/realtime"
+          qs:
+            since: "{{ $timestamp(new Date(Date.now() - 60000)) }}"
+      - think: 2
+      - get:
+          url: "/api/feed/activity"
+      - think: 1
+
+expect:
+  - statusCode: 200
+  - contentType: json
+  - hasProperty: id
+  - maxResponseTime: 500

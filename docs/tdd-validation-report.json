@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-09-09T22:09:41.823Z",
+  "summary": {
+    "total": 4,
+    "passed": 0,
+    "failed": 4,
+    "successRate": "0.00"
+  },
+  "results": {
+    "health": {
+      "passed": false,
+      "output": "\n> agent-feed@1.0.0 test:health\n> jest tests/health\n\nReferenceError: module is not defined in ES module scope\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at file:///workspaces/agent-feed/jest.config.js:1:1\n    at ModuleJobSync.runSync (node:internal/modules/esm/module_job:436:37)\n    at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:427:47)\n    at loadESMFromCJS (node:internal/modules/cjs/loader:1561:24)\n    at Module._compile (node:internal/modules/cjs/loader:1712:5)\n    at Object..js (node:internal/modules/cjs/loader:1895:10)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n",
+      "duration": 647
+    },
+    "unit": {
+      "passed": false,
+      "output": "\n> agent-feed@1.0.0 test:unit\n> jest\n\nReferenceError: module is not defined in ES module scope\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at file:///workspaces/agent-feed/jest.config.js:1:1\n    at ModuleJobSync.runSync (node:internal/modules/esm/module_job:436:37)\n    at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:427:47)\n    at loadESMFromCJS (node:internal/modules/cjs/loader:1561:24)\n    at Module._compile (node:internal/modules/cjs/loader:1712:5)\n    at Object..js (node:internal/modules/cjs/loader:1895:10)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n",
+      "duration": 564
+    },
+    "integration": {
+      "passed": false,
+      "output": "\n> agent-feed@1.0.0 test:integration\n> jest --config=jest.integration.config.js\n\nError: Can't find a root directory while resolving a config file path.\nProvided path to resolve: jest.integration.config.js\ncwd: /workspaces/agent-feed\n    at resolveConfigPath (/workspaces/agent-feed/node_modules/jest-config/build/resolveConfigPath.js:123:11)\n    at readInitialOptions (/workspaces/agent-feed/node_modules/jest-config/build/index.js:386:55)\n    at readConfig (/workspaces/agent-feed/node_modules/jest-config/build/index.js:147:54)\n    at readConfigs (/workspaces/agent-feed/node_modules/jest-config/build/index.js:424:32)\n    at runCLI (/workspaces/agent-feed/node_modules/@jest/core/build/cli/index.js:152:29)\n    at Object.run (/workspaces/agent-feed/node_modules/jest-cli/build/run.js:130:62)\n",
+      "duration": 458
+    },
+    "e2e": {
+      "passed": false,
+      "output": "",
+      "duration": 0
+    },
+    "regression": {
+      "passed": false,
+      "output": "\n> agent-feed@1.0.0 test:regression\n> jest tests/regression\n\nReferenceError: module is not defined in ES module scope\nThis file is being treated as an ES module because it has a '.js' file extension and '/workspaces/agent-feed/package.json' contains \"type\": \"module\". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.\n    at file:///workspaces/agent-feed/jest.config.js:1:1\n    at ModuleJobSync.runSync (node:internal/modules/esm/module_job:436:37)\n    at ModuleLoader.importSyncForRequire (node:internal/modules/esm/loader:427:47)\n    at loadESMFromCJS (node:internal/modules/cjs/loader:1561:24)\n    at Module._compile (node:internal/modules/cjs/loader:1712:5)\n    at Object..js (node:internal/modules/cjs/loader:1895:10)\n    at Module.load (node:internal/modules/cjs/loader:1465:32)\n    at Function._load (node:internal/modules/cjs/loader:1282:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:322:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)\n",
+      "duration": 476
+    }
+  },
+  "systemReady": false
+}

@@ -1,0 +1,168 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║           Header ID Generation - TDD Test Structure (22 Tests)              ║
+║                     London School Methodology                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📦 Header ID Generation - London School TDD
+│
+├─ 📂 ID Generation from Titles (5 tests) ✓
+│  │
+│  ├─ ✅ should convert "Text & Content" to "text-content"
+│  │     Mock: generateHeaderId('Text & Content') → 'text-content'
+│  │     Verify: h2 has id="text-content"
+│  │
+│  ├─ ✅ should convert "Interactive Forms" to "interactive-forms"
+│  │     Mock: generateHeaderId('Interactive Forms') → 'interactive-forms'
+│  │     Verify: h3 has id="interactive-forms"
+│  │
+│  ├─ ✅ should handle numbers: "Section 1" → "section-1"
+│  │     Mock: generateHeaderId('Section 1') → 'section-1'
+│  │     Verify: h2 has id="section-1"
+│  │
+│  ├─ ✅ should remove special chars: "What's New?" → "whats-new"
+│  │     Mock: generateHeaderId("What's New?") → 'whats-new'
+│  │     Verify: h1 has id="whats-new"
+│  │
+│  └─ ✅ should handle Unicode: "Café & Bar" → "cafe-bar"
+│        Mock: generateHeaderId('Café & Bar') → 'cafe-bar'
+│        Verify: h2 has id="cafe-bar"
+│
+├─ 📂 Explicit ID Preservation (3 tests) ✓
+│  │
+│  ├─ ✅ should use explicit id when provided
+│  │     Props: id="custom-section-id"
+│  │     Verify: generateHeaderId NOT called
+│  │     Verify: h2 has id="custom-section-id"
+│  │
+│  ├─ ✅ should not modify explicit id
+│  │     Props: id="MY-Custom-ID-123"
+│  │     Verify: generateHeaderId NOT called
+│  │     Verify: h3 has id="MY-Custom-ID-123" (unchanged)
+│  │
+│  └─ ✅ should prefer explicit id over generated
+│        Props: id="explicit-wins"
+│        Mock: generateHeaderId would return 'generated-would-be-this'
+│        Verify: generateHeaderId NOT called
+│        Verify: h1 has id="explicit-wins"
+│
+├─ 📂 Edge Cases (5 tests) ✓
+│  │
+│  ├─ ✅ should handle empty title (use fallback)
+│  │     Input: title=""
+│  │     Mock: generateHeaderId('') → 'header-fallback'
+│  │     Verify: h2 has id="header-fallback"
+│  │
+│  ├─ ✅ should handle very long titles (truncate)
+│  │     Input: 100+ character title
+│  │     Mock: generateHeaderId triggers truncateToMaxLength(title, 50)
+│  │     Verify: truncateToMaxLength called
+│  │     Verify: h2 has truncated id
+│  │
+│  ├─ ✅ should handle only special chars "!!!" → fallback
+│  │     Input: title="!!!"
+│  │     Mock: generateHeaderId('!!!') → 'header-1'
+│  │     Verify: h3 has id="header-1"
+│  │
+│  ├─ ✅ should handle whitespace-only title
+│  │     Input: title="   "
+│  │     Mock: generateHeaderId('   ') → 'header-fallback'
+│  │     Verify: h2 has id="header-fallback"
+│  │
+│  └─ ✅ should handle duplicate titles (add suffix)
+│        Input: Two headers with title="Features"
+│        Mock: First call → 'features', Second call → 'features-2'
+│        Verify: handleDuplicates called
+│        Verify: Different IDs for each header
+│
+├─ 📂 Header Rendering (4 tests) ✓
+│  │
+│  ├─ ✅ should render h1 with generated id
+│  │     Props: level=1, title="Main Title"
+│  │     Mock: generateHeaderId('Main Title') → 'main-title'
+│  │     Verify: tagName is 'H1'
+│  │     Verify: id="main-title"
+│  │
+│  ├─ ✅ should render h2 with explicit id
+│  │     Props: level=2, title="Subtitle", id="custom-h2"
+│  │     Verify: generateHeaderId NOT called
+│  │     Verify: tagName is 'H2'
+│  │     Verify: id="custom-h2"
+│  │
+│  ├─ ✅ should render h3 with title and generated id
+│  │     Props: level=3, title="Section Header"
+│  │     Mock: generateHeaderId('Section Header') → 'section-header'
+│  │     Verify: tagName is 'H3'
+│  │     Verify: text content is "Section Header"
+│  │     Verify: id="section-header"
+│  │
+│  └─ ✅ all header levels h1-h6 should get IDs
+│        Render: h1 through h6 with titles "Level 1" to "Level 6"
+│        Verify: generateHeaderId called 6 times
+│        Verify: Each header has non-empty id attribute
+│        Verify: All levels (1-6) properly rendered
+│
+├─ 📂 Integration with DynamicPageRenderer (3 tests) ✓
+│  │
+│  ├─ ✅ should render header from component config
+│  │     Config: { type: 'header', props: { level: 1, title: 'Page Title' } }
+│  │     Mock: generateHeaderId('Page Title') → 'page-title'
+│  │     Verify: h1 exists in DOM
+│  │     Verify: id="page-title"
+│  │     Verify: text content is "Page Title"
+│  │
+│  ├─ ✅ should work with multiple headers on page
+│  │     Config: 3 headers (Introduction, Features, Conclusion)
+│  │     Mock: Sequential calls → 'introduction', 'features', 'conclusion'
+│  │     Verify: generateHeaderId called 3 times
+│  │     Verify: Call order: nth(1) 'Introduction', nth(2) 'Features', nth(3) 'Conclusion'
+│  │     Verify: 3 headers in DOM with correct IDs
+│  │
+│  └─ ✅ should work with sidebar navigation
+│        Config: 2 headers (Overview, Getting Started)
+│        Mock: 'overview', 'getting-started'
+│        Navigation: Links with href="#overview" and href="#getting-started"
+│        Verify: Header IDs match navigation anchors
+│        Verify: Navigation links reference correct IDs
+│
+└─ 📂 Collaborator Contracts (2 tests) ✓
+   │
+   ├─ ✅ should define clear generateHeaderId contract
+   │     Contract: (title: string, existingIds?: Set<string>) => string
+   │     Verify: Function signature matches contract
+   │     Verify: Returns string type
+   │     Verify: Optional Set parameter handled
+   │
+   └─ ✅ should verify Header component accepts correct props interface
+         Interface: { level: 1-6, title: string, id?: string, className?: string }
+         Verify: Component accepts valid props without throwing
+         Verify: ID generation triggered when id not provided
+         Verify: Generated ID applied to rendered header
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                              Test Statistics                                 ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Total Tests:              22                                                ║
+║  Passed:                   22 ✓                                              ║
+║  Failed:                    0                                                ║
+║  Duration:                 ~6.5 seconds                                      ║
+║  Average per test:         ~295ms                                            ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Mock Interactions:        ~50+ verified                                     ║
+║  DOM Assertions:           ~40+ verified                                     ║
+║  Contract Verifications:    8 defined                                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        London School TDD Patterns Used                       ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  ✓ Mock-First Design          Defined collaborator contracts via mocks      ║
+║  ✓ Outside-In Testing         Started with integration, moved to units      ║
+║  ✓ Behavior Verification      Tested interactions, not just state           ║
+║  ✓ Interaction Testing        Verified object conversations                 ║
+║  ✓ Contract Definition        Explicit interface specifications              ║
+║  ✓ Collaboration Focus        HOW objects work together                     ║
+║  ✓ Minimal Stubs              Only mock external dependencies               ║
+║  ✓ Clear Expectations         Mock setup shows expected behavior            ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

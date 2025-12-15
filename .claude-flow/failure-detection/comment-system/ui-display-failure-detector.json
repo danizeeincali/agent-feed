@@ -1,0 +1,316 @@
+{
+  "detector_version": "1.0.0",
+  "detector_type": "ui_display_failure_detection",
+  "creation_timestamp": "2025-09-06T00:00:00Z",
+  
+  "detection_scope": {
+    "target_components": [
+      "CommentThread",
+      "CommentItem", 
+      "CommentCount",
+      "CommentForm",
+      "CommentActions",
+      "CommentNavigation"
+    ],
+    "failure_categories": [
+      "hardcoded_label_issues",
+      "data_type_mismatches",
+      "count_inconsistencies",
+      "threading_display_failures",
+      "navigation_failures"
+    ]
+  },
+  
+  "detection_rules": {
+    "hardcoded_label_detection": {
+      "rule_id": "UI_DETECT_001",
+      "description": "Detect hardcoded labels that confuse users",
+      "detection_patterns": [
+        {
+          "pattern_type": "string_literal_analysis",
+          "regex_patterns": [
+            "Technical Analysis",
+            "(?i)analysis\\s*:",
+            "(?i)category\\s*:\\s*[A-Z]",
+            "hardcoded.*label"
+          ],
+          "file_extensions": [".tsx", ".jsx", ".js", ".ts"],
+          "exclude_paths": ["node_modules", "tests", "mocks"]
+        },
+        {
+          "pattern_type": "user_feedback_analysis",
+          "trigger_phrases": [
+            "confusing labels",
+            "what does this mean",
+            "unclear category",
+            "wrong label",
+            "misleading text"
+          ],
+          "sentiment_threshold": -0.3,
+          "confidence_required": 0.7
+        }
+      ],
+      "severity_levels": {
+        "critical": "user-facing hardcoded domain-specific terms",
+        "high": "non-localized string literals in UI",
+        "medium": "inconsistent labeling patterns",
+        "low": "potential future localization issues"
+      }
+    },
+    
+    "data_type_mismatch_detection": {
+      "rule_id": "UI_DETECT_002",
+      "description": "Detect comment count data type inconsistencies",
+      "detection_patterns": [
+        {
+          "pattern_type": "api_response_analysis",
+          "monitors": [
+            {
+              "endpoint": "/api/posts/:id/comments",
+              "expected_type": "integer",
+              "field_path": "data.*.repliesCount",
+              "validation_rules": [
+                "is_integer",
+                "greater_than_or_equal_zero",
+                "consistent_across_responses"
+              ]
+            },
+            {
+              "endpoint": "/api/comments",
+              "expected_type": "integer",
+              "field_path": "data.length",
+              "cross_validation": "matches_individual_counts"
+            }
+          ]
+        },
+        {
+          "pattern_type": "frontend_type_checking",
+          "typescript_analysis": {
+            "check_prop_types": true,
+            "validate_interface_compliance": true,
+            "monitor_runtime_type_assertions": true
+          },
+          "runtime_validation": {
+            "console_error_patterns": [
+              "Cannot convert.*to number",
+              "Expected number.*received string",
+              "Invalid count.*type",
+              "NaN.*comment count"
+            ]
+          }
+        }
+      ],
+      "auto_correction": {
+        "enable_auto_fix": true,
+        "correction_strategies": [
+          "parseInt_with_fallback",
+          "null_coalescing_to_zero", 
+          "type_guard_validation",
+          "api_response_normalization"
+        ]
+      }
+    },
+    
+    "count_inconsistency_detection": {
+      "rule_id": "UI_DETECT_003",
+      "description": "Detect comment count display vs actual inconsistencies",
+      "detection_patterns": [
+        {
+          "pattern_type": "real_time_validation",
+          "validation_checks": [
+            {
+              "check_name": "displayed_vs_actual_count",
+              "frequency": "every_comment_load",
+              "tolerance": 0,
+              "failure_threshold": 3
+            },
+            {
+              "check_name": "parent_child_count_consistency",
+              "frequency": "on_thread_expansion",
+              "validation_logic": "parent.repliesCount === children.length"
+            },
+            {
+              "check_name": "cache_vs_live_data_consistency", 
+              "frequency": "periodic_background_check",
+              "interval": "30_seconds"
+            }
+          ]
+        },
+        {
+          "pattern_type": "user_behavior_analysis",
+          "behavioral_indicators": [
+            {
+              "indicator": "user_clicks_refresh_after_comment",
+              "weight": 0.4,
+              "description": "User refreshes page after commenting - suggests count mismatch"
+            },
+            {
+              "indicator": "user_reports_count_discrepancy", 
+              "weight": 0.9,
+              "description": "Direct user feedback about count issues"
+            },
+            {
+              "indicator": "rapid_comment_interaction_abandonment",
+              "weight": 0.6,
+              "description": "User quickly leaves comment section - possible confusion"
+            }
+          ]
+        }
+      ],
+      "escalation_rules": {
+        "minor_inconsistency": "log_and_monitor",
+        "persistent_inconsistency": "auto_refresh_counts",
+        "widespread_inconsistency": "alert_development_team",
+        "critical_inconsistency": "fallback_to_live_count_query"
+      }
+    }
+  },
+  
+  "monitoring_triggers": {
+    "file_change_monitoring": {
+      "watch_patterns": [
+        "src/components/**/*Comment*.{js,jsx,ts,tsx}",
+        "src/api/routes/comments*.{js,ts}",
+        "src/utils/*comment*.{js,ts}"
+      ],
+      "trigger_on": ["save", "commit", "deploy"],
+      "analysis_depth": "full_static_analysis"
+    },
+    
+    "runtime_monitoring": {
+      "error_log_patterns": [
+        "Comment.*error",
+        "Count.*mismatch",
+        "Threading.*failure",
+        "Navigation.*broken"
+      ],
+      "performance_thresholds": {
+        "comment_load_time_ms": 500,
+        "count_calculation_time_ms": 50,
+        "threading_render_time_ms": 200
+      },
+      "user_interaction_monitoring": {
+        "track_failed_interactions": true,
+        "track_user_confusion_indicators": true,
+        "track_accessibility_violations": true
+      }
+    },
+    
+    "user_feedback_monitoring": {
+      "feedback_channels": [
+        "in_app_feedback",
+        "support_tickets",
+        "user_testing_sessions",
+        "analytics_behavior_patterns"
+      ],
+      "sentiment_analysis": {
+        "enable": true,
+        "keywords": ["comment", "thread", "count", "navigation", "confusing"],
+        "alert_threshold": -0.5
+      }
+    }
+  },
+  
+  "detection_outputs": {
+    "alert_formats": {
+      "immediate_alert": {
+        "severity": "critical|high|medium|low",
+        "component": "specific_component_name",
+        "failure_type": "specific_failure_category",
+        "description": "human_readable_description",
+        "evidence": "supporting_data_or_logs",
+        "suggested_fixes": ["array_of_immediate_actions"],
+        "estimated_impact": "user_impact_assessment"
+      },
+      "pattern_report": {
+        "detection_timestamp": "ISO8601_datetime",
+        "pattern_frequency": "how_often_detected",
+        "affected_users": "estimated_user_count",
+        "trend_analysis": "increasing|stable|decreasing",
+        "correlation_factors": "related_system_changes"
+      }
+    },
+    
+    "integration_endpoints": {
+      "claude_flow_neural_update": "/api/claude-flow/neural/pattern-detected",
+      "development_alert": "/api/alerts/development-team",
+      "automated_fix_trigger": "/api/auto-fix/comment-system",
+      "metrics_update": "/api/metrics/comment-failure-detection"
+    }
+  },
+  
+  "machine_learning_integration": {
+    "pattern_classification_model": {
+      "model_type": "failure_pattern_classifier",
+      "input_features": [
+        "error_message_content",
+        "component_complexity_score",
+        "user_interaction_patterns",
+        "system_performance_metrics",
+        "recent_code_changes"
+      ],
+      "output_classes": [
+        "hardcoded_label_issue",
+        "data_type_mismatch",
+        "count_inconsistency",
+        "threading_failure",
+        "navigation_failure"
+      ],
+      "confidence_threshold": 0.8
+    },
+    
+    "predictive_failure_detection": {
+      "enable": true,
+      "prediction_window": "24_hours",
+      "risk_factors": [
+        "recent_api_changes",
+        "database_schema_modifications",
+        "frontend_component_updates",
+        "user_behavior_pattern_changes"
+      ],
+      "prevention_actions": [
+        "preemptive_validation_runs",
+        "enhanced_monitoring_activation",
+        "user_experience_testing_trigger"
+      ]
+    }
+  },
+  
+  "self_healing_mechanisms": {
+    "auto_correction_rules": [
+      {
+        "condition": "data_type_mismatch_detected",
+        "action": "apply_type_conversion_fix",
+        "verification": "validate_fix_effectiveness",
+        "rollback_trigger": "fix_causes_new_issues"
+      },
+      {
+        "condition": "count_inconsistency_persistent",
+        "action": "force_count_recalculation",
+        "verification": "confirm_count_accuracy",
+        "escalation": "manual_investigation_required"
+      },
+      {
+        "condition": "hardcoded_label_confusion_high",
+        "action": "flag_for_immediate_review",
+        "verification": "user_comprehension_testing",
+        "priority": "high"
+      }
+    ],
+    
+    "recovery_strategies": {
+      "graceful_degradation": [
+        "hide_problematic_counts_temporarily",
+        "show_loading_states_during_fixes",
+        "display_user_friendly_error_messages",
+        "maintain_core_functionality_access"
+      ],
+      "performance_optimization": [
+        "cache_valid_count_data",
+        "prioritize_critical_user_paths",
+        "background_data_validation",
+        "progressive_enhancement_loading"
+      ]
+    }
+  }
+}

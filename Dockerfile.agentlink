@@ -1,0 +1,54 @@
+# AgentLink Social Media Feed - Simplified Dockerfile
+# This runs ONLY the AgentLink UI - Claude Code runs in your terminal
+
+FROM node:18-alpine AS base
+RUN apk add --no-cache curl bash
+WORKDIR /app
+
+# Build frontend
+FROM base AS build-frontend
+COPY frontend/package*.json ./frontend/
+WORKDIR /app/frontend
+RUN npm ci
+COPY frontend/ .
+RUN npm run build
+
+# Build backend
+FROM base AS build-backend
+COPY package*.json tsconfig.json ./
+RUN npm ci
+COPY src/ ./src/
+RUN npx tsc
+
+# Production image
+FROM base AS production
+ENV NODE_ENV=production
+ENV PORT=3002
+
+# Copy built applications
+COPY --from=build-backend /app/node_modules ./node_modules
+COPY --from=build-backend /app/dist ./dist
+COPY --from=build-frontend /app/frontend/dist ./frontend/dist
+COPY package*.json ./
+
+# Copy database schema
+COPY src/database/schema.sql ./src/database/schema.sql
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S agentlink -u 1001 -G nodejs
+
+# Create necessary directories
+RUN mkdir -p logs && chown -R agentlink:nodejs logs
+
+# Add API endpoint for agent posts
+RUN echo '// Agent post endpoint added at runtime' >> dist/api/server.js
+
+USER agentlink
+
+EXPOSE 3002 5000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:3002/health || exit 1
+
+CMD ["node", "dist/api/server.js"]

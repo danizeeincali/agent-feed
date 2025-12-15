@@ -1,0 +1,886 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="221" failures="41" errors="0" time="27.023">
+  <testsuite name="tests/unit/engagement-optimization.test.js" errors="0" failures="15" skipped="0" timestamp="2025-11-08T06:12:29" time="2.733" tests="52">
+    <testcase classname="EngagementOptimizer › optimizeForEngagement" name="should orchestrate multi-round optimization correctly" time="0.011">
+      <failure>TypeError: mockEmotionalAnalyzer.analyze.mockResolvedValueOnCall is not a function
+    at Object.mockResolvedValueOnCall (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:70:18)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="EngagementOptimizer › optimizeForEngagement" name="should stop optimization when target score is reached" time="0.014">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 0
+Received: 1
+    at Object.toBe (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:119:46)</failure>
+    </testcase>
+    <testcase classname="EngagementOptimizer › optimizeForEngagement" name="should handle optimization errors gracefully" time="0.029">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected constructor: EngagementOptimizationError
+Received constructor: Error
+
+Received message: &quot;Analysis failed&quot;
+
+      127 |             const context = {};
+      128 |
+    &gt; 129 |             mockEmotionalAnalyzer.analyze.mockRejectedValue(new Error(&apos;Analysis failed&apos;));
+          |                                                             ^
+      130 |
+      131 |             // Act &amp; Assert
+      132 |             await expect(optimizer.optimizeForEngagement(content, qualityMetrics, context))
+
+      at Object.&lt;anonymous&gt; (tests/unit/engagement-optimization.test.js:129:61)
+    at Object.toThrow (/workspaces/agent-feed/node_modules/@jest/expect/node_modules/expect/build/index.js:218:22)
+    at Object.toThrow (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:133:26)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="EngagementOptimizer › optimizeForEngagement" name="should limit optimization to maximum rounds" time="0.004">
+    </testcase>
+    <testcase classname="EngagementOptimizer › assessCurrentEngagement" name="should calculate weighted engagement score correctly" time="0.004">
+      <failure>Error: expect(received).toBeCloseTo(expected, precision)
+
+Expected: 0.7
+Received: 0.55
+
+Expected precision:    2
+Expected difference: &lt; 0.005
+Received difference:   0.1499999999999999
+    at Object.toBeCloseTo (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:187:34)</failure>
+    </testcase>
+    <testcase classname="EngagementOptimizer › assessCurrentEngagement" name="should identify weakest areas correctly" time="0.003">
+    </testcase>
+    <testcase classname="EngagementOptimizer › selectOptimizationStrategies" name="should select strategies based on weakest areas" time="0.003">
+    </testcase>
+    <testcase classname="EngagementOptimizer › selectOptimizationStrategies" name="should add round-specific strategies" time="0.007">
+    </testcase>
+    <testcase classname="EngagementOptimizer › optimizeOpening" name="should improve non-engaging openings" time="0.035">
+    </testcase>
+    <testcase classname="EngagementOptimizer › optimizeOpening" name="should not modify already engaging openings" time="0.01">
+    </testcase>
+    <testcase classname="EngagementOptimizer › optimizeOpening" name="should generate appropriate openings for different agent types" time="0.013">
+    </testcase>
+    <testcase classname="EngagementOptimizer › enhanceCallToAction" name="should add CTA to content without one" time="0.024">
+    </testcase>
+    <testcase classname="EngagementOptimizer › enhanceCallToAction" name="should not modify content that already has CTA" time="0.008">
+    </testcase>
+    <testcase classname="EngagementOptimizer › enhanceCallToAction" name="should generate appropriate CTAs for different agent types" time="0.015">
+    </testcase>
+    <testcase classname="EngagementOptimizer › identifyWeakestAreas" name="should identify and sort weak dimensions" time="0.006">
+    </testcase>
+    <testcase classname="EngagementOptimizer › identifyWeakestAreas" name="should return empty array when all dimensions are strong" time="0.008">
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › analyze" name="should analyze emotional tone correctly" time="0.009">
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › analyze" name="should detect lack of emotional engagement" time="0.005">
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › analyze" name="should analyze personal connection" time="0.004">
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › analyzeEmotionalTone" name="should favor positive emotional content" time="0.004">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.5
+Received:   0.4
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:437:28)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › analyzeEmotionalTone" name="should handle mixed emotional content" time="0.006">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0
+Received:   0
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:443:28)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › analyzeEmotionalTone" name="should return low score for neutral content" time="0.003">
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › enhance" name="should enhance content with low emotional score" time="0.011">
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › enhance" name="should not modify content with high emotional score" time="0.005">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: true
+    at Object.toBe (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:481:37)</failure>
+    </testcase>
+    <testcase classname="EmotionalEngagementAnalyzer › enhance" name="should add appropriate emotional language for different agent types" time="0.009">
+      <failure>Error: expect(received).toContain(expected) // indexOf
+
+Expected substring: &quot;excited&quot;
+Received string:    &quot;I am looking forward to discussing basic content&quot;
+    at Object.toContain (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:498:37)</failure>
+    </testcase>
+    <testcase classname="InteractivityEnhancer › assess" name="should assess interactive content highly" time="0.004">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.7
+Received:   0.7
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:522:34)</failure>
+    </testcase>
+    <testcase classname="InteractivityEnhancer › assess" name="should identify missing interactivity elements" time="0.007">
+    </testcase>
+    <testcase classname="InteractivityEnhancer › enhance" name="should add questions to non-interactive content" time="0.004">
+    </testcase>
+    <testcase classname="InteractivityEnhancer › enhance" name="should not modify already interactive content" time="0.008">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: true
+    at Object.toBe (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:569:37)</failure>
+    </testcase>
+    <testcase classname="InteractivityEnhancer › enhance" name="should generate relevant questions for different agent types" time="0.01">
+      <failure>Error: expect(received).toContain(expected) // indexOf
+
+Expected substring: &quot;prioritize&quot;
+Received string:    &quot;non-interactive content any suggestions for the approach? what is your take on this approach?&quot;
+    at Object.toContain (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:589:51)</failure>
+    </testcase>
+    <testcase classname="PersonalizationEngine › assess" name="should assess personalized content highly" time="0.009">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.7
+Received:   0.7
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:618:34)</failure>
+    </testcase>
+    <testcase classname="PersonalizationEngine › assess" name="should suggest personalization when userData is missing" time="0.007">
+    </testcase>
+    <testcase classname="PersonalizationEngine › assess" name="should assess context relevance correctly" time="0.001">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.5
+Received:   0.09999999999999999
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:645:34)</failure>
+    </testcase>
+    <testcase classname="PersonalizationEngine › personalize" name="should add personal greeting when missing" time="0.005">
+    </testcase>
+    <testcase classname="PersonalizationEngine › personalize" name="should add role context when relevant" time="0.002">
+    </testcase>
+    <testcase classname="PersonalizationEngine › personalize" name="should not modify already personalized content" time="0.004">
+    </testcase>
+    <testcase classname="StructuralOptimizer › assess" name="should assess well-structured content highly" time="0.003">
+    </testcase>
+    <testcase classname="StructuralOptimizer › assess" name="should identify structural improvements needed" time="0.003">
+      <failure>Error: expect(received).toContain(expected) // indexOf
+
+Expected value: &quot;Improve paragraph structure&quot;
+Received array: [&quot;Add formatting for better readability&quot;]
+    at Object.toContain (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:731:40)</failure>
+    </testcase>
+    <testcase classname="StructuralOptimizer › optimize" name="should improve paragraph structure for long content" time="0.002">
+      <failure>Error: expect(received).toHaveLength(expected)
+
+Expected length: 2
+Received length: 1
+Received array:  [&quot;• Sentence one. Sentence two. Sentence three. Sentence four. Sentence five. Sentence six. Sentence seven. Sentence eight. Sentence nine.&quot;]
+    at Object.toHaveLength (/workspaces/agent-feed/prod/tests/unit/engagement-optimization.test.js:748:47)</failure>
+    </testcase>
+    <testcase classname="StructuralOptimizer › optimize" name="should add formatting to improve readability" time="0.002">
+    </testcase>
+    <testcase classname="StructuralOptimizer › optimize" name="should not modify well-structured content" time="0.004">
+    </testcase>
+    <testcase classname="EngagementPredictor › predict" name="should generate comprehensive engagement prediction" time="0.002">
+    </testcase>
+    <testcase classname="EngagementPredictor › predict" name="should predict higher interactions for idea content" time="0.012">
+    </testcase>
+    <testcase classname="EngagementPredictor › predict" name="should adjust prediction based on context factors" time="0.004">
+    </testcase>
+    <testcase classname="EngagementPredictor › predict" name="should generate recommendations for low engagement" time="0.004">
+    </testcase>
+    <testcase classname="EngagementPredictor › predictInteractions" name="should scale interactions with engagement score" time="0.004">
+    </testcase>
+    <testcase classname="EngagementPredictor › predictInteractions" name="should apply content type multipliers" time="0.003">
+    </testcase>
+    <testcase classname="EngagementPredictor › assessTimingImpact" name="should favor business hours" time="0.006">
+    </testcase>
+    <testcase classname="EngagementPredictor › assessTimingImpact" name="should give moderate scores to early/late work hours" time="0.004">
+    </testcase>
+    <testcase classname="Performance and Integration Tests" name="should complete optimization within performance requirements" time="0.007">
+    </testcase>
+    <testcase classname="Performance and Integration Tests" name="should handle batch optimization efficiently" time="0.007">
+    </testcase>
+    <testcase classname="Performance and Integration Tests" name="should maintain consistency in optimization results" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/unit/quality-assessment.test.js" errors="0" failures="11" skipped="0" timestamp="2025-11-08T06:12:32" time="0.786" tests="49">
+    <testcase classname="QualityAssessmentSystem › assessContent" name="should assess content across all quality dimensions" time="0.014">
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › assessContent" name="should calculate weighted overall score correctly" time="0.003">
+      <failure>Error: expect(received).toBeCloseTo(expected, precision)
+
+Expected: 0.63
+Received: 0.6100000000000001
+
+Expected precision:    2
+Expected difference: &lt; 0.005
+Received difference:   0.019999999999999907
+    at Object.toBeCloseTo (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:120:41)</failure>
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › assessContent" name="should handle errors gracefully" time="0.012">
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › assessContent" name="should generate quality insights based on scores" time="0.002">
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › assessContent" name="should identify improvements with proper prioritization" time="0.004">
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › assessContent" name="should create detailed quality breakdown" time="0.002">
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › batchAssess" name="should assess multiple contents and provide batch analytics" time="0.004">
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › batchAssess" name="should calculate score distribution correctly" time="0.004">
+    </testcase>
+    <testcase classname="QualityAssessmentSystem › getQualityGrade" name="should assign correct quality grades" time="0.004">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Good&quot;
+Received: &quot;Acceptable&quot;
+    at Object.toBe (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:291:57)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="ClarityAnalyzer › analyze" name="should analyze clarity with high score for clear content" time="0.002">
+    </testcase>
+    <testcase classname="ClarityAnalyzer › analyze" name="should analyze clarity with low score for complex content" time="0.002">
+      <failure>Error: expect(received).toContain(expected) // indexOf
+
+Expected value: &quot;Replace complex jargon with simpler, clearer language&quot;
+Received array: [&quot;Simplify sentence structure and reduce average sentence length&quot;]
+    at Object.toContain (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:334:40)</failure>
+    </testcase>
+    <testcase classname="ClarityAnalyzer › analyze" name="should detect ambiguous language" time="0.006">
+    </testcase>
+    <testcase classname="ClarityAnalyzer › assessSentenceComplexity" name="should rate optimal sentence length highly" time="0.003">
+    </testcase>
+    <testcase classname="ClarityAnalyzer › assessSentenceComplexity" name="should penalize very long sentences" time="0.006">
+    </testcase>
+    <testcase classname="ClarityAnalyzer › assessSentenceComplexity" name="should penalize very short sentences" time="0.004">
+    </testcase>
+    <testcase classname="ClarityAnalyzer › assessVocabularyClarity" name="should penalize complex vocabulary" time="0.004">
+    </testcase>
+    <testcase classname="ClarityAnalyzer › assessVocabularyClarity" name="should reward simple vocabulary" time="0.004">
+    </testcase>
+    <testcase classname="StructureAnalyzer › analyze" name="should analyze well-structured content positively" time="0.005">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.7
+Received:   0.3
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:413:46)</failure>
+    </testcase>
+    <testcase classname="StructureAnalyzer › analyze" name="should identify poor structure" time="0.002">
+    </testcase>
+    <testcase classname="StructureAnalyzer › assessLogicalFlow" name="should detect transition words" time="0.001">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.5
+Received:   0
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:436:28)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="StructureAnalyzer › assessLogicalFlow" name="should detect lack of transitions" time="0.001">
+    </testcase>
+    <testcase classname="StructureAnalyzer › assessFormatting" name="should detect headers" time="0.005">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.8
+Received:   0.6000000000000001
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:450:28)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="StructureAnalyzer › assessFormatting" name="should detect lists" time="0.004">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.7
+Received:   0.4
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:456:28)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="StructureAnalyzer › assessFormatting" name="should give low score for plain text" time="0.002">
+    </testcase>
+    <testcase classname="RelevanceAnalyzer › analyze" name="should analyze business-relevant content highly" time="0.002">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.6
+Received:   0.6
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:487:34)</failure>
+    </testcase>
+    <testcase classname="RelevanceAnalyzer › analyze" name="should detect context relevance based on agent type" time="0.002">
+    </testcase>
+    <testcase classname="RelevanceAnalyzer › analyze" name="should suggest improvements for low relevance" time="0.004">
+    </testcase>
+    <testcase classname="RelevanceAnalyzer › assessBusinessRelevance" name="should use impact analysis score as base" time="0.001">
+    </testcase>
+    <testcase classname="RelevanceAnalyzer › assessBusinessRelevance" name="should bonus for business keywords" time="0.001">
+    </testcase>
+    <testcase classname="RelevanceAnalyzer › assessContextRelevance" name="should match agent type keywords" time="0.003">
+    </testcase>
+    <testcase classname="RelevanceAnalyzer › assessContextRelevance" name="should default for unknown agent type" time="0.002">
+    </testcase>
+    <testcase classname="ActionabilityAnalyzer › analyze" name="should rate actionable content highly" time="0.002">
+    </testcase>
+    <testcase classname="ActionabilityAnalyzer › analyze" name="should suggest improvements for vague content" time="0.002">
+    </testcase>
+    <testcase classname="ActionabilityAnalyzer › assessActionWords" name="should detect action verbs" time="0.001">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.5
+Received:   0.4
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:600:28)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="ActionabilityAnalyzer › assessActionWords" name="should return low score for passive content" time="0.002">
+    </testcase>
+    <testcase classname="ActionabilityAnalyzer › assessSpecificity" name="should detect specific details" time="0.001">
+    </testcase>
+    <testcase classname="ActionabilityAnalyzer › assessSpecificity" name="should return low score for vague content" time="0.001">
+    </testcase>
+    <testcase classname="CompletenessAnalyzer › analyze" name="should assess personal-todos completeness" time="0.001">
+    </testcase>
+    <testcase classname="CompletenessAnalyzer › analyze" name="should assess meeting-next-steps completeness" time="0.001">
+    </testcase>
+    <testcase classname="CompletenessAnalyzer › analyze" name="should suggest improvements for incomplete content" time="0.002">
+    </testcase>
+    <testcase classname="ReadabilityAnalyzer › analyze" name="should assess readable content positively" time="0.003">
+    </testcase>
+    <testcase classname="ReadabilityAnalyzer › analyze" name="should suggest improvements for complex text" time="0.002">
+    </testcase>
+    <testcase classname="ReadabilityAnalyzer › calculateFleschReadability" name="should calculate Flesch score for simple text" time="0.006">
+    </testcase>
+    <testcase classname="ReadabilityAnalyzer › calculateFleschReadability" name="should calculate Flesch score for complex text" time="0.006">
+    </testcase>
+    <testcase classname="ReadabilityAnalyzer › countSyllables" name="should count syllables correctly" time="0.002">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 3
+Received: 4
+    at Object.toBe (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:734:69)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="ReadabilityAnalyzer › countSyllables" name="should handle edge cases" time="0.001">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 1
+Received: 2
+    at Object.toBe (/workspaces/agent-feed/prod/tests/unit/quality-assessment.test.js:741:65)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="Integration and Performance Tests" name="should complete assessment within performance requirements" time="0.002">
+    </testcase>
+    <testcase classname="Integration and Performance Tests" name="should handle batch processing efficiently" time="0.004">
+    </testcase>
+    <testcase classname="Integration and Performance Tests" name="should maintain consistency across multiple assessments" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/unit/posting-intelligence-framework.test.js" errors="0" failures="1" skipped="0" timestamp="2025-11-08T06:12:32" time="0.48" tests="25">
+    <testcase classname="PostingIntelligenceFramework › generateIntelligentPost" name="should orchestrate all phases of post generation correctly" time="0.006">
+    </testcase>
+    <testcase classname="PostingIntelligenceFramework › generateIntelligentPost" name="should handle errors gracefully and throw PostingIntelligenceError" time="0.066">
+    </testcase>
+    <testcase classname="PostingIntelligenceFramework › generateIntelligentPost" name="should meet performance requirement of &lt;200ms for post composition" time="0.002">
+    </testcase>
+    <testcase classname="PostingIntelligenceFramework › packageFinalPost" name="should create properly structured final post package" time="0.003">
+    </testcase>
+    <testcase classname="PostingIntelligenceFramework › batchGeneratePosts" name="should process multiple posts with intelligence sharing" time="0.003">
+    </testcase>
+    <testcase classname="PostingIntelligenceFramework › batchGeneratePosts" name="should achieve 100 posts/minute throughput requirement" time="0.003">
+    </testcase>
+    <testcase classname="PostingIntelligenceFramework › generateRecommendations" name="should generate quality recommendations when score is below threshold" time="0.002">
+    </testcase>
+    <testcase classname="PostingIntelligenceFramework › generateRecommendations" name="should generate impact recommendations when score is low" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › composeContent" name="should compose content for personal-todos agent type" time="0.004">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › composeContent" name="should compose content for meeting-prep agent type" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › composeContent" name="should throw error for unsupported agent type" time="0.003">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › generatePriorityReasoning" name="should generate reasoning for P1 priority" time="0.01">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › generatePriorityReasoning" name="should generate reasoning for P3 priority" time="0.005">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › generatePriorityReasoning" name="should default to P3 reasoning for unknown priority" time="0.005">
+    </testcase>
+    <testcase classname="BusinessImpactAnalyzer › analyzeBusinessImpact" name="should analyze content with high revenue impact" time="0.006">
+      <failure>Error: expect(received).toBeGreaterThan(expected)
+
+Expected: &gt; 0.5
+Received:   0.33099999999999996
+    at Object.toBeGreaterThan (/workspaces/agent-feed/prod/tests/unit/posting-intelligence-framework.test.js:457:34)</failure>
+    </testcase>
+    <testcase classname="BusinessImpactAnalyzer › analyzeBusinessImpact" name="should analyze content with low business impact" time="0.006">
+    </testcase>
+    <testcase classname="BusinessImpactAnalyzer › analyzeBusinessImpact" name="should generate improvements for low scores" time="0.006">
+    </testcase>
+    <testcase classname="BusinessImpactAnalyzer › analyzeRevenueImpact" name="should detect revenue keywords and calculate score" time="0.005">
+    </testcase>
+    <testcase classname="BusinessImpactAnalyzer › analyzeRevenueImpact" name="should handle content with no revenue keywords" time="0.002">
+    </testcase>
+    <testcase classname="BusinessImpactAnalyzer › analyzeEfficiencyImpact" name="should detect efficiency keywords and apply priority multiplier" time="0.003">
+    </testcase>
+    <testcase classname="BusinessImpactAnalyzer › analyzeEfficiencyImpact" name="should apply lower multiplier for lower priority tasks" time="0.009">
+    </testcase>
+    <testcase classname="Error Handling and Resilience" name="should handle template engine failures gracefully" time="0.004">
+    </testcase>
+    <testcase classname="Error Handling and Resilience" name="should handle partial failures in optimization pipeline" time="0.009">
+    </testcase>
+    <testcase classname="Performance and Scalability" name="should handle high-volume batch processing efficiently" time="0.01">
+    </testcase>
+    <testcase classname="Performance and Scalability" name="should maintain performance under memory pressure" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/integration/system-resilience.test.js" errors="0" failures="1" skipped="0" timestamp="2025-11-08T06:12:33" time="12.863" tests="11">
+    <testcase classname="System Resilience and Error Recovery › Network Failure Resilience" name="should handle intermittent network failures" time="0.024">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Network Failure Resilience" name="should implement exponential backoff on retries" time="0.705">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Database Connection Resilience" name="should reconnect automatically after connection loss" time="0.003">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Database Connection Resilience" name="should handle connection pool exhaustion" time="0.003">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Circuit Breaker Pattern" name="should open circuit after failure threshold" time="0.007">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Circuit Breaker Pattern" name="should transition to half-open and recover" time="11.006">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Graceful Degradation" name="should provide fallback responses when services fail" time="0.006">
+      <failure>TypeError: degradedFramework.generateIntelligentPost is not a function
+    at Object.generateIntelligentPost (/workspaces/agent-feed/prod/tests/integration/system-resilience.test.js:443:52)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Graceful Degradation" name="should handle partial feature failures" time="0.002">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Resource Management" name="should handle memory pressure gracefully" time="0.592">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › Resource Management" name="should implement request rate limiting" time="0.006">
+    </testcase>
+    <testcase classname="System Resilience and Error Recovery › System Health Monitoring" name="should provide comprehensive health status" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/integration/api-endpoints.test.js" errors="0" failures="1" skipped="0" timestamp="2025-11-08T06:12:47" time="4.344" tests="21">
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/generate" name="should generate intelligent post successfully" time="0.224">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/generate" name="should validate required parameters" time="0.042">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/generate" name="should handle invalid agent type gracefully" time="0.054">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/generate" name="should handle concurrent requests" time="0.188">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/batch" name="should process batch requests successfully" time="0.066">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/batch" name="should validate batch requests array" time="0.024">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/batch" name="should handle empty batch requests" time="0.046">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/batch" name="should handle large batch requests efficiently" time="0.039">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/analyze/quality" name="should analyze content quality successfully" time="0.043">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/analyze/quality" name="should validate content parameter" time="0.042">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › POST /api/v1/posting-intelligence/analyze/quality" name="should handle very long content" time="0.034">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › GET /api/v1/posting-intelligence/analytics" name="should return system analytics successfully" time="0.019">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › GET /api/v1/posting-intelligence/analytics" name="should handle analytics request with query parameters" time="0.044">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › GET /api/v1/posting-intelligence/health" name="should return health status successfully" time="0.041">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › GET /api/v1/posting-intelligence/health" name="should respond quickly for health checks" time="0.027">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › error handling and resilience" name="should handle malformed JSON gracefully" time="0.047">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › error handling and resilience" name="should handle missing Content-Type header" time="0.064">
+      <failure>Error: expected 400 &quot;Bad Request&quot;, got 500 &quot;Internal Server Error&quot;
+    at Object.expect (/workspaces/agent-feed/prod/tests/integration/api-endpoints.test.js:544:10)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)
+----
+    at Test._assertStatus (/workspaces/agent-feed/node_modules/supertest/lib/test.js:309:14)
+    at /workspaces/agent-feed/node_modules/supertest/lib/test.js:365:13
+    at Test._assertFunction (/workspaces/agent-feed/node_modules/supertest/lib/test.js:342:13)
+    at Test.assert (/workspaces/agent-feed/node_modules/supertest/lib/test.js:195:23)
+    at localAssert (/workspaces/agent-feed/node_modules/supertest/lib/test.js:138:14)
+    at Server.&lt;anonymous&gt; (/workspaces/agent-feed/node_modules/supertest/lib/test.js:152:11)
+    at Object.onceWrapper (node:events:632:28)
+    at Server.emit (node:events:518:28)
+    at emitCloseNT (node:net:2419:8)
+    at processTicksAndRejections (node:internal/process/task_queues:89:21)</failure>
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › error handling and resilience" name="should handle very large payloads" time="0.087">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › performance and load testing" name="should handle sustained load" time="0.608">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › performance and load testing" name="should maintain response times under load" time="0.243">
+    </testcase>
+    <testcase classname="API Endpoints Integration Tests › London School integration verification" name="should verify end-to-end workflow integration" time="0.127">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/integration/api-validation.test.js" errors="0" failures="0" skipped="0" timestamp="2025-11-08T06:12:51" time="1.7" tests="18">
+    <testcase classname="API Integration Validation › Core API Endpoints" name="should return healthy status" time="0.118">
+    </testcase>
+    <testcase classname="API Integration Validation › Core API Endpoints" name="should create posts with intelligence framework" time="0.073">
+    </testcase>
+    <testcase classname="API Integration Validation › Core API Endpoints" name="should validate input parameters" time="0.046">
+    </testcase>
+    <testcase classname="API Integration Validation › Core API Endpoints" name="should retrieve specific posts" time="0.03">
+    </testcase>
+    <testcase classname="API Integration Validation › Core API Endpoints" name="should update posts" time="0.044">
+    </testcase>
+    <testcase classname="API Integration Validation › Core API Endpoints" name="should delete posts" time="0.026">
+    </testcase>
+    <testcase classname="API Integration Validation › Quality Metrics API" name="should create quality metrics" time="0.023">
+    </testcase>
+    <testcase classname="API Integration Validation › Quality Metrics API" name="should retrieve quality metrics" time="0.054">
+    </testcase>
+    <testcase classname="API Integration Validation › Analytics API" name="should provide feed analytics" time="0.061">
+    </testcase>
+    <testcase classname="API Integration Validation › Analytics API" name="should provide agent-specific analytics" time="0.048">
+    </testcase>
+    <testcase classname="API Integration Validation › Templates API" name="should create templates" time="0.059">
+    </testcase>
+    <testcase classname="API Integration Validation › Templates API" name="should list templates with filters" time="0.049">
+    </testcase>
+    <testcase classname="API Integration Validation › Batch Operations" name="should handle batch post creation" time="0.03">
+    </testcase>
+    <testcase classname="API Integration Validation › Batch Operations" name="should validate batch request format" time="0.038">
+    </testcase>
+    <testcase classname="API Integration Validation › Performance Monitoring" name="should provide performance metrics" time="0.032">
+    </testcase>
+    <testcase classname="API Integration Validation › Error Handling" name="should handle malformed JSON gracefully" time="0.024">
+    </testcase>
+    <testcase classname="API Integration Validation › Error Handling" name="should return proper error messages" time="0.035">
+    </testcase>
+    <testcase classname="API Integration Validation › Performance Under Load" name="should handle concurrent requests" time="0.33">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/integration/database-validation.test.js" errors="0" failures="10" skipped="0" timestamp="2025-11-08T06:12:53" time="0.353" tests="10">
+    <testcase classname="Database Integration Validation › Migration Validation" name="should execute all migrations successfully" time="0.001">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Migration Validation" name="should have all required tables" time="0">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Migration Validation" name="should have all required indexes" time="0.003">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Migration Validation" name="should have proper constraints and triggers" time="0.006">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Database Operations" name="should insert and retrieve agent posts correctly" time="0.001">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Database Operations" name="should enforce data integrity constraints" time="0">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Database Operations" name="should handle quality metrics correctly" time="0.001">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Database Operations" name="should handle concurrent operations safely" time="0.004">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Performance Validation" name="should handle bulk operations efficiently" time="0.001">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+    <testcase classname="Database Integration Validation › Performance Validation" name="should execute complex queries efficiently" time="0.003">
+      <failure>AggregateError: 
+    at /workspaces/agent-feed/node_modules/pg-pool/index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at Object.&lt;anonymous&gt; (/workspaces/agent-feed/prod/tests/integration/database-validation.test.js:45:9)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/unit/content-template-engine.test.js" errors="0" failures="1" skipped="0" timestamp="2025-11-08T06:12:54" time="0.275" tests="23">
+    <testcase classname="ContentTemplateEngine › initialization" name="should load core templates on initialization" time="0.009">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › initialization" name="should define proper template structure" time="0.003">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › composeContent" name="should compose content for valid agent type" time="0.003">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › composeContent" name="should throw error for unknown agent type" time="0.046">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › composeContent" name="should populate elements correctly" time="0.002">
+      <failure>Error: expect(received).toEqual(expected) // deep equality
+
+Expected: &quot;Complete project documentation&quot;
+Received: &quot;Complete documentation&quot;
+    at Object.toEqual (/workspaces/agent-feed/prod/tests/unit/content-template-engine.test.js:99:60)</failure>
+    </testcase>
+    <testcase classname="ContentTemplateEngine › composeContent" name="should handle missing user data gracefully" time="0.001">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › populateElements" name="should populate all required elements" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › populateElements" name="should handle empty elements array" time="0.001">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › extractElementData" name="should extract task description from userData" time="0.001">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › extractElementData" name="should generate priority reasoning based on impact" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › extractElementData" name="should extract meeting purpose from context" time="0.001">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › extractElementData" name="should provide fallback for unknown elements" time="0.001">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › generatePriorityReasoning" name="should generate reasoning for P1 priority" time="0.003">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › generatePriorityReasoning" name="should generate reasoning for P3 priority" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › generatePriorityReasoning" name="should handle missing priority with default" time="0.006">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › assembleContent" name="should assemble task structure correctly" time="0.003">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › assembleContent" name="should assemble meeting prep structure correctly" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › assembleContent" name="should calculate word count and read time accurately" time="0.004">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › assembleContent" name="should handle unknown structure with default assembly" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › template-specific assembly methods" name="should assemble follow-up structure with arrays" time="0.002">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › template-specific assembly methods" name="should assemble idea structure correctly" time="0.003">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › performance and validation" name="should complete content composition within time limit" time="0.001">
+    </testcase>
+    <testcase classname="ContentTemplateEngine › performance and validation" name="should handle concurrent composition requests" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/unit/white-screen-reproduction.test.js" errors="0" failures="0" skipped="0" timestamp="2025-11-08T06:12:55" time="0.124" tests="3">
+    <testcase classname="White Screen Reproduction" name="should identify the exact failing import in App.tsx" time="0.006">
+    </testcase>
+    <testcase classname="White Screen Reproduction" name="should test individual component loading with mocks" time="0.005">
+    </testcase>
+    <testcase classname="White Screen Reproduction" name="should simulate main.tsx execution flow" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/unit/component-runtime-isolation.test.js" errors="0" failures="0" skipped="0" timestamp="2025-11-08T06:12:55" time="0.171" tests="4">
+    <testcase classname="Component Runtime Isolation" name="should test ErrorBoundary dependency chain" time="0.015">
+    </testcase>
+    <testcase classname="Component Runtime Isolation" name="should check the specific @/utils/errorHandling import" time="0.014">
+    </testcase>
+    <testcase classname="Component Runtime Isolation" name="should create minimal component test" time="0.024">
+    </testcase>
+    <testcase classname="Component Runtime Isolation" name="should test vite configuration issues" time="0.012">
+    </testcase>
+  </testsuite>
+  <testsuite name="tests/unit/tdd-london-debug.test.js" errors="0" failures="1" skipped="0" timestamp="2025-11-08T06:12:55" time="0.244" tests="5">
+    <testcase classname="TDD London School - White Screen Debug › Component Import Chain Analysis" name="should mock and test individual critical imports" time="0.01">
+      <failure>Error: Configuration error:
+
+Could not locate module @/components/ErrorBoundary mapped as:
+/workspaces/agent-feed/prod/agent_workspace/$1.
+
+Please check your configuration for these entries:
+{
+  &quot;moduleNameMapper&quot;: {
+    &quot;/^@\/(.*)$/&quot;: &quot;/workspaces/agent-feed/prod/agent_workspace/$1&quot;
+  },
+  &quot;resolver&quot;: undefined
+}
+    at createNoMappedModuleFoundError (/workspaces/agent-feed/node_modules/jest-resolve/build/resolver.js:759:17)
+    at Resolver.resolveStubModuleName (/workspaces/agent-feed/node_modules/jest-resolve/build/resolver.js:677:19)
+    at Resolver.getMockModule (/workspaces/agent-feed/node_modules/jest-resolve/build/resolver.js:481:31)
+    at Resolver._isModuleResolved (/workspaces/agent-feed/node_modules/jest-resolve/build/resolver.js:632:42)
+    at Resolver._getAbsolutePath (/workspaces/agent-feed/node_modules/jest-resolve/build/resolver.js:585:17)
+    at Resolver.getModuleID (/workspaces/agent-feed/node_modules/jest-resolve/build/resolver.js:530:31)
+    at Runtime.setMock (/workspaces/agent-feed/node_modules/jest-runtime/build/index.js:1212:37)
+    at setMockFactory (/workspaces/agent-feed/node_modules/jest-runtime/build/index.js:1936:12)
+    at Object.mock (/workspaces/agent-feed/node_modules/jest-runtime/build/index.js:1922:16)
+    at Object.doMock (/workspaces/agent-feed/prod/tests/unit/tdd-london-debug.test.js:30:12)
+    at Promise.then.completed (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/workspaces/agent-feed/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at _runTestsForDescribeBlock (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:121:9)
+    at run (/workspaces/agent-feed/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/workspaces/agent-feed/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/workspaces/agent-feed/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="TDD London School - White Screen Debug › Component Import Chain Analysis" name="should verify path alias resolution (@/ paths)" time="0.008">
+    </testcase>
+    <testcase classname="TDD London School - White Screen Debug › Component Mounting Behavior Verification" name="should verify ErrorBoundary wrapping behavior" time="0.004">
+    </testcase>
+    <testcase classname="TDD London School - White Screen Debug › Component Mounting Behavior Verification" name="should verify Router and QueryClient provider chain" time="0.007">
+    </testcase>
+    <testcase classname="TDD London School - White Screen Debug › Critical File Existence Verification" name="should verify all imported component files exist" time="0.002">
+    </testcase>
+  </testsuite>
+</testsuites>

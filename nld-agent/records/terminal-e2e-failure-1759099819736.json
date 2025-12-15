@@ -1,0 +1,9 @@
+{
+  "type": "terminal-e2e-failure",
+  "preventionPattern": true,
+  "test": "terminal-component-loading",
+  "timestamp": "2025-09-28T22:50:19.734Z",
+  "error": "Cannot read properties of undefined (reading 'goto')",
+  "failureType": "terminal-loading-failure",
+  "impact": "terminal-not-accessible"
+}

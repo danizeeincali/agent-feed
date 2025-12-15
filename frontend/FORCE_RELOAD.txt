@@ -1,0 +1,3 @@
+// Force Vite dev server to reload by changing a file
+// Current timestamp: 2025-08-24T20:52:00Z
+// This will trigger HMR (Hot Module Replacement) to refresh browser

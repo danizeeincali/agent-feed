@@ -1,0 +1,49 @@
+{
+  "instance": {
+    "type": "development",
+    "name": "claude-dev",
+    "version": "1.0.0",
+    "created": "2025-08-20T20:00:00Z"
+  },
+  "workspace": {
+    "root": "/workspaces/agent-feed/",
+    "restricted_paths": [
+      "/workspaces/agent-feed/agent_workspace/",
+      "/workspaces/agent-feed/.claude/prod/"
+    ],
+    "allowed_operations": [
+      "read", "write", "execute", "delete"
+    ]
+  },
+  "communication": {
+    "enabled": true,
+    "queue_path": "/tmp/claude-communication/",
+    "instance_id": "claude-dev-instance",
+    "partner_instance": "claude-prod-instance",
+    "auto_handoff": true,
+    "require_confirmation_for_incoming": false
+  },
+  "permissions": {
+    "dangerous_skip": true,
+    "sandbox_mode": false,
+    "max_file_size": "100MB",
+    "allowed_commands": ["npm", "git", "node", "python", "curl", "wget"]
+  },
+  "logging": {
+    "level": "info",
+    "file": ".claude/dev/logs/claude-dev.log",
+    "audit_enabled": true,
+    "audit_file": ".claude/dev/logs/audit.log"
+  },
+  "resources": {
+    "max_memory": "2GB",
+    "max_cpu_percent": 80,
+    "max_processes": 50
+  },
+  "features": {
+    "mcp_enabled": true,
+    "swarm_enabled": true,
+    "neural_learning": true,
+    "performance_monitoring": true
+  }
+}

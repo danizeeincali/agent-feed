@@ -1,0 +1,36 @@
+
+> agent-feed-frontend@0.0.0 dev
+> vite
+
+
+  VITE v5.4.20  ready in 3184 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://10.0.2.158:5173/
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/filter-stats?user_id=demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC&includeTickets=true -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/filter-data -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/agent-posts -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/system/state?userId=demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC&includeTickets=true -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/test-agent -> undefined
+🔍 SPARC DEBUG: HTTP API proxy response error: /api/user-settings/test-agent -> 404
+🔍 SPARC DEBUG: HTTP API proxy request: POST /api/system/initialize -> undefined
+🔍 SPARC DEBUG: HTTP API proxy response error: /api/system/initialize -> 400
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/agent-posts -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/user-settings/demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/filter-stats?user_id=demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/agent-posts -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC&includeTickets=true -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/system/state?userId=demo-user-123 -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/v1/agent-posts?limit=20&offset=0&filter=all&search=&sortBy=published_at&sortOrder=DESC&includeTickets=true -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/filter-data -> undefined
+🔍 SPARC DEBUG: HTTP API proxy request: POST /api/system/initialize -> undefined
+🔍 SPARC DEBUG: HTTP API proxy response error: /api/system/initialize -> 400
+🔍 SPARC DEBUG: HTTP API proxy request: GET /api/agent-posts -> undefined

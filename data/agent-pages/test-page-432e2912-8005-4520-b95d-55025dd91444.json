@@ -1,0 +1,14 @@
+{
+  "id": "test-page-432e2912-8005-4520-b95d-55025dd91444",
+  "agent_id": "test-agent-de17476b-5141-4d03-86c9-e816d34ff9ff",
+  "title": "Test Page - Registration Automation",
+  "page_type": "dynamic",
+  "content_type": "json",
+  "content_value": "{\"sections\":[{\"type\":\"header\",\"content\":\"Test Dashboard\"},{\"type\":\"text\",\"content\":\"This is a test page for automation\"}]}",
+  "status": "published",
+  "version": 1,
+  "tags": [
+    "test",
+    "automation"
+  ]
+}

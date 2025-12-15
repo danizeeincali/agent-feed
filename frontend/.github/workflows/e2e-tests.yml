@@ -1,0 +1,392 @@
+name: E2E Tests - Comprehensive Playwright Suite
+
+on:
+  push:
+    branches: [ main, develop, v* ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test Suite to Run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - core-features
+          - regression
+          - performance
+          - visual
+          - accessibility
+
+env:
+  NODE_VERSION: '18'
+  CI: true
+
+jobs:
+  # Core feature tests - run on all events
+  core-features:
+    name: 🧪 Core Features
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'core-features' || github.event.inputs.test_suite == ''
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npx playwright install --with-deps ${{ matrix.browser }}
+    
+    - name: Start application
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:5173 --timeout 60000
+    
+    - name: Run Core Features Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=core-features-${{ matrix.browser }} tests/e2e/core-features/
+      env:
+        PLAYWRIGHT_HTML_REPORT: playwright-report-${{ matrix.browser }}
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: core-features-results-${{ matrix.browser }}
+        path: |
+          frontend/playwright-report-${{ matrix.browser }}/
+          frontend/test-results/
+        retention-days: 7
+
+  # Regression prevention tests - critical for PR blocking
+  regression:
+    name: 🛡️ Regression Prevention
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'regression' || github.event.inputs.test_suite == ''
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npx playwright install --with-deps ${{ matrix.browser }}
+    
+    - name: Start application
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:5173 --timeout 60000
+    
+    - name: Run Regression Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=regression-${{ matrix.browser }} tests/e2e/regression/
+      env:
+        PLAYWRIGHT_HTML_REPORT: playwright-report-regression-${{ matrix.browser }}
+    
+    - name: Comment PR on failure
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '❌ **Regression tests failed!** Please check the test results and ensure no existing functionality was broken. View the full report in the Actions tab.'
+          })
+    
+    - name: Upload regression results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: regression-results-${{ matrix.browser }}
+        path: |
+          frontend/playwright-report-regression-${{ matrix.browser }}/
+          frontend/test-results/
+        retention-days: 30  # Keep regression results longer
+
+  # Performance tests - run on schedule and manual trigger
+  performance:
+    name: ⚡ Performance Benchmarks
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'performance' || github.event_name == 'schedule'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npx playwright install --with-deps chromium
+    
+    - name: Start application
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:5173 --timeout 60000
+    
+    - name: Run Performance Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=performance tests/e2e/performance/
+      env:
+        PLAYWRIGHT_HTML_REPORT: playwright-report-performance
+    
+    - name: Generate Performance Report
+      working-directory: ./frontend
+      run: |
+        echo "# Performance Test Results" > performance-report.md
+        echo "" >> performance-report.md
+        echo "Run Date: $(date)" >> performance-report.md
+        echo "Commit: ${{ github.sha }}" >> performance-report.md
+        echo "" >> performance-report.md
+        if [ -f "test-results/performance-baseline.json" ]; then
+          echo "## Baseline Comparison" >> performance-report.md
+          echo '```json' >> performance-report.md
+          cat test-results/performance-baseline.json >> performance-report.md
+          echo '```' >> performance-report.md
+        fi
+    
+    - name: Upload performance results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: performance-results
+        path: |
+          frontend/playwright-report-performance/
+          frontend/test-results/
+          frontend/performance-report.md
+        retention-days: 90  # Keep performance results for trends
+
+  # Visual regression tests - run on main branch changes
+  visual-regression:
+    name: 🎨 Visual Regression
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'visual' || github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npx playwright install --with-deps chromium
+    
+    - name: Start application
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:5173 --timeout 60000
+    
+    - name: Run Visual Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=visual tests/e2e/visual/
+      env:
+        PLAYWRIGHT_HTML_REPORT: playwright-report-visual
+    
+    - name: Upload visual test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: visual-regression-results
+        path: |
+          frontend/playwright-report-visual/
+          frontend/test-results/
+        retention-days: 14
+
+  # Accessibility tests - run on PR and main
+  accessibility:
+    name: ♿ Accessibility
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'accessibility' || github.event.inputs.test_suite == ''
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npx playwright install --with-deps chromium
+    
+    - name: Start application
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:5173 --timeout 60000
+    
+    - name: Run Accessibility Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=accessibility tests/e2e/accessibility/
+      env:
+        PLAYWRIGHT_HTML_REPORT: playwright-report-accessibility
+    
+    - name: Upload accessibility results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: accessibility-results
+        path: |
+          frontend/playwright-report-accessibility/
+          frontend/test-results/
+        retention-days: 30
+
+  # Mobile testing - run on schedule
+  mobile:
+    name: 📱 Mobile Testing
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event_name == 'schedule'
+    
+    strategy:
+      matrix:
+        device: [mobile-chrome, mobile-safari]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npx playwright install --with-deps
+    
+    - name: Start application
+      working-directory: ./frontend
+      run: |
+        npm run dev &
+        npx wait-on http://localhost:5173 --timeout 60000
+    
+    - name: Run Mobile Tests
+      working-directory: ./frontend
+      run: npx playwright test --project=${{ matrix.device }} tests/e2e/core-features/
+    
+    - name: Upload mobile results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: mobile-results-${{ matrix.device }}
+        path: |
+          frontend/playwright-report/
+          frontend/test-results/
+        retention-days: 7
+
+  # Test summary and notification
+  test-summary:
+    name: 📊 Test Summary
+    runs-on: ubuntu-latest
+    needs: [core-features, regression, performance, visual-regression, accessibility, mobile]
+    if: always()
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+    
+    - name: Generate Test Summary
+      run: |
+        echo "# 🎭 E2E Test Suite Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Run Date:** $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "| Test Suite | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Core Features | ${{ needs.core-features.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Regression | ${{ needs.regression.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Performance | ${{ needs.performance.result == 'success' && '✅ Passed' || needs.performance.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Visual Regression | ${{ needs.visual-regression.result == 'success' && '✅ Passed' || needs.visual-regression.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Accessibility | ${{ needs.accessibility.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Mobile | ${{ needs.mobile.result == 'success' && '✅ Passed' || needs.mobile.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [[ "${{ needs.regression.result }}" == "failure" ]]; then
+          echo "⚠️ **Critical:** Regression tests failed! This may indicate breaking changes." >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "## Quick Links" >> $GITHUB_STEP_SUMMARY
+        echo "- [View detailed test reports in artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+        echo "- [Playwright HTML Reports](#artifacts)" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Notify on failures
+      if: needs.regression.result == 'failure' || needs.core-features.result == 'failure'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const failedJobs = [];
+          if ('${{ needs.core-features.result }}' === 'failure') failedJobs.push('Core Features');
+          if ('${{ needs.regression.result }}' === 'failure') failedJobs.push('Regression');
+          if ('${{ needs.accessibility.result }}' === 'failure') failedJobs.push('Accessibility');
+          
+          if (failedJobs.length > 0) {
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 E2E Test Failures - ${failedJobs.join(', ')}`,
+              body: `Critical E2E tests failed in commit ${context.sha}.\n\nFailed suites: ${failedJobs.join(', ')}\n\nPlease check the [test results](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) and fix the issues.`,
+              labels: ['bug', 'e2e-failure', 'critical']
+            });
+          }

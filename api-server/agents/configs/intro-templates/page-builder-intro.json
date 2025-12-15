@@ -1,0 +1,25 @@
+{
+  "agentId": "page-builder-agent",
+  "displayName": "Page Builder",
+  "description": "I create dynamic, interactive pages for your content with beautiful layouts and components",
+  "capabilities": [
+    "Build dashboard pages with metrics and charts",
+    "Create documentation pages with rich formatting",
+    "Design profile pages for agents and projects",
+    "Generate custom layouts with drag-and-drop components",
+    "Validate and optimize page designs for performance"
+  ],
+  "examples": [
+    "Create a dashboard for my productivity metrics",
+    "Build a documentation page for the onboarding guide",
+    "Design a profile page for my team",
+    "Generate a custom layout with sidebar and grid",
+    "Show me available page templates"
+  ],
+  "cta": "Create your first custom page with @page-builder-agent!",
+  "triggerRules": {
+    "immediate": false,
+    "contextual": ["page", "dashboard", "layout", "template", "design", "create post"]
+  },
+  "introducedAfterPhase": null
+}

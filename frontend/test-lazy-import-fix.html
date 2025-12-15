@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lazy Import Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    #status {
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 16px;
+    }
+    .loading {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      color: #92400e;
+    }
+    .success {
+      background: #d1fae5;
+      border: 2px solid #10b981;
+      color: #065f46;
+    }
+    .error {
+      background: #fee2e2;
+      border: 2px solid #ef4444;
+      color: #991b1b;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    pre {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>TokenAnalyticsDashboard Lazy Import Test</h1>
+  <p>This test verifies that the lazy import for TokenAnalyticsDashboard works correctly.</p>
+
+  <button id="testBtn">Test Lazy Import</button>
+
+  <div id="status" class="loading" style="display:none;">
+    Testing...
+  </div>
+
+  <div id="details" style="display:none;">
+    <h3>Details:</h3>
+    <pre id="detailsContent"></pre>
+  </div>
+
+  <script type="module">
+    const testBtn = document.getElementById('testBtn');
+    const statusDiv = document.getElementById('status');
+    const detailsDiv = document.getElementById('details');
+    const detailsContent = document.getElementById('detailsContent');
+
+    testBtn.addEventListener('click', async () => {
+      statusDiv.style.display = 'block';
+      statusDiv.className = 'loading';
+      statusDiv.textContent = 'Testing lazy import...';
+      detailsDiv.style.display = 'none';
+
+      try {
+        const startTime = performance.now();
+
+        // Test the lazy import with explicit .tsx extension
+        const module = await import('./src/components/TokenAnalyticsDashboard.tsx');
+
+        const endTime = performance.now();
+        const loadTime = (endTime - startTime).toFixed(2);
+
+        if (module.default) {
+          statusDiv.className = 'success';
+          statusDiv.textContent = '✓ SUCCESS: TokenAnalyticsDashboard loaded successfully!';
+
+          detailsDiv.style.display = 'block';
+          detailsContent.textContent = JSON.stringify({
+            status: 'success',
+            message: 'Module loaded successfully',
+            loadTime: `${loadTime}ms`,
+            hasDefaultExport: true,
+            componentName: module.default.name || 'TokenAnalyticsDashboard',
+            exportedKeys: Object.keys(module)
+          }, null, 2);
+        } else {
+          throw new Error('Module loaded but has no default export');
+        }
+      } catch (error) {
+        statusDiv.className = 'error';
+        statusDiv.textContent = '✗ ERROR: Failed to load TokenAnalyticsDashboard';
+
+        detailsDiv.style.display = 'block';
+        detailsContent.textContent = JSON.stringify({
+          status: 'error',
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        }, null, 2);
+      }
+    });
+  </script>
+</body>
+</html>

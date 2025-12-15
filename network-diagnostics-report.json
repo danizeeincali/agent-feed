@@ -1,0 +1,128 @@
+{
+  "timestamp": "2025-09-07T18:09:55.815Z",
+  "ports": [
+    3000,
+    5173
+  ],
+  "environment": {
+    "isCodespaces": true,
+    "codespaceName": "animated-guacamole-4jgqg976v49pcqwqv",
+    "hasDevcontainer": true,
+    "workspaceFolder": "/workspaces/agent-feed",
+    "environmentVars": {
+      "CODESPACES": "true",
+      "CODESPACE_NAME": "animated-guacamole-4jgqg976v49pcqwqv",
+      "GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN": "app.github.dev"
+    },
+    "devcontainerPath": "/workspaces/agent-feed/.devcontainer/devcontainer.json"
+  },
+  "interfaces": {
+    "internal": [
+      {
+        "name": "lo",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "internal": true,
+        "cidr": "127.0.0.1/8"
+      }
+    ],
+    "external": [
+      {
+        "name": "eth0",
+        "address": "10.0.2.129",
+        "netmask": "255.255.0.0",
+        "internal": false,
+        "cidr": "10.0.2.129/16"
+      }
+    ],
+    "docker": [],
+    "codespaces": {
+      "name": "eth0",
+      "address": "10.0.2.129",
+      "netmask": "255.255.0.0",
+      "internal": false,
+      "cidr": "10.0.2.129/16"
+    },
+    "hasExternalInterface": true,
+    "codespacesReady": true
+  },
+  "portBinding": {
+    "3000": {
+      "bound": true,
+      "interfaces": [
+        "::"
+      ],
+      "codespacesSafe": true,
+      "recommendation": "Port 3000 is correctly bound to all interfaces."
+    },
+    "5173": {
+      "bound": true,
+      "interfaces": [
+        "0.0.0.0"
+      ],
+      "codespacesSafe": true,
+      "recommendation": "Port 5173 is correctly bound to all interfaces."
+    }
+  },
+  "portForwarding": {
+    "configured": true,
+    "ports": [
+      5173,
+      3000
+    ],
+    "visibility": {
+      "3000": "public",
+      "5173": "public"
+    },
+    "recommendations": []
+  },
+  "dns": {
+    "localhost": {
+      "resolved": true,
+      "address": "::1",
+      "family": 6,
+      "error": null
+    },
+    "127.0.0.1": {
+      "resolved": true,
+      "address": "127.0.0.1",
+      "family": 4,
+      "error": null
+    },
+    "0.0.0.0": {
+      "resolved": true,
+      "address": "0.0.0.0",
+      "family": 4,
+      "error": null
+    }
+  },
+  "connectivity": {
+    "local": {
+      "http://localhost:3000": {
+        "accessible": true,
+        "statusCode": 404,
+        "responseTime": 5,
+        "error": null
+      },
+      "http://127.0.0.1:3000": {
+        "accessible": true,
+        "statusCode": 404,
+        "responseTime": 2,
+        "error": null
+      },
+      "http://localhost:5173": {
+        "accessible": true,
+        "statusCode": 200,
+        "responseTime": 3,
+        "error": null
+      },
+      "http://127.0.0.1:5173": {
+        "accessible": true,
+        "statusCode": 200,
+        "responseTime": 2,
+        "error": null
+      }
+    }
+  },
+  "recommendations": []
+}

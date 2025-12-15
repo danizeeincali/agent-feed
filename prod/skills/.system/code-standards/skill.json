@@ -1,0 +1,32 @@
+{
+  "name": "code-standards",
+  "version": "1.0.0",
+  "type": "system",
+  "protection": "maximum",
+  "description": "AVI code standards enforcement - Never break one thing to build another",
+  "category": "development-standards",
+  "token_budget": 2000,
+  "required_for": [
+    "agent-architect-agent",
+    "agent-maintenance-agent",
+    "skills-architect-agent",
+    "skills-maintenance-agent",
+    "coder",
+    "sparc-coder",
+    "backend-dev",
+    "mobile-dev",
+    "tdd-london-swarm"
+  ],
+  "auto_load": true,
+  "tier": 1,
+  "files": {
+    "instructions": "instructions.md",
+    "checklist": "enforcement-checklist.md",
+    "examples": "violation-examples.md"
+  },
+  "metadata": {
+    "created": "2025-10-19",
+    "author": "Λvi",
+    "purpose": "Prevent breaking existing functionality when building new features"
+  }
+}

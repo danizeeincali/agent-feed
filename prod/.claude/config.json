@@ -1,0 +1,135 @@
+{
+  "workingDirectory": "/workspaces/agent-feed/prod",
+  "rules": {
+    "absoluteDirectoryPaths": true,
+    "noInitInstructions": false,
+    "requireAbsolutePaths": true
+  },
+  "agents": {
+    "enabled": true,
+    "searchPaths": [
+      "/workspaces/agent-feed/prod/.claude/agents",
+      "/workspaces/agent-feed/prod/agents"
+    ],
+    "disableParentScanning": true,
+    "isolation": {
+      "enforceWorkspaceBoundaries": true,
+      "restrictedPaths": [
+        "/workspaces/agent-feed/src",
+        "/workspaces/agent-feed/frontend",
+        "/workspaces/agent-feed/.claude",
+        "/workspaces/agent-feed/business",
+        "/workspaces/agent-feed/docs",
+        "/workspaces/agent-feed/tests"
+      ],
+      "allowedOperations": {
+        "/workspaces/agent-feed/prod": ["read", "write", "execute"],
+        "/workspaces/agent-feed/prod/agent_workspace": ["read", "write", "execute"],
+        "/workspaces/agent-feed/prod/system_instructions": ["read"]
+      },
+      "maxAgentConcurrency": 10,
+      "resourceLimits": {
+        "memoryPerAgent": "512MB",
+        "cpuPerAgent": 0.5,
+        "maxFileSize": "100MB",
+        "maxFilesPerAgent": 1000
+      }
+    }
+  },
+  "security": {
+    "enforceIsolation": true,
+    "validateOperations": true,
+    "auditEnabled": true,
+    "dangerousOperationsBlocked": [
+      "systemModification",
+      "networkAccess",
+      "processExecution"
+    ],
+    "allowedCommands": [
+      "node",
+      "npm",
+      "git",
+      "curl",
+      "wget",
+      "cat",
+      "ls",
+      "cd",
+      "mkdir",
+      "rm",
+      "cp",
+      "mv"
+    ]
+  },
+  "environment": {
+    "type": "production",
+    "name": "agent-feed-prod",
+    "version": "2.0.0",
+    "created": "2025-09-03T00:00:00Z",
+    "isolation": "complete",
+    "parentConfiguration": null
+  },
+  "logging": {
+    "level": "info",
+    "enableDebug": false,
+    "auditTrail": true,
+    "logPath": "/workspaces/agent-feed/prod/logs/claude.log",
+    "auditPath": "/workspaces/agent-feed/prod/logs/audit.log",
+    "agentLogs": "/workspaces/agent-feed/prod/agent_workspace/logs"
+  },
+  "features": {
+    "mcpEnabled": true,
+    "swarmEnabled": true,
+    "neuralLearning": true,
+    "performanceMonitoring": true,
+    "agentOrchestration": true,
+    "dynamicConfiguration": false
+  },
+  "performance": {
+    "maxMemoryUsage": "4GB",
+    "maxCpuPercent": 90,
+    "maxProcesses": 100,
+    "timeoutMs": 300000,
+    "healthCheckInterval": 30000
+  },
+  "integration": {
+    "claudeMdPath": "/workspaces/agent-feed/prod/PRODUCTION_CLAUDE.md",
+    "systemInstructions": "/workspaces/agent-feed/prod/system_instructions",
+    "agentWorkspace": "/workspages/agent-feed/prod/agent_workspace",
+    "configValidation": true
+  },
+  "mcpServers": {
+    "enabled": true,
+    "serverConfigs": {
+      "firecrawl": {
+        "command": "npx",
+        "args": ["-y", "firecrawl-mcp"],
+        "env": {
+          "FIRECRAWL_API_KEY": "fc-64ec975453854561bfb058cd19952156"
+        }
+      }
+    },
+    "toolFiltering": {
+      "enabled": true,
+      "allowedTools": [
+        "Bash",
+        "Glob", 
+        "Grep",
+        "Read",
+        "Edit",
+        "MultiEdit",
+        "Write",
+        "WebFetch",
+        "TodoWrite",
+        "WebSearch",
+        "Task",
+        "ExitPlanMode",
+        "NotebookEdit",
+        "BashOutput",
+        "KillBash",
+        "mcp__firecrawl__firecrawl_scrape",
+        "mcp__firecrawl__firecrawl_map",
+        "mcp__firecrawl__firecrawl_search"
+      ]
+    }
+  }
+}

@@ -1,0 +1,332 @@
+name: Claude AI Response System Regression Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.js'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.json'
+      - 'package*.json'
+      - '.github/workflows/**'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      node-versions: ${{ steps.node-matrix.outputs.versions }}
+    steps:
+      - name: Set Node.js versions matrix
+        id: node-matrix
+        run: |
+          echo "versions=[\"18.x\", \"20.x\", \"22.x\"]" >> $GITHUB_OUTPUT
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../tests && npm ci
+
+      - name: Run npm audit
+        run: |
+          npm audit --audit-level=moderate
+          cd frontend && npm audit --audit-level=moderate
+          cd ../tests && npm audit --audit-level=moderate
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  test-matrix:
+    needs: [setup, security-scan]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ${{ fromJson(needs.setup.outputs.node-versions) }}
+        test-type: ['unit', 'integration', 'e2e']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../tests && npm ci
+
+      - name: Setup test environment
+        run: chmod +x ./scripts/test-setup.sh && ./scripts/test-setup.sh
+
+      - name: Run Unit Tests
+        if: matrix.test-type == 'unit'
+        run: |
+          npm test -- --coverage --ci --watchAll=false
+          cd frontend && npm test -- --coverage --ci --watchAll=false
+
+      - name: Run Integration Tests
+        if: matrix.test-type == 'integration'
+        run: |
+          # Start backend server in background
+          node simple-backend.js &
+          BACKEND_PID=$!
+          
+          # Wait for server to start
+          sleep 5
+          
+          # Run integration tests
+          cd tests && npm run test:integration
+          
+          # Stop backend server
+          kill $BACKEND_PID
+
+      - name: Run E2E Tests
+        if: matrix.test-type == 'e2e'
+        run: |
+          # Start services
+          node simple-backend.js &
+          BACKEND_PID=$!
+          
+          cd frontend && npm run build
+          npx serve -s dist -l 5173 &
+          FRONTEND_PID=$!
+          
+          # Wait for services
+          sleep 10
+          
+          # Run E2E tests
+          cd ../tests && npm run test:e2e
+          
+          # Stop services
+          kill $BACKEND_PID $FRONTEND_PID
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.node-version }}-${{ matrix.test-type }}
+          path: |
+            coverage/
+            test-results/
+            frontend/coverage/
+
+  performance-tests:
+    needs: [setup]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../tests && npm ci
+
+      - name: Run performance tests
+        run: |
+          # Start backend server
+          node simple-backend.js &
+          BACKEND_PID=$!
+          
+          # Build and serve frontend
+          cd frontend && npm run build
+          npx serve -s dist -l 5173 &
+          FRONTEND_PID=$!
+          
+          # Wait for services
+          sleep 10
+          
+          # Run performance tests
+          cd ../tests && npm run test:performance
+          
+          # Stop services
+          kill $BACKEND_PID $FRONTEND_PID
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: |
+            tests/performance-results/
+            tests/benchmarks/
+
+  claude-ai-specific-tests:
+    needs: [setup]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd frontend && npm ci
+          cd ../tests && npm ci
+
+      - name: Setup mock Claude CLI
+        run: chmod +x ./scripts/mock-claude-cli.js
+
+      - name: Run Claude AI Response System Tests
+        env:
+          MOCK_CLAUDE_CLI: true
+          NODE_ENV: test
+        run: |
+          # Start backend with mock Claude CLI
+          MOCK_CLAUDE_CLI=true node simple-backend.js &
+          BACKEND_PID=$!
+          
+          # Wait for server
+          sleep 5
+          
+          # Run Claude AI specific tests
+          cd tests && npm run test:claude-ai
+          
+          # Stop backend
+          kill $BACKEND_PID
+
+      - name: Validate SSE Connection Stability
+        run: |
+          node simple-backend.js &
+          BACKEND_PID=$!
+          sleep 5
+          cd tests && npm run test:sse-stability
+          kill $BACKEND_PID
+
+      - name: Test Claude Instance Manager
+        run: |
+          node simple-backend.js &
+          BACKEND_PID=$!
+          sleep 5
+          cd tests && npm run test:claude-manager
+          kill $BACKEND_PID
+
+  coverage-report:
+    needs: [test-matrix, performance-tests, claude-ai-specific-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Merge coverage reports
+        run: |
+          npx nyc merge coverage/ .nyc_output/coverage.json
+          npx nyc report --reporter=lcov --reporter=text-summary
+
+      - name: Check coverage threshold
+        run: |
+          npx nyc check-coverage --lines 80 --functions 80 --branches 80 --statements 80
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+  quality-gates:
+    needs: [test-matrix, performance-tests, claude-ai-specific-tests, coverage-report]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.test-matrix.result }}" != "success" ] || \
+             [ "${{ needs.performance-tests.result }}" != "success" ] || \
+             [ "${{ needs.claude-ai-specific-tests.result }}" != "success" ] || \
+             [ "${{ needs.coverage-report.result }}" != "success" ]; then
+            echo "Quality gates failed!"
+            exit 1
+          fi
+
+      - name: Post PR Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const testResults = {
+              unit: '${{ needs.test-matrix.result }}',
+              integration: '${{ needs.test-matrix.result }}',
+              e2e: '${{ needs.test-matrix.result }}',
+              performance: '${{ needs.performance-tests.result }}',
+              claude_ai: '${{ needs.claude-ai-specific-tests.result }}',
+              coverage: '${{ needs.coverage-report.result }}'
+            };
+            
+            let comment = '## 🤖 Claude AI Regression Test Results\n\n';
+            
+            for (const [test, result] of Object.entries(testResults)) {
+              const icon = result === 'success' ? '✅' : '❌';
+              comment += `${icon} **${test.toUpperCase()}**: ${result}\n`;
+            }
+            
+            comment += '\n### Test Coverage\n';
+            comment += 'Coverage reports are available in the artifacts.\n';
+            
+            if (Object.values(testResults).every(r => r === 'success')) {
+              comment += '\n🎉 All quality gates passed! This PR is ready for review.';
+            } else {
+              comment += '\n⚠️  Some quality gates failed. Please review the test results.';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  notification:
+    needs: [quality-gates]
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Notify on failure
+        run: |
+          echo "CI/CD pipeline failed. Notifications would be sent here."
+          # Add Slack/email notification logic here

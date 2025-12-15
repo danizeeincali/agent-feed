@@ -1,0 +1,125 @@
+{
+  "timestamp": "2025-08-26T14:11:18.649Z",
+  "testEnvironment": {
+    "frontendUrl": "http://localhost:5173",
+    "backendUrl": "http://localhost:3000",
+    "nodeVersion": "v22.17.0"
+  },
+  "results": {
+    "frontendAccessible": true,
+    "backendHealthy": true,
+    "apiEndpointsWorking": true,
+    "instanceCreation": true,
+    "instanceManagement": false
+  },
+  "details": {
+    "frontendResponse": {
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "*",
+        "cache-control": "no-cache",
+        "connection": "keep-alive",
+        "content-length": "751",
+        "content-type": "text/html",
+        "date": "Tue, 26 Aug 2025 14:11:18 GMT",
+        "etag": "W/\"2ef-UReZbpv3Qr2wNsp8oHQ3e6/1ux0\"",
+        "keep-alive": "timeout=5"
+      }
+    },
+    "backendHealth": {
+      "status": "healthy",
+      "timestamp": "2025-08-26T14:11:18.672Z",
+      "version": "1.0.0",
+      "services": {
+        "api": "up",
+        "database": "disabled",
+        "redis": "fallback-enabled",
+        "claude_flow": "disabled"
+      },
+      "uptime": 854.750916329
+    },
+    "apiTests": [
+      {
+        "endpoint": "GET /api/claude/instances",
+        "status": 200,
+        "success": true,
+        "data": {
+          "success": true,
+          "instances": [
+            {
+              "id": "604405bd-9d1c-4dbe-9972-d0eb0a4a4d05",
+              "status": "running",
+              "startTime": "2025-08-26T14:02:37.400Z",
+              "lastActivity": "2025-08-26T14:02:37.400Z",
+              "config": {
+                "command": [
+                  "claude",
+                  "chat"
+                ],
+                "workingDirectory": "/workspaces/agent-feed",
+                "timeout": 300000,
+                "maxMemory": 1073741824,
+                "maxCpu": 80,
+                "restartOnCrash": true,
+                "name": "test-instance-1756216957383",
+                "description": "Test instance for WebSocket terminal validation",
+                "config": {
+                  "model": "claude-3-sonnet",
+                  "temperature": 0.7
+                },
+                "userId": "single-user-default"
+              },
+              "metrics": {
+                "messagesProcessed": 0,
+                "averageResponseTime": 0,
+                "errorCount": 0,
+                "restartCount": 0
+              },
+              "pid": 59807,
+              "memoryUsage": {
+                "rss": 152924160,
+                "heapTotal": 41664512,
+                "heapUsed": 38784792,
+                "external": 6135061,
+                "arrayBuffers": 1257183
+              },
+              "cpuUsage": {
+                "user": 2451219,
+                "system": 428023
+              }
+            }
+          ],
+          "pagination": {
+            "total": 1,
+            "limit": 50,
+            "offset": 0,
+            "hasMore": false
+          }
+        }
+      }
+    ],
+    "createdInstances": [
+      {
+        "id": "390a8622-9e2c-46ab-b652-92ff0bb8419f",
+        "button": "prod/claude",
+        "created": "2025-08-26T14:11:18.714Z"
+      }
+    ],
+    "errors": [
+      "Instance creation error: request to http://localhost:3000/api/claude/instances failed, reason: ",
+      "Instance creation error: request to http://localhost:3000/api/claude/instances failed, reason: ",
+      "Instance creation error: request to http://localhost:3000/api/claude/instances failed, reason: ",
+      "Instance management error: request to http://localhost:3000/api/claude/instances failed, reason: "
+    ]
+  },
+  "performanceMetrics": {
+    "frontendResponseTime": 21,
+    "backendResponseTime": 3,
+    "apiResponseTimes": [
+      {
+        "button": "prod/claude",
+        "responseTime": 37
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "name": "agent-feed-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx server.js",
+    "dev": "tsx server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "db:init": "node scripts/init-fresh-db.js",
+    "db:seed": "node scripts/create-welcome-posts.js",
+    "db:reset": "npm run db:init && npm run db:seed",
+    "db:verify": "sqlite3 ../database.db 'SELECT COUNT(*) as post_count FROM agent_posts;'",
+    "agents:init": "node scripts/init-agents.js",
+    "agents:backup": "node scripts/backup-agents.js",
+    "agents:restore": "node scripts/restore-agents-from-canonical.js",
+    "agents:restore-backup": "node scripts/restore-agents-from-backup.js",
+    "agents:save": "node scripts/update-canonical-agent.js",
+    "agents:list": "ls -lh ../prod/.claude/agents/*.md"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.4.1",
+    "chokidar": "^4.0.3",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^8.1.0",
+    "express-slow-down": "^3.0.0",
+    "express-validator": "^7.2.1",
+    "gray-matter": "^4.0.3",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
+    "isomorphic-dompurify": "^2.31.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "socket.io": "^4.8.1",
+    "tsx": "^4.20.6",
+    "uuid": "^13.0.0",
+    "xss-clean": "^0.1.4",
+    "zod": "^3.25.76",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "@vitest/ui": "^3.2.4",
+    "axios": "^1.12.2",
+    "supertest": "^7.0.0",
+    "vitest": "^3.2.4"
+  }
+}

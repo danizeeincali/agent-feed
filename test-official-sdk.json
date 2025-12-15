@@ -1,0 +1,1 @@
+{"message": "Hello Claude! Please use the Read tool to check what directory you are in and then use the Bash tool to list the files in the current directory. This is a test of your official Claude Code SDK with full tool access."}

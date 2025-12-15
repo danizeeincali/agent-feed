@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Terminal Streaming Test</title>
+    <style>
+        body {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.connected { background-color: #0e7432; }
+        .status.disconnected { background-color: #a1260d; }
+        .status.connecting { background-color: #a15c07; }
+        .test-section {
+            background-color: #2d2d2d;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007acc;
+        }
+        .terminal-output {
+            background-color: #000;
+            padding: 10px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+        .controls {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #1177bb;
+        }
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        input {
+            background-color: #3c3c3c;
+            color: #d4d4d4;
+            border: 1px solid #555;
+            padding: 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 2px solid #333;
+            padding-left: 10px;
+        }
+        .log-info { border-left-color: #007acc; }
+        .log-success { border-left-color: #0e7432; }
+        .log-error { border-left-color: #a1260d; }
+        .log-warning { border-left-color: #a15c07; }
+    </style>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔌 WebSocket Terminal Streaming Test</h1>
+            <p>Testing the missing WebSocket terminal streaming services</p>
+            <p>Server: <span class="status" id="server-status">connecting</span></p>
+            <p>Terminal Namespace: <span class="status" id="terminal-status">disconnected</span></p>
+            <p>Streaming Namespace: <span class="status" id="streaming-status">disconnected</span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>1. Main WebSocket Connection</h3>
+            <div class="controls">
+                <button onclick="connectMain()">Connect to Main</button>
+                <button onclick="disconnectMain()">Disconnect</button>
+            </div>
+            <div id="main-log" class="terminal-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>2. Terminal Namespace (/terminal)</h3>
+            <div class="controls">
+                <button onclick="connectTerminal()">Connect to Terminal</button>
+                <button onclick="disconnectTerminal()">Disconnect</button>
+                <button onclick="testTerminalFeatures()">Test Features</button>
+            </div>
+            <div id="terminal-log" class="terminal-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>3. Terminal Streaming Namespace (/terminal-streaming)</h3>
+            <div class="controls">
+                <button onclick="connectStreaming()">Connect to Streaming</button>
+                <button onclick="disconnectStreaming()">Disconnect</button>
+                <button onclick="testStreamingFeatures()">Test Features</button>
+            </div>
+            <div id="streaming-log" class="terminal-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>4. Instance Management Test</h3>
+            <div class="controls">
+                <input type="text" id="instance-id" placeholder="Instance ID" value="test-instance">
+                <button onclick="testInstanceConnection()">Connect to Instance</button>
+                <button onclick="listInstances()">List Instances</button>
+            </div>
+            <div id="instance-log" class="terminal-output"></div>
+        </div>
+    </div>
+
+    <script>
+        let mainSocket = null;
+        let terminalSocket = null;
+        let streamingSocket = null;
+
+        const serverUrl = 'http://localhost:3000';
+        
+        function log(containerId, message, type = 'info') {
+            const container = document.getElementById(containerId);
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            container.appendChild(logEntry);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateStatus(elementId, status) {
+            const element = document.getElementById(elementId);
+            element.className = `status ${status}`;
+            element.textContent = status;
+        }
+
+        // Main WebSocket Connection
+        function connectMain() {
+            if (mainSocket) {
+                mainSocket.disconnect();
+            }
+
+            updateStatus('server-status', 'connecting');
+            log('main-log', 'Connecting to main WebSocket...', 'info');
+
+            mainSocket = io(serverUrl, {
+                auth: {
+                    userId: 'test-user',
+                    username: 'WebSocket Tester'
+                }
+            });
+
+            mainSocket.on('connect', () => {
+                updateStatus('server-status', 'connected');
+                log('main-log', 'Connected to main WebSocket', 'success');
+            });
+
+            mainSocket.on('disconnect', (reason) => {
+                updateStatus('server-status', 'disconnected');
+                log('main-log', `Disconnected: ${reason}`, 'warning');
+            });
+
+            mainSocket.on('connect_error', (error) => {
+                updateStatus('server-status', 'disconnected');
+                log('main-log', `Connection error: ${error.message}`, 'error');
+            });
+
+            // Listen for system events
+            mainSocket.on('system:stats', (data) => {
+                log('main-log', `System stats: ${JSON.stringify(data)}`, 'info');
+            });
+
+            mainSocket.on('terminal:heartbeat', (data) => {
+                log('main-log', `Terminal heartbeat: ${data.connectedClients} clients`, 'info');
+            });
+        }
+
+        function disconnectMain() {
+            if (mainSocket) {
+                mainSocket.disconnect();
+                mainSocket = null;
+                updateStatus('server-status', 'disconnected');
+                log('main-log', 'Disconnected from main WebSocket', 'info');
+            }
+        }
+
+        // Terminal Namespace Connection
+        function connectTerminal() {
+            if (terminalSocket) {
+                terminalSocket.disconnect();
+            }
+
+            updateStatus('terminal-status', 'connecting');
+            log('terminal-log', 'Connecting to terminal namespace...', 'info');
+
+            terminalSocket = io(`${serverUrl}/terminal`, {
+                auth: {
+                    userId: 'test-user',
+                    username: 'Terminal Tester'
+                }
+            });
+
+            terminalSocket.on('connect', () => {
+                updateStatus('terminal-status', 'connected');
+                log('terminal-log', 'Connected to terminal namespace', 'success');
+            });
+
+            terminalSocket.on('disconnect', (reason) => {
+                updateStatus('terminal-status', 'disconnected');
+                log('terminal-log', `Terminal disconnected: ${reason}`, 'warning');
+            });
+
+            terminalSocket.on('terminal:connected', (data) => {
+                log('terminal-log', `Terminal connected: ${JSON.stringify(data)}`, 'success');
+            });
+
+            terminalSocket.on('terminal:error', (data) => {
+                log('terminal-log', `Terminal error: ${data.message}`, 'error');
+            });
+
+            terminalSocket.on('terminal:output', (data) => {
+                log('terminal-log', `Terminal output: ${data.data}`, 'info');
+            });
+
+            terminalSocket.on('terminal:instances_list', (data) => {
+                log('terminal-log', `Available instances: ${data.total}`, 'info');
+                data.instances.forEach(instance => {
+                    log('terminal-log', `  - ${instance.name} (${instance.id}): ${instance.status}`, 'info');
+                });
+            });
+        }
+
+        function disconnectTerminal() {
+            if (terminalSocket) {
+                terminalSocket.disconnect();
+                terminalSocket = null;
+                updateStatus('terminal-status', 'disconnected');
+                log('terminal-log', 'Disconnected from terminal namespace', 'info');
+            }
+        }
+
+        function testTerminalFeatures() {
+            if (!terminalSocket) {
+                log('terminal-log', 'Not connected to terminal namespace', 'error');
+                return;
+            }
+
+            log('terminal-log', 'Testing terminal features...', 'info');
+            
+            // Test listing instances
+            terminalSocket.emit('list_instances');
+            
+            // Test ping
+            terminalSocket.emit('ping');
+            terminalSocket.once('pong', (data) => {
+                log('terminal-log', `Pong received: ${data.timestamp}`, 'success');
+            });
+        }
+
+        // Streaming Namespace Connection
+        function connectStreaming() {
+            if (streamingSocket) {
+                streamingSocket.disconnect();
+            }
+
+            updateStatus('streaming-status', 'connecting');
+            log('streaming-log', 'Connecting to streaming namespace...', 'info');
+
+            streamingSocket = io(`${serverUrl}/terminal-streaming`, {
+                auth: {
+                    userId: 'test-user',
+                    username: 'Streaming Tester'
+                }
+            });
+
+            streamingSocket.on('connect', () => {
+                updateStatus('streaming-status', 'connected');
+                log('streaming-log', 'Connected to streaming namespace', 'success');
+            });
+
+            streamingSocket.on('disconnect', (reason) => {
+                updateStatus('streaming-status', 'disconnected');
+                log('streaming-log', `Streaming disconnected: ${reason}`, 'warning');
+            });
+
+            streamingSocket.on('streaming:connected', (data) => {
+                log('streaming-log', `Streaming connected: ${JSON.stringify(data)}`, 'success');
+            });
+
+            streamingSocket.on('streaming:error', (data) => {
+                log('streaming-log', `Streaming error: ${data.message}`, 'error');
+            });
+
+            streamingSocket.on('streaming:data', (data) => {
+                log('streaming-log', `Streaming data: ${data.data}`, 'info');
+            });
+
+            streamingSocket.on('streaming:instances_response', (data) => {
+                log('streaming-log', `Available instances: ${data.total}`, 'info');
+                data.instances.forEach(instance => {
+                    log('streaming-log', `  - ${instance.name} (${instance.id}): ${instance.status}`, 'info');
+                });
+            });
+        }
+
+        function disconnectStreaming() {
+            if (streamingSocket) {
+                streamingSocket.disconnect();
+                streamingSocket = null;
+                updateStatus('streaming-status', 'disconnected');
+                log('streaming-log', 'Disconnected from streaming namespace', 'info');
+            }
+        }
+
+        function testStreamingFeatures() {
+            if (!streamingSocket) {
+                log('streaming-log', 'Not connected to streaming namespace', 'error');
+                return;
+            }
+
+            log('streaming-log', 'Testing streaming features...', 'info');
+            
+            // Test getting instances
+            streamingSocket.emit('streaming:instances');
+            
+            // Test getting status
+            streamingSocket.emit('streaming:status');
+            
+            // Test ping
+            streamingSocket.emit('ping');
+            streamingSocket.once('pong', (data) => {
+                log('streaming-log', `Pong received: ${data.timestamp}`, 'success');
+            });
+        }
+
+        // Instance Management
+        function testInstanceConnection() {
+            const instanceId = document.getElementById('instance-id').value;
+            
+            if (!terminalSocket) {
+                log('instance-log', 'Not connected to terminal namespace', 'error');
+                return;
+            }
+
+            log('instance-log', `Testing connection to instance: ${instanceId}`, 'info');
+            
+            terminalSocket.emit('connect_to_instance', { instanceId });
+            
+            terminalSocket.once('terminal:instance_connected', (data) => {
+                log('instance-log', `Connected to instance: ${JSON.stringify(data)}`, 'success');
+            });
+
+            terminalSocket.once('terminal:error', (data) => {
+                log('instance-log', `Instance connection error: ${data.message}`, 'error');
+            });
+        }
+
+        function listInstances() {
+            log('instance-log', 'Requesting instance list...', 'info');
+            
+            if (terminalSocket) {
+                terminalSocket.emit('list_instances');
+            }
+            
+            if (streamingSocket) {
+                streamingSocket.emit('streaming:instances');
+            }
+        }
+
+        // Auto-connect on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                connectMain();
+                setTimeout(() => {
+                    connectTerminal();
+                    setTimeout(() => {
+                        connectStreaming();
+                    }, 1000);
+                }, 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

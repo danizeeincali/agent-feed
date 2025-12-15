@@ -1,0 +1,90 @@
+{
+  "pageId": "test-sidebar-page",
+  "agentId": "test-agent",
+  "title": "Test Sidebar Component",
+  "content": {
+    "components": [
+      {
+        "type": "Header",
+        "props": {
+          "level": 1,
+          "text": "Advanced Sidebar Test"
+        }
+      },
+      {
+        "type": "Sidebar",
+        "props": {
+          "items": [
+            {
+              "id": "nav-1",
+              "label": "Dashboard",
+              "icon": "home",
+              "link": "/dashboard"
+            },
+            {
+              "id": "nav-2",
+              "label": "Projects",
+              "icon": "folder",
+              "link": "/projects",
+              "children": [
+                {
+                  "id": "nav-2-1",
+                  "label": "Active Projects",
+                  "link": "/projects/active"
+                },
+                {
+                  "id": "nav-2-2",
+                  "label": "Archived Projects",
+                  "link": "/projects/archived"
+                }
+              ]
+            },
+            {
+              "id": "nav-3",
+              "label": "Team",
+              "icon": "users",
+              "link": "/team"
+            },
+            {
+              "id": "nav-4",
+              "label": "Reports",
+              "icon": "chart",
+              "link": "/reports",
+              "children": [
+                {
+                  "id": "nav-4-1",
+                  "label": "Analytics",
+                  "link": "/reports/analytics"
+                },
+                {
+                  "id": "nav-4-2",
+                  "label": "Performance",
+                  "link": "/reports/performance"
+                },
+                {
+                  "id": "nav-4-3",
+                  "label": "Usage Stats",
+                  "link": "/reports/usage"
+                }
+              ]
+            },
+            {
+              "id": "nav-5",
+              "label": "Settings",
+              "icon": "settings",
+              "link": "/settings"
+            }
+          ],
+          "position": "left",
+          "collapsible": true
+        }
+      },
+      {
+        "type": "Text",
+        "props": {
+          "content": "This is the main content area. The sidebar navigation should appear on the left side with collapsible menu items."
+        }
+      }
+    ]
+  }
+}

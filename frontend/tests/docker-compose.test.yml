@@ -1,0 +1,150 @@
+version: '3.8'
+
+services:
+  # Frontend Development Server
+  frontend-test:
+    build:
+      context: ../
+      dockerfile: tests/docker/Dockerfile.frontend
+    ports:
+      - "5176:5173"
+    environment:
+      - NODE_ENV=test
+      - TEST_ENV=docker
+      - VITE_API_URL=http://backend-api-test:3007
+      - VITE_WS_URL=ws://websocket-terminal-test:3008
+    volumes:
+      - ../src:/app/src:ro
+      - ../tests:/app/tests:ro
+    depends_on:
+      - backend-api-test
+      - websocket-terminal-test
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API Server
+  backend-api-test:
+    build:
+      context: ../../
+      dockerfile: frontend/tests/docker/Dockerfile.backend
+    ports:
+      - "3007:3001"
+    environment:
+      - NODE_ENV=test
+      - PORT=3001
+      - HOST=0.0.0.0
+      - WS_TERMINAL_URL=ws://websocket-terminal-test:3008
+    volumes:
+      - ../../backend-enhanced.js:/app/backend-enhanced.js:ro
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # WebSocket Terminal Server  
+  websocket-terminal-test:
+    build:
+      context: ../../
+      dockerfile: frontend/tests/docker/Dockerfile.terminal
+    ports:
+      - "3008:3002"
+    environment:
+      - NODE_ENV=test
+      - PORT=3002
+      - HOST=0.0.0.0
+    volumes:
+      - ../../backend-terminal-server-emergency-fix.js:/app/backend-terminal-server-emergency-fix.js:ro
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "3002"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Test Runner
+  test-runner:
+    build:
+      context: ../
+      dockerfile: tests/docker/Dockerfile.test-runner
+    environment:
+      - NODE_ENV=test
+      - TEST_ENV=docker
+      - FRONTEND_URL=http://frontend-test:5173
+      - BACKEND_URL=http://backend-api-test:3001
+      - WEBSOCKET_URL=ws://websocket-terminal-test:3002
+    volumes:
+      - ../tests:/app/tests:ro
+      - ../playwright.config.ts:/app/playwright.config.ts:ro
+      - ../vitest.config.ts:/app/vitest.config.ts:ro
+      - ./test-results:/app/test-results
+    depends_on:
+      frontend-test:
+        condition: service_healthy
+      backend-api-test:
+        condition: service_healthy
+      websocket-terminal-test:
+        condition: service_healthy
+    networks:
+      - test-network
+    command: >
+      sh -c "
+        echo 'Waiting for services to be ready...' &&
+        sleep 10 &&
+        echo 'Running integration tests...' &&
+        npm run test:integration &&
+        echo 'Running E2E tests...' &&
+        npm run test:e2e:docker
+      "
+
+  # Database for testing (if needed)
+  test-db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for testing (if needed)
+  test-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  test-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  test-db-data:
+  test-results:

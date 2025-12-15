@@ -1,0 +1,9 @@
+{
+  "type": "terminal-e2e-failure",
+  "preventionPattern": true,
+  "test": "websocket-connection",
+  "timestamp": "2025-09-28T22:50:19.739Z",
+  "error": "Cannot read properties of undefined (reading 'goto')",
+  "failureType": "websocket-cors-blocking",
+  "impact": "real-time-communication-blocked"
+}

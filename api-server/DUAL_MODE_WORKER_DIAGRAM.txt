@@ -1,0 +1,372 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    DUAL-MODE WORKER ARCHITECTURE
+                         System Diagram (ASCII)
+═══════════════════════════════════════════════════════════════════════════════
+
+
+                              USER/SYSTEM REQUEST
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          POST /api/v1/agent-posts                           │
+│  Accepts: title, content, author_agent, userId, metadata                   │
+└────────────────────────────────┬────────────────────────────────────────────┘
+                                 │
+                                 ▼
+                    ┌────────────────────────┐
+                    │   Create Post in DB    │
+                    └────────────┬───────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CREATE WORK QUEUE TICKET                                 │
+│  Fields:                                                                    │
+│    - user_id, post_id, post_content                                         │
+│    - post_metadata (task_type, params)                                      │
+│    - status: 'pending', priority: 5                                         │
+└────────────────────────────────┬────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                        AVI ORCHESTRATOR (Always-On)                        ┃
+┃  - Polls work_queue every 5 seconds                                        ┃
+┃  - Maintains max 5 concurrent workers                                      ┃
+┃  - Monitors health and context size                                        ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                                 │
+                                 │ spawns
+                                 ▼
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                      UNIFIED AGENT WORKER                                   ║
+║  worker/unified-agent-worker.js                                             ║
+║                                                                             ║
+║  ┌─────────────────────────────────────────────────────────────┐           ║
+║  │  1. Fetch ticket from work_queue                            │           ║
+║  │  2. Mark status: 'processing'                               │           ║
+║  │  3. Detect task type                                        │           ║
+║  │  4. Route to executor                                       │           ║
+║  │  5. Execute and capture result                              │           ║
+║  │  6. Update ticket (completed/failed)                        │           ║
+║  └─────────────────────────────────────────────────────────────┘           ║
+║                                                                             ║
+║  ┌───────────────────────────────────────────────────────────────────┐     ║
+║  │              TASK TYPE DETECTOR                                   │     ║
+║  │  worker/task-detector.js                                          │     ║
+║  │                                                                   │     ║
+║  │  Detection Strategy:                                              │     ║
+║  │  1. Check metadata.task_type (explicit)                           │     ║
+║  │  2. Pattern match post_content:                                   │     ║
+║  │     - file://create|read|write|delete → file_operation            │     ║
+║  │     - cmd:// → command                                            │     ║
+║  │     - api://GET|POST|PUT|DELETE → api_call                        │     ║
+║  │     - https?:// → rss_feed (default)                              │     ║
+║  └───────────────────┬───────────────────────────────────────────────┘     ║
+║                      │                                                      ║
+║                      ▼                                                      ║
+║            ┌──────────────────┐                                            ║
+║            │   Route to       │                                            ║
+║            │   Executor       │                                            ║
+║            └────┬─────┬───┬───┘                                            ║
+║                 │     │   │                                                ║
+║       ┌─────────┼─────┼───┼─────────┐                                      ║
+║       │         │     │   │         │                                      ║
+║       ▼         ▼     ▼   ▼         ▼                                      ║
+║  ┌────────┬────────┬──────┬────────┬──────────┐                           ║
+║  │RSS Feed│File Ops│ CMD  │  API   │ Future   │                           ║
+║  │Executor│Executor│Exec  │Executor│Executors │                           ║
+║  └────────┴────────┴──────┴────────┴──────────┘                           ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+         │           │          │        │
+         └───────────┴──────────┴────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    EXECUTOR IMPLEMENTATIONS                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔═════════════════════════════════════════════════════════════════════════════╗
+║  FILE OPERATION EXECUTOR                                                    ║
+║  worker/executors/file-operation-executor.js                                ║
+║                                                                             ║
+║  Operations:                        Security:                              ║
+║  • create(path, content)            • Path whitelist validation            ║
+║  • read(path)                       • Directory traversal blocking         ║
+║  • write(path, content)             • 10MB max file size                   ║
+║  • delete(path)                     • Allowed dirs: /tmp, /data            ║
+║                                                                             ║
+║  Example:                                                                   ║
+║  post_content: "file://create /tmp/output.txt"                              ║
+║  metadata.params: { content: "Hello", encoding: "utf8" }                   ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+
+╔═════════════════════════════════════════════════════════════════════════════╗
+║  COMMAND EXECUTOR                                                           ║
+║  worker/executors/command-executor.js                                       ║
+║                                                                             ║
+║  Operations:                        Security:                              ║
+║  • spawn(command, args, options)    • Command whitelist                    ║
+║  • capture stdout/stderr            • Block dangerous patterns             ║
+║  • handle exit codes                • 30s timeout                          ║
+║                                     • No shell interpretation              ║
+║                                                                             ║
+║  Example:                                                                   ║
+║  post_content: "cmd://npm test"                                             ║
+║  metadata.params: { cwd: "/app", timeout: 60000 }                          ║
+║                                                                             ║
+║  Allowed: ls, cat, npm, node, git, echo                                    ║
+║  Blocked: rm -rf, dd, mkfs, shutdown                                       ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+
+╔═════════════════════════════════════════════════════════════════════════════╗
+║  API EXECUTOR                                                               ║
+║  worker/executors/api-executor.js                                           ║
+║                                                                             ║
+║  Operations:                        Features:                              ║
+║  • GET, POST, PUT, DELETE           • Retry with exponential backoff       ║
+║  • Custom headers                   • 10s timeout                          ║
+║  • Request body support             • Response size limits (5MB)           ║
+║                                     • SSRF protection                      ║
+║                                                                             ║
+║  Example:                                                                   ║
+║  post_content: "api://GET https://api.example.com/users"                    ║
+║  metadata.params: { headers: { "Authorization": "Bearer token" } }         ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+
+╔═════════════════════════════════════════════════════════════════════════════╗
+║  RSS FEED EXECUTOR                                                          ║
+║  worker/executors/rss-feed-executor.js                                      ║
+║                                                                             ║
+║  Operations:                        Features:                              ║
+║  • Fetch and parse RSS/Atom feeds   • Existing logic wrapped              ║
+║  • Extract feed items               • Backward compatible                  ║
+║  • Store in agent memories          • No changes to current behavior       ║
+║                                                                             ║
+║  Example:                                                                   ║
+║  post_content: "https://example.com/feed.xml"                               ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+
+                                      │
+                                      │ result
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    UPDATE WORK QUEUE TICKET                                 │
+│                                                                             │
+│  Success:                           Failure:                                │
+│  • status: 'completed'              • status: 'failed'                      │
+│  • result: { success: true, ... }   • error_message: "..."                 │
+│  • completed_at: timestamp          • retry_count: +1                      │
+│                                     • retry if retryable && count < 3      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+                           DATA FLOW EXAMPLE
+═══════════════════════════════════════════════════════════════════════════════
+
+SCENARIO: User requests to create a configuration file
+
+1. User Request:
+   POST /api/v1/agent-posts
+   {
+     "title": "Create Config",
+     "content": "file://create /tmp/config.json",
+     "userId": "user123",
+     "metadata": {
+       "task_type": "file_operation",
+       "params": {
+         "operation": "create",
+         "path": "/tmp/config.json",
+         "content": "{\"env\": \"production\"}"
+       }
+     }
+   }
+
+2. Ticket Created:
+   work_queue.id = 42
+   work_queue.status = 'pending'
+   work_queue.post_content = "file://create /tmp/config.json"
+   work_queue.post_metadata = { task_type: "file_operation", ... }
+
+3. Orchestrator Detects:
+   SELECT * FROM work_queue WHERE status = 'pending' ORDER BY priority DESC
+
+4. Worker Spawned:
+   worker-1234567890-abc123 → ticket #42
+
+5. Task Detection:
+   TaskTypeDetector.detect() → { type: 'file_operation', params: { ... } }
+
+6. Execution:
+   FileOperationExecutor.execute()
+     → validatePath("/tmp/config.json") ✓
+     → fs.writeFileSync("/tmp/config.json", content) ✓
+     → { success: true, path: "/tmp/config.json", bytes: 23 }
+
+7. Ticket Updated:
+   work_queue.status = 'completed'
+   work_queue.result = {
+     "task_type": "file_operation",
+     "success": true,
+     "operation": "create",
+     "path": "/tmp/config.json",
+     "bytes_written": 23
+   }
+   work_queue.completed_at = '2025-10-13 12:34:56'
+
+8. Worker Terminates:
+   Worker cleaned up, orchestrator continues polling
+
+═══════════════════════════════════════════════════════════════════════════════
+                        SECURITY BOUNDARIES
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  INPUT VALIDATION LAYER                                                     │
+│  • Schema validation (Zod/Joi)                                              │
+│  • Type checking                                                            │
+│  • Size limits                                                              │
+└────────────────────────────────┬────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  TASK DETECTION LAYER                                                       │
+│  • Pattern matching                                                         │
+│  • Task classification                                                      │
+│  • Parameter extraction                                                     │
+└────────────────────────────────┬────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  EXECUTOR SECURITY LAYER                                                    │
+│  • Path validation (file ops)                                               │
+│  • Command whitelisting (cmd)                                               │
+│  • SSRF protection (API)                                                    │
+│  • Resource limits (all)                                                    │
+└────────────────────────────────┬────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  EXECUTION SANDBOX                                                          │
+│  • Timeout enforcement                                                      │
+│  • Memory limits                                                            │
+│  • CPU throttling                                                           │
+│  • Isolated file system access                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+                       ERROR HANDLING FLOW
+═══════════════════════════════════════════════════════════════════════════════
+
+                    ┌───────────────────┐
+                    │ Worker.execute()  │
+                    └─────────┬─────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │  Try Block        │
+                    │  • Detect task    │
+                    │  • Execute task   │
+                    │  • Capture result │
+                    └─────────┬─────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │  Success?         │
+                    └─────────┬─────────┘
+                              │
+                  ┌───────────┴───────────┐
+                  │                       │
+                  ▼ YES                   ▼ NO
+         ┌────────────────┐      ┌──────────────────┐
+         │ Complete       │      │ Catch Block      │
+         │ Ticket         │      │ • Classify error │
+         │ status='done'  │      │ • Log details    │
+         └────────────────┘      └────────┬─────────┘
+                                          │
+                                 ┌────────▼─────────┐
+                                 │ Retryable?       │
+                                 └────────┬─────────┘
+                                          │
+                              ┌───────────┴──────────┐
+                              │                      │
+                              ▼ YES                  ▼ NO
+                     ┌─────────────────┐    ┌──────────────────┐
+                     │ retry_count < 3?│    │ Fail Ticket      │
+                     └────────┬────────┘    │ status='failed'  │
+                              │             │ final            │
+                  ┌───────────┴──────────┐  └──────────────────┘
+                  │                      │
+                  ▼ YES                  ▼ NO
+         ┌────────────────┐     ┌──────────────────┐
+         │ Retry Ticket   │     │ Fail Ticket      │
+         │ status='pend'  │     │ status='failed'  │
+         │ retry_count++  │     │ max retries      │
+         └────────────────┘     └──────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+                         MONITORING DASHBOARD
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QUEUE METRICS                                                              │
+│  ┌───────────┬───────────┬───────────┬───────────┬───────────┐             │
+│  │ Pending   │ Processing│ Completed │  Failed   │  Total    │             │
+│  │    12     │     3     │   1,543   │    27     │  1,585    │             │
+│  └───────────┴───────────┴───────────┴───────────┴───────────┘             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  WORKER METRICS                                                             │
+│  ┌──────────────────┬──────────────┬─────────────────┬────────────────┐    │
+│  │ Active Workers   │ Tasks Today  │  Success Rate   │  Avg Time      │    │
+│  │       3 / 5      │     458      │     98.2%       │   1.25s        │    │
+│  └──────────────────┴──────────────┴─────────────────┴────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  TASK TYPE DISTRIBUTION                                                     │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │  RSS Feed:        ████████████████████████████████░░░░  77.8%      │    │
+│  │  File Ops:        ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░  15.9%      │    │
+│  │  Command:         ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   5.1%      │    │
+│  │  API Call:        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   1.3%      │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+                        IMPLEMENTATION CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+Phase 1: Core Implementation
+  [ ] Create UnifiedAgentWorker class
+  [ ] Implement TaskTypeDetector
+  [ ] Build FileOperationExecutor with security
+  [ ] Build CommandExecutor with whitelist
+  [ ] Build APIExecutor with SSRF protection
+  [ ] Wrap existing logic in RssFeedExecutor
+  [ ] Add comprehensive error handling
+  [ ] Write unit tests (TDD)
+
+Phase 2: Integration
+  [ ] Update orchestrator to use UnifiedAgentWorker
+  [ ] Enhance POST /api/v1/agent-posts endpoint
+  [ ] Add task metadata support
+  [ ] Create integration tests
+  [ ] Security penetration testing
+  [ ] Performance benchmarking
+
+Phase 3: Deployment
+  [ ] Deploy to staging environment
+  [ ] Run parallel processing (old + new)
+  [ ] Monitor metrics and error rates
+  [ ] Gradual production rollout (10% → 50% → 100%)
+  [ ] Deprecate old AgentWorker
+
+Phase 4: Documentation
+  [ ] Update API documentation
+  [ ] Create user guides for task types
+  [ ] Document security boundaries
+  [ ] Create runbooks for operations team
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                        END OF DIAGRAM
+
+═══════════════════════════════════════════════════════════════════════════════

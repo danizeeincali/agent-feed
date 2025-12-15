@@ -1,0 +1,222 @@
+{
+  "id": "mermaid-all-types-test",
+  "agent_id": "page-builder-agent",
+  "title": "Mermaid All Diagram Types Test",
+  "description": "Comprehensive test of all 10 Mermaid diagram types",
+  "specification": {
+    "id": "mermaid-all-types-test",
+    "title": "Mermaid All Diagram Types Test",
+    "layout": "single-column",
+    "components": [
+      {
+        "type": "header",
+        "props": {
+          "title": "Mermaid Diagram Types - Complete Test Suite",
+          "level": 1
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "This page tests all 10 Mermaid diagram types to verify rendering works correctly. Each diagram type is shown with a working example."
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "1. Flowchart",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "Flowcharts visualize workflows, processes, and decision trees with nodes and directional edges."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "graph TD\n    A[Start] --> B{Decision}\n    B -->|Yes| C[Process]\n    B -->|No| D[End]\n    C --> D"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "2. Sequence Diagram",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "Sequence diagrams show how processes interact with each other over time, displaying message exchanges between participants."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "sequenceDiagram\n    participant A as Alice\n    participant B as Bob\n    A->>B: Hello Bob!\n    B->>A: Hello Alice!\n    A->>B: How are you?\n    B->>A: I'm doing great!"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "3. Class Diagram",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "Class diagrams represent object-oriented programming structures, showing classes, their attributes, methods, and relationships."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "classDiagram\n    Animal <|-- Duck\n    Animal <|-- Fish\n    Animal: +int age\n    Animal: +String gender\n    Animal: +isMammal()\n    class Duck{\n        +String beakColor\n        +swim()\n        +quack()\n    }\n    class Fish{\n        -int sizeInFeet\n        -canEat()\n    }"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "4. State Diagram",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "State diagrams illustrate the states of a system and transitions between those states based on events."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "stateDiagram-v2\n    [*] --> Still\n    Still --> Moving\n    Moving --> Still\n    Moving --> Crash\n    Crash --> [*]"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "5. Entity Relationship Diagram",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "ER diagrams model database structures, showing entities, their attributes, and relationships between them."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "erDiagram\n    CUSTOMER ||--o{ ORDER : places\n    ORDER ||--|{ LINE-ITEM : contains\n    CUSTOMER {\n        string name\n        string email\n        string address\n    }\n    ORDER {\n        int orderNumber\n        date orderDate\n    }\n    LINE-ITEM {\n        int quantity\n        decimal price\n    }"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "6. Gantt Chart",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "Gantt charts display project schedules, showing tasks, their durations, and dependencies over time."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "gantt\n    title Project Schedule\n    dateFormat YYYY-MM-DD\n    section Phase 1\n    Task 1 :a1, 2025-01-01, 30d\n    Task 2 :after a1, 20d\n    section Phase 2\n    Task 3 :2025-02-20, 15d\n    Task 4 :2025-03-01, 25d"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "7. User Journey",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "User journey diagrams map out user experiences and satisfaction levels through different stages of interaction."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "journey\n    title User Shopping Journey\n    section Browse\n      Visit site: 5: Me\n      Search products: 3: Me\n    section Purchase\n      Add to cart: 4: Me\n      Checkout: 2: Me\n    section Post-Purchase\n      Receive email: 4: Me\n      Track order: 5: Me"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "8. Pie Chart",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "Pie charts display proportional data as slices of a circle, useful for showing percentage distributions."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "pie title Languages Used\n    \"JavaScript\" : 45\n    \"Python\" : 30\n    \"TypeScript\" : 25"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "9. Git Graph",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "Git graphs visualize version control workflows, showing commits, branches, and merges."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "gitGraph\n    commit\n    commit\n    branch develop\n    checkout develop\n    commit\n    commit\n    checkout main\n    merge develop\n    commit"
+        }
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "10. Timeline",
+          "level": 2
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "Timeline diagrams show chronological events and milestones in a linear, easy-to-follow format."
+        }
+      },
+      {
+        "type": "Mermaid",
+        "props": {
+          "chart": "timeline\n    title Development Timeline\n    2025-01 : Planning\n    2025-02 : Development\n    2025-03 : Testing\n    2025-04 : Launch"
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "---\n\n## Test Results\n\nIf all 10 diagrams above render correctly, the Mermaid integration is working as expected. Each diagram type serves different visualization purposes and demonstrates the versatility of Mermaid.js."
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,284 @@
+name: Performance Regression Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+  LIGHTHOUSE_CI_TOKEN: ${{ secrets.LIGHTHOUSE_CI_TOKEN }}
+  PERFORMANCE_ALERT_EMAIL: ${{ secrets.PERFORMANCE_ALERT_EMAIL }}
+  PERFORMANCE_ALERT_SLACK_WEBHOOK: ${{ secrets.PERFORMANCE_ALERT_SLACK_WEBHOOK }}
+
+jobs:
+  performance-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      matrix:
+        test-suite: [lighthouse, bundle, memory, api, interaction]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for regression comparison
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application (for browser tests)
+        if: matrix.test-suite != 'bundle'
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run Lighthouse CI
+        if: matrix.test-suite == 'lighthouse'
+        run: |
+          npm run test:performance:lighthouse
+        continue-on-error: true
+
+      - name: Run Bundle Analysis
+        if: matrix.test-suite == 'bundle'
+        run: |
+          npm run test:performance:bundle
+        continue-on-error: true
+
+      - name: Run Memory Leak Detection
+        if: matrix.test-suite == 'memory'
+        run: |
+          npm run test:performance:memory
+        continue-on-error: true
+
+      - name: Run API Performance Tests
+        if: matrix.test-suite == 'api'
+        run: |
+          npm run test:performance:api
+        continue-on-error: true
+
+      - name: Run User Interaction Tests
+        if: matrix.test-suite == 'interaction'
+        run: |
+          npm run test:performance:interaction
+        continue-on-error: true
+
+      - name: Upload Performance Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-reports-${{ matrix.test-suite }}
+          path: |
+            tests/performance/reports/
+            .lighthouseci/
+          retention-days: 30
+
+  performance-summary:
+    needs: performance-regression
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download all performance reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: performance-reports-*
+          merge-multiple: true
+          path: tests/performance/reports/
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run comprehensive performance test
+        run: npm run test:performance
+        continue-on-error: true
+
+      - name: Generate performance summary
+        run: |
+          # Create summary from all test results
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+
+            const reportsDir = 'tests/performance/reports';
+            const summaryFile = path.join(reportsDir, 'ci-performance-report.json');
+
+            if (fs.existsSync(summaryFile)) {
+              const summary = JSON.parse(fs.readFileSync(summaryFile, 'utf8'));
+
+              console.log('🎯 Performance Test Results');
+              console.log('============================');
+              console.log('Overall Status:', summary.passed ? '✅ PASSED' : '❌ FAILED');
+              console.log('Performance Score:', summary.score.toFixed(1) + '%');
+              console.log('Regressions Found:', summary.regressions);
+              console.log('Recommendations:', summary.recommendations);
+
+              // Set GitHub Actions outputs
+              const output = \`performance_passed=\${summary.passed}
+performance_score=\${summary.score}
+regressions_count=\${summary.regressions}
+recommendations_count=\${summary.recommendations}\`;
+
+              fs.writeFileSync(process.env.GITHUB_OUTPUT || '/dev/stdout', output);
+
+              // Fail if performance is below threshold
+              if (!summary.passed) {
+                console.error('❌ Performance regression detected!');
+                process.exit(1);
+              }
+            } else {
+              console.log('⚠️ No performance summary found');
+              fs.writeFileSync(process.env.GITHUB_OUTPUT || '/dev/stdout', 'performance_passed=false');
+              process.exit(1);
+            }
+          "
+
+      - name: Comment on PR with performance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            try {
+              const summaryFile = 'tests/performance/reports/ci-performance-report.json';
+              if (!fs.existsSync(summaryFile)) {
+                console.log('No performance summary file found');
+                return;
+              }
+
+              const summary = JSON.parse(fs.readFileSync(summaryFile, 'utf8'));
+              const reportFile = 'tests/performance/reports/performance-summary.txt';
+              const detailedReport = fs.existsSync(reportFile)
+                ? fs.readFileSync(reportFile, 'utf8')
+                : 'Detailed report not available';
+
+              const status = summary.passed ? '✅ PASSED' : '❌ FAILED';
+              const score = summary.score.toFixed(1);
+
+              const comment = `## 🎯 Performance Test Results
+
+**Status:** ${status}
+**Performance Score:** ${score}%
+**Regressions:** ${summary.regressions}
+**Recommendations:** ${summary.recommendations}
+
+<details>
+<summary>📊 Detailed Performance Report</summary>
+
+\`\`\`
+${detailedReport}
+\`\`\`
+</details>
+
+${!summary.passed ? '⚠️ **Performance regression detected!** This PR should not be merged until performance issues are resolved.' : ''}
+              `;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.error('Error creating PR comment:', error);
+            }
+
+      - name: Update performance baseline (main branch only)
+        if: github.ref == 'refs/heads/main' && success()
+        run: |
+          # Update baseline files for future comparisons
+          git config --global user.email "action@github.com"
+          git config --global user.name "Performance Bot"
+
+          # Add baseline files if they exist
+          if [ -f "tests/performance/reports/bundle-baseline.json" ]; then
+            git add tests/performance/reports/bundle-baseline.json
+          fi
+
+          if [ -f "tests/performance/reports/api-baseline.json" ]; then
+            git add tests/performance/reports/api-baseline.json
+          fi
+
+          # Commit only if there are changes
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update performance baselines [skip ci]"
+            git push
+          fi
+
+      - name: Upload final performance artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-final-report
+          path: |
+            tests/performance/reports/
+            .lighthouseci/
+          retention-days: 90  # Keep final reports longer
+
+      - name: Send Slack notification on failure
+        if: failure() && github.ref == 'refs/heads/main'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#performance-alerts'
+          webhook_url: ${{ env.PERFORMANCE_ALERT_SLACK_WEBHOOK }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          custom_payload: |
+            {
+              attachments: [{
+                color: 'danger',
+                title: '🚨 Performance Regression Alert',
+                text: `Performance tests failed on ${context.repo.repo}`,
+                fields: [{
+                  title: 'Branch',
+                  value: '${github.ref}',
+                  short: true
+                }, {
+                  title: 'Commit',
+                  value: '${github.sha}'.substring(0, 7),
+                  short: true
+                }, {
+                  title: 'Author',
+                  value: '${github.actor}',
+                  short: true
+                }],
+                actions: [{
+                  type: 'button',
+                  text: 'View Details',
+                  url: '${github.server_url}/${github.repository}/actions/runs/${github.run_id}'
+                }]
+              }]
+            }

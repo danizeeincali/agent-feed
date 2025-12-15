@@ -1,0 +1,12 @@
+
+> agent-feed@0.1.0 test
+> jest --config jest.config.cjs api-server/tests/unit/services/auth/ClaudeAuthManager.test.cjs --no-coverage
+
+No tests found, exiting with code 1
+Run with `--passWithNoTests` to exit with code 0
+In /workspaces/agent-feed
+  235 files checked.
+  testMatch: **/__tests__/**/*.+(ts|tsx|js), **/*.(test|spec).+(ts|tsx|js) - 169 matches
+  testPathIgnorePatterns: /node_modules/, /dist/, /frontend/node_modules/, /frontend/dist/, /tests/production-validation/tool-call-visualization-e2e.spec.ts - 235 matches
+  testRegex:  - 0 matches
+Pattern: api-server/tests/unit/services/auth/ClaudeAuthManager.test.cjs - 0 matches

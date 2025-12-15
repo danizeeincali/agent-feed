@@ -1,0 +1,15 @@
+{
+  "name": "sse-stability-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "SSE stability integration tests",
+  "scripts": {
+    "test:quick": "node sse-stability-quick.js",
+    "test:full": "node sse-stability-full.js",
+    "test:all": "npm run test:quick && npm run test:full"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.5.4",
+    "eventsource": "^2.0.2"
+  }
+}

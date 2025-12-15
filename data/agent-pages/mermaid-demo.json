@@ -1,0 +1,213 @@
+{
+  "page": {
+    "title": "Mermaid Diagrams - Complete Examples",
+    "description": "Comprehensive showcase of all Mermaid diagram types for technical documentation",
+    "author": "Claude Code",
+    "version": "1.0.0",
+    "published": true,
+    "components": [
+      {
+        "type": "header",
+        "props": {
+          "title": "Mermaid Diagram Gallery",
+          "level": 1
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "This page demonstrates all Mermaid diagram types embedded in Markdown components. Use these as templates for technical documentation, architecture diagrams, and workflow visualization."
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Flowcharts",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Simple Decision Flow\nBasic flowchart showing user authentication process.\n\n```mermaid\nflowchart TD\n    A[Start] --> B{User Logged In?}\n    B -->|Yes| C[Show Dashboard]\n    B -->|No| D[Show Login Page]\n    D --> E[Enter Credentials]\n    E --> F{Valid?}\n    F -->|Yes| C\n    F -->|No| G[Show Error]\n    G --> D\n    C --> H[End]\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Complex Workflow\nE-commerce order processing with multiple decision points.\n\n```mermaid\nflowchart TB\n    Start([New Order]) --> ValidateOrder{Validate Order}\n    ValidateOrder -->|Invalid| RejectOrder[Reject Order]\n    ValidateOrder -->|Valid| CheckInventory{Check Inventory}\n    CheckInventory -->|Out of Stock| NotifyCustomer[Notify Customer]\n    CheckInventory -->|In Stock| ProcessPayment{Process Payment}\n    ProcessPayment -->|Failed| PaymentFailed[Payment Failed]\n    ProcessPayment -->|Success| ShipOrder[Ship Order]\n    ShipOrder --> SendTracking[Send Tracking Info]\n    SendTracking --> Complete([Order Complete])\n    PaymentFailed --> RetryPayment{Retry?}\n    RetryPayment -->|Yes| ProcessPayment\n    RetryPayment -->|No| CancelOrder[Cancel Order]\n    NotifyCustomer --> Backorder{Backorder?}\n    Backorder -->|Yes| WaitStock[Wait for Stock]\n    Backorder -->|No| CancelOrder\n    WaitStock --> CheckInventory\n    RejectOrder --> End([End])\n    CancelOrder --> End\n    Complete --> End\n    \n    style Start fill:#10b981\n    style Complete fill:#10b981\n    style RejectOrder fill:#ef4444\n    style PaymentFailed fill:#ef4444\n    style CancelOrder fill:#ef4444\n    style ShipOrder fill:#3b82f6\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Sequence Diagrams",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### API Authentication Flow\nOAuth 2.0 authentication sequence.\n\n```mermaid\nsequenceDiagram\n    participant User\n    participant Client\n    participant AuthServer\n    participant ResourceServer\n    \n    User->>Client: Click Login\n    Client->>AuthServer: Authorization Request\n    AuthServer->>User: Show Login Page\n    User->>AuthServer: Enter Credentials\n    AuthServer->>AuthServer: Validate Credentials\n    AuthServer->>Client: Authorization Code\n    Client->>AuthServer: Exchange Code for Token\n    AuthServer->>Client: Access Token + Refresh Token\n    Client->>ResourceServer: API Request + Access Token\n    ResourceServer->>ResourceServer: Validate Token\n    ResourceServer->>Client: Protected Resource\n    Client->>User: Display Data\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Microservices Communication\nOrder processing across distributed services.\n\n```mermaid\nsequenceDiagram\n    participant UI as Frontend\n    participant API as API Gateway\n    participant Order as Order Service\n    participant Inventory as Inventory Service\n    participant Payment as Payment Service\n    participant Notification as Notification Service\n    \n    UI->>API: POST /orders\n    API->>Order: Create Order\n    Order->>Inventory: Check Stock\n    Inventory-->>Order: Stock Available\n    Order->>Payment: Process Payment\n    Payment-->>Order: Payment Success\n    Order->>Inventory: Reserve Items\n    Inventory-->>Order: Reserved\n    Order->>Notification: Send Confirmation\n    Notification-->>Order: Email Sent\n    Order-->>API: Order Created\n    API-->>UI: 201 Created\n    \n    Note over Order,Notification: Async Processing\n    Notification->>UI: Push Notification\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Class Diagrams",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### System Architecture\nCore domain model for e-commerce platform.\n\n```mermaid\nclassDiagram\n    class User {\n        +String id\n        +String email\n        +String name\n        +Date createdAt\n        +login()\n        +logout()\n        +updateProfile()\n    }\n    \n    class Order {\n        +String id\n        +String userId\n        +Date orderDate\n        +String status\n        +Float total\n        +createOrder()\n        +cancelOrder()\n        +getStatus()\n    }\n    \n    class OrderItem {\n        +String id\n        +String orderId\n        +String productId\n        +Integer quantity\n        +Float price\n        +calculateSubtotal()\n    }\n    \n    class Product {\n        +String id\n        +String name\n        +String description\n        +Float price\n        +Integer stock\n        +updateStock()\n        +getPrice()\n    }\n    \n    class Payment {\n        +String id\n        +String orderId\n        +Float amount\n        +String method\n        +String status\n        +processPayment()\n        +refund()\n    }\n    \n    class ShoppingCart {\n        +String id\n        +String userId\n        +Date updatedAt\n        +addItem()\n        +removeItem()\n        +checkout()\n    }\n    \n    User \"1\" --> \"*\" Order : places\n    User \"1\" --> \"1\" ShoppingCart : has\n    Order \"1\" --> \"*\" OrderItem : contains\n    OrderItem \"*\" --> \"1\" Product : references\n    Order \"1\" --> \"1\" Payment : processes\n    ShoppingCart \"1\" --> \"*\" Product : contains\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "State Diagrams",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Order Lifecycle\nComplete state transitions for order management.\n\n```mermaid\nstateDiagram-v2\n    [*] --> Draft\n    Draft --> Pending: Submit Order\n    Pending --> Processing: Payment Approved\n    Pending --> Cancelled: Payment Failed\n    Processing --> Shipped: Items Dispatched\n    Processing --> Cancelled: Out of Stock\n    Shipped --> InTransit: Carrier Pickup\n    InTransit --> Delivered: Customer Received\n    InTransit --> Failed: Delivery Failed\n    Failed --> InTransit: Retry Delivery\n    Failed --> Returned: Return to Sender\n    Delivered --> Completed: No Issues\n    Delivered --> ReturnRequested: Customer Request\n    ReturnRequested --> Returned: Return Approved\n    Returned --> Refunded: Refund Processed\n    Cancelled --> [*]\n    Completed --> [*]\n    Refunded --> [*]\n    \n    note right of Pending\n        Payment gateway\n        validation\n    end note\n    \n    note right of Delivered\n        Customer has 30 days\n        for returns\n    end note\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### User Session States\nUser authentication and session management.\n\n```mermaid\nstateDiagram-v2\n    [*] --> Anonymous\n    Anonymous --> Authenticated: Login Success\n    Anonymous --> Anonymous: Login Failed\n    Authenticated --> Active: User Activity\n    Active --> Idle: No Activity (5 min)\n    Idle --> Active: User Activity\n    Idle --> Expired: Timeout (30 min)\n    Active --> Locked: Security Event\n    Locked --> Authenticated: Unlock\n    Authenticated --> [*]: Logout\n    Expired --> [*]: Session Ended\n    Locked --> [*]: Force Logout\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Entity Relationship Diagrams",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Database Schema\nRelational database design for application.\n\n```mermaid\nerDiagram\n    USER ||--o{ ORDER : places\n    USER ||--|| SHOPPING_CART : has\n    USER {\n        string id PK\n        string email UK\n        string password_hash\n        string name\n        datetime created_at\n        datetime updated_at\n    }\n    \n    ORDER ||--|{ ORDER_ITEM : contains\n    ORDER ||--|| PAYMENT : has\n    ORDER ||--|| SHIPPING : has\n    ORDER {\n        string id PK\n        string user_id FK\n        string status\n        decimal total\n        datetime order_date\n        datetime updated_at\n    }\n    \n    ORDER_ITEM }o--|| PRODUCT : references\n    ORDER_ITEM {\n        string id PK\n        string order_id FK\n        string product_id FK\n        integer quantity\n        decimal price\n        decimal subtotal\n    }\n    \n    PRODUCT ||--o{ CATEGORY : belongs_to\n    PRODUCT ||--o{ INVENTORY : has\n    PRODUCT {\n        string id PK\n        string name\n        text description\n        decimal price\n        string sku UK\n        datetime created_at\n    }\n    \n    CATEGORY {\n        string id PK\n        string name\n        string slug UK\n        string parent_id FK\n    }\n    \n    INVENTORY {\n        string id PK\n        string product_id FK\n        string warehouse_id FK\n        integer quantity\n        datetime updated_at\n    }\n    \n    PAYMENT {\n        string id PK\n        string order_id FK\n        decimal amount\n        string method\n        string status\n        string transaction_id UK\n        datetime processed_at\n    }\n    \n    SHIPPING {\n        string id PK\n        string order_id FK\n        string address\n        string city\n        string country\n        string tracking_number UK\n        string carrier\n        datetime shipped_at\n    }\n    \n    SHOPPING_CART ||--|{ CART_ITEM : contains\n    SHOPPING_CART {\n        string id PK\n        string user_id FK\n        datetime updated_at\n    }\n    \n    CART_ITEM }o--|| PRODUCT : references\n    CART_ITEM {\n        string id PK\n        string cart_id FK\n        string product_id FK\n        integer quantity\n    }\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Timeline Diagrams",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Project Roadmap\nDevelopment timeline and milestones.\n\n```mermaid\ntimeline\n    title Product Development Roadmap 2024\n    section Q1\n        January : Research & Planning\n                : User Interviews\n                : Market Analysis\n        February : Design Phase\n                 : Wireframes\n                 : Prototypes\n        March : MVP Development Starts\n              : Core Features\n              : Authentication System\n    section Q2\n        April : Backend Development\n              : API Design\n              : Database Setup\n        May : Frontend Development\n            : UI Components\n            : Integration\n        June : Alpha Release\n             : Internal Testing\n             : Bug Fixes\n    section Q3\n        July : Beta Release\n             : User Testing\n             : Feedback Collection\n        August : Feature Enhancements\n               : Performance Optimization\n               : Security Audit\n        September : Release Candidate\n                  : Final Testing\n                  : Documentation\n    section Q4\n        October : Public Launch\n                : Marketing Campaign\n                : User Onboarding\n        November : Post-Launch Support\n                 : Feature Requests\n                 : Bug Fixes\n        December : Year End Review\n                 : Metrics Analysis\n                 : 2025 Planning\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Git Graphs",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Feature Branch Workflow\nGit branching strategy visualization.\n\n```mermaid\ngitGraph\n    commit id: \"Initial commit\"\n    commit id: \"Add README\"\n    branch develop\n    checkout develop\n    commit id: \"Setup project structure\"\n    branch feature/auth\n    checkout feature/auth\n    commit id: \"Add login page\"\n    commit id: \"Add authentication logic\"\n    checkout develop\n    merge feature/auth\n    branch feature/dashboard\n    checkout feature/dashboard\n    commit id: \"Create dashboard layout\"\n    commit id: \"Add charts\"\n    checkout develop\n    merge feature/dashboard\n    checkout main\n    merge develop tag: \"v1.0.0\"\n    checkout develop\n    branch feature/notifications\n    checkout feature/notifications\n    commit id: \"Add notification system\"\n    checkout develop\n    merge feature/notifications\n    checkout main\n    merge develop tag: \"v1.1.0\"\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Mind Maps",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### System Architecture Overview\nHigh-level architecture components.\n\n```mermaid\nmindmap\n  root((E-Commerce Platform))\n    Frontend\n      Web Application\n        React/Vue\n        Responsive Design\n        PWA Support\n      Mobile App\n        iOS\n        Android\n        React Native\n    Backend\n      API Gateway\n        REST API\n        GraphQL\n        WebSocket\n      Microservices\n        User Service\n        Order Service\n        Payment Service\n        Inventory Service\n      Database\n        PostgreSQL\n        Redis Cache\n        Elasticsearch\n    Infrastructure\n      Cloud Provider\n        AWS/Azure/GCP\n        Auto Scaling\n        Load Balancer\n      DevOps\n        CI/CD Pipeline\n        Monitoring\n        Logging\n      Security\n        SSL/TLS\n        OAuth 2.0\n        Rate Limiting\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Feature Planning\nProduct feature breakdown and priorities.\n\n```mermaid\nmindmap\n  root((Product Features))\n    Core Features\n      User Management\n        Registration\n        Login/Logout\n        Profile\n      Product Catalog\n        Browse Products\n        Search\n        Filters\n      Shopping Cart\n        Add to Cart\n        Update Quantity\n        Checkout\n    Advanced Features\n      Recommendations\n        Personalized\n        Trending Items\n        Related Products\n      Reviews & Ratings\n        Write Review\n        Upload Photos\n        Helpful Votes\n      Wishlist\n        Save Items\n        Share List\n        Price Alerts\n    Admin Features\n      Dashboard\n        Analytics\n        Reports\n        KPIs\n      Inventory Management\n        Stock Levels\n        Reorder Alerts\n        Suppliers\n      Order Management\n        Process Orders\n        Shipping\n        Returns\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Quadrant Charts",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Feature Prioritization Matrix\nEffort vs Impact analysis for features.\n\n```mermaid\nquadrantChart\n    title Feature Prioritization: Impact vs Effort\n    x-axis Low Effort --> High Effort\n    y-axis Low Impact --> High Impact\n    quadrant-1 Major Projects\n    quadrant-2 Quick Wins\n    quadrant-3 Fill-ins\n    quadrant-4 Time Wasters\n    User Authentication: [0.3, 0.9]\n    Product Search: [0.4, 0.8]\n    Shopping Cart: [0.2, 0.85]\n    Payment Gateway: [0.7, 0.95]\n    Reviews System: [0.5, 0.6]\n    Wishlist: [0.3, 0.5]\n    Email Notifications: [0.2, 0.7]\n    Social Sharing: [0.3, 0.3]\n    Advanced Analytics: [0.8, 0.7]\n    Mobile App: [0.9, 0.9]\n    Chat Support: [0.6, 0.65]\n    Dark Mode: [0.2, 0.2]\n```"
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "## Summary\n\nThis demonstration page showcases:\n- **Flowcharts**: Simple and complex workflows with decision points\n- **Sequence Diagrams**: API calls, microservices communication\n- **Class Diagrams**: Object-oriented system architecture\n- **State Diagrams**: State machines and transitions\n- **ER Diagrams**: Database schemas and relationships\n- **Timeline Diagrams**: Project roadmaps and schedules\n- **Git Graphs**: Version control workflows\n- **Mind Maps**: System architecture and feature planning\n- **Quadrant Charts**: Prioritization matrices\n\nAll diagrams are rendered using Mermaid syntax within Markdown components."
+        }
+      }
+    ]
+  }
+}

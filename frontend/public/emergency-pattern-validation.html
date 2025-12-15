@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 EMERGENCY: @ Mention Pattern Fix Validation</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 20px;
+            background: #f8fafc;
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .test-card {
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .success { border-color: #10b981; background: #ecfdf5; }
+        .warning { border-color: #f59e0b; background: #fffbeb; }
+        .instructions {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        .checklist {
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .checklist label {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 EMERGENCY: @ Mention Pattern Fix Validation</h1>
+        
+        <div class="instructions">
+            <h3>🎯 MISSION: Verify All Components Show Debug Dropdown</h3>
+            <p><strong>Goal:</strong> PostCreator and CommentForm should now work like QuickPost</p>
+            <p><strong>Test:</strong> Type @ in each component → expect identical debug dropdown</p>
+            <p><strong>Expected:</strong> "🚨 EMERGENCY DEBUG: Dropdown Open | Query: "" | Suggestions: 8"</p>
+        </div>
+
+        <!-- QuickPost Reference -->
+        <div class="test-card success">
+            <h2>✅ QuickPost (Reference - Working)</h2>
+            <p><strong>Location:</strong> <a href="http://localhost:5173" target="_blank">Main Feed</a> → Top input box</p>
+            <p><strong>Status:</strong> CONFIRMED WORKING - Use as reference</p>
+            <div class="checklist">
+                <label><input type="checkbox" checked disabled> Shows debug dropdown</label>
+                <label><input type="checkbox" checked disabled> Has 8 suggestions</label>
+                <label><input type="checkbox" checked disabled> Debug menu visible</label>
+            </div>
+        </div>
+
+        <!-- PostCreator Test -->
+        <div class="test-card warning">
+            <h2>🔧 PostCreator (Recently Fixed)</h2>
+            <p><strong>Location:</strong> <a href="http://localhost:5173" target="_blank">Main Feed</a> → "Create New Post" → Content textarea</p>
+            <p><strong>Fix Applied:</strong> Simplified mention handling to match QuickPost pattern</p>
+            
+            <h4>Test Steps:</h4>
+            <ol>
+                <li>Click "Create New Post" button</li>
+                <li>Click in the large content textarea</li>
+                <li>Type @ character</li>
+                <li>Verify dropdown appears with debug menu</li>
+            </ol>
+            
+            <div class="checklist">
+                <label><input type="checkbox" id="pc-dropdown"> Shows debug dropdown</label>
+                <label><input type="checkbox" id="pc-suggestions"> Has 8 suggestions</label>
+                <label><input type="checkbox" id="pc-debug"> Debug menu visible</label>
+                <label><input type="checkbox" id="pc-identical"> Identical to QuickPost</label>
+            </div>
+        </div>
+
+        <!-- CommentForm Test -->
+        <div class="test-card warning">
+            <h2>🔧 CommentForm (Recently Fixed)</h2>
+            <p><strong>Location:</strong> <a href="http://localhost:5173" target="_blank">Any Post</a> → "Add Analysis" → Comment textarea</p>
+            <p><strong>Fix Applied:</strong> Removed fallback textarea, simplified to match QuickPost</p>
+            
+            <h4>Test Steps:</h4>
+            <ol>
+                <li>Find any post on the feed</li>
+                <li>Click "Add Analysis" or comment button</li>
+                <li>Click in comment textarea</li>
+                <li>Type @ character</li>
+                <li>Verify dropdown appears with debug menu</li>
+            </ol>
+            
+            <div class="checklist">
+                <label><input type="checkbox" id="cf-dropdown"> Shows debug dropdown</label>
+                <label><input type="checkbox" id="cf-suggestions"> Has 8 suggestions</label>
+                <label><input type="checkbox" id="cf-debug"> Debug menu visible</label>
+                <label><input type="checkbox" id="cf-identical"> Identical to QuickPost</label>
+            </div>
+        </div>
+
+        <!-- Success Summary -->
+        <div class="test-card" id="summary" style="border-color: #6b7280;">
+            <h2>📊 Validation Summary</h2>
+            <p><strong>Progress:</strong> <span id="progress">0/8</span> checks completed</p>
+            <div id="result-message">Complete all tests above to see results...</div>
+            
+            <h4>Success Criteria (All must be checked):</h4>
+            <ul>
+                <li>PostCreator shows dropdown with @ typed ✅/❌</li>
+                <li>CommentForm shows dropdown with @ typed ✅/❌</li>
+                <li>Both show debug menu like QuickPost ✅/❌</li>
+                <li>All have 8 agent suggestions ✅/❌</li>
+                <li>Dropdown behavior is identical ✅/❌</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <p><strong>🚨 EMERGENCY MISSION:</strong> Build on QuickPost Success</p>
+            <p style="color: #059669;">Target: 100% @ mention functionality across all components</p>
+        </div>
+    </div>
+
+    <script>
+        // Track progress
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:not([disabled])');
+            const checked = document.querySelectorAll('input[type="checkbox"]:not([disabled]):checked');
+            const progress = `${checked.length}/${checkboxes.length}`;
+            document.getElementById('progress').textContent = progress;
+            
+            const summary = document.getElementById('summary');
+            const resultMessage = document.getElementById('result-message');
+            
+            if (checked.length === checkboxes.length) {
+                summary.className = 'test-card success';
+                resultMessage.innerHTML = '🎉 <strong>SUCCESS!</strong> All components fixed - 100% @ mention functionality achieved!';
+            } else if (checked.length > 0) {
+                summary.className = 'test-card warning';
+                resultMessage.innerHTML = `⏳ <strong>IN PROGRESS:</strong> ${checked.length} of ${checkboxes.length} tests passed. Continue validation...`;
+            } else {
+                summary.className = 'test-card';
+                resultMessage.textContent = 'Complete all tests above to see results...';
+            }
+        }
+        
+        // Add event listeners
+        document.querySelectorAll('input[type="checkbox"]:not([disabled])').forEach(checkbox => {
+            checkbox.addEventListener('change', updateProgress);
+        });
+        
+        // Initial update
+        updateProgress();
+        
+        // Console logging
+        console.log('🚨 EMERGENCY VALIDATION: Testing @ mention pattern fixes');
+        console.log('PostCreator and CommentForm should now match QuickPost behavior');
+    </script>
+</body>
+</html>

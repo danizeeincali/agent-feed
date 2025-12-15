@@ -1,0 +1,216 @@
+{
+  "config": {
+    "configFile": "/workspaces/agent-feed/playwright.config.comment-validation.cjs",
+    "rootDir": "/workspaces/agent-feed/tests/playwright",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "tests/playwright/comment-validation-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "tests/playwright/comment-validation-junit.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/agent-feed/docs/validation/screenshots/comment-agent-validation",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/agent-feed/tests/playwright",
+        "testIgnore": [],
+        "testMatch": [
+          "**/comment-agent-response-validation.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "comment-agent-response-validation.spec.ts",
+      "file": "comment-agent-response-validation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Comment-Agent Response Validation",
+          "file": "comment-agent-response-validation.spec.ts",
+          "line": 117,
+          "column": 6,
+          "specs": [
+            {
+              "title": "TDD-1: User comment triggers agent response visible in UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ddbd417301d83067f68f-88d3902aa97dedb41b48",
+              "file": "comment-agent-response-validation.spec.ts",
+              "line": 131,
+              "column": 3
+            },
+            {
+              "title": "TDD-2: Agent responses update in real-time via WebSocket",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ddbd417301d83067f68f-be4f79be037658679c8a",
+              "file": "comment-agent-response-validation.spec.ts",
+              "line": 210,
+              "column": 3
+            },
+            {
+              "title": "TDD-3: Agent comment has correct author metadata",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ddbd417301d83067f68f-311d6b8ca3985b67cb1c",
+              "file": "comment-agent-response-validation.spec.ts",
+              "line": 280,
+              "column": 3
+            },
+            {
+              "title": "TDD-4: No infinite loop in comment processing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ddbd417301d83067f68f-4ff61987c3d53a08cfa1",
+              "file": "comment-agent-response-validation.spec.ts",
+              "line": 330,
+              "column": 3
+            },
+            {
+              "title": "TDD-5: Multiple users commenting triggers separate agent responses",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ddbd417301d83067f68f-981e6c1f6e030d41d483",
+              "file": "comment-agent-response-validation.spec.ts",
+              "line": 383,
+              "column": 3
+            },
+            {
+              "title": "TDD-6: Agent response contains relevant content",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "ddbd417301d83067f68f-22218a79354f6914b35d",
+              "file": "comment-agent-response-validation.spec.ts",
+              "line": 437,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-11-12T00:03:44.711Z",
+    "duration": 754.0509999999999,
+    "expected": 0,
+    "skipped": 6,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

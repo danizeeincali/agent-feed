@@ -1,0 +1,115 @@
+/* Agents Page Styles */
+.agents-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem;
+}
+
+.agents-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.agents-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.agents-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin: 0;
+}
+
+.agents-subtitle {
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.agents-content {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 2rem;
+  min-height: 600px;
+}
+
+.agents-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.agents-main {
+  min-height: 500px;
+}
+
+.agents-error {
+  text-align: center;
+  padding: 3rem;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.agents-empty {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+  background: rgba(107, 114, 128, 0.1);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Loading Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Agent Card Hover Effects */
+.agent-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .agents-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .agents-sidebar {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .agents-page {
+    padding: 0.5rem;
+  }
+  
+  .agents-container {
+    padding: 1rem;
+  }
+  
+  .agents-title {
+    font-size: 2rem;
+  }
+  
+  .agents-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}

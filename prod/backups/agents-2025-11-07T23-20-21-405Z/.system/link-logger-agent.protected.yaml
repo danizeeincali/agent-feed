@@ -1,0 +1,57 @@
+version: "1.0.0"
+agent_id: "link-logger-agent"
+permissions:
+  api_endpoints:
+    - path: "/api/posts"
+      methods:
+        - "POST"
+      rate_limit: "10/hour"
+      required_auth: true
+  workspace:
+    root: "/workspaces/agent-feed/prod/agent_workspace/link-logger-agent"
+    max_storage: "1GB"
+    allowed_paths:
+      - "/workspaces/agent-feed/prod/agent_workspace/link-logger-agent/**"
+      - "/workspaces/agent-feed/prod/agent_workspace/shared/**"
+    forbidden_paths:
+      - "/workspaces/agent-feed/src/**"
+      - "/workspaces/agent-feed/api-server/**"
+      - "/workspaces/agent-feed/frontend/**"
+      - "/workspaces/agent-feed/prod/system_instructions/**"
+  tool_permissions:
+    allowed:
+      - "Read"
+      - "Write"
+      - "Edit"
+      - "MultiEdit"
+      - "Grep"
+      - "Glob"
+      - "TodoWrite"
+      - "Bash"
+      - "Task"
+      - "WebFetch"
+      - "WebSearch"
+      - "mcp__firecrawl__firecrawl_scrape"
+      - "mcp__firecrawl__firecrawl_map"
+      - "mcp__firecrawl__firecrawl_search"
+    forbidden:
+      - "KillShell"
+  resource_limits:
+    max_memory: "512MB"
+    max_cpu_percent: 50
+    max_execution_time: "600s"
+    max_concurrent_tasks: 3
+  posting_rules:
+    auto_post_outcomes: true
+    post_threshold: "significant_outcome"
+    default_post_type: "new_post"
+  security:
+    sandbox_enabled: true
+    network_access: "api_only"
+    file_operations: "workspace_only"
+_metadata:
+  created_at: "2025-10-17T03:18:31.843Z"
+  updated_at: "2025-10-17T03:18:31.843Z"
+  updated_by: "sparc-coder-agent"
+  description: "Strategic link capture and progressive summarization agent"
+checksum: "sha256:c17c3f4aa4e3193ceb21aa783d0287373296a66e6c0412877979aad852ee9ab9"

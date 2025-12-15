@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Terminal Streaming Client</title>
+    <style>
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #569cd6;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .terminal-container {
+            background-color: #0c0c0c;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 400px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .terminal-output {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+        
+        .terminal-input {
+            width: 100%;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            color: #d4d4d4;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .terminal-input:focus {
+            outline: none;
+            border-color: #569cd6;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #1177bb;
+        }
+        
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        
+        .status {
+            background-color: #2d2d30;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #569cd6;
+        }
+        
+        .error {
+            color: #f48771;
+            border-left-color: #f48771;
+        }
+        
+        .success {
+            color: #4ec9b0;
+            border-left-color: #4ec9b0;
+        }
+        
+        .warning {
+            color: #dcdcaa;
+            border-left-color: #dcdcaa;
+        }
+        
+        .info-panel {
+            background-color: #252526;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .session-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            font-size: 12px;
+        }
+        
+        .metric {
+            background-color: #1e1e1e;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #569cd6;
+        }
+        
+        .metric-label {
+            color: #9cdcfe;
+            font-weight: bold;
+        }
+        
+        .metric-value {
+            color: #4ec9b0;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖥️ WebSocket Terminal Streaming Client</h1>
+        
+        <div class="info-panel">
+            <h3>Connection Status</h3>
+            <div id="connectionStatus" class="status">
+                Disconnected
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="connectBtn">Connect to Server</button>
+            <button id="disconnectBtn" disabled>Disconnect</button>
+            <button id="createTerminalBtn" disabled>Create Terminal</button>
+            <button id="clearTerminalBtn" disabled>Clear Terminal</button>
+            <button id="getStatsBtn" disabled>Get Statistics</button>
+            <button id="listSessionsBtn" disabled>List Sessions</button>
+        </div>
+        
+        <div class="info-panel">
+            <h3>Terminal Session</h3>
+            <div class="session-info" id="sessionInfo">
+                <div class="metric">
+                    <span class="metric-label">Session ID:</span>
+                    <span class="metric-value" id="sessionId">None</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Shell:</span>
+                    <span class="metric-value" id="sessionShell">N/A</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Dimensions:</span>
+                    <span class="metric-value" id="sessionDimensions">80x24</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Status:</span>
+                    <span class="metric-value" id="sessionStatus">Inactive</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="terminal-container">
+            <div id="terminalOutput" class="terminal-output">
+                Welcome to WebSocket Terminal Streaming Client
+                
+                Instructions:
+                1. Click "Connect to Server" to establish WebSocket connection
+                2. Click "Create Terminal" to start a new terminal session  
+                3. Type commands in the input field below
+                4. Use Ctrl+C to send interrupt signal
+                
+                Waiting for connection...
+            </div>
+        </div>
+        
+        <input type="text" id="terminalInput" class="terminal-input" 
+               placeholder="Type your command here and press Enter..." disabled>
+        
+        <div class="info-panel">
+            <h3>Statistics</h3>
+            <div id="statisticsPanel">
+                Click "Get Statistics" to view server statistics
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h3>Event Log</h3>
+            <div id="eventLog" class="terminal-output" style="max-height: 200px; overflow-y: auto;">
+                Event log will appear here...
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        class TerminalStreamingClient {
+            constructor() {
+                this.socket = null;
+                this.terminalSocket = null;
+                this.sessionId = null;
+                this.connected = false;
+                this.terminalActive = false;
+                
+                this.initializeElements();
+                this.bindEvents();
+            }
+            
+            initializeElements() {
+                this.elements = {
+                    connectBtn: document.getElementById('connectBtn'),
+                    disconnectBtn: document.getElementById('disconnectBtn'),
+                    createTerminalBtn: document.getElementById('createTerminalBtn'),
+                    clearTerminalBtn: document.getElementById('clearTerminalBtn'),
+                    getStatsBtn: document.getElementById('getStatsBtn'),
+                    listSessionsBtn: document.getElementById('listSessionsBtn'),
+                    terminalInput: document.getElementById('terminalInput'),
+                    terminalOutput: document.getElementById('terminalOutput'),
+                    connectionStatus: document.getElementById('connectionStatus'),
+                    sessionId: document.getElementById('sessionId'),
+                    sessionShell: document.getElementById('sessionShell'),
+                    sessionDimensions: document.getElementById('sessionDimensions'),
+                    sessionStatus: document.getElementById('sessionStatus'),
+                    statisticsPanel: document.getElementById('statisticsPanel'),
+                    eventLog: document.getElementById('eventLog')
+                };
+            }
+            
+            bindEvents() {
+                this.elements.connectBtn.addEventListener('click', () => this.connect());
+                this.elements.disconnectBtn.addEventListener('click', () => this.disconnect());
+                this.elements.createTerminalBtn.addEventListener('click', () => this.createTerminal());
+                this.elements.clearTerminalBtn.addEventListener('click', () => this.clearTerminal());
+                this.elements.getStatsBtn.addEventListener('click', () => this.getStatistics());
+                this.elements.listSessionsBtn.addEventListener('click', () => this.listSessions());
+                
+                this.elements.terminalInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendInput();
+                    }
+                });
+                
+                // Handle Ctrl+C
+                this.elements.terminalInput.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'c') {
+                        e.preventDefault();
+                        this.sendCtrlC();
+                    }
+                });
+            }
+            
+            connect() {
+                try {
+                    this.log('Connecting to WebSocket server...', 'info');
+                    
+                    // Connect to main namespace first
+                    this.socket = io('http://localhost:3001', {
+                        transports: ['polling', 'websocket']
+                    });
+                    
+                    this.socket.on('connect', () => {
+                        this.connected = true;
+                        this.updateConnectionStatus('Connected to main server', 'success');
+                        this.log('Main WebSocket connection established', 'success');
+                        
+                        // Now connect to terminal namespace
+                        this.connectToTerminal();
+                    });
+                    
+                    this.socket.on('disconnect', () => {
+                        this.connected = false;
+                        this.terminalActive = false;
+                        this.updateConnectionStatus('Disconnected from server', 'error');
+                        this.log('Main WebSocket connection lost', 'error');
+                        this.updateButtons();
+                    });
+                    
+                    this.socket.on('error', (error) => {
+                        this.log(`Main WebSocket error: ${error}`, 'error');
+                    });
+                    
+                } catch (error) {
+                    this.log(`Connection failed: ${error.message}`, 'error');
+                }
+            }
+            
+            connectToTerminal() {
+                try {
+                    this.log('Connecting to terminal namespace...', 'info');
+                    
+                    this.terminalSocket = io('http://localhost:3001/terminal', {
+                        transports: ['polling', 'websocket']
+                    });
+                    
+                    this.terminalSocket.on('connect', () => {
+                        this.log('Terminal namespace connected', 'success');
+                        this.updateConnectionStatus('Connected to terminal service', 'success');
+                        this.updateButtons();
+                    });
+                    
+                    this.terminalSocket.on('terminal:created', (data) => {
+                        this.sessionId = data.sessionId;
+                        this.terminalActive = true;
+                        this.updateSessionInfo(data);
+                        this.log(`Terminal session created: ${data.sessionId}`, 'success');
+                        this.elements.terminalInput.disabled = false;
+                    });
+                    
+                    this.terminalSocket.on('terminal:output', (data) => {
+                        this.appendOutput(data.data);
+                    });
+                    
+                    this.terminalSocket.on('terminal:exit', (data) => {
+                        this.terminalActive = false;
+                        this.sessionId = null;
+                        this.log(`Terminal session exited with code: ${data.exitCode}`, 'warning');
+                        this.elements.terminalInput.disabled = true;
+                        this.updateSessionInfo({ sessionId: null, status: 'Inactive' });
+                    });
+                    
+                    this.terminalSocket.on('terminal:error', (data) => {
+                        this.log(`Terminal error: ${data.error}`, 'error');
+                    });
+                    
+                    this.terminalSocket.on('terminal:sessions', (data) => {
+                        this.displayStatistics(data);
+                    });
+                    
+                    this.terminalSocket.on('disconnect', () => {
+                        this.terminalActive = false;
+                        this.updateConnectionStatus('Terminal service disconnected', 'warning');
+                        this.log('Terminal WebSocket disconnected', 'warning');
+                        this.elements.terminalInput.disabled = true;
+                    });
+                    
+                } catch (error) {
+                    this.log(`Terminal connection failed: ${error.message}`, 'error');
+                }
+            }
+            
+            disconnect() {
+                if (this.terminalSocket) {
+                    this.terminalSocket.disconnect();
+                    this.terminalSocket = null;
+                }
+                if (this.socket) {
+                    this.socket.disconnect();
+                    this.socket = null;
+                }
+                
+                this.connected = false;
+                this.terminalActive = false;
+                this.sessionId = null;
+                this.updateConnectionStatus('Disconnected', 'info');
+                this.log('Disconnected from server', 'info');
+                this.updateButtons();
+                this.elements.terminalInput.disabled = true;
+            }
+            
+            createTerminal() {
+                if (!this.terminalSocket || !this.connected) {
+                    this.log('Not connected to terminal service', 'error');
+                    return;
+                }
+                
+                this.log('Creating new terminal session...', 'info');
+                this.terminalSocket.emit('terminal:create', {
+                    cols: 80,
+                    rows: 24,
+                    cwd: '/workspaces/agent-feed'
+                });
+            }
+            
+            sendInput() {
+                const input = this.elements.terminalInput.value;
+                if (!input || !this.terminalActive || !this.terminalSocket) {
+                    return;
+                }
+                
+                this.terminalSocket.emit('terminal:input', {
+                    sessionId: this.sessionId,
+                    input: input + '\\n'
+                });
+                
+                this.elements.terminalInput.value = '';
+                this.log(`Input sent: ${input}`, 'info');
+            }
+            
+            sendCtrlC() {
+                if (!this.terminalActive || !this.terminalSocket) {
+                    return;
+                }
+                
+                this.terminalSocket.emit('terminal:input', {
+                    sessionId: this.sessionId,
+                    input: '\\u0003' // Ctrl+C
+                });
+                
+                this.log('Ctrl+C sent', 'info');
+            }
+            
+            clearTerminal() {
+                this.elements.terminalOutput.textContent = '';
+                this.log('Terminal output cleared', 'info');
+            }
+            
+            getStatistics() {
+                if (!this.terminalSocket || !this.connected) {
+                    this.log('Not connected to terminal service', 'error');
+                    return;
+                }
+                
+                this.log('Requesting statistics...', 'info');
+                this.terminalSocket.emit('terminal:list');
+            }
+            
+            listSessions() {
+                if (!this.socket || !this.connected) {
+                    this.log('Not connected to server', 'error');
+                    return;
+                }
+                
+                this.log('Requesting session list...', 'info');
+                
+                // Make HTTP request to get session list
+                fetch('http://localhost:3001/api/v1/terminal/sessions', {
+                    headers: {
+                        'Authorization': 'Bearer demo-token',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    this.displayStatistics(data);
+                })
+                .catch(error => {
+                    this.log(`Failed to get session list: ${error.message}`, 'error');
+                });
+            }
+            
+            appendOutput(data) {
+                this.elements.terminalOutput.textContent += data;
+                this.elements.terminalOutput.scrollTop = this.elements.terminalOutput.scrollHeight;
+            }
+            
+            updateConnectionStatus(message, type = 'info') {
+                this.elements.connectionStatus.textContent = message;
+                this.elements.connectionStatus.className = `status ${type}`;
+            }
+            
+            updateSessionInfo(data) {
+                this.elements.sessionId.textContent = data.sessionId || 'None';
+                this.elements.sessionShell.textContent = data.shell || 'N/A';
+                this.elements.sessionDimensions.textContent = data.cols && data.rows ? 
+                    `${data.cols}x${data.rows}` : '80x24';
+                this.elements.sessionStatus.textContent = this.terminalActive ? 'Active' : 'Inactive';
+            }
+            
+            displayStatistics(data) {
+                const formatted = JSON.stringify(data, null, 2);
+                this.elements.statisticsPanel.innerHTML = `<pre>${formatted}</pre>`;
+                this.log('Statistics updated', 'info');
+            }
+            
+            updateButtons() {
+                this.elements.connectBtn.disabled = this.connected;
+                this.elements.disconnectBtn.disabled = !this.connected;
+                this.elements.createTerminalBtn.disabled = !this.connected;
+                this.elements.clearTerminalBtn.disabled = false;
+                this.elements.getStatsBtn.disabled = !this.connected;
+                this.elements.listSessionsBtn.disabled = !this.connected;
+            }
+            
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}\\n`;
+                
+                this.elements.eventLog.textContent += logEntry;
+                this.elements.eventLog.scrollTop = this.elements.eventLog.scrollHeight;
+                
+                console.log(`TerminalClient: ${message}`);
+            }
+        }
+        
+        // Initialize the client when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.terminalClient = new TerminalStreamingClient();
+            console.log('Terminal Streaming Client initialized');
+        });
+    </script>
+</body>
+</html>

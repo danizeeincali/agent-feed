@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Component Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .iframe-container { width: 100%; height: 600px; border: 2px solid #ccc; border-radius: 4px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Direct Component Rendering Test</h1>
+    
+    <div class="test-section">
+        <h2>Navigation Fix Test</h2>
+        <div id="nav-status" class="status info">Testing React Router navigation...</div>
+        <p>After fixing navigation from href to Link components, routes should work properly.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>/settings Route Test</h2>
+        <div id="settings-status" class="status info">Loading...</div>
+        <iframe id="settings-frame" class="iframe-container" src="http://localhost:3001/settings"></iframe>
+    </div>
+
+    <div class="test-section">
+        <h2>/agents Route Test</h2>
+        <div id="agents-status" class="status info">Loading...</div>
+        <iframe id="agents-frame" class="iframe-container" src="http://localhost:3001/agents"></iframe>
+    </div>
+
+    <div class="test-section">
+        <h2>/analytics Route Test</h2>
+        <div id="analytics-status" class="status info">Loading...</div>
+        <iframe id="analytics-frame" class="iframe-container" src="http://localhost:3001/analytics"></iframe>
+    </div>
+
+    <div class="test-section">
+        <h2>Navigation Test</h2>
+        <div id="navigation-test"></div>
+        <button onclick="testNavigation()" class="btn">Test Internal Navigation</button>
+    </div>
+
+    <script>
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+
+        function testIframe(iframeId, statusId, routeName) {
+            const iframe = document.getElementById(iframeId);
+            
+            iframe.onload = () => {
+                setTimeout(() => {
+                    try {
+                        // Check if iframe has loaded content
+                        updateStatus(statusId, `✅ ${routeName} route loaded successfully`, 'success');
+                        
+                        // Try to inspect content (may fail due to CORS)
+                        try {
+                            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                            const body = iframeDoc.body;
+                            if (body && body.children.length > 0) {
+                                updateStatus(statusId, `✅ ${routeName} has content visible`, 'success');
+                            }
+                        } catch (corsError) {
+                            // CORS is expected, but iframe loaded successfully
+                            updateStatus(statusId, `✅ ${routeName} loaded (content inspection blocked by CORS)`, 'success');
+                        }
+                        
+                    } catch (error) {
+                        updateStatus(statusId, `❌ ${routeName} error: ${error.message}`, 'error');
+                    }
+                }, 3000); // Wait 3 seconds for React to render
+            };
+
+            iframe.onerror = () => {
+                updateStatus(statusId, `❌ ${routeName} failed to load`, 'error');
+            };
+        }
+
+        function testNavigation() {
+            const testDiv = document.getElementById('navigation-test');
+            testDiv.innerHTML = `
+                <div class="info">
+                    <h3>Manual Navigation Test:</h3>
+                    <ol>
+                        <li>Open <a href="http://localhost:3001/" target="_blank">http://localhost:3001/</a></li>
+                        <li>Click on "Settings" in the sidebar</li>
+                        <li>Verify you see settings content, not just navigation</li>
+                        <li>Click on "Agent Manager" in the sidebar</li>
+                        <li>Verify you see agent content, not just navigation</li>
+                        <li>Click on "Analytics" in the sidebar</li>
+                        <li>Verify you see analytics content, not just navigation</li>
+                    </ol>
+                    <p><strong>Expected:</strong> Each route should show specific content, not just the sidebar navigation.</p>
+                </div>
+            `;
+        }
+
+        // Test API endpoints first
+        async function testAPI() {
+            try {
+                const response = await fetch('/api/v1/claude-live/prod/agents');
+                const data = await response.json();
+                
+                if (data.success && data.agents.length > 0) {
+                    updateStatus('nav-status', '✅ Mock API working - navigation fix should resolve routing issues', 'success');
+                } else {
+                    updateStatus('nav-status', '⚠️ API issues may affect content loading', 'error');
+                }
+            } catch (error) {
+                updateStatus('nav-status', '❌ API test failed - this may cause content issues', 'error');
+            }
+        }
+
+        // Run tests
+        testIframe('settings-frame', 'settings-status', 'Settings');
+        testIframe('agents-frame', 'agents-status', 'Agents');
+        testIframe('analytics-frame', 'analytics-status', 'Analytics');
+        testAPI();
+
+        // Instructions
+        setTimeout(() => {
+            const instructions = document.createElement('div');
+            instructions.innerHTML = `
+                <div class="test-section">
+                    <h2>🎯 Expected Results After Navigation Fix:</h2>
+                    <div class="info">
+                        <ul>
+                            <li>✅ /settings should show Settings configuration panel</li>
+                            <li>✅ /agents should show Agent Manager with agent lists</li>
+                            <li>✅ /analytics should show Analytics dashboard with metrics</li>
+                            <li>✅ Navigation should work without page refreshes</li>
+                            <li>✅ Active route should be highlighted in sidebar</li>
+                        </ul>
+                        <p><strong>If still seeing only navigation:</strong> There may be component-level issues that need investigation.</p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(instructions);
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-10-17T04:24:18.888Z",
+  "total": 14,
+  "valid": 14,
+  "invalid": 0,
+  "errors": 0,
+  "allValid": true,
+  "details": {
+    "valid": [
+      "agent-feedback-agent.protected.yaml",
+      "agent-ideas-agent.protected.yaml",
+      "dynamic-page-testing-agent.protected.yaml",
+      "follow-ups-agent.protected.yaml",
+      "get-to-know-you-agent.protected.yaml",
+      "link-logger-agent.protected.yaml",
+      "meeting-next-steps-agent.protected.yaml",
+      "meeting-prep-agent.protected.yaml",
+      "meta-agent.protected.yaml",
+      "meta-update-agent.protected.yaml",
+      "page-builder-agent.protected.yaml",
+      "page-verification-agent.protected.yaml",
+      "personal-todos-agent.protected.yaml",
+      "test-integrity-checker.protected.yaml"
+    ],
+    "invalid": [],
+    "errors": []
+  }
+}

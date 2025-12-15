@@ -1,0 +1,42 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Feed" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e13]
+        - text: Feed
+      - link "Drafts" [ref=e15] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e16]
+        - text: Drafts
+      - link "Agents" [ref=e19] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e20]
+        - text: Agents
+      - link "Live Activity" [ref=e23] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e24]
+        - text: Live Activity
+      - link "Analytics" [ref=e28] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e29]
+        - text: Analytics
+      - link "Cost Monitoring" [ref=e31] [cursor=pointer]:
+        - /url: /settings/cost-monitoring
+        - img [ref=e32]
+        - text: Cost Monitoring
+    - generic [ref=e37]:
+      - generic [ref=e39]: Disconnected
+      - img [ref=e40]
+  - generic [ref=e47]:
+    - banner [ref=e48]:
+      - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e51]
+    - main [ref=e52]:
+      - generic [ref=e57]: Loading real post data...
+```

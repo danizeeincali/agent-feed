@@ -1,0 +1,90 @@
+{
+  "name": "agents-page-test-suite",
+  "version": "1.0.0",
+  "description": "London School TDD test suite for agents page functionality",
+  "scripts": {
+    "test": "jest --config=jest.agents-page.config.js",
+    "test:unit": "jest --config=jest.agents-page.config.js unit/",
+    "test:integration": "jest --config=jest.agents-page.config.js integration/",
+    "test:performance": "jest --config=jest.agents-page.config.js performance/",
+    "test:accessibility": "jest --config=jest.agents-page.config.js accessibility/",
+    "test:watch": "jest --config=jest.agents-page.config.js --watch",
+    "test:coverage": "jest --config=jest.agents-page.config.js --coverage",
+    "test:e2e": "playwright test --config=playwright.config.js",
+    "test:e2e:ui": "playwright test --config=playwright.config.js --ui",
+    "test:e2e:debug": "playwright test --config=playwright.config.js --debug",
+    "test:e2e:headed": "playwright test --config=playwright.config.js --headed",
+    "test:cross-browser": "playwright test --config=playwright.config.js --project=chromium --project=firefox --project=webkit",
+    "test:mobile": "playwright test --config=playwright.config.js --project=mobile-chrome --project=mobile-safari",
+    "test:accessibility:e2e": "playwright test --config=playwright.config.js --project=accessibility",
+    "test:performance:e2e": "playwright test --config=playwright.config.js --project=performance",
+    "test:all": "npm run test:coverage && npm run test:e2e",
+    "lint:tests": "eslint **/*.test.js",
+    "clean": "rimraf coverage temp",
+    "report": "open coverage/agents-page/agents-page-test-report.html"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "@babel/preset-react": "^7.22.0",
+    "@babel/plugin-transform-runtime": "^7.22.0",
+    "@babel/plugin-proposal-class-properties": "^7.18.0",
+    "@faker-js/faker": "^8.0.0",
+    "@jest/globals": "^29.7.0",
+    "@playwright/test": "^1.40.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.0",
+    "axe-core": "^4.8.0",
+    "babel-jest": "^29.7.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.0",
+    "enzyme-to-json": "^3.6.2",
+    "eslint": "^8.45.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-html-reporters": "^3.1.0",
+    "jest-junit": "^16.0.0",
+    "jest-transform-css": "^6.0.1",
+    "jest-transform-file": "^1.1.1",
+    "jest-watch-typeahead": "^2.2.0",
+    "rimraf": "^5.0.0"
+  },
+  "keywords": [
+    "testing",
+    "tdd",
+    "london-school",
+    "agents",
+    "react",
+    "accessibility",
+    "performance",
+    "e2e",
+    "playwright",
+    "jest"
+  ],
+  "author": "Agent Feed Development Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/agent-feed.git",
+    "directory": "prod/tests/agents-page"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/agent-feed/issues"
+  },
+  "homepage": "https://github.com/your-org/agent-feed#readme",
+  "testEnvironment": "jsdom",
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/coverage/",
+    "/temp/"
+  ]
+}

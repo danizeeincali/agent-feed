@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Component Rendering Test</title>
+    <script>
+        async function testRendering() {
+            const response = await fetch('http://localhost:3001/api/agent-pages/agents/personal-todos-agent/pages/comprehensive-dashboard');
+            const data = await response.json();
+
+            console.log('=== API Response ===');
+            console.log('Has components array:', Array.isArray(data.page.components));
+            console.log('Components length:', data.page.components?.length);
+            console.log('Layout type:', typeof data.page.layout);
+            console.log('Layout value:', data.page.layout);
+            console.log('First component type:', data.page.components[0]?.type);
+            console.log('First component has children:', Array.isArray(data.page.components[0]?.children));
+            console.log('Children count:', data.page.components[0]?.children?.length);
+
+            document.getElementById('output').textContent = JSON.stringify(data.page, null, 2);
+        }
+    </script>
+</head>
+<body onload="testRendering()">
+    <h1>Component Rendering API Test</h1>
+    <pre id="output">Loading...</pre>
+</body>
+</html>

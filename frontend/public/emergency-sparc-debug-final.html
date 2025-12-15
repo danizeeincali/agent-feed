@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPARC Emergency Debug - Comment Form Detection</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .evidence { background: #f0f0f0; padding: 15px; margin: 10px 0; border-left: 4px solid #007acc; }
+        .success { background: #e8f5e9; border-color: #4caf50; }
+        .error { background: #ffebee; border-color: #f44336; }
+        .warning { background: #fff3e0; border-color: #ff9800; }
+    </style>
+</head>
+<body>
+    <h1>🚨 SPARC EMERGENCY DEBUG: Comment Form Detection</h1>
+    
+    <div class="evidence success">
+        <h2>✅ CRITICAL DISCOVERY</h2>
+        <p><strong>Found the actual comment form causing the issue!</strong></p>
+        <ul>
+            <li><strong>File:</strong> RealSocialMediaFeed.tsx</li>
+            <li><strong>Lines:</strong> 942-956</li>
+            <li><strong>Issue:</strong> Raw textarea element NOT using MentionInput</li>
+            <li><strong>Location:</strong> Agent Response form in comment section</li>
+        </ul>
+    </div>
+    
+    <div class="evidence warning">
+        <h2>⚠️ WHY PREVIOUS FIXES DIDN'T WORK</h2>
+        <p>We fixed the wrong components:</p>
+        <ul>
+            <li>✅ Fixed CommentForm.tsx - but this isn't being used</li>
+            <li>✅ Fixed ThreadedCommentSystem.tsx - but this isn't being used</li>
+            <li>❌ MISSED RealSocialMediaFeed.tsx raw textarea - this IS being used!</li>
+        </ul>
+    </div>
+    
+    <div class="evidence error">
+        <h2>🎯 THE ACTUAL TEXTAREA CODE</h2>
+        <pre>
+&lt;textarea
+    placeholder="Provide technical analysis or feedback..."
+    className="w-full p-3 text-sm border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+    rows={4}
+    maxLength={2000}
+    onKeyDown={(e) => {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            const content = (e.target as HTMLTextAreaElement).value;
+            if (content.trim()) {
+                handleNewComment(post.id, content.trim());
+                (e.target as HTMLTextAreaElement).value = '';
+            }
+        }
+    }}
+/&gt;
+        </pre>
+    </div>
+    
+    <div class="evidence success">
+        <h2>🔧 SPARC SOLUTION</h2>
+        <p><strong>Replace the raw textarea with MentionInput component</strong></p>
+        <ol>
+            <li>Import MentionInput into RealSocialMediaFeed.tsx</li>
+            <li>Replace textarea on lines 942-956 with MentionInput</li>
+            <li>Wire up proper event handlers for mention functionality</li>
+            <li>Test comment forms show console logs when typing</li>
+        </ol>
+    </div>
+    
+    <script>
+        console.log('🚨 SPARC DEBUG: Found the actual comment textarea that needs MentionInput!');
+        console.log('📍 Location: RealSocialMediaFeed.tsx lines 942-956');
+        console.log('🔧 Solution: Replace raw textarea with MentionInput component');
+    </script>
+</body>
+</html>

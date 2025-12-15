@@ -1,0 +1,18 @@
+{
+  "dependencies_to_add": {
+    "pg": "^8.11.3",
+    "winston": "^3.11.0"
+  },
+  "scripts_to_add": {
+    "test:sparc": "jest tests/sparc --verbose",
+    "test:sparc:spec": "jest tests/sparc/sparc-specification.test.js",
+    "test:sparc:pseudocode": "jest tests/sparc/sparc-pseudocode.test.js", 
+    "test:sparc:architecture": "jest tests/sparc/sparc-architecture.test.js",
+    "test:sparc:e2e": "playwright test tests/sparc/sparc-playwright-e2e.test.js",
+    "test:sparc:all": "npm run test:sparc && npm run test:sparc:e2e",
+    "db:init": "psql -h localhost -U postgres -d agent_feed -f src/database/schema.sql",
+    "db:migrate": "find src/database/migrations -name '*.sql' | sort | xargs -I {} psql -h localhost -U postgres -d agent_feed -f {}",
+    "db:test-data": "psql -h localhost -U postgres -d agent_feed -f scripts/create-test-data.sql",
+    "sparc:validate": "npm run test:sparc:all && echo '✅ SPARC methodology validation complete'"
+  }
+}

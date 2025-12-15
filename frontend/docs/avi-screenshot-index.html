@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Λvi System Identity - Screenshot Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .screenshot-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .screenshot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        .screenshot-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid #667eea;
+        }
+        .screenshot-info {
+            padding: 20px;
+        }
+        .screenshot-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .screenshot-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 10px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Λvi System Identity Test</h1>
+        <p class="subtitle">Visual Evidence & Screenshot Gallery</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">11</div>
+                <div class="stat-label">Tests Passed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Screenshots</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2.1s</div>
+                <div class="stat-label">Load Time</div>
+            </div>
+        </div>
+
+        <div class="gallery">
+            <div class="screenshot-card">
+                <img src="../tests/e2e/screenshots/avi-identity/desktop-1920x1080.png" alt="Desktop View">
+                <div class="screenshot-info">
+                    <div class="screenshot-title">Desktop View</div>
+                    <p>Full application layout on desktop viewport (1920x1080)</p>
+                    <div class="screenshot-meta">
+                        <span>Size: 84 KB</span>
+                        <span>1920x1080</span>
+                    </div>
+                    <span class="badge badge-success">Responsive</span>
+                </div>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="../tests/e2e/screenshots/avi-identity/tablet-768x1024.png" alt="Tablet View">
+                <div class="screenshot-info">
+                    <div class="screenshot-title">Tablet View</div>
+                    <p>Responsive layout on tablet viewport (768x1024)</p>
+                    <div class="screenshot-meta">
+                        <span>Size: 59 KB</span>
+                        <span>768x1024</span>
+                    </div>
+                    <span class="badge badge-success">Responsive</span>
+                </div>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="../tests/e2e/screenshots/avi-identity/mobile-375x667.png" alt="Mobile View">
+                <div class="screenshot-info">
+                    <div class="screenshot-title">Mobile View</div>
+                    <p>Optimized display on mobile viewport (375x667)</p>
+                    <div class="screenshot-meta">
+                        <span>Size: 34 KB</span>
+                        <span>375x667</span>
+                    </div>
+                    <span class="badge badge-success">Mobile Optimized</span>
+                </div>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="../tests/e2e/screenshots/avi-identity/feed-avi-references.png" alt="Feed View">
+                <div class="screenshot-info">
+                    <div class="screenshot-title">Feed with Avi References</div>
+                    <p>Main feed showing current state (no Avi posts)</p>
+                    <div class="screenshot-meta">
+                        <span>Size: 52 KB</span>
+                        <span>Full page</span>
+                    </div>
+                    <span class="badge badge-info">Feed View</span>
+                </div>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="../tests/e2e/screenshots/avi-identity/agents-page.png" alt="Agents Page">
+                <div class="screenshot-info">
+                    <div class="screenshot-title">Agents List Page</div>
+                    <p>Agent directory page (no Avi agent found)</p>
+                    <div class="screenshot-meta">
+                        <span>Size: 29 KB</span>
+                        <span>Full page</span>
+                    </div>
+                    <span class="badge badge-info">Navigation</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Test Status:</strong> ✅ All Tests Passed</p>
+            <p>Generated: 2025-10-27 | Framework: Playwright | Browser: Chrome</p>
+            <p><a href="avi-system-identity-test-report.md" style="color: #667eea;">View Full Test Report</a></p>
+        </div>
+    </div>
+</body>
+</html>

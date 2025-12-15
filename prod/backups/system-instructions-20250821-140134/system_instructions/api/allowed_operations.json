@@ -1,0 +1,242 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2025-08-21",
+    "description": "Comprehensive whitelist of operations permitted for production Claude instance",
+    "security_level": "PRODUCTION",
+    "review_frequency": "WEEKLY"
+  },
+  "file_system_operations": {
+    "allowed": {
+      "read": {
+        "paths": [
+          "/workspaces/agent-feed/src/**/*",
+          "/workspaces/agent-feed/frontend/src/**/*",
+          "/workspaces/agent-feed/docs/**/*",
+          "/workspaces/agent-feed/tests/**/*",
+          "/workspaces/agent-feed/prod/system_instructions/**/*",
+          "/workspaces/agent-feed/prod/agent_workspace/**/*",
+          "/workspaces/agent-feed/prod/logs/**/*",
+          "/workspaces/agent-feed/config/**/*",
+          "/workspaces/agent-feed/*.md",
+          "/workspaces/agent-feed/package.json",
+          "/workspaces/agent-feed/tsconfig.json"
+        ],
+        "file_types": [
+          ".md", ".json", ".js", ".ts", ".tsx", ".css", ".html", 
+          ".yml", ".yaml", ".sql", ".sh", ".txt", ".log"
+        ],
+        "max_file_size": "10MB",
+        "restrictions": {
+          "exclude_patterns": [
+            "**/.git/**",
+            "**/node_modules/**",
+            "**/.env*",
+            "**/secrets/**",
+            "**/private/**"
+          ]
+        }
+      },
+      "write": {
+        "paths": [
+          "/workspaces/agent-feed/prod/agent_workspace/**/*",
+          "/workspaces/agent-feed/prod/logs/**/*",
+          "/workspaces/agent-feed/prod/debug/**/*",
+          "/workspaces/agent-feed/prod/backups/**/*"
+        ],
+        "file_types": [
+          ".md", ".json", ".txt", ".log", ".tmp", ".debug"
+        ],
+        "max_file_size": "5MB",
+        "restrictions": {
+          "require_validation": true,
+          "audit_logging": true,
+          "virus_scanning": true
+        }
+      },
+      "execute": {
+        "commands": [
+          "ls", "cat", "head", "tail", "grep", "find", "wc", "sort",
+          "npm test", "npm run build", "npm run lint",
+          "git status", "git log", "git diff",
+          "docker ps", "docker logs",
+          "curl -I", "ping -c 3", "nslookup"
+        ],
+        "scripts": [
+          "/workspaces/agent-feed/scripts/validate-*.sh",
+          "/workspaces/agent-feed/prod/scripts/health-check.sh",
+          "/workspaces/agent-feed/prod/scripts/backup-workspace.sh"
+        ],
+        "restrictions": {
+          "no_system_modification": true,
+          "timeout_seconds": 300,
+          "output_size_limit": "1MB"
+        }
+      }
+    }
+  },
+  "api_operations": {
+    "allowed": {
+      "http_methods": ["GET", "POST"],
+      "endpoints": [
+        "/api/health",
+        "/api/status",
+        "/api/metrics",
+        "/api/logs",
+        "/api/agents/status",
+        "/api/workspace/read",
+        "/api/workspace/validate",
+        "/api/system/info"
+      ],
+      "websocket_operations": [
+        "connect",
+        "subscribe_to_status",
+        "subscribe_to_logs",
+        "send_heartbeat",
+        "request_metrics"
+      ],
+      "rate_limits": {
+        "requests_per_minute": 100,
+        "websocket_messages_per_minute": 1000,
+        "concurrent_connections": 5
+      }
+    }
+  },
+  "agent_operations": {
+    "allowed": {
+      "workspace_actions": [
+        "create_work_directory",
+        "write_agent_output",
+        "log_operations",
+        "create_temporary_files",
+        "validate_outputs",
+        "backup_work"
+      ],
+      "collaboration": [
+        "read_shared_data",
+        "write_to_shared_logs",
+        "coordinate_with_other_agents",
+        "request_assistance",
+        "report_progress"
+      ],
+      "system_interaction": [
+        "query_system_status",
+        "access_documentation",
+        "validate_configurations",
+        "perform_health_checks",
+        "monitor_resources"
+      ]
+    }
+  },
+  "database_operations": {
+    "allowed": {
+      "read_operations": [
+        "SELECT from logs",
+        "SELECT from metrics", 
+        "SELECT from agent_status",
+        "SELECT from workspace_metadata"
+      ],
+      "write_operations": [
+        "INSERT into logs",
+        "INSERT into metrics",
+        "UPDATE agent_status",
+        "INSERT into workspace_operations"
+      ],
+      "restrictions": {
+        "no_schema_changes": true,
+        "no_user_data_access": true,
+        "audit_all_operations": true,
+        "max_query_duration": "30s"
+      }
+    }
+  },
+  "network_operations": {
+    "allowed": {
+      "outbound_connections": [
+        "localhost:*",
+        "127.0.0.1:*",
+        "api.github.com:443",
+        "registry.npmjs.org:443"
+      ],
+      "protocols": ["HTTP", "HTTPS", "WebSocket"],
+      "operations": [
+        "health_check_endpoints",
+        "package_registry_queries",
+        "github_api_readonly",
+        "local_service_communication"
+      ],
+      "restrictions": {
+        "no_external_file_downloads": true,
+        "no_code_execution_from_remote": true,
+        "ssl_verification_required": true,
+        "timeout_seconds": 30
+      }
+    }
+  },
+  "monitoring_operations": {
+    "allowed": {
+      "metrics_collection": [
+        "system_performance",
+        "operation_counts",
+        "error_rates",
+        "resource_usage"
+      ],
+      "log_access": [
+        "read_application_logs",
+        "read_system_logs",
+        "read_audit_logs",
+        "read_error_logs"
+      ],
+      "alerts": [
+        "generate_status_alerts",
+        "send_health_notifications",
+        "report_anomalies",
+        "escalate_critical_issues"
+      ]
+    }
+  },
+  "validation_rules": {
+    "pre_execution": [
+      "validate_operation_against_whitelist",
+      "check_file_permissions",
+      "verify_path_traversal_safety",
+      "validate_input_sanitization"
+    ],
+    "during_execution": [
+      "monitor_resource_usage",
+      "track_operation_duration",
+      "log_all_activities",
+      "validate_outputs"
+    ],
+    "post_execution": [
+      "audit_operation_results",
+      "update_metrics",
+      "clean_temporary_files",
+      "backup_important_outputs"
+    ]
+  },
+  "security_constraints": {
+    "authentication": {
+      "required": true,
+      "methods": ["api_key", "session_token"],
+      "session_timeout": "1h"
+    },
+    "authorization": {
+      "role_based": true,
+      "principle": "least_privilege",
+      "permission_validation": "real_time"
+    },
+    "audit_logging": {
+      "log_all_operations": true,
+      "include_payloads": false,
+      "retention_period": "90_days",
+      "real_time_monitoring": true
+    },
+    "data_protection": {
+      "no_sensitive_data_access": true,
+      "encrypt_in_transit": true,
+      "sanitize_outputs": true,
+      "prevent_data_exfiltration": true
+    }
+  }
+}

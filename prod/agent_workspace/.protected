@@ -1,0 +1,19 @@
+PROTECTED AGENT WORKSPACE
+========================
+
+This directory is the designated workspace for all agent operations in the production environment.
+
+RULES:
+- All agent work MUST be contained within this directory structure
+- Agents cannot modify files outside this workspace
+- System instructions are READ-ONLY
+- Workspace is monitored for compliance
+
+STRUCTURE:
+- agents/     Individual agent working directories
+- shared/     Resources shared between agents
+- outputs/    Final agent outputs and reports
+- logs/       Agent operation logs
+- temp/       Temporary files (cleaned automatically)
+
+DO NOT MODIFY THIS FILE

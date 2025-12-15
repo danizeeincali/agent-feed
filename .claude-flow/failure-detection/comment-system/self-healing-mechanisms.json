@@ -1,0 +1,341 @@
+{
+  "self_healing_version": "1.0.0",
+  "mechanism_type": "comment_system_auto_recovery",
+  "creation_timestamp": "2025-09-06T00:00:00Z",
+  
+  "healing_scope": {
+    "target_systems": [
+      "comment_count_synchronization",
+      "comment_threading_integrity",
+      "api_response_normalization",
+      "database_consistency_maintenance",
+      "user_interface_error_recovery"
+    ],
+    "healing_levels": [
+      "immediate_auto_correction",
+      "graceful_degradation",
+      "background_recovery",
+      "escalated_manual_intervention"
+    ]
+  },
+  
+  "auto_healing_mechanisms": {
+    "comment_count_data_type_healing": {
+      "mechanism_id": "HEAL_001",
+      "description": "Automatic detection and correction of comment count data type issues",
+      "detection_triggers": [
+        "api_response_contains_non_integer_counts",
+        "frontend_console_errors_about_count_types",
+        "database_query_returns_decimal_counts"
+      ],
+      "healing_strategies": [
+        {
+          "strategy": "immediate_type_conversion",
+          "implementation": {
+            "api_middleware": "convert_all_counts_to_integers_before_response",
+            "frontend_guards": "ensure_parseInt_with_fallback_to_zero",
+            "database_casting": "CAST(COUNT(*) as INTEGER) in all count queries"
+          },
+          "success_criteria": "no_type_related_errors_for_24_hours",
+          "rollback_condition": "type_conversion_causes_data_loss"
+        },
+        {
+          "strategy": "adaptive_fallback_display",
+          "implementation": {
+            "uncertain_counts": "display_approximate_indicator",
+            "failed_counts": "show_loading_state_with_retry",
+            "null_counts": "display_dash_or_empty_state"
+          },
+          "user_experience": "transparent_graceful_degradation"
+        }
+      ],
+      "monitoring_and_validation": {
+        "healing_effectiveness": "track_reduction_in_type_errors",
+        "user_impact": "monitor_comment_interaction_success_rates",
+        "system_health": "validate_no_side_effects_from_healing"
+      }
+    },
+    
+    "comment_threading_integrity_healing": {
+      "mechanism_id": "HEAL_002",
+      "description": "Automatic repair of broken comment thread hierarchies",
+      "detection_triggers": [
+        "orphaned_comments_detected",
+        "circular_parent_child_relationships",
+        "thread_depth_inconsistencies",
+        "missing_parent_comments_in_chains"
+      ],
+      "healing_strategies": [
+        {
+          "strategy": "thread_reconstruction",
+          "implementation": {
+            "orphan_resolution": "reattach_orphans_to_nearest_valid_parent",
+            "circular_reference_breaking": "identify_and_break_circular_chains",
+            "depth_recalculation": "recalculate_thread_depth_for_entire_post"
+          },
+          "validation": "verify_thread_integrity_after_reconstruction"
+        },
+        {
+          "strategy": "thread_isolation_and_recovery",
+          "implementation": {
+            "isolate_broken_threads": "temporarily_hide_problematic_thread_sections",
+            "background_repair": "queue_thread_repair_tasks_for_background_processing",
+            "progressive_restoration": "gradually_restore_repaired_sections"
+          },
+          "user_communication": "inform_users_of_temporary_threading_issues"
+        }
+      ],
+      "prevention_measures": {
+        "pre_save_validation": "validate_thread_integrity_before_comment_creation",
+        "atomic_thread_operations": "ensure_parent_child_relationships_created_atomically",
+        "thread_health_monitoring": "continuous_monitoring_of_thread_consistency"
+      }
+    },
+    
+    "api_response_normalization_healing": {
+      "mechanism_id": "HEAL_003",
+      "description": "Automatic normalization of inconsistent API responses",
+      "detection_triggers": [
+        "api_response_schema_variations",
+        "missing_expected_fields_in_responses",
+        "inconsistent_data_formats_across_endpoints"
+      ],
+      "healing_strategies": [
+        {
+          "strategy": "response_schema_standardization",
+          "implementation": {
+            "middleware_normalization": "apply_consistent_response_structure",
+            "field_mapping": "map_legacy_fields_to_standard_schema", 
+            "default_value_injection": "provide_defaults_for_missing_fields"
+          },
+          "schema_enforcement": "validate_all_responses_against_standard_schema"
+        },
+        {
+          "strategy": "backwards_compatibility_layer",
+          "implementation": {
+            "version_detection": "detect_api_version_from_request_headers",
+            "response_transformation": "transform_responses_to_expected_format",
+            "deprecation_warnings": "log_usage_of_deprecated_response_formats"
+          },
+          "migration_support": "gradual_migration_to_standardized_responses"
+        }
+      ],
+      "quality_assurance": {
+        "response_validation": "automated_testing_of_normalized_responses",
+        "client_compatibility": "ensure_frontend_compatibility_after_normalization",
+        "performance_impact": "monitor_normalization_performance_overhead"
+      }
+    }
+  },
+  
+  "graceful_degradation_patterns": {
+    "comment_system_unavailable": {
+      "degradation_levels": [
+        {
+          "level": "partial_functionality",
+          "available_features": ["view_existing_comments", "basic_threading_display"],
+          "unavailable_features": ["new_comment_creation", "real_time_updates"],
+          "user_notification": "inform_users_of_temporary_limitations"
+        },
+        {
+          "level": "read_only_mode",
+          "available_features": ["view_comments_only"],
+          "unavailable_features": ["all_interactive_features"],
+          "user_experience": "clear_indication_of_read_only_state"
+        },
+        {
+          "level": "minimal_functionality",
+          "available_features": ["show_comment_count_only"],
+          "unavailable_features": ["comment_content_display"],
+          "fallback_message": "comments_temporarily_unavailable"
+        }
+      ]
+    },
+    
+    "performance_degradation_handling": {
+      "triggers": [
+        "comment_load_times_exceed_thresholds",
+        "database_connection_issues",
+        "high_server_load_detected"
+      ],
+      "degradation_strategies": [
+        {
+          "strategy": "progressive_loading",
+          "implementation": "load_comments_in_smaller_batches",
+          "user_experience": "skeleton_loading_states_with_load_more_buttons"
+        },
+        {
+          "strategy": "cached_fallback",
+          "implementation": "serve_slightly_stale_cached_content",
+          "user_notification": "indicate_data_freshness_with_timestamps"
+        },
+        {
+          "strategy": "essential_features_only",
+          "implementation": "disable_non_critical_comment_features_temporarily",
+          "recovery": "automatically_restore_features_when_performance_improves"
+        }
+      ]
+    }
+  },
+  
+  "automated_recovery_workflows": {
+    "comment_count_sync_recovery": {
+      "workflow_id": "RECOVERY_001",
+      "trigger_conditions": [
+        "comment_count_discrepancies_detected",
+        "cache_invalidation_failures",
+        "real_time_update_sync_issues"
+      ],
+      "recovery_steps": [
+        {
+          "step": "identify_inconsistent_counts",
+          "action": "query_database_for_actual_counts",
+          "validation": "compare_stored_vs_calculated_counts"
+        },
+        {
+          "step": "recalculate_accurate_counts", 
+          "action": "run_count_aggregation_queries",
+          "safety": "validate_results_before_applying"
+        },
+        {
+          "step": "update_cached_counts",
+          "action": "invalidate_old_cache_entries_and_populate_new",
+          "verification": "confirm_cache_consistency"
+        },
+        {
+          "step": "notify_connected_clients",
+          "action": "push_updated_counts_via_websockets",
+          "fallback": "client_side_cache_invalidation"
+        }
+      ],
+      "success_criteria": "count_discrepancies_eliminated_for_1_hour",
+      "escalation": "manual_investigation_if_recovery_fails"
+    },
+    
+    "thread_integrity_recovery": {
+      "workflow_id": "RECOVERY_002",
+      "trigger_conditions": [
+        "broken_thread_hierarchies_detected",
+        "orphaned_comments_found",
+        "thread_depth_calculation_errors"
+      ],
+      "recovery_steps": [
+        {
+          "step": "analyze_thread_structure",
+          "action": "map_current_parent_child_relationships",
+          "output": "thread_structure_graph"
+        },
+        {
+          "step": "identify_structural_problems",
+          "action": "detect_orphans_cycles_and_depth_errors",
+          "prioritization": "critical_issues_first"
+        },
+        {
+          "step": "repair_thread_relationships",
+          "action": "fix_parent_child_links_and_recalculate_depths",
+          "validation": "verify_thread_integrity_after_repairs"
+        },
+        {
+          "step": "update_thread_metadata",
+          "action": "refresh_thread_paths_and_depth_information",
+          "consistency_check": "validate_metadata_matches_structure"
+        }
+      ],
+      "rollback_plan": "restore_from_backup_if_repair_causes_data_loss"
+    }
+  },
+  
+  "proactive_health_monitoring": {
+    "system_health_indicators": [
+      {
+        "indicator": "comment_system_response_time",
+        "healthy_range": "under_200ms",
+        "warning_threshold": "200_500ms",
+        "critical_threshold": "over_500ms",
+        "auto_healing_trigger": "critical_threshold_exceeded_for_5_minutes"
+      },
+      {
+        "indicator": "comment_count_accuracy_rate",
+        "healthy_range": "99_5_percent_or_higher",
+        "warning_threshold": "95_99_percent",
+        "critical_threshold": "below_95_percent",
+        "auto_healing_trigger": "warning_threshold_exceeded"
+      },
+      {
+        "indicator": "user_interaction_success_rate",
+        "healthy_range": "98_percent_or_higher",
+        "warning_threshold": "95_98_percent",
+        "critical_threshold": "below_95_percent",
+        "auto_healing_trigger": "critical_threshold_exceeded"
+      }
+    ],
+    
+    "predictive_failure_detection": {
+      "early_warning_signals": [
+        "gradual_increase_in_response_times",
+        "increasing_frequency_of_type_conversion_errors",
+        "growing_number_of_thread_inconsistencies",
+        "declining_user_satisfaction_metrics"
+      ],
+      "prediction_models": {
+        "failure_probability_model": "ml_model_predicting_system_failure_likelihood",
+        "performance_degradation_model": "trend_analysis_of_performance_metrics",
+        "user_impact_prediction": "model_estimating_user_experience_impact"
+      },
+      "proactive_actions": [
+        "scale_up_resources_before_predicted_load",
+        "pre_cache_frequently_accessed_comments",
+        "run_preventive_maintenance_during_low_usage_periods"
+      ]
+    }
+  },
+  
+  "machine_learning_driven_healing": {
+    "adaptive_healing_strategies": {
+      "learning_from_past_failures": {
+        "failure_pattern_recognition": "identify_recurring_failure_modes",
+        "healing_effectiveness_analysis": "track_which_strategies_work_best",
+        "strategy_optimization": "improve_healing_approaches_based_on_outcomes"
+      },
+      "personalized_error_recovery": {
+        "user_specific_healing": "adapt_recovery_strategies_based_on_user_behavior",
+        "context_aware_degradation": "choose_degradation_levels_based_on_user_needs",
+        "intelligent_retry_logic": "optimize_retry_strategies_for_different_error_types"
+      }
+    },
+    
+    "continuous_improvement_loops": {
+      "healing_effectiveness_tracking": "measure_success_rates_of_different_healing_strategies",
+      "user_impact_analysis": "analyze_how_healing_affects_user_experience",
+      "system_resilience_improvement": "strengthen_system_based_on_healing_insights"
+    }
+  },
+  
+  "integration_with_monitoring_systems": {
+    "alert_correlation": {
+      "healing_triggered_alerts": "notify_teams_when_auto_healing_activates",
+      "healing_success_notifications": "confirm_successful_healing_completion",
+      "healing_failure_escalations": "escalate_when_auto_healing_cannot_resolve_issues"
+    },
+    
+    "metrics_and_dashboards": {
+      "healing_activity_dashboard": "visualize_auto_healing_activities_and_success_rates",
+      "system_resilience_metrics": "track_system_ability_to_self_recover",
+      "user_impact_during_healing": "monitor_user_experience_during_recovery_processes"
+    }
+  },
+  
+  "configuration_and_tuning": {
+    "healing_sensitivity_settings": {
+      "trigger_thresholds": "configurable_thresholds_for_healing_activation",
+      "healing_aggressiveness": "balance_between_quick_healing_and_system_stability",
+      "user_experience_priorities": "prioritize_user_experience_vs_system_resources"
+    },
+    
+    "environment_specific_configurations": {
+      "development_environment": "more_aggressive_healing_for_faster_feedback",
+      "staging_environment": "production_like_healing_for_testing",
+      "production_environment": "conservative_healing_prioritizing_stability"
+    }
+  }
+}

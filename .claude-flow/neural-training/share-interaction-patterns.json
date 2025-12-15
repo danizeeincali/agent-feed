@@ -1,0 +1,110 @@
+{
+  "neuralPatternId": "share-interaction-001",
+  "trainingData": {
+    "featureInteractions": {
+      "like_share_parallel": {
+        "pattern": "both use optimistic UI updates",
+        "codeStructure": "similar async handlers with try-catch",
+        "stateUpdates": "both update posts array and search results",
+        "riskScore": 0.7,
+        "removalImpact": "removing share could accidentally break like if copy-paste errors"
+      },
+      "comment_share_parallel": {
+        "pattern": "both in same UI button group",
+        "codeStructure": "sequential buttons in DOM",
+        "stateUpdates": "independent state updates",
+        "riskScore": 0.3,
+        "removalImpact": "layout changes needed, spacing adjustments"
+      },
+      "search_results_integration": {
+        "pattern": "dual state management",
+        "codeStructure": "updates both posts and search.results arrays",
+        "stateUpdates": "conditional based on isSearching flag",
+        "riskScore": 0.9,
+        "removalImpact": "high risk - must remove share updates from both paths"
+      }
+    },
+    "apiIntegration": {
+      "updatePostEngagement": {
+        "endpoint": "apiService.updatePostEngagement(postId, 'share')",
+        "usageCount": 1,
+        "errorHandling": "try-catch with console.error",
+        "rollbackStrategy": "none implemented",
+        "riskScore": 0.5,
+        "removalStrategy": "remove 'share' case from API handler"
+      }
+    },
+    "componentCoverage": {
+      "SocialMediaFeed.tsx": {
+        "shareReferences": 8,
+        "criticalPaths": ["handleSharePost", "Share2 import", "shares property", "button onClick"],
+        "testCoverage": "unknown - no specific share tests found"
+      },
+      "PostCard.tsx": {
+        "shareReferences": 4,
+        "criticalPaths": ["Share2 import", "shares display", "share button"],
+        "testCoverage": "unknown"
+      },
+      "AgentPostsFeed.tsx": {
+        "shareReferences": 3,
+        "criticalPaths": ["Share2 import", "shares count", "engagement handler"],
+        "testCoverage": "unknown"
+      }
+    }
+  },
+  "failurePrediction": {
+    "highRiskAreas": [
+      {
+        "area": "TypeScript compilation",
+        "risk": "shares property removal from interfaces",
+        "likelihood": 0.8,
+        "severity": "high",
+        "preventionStrategy": "remove from all interfaces simultaneously"
+      },
+      {
+        "area": "Runtime errors", 
+        "risk": "handleSharePost called after removal",
+        "likelihood": 0.6,
+        "severity": "medium",
+        "preventionStrategy": "remove all onClick handlers first"
+      },
+      {
+        "area": "UI layout breaks",
+        "risk": "button spacing changes after removal", 
+        "likelihood": 0.9,
+        "severity": "low",
+        "preventionStrategy": "adjust CSS grid/flexbox layouts"
+      },
+      {
+        "area": "State inconsistencies",
+        "risk": "search results not updated",
+        "likelihood": 0.7,
+        "severity": "medium", 
+        "preventionStrategy": "remove share logic from both posts and search state updates"
+      }
+    ],
+    "successPatterns": [
+      "Remove UI elements first (buttons, icons)",
+      "Remove event handlers second", 
+      "Remove state updates third",
+      "Remove type definitions last",
+      "Test after each step"
+    ]
+  },
+  "testingStrategy": {
+    "requiredTests": [
+      "UI renders without share buttons",
+      "Like and comment buttons still work",
+      "Search results don't include share data",
+      "API calls don't include share parameter",
+      "TypeScript compiles without shares property"
+    ],
+    "regressionChecks": [
+      "Like functionality unaffected",
+      "Comment functionality unaffected", 
+      "Search functionality unaffected",
+      "Post creation/display unaffected",
+      "WebSocket events unaffected"
+    ]
+  }
+}

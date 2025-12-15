@@ -1,0 +1,99 @@
+# Example Protected Agent Configuration
+# This is a template showing all available protection options
+
+version: "1.0.0"
+checksum: "sha256:PLACEHOLDER_WILL_BE_COMPUTED_DURING_MIGRATION"
+agent_id: "example-agent"
+
+# Metadata tracks changes over time
+_metadata:
+  created_at: "2025-10-17T00:00:00Z"
+  updated_at: "2025-10-17T00:00:00Z"
+  updated_by: "system"
+  description: "Example protected configuration template"
+
+# All protected permissions
+permissions:
+
+  # API Access Control
+  # Defines which API endpoints the agent can access
+  api_endpoints:
+    - path: "/api/posts"
+      methods: ["GET", "POST"]
+      rate_limit: "10/minute"
+      required_auth: true
+
+    - path: "/api/posts/:id"
+      methods: ["GET", "PUT", "DELETE"]
+      rate_limit: "20/minute"
+      required_auth: true
+
+    - path: "/api/comments"
+      methods: ["GET", "POST"]
+      rate_limit: "30/minute"
+      required_auth: true
+
+  # Workspace Configuration
+  # Restricts where the agent can read/write files
+  workspace:
+    root: "/workspaces/agent-feed/prod/agent_workspace/agents/example-agent"
+    max_storage: "1GB"
+
+    # Paths the agent CAN access (whitelist)
+    allowed_paths:
+      - "/workspaces/agent-feed/prod/agent_workspace/agents/example-agent/**"
+      - "/workspaces/agent-feed/prod/agent_workspace/shared/**"
+
+    # Paths the agent CANNOT access (blacklist)
+    forbidden_paths:
+      - "/workspaces/agent-feed/src/**"
+      - "/workspaces/agent-feed/api-server/**"
+      - "/workspaces/agent-feed/.claude/**"
+      - "/workspaces/agent-feed/node_modules/**"
+
+  # Tool Permissions
+  # Controls which Claude Code tools the agent can use
+  tool_permissions:
+    # Tools the agent IS allowed to use
+    allowed:
+      - "Read"
+      - "Write"
+      - "Edit"
+      - "Bash"
+      - "Grep"
+      - "Glob"
+      - "TodoWrite"
+
+    # Tools the agent IS NOT allowed to use
+    forbidden:
+      - "KillShell"
+      - "NotebookEdit"
+
+  # Resource Limits
+  # Prevents resource exhaustion
+  resource_limits:
+    max_memory: "512MB"           # Maximum memory usage
+    max_cpu_percent: 50            # Maximum CPU percentage
+    max_execution_time: "300s"     # Maximum execution time (5 minutes)
+    max_concurrent_tasks: 3        # Maximum parallel tasks
+
+  # Posting Rules
+  # Controls when and how the agent posts outcomes
+  posting_rules:
+    auto_post_outcomes: true       # Automatically post work outcomes
+    post_threshold: "completed_task"  # When to post: never, completed_task, significant_outcome, always
+    default_post_type: "reply"     # Default post type: reply, new_post, auto
+
+  # Security Policies (Optional)
+  security:
+    sandbox_enabled: true          # Run in sandboxed environment
+    network_access: "api_only"     # Network access level: none, api_only, restricted, full
+    file_operations: "workspace_only" # File access: none, workspace_only, restricted, full
+
+# Notes on Protection:
+# - All fields above are PROTECTED and cannot be edited by users
+# - Changes require system administrator privileges
+# - Updates go through ProtectedConfigManager API
+# - All changes are logged and versioned
+# - SHA-256 checksum ensures integrity
+# - File permissions (444) prevent unauthorized modifications

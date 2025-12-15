@@ -1,0 +1,23 @@
+{
+  "baselineFile": "./ci-config/performance-baselines.json",
+  "thresholds": {
+    "claudeResponseTime": {
+      "warningThreshold": 2000,
+      "errorThreshold": 5000,
+      "regressionPercent": 30
+    },
+    "sseDeliveryTime": {
+      "warningThreshold": 100,
+      "errorThreshold": 500,
+      "regressionPercent": 50
+    },
+    "memoryPerInstance": {
+      "warningThreshold": 52428800,
+      "errorThreshold": 104857600,
+      "regressionPercent": 25
+    }
+  },
+  "testDuration": 120000,
+  "smokeTestDuration": 30000,
+  "enableRegression": true
+}

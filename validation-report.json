@@ -1,0 +1,82 @@
+{
+  "timestamp": "2025-09-06T05:13:37.891Z",
+  "success": false,
+  "totalPassed": 8,
+  "totalTests": 11,
+  "successRate": 72.72727272727273,
+  "details": {
+    "backend": {
+      "passed": 0,
+      "failed": 2,
+      "tests": [
+        {
+          "name": "API Connection",
+          "result": "FAIL",
+          "details": "https is not defined"
+        },
+        {
+          "name": "Backend Health Check",
+          "result": "FAIL",
+          "details": "https is not defined"
+        }
+      ]
+    },
+    "frontend": {
+      "passed": 0,
+      "failed": 1,
+      "tests": [
+        {
+          "name": "Frontend Connection",
+          "result": "FAIL",
+          "details": "https is not defined"
+        }
+      ]
+    },
+    "fixes": {
+      "passed": 8,
+      "failed": 0,
+      "tests": [
+        {
+          "name": "Threading Data Structure Fix",
+          "result": "PASS",
+          "details": "processedComments adds replies[] arrays correctly"
+        },
+        {
+          "name": "URL Navigation Fix",
+          "result": "PASS",
+          "details": "Permalink generation corrected"
+        },
+        {
+          "name": "Hash Navigation Events",
+          "result": "PASS",
+          "details": "Proper event listeners implemented"
+        },
+        {
+          "name": "Comment Tree Building",
+          "result": "PASS",
+          "details": "Using proper tree structure for threading"
+        },
+        {
+          "name": "Visual Threading Indentation",
+          "result": "PASS",
+          "details": "Proper CSS classes for nested display"
+        },
+        {
+          "name": "Comment Tree Utilities",
+          "result": "PASS",
+          "details": "Proper tree structure utilities available"
+        },
+        {
+          "name": "URL Pattern Format",
+          "result": "PASS",
+          "details": "Problematic URL follows expected pattern"
+        },
+        {
+          "name": "Double-Prefix Bug Fix",
+          "result": "PASS",
+          "details": "No double-prefix in URL"
+        }
+      ]
+    }
+  }
+}

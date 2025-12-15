@@ -1,0 +1,1476 @@
+# Response Schema Definitions
+# Complete response schema specifications for the Distributed Posting Intelligence API
+
+PostComposeResponse:
+  type: object
+  required:
+    - content
+    - metadata
+    - quality_score
+  properties:
+    content:
+      type: string
+      description: Generated or enhanced content
+      example: "🚀 Exciting news! We've just launched our revolutionary AI product that's transforming how businesses operate. Join thousands of companies already benefiting from this breakthrough technology. Get 20% off your first month with code LAUNCH20! #AI #Innovation #TechLaunch #StartupLife"
+    alternatives:
+      type: array
+      description: Alternative content variations
+      items:
+        type: object
+        properties:
+          content:
+            type: string
+          score:
+            type: number
+            minimum: 0
+            maximum: 1
+          focus:
+            type: string
+            enum: [engagement, reach, clicks, conversions]
+          optimization_notes:
+            type: string
+      example:
+        - content: "Big announcement! Our new AI product is live and ready to revolutionize your business. Special launch offer inside! 🎉 #AIRevolution"
+          score: 0.87
+          focus: "engagement"
+          optimization_notes: "Optimized for higher engagement with emojis and urgency"
+    metadata:
+      type: object
+      required:
+        - platform_optimized
+        - character_count
+        - word_count
+      properties:
+        platform_optimized:
+          type: string
+          example: "twitter"
+        character_count:
+          type: integer
+          example: 267
+        word_count:
+          type: integer
+          example: 43
+        hashtags:
+          type: array
+          items:
+            type: string
+          example: ["#AI", "#Innovation", "#TechLaunch", "#StartupLife"]
+        mentions:
+          type: array
+          items:
+            type: string
+          example: ["@company", "@partner"]
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                format: uri
+              display_text:
+                type: string
+              position:
+                type: integer
+        estimated_reach:
+          type: integer
+          minimum: 0
+          example: 25000
+        optimal_posting_time:
+          type: string
+          format: date-time
+          example: "2024-01-16T14:30:00Z"
+        content_themes:
+          type: array
+          items:
+            type: string
+          example: ["product launch", "technology", "business growth"]
+        reading_time_seconds:
+          type: number
+          example: 12.5
+        complexity_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Content complexity (0=simple, 1=complex)
+          example: 0.35
+    quality_score:
+      type: number
+      minimum: 0
+      maximum: 1
+      description: Overall content quality score
+      example: 0.92
+    quality_breakdown:
+      type: object
+      properties:
+        engagement_potential:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.89
+        readability:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.95
+        brand_alignment:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.91
+        platform_optimization:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.93
+        originality:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.88
+    engagement_prediction:
+      type: object
+      properties:
+        likes:
+          type: object
+          properties:
+            predicted:
+              type: number
+              example: 245
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.85
+            range:
+              type: object
+              properties:
+                min:
+                  type: number
+                  example: 180
+                max:
+                  type: number
+                  example: 320
+        shares:
+          type: object
+          properties:
+            predicted:
+              type: number
+              example: 67
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.78
+        comments:
+          type: object
+          properties:
+            predicted:
+              type: number
+              example: 23
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.72
+        click_through_rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.067
+        engagement_rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.124
+    optimization_suggestions:
+      type: array
+      items:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: [content, timing, hashtags, structure, cta, visual]
+          priority:
+            type: string
+            enum: [high, medium, low]
+          suggestion:
+            type: string
+          impact_estimate:
+            type: string
+            enum: [high, medium, low]
+          effort_required:
+            type: string
+            enum: [low, medium, high]
+      example:
+        - type: "hashtags"
+          priority: "medium"
+          suggestion: "Consider adding #ProductLaunch for better discoverability"
+          impact_estimate: "medium"
+          effort_required: "low"
+    processing_info:
+      type: object
+      properties:
+        processing_time_ms:
+          type: integer
+          example: 1250
+        model_version:
+          type: string
+          example: "v2.1.0"
+        features_used:
+          type: array
+          items:
+            type: string
+          example: ["sentiment_analysis", "hashtag_optimization", "engagement_prediction"]
+        cache_hit:
+          type: boolean
+          example: false
+
+QualityAnalysisResponse:
+  type: object
+  required:
+    - overall_score
+    - analysis_results
+  properties:
+    overall_score:
+      type: number
+      minimum: 0
+      maximum: 1
+      description: Overall quality score (0-1)
+      example: 0.85
+    grade:
+      type: string
+      enum: [A+, A, A-, B+, B, B-, C+, C, C-, D, F]
+      example: "A-"
+    analysis_results:
+      type: object
+      required:
+        - engagement_potential
+        - readability_score
+      properties:
+        engagement_potential:
+          type: object
+          properties:
+            score:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.82
+            factors:
+              type: array
+              items:
+                type: object
+                properties:
+                  factor:
+                    type: string
+                    example: "emotional_appeal"
+                  impact:
+                    type: string
+                    enum: [positive, negative, neutral]
+                    example: "positive"
+                  weight:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                    example: 0.7
+                  explanation:
+                    type: string
+                    example: "Content evokes excitement and curiosity"
+        readability_score:
+          type: object
+          properties:
+            flesch_reading_ease:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 72.5
+            flesch_kincaid_grade:
+              type: number
+              example: 8.2
+            complexity_level:
+              type: string
+              enum: [very_easy, easy, fairly_easy, standard, fairly_difficult, difficult, very_difficult]
+              example: "fairly_easy"
+            syllable_count:
+              type: integer
+              example: 45
+            sentence_count:
+              type: integer
+              example: 3
+            avg_sentence_length:
+              type: number
+              example: 14.3
+        sentiment_analysis:
+          type: object
+          properties:
+            sentiment:
+              type: string
+              enum: [very_positive, positive, neutral, negative, very_negative]
+              example: "positive"
+            confidence:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.89
+            polarity_score:
+              type: number
+              minimum: -1
+              maximum: 1
+              example: 0.72
+            subjectivity_score:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.65
+            emotions:
+              type: array
+              items:
+                type: object
+                properties:
+                  emotion:
+                    type: string
+                    enum: [joy, sadness, anger, fear, surprise, disgust, trust, anticipation]
+                  intensity:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                  example: "joy"
+            toxicity_score:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.02
+        platform_optimization:
+          type: object
+          properties:
+            character_usage:
+              type: object
+              properties:
+                used:
+                  type: integer
+                  example: 267
+                limit:
+                  type: integer
+                  example: 280
+                efficiency:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  example: 0.95
+            hashtag_analysis:
+              type: object
+              properties:
+                count:
+                  type: integer
+                  example: 4
+                optimal_count:
+                  type: integer
+                  example: 3
+                effectiveness_score:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  example: 0.78
+                trending_hashtags:
+                  type: array
+                  items:
+                    type: string
+                  example: ["#AI", "#Innovation"]
+            timing_analysis:
+              type: object
+              properties:
+                current_time_score:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  example: 0.45
+                optimal_times:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                        enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+                      hour:
+                        type: integer
+                        minimum: 0
+                        maximum: 23
+                      score:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                  example:
+                    - day: "tuesday"
+                      hour: 14
+                      score: 0.92
+        content_structure:
+          type: object
+          properties:
+            has_hook:
+              type: boolean
+              example: true
+            has_cta:
+              type: boolean
+              example: true
+            paragraph_count:
+              type: integer
+              example: 1
+            bullet_points:
+              type: integer
+              example: 0
+            questions_count:
+              type: integer
+              example: 0
+            exclamation_count:
+              type: integer
+              example: 2
+            structure_score:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.85
+        spam_detection:
+          type: object
+          properties:
+            spam_probability:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.05
+            spam_indicators:
+              type: array
+              items:
+                type: string
+              example: []
+            promotional_score:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.72
+        brand_compliance:
+          type: object
+          properties:
+            brand_voice_match:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.88
+            prohibited_content:
+              type: array
+              items:
+                type: string
+              example: []
+            required_elements:
+              type: object
+              properties:
+                present:
+                  type: array
+                  items:
+                    type: string
+                  example: ["hashtags", "call_to_action"]
+                missing:
+                  type: array
+                  items:
+                    type: string
+                  example: []
+    improvement_suggestions:
+      type: array
+      items:
+        type: object
+        properties:
+          category:
+            type: string
+            enum: [content, structure, timing, hashtags, engagement, readability, branding]
+          priority:
+            type: string
+            enum: [high, medium, low]
+          message:
+            type: string
+          implementation:
+            type: string
+          expected_impact:
+            type: string
+            enum: [high, medium, low]
+          effort_required:
+            type: string
+            enum: [low, medium, high]
+      example:
+        - category: "hashtags"
+          priority: "medium"
+          message: "Consider reducing hashtag count to 3 for better engagement"
+          implementation: "Remove least relevant hashtag"
+          expected_impact: "medium"
+          effort_required: "low"
+    benchmark_comparison:
+      type: object
+      properties:
+        industry_average:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.65
+        top_percentile:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.92
+        your_average:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.78
+        ranking:
+          type: string
+          enum: [top_1_percent, top_5_percent, top_10_percent, above_average, average, below_average]
+          example: "above_average"
+    metrics:
+      type: object
+      properties:
+        processing_time:
+          type: number
+          description: Analysis processing time in milliseconds
+          example: 875
+        confidence_level:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.91
+        model_version:
+          type: string
+          example: "quality-analyzer-v3.2.1"
+        analysis_depth:
+          type: string
+          enum: [basic, standard, comprehensive]
+          example: "comprehensive"
+
+TaskCoordinationResponse:
+  type: object
+  required:
+    - task_id
+    - status
+    - coordination_plan
+  properties:
+    task_id:
+      type: string
+      format: uuid
+      description: Unique task identifier
+      example: "550e8400-e29b-41d4-a716-446655440000"
+    status:
+      type: string
+      enum: [queued, planning, executing, completed, failed, cancelled]
+      example: "executing"
+    coordination_plan:
+      type: object
+      properties:
+        strategy:
+          type: string
+          enum: [parallel, sequential, adaptive, hybrid]
+          example: "parallel"
+        assigned_agents:
+          type: array
+          items:
+            type: object
+            properties:
+              agent_id:
+                type: string
+                example: "agent_research_001"
+              agent_type:
+                type: string
+                enum: [researcher, coder, analyst, optimizer, coordinator, content-creator]
+                example: "researcher"
+              subtask_ids:
+                type: array
+                items:
+                  type: string
+                example: ["competitor_analysis", "trend_research"]
+              role:
+                type: string
+                example: "Lead Researcher"
+              status:
+                type: string
+                enum: [assigned, active, completed, failed]
+                example: "active"
+              current_subtask:
+                type: string
+                example: "competitor_analysis"
+              progress:
+                type: number
+                minimum: 0
+                maximum: 1
+                example: 0.35
+        execution_order:
+          type: array
+          items:
+            type: object
+            properties:
+              phase:
+                type: integer
+                example: 1
+              phase_name:
+                type: string
+                example: "Data Collection"
+              parallel_tasks:
+                type: array
+                items:
+                  type: string
+                example: ["competitor_analysis", "trend_research"]
+              dependencies:
+                type: array
+                items:
+                  type: string
+                example: []
+              estimated_duration:
+                type: integer
+                description: Phase duration in seconds
+                example: 1800
+        estimated_completion:
+          type: string
+          format: date-time
+          example: "2024-01-15T16:30:00Z"
+        resource_allocation:
+          type: object
+          properties:
+            total_agents:
+              type: integer
+              example: 3
+            cpu_cores_allocated:
+              type: integer
+              example: 6
+            memory_gb_allocated:
+              type: number
+              example: 8.5
+            estimated_cost:
+              type: number
+              example: 12.50
+    progress:
+      type: object
+      properties:
+        overall_progress:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.35
+        completed_subtasks:
+          type: integer
+          example: 2
+        total_subtasks:
+          type: integer
+          example: 6
+        current_phase:
+          type: string
+          example: "Data Collection"
+        time_elapsed:
+          type: integer
+          description: Elapsed time in seconds
+          example: 630
+        estimated_time_remaining:
+          type: integer
+          description: Estimated remaining time in seconds
+          example: 1170
+    subtask_status:
+      type: array
+      items:
+        type: object
+        properties:
+          subtask_id:
+            type: string
+            example: "competitor_analysis"
+          status:
+            type: string
+            enum: [pending, active, completed, failed, skipped]
+            example: "active"
+          progress:
+            type: number
+            minimum: 0
+            maximum: 1
+            example: 0.65
+          assigned_agent:
+            type: string
+            example: "agent_research_001"
+          started_at:
+            type: string
+            format: date-time
+            example: "2024-01-15T15:00:00Z"
+          estimated_completion:
+            type: string
+            format: date-time
+            example: "2024-01-15T15:30:00Z"
+          output_preview:
+            type: string
+            example: "Found 15 competitors, analyzing posting patterns..."
+    quality_metrics:
+      type: object
+      properties:
+        current_quality_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.87
+        quality_threshold:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.8
+        quality_trend:
+          type: string
+          enum: [improving, stable, declining]
+          example: "improving"
+    created_at:
+      type: string
+      format: date-time
+      example: "2024-01-15T14:45:00Z"
+    updated_at:
+      type: string
+      format: date-time
+      example: "2024-01-15T15:10:00Z"
+    notifications:
+      type: object
+      properties:
+        webhook_url:
+          type: string
+          format: uri
+        email_notifications:
+          type: boolean
+          example: true
+        notification_preferences:
+          type: array
+          items:
+            type: string
+            enum: [progress_update, completion, error, quality_alert]
+          example: ["completion", "error"]
+
+FeedAnalyticsResponse:
+  type: object
+  required:
+    - metrics
+    - time_range
+    - generated_at
+  properties:
+    summary:
+      type: object
+      properties:
+        total_posts:
+          type: integer
+          example: 1250
+        total_engagement:
+          type: integer
+          example: 45320
+        average_engagement_rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.087
+        top_performing_platform:
+          type: string
+          example: "linkedin"
+        engagement_trend:
+          type: string
+          enum: [increasing, stable, decreasing]
+          example: "increasing"
+        trend_percentage:
+          type: number
+          example: 15.2
+    metrics:
+      type: object
+      properties:
+        engagement:
+          type: object
+          properties:
+            total_interactions:
+              type: integer
+              example: 45320
+            engagement_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.087
+            likes:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 28500
+                average_per_post:
+                  type: number
+                  example: 22.8
+                growth_rate:
+                  type: number
+                  example: 12.5
+            shares:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 8200
+                average_per_post:
+                  type: number
+                  example: 6.56
+                growth_rate:
+                  type: number
+                  example: 18.3
+            comments:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 5820
+                average_per_post:
+                  type: number
+                  example: 4.66
+                growth_rate:
+                  type: number
+                  example: 8.7
+            clicks:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  example: 2800
+                average_per_post:
+                  type: number
+                  example: 2.24
+                click_through_rate:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  example: 0.035
+        reach:
+          type: object
+          properties:
+            total_reach:
+              type: integer
+              example: 520000
+            unique_users:
+              type: integer
+              example: 485000
+            impressions:
+              type: integer
+              example: 750000
+            reach_rate:
+              type: number
+              minimum: 0
+              maximum: 1
+              example: 0.693
+            frequency:
+              type: number
+              example: 1.55
+        performance:
+          type: object
+          properties:
+            top_performing_posts:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "post_12345"
+                  content:
+                    type: string
+                    example: "Our latest AI breakthrough is changing everything! 🚀"
+                  engagement_score:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                    example: 0.95
+                  platform:
+                    type: string
+                    example: "linkedin"
+                  posted_at:
+                    type: string
+                    format: date-time
+                    example: "2024-01-10T14:00:00Z"
+                  metrics:
+                    type: object
+                    properties:
+                      likes:
+                        type: integer
+                        example: 450
+                      shares:
+                        type: integer
+                        example: 89
+                      comments:
+                        type: integer
+                        example: 34
+                      reach:
+                        type: integer
+                        example: 12000
+            best_posting_times:
+              type: array
+              items:
+                type: object
+                properties:
+                  day:
+                    type: string
+                    enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+                    example: "tuesday"
+                  hour:
+                    type: integer
+                    minimum: 0
+                    maximum: 23
+                    example: 14
+                  engagement_multiplier:
+                    type: number
+                    example: 1.85
+                  sample_size:
+                    type: integer
+                    example: 45
+                  confidence:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                    example: 0.92
+            content_performance:
+              type: object
+              properties:
+                by_type:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      content_type:
+                        type: string
+                        enum: [text, image, video, link, poll]
+                        example: "image"
+                      post_count:
+                        type: integer
+                        example: 350
+                      average_engagement:
+                        type: number
+                        example: 0.094
+                      total_reach:
+                        type: integer
+                        example: 180000
+                by_topic:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      topic:
+                        type: string
+                        example: "AI & Technology"
+                      post_count:
+                        type: integer
+                        example: 89
+                      average_engagement:
+                        type: number
+                        example: 0.112
+                      trending_score:
+                        type: number
+                        minimum: 0
+                        maximum: 1
+                        example: 0.89
+            optimal_frequency:
+              type: object
+              properties:
+                posts_per_day:
+                  type: number
+                  example: 2.3
+                posts_per_week:
+                  type: number
+                  example: 16.1
+                recommended_schedule:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                      recommended_posts:
+                        type: integer
+                      optimal_times:
+                        type: array
+                        items:
+                          type: integer
+    platform_breakdown:
+      type: array
+      items:
+        type: object
+        properties:
+          platform:
+            type: string
+            enum: [twitter, linkedin, instagram, facebook, youtube, tiktok]
+            example: "linkedin"
+          posts_count:
+            type: integer
+            example: 420
+          engagement_rate:
+            type: number
+            minimum: 0
+            maximum: 1
+            example: 0.095
+          total_reach:
+            type: integer
+            example: 185000
+          growth_metrics:
+            type: object
+            properties:
+              follower_growth:
+                type: number
+                example: 8.5
+              engagement_growth:
+                type: number
+                example: 12.3
+              reach_growth:
+                type: number
+                example: 15.7
+          top_performing_content:
+            type: array
+            items:
+              type: string
+            example: ["product updates", "industry insights", "team highlights"]
+    trends:
+      type: array
+      items:
+        type: object
+        properties:
+          metric:
+            type: string
+            example: "engagement_rate"
+          direction:
+            type: string
+            enum: [increasing, decreasing, stable]
+            example: "increasing"
+          change_percentage:
+            type: number
+            example: 15.2
+          significance:
+            type: string
+            enum: [high, medium, low]
+            example: "high"
+          confidence:
+            type: number
+            minimum: 0
+            maximum: 1
+            example: 0.87
+          time_period:
+            type: string
+            example: "last_30_days"
+          explanation:
+            type: string
+            example: "Engagement rate increased significantly due to improved content quality and optimal posting times"
+    time_series:
+      type: array
+      items:
+        type: object
+        properties:
+          timestamp:
+            type: string
+            format: date-time
+            example: "2024-01-10T00:00:00Z"
+          metrics:
+            type: object
+            additionalProperties:
+              type: number
+            example:
+              engagement_rate: 0.089
+              reach: 15000
+              impressions: 22000
+              clicks: 450
+    audience_insights:
+      type: object
+      properties:
+        demographics:
+          type: object
+          properties:
+            age_distribution:
+              type: array
+              items:
+                type: object
+                properties:
+                  age_range:
+                    type: string
+                    example: "25-34"
+                  percentage:
+                    type: number
+                    minimum: 0
+                    maximum: 100
+                    example: 32.5
+            location_distribution:
+              type: array
+              items:
+                type: object
+                properties:
+                  location:
+                    type: string
+                    example: "United States"
+                  percentage:
+                    type: number
+                    minimum: 0
+                    maximum: 100
+                    example: 45.2
+        engagement_patterns:
+          type: object
+          properties:
+            most_active_hours:
+              type: array
+              items:
+                type: integer
+                minimum: 0
+                maximum: 23
+              example: [9, 12, 14, 18]
+            most_active_days:
+              type: array
+              items:
+                type: string
+                enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+              example: ["tuesday", "wednesday", "thursday"]
+            content_preferences:
+              type: array
+              items:
+                type: object
+                properties:
+                  content_type:
+                    type: string
+                  preference_score:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                  example: "educational"
+    time_range:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          example: "2023-12-16T00:00:00Z"
+        end:
+          type: string
+          format: date-time
+          example: "2024-01-15T23:59:59Z"
+        granularity:
+          type: string
+          enum: [hourly, daily, weekly]
+          example: "daily"
+        total_days:
+          type: integer
+          example: 30
+    generated_at:
+      type: string
+      format: date-time
+      example: "2024-01-15T16:00:00Z"
+    data_freshness:
+      type: object
+      properties:
+        last_data_update:
+          type: string
+          format: date-time
+          example: "2024-01-15T15:45:00Z"
+        data_lag_minutes:
+          type: integer
+          example: 15
+        completeness_percentage:
+          type: number
+          minimum: 0
+          maximum: 100
+          example: 98.5
+
+SystemHealthResponse:
+  type: object
+  required:
+    - status
+    - components
+    - timestamp
+  properties:
+    status:
+      type: string
+      enum: [healthy, degraded, unhealthy]
+      example: "healthy"
+    overall_score:
+      type: number
+      minimum: 0
+      maximum: 1
+      example: 0.96
+    components:
+      type: object
+      properties:
+        api_gateway:
+          $ref: '#/components/schemas/ComponentHealth'
+        database:
+          $ref: '#/components/schemas/ComponentHealth'
+        ai_services:
+          $ref: '#/components/schemas/ComponentHealth'
+        agent_coordination:
+          $ref: '#/components/schemas/ComponentHealth'
+        feed_processor:
+          $ref: '#/components/schemas/ComponentHealth'
+        content_analyzer:
+          $ref: '#/components/schemas/ComponentHealth'
+        cache:
+          $ref: '#/components/schemas/ComponentHealth'
+        queue_system:
+          $ref: '#/components/schemas/ComponentHealth'
+    system_metrics:
+      type: object
+      properties:
+        uptime:
+          type: integer
+          description: System uptime in seconds
+          example: 2592000
+        uptime_percentage:
+          type: number
+          minimum: 0
+          maximum: 100
+          example: 99.95
+        requests_per_second:
+          type: number
+          example: 1250.5
+        error_rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0.002
+        average_response_time:
+          type: number
+          description: Average response time in milliseconds
+          example: 145.2
+        peak_response_time:
+          type: number
+          description: Peak response time in milliseconds
+          example: 890.5
+        total_requests_today:
+          type: integer
+          example: 108000000
+        successful_requests_today:
+          type: integer
+          example: 107784000
+    performance_indicators:
+      type: object
+      properties:
+        cpu_usage:
+          type: object
+          properties:
+            current:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 45.2
+            average_24h:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 52.1
+            peak_24h:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 78.9
+        memory_usage:
+          type: object
+          properties:
+            current:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 68.5
+            available_gb:
+              type: number
+              example: 12.8
+            total_gb:
+              type: number
+              example: 64.0
+        disk_usage:
+          type: object
+          properties:
+            current:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 42.1
+            free_space_gb:
+              type: number
+              example: 289.5
+        network_io:
+          type: object
+          properties:
+            bytes_in_per_second:
+              type: integer
+              example: 1250000
+            bytes_out_per_second:
+              type: integer
+              example: 2500000
+            connections_active:
+              type: integer
+              example: 1245
+    alerts:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "alert_001"
+          severity:
+            type: string
+            enum: [info, warning, error, critical]
+            example: "warning"
+          component:
+            type: string
+            example: "database"
+          message:
+            type: string
+            example: "Database connection pool utilization above 80%"
+          timestamp:
+            type: string
+            format: date-time
+            example: "2024-01-15T15:45:00Z"
+          resolved:
+            type: boolean
+            example: false
+          actions_taken:
+            type: array
+            items:
+              type: string
+            example: ["Scaled database connections", "Notified operations team"]
+    service_level_indicators:
+      type: object
+      properties:
+        availability:
+          type: object
+          properties:
+            current_month:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 99.95
+            last_month:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 99.97
+            sla_target:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 99.9
+        latency:
+          type: object
+          properties:
+            p50_ms:
+              type: number
+              example: 125.5
+            p95_ms:
+              type: number
+              example: 345.2
+            p99_ms:
+              type: number
+              example: 678.9
+            sla_target_p95:
+              type: number
+              example: 500.0
+        error_budget:
+          type: object
+          properties:
+            remaining_percentage:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 87.3
+            consumed_this_month:
+              type: number
+              minimum: 0
+              maximum: 100
+              example: 12.7
+    timestamp:
+      type: string
+      format: date-time
+      example: "2024-01-15T16:00:00Z"
+    next_health_check:
+      type: string
+      format: date-time
+      example: "2024-01-15T16:05:00Z"
+
+ComponentHealth:
+  type: object
+  required:
+    - status
+    - response_time
+  properties:
+    status:
+      type: string
+      enum: [up, down, degraded, maintenance]
+      example: "up"
+    response_time:
+      type: number
+      description: Response time in milliseconds
+      example: 145.2
+    uptime_percentage:
+      type: number
+      minimum: 0
+      maximum: 100
+      example: 99.98
+    last_check:
+      type: string
+      format: date-time
+      example: "2024-01-15T16:00:00Z"
+    error_count:
+      type: integer
+      minimum: 0
+      example: 0
+    error_rate:
+      type: number
+      minimum: 0
+      maximum: 1
+      example: 0.001
+    health_score:
+      type: number
+      minimum: 0
+      maximum: 1
+      example: 0.98
+    details:
+      type: object
+      properties:
+        version:
+          type: string
+          example: "v2.1.0"
+        region:
+          type: string
+          example: "us-east-1"
+        instance_count:
+          type: integer
+          example: 3
+        healthy_instances:
+          type: integer
+          example: 3
+        dependencies:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              status:
+                type: string
+                enum: [healthy, unhealthy, unknown]
+              response_time:
+                type: number
+        metrics:
+          type: object
+          additionalProperties:
+            type: number
+          example:
+            cpu_usage: 45.2
+            memory_usage: 68.5
+            active_connections: 125
+            queue_depth: 0
+    recent_incidents:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          title:
+            type: string
+          occurred_at:
+            type: string
+            format: date-time
+          resolved_at:
+            type: string
+            format: date-time
+          duration_minutes:
+            type: integer
+          severity:
+            type: string
+            enum: [low, medium, high, critical]

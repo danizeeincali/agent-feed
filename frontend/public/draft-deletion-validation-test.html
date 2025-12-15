@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft Deletion Validation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .test-status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-pending { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .status-running { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .status-success { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .status-error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .test-results {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .step-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #6c757d;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 12px;
+            line-height: 20px;
+            margin-right: 10px;
+        }
+        .step-success { background: #28a745; }
+        .step-error { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Draft Deletion Validation Test</h1>
+        <p>This test validates that drafts are properly deleted when publishing posts from the draft modal.</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <strong>Initial Drafts:</strong>
+                <div id="initialDrafts">-</div>
+            </div>
+            <div class="stat-card">
+                <strong>Current Drafts:</strong>
+                <div id="currentDrafts">-</div>
+            </div>
+            <div class="stat-card">
+                <strong>Deleted Drafts:</strong>
+                <div id="deletedDrafts">0</div>
+            </div>
+            <div class="stat-card">
+                <strong>Test Status:</strong>
+                <div id="testStatus">Ready</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Pre-Test Setup</h2>
+            <button onclick="initializeTestDrafts()">Initialize Test Drafts</button>
+            <button onclick="clearAllDrafts()">Clear All Drafts</button>
+            <button onclick="openDraftsPage()">Open Drafts Page</button>
+            <div id="setupStatus" class="test-status status-pending">Ready to start</div>
+        </div>
+
+        <div class="test-section">
+            <h2>Draft Deletion Test</h2>
+            <button onclick="runDeletionTest()" id="startTestBtn">Start Draft Deletion Test</button>
+            <button onclick="validateResults()">Validate Results</button>
+            <div id="testProgress" class="test-status status-pending">Test not started</div>
+            <div class="test-results" id="testResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Manual Validation Steps</h2>
+            <ol>
+                <li>Initialize test drafts using the button above</li>
+                <li>Open drafts page and count initial drafts</li>
+                <li>Click "Edit Draft" on any draft</li>
+                <li>Click "Publish Post" in the modal</li>
+                <li>Verify draft is deleted from localStorage and UI</li>
+                <li>Check that post appears in main feed</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        let initialDraftCount = 0;
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}`;
+            testResults.push(logMessage);
+            updateResults();
+            console.log(logMessage);
+        }
+
+        function updateResults() {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.textContent = testResults.join('\n');
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function updateStats() {
+            try {
+                const drafts = JSON.parse(localStorage.getItem('agent-feed-drafts') || '[]');
+                document.getElementById('currentDrafts').textContent = drafts.length;
+                document.getElementById('deletedDrafts').textContent = 
+                    Math.max(0, initialDraftCount - drafts.length);
+            } catch (error) {
+                log(`Error updating stats: ${error.message}`);
+            }
+        }
+
+        function initializeTestDrafts() {
+            log('Initializing test drafts...');
+            
+            const testDrafts = [
+                {
+                    id: 'test-draft-1-' + Date.now(),
+                    userId: 'test-user',
+                    title: 'Test Draft 1 - AI Strategy Update',
+                    content: 'This is a test draft for validation purposes. Testing draft deletion functionality.',
+                    status: 'draft',
+                    tags: ['test', 'validation'],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    wordCount: 15
+                },
+                {
+                    id: 'test-draft-2-' + Date.now(),
+                    userId: 'test-user',
+                    title: 'Test Draft 2 - Performance Metrics',
+                    content: 'Another test draft with different content. This should also be deleted when published.',
+                    status: 'draft',
+                    tags: ['performance', 'metrics'],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    wordCount: 16
+                },
+                {
+                    id: 'test-draft-3-' + Date.now(),
+                    userId: 'test-user',
+                    title: 'Test Draft 3 - Special Characters & Emojis 🚀',
+                    content: 'Test draft with special characters: éñçôdé, émojis 🔥, URLs: https://example.com, and #hashtags',
+                    status: 'draft',
+                    tags: ['special', 'unicode'],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    wordCount: 18
+                }
+            ];
+
+            try {
+                const existingDrafts = JSON.parse(localStorage.getItem('agent-feed-drafts') || '[]');
+                const combinedDrafts = [...testDrafts, ...existingDrafts];
+                localStorage.setItem('agent-feed-drafts', JSON.stringify(combinedDrafts));
+                
+                initialDraftCount = combinedDrafts.length;
+                document.getElementById('initialDrafts').textContent = initialDraftCount;
+                updateStats();
+                
+                log(`✅ Initialized ${testDrafts.length} test drafts`);
+                log(`📊 Total drafts in storage: ${combinedDrafts.length}`);
+                document.getElementById('setupStatus').textContent = 'Test drafts initialized';
+                document.getElementById('setupStatus').className = 'test-status status-success';
+            } catch (error) {
+                log(`❌ Failed to initialize test drafts: ${error.message}`);
+                document.getElementById('setupStatus').textContent = 'Failed to initialize';
+                document.getElementById('setupStatus').className = 'test-status status-error';
+            }
+        }
+
+        function clearAllDrafts() {
+            try {
+                localStorage.removeItem('agent-feed-drafts');
+                initialDraftCount = 0;
+                document.getElementById('initialDrafts').textContent = '0';
+                updateStats();
+                log('🗑️ Cleared all drafts');
+                document.getElementById('setupStatus').textContent = 'All drafts cleared';
+                document.getElementById('setupStatus').className = 'test-status status-success';
+            } catch (error) {
+                log(`❌ Failed to clear drafts: ${error.message}`);
+            }
+        }
+
+        function openDraftsPage() {
+            window.open('/drafts', '_blank');
+            log('🔗 Opened drafts page in new tab');
+        }
+
+        async function runDeletionTest() {
+            document.getElementById('startTestBtn').disabled = true;
+            document.getElementById('testProgress').textContent = 'Running test...';
+            document.getElementById('testProgress').className = 'test-status status-running';
+            
+            log('🧪 Starting Draft Deletion Validation Test');
+            
+            try {
+                // Step 1: Check initial state
+                log('<span class="step-indicator">1</span>Checking initial draft state...');
+                const initialDrafts = JSON.parse(localStorage.getItem('agent-feed-drafts') || '[]');
+                if (initialDrafts.length === 0) {
+                    throw new Error('No drafts found. Please initialize test drafts first.');
+                }
+                
+                initialDraftCount = initialDrafts.length;
+                log(`📊 Initial draft count: ${initialDraftCount}`);
+                document.getElementById('initialDrafts').textContent = initialDraftCount;
+                
+                // Step 2: Simulate draft selection
+                log('<span class="step-indicator">2</span>Selecting first draft for testing...');
+                const testDraft = initialDrafts[0];
+                log(`🎯 Selected draft: "${testDraft.title}" (ID: ${testDraft.id})`);
+                
+                // Step 3: Simulate publishing process
+                log('<span class="step-indicator">3</span>Simulating publish process...');
+                
+                // Create post data (similar to PostCreator logic)
+                const postData = {
+                    title: testDraft.title,
+                    content: testDraft.content,
+                    author_agent: 'user-agent',
+                    metadata: {
+                        businessImpact: 5,
+                        tags: testDraft.tags,
+                        isAgentResponse: false,
+                        postType: 'insight',
+                        wordCount: testDraft.wordCount
+                    }
+                };
+                
+                // Step 4: Make API call
+                log('<span class="step-indicator">4</span>Making API call to publish post...');
+                const response = await fetch('/api/v1/agent-posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(postData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`API call failed: ${response.status} ${errorData.error || 'Unknown error'}`);
+                }
+                
+                const result = await response.json();
+                log(`✅ Post published successfully: ${result.data?.id || 'Unknown ID'}`);
+                
+                // Step 5: Delete the draft (as PostCreator does)
+                log('<span class="step-indicator">5</span>Deleting draft after successful publish...');
+                const updatedDrafts = initialDrafts.filter(draft => draft.id !== testDraft.id);
+                localStorage.setItem('agent-feed-drafts', JSON.stringify(updatedDrafts));
+                
+                log(`🗑️ Draft "${testDraft.id}" deleted from localStorage`);
+                
+                // Step 6: Validate results
+                await new Promise(resolve => setTimeout(resolve, 500)); // Brief pause
+                validateResults();
+                
+                document.getElementById('testProgress').textContent = 'Test completed successfully';
+                document.getElementById('testProgress').className = 'test-status status-success';
+                
+            } catch (error) {
+                log(`❌ Test failed: ${error.message}`);
+                document.getElementById('testProgress').textContent = `Test failed: ${error.message}`;
+                document.getElementById('testProgress').className = 'test-status status-error';
+            } finally {
+                document.getElementById('startTestBtn').disabled = false;
+            }
+        }
+
+        function validateResults() {
+            log('<span class="step-indicator">✓</span>Validating test results...');
+            
+            try {
+                const currentDrafts = JSON.parse(localStorage.getItem('agent-feed-drafts') || '[]');
+                const currentCount = currentDrafts.length;
+                const deletedCount = initialDraftCount - currentCount;
+                
+                log(`📊 Initial drafts: ${initialDraftCount}`);
+                log(`📊 Current drafts: ${currentCount}`);
+                log(`📊 Drafts deleted: ${deletedCount}`);
+                
+                updateStats();
+                
+                if (deletedCount > 0) {
+                    log(`✅ SUCCESS: ${deletedCount} draft(s) successfully deleted`);
+                    document.getElementById('testStatus').textContent = 'PASSED';
+                    document.getElementById('testStatus').style.color = '#28a745';
+                } else {
+                    log(`⚠️ WARNING: No drafts were deleted during test`);
+                    document.getElementById('testStatus').textContent = 'NO CHANGES';
+                    document.getElementById('testStatus').style.color = '#ffc107';
+                }
+                
+                // Additional validations
+                log('<span class="step-indicator">✓</span>Running additional validations...');
+                
+                // Check draft structure
+                if (currentDrafts.length > 0) {
+                    const sampleDraft = currentDrafts[0];
+                    const requiredFields = ['id', 'title', 'content', 'status', 'createdAt', 'updatedAt'];
+                    const missingFields = requiredFields.filter(field => !sampleDraft.hasOwnProperty(field));
+                    
+                    if (missingFields.length === 0) {
+                        log('✅ Draft structure validation passed');
+                    } else {
+                        log(`⚠️ Draft structure validation warning: Missing fields: ${missingFields.join(', ')}`);
+                    }
+                }
+                
+                log('🎉 Validation completed!');
+                
+            } catch (error) {
+                log(`❌ Validation failed: ${error.message}`);
+                document.getElementById('testStatus').textContent = 'ERROR';
+                document.getElementById('testStatus').style.color = '#dc3545';
+            }
+        }
+
+        // Initialize stats on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            
+            // Auto-update stats every 2 seconds
+            setInterval(updateStats, 2000);
+            
+            log('🚀 Draft Deletion Validation Test initialized');
+            log('📝 Use the buttons above to run the test');
+        });
+    </script>
+</body>
+</html>

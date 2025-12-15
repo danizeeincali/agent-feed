@@ -1,0 +1,16 @@
+[Unit]
+Description=Claude Code Development Instance
+After=network.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=/workspaces/agent-feed
+Environment=NODE_ENV=development
+EnvironmentFile=/workspaces/agent-feed/.env.dev
+ExecStart=/usr/local/bin/claude code --config-file .claude-dev --port 8080
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,275 @@
+/**
+ * Mobile Responsive Styles for Agent UI Components
+ * Phase 2: Comprehensive mobile optimization with breakpoints
+ */
+
+/* Mobile-first approach with progressive enhancement */
+
+/* Base mobile styles (320px and up) */
+@media (max-width: 640px) {
+  /* Agent List Mobile Optimizations */
+  .agents-header {
+    @apply flex-col space-y-4;
+  }
+
+  .agents-title {
+    @apply text-2xl;
+  }
+
+  .agents-controls {
+    @apply flex-col space-y-3;
+  }
+
+  .agents-search {
+    @apply w-full;
+  }
+
+  .agents-filters {
+    @apply flex-col space-y-3;
+  }
+
+  .agents-grid {
+    @apply grid-cols-1 gap-4;
+  }
+
+  /* Agent Card Mobile Styles */
+  .agent-card {
+    @apply p-4;
+  }
+
+  .agent-card-header {
+    @apply flex-col items-start space-y-2;
+  }
+
+  .agent-card-meta {
+    @apply flex-col space-y-1;
+  }
+
+  /* Agent Detail Mobile Styles */
+  .agent-detail-header {
+    @apply flex-col space-y-4;
+  }
+
+  .agent-detail-actions {
+    @apply flex-col w-full;
+  }
+
+  .agent-detail-tabs {
+    @apply text-sm;
+  }
+
+  /* File Browser Mobile Styles */
+  .file-browser-grid {
+    @apply grid-cols-1;
+  }
+
+  .file-tree {
+    @apply max-h-64;
+  }
+
+  .file-preview {
+    @apply mt-4;
+  }
+
+  /* Form Elements Mobile Styles */
+  .mobile-form-group {
+    @apply space-y-2;
+  }
+
+  .mobile-input {
+    @apply w-full text-base; /* Prevent zoom on iOS */
+  }
+
+  .mobile-select {
+    @apply w-full text-base;
+  }
+
+  /* Button Groups Mobile */
+  .mobile-button-group {
+    @apply flex-col space-y-2 w-full;
+  }
+
+  .mobile-button {
+    @apply w-full justify-center;
+  }
+}
+
+/* Small tablets (641px to 768px) */
+@media (min-width: 641px) and (max-width: 768px) {
+  .agents-grid {
+    @apply grid-cols-2 gap-5;
+  }
+
+  .agent-detail-header {
+    @apply flex-row items-center justify-between;
+  }
+
+  .file-browser-grid {
+    @apply grid-cols-1 lg:grid-cols-2;
+  }
+}
+
+/* Tablets (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .agents-grid {
+    @apply grid-cols-2 lg:grid-cols-3 gap-5;
+  }
+
+  .file-browser-grid {
+    @apply grid-cols-1 lg:grid-cols-3;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .agent-card {
+    @apply active:bg-gray-50 active:scale-[0.98];
+    transition: all 0.1s ease;
+  }
+
+  .agent-card-action {
+    @apply p-3 min-h-[44px] min-w-[44px];
+  }
+
+  /* Remove hover effects on touch devices */
+  .agent-card:hover {
+    @apply shadow-none transform-none;
+  }
+
+  /* Improve tab navigation for touch */
+  .mobile-tab {
+    @apply py-4 px-6 text-base;
+  }
+
+  /* Better touch scrolling */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Crisp icons and images */
+  .high-dpi-icon {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Landscape orientation optimizations */
+@media (orientation: landscape) and (max-height: 500px) {
+  .landscape-compact {
+    @apply py-2;
+  }
+
+  .landscape-header {
+    @apply h-12;
+  }
+
+  .landscape-content {
+    @apply max-h-[calc(100vh-3rem)];
+  }
+}
+
+/* Dark mode mobile optimizations */
+@media (prefers-color-scheme: dark) {
+  .dark-mobile .agent-card {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .dark-mobile .mobile-input {
+    @apply bg-gray-700 border-gray-600 text-white;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .reduce-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .agent-card {
+    @apply transition-none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .high-contrast .agent-card {
+    @apply border-2 border-black;
+  }
+
+  .high-contrast .agent-status-active {
+    @apply bg-green-600 text-white;
+  }
+
+  .high-contrast .agent-status-inactive {
+    @apply bg-red-600 text-white;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    @apply hidden;
+  }
+
+  .agent-card {
+    @apply shadow-none border border-gray-300 break-inside-avoid;
+  }
+
+  .print-break-before {
+    page-break-before: always;
+  }
+}
+
+/* Utility classes for mobile responsiveness */
+.mobile-only {
+  @apply block sm:hidden;
+}
+
+.desktop-only {
+  @apply hidden sm:block;
+}
+
+.tablet-and-up {
+  @apply hidden md:block;
+}
+
+.mobile-and-tablet {
+  @apply block lg:hidden;
+}
+
+/* Mobile-specific spacing */
+.mobile-spacing {
+  @apply p-4 sm:p-6 lg:p-8;
+}
+
+.mobile-text {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
+/* Safe area handling for mobile devices */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}

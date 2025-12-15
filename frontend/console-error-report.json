@@ -1,0 +1,2772 @@
+{
+  "timestamp": "2025-10-02T22:05:32.390Z",
+  "url": "http://localhost:5173",
+  "summary": {
+    "consoleErrors": 56,
+    "consoleWarnings": 4,
+    "pageErrors": 0,
+    "networkErrors": 38,
+    "moduleErrors": 0,
+    "reactErrors": 0
+  },
+  "details": {
+    "consoleErrors": [
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:443/?token=k426B6-IQF7e' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:5173/@vite/client",
+          "lineNumber": 535,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:04:56.743Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:04:56.802Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:04:58.490Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 175,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:04:59.059Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 193,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.086Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:04:59.335Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:00.338Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:01.341Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:02.349Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:03.352Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 175,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:04.090Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 193,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:04.090Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:04.355Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:05.357Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:06.360Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:07.363Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:08.366Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 175,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:09.095Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 193,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:09.095Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:09.213Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:09.214Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:09.369Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:10.372Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:11.376Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:12.380Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:13.387Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 175,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:14.100Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 193,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:14.100Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:14.390Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:15.093Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:443/?token=k426B6-IQF7e' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:5173/@vite/client",
+          "lineNumber": 535,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:15.230Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:15.277Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:16.706Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 175,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:17.263Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 193,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.264Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:17.613Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:18.616Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:19.618Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:20.622Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:21.627Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 175,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:22.265Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 193,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:22.265Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:22.631Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:23.641Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:24.644Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:25.647Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:26.650Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 175,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:27.294Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "❌ WebSocket error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 193,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:27.294Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Streaming ticker error: Event",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 95,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:27.358Z",
+        "args": 2
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+        "location": {
+          "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:27.359Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:27.653Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:28.655Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:29.658Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:30.664Z",
+        "args": 0
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+        "location": {
+          "url": "http://localhost:443/",
+          "lineNumber": 0,
+          "columnNumber": 0
+        },
+        "timestamp": "2025-10-02T22:05:31.667Z",
+        "args": 0
+      }
+    ],
+    "consoleWarnings": [
+      {
+        "type": "warning",
+        "text": "⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+        "location": {
+          "url": "http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=7cd4e6cf",
+          "lineNumber": 4392,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.054Z",
+        "args": 1
+      },
+      {
+        "type": "warning",
+        "text": "⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.",
+        "location": {
+          "url": "http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=7cd4e6cf",
+          "lineNumber": 4392,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.057Z",
+        "args": 1
+      },
+      {
+        "type": "warning",
+        "text": "⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+        "location": {
+          "url": "http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=7cd4e6cf",
+          "lineNumber": 4392,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.237Z",
+        "args": 1
+      },
+      {
+        "type": "warning",
+        "text": "⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.",
+        "location": {
+          "url": "http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=7cd4e6cf",
+          "lineNumber": 4392,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.238Z",
+        "args": 1
+      }
+    ],
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[vite] server connection lost. Polling for restart...",
+        "location": {
+          "url": "http://localhost:5173/@vite/client",
+          "lineNumber": 559,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:56.743Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔗 API Service initialized with base URL: /api",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 7,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:58.670Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:58.670Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 Creating new MentionService instance",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 156,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:58.671Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 MentionServiceImpl constructor called",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 102,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:58.673Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔍 Constructor: agents array initialized: {hasAgents: true, isArray: true, length: 13, firstAgent: Chief of Staff}",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 103,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:58.673Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "✅ MentionService instance created, agents length: 13",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 158,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:58.673Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: App.tsx loading...",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 18,
+          "columnNumber": 8
+        },
+        "timestamp": "2025-10-02T22:04:59.001Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: Loading SocialMediaFeed...",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 27,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:04:59.001Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "main.tsx: File loading...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 1,
+          "columnNumber": 8
+        },
+        "timestamp": "2025-10-02T22:04:59.004Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "main.tsx: Imports complete, starting application...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 5,
+          "columnNumber": 8
+        },
+        "timestamp": "2025-10-02T22:04:59.004Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "AgentLink: Creating React root...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 21,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.004Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "AgentLink: Rendering application with error boundaries...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 23,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.005Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "AgentLink: ✅ Application started successfully",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 29,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.007Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: App component rendering...",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 340,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:04:59.013Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 415,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:04:59.032Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering loading state",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 424,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.034Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: Initial useEffect triggered",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 118,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.048Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 57,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.053Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 Calling apiService.getAgentPosts...",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 63,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.053Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: Filter changed, reloading posts {type: all}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 274,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.053Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 57,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.053Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 Calling apiService.getAgentPosts...",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 63,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.053Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RouteWrapper: feed mounted",
+        "location": {
+          "url": "http://localhost:5173/src/components/RouteWrapper.tsx",
+          "lineNumber": 30,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.054Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: App component mounted!",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 342,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:04:59.059Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 WebSocket connection closed",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 189,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.087Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "✅ HTTP API connection established",
+        "location": {
+          "url": "http://localhost:5173/src/context/WebSocketSingletonContext.tsx",
+          "lineNumber": 79,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.097Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "📦 Raw API response: {success: true, data: Array(20), total: 20, posts: Array(20)}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.109Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 20, totalCount: 20}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 79,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.110Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "✅ Valid posts array: {validPostsLength: 20, firstPostId: 26f27c0e-6a70-4ce3-af1e-f48d8dff63ed, firstPostTitle: Machine Learning Model Deployment Successful}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 86,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.110Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📝 Setting posts array with 20 posts",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 98,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.111Z",
+        "args": 3
+      },
+      {
+        "type": "log",
+        "text": "🏁 loadPosts finished - loading set to false",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 108,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.111Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "📦 Raw API response: {success: true, data: Array(20), total: 20, posts: Array(20)}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.113Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 20, totalCount: 20}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 79,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.113Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "✅ Valid posts array: {validPostsLength: 20, firstPostId: 26f27c0e-6a70-4ce3-af1e-f48d8dff63ed, firstPostTitle: Machine Learning Model Deployment Successful}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 86,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.113Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📝 Setting posts array with 20 posts",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 98,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.114Z",
+        "args": 3
+      },
+      {
+        "type": "log",
+        "text": "🏁 loadPosts finished - loading set to false",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 108,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.114Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 20, postsType: object, postsIsArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 415,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:04:59.116Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 About to render posts: {postsExists: true, postsLength: 20, postsType: object, isArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 586,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.116Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 0 : {id: 26f27c0e-6a70-4ce3-af1e-f48d8dff63ed, title: Machine Learning Model Deployment Successful}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.118Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 1 : {id: 769f2301-b51f-4e5d-b06a-37e42850ad3e, title: Security Alert: Dependency Vulnerability Found}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.119Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 2 : {id: 96651452-22c4-4932-9330-50d47dab7502, title: Performance Optimization: Database Queries}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.120Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 3 : {id: 1b3991fb-17d5-4ae9-ab7f-cadc3c822cd7, title: API Documentation Generation Complete}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.120Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 4 : {id: 9e14726f-f179-45d9-b173-76281eda0c5a, title: Code Review Complete: Authentication Module}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.121Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 5 : {id: c7d452a0-02b2-4d66-b08b-72bda5826503, title: Special Chars Test 🎯}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.124Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 6 : {id: 72199bac-fc1f-45f4-9c7d-704535f445fc, title: 10k Character Test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.124Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 7 : {id: 7183c6c0-3208-4526-b063-2966ca3dc3c2, title: Integration Test 1}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.124Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 8 : {id: b42ab3bc-d04b-4639-8eed-d75405270e8c, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.125Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 9 : {id: 76c3e556-c9ef-4ad3-8852-c821888ae969, title: test test test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.125Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 10 : {id: b1bcc3ce-c74d-465a-875a-6b0c5b831be6, title: new test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.126Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 11 : {id: 1d047873-77e2-4f0f-a6d6-a60c29a7faa4, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.126Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 12 : {id: 00efd9c5-f1d3-4cf2-a0b9-13c71b79ad90, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.127Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 13 : {id: 21466ce5-752c-4880-a3f8-5f2f0a39bbbc, title: Final Validation Test - Database Integration Worki}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.127Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 14 : {id: 559f1aa4-dd50-4d60-9de2-d49aac964730, title: Second Post}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.128Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 15 : {id: 079e90cf-189b-41b0-a206-8df2441c8f59, title: First Post}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.128Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 16 : {id: 4c6490b3-9cd3-4fc3-a2ed-0f176c96de92, title: DB Test Post 1759366059079}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.129Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 17 : {id: f8e044e6-36ae-4d7c-8258-fb43d744a8ec, title: Simple Test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.129Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 18 : {id: a393852c-2006-4f4e-a27a-fc1dc5d5d401, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.131Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 19 : {id: d631a9fd-9191-486f-8c40-75140bae3da1, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:04:59.131Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🔄 DEBUG: Fetching suggestions {mentionQuery: null, debouncedQuery: , isDropdownOpen: false}",
+        "location": {
+          "url": "http://localhost:5173/src/components/MentionInput.tsx",
+          "lineNumber": 208,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.203Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "⏹️ DEBUG: Skipping fetch - dropdown closed",
+        "location": {
+          "url": "http://localhost:5173/src/components/MentionInput.tsx",
+          "lineNumber": 210,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:04:59.206Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "Streaming ticker connected",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:04:59.213Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 Attempting WebSocket reconnection...",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 219,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:04.087Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:04.087Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔌 WebSocket connection closed",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 189,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:04.090Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 Attempting WebSocket reconnection...",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 219,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:09.091Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:09.091Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔌 WebSocket connection closed",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 189,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:09.095Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "Streaming ticker connected",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:12.218Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 Attempting WebSocket reconnection...",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 219,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:14.096Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:14.096Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔌 WebSocket connection closed",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 189,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:14.100Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "[vite] server connection lost. Polling for restart...",
+        "location": {
+          "url": "http://localhost:5173/@vite/client",
+          "lineNumber": 559,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:15.230Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔗 API Service initialized with base URL: /api",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 7,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:16.897Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:16.897Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 Creating new MentionService instance",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 156,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:16.902Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 MentionServiceImpl constructor called",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 102,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:16.902Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔍 Constructor: agents array initialized: {hasAgents: true, isArray: true, length: 13, firstAgent: Chief of Staff}",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 103,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:16.903Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "✅ MentionService instance created, agents length: 13",
+        "location": {
+          "url": "http://localhost:5173/src/services/MentionService.ts",
+          "lineNumber": 158,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:16.903Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: App.tsx loading...",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 18,
+          "columnNumber": 8
+        },
+        "timestamp": "2025-10-02T22:05:17.210Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: Loading SocialMediaFeed...",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 27,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:05:17.210Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "main.tsx: File loading...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 1,
+          "columnNumber": 8
+        },
+        "timestamp": "2025-10-02T22:05:17.212Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "main.tsx: Imports complete, starting application...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 5,
+          "columnNumber": 8
+        },
+        "timestamp": "2025-10-02T22:05:17.212Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "AgentLink: Creating React root...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 21,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.212Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "AgentLink: Rendering application with error boundaries...",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 23,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.213Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "AgentLink: ✅ Application started successfully",
+        "location": {
+          "url": "http://localhost:5173/src/main.tsx",
+          "lineNumber": 29,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.213Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: App component rendering...",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 340,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:05:17.216Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🎨 RealSocialMediaFeed RENDER: {loading: true, error: null, postsLength: 0, postsType: object, postsIsArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 415,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:05:17.226Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering loading state",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 424,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.226Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: Initial useEffect triggered",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 118,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.235Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 57,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.235Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 Calling apiService.getAgentPosts...",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 63,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.235Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: Filter changed, reloading posts {type: all}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 274,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.237Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 RealSocialMediaFeed: loadPosts called {pageNum: 0, append: false, filterType: all}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 57,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.237Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔄 Calling apiService.getAgentPosts...",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 63,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.237Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 RouteWrapper: feed mounted",
+        "location": {
+          "url": "http://localhost:5173/src/components/RouteWrapper.tsx",
+          "lineNumber": 30,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.237Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "DEBUG: App component mounted!",
+        "location": {
+          "url": "http://localhost:5173/src/App.tsx",
+          "lineNumber": 342,
+          "columnNumber": 12
+        },
+        "timestamp": "2025-10-02T22:05:17.238Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 WebSocket connection closed",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 189,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.267Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "📦 Raw API response: {success: true, data: Array(20), total: 20, posts: Array(20)}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.270Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 20, totalCount: 20}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 79,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.270Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "✅ Valid posts array: {validPostsLength: 20, firstPostId: 26f27c0e-6a70-4ce3-af1e-f48d8dff63ed, firstPostTitle: Machine Learning Model Deployment Successful}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 86,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.270Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📝 Setting posts array with 20 posts",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 98,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.270Z",
+        "args": 3
+      },
+      {
+        "type": "log",
+        "text": "🏁 loadPosts finished - loading set to false",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 108,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.270Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 20, postsType: object, postsIsArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 415,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:05:17.274Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 About to render posts: {postsExists: true, postsLength: 20, postsType: object, isArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 586,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.274Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 0 : {id: 26f27c0e-6a70-4ce3-af1e-f48d8dff63ed, title: Machine Learning Model Deployment Successful}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.277Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 1 : {id: 769f2301-b51f-4e5d-b06a-37e42850ad3e, title: Security Alert: Dependency Vulnerability Found}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.277Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 2 : {id: 96651452-22c4-4932-9330-50d47dab7502, title: Performance Optimization: Database Queries}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.277Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 3 : {id: 1b3991fb-17d5-4ae9-ab7f-cadc3c822cd7, title: API Documentation Generation Complete}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.284Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 4 : {id: 9e14726f-f179-45d9-b173-76281eda0c5a, title: Code Review Complete: Authentication Module}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.284Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 5 : {id: c7d452a0-02b2-4d66-b08b-72bda5826503, title: Special Chars Test 🎯}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.284Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 6 : {id: 72199bac-fc1f-45f4-9c7d-704535f445fc, title: 10k Character Test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.285Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 7 : {id: 7183c6c0-3208-4526-b063-2966ca3dc3c2, title: Integration Test 1}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.285Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 8 : {id: b42ab3bc-d04b-4639-8eed-d75405270e8c, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.285Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 9 : {id: 76c3e556-c9ef-4ad3-8852-c821888ae969, title: test test test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 10 : {id: b1bcc3ce-c74d-465a-875a-6b0c5b831be6, title: new test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 11 : {id: 1d047873-77e2-4f0f-a6d6-a60c29a7faa4, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 12 : {id: 00efd9c5-f1d3-4cf2-a0b9-13c71b79ad90, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 13 : {id: 21466ce5-752c-4880-a3f8-5f2f0a39bbbc, title: Final Validation Test - Database Integration Worki}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 14 : {id: 559f1aa4-dd50-4d60-9de2-d49aac964730, title: Second Post}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 15 : {id: 079e90cf-189b-41b0-a206-8df2441c8f59, title: First Post}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 16 : {id: 4c6490b3-9cd3-4fc3-a2ed-0f176c96de92, title: DB Test Post 1759366059079}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 17 : {id: f8e044e6-36ae-4d7c-8258-fb43d744a8ec, title: Simple Test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.288Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 18 : {id: a393852c-2006-4f4e-a27a-fc1dc5d5d401, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.291Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 19 : {id: d631a9fd-9191-486f-8c40-75140bae3da1, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.291Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "✅ HTTP API connection established",
+        "location": {
+          "url": "http://localhost:5173/src/context/WebSocketSingletonContext.tsx",
+          "lineNumber": 79,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.337Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 DEBUG: Fetching suggestions {mentionQuery: null, debouncedQuery: , isDropdownOpen: false}",
+        "location": {
+          "url": "http://localhost:5173/src/components/MentionInput.tsx",
+          "lineNumber": 208,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.337Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "⏹️ DEBUG: Skipping fetch - dropdown closed",
+        "location": {
+          "url": "http://localhost:5173/src/components/MentionInput.tsx",
+          "lineNumber": 210,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.337Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "📦 Raw API response: {success: true, data: Array(20), total: 20, posts: Array(20)}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.347Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📊 Processed data: {postsDataType: object, postsDataIsArray: true, postsDataLength: 20, totalCount: 20}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 79,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.347Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "✅ Valid posts array: {validPostsLength: 20, firstPostId: 26f27c0e-6a70-4ce3-af1e-f48d8dff63ed, firstPostTitle: Machine Learning Model Deployment Successful}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 86,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.348Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "📝 Setting posts array with 20 posts",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 98,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.350Z",
+        "args": 3
+      },
+      {
+        "type": "log",
+        "text": "🏁 loadPosts finished - loading set to false",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 108,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.350Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 20, postsType: object, postsIsArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 415,
+          "columnNumber": 10
+        },
+        "timestamp": "2025-10-02T22:05:17.350Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 About to render posts: {postsExists: true, postsLength: 20, postsType: object, isArray: true}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 586,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:17.350Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 0 : {id: 26f27c0e-6a70-4ce3-af1e-f48d8dff63ed, title: Machine Learning Model Deployment Successful}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.350Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 1 : {id: 769f2301-b51f-4e5d-b06a-37e42850ad3e, title: Security Alert: Dependency Vulnerability Found}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.351Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 2 : {id: 96651452-22c4-4932-9330-50d47dab7502, title: Performance Optimization: Database Queries}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.351Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 3 : {id: 1b3991fb-17d5-4ae9-ab7f-cadc3c822cd7, title: API Documentation Generation Complete}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.351Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 4 : {id: 9e14726f-f179-45d9-b173-76281eda0c5a, title: Code Review Complete: Authentication Module}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.351Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 5 : {id: c7d452a0-02b2-4d66-b08b-72bda5826503, title: Special Chars Test 🎯}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.355Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 6 : {id: 72199bac-fc1f-45f4-9c7d-704535f445fc, title: 10k Character Test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.355Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 7 : {id: 7183c6c0-3208-4526-b063-2966ca3dc3c2, title: Integration Test 1}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.356Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 8 : {id: b42ab3bc-d04b-4639-8eed-d75405270e8c, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.356Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 9 : {id: 76c3e556-c9ef-4ad3-8852-c821888ae969, title: test test test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.356Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 10 : {id: b1bcc3ce-c74d-465a-875a-6b0c5b831be6, title: new test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.356Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 11 : {id: 1d047873-77e2-4f0f-a6d6-a60c29a7faa4, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.358Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 12 : {id: 00efd9c5-f1d3-4cf2-a0b9-13c71b79ad90, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.358Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 13 : {id: 21466ce5-752c-4880-a3f8-5f2f0a39bbbc, title: Final Validation Test - Database Integration Worki}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.358Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 14 : {id: 559f1aa4-dd50-4d60-9de2-d49aac964730, title: Second Post}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.358Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 15 : {id: 079e90cf-189b-41b0-a206-8df2441c8f59, title: First Post}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.358Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 16 : {id: 4c6490b3-9cd3-4fc3-a2ed-0f176c96de92, title: DB Test Post 1759366059079}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.359Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 17 : {id: f8e044e6-36ae-4d7c-8258-fb43d744a8ec, title: Simple Test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.359Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 18 : {id: a393852c-2006-4f4e-a27a-fc1dc5d5d401, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.359Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "🎨 Rendering post 19 : {id: d631a9fd-9191-486f-8c40-75140bae3da1, title: test}",
+        "location": {
+          "url": "http://localhost:5173/src/components/RealSocialMediaFeed.tsx",
+          "lineNumber": 593,
+          "columnNumber": 18
+        },
+        "timestamp": "2025-10-02T22:05:17.359Z",
+        "args": 4
+      },
+      {
+        "type": "log",
+        "text": "Streaming ticker connected",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:17.372Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 Attempting WebSocket reconnection...",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 219,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:22.250Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:22.250Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔌 WebSocket connection closed",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 189,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:22.266Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 Attempting WebSocket reconnection...",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 219,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:27.267Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:27.267Z",
+        "args": 2
+      },
+      {
+        "type": "log",
+        "text": "🔌 WebSocket connection closed",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 189,
+          "columnNumber": 16
+        },
+        "timestamp": "2025-10-02T22:05:27.294Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "Streaming ticker connected",
+        "location": {
+          "url": "http://localhost:5173/src/StreamingTickerWorking.tsx",
+          "lineNumber": 76,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:30.369Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔄 Attempting WebSocket reconnection...",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 219,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:32.296Z",
+        "args": 1
+      },
+      {
+        "type": "log",
+        "text": "🔌 Attempting WebSocket connection to: ws://localhost:5173/ws",
+        "location": {
+          "url": "http://localhost:5173/src/services/api.ts",
+          "lineNumber": 174,
+          "columnNumber": 14
+        },
+        "timestamp": "2025-10-02T22:05:32.297Z",
+        "args": 2
+      }
+    ],
+    "pageErrors": [],
+    "networkErrors": [
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:04:56.791Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:04:58.489Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:04:59.335Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:00.338Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:01.341Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:02.349Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:03.351Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:04.354Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:05.357Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:06.360Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:07.363Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:08.366Z"
+      },
+      {
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "method": "GET",
+        "resourceType": "eventsource",
+        "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+        "timestamp": "2025-10-02T22:05:09.214Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:09.369Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:10.372Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:11.376Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:12.379Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:13.386Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:14.390Z"
+      },
+      {
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "method": "GET",
+        "resourceType": "eventsource",
+        "failure": "net::ERR_ABORTED",
+        "timestamp": "2025-10-02T22:05:15.093Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:15.275Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:16.705Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:17.613Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:18.615Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:19.618Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:20.621Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:21.627Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:22.630Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:23.641Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:24.644Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:25.647Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:26.649Z"
+      },
+      {
+        "url": "http://localhost:5173/api/streaming-ticker/stream?userId=agent-feed-user",
+        "method": "GET",
+        "resourceType": "eventsource",
+        "failure": "net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+        "timestamp": "2025-10-02T22:05:27.358Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:27.653Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:28.655Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:29.658Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:30.663Z"
+      },
+      {
+        "url": "http://localhost:443/",
+        "method": "GET",
+        "resourceType": "fetch",
+        "failure": "net::ERR_CONNECTION_REFUSED",
+        "timestamp": "2025-10-02T22:05:31.666Z"
+      }
+    ],
+    "moduleErrors": [],
+    "reactErrors": []
+  },
+  "screenshots": [
+    "01-initial-load.png",
+    "02-after-stability.png",
+    "03-after-hard-refresh.png",
+    "04-after-scroll.png"
+  ]
+}

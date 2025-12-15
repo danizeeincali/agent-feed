@@ -1,0 +1,18 @@
+{
+  "retry": {
+    "maxRetries": 3,
+    "baseDelay": 5,
+    "maxDelay": 120,
+    "backoffMultiplier": 6,
+    "strategies": [
+      "retry_same",
+      "simplify_post",
+      "different_agent"
+    ],
+    "strategyThresholds": {
+      "retrySame": 1,
+      "simplifyPost": 2,
+      "differentAgent": 3
+    }
+  }
+}

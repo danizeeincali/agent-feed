@@ -1,0 +1,140 @@
+{
+  "name": "Claude Code + AgentLink Development Environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "agentfeed-dev",
+  "workspaceFolder": "/app",
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-json",
+        "ms-python.python",
+        "ms-vscode.docker",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-eslint",
+        "dbaeumer.vscode-eslint",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-node-azure-pack",
+        "ms-vscode-remote.remote-containers",
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-playwright.playwright",
+        "humao.rest-client",
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-test-explorer"
+      ],
+      
+      "settings": {
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true,
+          "source.organizeImports": true
+        },
+        "files.exclude": {
+          "**/node_modules": true,
+          "**/dist": true,
+          "**/.git": false
+        },
+        "search.exclude": {
+          "**/node_modules": true,
+          "**/dist": true,
+          "**/logs": true
+        },
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash",
+            "args": ["-l"]
+          }
+        },
+        "docker.dockerPath": "docker",
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "playwright.reuseBrowser": true,
+        "playwright.showTrace": true,
+        "rest-client.environmentVariables": {
+          "dev": {
+            "baseUrl": "http://localhost:3000",
+            "claudeCodeUrl": "http://localhost:8080"
+          }
+        }
+      }
+    }
+  },
+  
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": false,
+      "installOhMyZsh": false,
+      "upgradePackages": false,
+      "username": "appuser",
+      "uid": "1000",
+      "gid": "1000"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "ppa": false,
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true,
+      "version": "latest"
+    }
+  },
+  
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "AgentFeed Application",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Claude Code Server",
+      "onAutoForward": "silent"
+    },
+    "5432": {
+      "label": "PostgreSQL Database",
+      "onAutoForward": "silent"
+    }
+  },
+  
+  "postCreateCommand": "echo 'Claude Code + AgentLink environment ready!'",
+  "postStartCommand": ".devcontainer/post-start.sh",
+  
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=${localWorkspaceFolder}/.claude,target=/app/.claude,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/memory,target=/app/memory,type=bind,consistency=cached"
+  ],
+  
+  "remoteEnv": {
+    "NODE_ENV": "development",
+    "PORT": "3000",
+    "CLAUDE_CODE_PORT": "8080",
+    "POSTGRES_PORT": "5432",
+    "HOT_RELOAD": "true",
+    "DEBUG": "agent-feed:*",
+    "CLAUDE_CONFIG_PATH": "/app/.claude"
+  },
+  
+  "containerEnv": {
+    "SHELL": "/bin/bash",
+    "TZ": "UTC"
+  },
+  
+  "initializeCommand": ".devcontainer/initialize.sh",
+  "updateContentCommand": "npm install && cd frontend && npm install",
+  
+  "capAdd": ["SYS_PTRACE"],
+  "securityOpt": ["seccomp=unconfined"],
+  
+  "shutdownAction": "stopCompose",
+  "overrideCommand": false,
+  
+  "waitFor": "postCreateCommand"
+}

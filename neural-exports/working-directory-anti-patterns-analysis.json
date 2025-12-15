@@ -1,0 +1,20 @@
+{
+  "patterns": [
+    {
+      "id": "WD_HARDCODED_PARENT_DIR",
+      "name": "Hardcoded Parent Directory Pattern",
+      "severity": "high",
+      "description": "Working directory hardcoded to parent directory when user expects subdirectory based on button type",
+      "symptoms": [
+        "prod/claude button spawns in /workspaces/agent-feed instead of /workspaces/agent-feed/prod",
+        "All instance types spawn in same directory regardless of button type"
+      ],
+      "solution": "Implement dynamic directory mapping based on button type",
+      "frequency": 0
+    }
+  ],
+  "summary": {
+    "totalPatterns": 1,
+    "highSeverityIssues": 1
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "tracker_version": "1.0.0",
+  "tracker_type": "backend_data_issue_detection",
+  "creation_timestamp": "2025-09-06T00:00:00Z",
+  
+  "monitoring_scope": {
+    "target_systems": [
+      "comment_api_endpoints",
+      "database_comment_queries",
+      "comment_count_aggregations",
+      "comment_threading_data",
+      "comment_real_time_updates"
+    ],
+    "data_issue_categories": [
+      "decimal_integer_conversion_failures",
+      "api_response_inconsistencies", 
+      "database_query_performance_issues",
+      "data_type_mismatches",
+      "cache_synchronization_problems"
+    ]
+  },
+  
+  "detection_systems": {
+    "decimal_integer_conversion_monitor": {
+      "system_id": "BD_MONITOR_001",
+      "description": "Monitor decimal to integer conversion issues in comment counts",
+      "monitoring_points": [
+        {
+          "location": "database_query_results",
+          "check_type": "data_type_validation",
+          "expected_types": {
+            "likes_count": "integer",
+            "replies_count": "integer", 
+            "reported_count": "integer",
+            "thread_depth": "integer"
+          },
+          "validation_rules": [
+            "no_decimal_places_in_counts",
+            "non_negative_integer_values",
+            "reasonable_upper_bounds"
+          ]
+        },
+        {
+          "location": "api_response_serialization",
+          "check_type": "response_format_validation",
+          "serialization_checks": [
+            "json_number_type_consistency",
+            "no_string_numbers_for_counts",
+            "proper_null_handling"
+          ],
+          "automatic_corrections": [
+            "force_integer_conversion",
+            "apply_math_floor_to_decimals",
+            "default_zero_for_null_counts"
+          ]
+        }
+      ],
+      "error_patterns": [
+        {
+          "pattern": "PostgreSQL_numeric_precision_loss",
+          "detection": "COUNT(*) returning NUMERIC instead of INTEGER",
+          "fix": "CAST(COUNT(*) AS INTEGER) in queries",
+          "prevention": "use INTEGER data types for count columns"
+        },
+        {
+          "pattern": "JavaScript_parseInt_failures",
+          "detection": "NaN results from parseInt operations", 
+          "fix": "use Number() with fallback to 0",
+          "prevention": "server-side type validation"
+        }
+      ]
+    },
+    
+    "api_response_consistency_monitor": {
+      "system_id": "BD_MONITOR_002",
+      "description": "Monitor API response structure consistency across endpoints",
+      "consistency_checks": [
+        {
+          "endpoint_group": "comment_crud_operations",
+          "endpoints": [
+            "POST /api/posts/:postId/comments",
+            "GET /api/posts/:postId/comments",
+            "PUT /api/comments/:commentId",
+            "DELETE /api/comments/:commentId"
+          ],
+          "consistency_requirements": [
+            {
+              "field": "comment_object_structure",
+              "required_fields": ["id", "postId", "content", "author", "createdAt"],
+              "optional_fields": ["parentId", "repliesCount", "likesCount"],
+              "data_types": {
+                "id": "string",
+                "postId": "string",
+                "repliesCount": "integer", 
+                "likesCount": "integer"
+              }
+            }
+          ]
+        },
+        {
+          "endpoint_group": "comment_aggregation_endpoints",
+          "endpoints": [
+            "GET /api/posts/:postId/comments/count",
+            "GET /api/posts/:postId/comments?summary=true"
+          ],
+          "consistency_requirements": [
+            {
+              "field": "count_response_format",
+              "validation": "count_fields_are_integers",
+              "cross_validation": "individual_count_matches_aggregate"
+            }
+          ]
+        }
+      ],
+      "inconsistency_detection": {
+        "response_schema_drift": {
+          "detection_method": "json_schema_validation",
+          "alert_on": "schema_version_mismatch",
+          "tolerance": "zero_tolerance_for_breaking_changes"
+        },
+        "data_format_variations": {
+          "detection_method": "response_format_comparison",
+          "track_changes": "field_type_modifications",
+          "alert_severity": "high_for_count_type_changes"
+        }
+      }
+    },
+    
+    "database_performance_monitor": {
+      "system_id": "BD_MONITOR_003",
+      "description": "Monitor comment-related database query performance",
+      "performance_targets": {
+        "comment_count_queries": {
+          "target_time_ms": 50,
+          "warning_threshold_ms": 100,
+          "critical_threshold_ms": 500,
+          "queries_monitored": [
+            "SELECT COUNT(*) FROM comments WHERE post_id = ?",
+            "SELECT COUNT(*) FROM comments WHERE parent_id = ?",
+            "SELECT * FROM comments WHERE post_id = ? ORDER BY created_at"
+          ]
+        },
+        "comment_threading_queries": {
+          "target_time_ms": 200,
+          "warning_threshold_ms": 500, 
+          "critical_threshold_ms": 2000,
+          "queries_monitored": [
+            "WITH RECURSIVE comment_tree AS (...) SELECT * FROM comment_tree",
+            "SELECT *, COUNT(replies) FROM comments LEFT JOIN ..."
+          ]
+        }
+      },
+      "performance_optimization_triggers": [
+        {
+          "trigger": "query_time_exceeds_warning_threshold",
+          "action": "analyze_query_execution_plan",
+          "escalation": "suggest_index_optimization"
+        },
+        {
+          "trigger": "query_time_exceeds_critical_threshold",
+          "action": "enable_query_caching",
+          "escalation": "implement_count_denormalization"
+        }
+      ],
+      "optimization_strategies": [
+        {
+          "strategy": "comment_count_caching",
+          "implementation": "redis_cache_with_ttl",
+          "invalidation": "on_comment_mutations",
+          "performance_gain_target": "80_percent_improvement"
+        },
+        {
+          "strategy": "denormalized_count_columns",
+          "implementation": "replies_count_column_on_comments_table",
+          "maintenance": "trigger_based_count_updates",
+          "consistency": "eventual_consistency_acceptable"
+        }
+      ]
+    }
+  },
+  
+  "real_time_monitoring": {
+    "database_connection_health": {
+      "monitor_type": "connection_pool_monitoring",
+      "health_indicators": [
+        "active_connections_count",
+        "connection_wait_time",
+        "query_timeout_frequency",
+        "deadlock_detection"
+      ],
+      "alert_thresholds": {
+        "high_connection_usage": 0.8,
+        "query_timeout_rate": 0.01,
+        "deadlock_frequency": "more_than_1_per_hour"
+      }
+    },
+    
+    "data_integrity_monitoring": {
+      "monitor_type": "data_consistency_validation",
+      "integrity_checks": [
+        {
+          "check": "parent_child_relationship_validity",
+          "validation": "all_parent_ids_exist_in_comments_table",
+          "frequency": "every_10_minutes"
+        },
+        {
+          "check": "comment_count_accuracy",
+          "validation": "calculated_counts_match_stored_counts",
+          "frequency": "every_5_minutes"
+        },
+        {
+          "check": "thread_path_consistency",
+          "validation": "thread_paths_correctly_represent_hierarchy",
+          "frequency": "every_30_minutes"
+        }
+      ]
+    }
+  },
+  
+  "automatic_issue_resolution": {
+    "data_type_auto_correction": {
+      "correction_rules": [
+        {
+          "issue": "decimal_count_values",
+          "correction": "Math.floor(decimalValue)",
+          "validation": "ensure_non_negative_result",
+          "fallback": "default_to_zero"
+        },
+        {
+          "issue": "null_count_values", 
+          "correction": "replace_with_zero",
+          "validation": "verify_zero_is_appropriate",
+          "logging": "log_null_count_occurrences"
+        },
+        {
+          "issue": "string_count_values",
+          "correction": "parseInt_with_radix_10",
+          "validation": "check_for_NaN_result",
+          "fallback": "calculate_count_from_database"
+        }
+      ]
+    },
+    
+    "performance_auto_optimization": {
+      "optimization_rules": [
+        {
+          "trigger": "slow_count_query_detected",
+          "action": "enable_count_result_caching",
+          "duration": "cache_for_5_minutes",
+          "invalidation": "on_comment_create_update_delete"
+        },
+        {
+          "trigger": "high_database_load_detected",
+          "action": "implement_read_replica_routing",
+          "scope": "comment_read_operations_only",
+          "fallback": "primary_database_if_replica_unavailable"
+        }
+      ]
+    }
+  },
+  
+  "machine_learning_integration": {
+    "anomaly_detection_model": {
+      "model_type": "backend_data_anomaly_detector",
+      "input_features": [
+        "query_execution_time_ms",
+        "result_set_size",
+        "data_type_consistency_score",
+        "api_response_time_ms",
+        "error_rate_per_endpoint",
+        "database_connection_count"
+      ],
+      "anomaly_types": [
+        "performance_degradation",
+        "data_quality_issues",
+        "consistency_violations",
+        "scalability_problems"
+      ],
+      "detection_threshold": 0.85,
+      "learning_mode": "continuous_unsupervised_learning"
+    },
+    
+    "predictive_performance_model": {
+      "model_type": "performance_prediction",
+      "prediction_targets": [
+        "query_performance_under_load",
+        "optimal_caching_strategies",
+        "database_scaling_requirements",
+        "api_response_time_forecasting"
+      ],
+      "training_data": [
+        "historical_performance_metrics",
+        "user_traffic_patterns",
+        "comment_creation_patterns",
+        "database_resource_utilization"
+      ]
+    }
+  },
+  
+  "integration_with_frontend_monitoring": {
+    "cross_layer_correlation": {
+      "correlate_backend_issues_with_frontend_errors": true,
+      "shared_metrics": [
+        "comment_load_success_rate",
+        "comment_count_accuracy",
+        "real_time_update_reliability"
+      ],
+      "alert_correlation": {
+        "backend_performance_degradation": "check_frontend_user_experience_impact",
+        "data_type_issues": "verify_frontend_display_correctness",
+        "api_inconsistencies": "validate_frontend_error_handling"
+      }
+    }
+  },
+  
+  "reporting_and_alerting": {
+    "daily_health_reports": {
+      "report_contents": [
+        "data_quality_summary",
+        "performance_metrics_summary", 
+        "error_rate_analysis",
+        "optimization_opportunities_identified"
+      ],
+      "report_recipients": [
+        "backend_development_team",
+        "database_administrators",
+        "product_management"
+      ]
+    },
+    
+    "real_time_alerts": {
+      "critical_alerts": [
+        "data_corruption_detected",
+        "critical_performance_degradation",
+        "api_endpoint_failure_rate_high"
+      ],
+      "alert_channels": [
+        "slack_development_channel",
+        "pagerduty_on_call_system",
+        "email_notification_system"
+      ],
+      "escalation_rules": {
+        "immediate": "critical_data_integrity_issues",
+        "within_15_minutes": "performance_degradation",
+        "within_1_hour": "data_consistency_warnings"
+      }
+    }
+  }
+}

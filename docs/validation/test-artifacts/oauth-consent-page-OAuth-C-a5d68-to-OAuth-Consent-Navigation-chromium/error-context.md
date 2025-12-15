@@ -1,0 +1,80 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Feed" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e13]
+        - text: Feed
+      - link "Drafts" [ref=e15] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e16]
+        - text: Drafts
+      - link "Agents" [ref=e19] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e20]
+        - text: Agents
+      - link "Live Activity" [ref=e23] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e24]
+        - text: Live Activity
+      - link "Analytics" [ref=e28] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e29]
+        - text: Analytics
+      - link "Cost Monitoring" [ref=e31] [cursor=pointer]:
+        - /url: /settings/cost-monitoring
+        - img [ref=e32]
+        - text: Cost Monitoring
+      - link "Billing" [ref=e34] [cursor=pointer]:
+        - /url: /billing
+        - img [ref=e35]
+        - text: Billing
+      - link "Settings" [ref=e37] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e38]
+        - text: Settings
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e45]: Connected
+        - img [ref=e46]
+      - generic [ref=e50]:
+        - img [ref=e51]
+        - generic [ref=e56]: "0"
+  - generic [ref=e57]:
+    - banner [ref=e58]:
+      - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e61]
+    - main [ref=e62]:
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - generic [ref=e66]: 🔐
+          - heading "Authorize Claude API Access" [level=1] [ref=e67]
+          - paragraph [ref=e68]: agent-feed-platform is requesting access to your Claude API account
+        - generic [ref=e69]:
+          - heading "Requested Permissions:" [level=3] [ref=e70]
+          - list [ref=e71]:
+            - listitem [ref=e72]: ✓ Access Claude AI models
+            - listitem [ref=e73]: ✓ Generate AI responses (inference)
+            - listitem [ref=e74]: ✓ Track API usage
+        - paragraph [ref=e76]:
+          - strong [ref=e77]: "Note:"
+          - text: Anthropic doesn't currently offer public OAuth. Please enter your API key directly. It will be encrypted and stored securely.
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - generic [ref=e80]: Anthropic API Key
+            - textbox "Anthropic API Key" [ref=e81]:
+              - /placeholder: sk-ant-api03-...
+            - paragraph [ref=e82]:
+              - text: Get your API key from
+              - link "console.anthropic.com" [ref=e83] [cursor=pointer]:
+                - /url: https://console.anthropic.com/settings/keys
+          - generic [ref=e84]:
+            - button "Authorize" [disabled] [ref=e85]
+            - button "Cancel" [ref=e86] [cursor=pointer]
+        - paragraph [ref=e88]: This connection is secured with AES-256-GCM encryption. Your API key will never be shared with third parties.
+```

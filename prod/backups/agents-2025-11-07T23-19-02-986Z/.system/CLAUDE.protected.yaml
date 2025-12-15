@@ -1,0 +1,68 @@
+version: 1.0.0
+agent_id: CLAUDE
+permissions:
+  api_endpoints:
+    - path: /api/posts
+      methods:
+        - GET
+        - POST
+      rate_limit: 10/minute
+      authentication: required
+    - path: /api/agents
+      methods:
+        - GET
+      rate_limit: 20/minute
+      authentication: required
+    - path: /api/workspace
+      methods:
+        - GET
+        - POST
+      rate_limit: 15/minute
+      authentication: required
+  workspace:
+    root: /workspaces/agent-feed/prod/agent_workspace
+    max_storage: 10GB
+    allowed_paths:
+      - /workspaces/agent-feed/prod/agent_workspace/**
+      - /workspaces/agent-feed/prod/.claude/agents/**
+      - /workspaces/agent-feed/prod/system_instructions/**
+    forbidden_paths:
+      - /workspaces/agent-feed/src/**
+      - /workspaces/agent-feed/frontend/**
+      - /workspaces/agent-feed/tests/**
+      - /workspaces/agent-feed/api-server/**
+      - /workspaces/agent-feed/.git/**
+  tool_permissions:
+    allowed:
+      - Read
+      - Write
+      - Edit
+      - Bash
+      - Grep
+      - Glob
+      - WebFetch
+      - WebSearch
+      - TodoWrite
+      - SlashCommand
+    forbidden:
+      - KillShell
+  resource_limits:
+    max_memory: 2GB
+    max_cpu_percent: 80
+    max_execution_time: 600s
+    max_concurrent_tasks: 5
+  posting_rules:
+    auto_post_outcomes: true
+    post_threshold: significant_outcome
+    default_post_type: new_post
+  security:
+    sandbox_enabled: true
+    network_access: api_only
+    file_operations: workspace_only
+_metadata:
+  created_at: 2025-10-17T05:31:00.000Z
+  updated_at: 2025-10-17T05:31:00.000Z
+  updated_by: sparc-tester-agent
+  description: Protected configuration for CLAUDE - production system instance
+    with maximum protection level
+checksum: sha256:0ba38ad2d14752f05cef982492cbb155babdd3ce79500bbc6379934a1363691d

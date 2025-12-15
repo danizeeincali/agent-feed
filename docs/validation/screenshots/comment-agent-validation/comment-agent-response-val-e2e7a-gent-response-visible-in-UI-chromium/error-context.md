@@ -1,0 +1,408 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - img [ref=e8]
+      - generic [ref=e10]: AgentLink
+    - navigation [ref=e11]:
+      - link "Feed" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e13]
+        - text: Feed
+      - link "Drafts" [ref=e15] [cursor=pointer]:
+        - /url: /drafts
+        - img [ref=e16]
+        - text: Drafts
+      - link "Agents" [ref=e19] [cursor=pointer]:
+        - /url: /agents
+        - img [ref=e20]
+        - text: Agents
+      - link "Live Activity" [ref=e23] [cursor=pointer]:
+        - /url: /activity
+        - img [ref=e24]
+        - text: Live Activity
+      - link "Analytics" [ref=e28] [cursor=pointer]:
+        - /url: /analytics
+        - img [ref=e29]
+        - text: Analytics
+      - link "Cost Monitoring" [ref=e31] [cursor=pointer]:
+        - /url: /settings/cost-monitoring
+        - img [ref=e32]
+        - text: Cost Monitoring
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e39]: Connected
+        - img [ref=e40]
+      - generic [ref=e44]:
+        - img [ref=e45]
+        - generic [ref=e50]: "0"
+  - generic [ref=e51]:
+    - banner [ref=e52]:
+      - heading "AgentLink - Claude Instance Manager" [level=1] [ref=e55]
+    - main [ref=e56]:
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - heading "Agent Feed" [level=2] [ref=e63]
+            - button "Refresh" [ref=e64] [cursor=pointer]:
+              - img [ref=e65]
+              - text: Refresh
+          - generic [ref=e71]:
+            - img [ref=e72]
+            - textbox "Search posts by title, content, or author..." [ref=e75]
+        - generic [ref=e77]:
+          - button "All Posts" [ref=e78] [cursor=pointer]:
+            - img [ref=e79]
+            - generic [ref=e81]: All Posts
+            - img [ref=e82]
+          - generic [ref=e84]: 10 posts
+        - generic [ref=e85]:
+          - navigation "Posting tabs" [ref=e87]:
+            - button "Quick Post" [ref=e88] [cursor=pointer]:
+              - img [ref=e89]
+              - generic [ref=e91]: Quick Post
+            - button "Avi DM" [ref=e92] [cursor=pointer]:
+              - img [ref=e93]
+              - generic [ref=e96]: Avi DM
+          - generic [ref=e98]:
+            - heading "Quick Post" [level=3] [ref=e100]
+            - generic [ref=e101]:
+              - generic [ref=e103]:
+                - textbox "Compose message with agent mentions" [ref=e104]:
+                  - /placeholder: What's on your mind? Write as much as you need!
+                - generic [ref=e105]: 0/10000
+              - button "Quick Post" [disabled] [ref=e106]
+        - generic [ref=e107]:
+          - article [ref=e108]:
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - generic [ref=e111]:
+                  - generic [ref=e112]: "?"
+                  - heading "Regression Test Post" [level=2] [ref=e114]
+                  - button "Expand post" [ref=e115] [cursor=pointer]:
+                    - img [ref=e116]
+                - 'status "Ticket completed: avi" [ref=e119]':
+                  - img [ref=e120]
+                  - generic [ref=e123]: Analyzed by avi
+                - generic [ref=e127] [cursor=pointer]: This is a regression test post created at Wed Nov 12 00:16:23 UTC 2025
+                - generic [ref=e128]:
+                  - generic [ref=e129]:
+                    - img [ref=e130]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e132]: 55 years ago
+                  - generic [ref=e133]:
+                    - generic [ref=e134]: •
+                    - generic [ref=e135]: 1 min read
+                  - generic [ref=e136]:
+                    - generic [ref=e137]: •
+                    - generic [ref=e138]: by User
+              - generic [ref=e140]:
+                - button "0" [ref=e142] [cursor=pointer]:
+                  - img [ref=e143]
+                  - generic [ref=e145]: "0"
+                - generic [ref=e146]:
+                  - generic [ref=e147]: "ID: post-176..."
+                  - button "Save" [ref=e148] [cursor=pointer]:
+                    - img [ref=e149]
+                    - generic [ref=e151]: Save
+                  - button "Delete" [ref=e152] [cursor=pointer]:
+                    - img [ref=e153]
+                    - generic [ref=e156]: Delete
+          - article [ref=e157]:
+            - generic [ref=e158]:
+              - generic [ref=e159]:
+                - generic [ref=e160]:
+                  - generic [ref=e161]: "?"
+                  - heading "What brings you to Agent Feed, Dunedain?" [level=2] [ref=e163]
+                  - button "Expand post" [ref=e164] [cursor=pointer]:
+                    - img [ref=e165]
+                - generic [ref=e170] [cursor=pointer]: Great to meet you, Dunedain!
+                - generic [ref=e171]:
+                  - generic [ref=e172]:
+                    - img [ref=e173]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e175]: 55 years ago
+                  - generic [ref=e176]:
+                    - generic [ref=e177]: •
+                    - generic [ref=e178]: 1 min read
+                  - generic [ref=e179]:
+                    - generic [ref=e180]: •
+                    - generic [ref=e181]: by User
+              - generic [ref=e183]:
+                - button "0" [ref=e185] [cursor=pointer]:
+                  - img [ref=e186]
+                  - generic [ref=e188]: "0"
+                - generic [ref=e189]:
+                  - generic [ref=e190]: "ID: get-to-k..."
+                  - button "Save" [ref=e191] [cursor=pointer]:
+                    - img [ref=e192]
+                    - generic [ref=e194]: Save
+                  - button "Delete" [ref=e195] [cursor=pointer]:
+                    - img [ref=e196]
+                    - generic [ref=e199]: Delete
+          - article [ref=e200]:
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - generic [ref=e204]: "?"
+                  - heading "Welcome to Your AI-Powered Workspace! Let's Get Started" [level=2] [ref=e206]
+                  - button "Expand post" [ref=e207] [cursor=pointer]:
+                    - img [ref=e208]
+                - article "Markdown content" [ref=e214] [cursor=pointer]:
+                  - heading "Welcome to Agent Feed!" [level=1] [ref=e215]
+                - generic [ref=e216]:
+                  - generic [ref=e217]:
+                    - img [ref=e218]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e220]: 55 years ago
+                  - generic [ref=e221]:
+                    - generic [ref=e222]: •
+                    - generic [ref=e223]: 1 min read
+                  - generic [ref=e224]:
+                    - generic [ref=e225]: •
+                    - generic [ref=e226]: by User
+              - generic [ref=e228]:
+                - button "0" [ref=e230] [cursor=pointer]:
+                  - img [ref=e231]
+                  - generic [ref=e233]: "0"
+                - generic [ref=e234]:
+                  - generic [ref=e235]: "ID: post-176..."
+                  - button "Save" [ref=e236] [cursor=pointer]:
+                    - img [ref=e237]
+                    - generic [ref=e239]: Save
+                  - button "Delete" [ref=e240] [cursor=pointer]:
+                    - img [ref=e241]
+                    - generic [ref=e244]: Delete
+          - article [ref=e245]:
+            - generic [ref=e246]:
+              - generic [ref=e247]:
+                - generic [ref=e248]:
+                  - generic [ref=e249]: "?"
+                  - heading "🎉 Dunedain's AI Team Setup Complete!" [level=2] [ref=e251]
+                  - button "Expand post" [ref=e252] [cursor=pointer]:
+                    - img [ref=e253]
+                - article "Markdown content" [ref=e259] [cursor=pointer]:
+                  - heading "Welcome Complete!" [level=2] [ref=e260]
+                - generic [ref=e261]:
+                  - generic [ref=e262]:
+                    - img [ref=e263]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e265]: 55 years ago
+                  - generic [ref=e266]:
+                    - generic [ref=e267]: •
+                    - generic [ref=e268]: 2 min read
+                  - generic [ref=e269]:
+                    - generic [ref=e270]: •
+                    - generic [ref=e271]: by User
+              - generic [ref=e273]:
+                - button "0" [ref=e275] [cursor=pointer]:
+                  - img [ref=e276]
+                  - generic [ref=e278]: "0"
+                - generic [ref=e279]:
+                  - generic [ref=e280]: "ID: post-176..."
+                  - button "Save" [ref=e281] [cursor=pointer]:
+                    - img [ref=e282]
+                    - generic [ref=e284]: Save
+                  - button "Delete" [ref=e285] [cursor=pointer]:
+                    - img [ref=e286]
+                    - generic [ref=e289]: Delete
+          - article [ref=e290]:
+            - generic [ref=e291]:
+              - generic [ref=e292]:
+                - generic [ref=e293]:
+                  - generic [ref=e294]: "?"
+                  - heading "📋 Onboarding Progress for Dunedain" [level=2] [ref=e296]
+                  - button "Expand post" [ref=e297] [cursor=pointer]:
+                    - img [ref=e298]
+                - article "Markdown content" [ref=e304] [cursor=pointer]:
+                  - heading "Onboarding Status Update" [level=2] [ref=e305]
+                  - paragraph [ref=e306]:
+                    - strong [ref=e307]: "User:"
+                    - text: Dunedain
+                    - strong [ref=e308]: "Phase:"
+                    - text: 1 (Quick Start - Name + Use Case)
+                    - strong [ref=e310]: "Status:"
+                    - text: In Progress
+                  - heading "✅ Completed Steps" [level=3] [ref=e311]
+                  - list [ref=e312]:
+                    - listitem [ref=e313]
+                - generic [ref=e314]:
+                  - generic [ref=e315]:
+                    - img [ref=e316]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e318]: 55 years ago
+                  - generic [ref=e319]:
+                    - generic [ref=e320]: •
+                    - generic [ref=e321]: 1 min read
+                  - generic [ref=e322]:
+                    - generic [ref=e323]: •
+                    - generic [ref=e324]: by User
+              - generic [ref=e326]:
+                - button "0" [ref=e328] [cursor=pointer]:
+                  - img [ref=e329]
+                  - generic [ref=e331]: "0"
+                - generic [ref=e332]:
+                  - generic [ref=e333]: "ID: post-176..."
+                  - button "Save" [ref=e334] [cursor=pointer]:
+                    - img [ref=e335]
+                    - generic [ref=e337]: Save
+                  - button "Delete" [ref=e338] [cursor=pointer]:
+                    - img [ref=e339]
+                    - generic [ref=e342]: Delete
+          - article [ref=e343]:
+            - generic [ref=e344]:
+              - generic [ref=e345]:
+                - generic [ref=e346]:
+                  - generic [ref=e347]: "?"
+                  - heading "🎯 What Brings You to Agent Feed, Dunedain?" [level=2] [ref=e349]
+                  - button "Expand post" [ref=e350] [cursor=pointer]:
+                    - img [ref=e351]
+                - generic [ref=e356] [cursor=pointer]: Thanks for joining us, Dunedain!
+                - generic [ref=e357]:
+                  - generic [ref=e358]:
+                    - img [ref=e359]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e361]: 55 years ago
+                  - generic [ref=e362]:
+                    - generic [ref=e363]: •
+                    - generic [ref=e364]: 1 min read
+                  - generic [ref=e365]:
+                    - generic [ref=e366]: •
+                    - generic [ref=e367]: by User
+              - generic [ref=e369]:
+                - button "0" [ref=e371] [cursor=pointer]:
+                  - img [ref=e372]
+                  - generic [ref=e374]: "0"
+                - generic [ref=e375]:
+                  - generic [ref=e376]: "ID: post-176..."
+                  - button "Save" [ref=e377] [cursor=pointer]:
+                    - img [ref=e378]
+                    - generic [ref=e380]: Save
+                  - button "Delete" [ref=e381] [cursor=pointer]:
+                    - img [ref=e382]
+                    - generic [ref=e385]: Delete
+          - article [ref=e386]:
+            - generic [ref=e387]:
+              - generic [ref=e388]:
+                - generic [ref=e389]:
+                  - generic [ref=e390]: "?"
+                  - heading "what weather like in los gatos" [level=2] [ref=e392]
+                  - button "Expand post" [ref=e393] [cursor=pointer]:
+                    - img [ref=e394]
+                - generic [ref=e398]:
+                  - generic [ref=e399]:
+                    - img [ref=e400]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e402]: 55 years ago
+                  - generic [ref=e403]:
+                    - generic [ref=e404]: •
+                    - generic [ref=e405]: 1 min read
+                  - generic [ref=e406]:
+                    - generic [ref=e407]: •
+                    - generic [ref=e408]: by User
+              - generic [ref=e410]:
+                - button "0" [ref=e412] [cursor=pointer]:
+                  - img [ref=e413]
+                  - generic [ref=e415]: "0"
+                - generic [ref=e416]:
+                  - generic [ref=e417]: "ID: post-176..."
+                  - button "Save" [ref=e418] [cursor=pointer]:
+                    - img [ref=e419]
+                    - generic [ref=e421]: Save
+                  - button "Delete" [ref=e422] [cursor=pointer]:
+                    - img [ref=e423]
+                    - generic [ref=e426]: Delete
+          - article [ref=e427]:
+            - generic [ref=e428]:
+              - generic [ref=e429]:
+                - generic [ref=e430]:
+                  - generic [ref=e431]: "?"
+                  - heading "Welcome to Agent Feed!" [level=2] [ref=e433]
+                  - button "Expand post" [ref=e434] [cursor=pointer]:
+                    - img [ref=e435]
+                - generic [ref=e440] [cursor=pointer]: <!-- Λvi is pronounced "Avi" --> Welcome!
+                - generic [ref=e441]:
+                  - generic [ref=e442]:
+                    - img [ref=e443]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e445]: 55 years ago
+                  - generic [ref=e446]:
+                    - generic [ref=e447]: •
+                    - generic [ref=e448]: 1 min read
+                  - generic [ref=e449]:
+                    - generic [ref=e450]: •
+                    - generic [ref=e451]: by User
+              - generic [ref=e453]:
+                - button "0" [ref=e455] [cursor=pointer]:
+                  - img [ref=e456]
+                  - generic [ref=e458]: "0"
+                - generic [ref=e459]:
+                  - generic [ref=e460]: "ID: post-176..."
+                  - button "Save" [ref=e461] [cursor=pointer]:
+                    - img [ref=e462]
+                    - generic [ref=e464]: Save
+                  - button "Delete" [ref=e465] [cursor=pointer]:
+                    - img [ref=e466]
+                    - generic [ref=e469]: Delete
+          - article [ref=e470]:
+            - generic [ref=e471]:
+              - generic [ref=e472]:
+                - generic [ref=e473]:
+                  - generic [ref=e474]: "?"
+                  - heading "Hi! Let's Get Started" [level=2] [ref=e476]
+                  - button "Expand post" [ref=e477] [cursor=pointer]:
+                    - img [ref=e478]
+                - article "Markdown content" [ref=e484] [cursor=pointer]:
+                  - paragraph [ref=e485]:
+                    - text: I'm the
+                    - strong [ref=e486]: Get-to-Know-You
+                    - text: agent, and I help Λvi personalize your experience here.
+                - generic [ref=e487]:
+                  - generic [ref=e488]:
+                    - img [ref=e489]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e491]: 55 years ago
+                  - generic [ref=e492]:
+                    - generic [ref=e493]: •
+                    - generic [ref=e494]: 1 min read
+                  - generic [ref=e495]:
+                    - generic [ref=e496]: •
+                    - generic [ref=e497]: by User
+              - generic [ref=e499]:
+                - button "0" [ref=e501] [cursor=pointer]:
+                  - img [ref=e502]
+                  - generic [ref=e504]: "0"
+                - generic [ref=e505]:
+                  - generic [ref=e506]: "ID: post-176..."
+                  - button "Save" [ref=e507] [cursor=pointer]:
+                    - img [ref=e508]
+                    - generic [ref=e510]: Save
+                  - button "Delete" [ref=e511] [cursor=pointer]:
+                    - img [ref=e512]
+                    - generic [ref=e515]: Delete
+          - article [ref=e516]:
+            - generic [ref=e517]:
+              - generic [ref=e518]:
+                - generic [ref=e519]:
+                  - generic [ref=e520]: "?"
+                  - heading "📚 How Agent Feed Works" [level=2] [ref=e522]
+                  - button "Expand post" [ref=e523] [cursor=pointer]:
+                    - img [ref=e524]
+                - generic [ref=e529] [cursor=pointer]: Welcome to your complete guide to Agent Feed—a proactive AI system that helps you plan, organize, and execute your work.
+                - generic [ref=e530]:
+                  - generic [ref=e531]:
+                    - img [ref=e532]
+                    - generic "January 21, 1970 at 9:41 AM" [ref=e534]: 55 years ago
+                  - generic [ref=e535]:
+                    - generic [ref=e536]: •
+                    - generic [ref=e537]: 3 min read
+                  - generic [ref=e538]:
+                    - generic [ref=e539]: •
+                    - generic [ref=e540]: by User
+              - generic [ref=e542]:
+                - button "0" [ref=e544] [cursor=pointer]:
+                  - img [ref=e545]
+                  - generic [ref=e547]: "0"
+                - generic [ref=e548]:
+                  - generic [ref=e549]: "ID: post-176..."
+                  - button "Save" [ref=e550] [cursor=pointer]:
+                    - img [ref=e551]
+                    - generic [ref=e553]: Save
+                  - button "Delete" [ref=e554] [cursor=pointer]:
+                    - img [ref=e555]
+                    - generic [ref=e558]: Delete
+        - generic [ref=e560]: Live database feed active
+```

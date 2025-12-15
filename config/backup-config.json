@@ -1,0 +1,89 @@
+{
+  "backup": {
+    "schedule": {
+      "daily": "0 2 * * *",
+      "weekly": "0 3 * * 0",
+      "description": "Daily backups at 2 AM, weekly full backup on Sunday at 3 AM"
+    },
+    "retention": {
+      "dailyBackups": 7,
+      "weeklyBackups": 4,
+      "monthlyBackups": 12,
+      "description": "Keep 7 daily, 4 weekly, 12 monthly backups"
+    },
+    "destinations": {
+      "local": {
+        "enabled": true,
+        "path": "/workspaces/agent-feed/backups",
+        "maxSizeGB": 50
+      },
+      "s3": {
+        "enabled": false,
+        "bucket": "your-backup-bucket",
+        "region": "us-east-1",
+        "prefix": "agent-feed-backups/",
+        "storageClass": "STANDARD_IA",
+        "description": "Set enabled=true and configure AWS credentials when ready for S3"
+      }
+    },
+    "databases": {
+      "postgresql": {
+        "enabled": true,
+        "host": "${DB_HOST:-localhost}",
+        "port": "${DB_PORT:-5432}",
+        "database": "${POSTGRES_DB:-avidm_dev}",
+        "user": "${POSTGRES_USER:-postgres}",
+        "password": "${POSTGRES_PASSWORD}",
+        "format": "custom",
+        "compression": 9
+      },
+      "sqlite": {
+        "enabled": true,
+        "databases": [
+          "database.db",
+          "data/agent-pages.db",
+          "data/token-analytics.db",
+          "data/agent-feed.db"
+        ]
+      }
+    },
+    "userData": {
+      "enabled": true,
+      "paths": [
+        ".claude/config",
+        ".claude/memory",
+        "agents",
+        "config/agents.json"
+      ]
+    },
+    "verification": {
+      "enabled": true,
+      "methods": ["checksum", "integrity", "restore-test"]
+    },
+    "notifications": {
+      "enabled": false,
+      "email": {
+        "enabled": false,
+        "from": "backup@agent-feed.local",
+        "to": ["admin@agent-feed.local"],
+        "smtp": {
+          "host": "smtp.gmail.com",
+          "port": 587,
+          "secure": false,
+          "user": "${SMTP_USER}",
+          "password": "${SMTP_PASSWORD}"
+        }
+      },
+      "webhook": {
+        "enabled": false,
+        "url": "https://your-webhook-url.com/backup-status",
+        "method": "POST"
+      }
+    },
+    "compression": {
+      "enabled": true,
+      "algorithm": "gzip",
+      "level": 9
+    }
+  }
+}

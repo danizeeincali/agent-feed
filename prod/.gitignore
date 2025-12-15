@@ -1,0 +1,57 @@
+# Production Instance Git Ignore Rules
+
+# Protect entire agent workspace
+agent_workspace/*
+!agent_workspace/.gitignore
+!agent_workspace/README.md
+!agent_workspace/.protected
+
+# Logs and runtime data
+logs/*.log
+logs/*.txt
+monitoring/*.json
+monitoring/*.dat
+
+# Security and secrets
+security/*.key
+security/*.pem
+security/*.cert
+security/*.secret
+*.env
+*.credential
+
+# Backups (too large for git)
+backups/*.tar
+backups/*.gz
+backups/*.zip
+backups/*.bak
+
+# Terminal session data
+terminal/*.session
+terminal/*.history
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+*.swp
+*.swo
+*~
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Claude runtime
+.claude-cache/
+.claude-session/
+
+# Node modules if any
+node_modules/
+
+# Python if any
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/

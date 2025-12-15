@@ -1,0 +1,93 @@
+# Claude Code Agent Orchestrator Dockerfile
+FROM node:18-alpine AS base
+
+# Install system dependencies
+RUN apk update && apk add --no-cache \
+    curl \
+    ca-certificates \
+    && rm -rf /var/cache/apk/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files for dependency installation
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy source code
+COPY src/orchestration/ ./src/orchestration/
+COPY src/types/ ./src/types/
+COPY src/utils/ ./src/utils/
+
+# Copy agent configurations
+COPY agents/ ./agents/
+
+# Build the orchestrator
+FROM base AS build
+RUN npm install -g typescript
+RUN npx tsc --project tsconfig.json --outDir dist
+
+# Production image
+FROM node:18-alpine AS production
+
+# Install runtime dependencies
+RUN apk update && apk add --no-cache \
+    curl \
+    ca-certificates \
+    && rm -rf /var/cache/apk/*
+
+# Create app user
+RUN addgroup -g 1001 -S nodejs && adduser -S orchestrator -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy built application
+COPY --from=build --chown=orchestrator:nodejs /app/dist ./dist
+COPY --from=build --chown=orchestrator:nodejs /app/node_modules ./node_modules
+COPY --from=build --chown=orchestrator:nodejs /app/agents ./agents
+
+# Create orchestrator entry point
+RUN echo '#!/usr/bin/env node' > /app/orchestrator.js && \
+    echo 'const { ClaudeCodeAgentOrchestrator } = require("./dist/orchestration/claude-code-agent-orchestrator");' >> /app/orchestrator.js && \
+    echo 'const express = require("express");' >> /app/orchestrator.js && \
+    echo 'const app = express();' >> /app/orchestrator.js && \
+    echo 'const port = process.env.ORCHESTRATOR_PORT || 8000;' >> /app/orchestrator.js && \
+    echo 'app.use(express.json());' >> /app/orchestrator.js && \
+    echo 'const orchestrator = new ClaudeCodeAgentOrchestrator();' >> /app/orchestrator.js && \
+    echo 'app.get("/health", (req, res) => res.json({ status: "healthy", timestamp: new Date().toISOString() }));' >> /app/orchestrator.js && \
+    echo 'app.post("/execute-agent", async (req, res) => {' >> /app/orchestrator.js && \
+    echo '  try {' >> /app/orchestrator.js && \
+    echo '    const { agentType, task, options } = req.body;' >> /app/orchestrator.js && \
+    echo '    const result = await orchestrator.executeAgentWithPosting(agentType, task, options);' >> /app/orchestrator.js && \
+    echo '    res.json(result);' >> /app/orchestrator.js && \
+    echo '  } catch (error) {' >> /app/orchestrator.js && \
+    echo '    res.status(500).json({ error: error.message });' >> /app/orchestrator.js && \
+    echo '  }' >> /app/orchestrator.js && \
+    echo '});' >> /app/orchestrator.js && \
+    echo 'app.listen(port, () => console.log(`Claude Code Orchestrator running on port ${port}`));' >> /app/orchestrator.js && \
+    chmod +x /app/orchestrator.js
+
+# Create logs directory
+RUN mkdir -p /app/logs && chown orchestrator:nodejs /app/logs
+
+# Switch to non-root user
+USER orchestrator
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${ORCHESTRATOR_PORT:-8000}/health || exit 1
+
+# Expose port
+EXPOSE 8000
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV ORCHESTRATOR_PORT=8000
+ENV LOG_LEVEL=info
+
+# Start the orchestrator
+CMD ["node", "/app/orchestrator.js"]

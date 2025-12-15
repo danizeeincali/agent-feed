@@ -1,0 +1,58 @@
+{
+  "pageId": "test-calendar-page",
+  "agentId": "test-agent",
+  "title": "Test Calendar Component",
+  "content": {
+    "components": [
+      {
+        "type": "Header",
+        "props": {
+          "level": 1,
+          "text": "Advanced Calendar Test"
+        }
+      },
+      {
+        "type": "Calendar",
+        "props": {
+          "events": [
+            {
+              "id": "event-1",
+              "title": "Team Standup",
+              "date": "2025-10-06",
+              "type": "meeting"
+            },
+            {
+              "id": "event-2",
+              "title": "Code Review Session",
+              "date": "2025-10-08",
+              "type": "work"
+            },
+            {
+              "id": "event-3",
+              "title": "Sprint Planning",
+              "date": "2025-10-13",
+              "type": "meeting"
+            },
+            {
+              "id": "event-4",
+              "title": "Product Demo",
+              "date": "2025-10-15",
+              "type": "presentation"
+            },
+            {
+              "id": "event-5",
+              "title": "Release v2.0",
+              "date": "2025-10-20",
+              "type": "deadline"
+            }
+          ],
+          "defaultDate": "2025-10-06",
+          "onDateSelect": {
+            "endpoint": "/api/calendar-select",
+            "method": "POST"
+          }
+        }
+      }
+    ]
+  }
+}

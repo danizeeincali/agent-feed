@@ -1,0 +1,48 @@
+version: "1.0.0"
+agent_id: "meta-agent"
+permissions:
+  api_endpoints:
+    - path: "/api/posts"
+      methods:
+        - "POST"
+      rate_limit: "5/minute"
+      required_auth: true
+  workspace:
+    root: "/workspaces/agent-feed/prod/agent_workspace/meta-agent"
+    max_storage: "100MB"
+    allowed_paths:
+      - "/workspaces/agent-feed/prod/agent_workspace/meta-agent/**"
+      - "/workspaces/agent-feed/prod/.claude/agents/**"
+    forbidden_paths:
+      - "/workspaces/agent-feed/src/**"
+      - "/workspaces/agent-feed/api-server/**"
+      - "/workspaces/agent-feed/frontend/**"
+  tool_permissions:
+    allowed:
+      - "Read"
+      - "Write"
+      - "Edit"
+      - "Bash"
+      - "Grep"
+      - "Glob"
+      - "WebFetch"
+      - "TodoWrite"
+      - "WebSearch"
+    forbidden:
+      - "KillShell"
+  resource_limits:
+    max_memory: "256MB"
+    max_cpu_percent: 30
+    max_execution_time: "180s"
+    max_concurrent_tasks: 2
+  posting_rules:
+    auto_post_outcomes: false
+    post_threshold: "never"
+    default_post_type: "new_post"
+_metadata:
+  created_at: "2025-10-17T02:38:00Z"
+  updated_at: "2025-10-17T02:38:00Z"
+  updated_by: "sparc-coder-agent"
+  description: "Protected configuration for meta-agent - system agent for creating
+    new agents"
+checksum: "sha256:2942374417152ec6a43d7d025f92c970f60453bd6946dc5f549b29bc5a33095b"

@@ -1,0 +1,72 @@
+{
+  "systemInstructions": {
+    "title": "Allowed Operations for Production Claude Instance",
+    "version": "1.0.0",
+    "lastUpdated": "2025-08-21T13:45:33.000Z",
+    "description": "Comprehensive whitelist of operations the production Claude instance is permitted to perform"
+  },
+  "fileOperations": {
+    "read": {
+      "allowed": true,
+      "paths": [
+        "/workspaces/agent-feed/prod/system_instructions/**",
+        "/workspaces/agent-feed/prod/agent_workspace/**",
+        "/workspaces/agent-feed/prod/config/**",
+        "/workspaces/agent-feed/prod/logs/**",
+        "/workspaces/agent-feed/prod/monitoring/**",
+        "/workspaces/agent-feed/prod/CLAUDE.md"
+      ],
+      "restrictions": "Read-only access to system instructions and production directories"
+    },
+    "write": {
+      "allowed": true,
+      "paths": [
+        "/workspaces/agent-feed/prod/agent_workspace/**",
+        "/workspaces/agent-feed/prod/logs/**",
+        "/workspaces/agent-feed/prod/monitoring/alerts/**",
+        "/workspaces/agent-feed/prod/reports/**"
+      ],
+      "restrictions": "Write access limited to agent workspace and designated logging areas"
+    },
+    "create": {
+      "allowed": true,
+      "paths": [
+        "/workspaces/agent-feed/prod/agent_workspace/**",
+        "/workspaces/agent-feed/prod/logs/**",
+        "/workspaces/agent-feed/prod/reports/**"
+      ],
+      "fileTypes": [".txt", ".md", ".json", ".log", ".tmp", ".data"],
+      "restrictions": "File creation only in agent workspace and logging directories"
+    },
+    "delete": {
+      "allowed": true,
+      "paths": [
+        "/workspaces/agent-feed/prod/agent_workspace/temp/**",
+        "/workspaces/agent-feed/prod/logs/*.tmp",
+        "/workspaces/agent-feed/prod/agent_workspace/outputs/**"
+      ],
+      "restrictions": "Deletion only for temporary files and agent outputs"
+    }
+  },
+  "agentOperations": {
+    "workspaceManagement": {
+      "allowed": true,
+      "scope": "/workspaces/agent-feed/prod/agent_workspace/",
+      "capabilities": [
+        "Create agent work directories",
+        "Store agent outputs and data",
+        "Manage temporary files",
+        "Write agent logs and reports"
+      ]
+    },
+    "swarmCoordination": {
+      "allowed": true,
+      "capabilities": [
+        "Initialize agent swarms within workspace",
+        "Coordinate multi-agent tasks",
+        "Share data between agents in workspace",
+        "Monitor agent performance and health"
+      ]
+    }
+  }
+}

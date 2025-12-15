@@ -1,0 +1,522 @@
+/* Agent-specific styling for professional interface */
+
+/* Agent Status Colors */
+.agent-status-active {
+  @apply bg-green-100 text-green-800 border-green-200;
+}
+
+.agent-status-busy {
+  @apply bg-blue-100 text-blue-800 border-blue-200;
+}
+
+.agent-status-idle {
+  @apply bg-yellow-100 text-yellow-800 border-yellow-200;
+}
+
+.agent-status-offline {
+  @apply bg-red-100 text-red-800 border-red-200;
+}
+
+/* Agent Type Specific Styling */
+.agent-coordinator {
+  @apply border-l-4 border-blue-500;
+}
+
+.agent-specialist {
+  @apply border-l-4 border-purple-500;
+}
+
+.agent-analyst {
+  @apply border-l-4 border-indigo-500;
+}
+
+.agent-reviewer {
+  @apply border-l-4 border-teal-500;
+}
+
+.agent-documenter {
+  @apply border-l-4 border-green-500;
+}
+
+.agent-tester {
+  @apply border-l-4 border-orange-500;
+}
+
+.agent-security {
+  @apply border-l-4 border-red-500;
+}
+
+.agent-optimizer {
+  @apply border-l-4 border-yellow-500;
+}
+
+.agent-coder {
+  @apply border-l-4 border-cyan-500;
+}
+
+.agent-engineer {
+  @apply border-l-4 border-gray-500;
+}
+
+.agent-monitor {
+  @apply border-l-4 border-pink-500;
+}
+
+.agent-researcher {
+  @apply border-l-4 border-violet-500;
+}
+
+/* Performance Metrics Styling */
+.performance-excellent {
+  @apply bg-green-500 text-white;
+}
+
+.performance-good {
+  @apply bg-blue-500 text-white;
+}
+
+.performance-average {
+  @apply bg-yellow-500 text-white;
+}
+
+.performance-poor {
+  @apply bg-red-500 text-white;
+}
+
+/* Workflow Status Styling */
+.workflow-running {
+  @apply bg-blue-50 border-blue-200;
+}
+
+.workflow-completed {
+  @apply bg-green-50 border-green-200;
+}
+
+.workflow-failed {
+  @apply bg-red-50 border-red-200;
+}
+
+.workflow-paused {
+  @apply bg-yellow-50 border-yellow-200;
+}
+
+.workflow-cancelled {
+  @apply bg-gray-50 border-gray-200;
+}
+
+/* Priority Levels */
+.priority-critical {
+  @apply bg-red-100 text-red-800 border-red-200;
+}
+
+.priority-high {
+  @apply bg-orange-100 text-orange-800 border-orange-200;
+}
+
+.priority-medium {
+  @apply bg-blue-100 text-blue-800 border-blue-200;
+}
+
+.priority-low {
+  @apply bg-gray-100 text-gray-800 border-gray-200;
+}
+
+/* Post Type Styling */
+.post-insight {
+  @apply border-l-4 border-blue-500 bg-blue-50;
+}
+
+.post-code-review {
+  @apply border-l-4 border-purple-500 bg-purple-50;
+}
+
+.post-task-completion {
+  @apply border-l-4 border-green-500 bg-green-50;
+}
+
+.post-alert {
+  @apply border-l-4 border-red-500 bg-red-50;
+}
+
+.post-recommendation {
+  @apply border-l-4 border-indigo-500 bg-indigo-50;
+}
+
+/* Engagement Animations */
+.engagement-like:hover {
+  @apply transform scale-110 transition-transform duration-200;
+}
+
+.engagement-heart:hover {
+  @apply transform scale-110 transition-transform duration-200;
+}
+
+.engagement-liked {
+  @apply text-blue-600;
+  animation: pulse-blue 0.3s ease-in-out;
+}
+
+.engagement-hearted {
+  @apply text-red-600;
+  animation: pulse-red 0.3s ease-in-out;
+}
+
+.engagement-bookmarked {
+  @apply text-yellow-600;
+  animation: pulse-yellow 0.3s ease-in-out;
+}
+
+/* Pulse Animations */
+@keyframes pulse-blue {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-yellow {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Activity Indicators */
+.activity-indicator {
+  position: relative;
+}
+
+.activity-indicator::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  border: 2px solid white;
+  animation: pulse-activity 2s infinite;
+}
+
+@keyframes pulse-activity {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Progress Bars */
+.progress-bar {
+  @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+.progress-fill {
+  @apply h-2 rounded-full transition-all duration-300 ease-in-out;
+}
+
+.progress-excellent {
+  @apply bg-green-500;
+}
+
+.progress-good {
+  @apply bg-blue-500;
+}
+
+.progress-average {
+  @apply bg-yellow-500;
+}
+
+.progress-poor {
+  @apply bg-red-500;
+}
+
+/* Connection Status */
+.connection-indicator {
+  position: relative;
+  display: inline-block;
+}
+
+.connection-connected {
+  @apply text-green-500;
+}
+
+.connection-disconnected {
+  @apply text-red-500;
+}
+
+.connection-connecting {
+  @apply text-yellow-500;
+  animation: pulse 1s infinite;
+}
+
+/* Hover Effects */
+.agent-card:hover {
+  @apply shadow-lg transform -translate-y-1 transition-all duration-200;
+}
+
+.workflow-step:hover {
+  @apply bg-gray-50 transition-colors duration-200;
+}
+
+.post-card:hover {
+  @apply shadow-md transition-shadow duration-200;
+}
+
+/* Loading States */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Scrollbar Styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    @apply bg-gray-900 text-gray-100;
+  }
+  
+  .dark-mode .agent-card {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  .dark-mode .workflow-step {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  .dark-mode .post-card {
+    @apply bg-gray-800 border-gray-700;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .agent-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .workflow-timeline {
+    padding-left: 1rem;
+  }
+  
+  .activity-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .agent-status-active {
+    @apply border-2 border-green-600;
+  }
+  
+  .agent-status-busy {
+    @apply border-2 border-blue-600;
+  }
+  
+  .agent-status-idle {
+    @apply border-2 border-yellow-600;
+  }
+  
+  .agent-status-offline {
+    @apply border-2 border-red-600;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .agent-card:hover {
+    transform: none;
+  }
+  
+  .engagement-like:hover,
+  .engagement-heart:hover {
+    transform: none;
+  }
+  
+  .activity-indicator::after {
+    animation: none;
+  }
+  
+  .loading-shimmer {
+    animation: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .agent-dashboard {
+    @apply text-black bg-white;
+  }
+  
+  .agent-card {
+    @apply border border-gray-400 shadow-none;
+    break-inside: avoid;
+  }
+  
+  .workflow-visualization {
+    @apply text-black bg-white;
+  }
+  
+  .activity-panel {
+    display: none;
+  }
+}
+
+/* Focus Styles for Accessibility */
+.agent-card:focus-within {
+  @apply ring-2 ring-blue-500 ring-offset-2;
+}
+
+.workflow-step:focus-within {
+  @apply ring-2 ring-blue-500 ring-offset-2;
+}
+
+.post-card:focus-within {
+  @apply ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* Custom Grid Layouts */
+.agent-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.agent-grid-detailed {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .workflow-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Status Badges */
+.status-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.impact-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border;
+}
+
+.capability-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200;
+}
+
+/* Notification Styles */
+.notification-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notification-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.notification-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Tooltip Styles */
+.tooltip {
+  @apply absolute z-10 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.tooltip-trigger:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Code Syntax Highlighting */
+.code-snippet {
+  @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto;
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+}
+
+.code-snippet .keyword {
+  @apply text-blue-400;
+}
+
+.code-snippet .string {
+  @apply text-green-400;
+}
+
+.code-snippet .comment {
+  @apply text-gray-500;
+}
+
+.code-snippet .function {
+  @apply text-yellow-400;
+}
+
+.code-snippet .variable {
+  @apply text-purple-400;
+}
+
+/* Performance Optimization */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

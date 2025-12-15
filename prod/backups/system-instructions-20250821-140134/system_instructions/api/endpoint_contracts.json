@@ -1,0 +1,603 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2025-08-21",
+    "description": "Complete API endpoint contracts for production Claude instance",
+    "security_level": "PRODUCTION",
+    "compliance": "SOC2_TYPE2"
+  },
+  "health_monitoring": {
+    "GET /api/health": {
+      "description": "System health status endpoint",
+      "access_level": "public",
+      "rate_limit": "100/minute",
+      "response_format": {
+        "status": "string",
+        "timestamp": "ISO8601",
+        "components": {
+          "database": "string",
+          "websocket": "string", 
+          "file_system": "string",
+          "memory": "string"
+        },
+        "uptime": "number",
+        "version": "string"
+      },
+      "possible_responses": {
+        "200": "System healthy",
+        "503": "System degraded",
+        "500": "System error"
+      },
+      "security_requirements": {
+        "authentication": false,
+        "authorization": false,
+        "rate_limiting": true,
+        "audit_logging": true
+      }
+    },
+    "GET /api/status": {
+      "description": "Detailed system status information",
+      "access_level": "authenticated",
+      "rate_limit": "50/minute",
+      "response_format": {
+        "system": {
+          "cpu_usage": "number",
+          "memory_usage": "number",
+          "disk_usage": "number",
+          "network_status": "string"
+        },
+        "services": {
+          "api_server": "string",
+          "websocket_server": "string",
+          "database": "string",
+          "cache": "string"
+        },
+        "agents": {
+          "active_count": "number",
+          "total_count": "number",
+          "health_status": "string"
+        }
+      },
+      "security_requirements": {
+        "authentication": true,
+        "authorization": "read_only",
+        "audit_logging": true
+      }
+    }
+  },
+  "metrics_and_analytics": {
+    "GET /api/metrics": {
+      "description": "System performance metrics",
+      "access_level": "authenticated",
+      "rate_limit": "30/minute", 
+      "query_parameters": {
+        "timeframe": {
+          "type": "string",
+          "enum": ["1h", "24h", "7d", "30d"],
+          "default": "1h"
+        },
+        "category": {
+          "type": "string", 
+          "enum": ["system", "agents", "api", "websocket"],
+          "default": "system"
+        }
+      },
+      "response_format": {
+        "timeframe": "string",
+        "category": "string",
+        "metrics": {
+          "requests_per_minute": "number",
+          "average_response_time": "number", 
+          "error_rate": "number",
+          "active_connections": "number"
+        },
+        "generated_at": "ISO8601"
+      },
+      "security_requirements": {
+        "authentication": true,
+        "authorization": "metrics_read",
+        "data_sanitization": true,
+        "audit_logging": true
+      }
+    },
+    "GET /api/metrics/workspace": {
+      "description": "Production workspace metrics",
+      "access_level": "authenticated",
+      "rate_limit": "20/minute",
+      "response_format": {
+        "storage_usage": {
+          "total_used": "string",
+          "total_available": "string",
+          "per_agent_usage": "object"
+        },
+        "operation_counts": {
+          "reads": "number",
+          "writes": "number",
+          "deletes": "number",
+          "errors": "number"
+        },
+        "performance": {
+          "average_operation_time": "number",
+          "slowest_operations": "array",
+          "most_active_agents": "array"
+        }
+      },
+      "security_requirements": {
+        "authentication": true,
+        "authorization": "workspace_metrics",
+        "audit_logging": true
+      }
+    }
+  },
+  "logging_and_audit": {
+    "GET /api/logs": {
+      "description": "Retrieve system logs",
+      "access_level": "authenticated",
+      "rate_limit": "10/minute",
+      "query_parameters": {
+        "level": {
+          "type": "string",
+          "enum": ["debug", "info", "warn", "error"],
+          "default": "info"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["system", "agent", "security", "audit"],
+          "default": "system"
+        },
+        "limit": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 100
+        },
+        "since": {
+          "type": "string",
+          "format": "ISO8601",
+          "description": "Return logs since this timestamp"
+        }
+      },
+      "response_format": {
+        "logs": [
+          {
+            "timestamp": "ISO8601",
+            "level": "string",
+            "category": "string", 
+            "message": "string",
+            "metadata": "object"
+          }
+        ],
+        "total_count": "number",
+        "has_more": "boolean"
+      },
+      "security_requirements": {
+        "authentication": true,
+        "authorization": "logs_read",
+        "data_sanitization": true,
+        "audit_logging": true
+      }
+    },
+    "POST /api/logs": {
+      "description": "Write log entries to production logs",
+      "access_level": "authenticated",
+      "rate_limit": "1000/minute",
+      "request_format": {
+        "level": {
+          "type": "string",
+          "enum": ["debug", "info", "warn", "error"],
+          "required": true
+        },
+        "category": {
+          "type": "string",
+          "enum": ["agent", "operation", "performance"],
+          "required": true
+        },
+        "message": {
+          "type": "string",
+          "max_length": 5000,
+          "required": true
+        },
+        "metadata": {
+          "type": "object",
+          "max_size": "1KB",
+          "required": false
+        }
+      },
+      "validation_rules": {
+        "content_filtering": true,
+        "malware_scanning": true,
+        "size_validation": true,
+        "rate_limiting": true
+      },
+      "security_requirements": {
+        "authentication": true,
+        "authorization": "logs_write",
+        "content_validation": true,
+        "audit_logging": true
+      }
+    }
+  },
+  "workspace_operations": {
+    "GET /api/workspace/status": {
+      "description": "Production workspace status information",
+      "access_level": "authenticated",
+      "rate_limit": "60/minute",
+      "response_format": {
+        "workspace_path": "string",
+        "total_agents": "number",
+        "active_agents": "number",
+        "storage_usage": {
+          "used": "string",
+          "available": "string",
+          "percentage": "number"
+        },
+        "recent_activity": [
+          {
+            "agent_id": "string",
+            "operation": "string",
+            "timestamp": "ISO8601",
+            "status": "string"
+          }
+        ],
+        "health_status": "string"
+      }
+    },
+    "GET /api/workspace/agents": {
+      "description": "List all production agents",
+      "access_level": "authenticated", 
+      "rate_limit": "30/minute",
+      "query_parameters": {
+        "status": {
+          "type": "string",
+          "enum": ["all", "active", "idle", "error"],
+          "default": "all"
+        }
+      },
+      "response_format": {
+        "agents": [
+          {
+            "id": "string",
+            "name": "string",
+            "type": "string",
+            "status": "string",
+            "last_activity": "ISO8601",
+            "workspace_path": "string",
+            "performance_metrics": {
+              "operations_count": "number",
+              "average_response_time": "number",
+              "error_rate": "number"
+            }
+          }
+        ],
+        "total_count": "number"
+      }
+    },
+    "POST /api/workspace/agent/create": {
+      "description": "Create new agent workspace",
+      "access_level": "authenticated",
+      "rate_limit": "10/minute",
+      "request_format": {
+        "agent_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9-_]+$",
+          "max_length": 50,
+          "required": true
+        },
+        "agent_name": {
+          "type": "string",
+          "max_length": 100,
+          "required": true
+        },
+        "agent_type": {
+          "type": "string",
+          "enum": ["researcher", "coder", "analyst", "coordinator"],
+          "required": true
+        },
+        "capabilities": {
+          "type": "array",
+          "items": "string",
+          "max_items": 10,
+          "required": false
+        }
+      },
+      "validation_rules": {
+        "unique_agent_id": true,
+        "valid_agent_type": true,
+        "resource_availability": true,
+        "security_clearance": true
+      },
+      "security_requirements": {
+        "authentication": true,
+        "authorization": "agent_create",
+        "input_sanitization": true,
+        "audit_logging": true
+      }
+    }
+  },
+  "system_information": {
+    "GET /api/system/info": {
+      "description": "Read-only system information",
+      "access_level": "authenticated",
+      "rate_limit": "20/minute",
+      "response_format": {
+        "system": {
+          "environment": "production",
+          "version": "string",
+          "build": "string",
+          "deploy_date": "ISO8601"
+        },
+        "capabilities": [
+          "workspace_management",
+          "agent_coordination", 
+          "health_monitoring",
+          "performance_analytics"
+        ],
+        "limitations": [
+          "no_system_modification",
+          "read_only_configurations",
+          "isolated_workspace_only"
+        ],
+        "boundaries": {
+          "workspace_path": "/workspaces/agent-feed/prod/agent_workspace/",
+          "max_agents": 50,
+          "max_storage": "10GB",
+          "max_processing_time": "1h"
+        }
+      }
+    },
+    "GET /api/system/documentation": {
+      "description": "Access to system documentation",
+      "access_level": "authenticated",
+      "rate_limit": "50/minute",
+      "query_parameters": {
+        "category": {
+          "type": "string",
+          "enum": ["api", "rules", "architecture", "workspace", "migration"],
+          "default": "api"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["markdown", "json", "html"],
+          "default": "markdown"
+        }
+      },
+      "response_format": {
+        "category": "string",
+        "format": "string",
+        "content": "string",
+        "last_updated": "ISO8601",
+        "version": "string"
+      }
+    }
+  },
+  "websocket_protocols": {
+    "connection": {
+      "endpoint": "/ws/production",
+      "authentication_required": true,
+      "max_connections_per_client": 3,
+      "heartbeat_interval": "30s",
+      "idle_timeout": "5m"
+    },
+    "message_types": {
+      "heartbeat": {
+        "direction": "bidirectional",
+        "format": {
+          "type": "heartbeat",
+          "timestamp": "ISO8601"
+        },
+        "rate_limit": "2/minute"
+      },
+      "status_update": {
+        "direction": "server_to_client",
+        "format": {
+          "type": "status_update",
+          "component": "string",
+          "status": "string",
+          "details": "object",
+          "timestamp": "ISO8601"
+        }
+      },
+      "log_stream": {
+        "direction": "server_to_client",
+        "format": {
+          "type": "log_entry",
+          "level": "string",
+          "message": "string",
+          "timestamp": "ISO8601"
+        },
+        "rate_limit": "1000/minute"
+      },
+      "workspace_notification": {
+        "direction": "server_to_client",
+        "format": {
+          "type": "workspace_event",
+          "event": "string",
+          "agent_id": "string",
+          "details": "object",
+          "timestamp": "ISO8601"
+        }
+      }
+    }
+  },
+  "error_handling": {
+    "standard_error_responses": {
+      "400": {
+        "description": "Bad Request",
+        "format": {
+          "error": "string",
+          "message": "string",
+          "details": "object",
+          "timestamp": "ISO8601",
+          "request_id": "string"
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "format": {
+          "error": "authentication_required",
+          "message": "Valid authentication credentials required",
+          "timestamp": "ISO8601"
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "format": {
+          "error": "access_denied",
+          "message": "Operation not permitted for production instance",
+          "allowed_operations": "array",
+          "timestamp": "ISO8601"
+        }
+      },
+      "429": {
+        "description": "Rate Limit Exceeded",
+        "format": {
+          "error": "rate_limit_exceeded",
+          "message": "Too many requests",
+          "retry_after": "number",
+          "limit": "string",
+          "timestamp": "ISO8601"
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "format": {
+          "error": "internal_error", 
+          "message": "An unexpected error occurred",
+          "incident_id": "string",
+          "timestamp": "ISO8601"
+        }
+      }
+    },
+    "custom_error_codes": {
+      "SYSTEM_INSTRUCTIONS_READONLY": {
+        "http_code": 403,
+        "message": "System instructions are read-only for production instance",
+        "recovery_action": "Contact development team for modifications"
+      },
+      "WORKSPACE_QUOTA_EXCEEDED": {
+        "http_code": 413,
+        "message": "Agent workspace quota exceeded",
+        "recovery_action": "Clean up temporary files or request quota increase"
+      },
+      "SECURITY_VIOLATION": {
+        "http_code": 403,
+        "message": "Operation violates security policy",
+        "recovery_action": "Review allowed operations documentation"
+      },
+      "INTEGRITY_CHECK_FAILED": {
+        "http_code": 500,
+        "message": "System instruction integrity verification failed",
+        "recovery_action": "System will auto-recover from backup"
+      }
+    }
+  },
+  "security_headers": {
+    "required_request_headers": {
+      "Authorization": "Bearer token or API key",
+      "Content-Type": "application/json (for POST requests)",
+      "User-Agent": "Production Claude instance identifier"
+    },
+    "required_response_headers": {
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "X-XSS-Protection": "1; mode=block",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "Content-Security-Policy": "default-src 'self'",
+      "X-Rate-Limit-Remaining": "number",
+      "X-Rate-Limit-Reset": "timestamp"
+    }
+  },
+  "data_validation": {
+    "input_validation": {
+      "string_fields": {
+        "max_length": 10000,
+        "forbidden_patterns": [
+          "javascript:", "data:", "vbscript:",
+          "<script", "</script>", "onload=", "onerror=",
+          "'; DROP", "'; DELETE", "'; UPDATE"
+        ],
+        "required_encoding": "UTF-8"
+      },
+      "numeric_fields": {
+        "range_validation": true,
+        "type_validation": true,
+        "overflow_protection": true
+      },
+      "file_uploads": {
+        "max_size": "10MB",
+        "allowed_types": [".md", ".txt", ".json", ".csv", ".log"],
+        "virus_scanning": true,
+        "content_validation": true
+      }
+    },
+    "output_sanitization": {
+      "sensitive_data_removal": [
+        "api_keys", "passwords", "tokens", "personal_information",
+        "email_addresses", "phone_numbers", "ip_addresses"
+      ],
+      "html_encoding": true,
+      "script_removal": true,
+      "size_limits": true
+    }
+  },
+  "compliance_requirements": {
+    "audit_logging": {
+      "log_all_requests": true,
+      "include_request_headers": false,
+      "include_response_data": false,
+      "include_user_identification": true,
+      "retention_period": "90_days"
+    },
+    "data_protection": {
+      "encryption_in_transit": "TLS_1.3",
+      "encryption_at_rest": "AES_256",
+      "key_management": "automated",
+      "data_classification": "internal"
+    },
+    "availability_requirements": {
+      "uptime_target": "99.9%",
+      "response_time_target": "< 200ms",
+      "recovery_time_objective": "< 5_minutes",
+      "recovery_point_objective": "< 1_hour"
+    }
+  },
+  "integration_contracts": {
+    "with_development_environment": {
+      "shared_resources": [
+        "database_read_access",
+        "websocket_monitoring", 
+        "api_documentation_sync"
+      ],
+      "isolation_requirements": [
+        "no_development_workspace_access",
+        "no_development_configuration_modification",
+        "separate_logging_streams"
+      ]
+    },
+    "with_monitoring_systems": {
+      "health_check_integration": {
+        "endpoint": "/api/health",
+        "frequency": "every_30s",
+        "timeout": "5s",
+        "failure_threshold": 3
+      },
+      "metrics_integration": {
+        "push_metrics": true,
+        "metrics_format": "prometheus",
+        "push_frequency": "every_60s"
+      }
+    },
+    "with_backup_systems": {
+      "workspace_backup": {
+        "frequency": "every_6h",
+        "retention": "30_days",
+        "verification": "automatic"
+      },
+      "configuration_backup": {
+        "frequency": "on_change",
+        "retention": "90_days",
+        "verification": "automatic"
+      }
+    }
+  }
+}

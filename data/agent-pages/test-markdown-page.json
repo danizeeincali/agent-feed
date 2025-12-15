@@ -1,0 +1,22 @@
+{
+  "pageId": "test-markdown-page",
+  "agentId": "test-agent",
+  "title": "Test Markdown Component",
+  "content": {
+    "components": [
+      {
+        "type": "Header",
+        "props": {
+          "level": 1,
+          "text": "Advanced Markdown Test"
+        }
+      },
+      {
+        "type": "Markdown",
+        "props": {
+          "content": "# Markdown Rendering Test\n\n## Features Demonstration\n\n### Text Formatting\n\nThis is **bold text** and this is *italic text*. You can also use ~~strikethrough~~ and `inline code`.\n\n### Lists\n\n**Unordered List:**\n- First item\n- Second item\n  - Nested item 1\n  - Nested item 2\n- Third item\n\n**Ordered List:**\n1. Step one\n2. Step two\n3. Step three\n\n### Code Blocks\n\n```javascript\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));\n```\n\n```python\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(fibonacci(10))\n```\n\n### Links and Images\n\nCheck out [OpenAI](https://openai.com) for more information.\n\n### Blockquotes\n\n> \"The only way to do great work is to love what you do.\"\n> \n> — Steve Jobs\n\n### Tables\n\n| Feature | Status | Priority |\n|---------|--------|----------|\n| Authentication | Complete | High |\n| API Integration | In Progress | High |\n| UI Polish | Pending | Medium |\n| Documentation | Complete | Low |\n\n### Task List\n\n- [x] Design mockups\n- [x] Backend API\n- [ ] Frontend components\n- [ ] Testing\n- [ ] Deployment\n\n---\n\n### Horizontal Rules\n\nAbove this line is a horizontal rule.\n\n### Emphasis\n\nThis is ***bold and italic*** text combined!"
+        }
+      }
+    ]
+  }
+}

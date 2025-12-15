@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚨 EMERGENCY: @ Mention Debug Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .debug-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px solid #f0f0f0;
+      border-radius: 8px;
+    }
+    .emergency {
+      border-color: #ff6b6b;
+      background: #fff5f5;
+    }
+    .success {
+      border-color: #51cf66;
+      background: #f3fdf3;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      min-height: 100px;
+    }
+    .dropdown {
+      position: absolute;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .suggestion {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+    }
+    .suggestion:hover, .suggestion.selected {
+      background: #f0f8ff;
+    }
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚨 EMERGENCY: @ Mention System Debug Test</h1>
+  
+  <div class="debug-section emergency">
+    <h2>🔥 CRITICAL TEST: Direct @ Mention Detection</h2>
+    <p><strong>Objective:</strong> Verify @ mention detection triggers dropdown in live browser</p>
+    
+    <div style="position: relative;">
+      <textarea 
+        id="emergency-textarea" 
+        placeholder="Type @ to test mention detection..."
+        style="margin-bottom: 10px;"
+      ></textarea>
+      <div id="emergency-dropdown" class="dropdown" style="display: none; top: 120px; left: 0; right: 0;">
+        <div class="suggestion selected" data-agent="chief-of-staff">
+          <strong>Chief of Staff</strong><br>
+          <small>Strategic coordination and planning</small>
+        </div>
+        <div class="suggestion" data-agent="personal-todos">
+          <strong>Personal Todos</strong><br>
+          <small>Task and project management</small>
+        </div>
+        <div class="suggestion" data-agent="meeting-prep">
+          <strong>Meeting Prep</strong><br>
+          <small>Meeting preparation and coordination</small>
+        </div>
+      </div>
+    </div>
+    
+    <div id="emergency-log" class="log">
+      <div>🔄 Emergency debug test loaded. Type @ to test mention detection.</div>
+    </div>
+  </div>
+
+  <div class="debug-section">
+    <h2>📊 Test Results</h2>
+    <div id="test-results">
+      <div>❌ @ Detection: <span id="at-detection">Not tested</span></div>
+      <div>❌ Dropdown Visibility: <span id="dropdown-visibility">Not tested</span></div>
+      <div>❌ Suggestion Selection: <span id="suggestion-selection">Not tested</span></div>
+      <div>❌ Cursor Position: <span id="cursor-position">Not tested</span></div>
+    </div>
+  </div>
+
+  <div class="debug-section">
+    <h2>🛠️ Manual Test Instructions</h2>
+    <ol>
+      <li><strong>Type @</strong> in the textarea above</li>
+      <li><strong>Verify dropdown appears</strong> with agent suggestions</li>
+      <li><strong>Type @chief</strong> to test filtering</li>
+      <li><strong>Click a suggestion</strong> to test selection</li>
+      <li><strong>Check logs</strong> for detailed debug information</li>
+    </ol>
+  </div>
+
+  <script>
+    // Emergency @ mention detection test
+    const textarea = document.getElementById('emergency-textarea');
+    const dropdown = document.getElementById('emergency-dropdown');
+    const log = document.getElementById('emergency-log');
+    
+    function addLog(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      log.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+      log.scrollTop = log.scrollHeight;
+    }
+    
+    function updateTestResult(id, status, message) {
+      const element = document.getElementById(id);
+      element.textContent = message;
+      element.style.color = status === 'success' ? '#51cf66' : '#ff6b6b';
+    }
+    
+    // Mock agent data
+    const agents = [
+      { id: 'chief-of-staff', name: 'Chief of Staff', description: 'Strategic coordination and planning' },
+      { id: 'personal-todos', name: 'Personal Todos', description: 'Task and project management' },
+      { id: 'meeting-prep', name: 'Meeting Prep', description: 'Meeting preparation and coordination' }
+    ];
+    
+    let currentMention = null;
+    let selectedIndex = 0;
+    
+    function findMentionQuery(text, cursorPosition) {
+      addLog(`🔍 DEBUG: Checking for @ mention - text: "${text.substring(Math.max(0, cursorPosition - 10), cursorPosition + 5)}", cursor: ${cursorPosition}`);
+      
+      // Find @ symbol before cursor
+      let atIndex = -1;
+      for (let i = cursorPosition - 1; i >= 0; i--) {
+        if (text[i] === '@') {
+          atIndex = i;
+          break;
+        }
+        if (text[i] === ' ' || text[i] === '\n') {
+          break;
+        }
+      }
+      
+      if (atIndex === -1) {
+        addLog('❌ No @ symbol found before cursor');
+        return null;
+      }
+      
+      const query = text.substring(atIndex + 1, cursorPosition);
+      addLog(`✅ Found @ mention query: "${query}" at position ${atIndex}`);
+      
+      return { query, startIndex: atIndex };
+    }
+    
+    function showDropdown(query = '') {
+      addLog(`📋 Showing dropdown with query: "${query}"`);
+      
+      // Filter agents based on query
+      const filteredAgents = agents.filter(agent => 
+        agent.name.toLowerCase().includes(query.toLowerCase()) ||
+        agent.description.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      // Update dropdown content
+      dropdown.innerHTML = filteredAgents.map((agent, index) => `
+        <div class="suggestion ${index === 0 ? 'selected' : ''}" data-agent="${agent.id}">
+          <strong>${agent.name}</strong><br>
+          <small>${agent.description}</small>
+        </div>
+      `).join('');
+      
+      dropdown.style.display = 'block';
+      selectedIndex = 0;
+      
+      updateTestResult('dropdown-visibility', 'success', 'Dropdown shown successfully');
+      addLog(`✅ Dropdown visible with ${filteredAgents.length} suggestions`);
+      
+      // Add click handlers
+      dropdown.querySelectorAll('.suggestion').forEach((suggestion, index) => {
+        suggestion.addEventListener('click', () => selectSuggestion(index));
+      });
+    }
+    
+    function hideDropdown() {
+      addLog('❌ Hiding dropdown');
+      dropdown.style.display = 'none';
+      currentMention = null;
+      updateTestResult('dropdown-visibility', 'error', 'Dropdown hidden');
+    }
+    
+    function selectSuggestion(index) {
+      const suggestions = dropdown.querySelectorAll('.suggestion');
+      if (index >= 0 && index < suggestions.length) {
+        const selected = suggestions[index];
+        const agentId = selected.getAttribute('data-agent');
+        const agent = agents.find(a => a.id === agentId);
+        
+        if (agent && currentMention) {
+          // Insert the mention
+          const beforeMention = textarea.value.substring(0, currentMention.startIndex);
+          const afterMention = textarea.value.substring(textarea.selectionStart);
+          const mentionText = `@${agent.name}`;
+          
+          textarea.value = beforeMention + mentionText + ' ' + afterMention;
+          
+          // Set cursor after mention
+          const newCursorPos = currentMention.startIndex + mentionText.length + 1;
+          textarea.setSelectionRange(newCursorPos, newCursorPos);
+          
+          addLog(`✅ Inserted mention: ${mentionText}`);
+          updateTestResult('suggestion-selection', 'success', `Selected: ${agent.name}`);
+          
+          hideDropdown();
+          textarea.focus();
+        }
+      }
+    }
+    
+    // Main input handler
+    textarea.addEventListener('input', (e) => {
+      const value = e.target.value;
+      const cursorPos = e.target.selectionStart;
+      
+      addLog(`🔤 Input changed: "${value.substring(Math.max(0, value.length - 20))}" (cursor: ${cursorPos})`);
+      updateTestResult('cursor-position', 'success', `Position: ${cursorPos}`);
+      
+      // Check for @ mention
+      const mentionQuery = findMentionQuery(value, cursorPos);
+      
+      if (mentionQuery) {
+        addLog(`🎯 @ mention detected: "${mentionQuery.query}"`);
+        updateTestResult('at-detection', 'success', `Detected: @${mentionQuery.query}`);
+        currentMention = mentionQuery;
+        showDropdown(mentionQuery.query);
+      } else {
+        if (currentMention) {
+          addLog('📝 @ mention ended');
+          updateTestResult('at-detection', 'error', 'No active @ mention');
+        }
+        hideDropdown();
+      }
+    });
+    
+    // Keyboard navigation
+    textarea.addEventListener('keydown', (e) => {
+      if (dropdown.style.display === 'block') {
+        const suggestions = dropdown.querySelectorAll('.suggestion');
+        
+        switch (e.key) {
+          case 'ArrowDown':
+            e.preventDefault();
+            selectedIndex = (selectedIndex + 1) % suggestions.length;
+            updateSelection();
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            selectedIndex = (selectedIndex - 1 + suggestions.length) % suggestions.length;
+            updateSelection();
+            break;
+          case 'Enter':
+          case 'Tab':
+            e.preventDefault();
+            selectSuggestion(selectedIndex);
+            break;
+          case 'Escape':
+            e.preventDefault();
+            hideDropdown();
+            break;
+        }
+      }
+    });
+    
+    function updateSelection() {
+      const suggestions = dropdown.querySelectorAll('.suggestion');
+      suggestions.forEach((suggestion, index) => {
+        suggestion.classList.toggle('selected', index === selectedIndex);
+      });
+    }
+    
+    // Auto-focus for immediate testing
+    textarea.focus();
+    addLog('🚀 Ready for testing! Type @ to begin...');
+  </script>
+</body>
+</html>

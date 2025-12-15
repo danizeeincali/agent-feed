@@ -1,0 +1,620 @@
+{
+  "page": {
+    "title": "Chart Examples - Comprehensive Demo",
+    "description": "Complete showcase of all chart types with real-world data examples",
+    "author": "Claude Code",
+    "version": "1.0.0",
+    "published": true,
+    "components": [
+      {
+        "type": "header",
+        "props": {
+          "title": "Chart Examples Gallery",
+          "level": 1
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "This page demonstrates all available chart types with realistic data scenarios. Each example includes different configurations and styling options."
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Line Charts",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### User Growth Trends (2024)\nTrack monthly active users and new signups with trend analysis."
+        }
+      },
+      {
+        "type": "LineChart",
+        "props": {
+          "data": {
+            "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            "datasets": [
+              {
+                "label": "Active Users",
+                "data": [1200, 1450, 1800, 2100, 2400, 2850, 3200, 3600, 4100, 4500, 5000, 5600],
+                "borderColor": "rgb(59, 130, 246)",
+                "backgroundColor": "rgba(59, 130, 246, 0.1)",
+                "fill": true,
+                "tension": 0.4
+              },
+              {
+                "label": "New Signups",
+                "data": [250, 280, 350, 320, 380, 450, 400, 480, 520, 450, 550, 650],
+                "borderColor": "rgb(16, 185, 129)",
+                "backgroundColor": "rgba(16, 185, 129, 0.1)",
+                "fill": true,
+                "tension": 0.4
+              }
+            ]
+          },
+          "config": {
+            "responsive": true,
+            "plugins": {
+              "legend": {
+                "position": "top"
+              },
+              "title": {
+                "display": true,
+                "text": "User Growth Analytics - 2024"
+              }
+            },
+            "scales": {
+              "y": {
+                "beginAtZero": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Revenue Performance (Multi-line with gradient)\nQuarterly revenue breakdown by product category."
+        }
+      },
+      {
+        "type": "LineChart",
+        "props": {
+          "data": {
+            "labels": ["Q1 2023", "Q2 2023", "Q3 2023", "Q4 2023", "Q1 2024", "Q2 2024", "Q3 2024", "Q4 2024"],
+            "datasets": [
+              {
+                "label": "SaaS Subscriptions",
+                "data": [45000, 52000, 58000, 67000, 75000, 84000, 92000, 105000],
+                "borderColor": "rgb(139, 92, 246)",
+                "backgroundColor": "rgba(139, 92, 246, 0.2)",
+                "fill": true,
+                "tension": 0.3
+              },
+              {
+                "label": "Professional Services",
+                "data": [28000, 31000, 35000, 42000, 48000, 53000, 61000, 69000],
+                "borderColor": "rgb(236, 72, 153)",
+                "backgroundColor": "rgba(236, 72, 153, 0.2)",
+                "fill": true,
+                "tension": 0.3
+              },
+              {
+                "label": "Enterprise Licenses",
+                "data": [15000, 18000, 22000, 28000, 35000, 41000, 48000, 58000],
+                "borderColor": "rgb(251, 146, 60)",
+                "backgroundColor": "rgba(251, 146, 60, 0.2)",
+                "fill": true,
+                "tension": 0.3
+              }
+            ]
+          },
+          "config": {
+            "responsive": true,
+            "plugins": {
+              "legend": {
+                "position": "bottom"
+              },
+              "title": {
+                "display": true,
+                "text": "Revenue by Product Category (USD)"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Bar Charts",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Sales Performance by Region (Vertical)\nCompare sales across different geographical regions."
+        }
+      },
+      {
+        "type": "BarChart",
+        "props": {
+          "data": {
+            "labels": ["North America", "Europe", "Asia Pacific", "Latin America", "Middle East", "Africa"],
+            "datasets": [
+              {
+                "label": "Q3 2024",
+                "data": [125000, 98000, 145000, 42000, 38000, 28000],
+                "backgroundColor": "rgba(59, 130, 246, 0.8)",
+                "borderColor": "rgb(59, 130, 246)",
+                "borderWidth": 1
+              },
+              {
+                "label": "Q4 2024",
+                "data": [142000, 108000, 168000, 51000, 45000, 35000],
+                "backgroundColor": "rgba(16, 185, 129, 0.8)",
+                "borderColor": "rgb(16, 185, 129)",
+                "borderWidth": 1
+              }
+            ]
+          },
+          "config": {
+            "responsive": true,
+            "plugins": {
+              "legend": {
+                "position": "top"
+              },
+              "title": {
+                "display": true,
+                "text": "Regional Sales Comparison (USD)"
+              }
+            },
+            "scales": {
+              "y": {
+                "beginAtZero": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Project Timeline (Horizontal)\nTask completion status across different teams."
+        }
+      },
+      {
+        "type": "BarChart",
+        "props": {
+          "data": {
+            "labels": ["Frontend Team", "Backend Team", "DevOps Team", "QA Team", "Design Team", "Product Team"],
+            "datasets": [
+              {
+                "label": "Completed",
+                "data": [45, 38, 28, 52, 35, 41],
+                "backgroundColor": "rgba(34, 197, 94, 0.8)"
+              },
+              {
+                "label": "In Progress",
+                "data": [12, 15, 8, 11, 9, 14],
+                "backgroundColor": "rgba(251, 191, 36, 0.8)"
+              },
+              {
+                "label": "Blocked",
+                "data": [3, 5, 2, 4, 1, 3],
+                "backgroundColor": "rgba(239, 68, 68, 0.8)"
+              }
+            ]
+          },
+          "config": {
+            "indexAxis": "y",
+            "responsive": true,
+            "plugins": {
+              "legend": {
+                "position": "right"
+              },
+              "title": {
+                "display": true,
+                "text": "Task Status by Team"
+              }
+            },
+            "scales": {
+              "x": {
+                "stacked": true
+              },
+              "y": {
+                "stacked": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Pie Charts",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Market Share Distribution\nBreakdown of market share by competitor."
+        }
+      },
+      {
+        "type": "PieChart",
+        "props": {
+          "data": {
+            "labels": ["Our Product", "Competitor A", "Competitor B", "Competitor C", "Others"],
+            "datasets": [
+              {
+                "label": "Market Share",
+                "data": [32, 28, 18, 12, 10],
+                "backgroundColor": [
+                  "rgba(59, 130, 246, 0.8)",
+                  "rgba(239, 68, 68, 0.8)",
+                  "rgba(251, 191, 36, 0.8)",
+                  "rgba(139, 92, 246, 0.8)",
+                  "rgba(156, 163, 175, 0.8)"
+                ],
+                "borderColor": [
+                  "rgb(59, 130, 246)",
+                  "rgb(239, 68, 68)",
+                  "rgb(251, 191, 36)",
+                  "rgb(139, 92, 246)",
+                  "rgb(156, 163, 175)"
+                ],
+                "borderWidth": 2
+              }
+            ]
+          },
+          "config": {
+            "responsive": true,
+            "plugins": {
+              "legend": {
+                "position": "right"
+              },
+              "title": {
+                "display": true,
+                "text": "Market Share Analysis (%)"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Traffic Sources (Donut Chart)\nWebsite traffic breakdown by source channel."
+        }
+      },
+      {
+        "type": "PieChart",
+        "props": {
+          "data": {
+            "labels": ["Organic Search", "Direct", "Social Media", "Referral", "Email", "Paid Ads"],
+            "datasets": [
+              {
+                "label": "Traffic Share",
+                "data": [42, 23, 15, 10, 6, 4],
+                "backgroundColor": [
+                  "rgba(16, 185, 129, 0.8)",
+                  "rgba(59, 130, 246, 0.8)",
+                  "rgba(236, 72, 153, 0.8)",
+                  "rgba(251, 146, 60, 0.8)",
+                  "rgba(139, 92, 246, 0.8)",
+                  "rgba(251, 191, 36, 0.8)"
+                ],
+                "borderWidth": 2
+              }
+            ]
+          },
+          "config": {
+            "responsive": true,
+            "plugins": {
+              "legend": {
+                "position": "bottom"
+              },
+              "title": {
+                "display": true,
+                "text": "Traffic Source Distribution (%)"
+              }
+            },
+            "cutout": "50%"
+          }
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Multiple Charts Grid",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### E-Commerce Dashboard\nKey metrics at a glance with multiple chart types."
+        }
+      },
+      {
+        "type": "grid",
+        "props": {
+          "columns": 2,
+          "gap": "1rem"
+        },
+        "children": [
+          {
+            "type": "card",
+            "props": {
+              "title": "Daily Orders"
+            },
+            "children": [
+              {
+                "type": "LineChart",
+                "props": {
+                  "data": {
+                    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                    "datasets": [
+                      {
+                        "label": "Orders",
+                        "data": [245, 289, 312, 298, 356, 425, 398],
+                        "borderColor": "rgb(59, 130, 246)",
+                        "backgroundColor": "rgba(59, 130, 246, 0.1)",
+                        "fill": true,
+                        "tension": 0.4
+                      }
+                    ]
+                  },
+                  "config": {
+                    "responsive": true,
+                    "plugins": {
+                      "legend": {
+                        "display": false
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "props": {
+              "title": "Product Categories"
+            },
+            "children": [
+              {
+                "type": "PieChart",
+                "props": {
+                  "data": {
+                    "labels": ["Electronics", "Clothing", "Home", "Books", "Sports"],
+                    "datasets": [
+                      {
+                        "data": [35, 28, 18, 12, 7],
+                        "backgroundColor": [
+                          "rgba(59, 130, 246, 0.8)",
+                          "rgba(236, 72, 153, 0.8)",
+                          "rgba(251, 191, 36, 0.8)",
+                          "rgba(16, 185, 129, 0.8)",
+                          "rgba(139, 92, 246, 0.8)"
+                        ]
+                      }
+                    ]
+                  },
+                  "config": {
+                    "responsive": true,
+                    "plugins": {
+                      "legend": {
+                        "position": "bottom",
+                        "labels": {
+                          "boxWidth": 12,
+                          "font": {
+                            "size": 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "props": {
+              "title": "Top Products"
+            },
+            "children": [
+              {
+                "type": "BarChart",
+                "props": {
+                  "data": {
+                    "labels": ["Product A", "Product B", "Product C", "Product D", "Product E"],
+                    "datasets": [
+                      {
+                        "label": "Sales",
+                        "data": [856, 742, 658, 521, 489],
+                        "backgroundColor": "rgba(16, 185, 129, 0.8)"
+                      }
+                    ]
+                  },
+                  "config": {
+                    "indexAxis": "y",
+                    "responsive": true,
+                    "plugins": {
+                      "legend": {
+                        "display": false
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "card",
+            "props": {
+              "title": "Revenue Trend"
+            },
+            "children": [
+              {
+                "type": "LineChart",
+                "props": {
+                  "data": {
+                    "labels": ["Week 1", "Week 2", "Week 3", "Week 4"],
+                    "datasets": [
+                      {
+                        "label": "Revenue",
+                        "data": [45280, 52150, 48920, 61340],
+                        "borderColor": "rgb(16, 185, 129)",
+                        "backgroundColor": "rgba(16, 185, 129, 0.1)",
+                        "fill": true,
+                        "tension": 0.4
+                      }
+                    ]
+                  },
+                  "config": {
+                    "responsive": true,
+                    "plugins": {
+                      "legend": {
+                        "display": false
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "header",
+        "props": {
+          "title": "Advanced Styling Examples",
+          "level": 2
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "### Server Performance Monitoring\nMulti-metric system monitoring with custom colors."
+        }
+      },
+      {
+        "type": "LineChart",
+        "props": {
+          "data": {
+            "labels": ["00:00", "04:00", "08:00", "12:00", "16:00", "20:00", "24:00"],
+            "datasets": [
+              {
+                "label": "CPU Usage (%)",
+                "data": [25, 32, 58, 72, 65, 48, 35],
+                "borderColor": "rgb(239, 68, 68)",
+                "backgroundColor": "rgba(239, 68, 68, 0.1)",
+                "fill": true,
+                "tension": 0.4,
+                "yAxisID": "y"
+              },
+              {
+                "label": "Memory Usage (%)",
+                "data": [45, 48, 52, 58, 55, 51, 47],
+                "borderColor": "rgb(251, 191, 36)",
+                "backgroundColor": "rgba(251, 191, 36, 0.1)",
+                "fill": true,
+                "tension": 0.4,
+                "yAxisID": "y"
+              },
+              {
+                "label": "Network I/O (Mbps)",
+                "data": [125, 245, 380, 520, 445, 312, 198],
+                "borderColor": "rgb(59, 130, 246)",
+                "backgroundColor": "rgba(59, 130, 246, 0.1)",
+                "fill": true,
+                "tension": 0.4,
+                "yAxisID": "y1"
+              }
+            ]
+          },
+          "config": {
+            "responsive": true,
+            "interaction": {
+              "mode": "index",
+              "intersect": false
+            },
+            "plugins": {
+              "legend": {
+                "position": "top"
+              },
+              "title": {
+                "display": true,
+                "text": "24-Hour Server Metrics"
+              }
+            },
+            "scales": {
+              "y": {
+                "type": "linear",
+                "display": true,
+                "position": "left",
+                "title": {
+                  "display": true,
+                  "text": "Percentage (%)"
+                }
+              },
+              "y1": {
+                "type": "linear",
+                "display": true,
+                "position": "right",
+                "title": {
+                  "display": true,
+                  "text": "Network (Mbps)"
+                },
+                "grid": {
+                  "drawOnChartArea": false
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "## Summary\n\nThis demonstration page showcases:\n- **Line Charts**: Trends, multi-series, gradients, dual-axis\n- **Bar Charts**: Vertical, horizontal, stacked, grouped\n- **Pie Charts**: Regular, donut mode, custom colors\n- **Grid Layouts**: Multiple charts in responsive grid\n- **Real-world Data**: User analytics, sales, revenue, performance metrics\n- **Custom Styling**: Colors, legends, titles, axes\n\nAll charts are fully responsive and interactive."
+        }
+      }
+    ]
+  }
+}

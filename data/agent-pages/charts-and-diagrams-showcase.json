@@ -1,0 +1,735 @@
+{
+  "page": {
+    "title": "Charts & Diagrams Showcase",
+    "description": "Complete demonstration combining charts and Mermaid diagrams in a tabbed interface",
+    "author": "Claude Code",
+    "version": "1.0.0",
+    "published": true,
+    "components": [
+      {
+        "type": "header",
+        "props": {
+          "title": "Complete Visualization Showcase",
+          "level": 1
+        }
+      },
+      {
+        "type": "markdown",
+        "props": {
+          "content": "This comprehensive showcase demonstrates all visualization capabilities: interactive charts, technical diagrams, and combined layouts. Navigate through tabs to explore different use cases."
+        }
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "tabs",
+        "props": {
+          "defaultTab": "overview"
+        },
+        "children": [
+          {
+            "type": "tab",
+            "props": {
+              "id": "overview",
+              "label": "Overview Metrics"
+            },
+            "children": [
+              {
+                "type": "header",
+                "props": {
+                  "title": "Business Overview Dashboard",
+                  "level": 2
+                }
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "Real-time business metrics and KPIs at a glance."
+                }
+              },
+              {
+                "type": "grid",
+                "props": {
+                  "columns": 3,
+                  "gap": "1rem"
+                },
+                "children": [
+                  {
+                    "type": "card",
+                    "props": {
+                      "title": "Monthly Revenue Trend"
+                    },
+                    "children": [
+                      {
+                        "type": "LineChart",
+                        "props": {
+                          "data": {
+                            "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                            "datasets": [
+                              {
+                                "label": "Revenue",
+                                "data": [125000, 142000, 138000, 165000, 182000, 205000],
+                                "borderColor": "rgb(16, 185, 129)",
+                                "backgroundColor": "rgba(16, 185, 129, 0.1)",
+                                "fill": true,
+                                "tension": 0.4
+                              }
+                            ]
+                          },
+                          "config": {
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "display": false
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "card",
+                    "props": {
+                      "title": "Customer Acquisition"
+                    },
+                    "children": [
+                      {
+                        "type": "BarChart",
+                        "props": {
+                          "data": {
+                            "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                            "datasets": [
+                              {
+                                "label": "New Customers",
+                                "data": [245, 312, 289, 356, 398, 421],
+                                "backgroundColor": "rgba(59, 130, 246, 0.8)"
+                              }
+                            ]
+                          },
+                          "config": {
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "display": false
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "card",
+                    "props": {
+                      "title": "Revenue by Source"
+                    },
+                    "children": [
+                      {
+                        "type": "PieChart",
+                        "props": {
+                          "data": {
+                            "labels": ["Direct", "Referral", "Organic", "Paid"],
+                            "datasets": [
+                              {
+                                "data": [42, 23, 21, 14],
+                                "backgroundColor": [
+                                  "rgba(59, 130, 246, 0.8)",
+                                  "rgba(16, 185, 129, 0.8)",
+                                  "rgba(251, 191, 36, 0.8)",
+                                  "rgba(236, 72, 153, 0.8)"
+                                ]
+                              }
+                            ]
+                          },
+                          "config": {
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "position": "bottom",
+                                "labels": {
+                                  "boxWidth": 12
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### Year-over-Year Comparison\nCompare current performance against previous year."
+                }
+              },
+              {
+                "type": "LineChart",
+                "props": {
+                  "data": {
+                    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    "datasets": [
+                      {
+                        "label": "2024 Revenue",
+                        "data": [125000, 142000, 138000, 165000, 182000, 205000, 218000, 235000, 248000, 265000, 282000, 310000],
+                        "borderColor": "rgb(59, 130, 246)",
+                        "backgroundColor": "rgba(59, 130, 246, 0.1)",
+                        "fill": true,
+                        "tension": 0.4
+                      },
+                      {
+                        "label": "2023 Revenue",
+                        "data": [98000, 105000, 112000, 125000, 138000, 145000, 152000, 165000, 178000, 185000, 198000, 215000],
+                        "borderColor": "rgb(156, 163, 175)",
+                        "backgroundColor": "rgba(156, 163, 175, 0.05)",
+                        "fill": true,
+                        "tension": 0.4,
+                        "borderDash": [5, 5]
+                      }
+                    ]
+                  },
+                  "config": {
+                    "responsive": true,
+                    "plugins": {
+                      "legend": {
+                        "position": "top"
+                      },
+                      "title": {
+                        "display": true,
+                        "text": "Revenue Comparison: 2024 vs 2023"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "tab",
+            "props": {
+              "id": "architecture",
+              "label": "System Architecture"
+            },
+            "children": [
+              {
+                "type": "header",
+                "props": {
+                  "title": "Technical Architecture",
+                  "level": 2
+                }
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### High-Level System Design\nMicroservices architecture with event-driven communication.\n\n```mermaid\nflowchart TB\n    subgraph Client[\"Client Layer\"]\n        Web[Web Application]\n        Mobile[Mobile App]\n        Admin[Admin Portal]\n    end\n    \n    subgraph Gateway[\"API Gateway Layer\"]\n        APIGW[API Gateway]\n        Auth[Auth Service]\n        RateLimit[Rate Limiter]\n    end\n    \n    subgraph Services[\"Microservices Layer\"]\n        UserSvc[User Service]\n        OrderSvc[Order Service]\n        ProductSvc[Product Service]\n        PaymentSvc[Payment Service]\n        NotifSvc[Notification Service]\n    end\n    \n    subgraph Data[\"Data Layer\"]\n        UserDB[(User DB)]\n        OrderDB[(Order DB)]\n        ProductDB[(Product DB)]\n        Cache[(Redis Cache)]\n        Queue[Message Queue]\n    end\n    \n    subgraph External[\"External Services\"]\n        PayGW[Payment Gateway]\n        Email[Email Provider]\n        SMS[SMS Gateway]\n    end\n    \n    Web --> APIGW\n    Mobile --> APIGW\n    Admin --> APIGW\n    \n    APIGW --> Auth\n    APIGW --> RateLimit\n    APIGW --> UserSvc\n    APIGW --> OrderSvc\n    APIGW --> ProductSvc\n    \n    UserSvc --> UserDB\n    OrderSvc --> OrderDB\n    ProductSvc --> ProductDB\n    \n    UserSvc --> Cache\n    OrderSvc --> Cache\n    ProductSvc --> Cache\n    \n    OrderSvc --> Queue\n    PaymentSvc --> Queue\n    NotifSvc --> Queue\n    \n    PaymentSvc --> PayGW\n    NotifSvc --> Email\n    NotifSvc --> SMS\n    \n    style Client fill:#3b82f6,color:#fff\n    style Gateway fill:#10b981,color:#fff\n    style Services fill:#8b5cf6,color:#fff\n    style Data fill:#f59e0b,color:#fff\n    style External fill:#ef4444,color:#fff\n```"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### Database Schema\nCore entities and relationships.\n\n```mermaid\nerDiagram\n    USER ||--o{ ORDER : places\n    USER ||--|| PROFILE : has\n    USER ||--o{ REVIEW : writes\n    \n    ORDER ||--|{ ORDER_ITEM : contains\n    ORDER ||--|| PAYMENT : requires\n    ORDER ||--o| SHIPPING : has\n    \n    PRODUCT ||--o{ ORDER_ITEM : ordered_in\n    PRODUCT ||--o{ REVIEW : has\n    PRODUCT }o--|| CATEGORY : belongs_to\n    PRODUCT ||--o{ INVENTORY : tracked_in\n    \n    USER {\n        uuid id PK\n        string email UK\n        string password_hash\n        timestamp created_at\n    }\n    \n    PROFILE {\n        uuid id PK\n        uuid user_id FK\n        string first_name\n        string last_name\n        string phone\n    }\n    \n    ORDER {\n        uuid id PK\n        uuid user_id FK\n        string status\n        decimal total\n        timestamp created_at\n    }\n    \n    ORDER_ITEM {\n        uuid id PK\n        uuid order_id FK\n        uuid product_id FK\n        integer quantity\n        decimal price\n    }\n    \n    PRODUCT {\n        uuid id PK\n        string name\n        text description\n        decimal price\n        uuid category_id FK\n    }\n    \n    CATEGORY {\n        uuid id PK\n        string name\n        string slug UK\n    }\n    \n    PAYMENT {\n        uuid id PK\n        uuid order_id FK\n        decimal amount\n        string status\n        timestamp processed_at\n    }\n    \n    SHIPPING {\n        uuid id PK\n        uuid order_id FK\n        string tracking_number\n        timestamp shipped_at\n    }\n    \n    REVIEW {\n        uuid id PK\n        uuid user_id FK\n        uuid product_id FK\n        integer rating\n        text comment\n    }\n    \n    INVENTORY {\n        uuid id PK\n        uuid product_id FK\n        integer quantity\n        string location\n    }\n```"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### Component Architecture\nDomain model class structure.\n\n```mermaid\nclassDiagram\n    class AbstractEntity {\n        <<abstract>>\n        +UUID id\n        +DateTime createdAt\n        +DateTime updatedAt\n        +validate()\n    }\n    \n    class User {\n        +String email\n        +String passwordHash\n        +String role\n        +authenticate(password)\n        +updatePassword(newPassword)\n    }\n    \n    class Order {\n        +UUID userId\n        +OrderStatus status\n        +Decimal total\n        +calculateTotal()\n        +updateStatus(status)\n        +cancel()\n    }\n    \n    class OrderItem {\n        +UUID orderId\n        +UUID productId\n        +Integer quantity\n        +Decimal price\n        +getSubtotal()\n    }\n    \n    class Product {\n        +String name\n        +String description\n        +Decimal price\n        +Integer stock\n        +updateStock(quantity)\n        +isAvailable()\n    }\n    \n    class Payment {\n        +UUID orderId\n        +Decimal amount\n        +PaymentMethod method\n        +PaymentStatus status\n        +process()\n        +refund()\n    }\n    \n    AbstractEntity <|-- User\n    AbstractEntity <|-- Order\n    AbstractEntity <|-- OrderItem\n    AbstractEntity <|-- Product\n    AbstractEntity <|-- Payment\n    \n    User \"1\" *-- \"*\" Order\n    Order \"1\" *-- \"*\" OrderItem\n    OrderItem \"*\" --> \"1\" Product\n    Order \"1\" -- \"1\" Payment\n```"
+                }
+              }
+            ]
+          },
+          {
+            "type": "tab",
+            "props": {
+              "id": "workflows",
+              "label": "Process Workflows"
+            },
+            "children": [
+              {
+                "type": "header",
+                "props": {
+                  "title": "Business Process Workflows",
+                  "level": 2
+                }
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### Order Processing Sequence\nComplete flow from order placement to delivery.\n\n```mermaid\nsequenceDiagram\n    actor Customer\n    participant Web\n    participant API\n    participant OrderSvc\n    participant InventorySvc\n    participant PaymentSvc\n    participant ShippingSvc\n    participant NotificationSvc\n    \n    Customer->>Web: Browse & Add to Cart\n    Customer->>Web: Checkout\n    Web->>API: POST /orders\n    API->>OrderSvc: Create Order\n    \n    OrderSvc->>InventorySvc: Check Stock\n    alt Stock Available\n        InventorySvc-->>OrderSvc: Confirmed\n        OrderSvc->>PaymentSvc: Process Payment\n        \n        alt Payment Success\n            PaymentSvc-->>OrderSvc: Payment Approved\n            OrderSvc->>InventorySvc: Reserve Items\n            InventorySvc-->>OrderSvc: Items Reserved\n            OrderSvc->>ShippingSvc: Create Shipment\n            ShippingSvc-->>OrderSvc: Shipment Created\n            OrderSvc-->>API: Order Success\n            API-->>Web: 201 Created\n            Web-->>Customer: Order Confirmation\n            \n            par Async Notifications\n                OrderSvc->>NotificationSvc: Send Email\n                NotificationSvc-->>Customer: Confirmation Email\n            and\n                ShippingSvc->>NotificationSvc: Tracking Info\n                NotificationSvc-->>Customer: Tracking Email\n            end\n            \n            ShippingSvc->>ShippingSvc: Dispatch Order\n            ShippingSvc->>NotificationSvc: Delivery Update\n            NotificationSvc-->>Customer: Out for Delivery\n            \n        else Payment Failed\n            PaymentSvc-->>OrderSvc: Payment Declined\n            OrderSvc-->>API: Payment Error\n            API-->>Web: 402 Payment Required\n            Web-->>Customer: Payment Failed\n        end\n        \n    else Out of Stock\n        InventorySvc-->>OrderSvc: Insufficient Stock\n        OrderSvc-->>API: Stock Error\n        API-->>Web: 409 Conflict\n        Web-->>Customer: Item Unavailable\n    end\n```"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### User Registration Flow\nAccount creation with email verification.\n\n```mermaid\nflowchart TD\n    Start([User Visits Site]) --> ShowForm[Show Registration Form]\n    ShowForm --> EnterDetails[User Enters Details]\n    EnterDetails --> Validate{Validate Input}\n    \n    Validate -->|Invalid| ShowError[Show Validation Errors]\n    ShowError --> EnterDetails\n    \n    Validate -->|Valid| CheckEmail{Email Exists?}\n    CheckEmail -->|Yes| EmailTaken[Email Already Registered]\n    EmailTaken --> EnterDetails\n    \n    CheckEmail -->|No| CreateUser[Create User Account]\n    CreateUser --> HashPassword[Hash Password]\n    HashPassword --> SaveDB[(Save to Database)]\n    SaveDB --> GenerateToken[Generate Verification Token]\n    GenerateToken --> SendEmail[Send Verification Email]\n    SendEmail --> ShowSuccess[Show Success Message]\n    \n    ShowSuccess --> UserChecksEmail[User Checks Email]\n    UserChecksEmail --> ClickLink[Click Verification Link]\n    ClickLink --> VerifyToken{Token Valid?}\n    \n    VerifyToken -->|Invalid| TokenError[Show Error - Request New]\n    TokenError --> ResendEmail[Resend Verification]\n    ResendEmail --> SendEmail\n    \n    VerifyToken -->|Expired| TokenExpired[Token Expired]\n    TokenExpired --> ResendEmail\n    \n    VerifyToken -->|Valid| MarkVerified[Mark Email Verified]\n    MarkVerified --> UpdateDB[(Update Database)]\n    UpdateDB --> AutoLogin[Auto Login User]\n    AutoLogin --> CreateSession[Create Session]\n    CreateSession --> Welcome[Show Welcome Page]\n    Welcome --> End([Registration Complete])\n    \n    style Start fill:#10b981\n    style End fill:#10b981\n    style ShowError fill:#ef4444\n    style EmailTaken fill:#ef4444\n    style TokenError fill:#ef4444\n    style TokenExpired fill:#f59e0b\n    style CreateUser fill:#3b82f6\n    style MarkVerified fill:#3b82f6\n```"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### Order State Machine\nAll possible order states and transitions.\n\n```mermaid\nstateDiagram-v2\n    [*] --> Created: New Order\n    \n    Created --> AwaitingPayment: Payment Initiated\n    Created --> Cancelled: Customer Cancels\n    \n    AwaitingPayment --> PaymentFailed: Payment Declined\n    AwaitingPayment --> Paid: Payment Success\n    \n    PaymentFailed --> AwaitingPayment: Retry Payment\n    PaymentFailed --> Cancelled: Too Many Failures\n    \n    Paid --> Processing: Start Processing\n    \n    Processing --> OnHold: Issue Detected\n    Processing --> ReadyToShip: Processing Complete\n    \n    OnHold --> Processing: Issue Resolved\n    OnHold --> Cancelled: Cannot Fulfill\n    \n    ReadyToShip --> Shipped: Dispatched\n    \n    Shipped --> InTransit: Carrier Pickup\n    \n    InTransit --> Delivered: Customer Received\n    InTransit --> DeliveryFailed: Delivery Attempt Failed\n    \n    DeliveryFailed --> InTransit: Reattempt Delivery\n    DeliveryFailed --> ReturnToSender: Max Attempts\n    \n    Delivered --> Completed: No Issues (7 days)\n    Delivered --> ReturnInitiated: Customer Return Request\n    \n    ReturnInitiated --> Returning: Return Approved\n    ReturnInitiated --> Completed: Return Denied\n    \n    Returning --> Returned: Return Received\n    \n    Returned --> Refunded: Refund Processed\n    \n    ReturnToSender --> Refunded: Return Processed\n    \n    Cancelled --> [*]\n    Completed --> [*]\n    Refunded --> [*]\n    \n    note right of AwaitingPayment\n        15 minute timeout\n        for payment completion\n    end note\n    \n    note right of Delivered\n        7 day waiting period\n        before auto-complete\n    end note\n```"
+                }
+              }
+            ]
+          },
+          {
+            "type": "tab",
+            "props": {
+              "id": "analytics",
+              "label": "Analytics Dashboard"
+            },
+            "children": [
+              {
+                "type": "header",
+                "props": {
+                  "title": "Performance Analytics",
+                  "level": 2
+                }
+              },
+              {
+                "type": "grid",
+                "props": {
+                  "columns": 2,
+                  "gap": "1rem"
+                },
+                "children": [
+                  {
+                    "type": "card",
+                    "props": {
+                      "title": "Conversion Funnel"
+                    },
+                    "children": [
+                      {
+                        "type": "BarChart",
+                        "props": {
+                          "data": {
+                            "labels": ["Visitors", "Product Views", "Add to Cart", "Checkout", "Purchase"],
+                            "datasets": [
+                              {
+                                "label": "Users",
+                                "data": [10000, 6500, 3200, 1800, 1250],
+                                "backgroundColor": [
+                                  "rgba(59, 130, 246, 0.9)",
+                                  "rgba(59, 130, 246, 0.75)",
+                                  "rgba(59, 130, 246, 0.6)",
+                                  "rgba(59, 130, 246, 0.45)",
+                                  "rgba(16, 185, 129, 0.9)"
+                                ]
+                              }
+                            ]
+                          },
+                          "config": {
+                            "indexAxis": "y",
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "display": false
+                              },
+                              "title": {
+                                "display": true,
+                                "text": "12.5% Conversion Rate"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "card",
+                    "props": {
+                      "title": "Customer Segments"
+                    },
+                    "children": [
+                      {
+                        "type": "PieChart",
+                        "props": {
+                          "data": {
+                            "labels": ["VIP", "Loyal", "Regular", "New", "Inactive"],
+                            "datasets": [
+                              {
+                                "data": [8, 22, 35, 25, 10],
+                                "backgroundColor": [
+                                  "rgba(139, 92, 246, 0.9)",
+                                  "rgba(59, 130, 246, 0.9)",
+                                  "rgba(16, 185, 129, 0.9)",
+                                  "rgba(251, 191, 36, 0.9)",
+                                  "rgba(156, 163, 175, 0.9)"
+                                ]
+                              }
+                            ]
+                          },
+                          "config": {
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "position": "right"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### Multi-Channel Performance\nSales and engagement across different channels."
+                }
+              },
+              {
+                "type": "BarChart",
+                "props": {
+                  "data": {
+                    "labels": ["Website", "Mobile App", "Social Media", "Marketplace", "Retail"],
+                    "datasets": [
+                      {
+                        "label": "Revenue (USD)",
+                        "data": [125000, 98000, 45000, 62000, 38000],
+                        "backgroundColor": "rgba(59, 130, 246, 0.8)",
+                        "yAxisID": "y"
+                      },
+                      {
+                        "label": "Orders",
+                        "data": [2100, 1850, 890, 1250, 720],
+                        "backgroundColor": "rgba(16, 185, 129, 0.8)",
+                        "yAxisID": "y1"
+                      }
+                    ]
+                  },
+                  "config": {
+                    "responsive": true,
+                    "plugins": {
+                      "legend": {
+                        "position": "top"
+                      }
+                    },
+                    "scales": {
+                      "y": {
+                        "type": "linear",
+                        "display": true,
+                        "position": "left",
+                        "title": {
+                          "display": true,
+                          "text": "Revenue (USD)"
+                        }
+                      },
+                      "y1": {
+                        "type": "linear",
+                        "display": true,
+                        "position": "right",
+                        "title": {
+                          "display": true,
+                          "text": "Number of Orders"
+                        },
+                        "grid": {
+                          "drawOnChartArea": false
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "### Customer Retention Analysis\nMonthly cohort retention rates."
+                }
+              },
+              {
+                "type": "LineChart",
+                "props": {
+                  "data": {
+                    "labels": ["Month 1", "Month 2", "Month 3", "Month 4", "Month 5", "Month 6"],
+                    "datasets": [
+                      {
+                        "label": "January Cohort",
+                        "data": [100, 72, 58, 48, 42, 38],
+                        "borderColor": "rgb(59, 130, 246)",
+                        "tension": 0.4
+                      },
+                      {
+                        "label": "February Cohort",
+                        "data": [100, 75, 62, 52, 45, 40],
+                        "borderColor": "rgb(16, 185, 129)",
+                        "tension": 0.4
+                      },
+                      {
+                        "label": "March Cohort",
+                        "data": [100, 78, 65, 55, 48, null],
+                        "borderColor": "rgb(251, 191, 36)",
+                        "tension": 0.4
+                      },
+                      {
+                        "label": "April Cohort",
+                        "data": [100, 80, 68, 58, null, null],
+                        "borderColor": "rgb(236, 72, 153)",
+                        "tension": 0.4
+                      }
+                    ]
+                  },
+                  "config": {
+                    "responsive": true,
+                    "plugins": {
+                      "legend": {
+                        "position": "bottom"
+                      },
+                      "title": {
+                        "display": true,
+                        "text": "Retention Rate by Cohort (%)"
+                      }
+                    },
+                    "scales": {
+                      "y": {
+                        "beginAtZero": true,
+                        "max": 100
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "tab",
+            "props": {
+              "id": "features",
+              "label": "All Features Mixed"
+            },
+            "children": [
+              {
+                "type": "header",
+                "props": {
+                  "title": "Feature Showcase: Charts + Diagrams",
+                  "level": 2
+                }
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "This tab demonstrates mixing charts and diagrams in a single view for comprehensive documentation."
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "Development Sprint Overview",
+                  "level": 3
+                }
+              },
+              {
+                "type": "grid",
+                "props": {
+                  "columns": 2,
+                  "gap": "1.5rem"
+                },
+                "children": [
+                  {
+                    "type": "div",
+                    "children": [
+                      {
+                        "type": "markdown",
+                        "props": {
+                          "content": "#### Sprint Progress\n\n**Sprint 12 Status**\n\nVelocity and completion tracking."
+                        }
+                      },
+                      {
+                        "type": "LineChart",
+                        "props": {
+                          "data": {
+                            "labels": ["Day 1", "Day 3", "Day 5", "Day 7", "Day 9", "Day 11", "Day 13"],
+                            "datasets": [
+                              {
+                                "label": "Planned",
+                                "data": [100, 85, 70, 55, 40, 25, 0],
+                                "borderColor": "rgb(156, 163, 175)",
+                                "borderDash": [5, 5]
+                              },
+                              {
+                                "label": "Actual",
+                                "data": [100, 82, 68, 52, 38, 20, 5],
+                                "borderColor": "rgb(16, 185, 129)",
+                                "backgroundColor": "rgba(16, 185, 129, 0.1)",
+                                "fill": true,
+                                "tension": 0.4
+                              }
+                            ]
+                          },
+                          "config": {
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "position": "bottom"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "children": [
+                      {
+                        "type": "markdown",
+                        "props": {
+                          "content": "#### Task Workflow\n\n**Development Process**\n\n```mermaid\nflowchart LR\n    Backlog[Backlog] --> Todo[To Do]\n    Todo --> InDev[In Development]\n    InDev --> Review[Code Review]\n    Review --> Testing[Testing]\n    Testing --> Done[Done]\n    \n    Review -->|Changes| InDev\n    Testing -->|Bugs| InDev\n    \n    style Backlog fill:#e5e7eb\n    style Todo fill:#fbbf24\n    style InDev fill:#3b82f6\n    style Review fill:#8b5cf6\n    style Testing fill:#f59e0b\n    style Done fill:#10b981\n```"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "header",
+                "props": {
+                  "title": "System Deployment Pipeline",
+                  "level": 3
+                }
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "#### CI/CD Process Flow\n\n```mermaid\nflowchart TD\n    subgraph Dev[\"Development\"]\n        Code[Write Code] --> Commit[Git Commit]\n        Commit --> Push[Git Push]\n    end\n    \n    subgraph CI[\"Continuous Integration\"]\n        Push --> Trigger[Trigger Pipeline]\n        Trigger --> Build[Build]\n        Build --> UnitTest[Unit Tests]\n        UnitTest --> Lint[Linting]\n        Lint --> Scan[Security Scan]\n    end\n    \n    subgraph CD[\"Continuous Deployment\"]\n        Scan --> Stage{Deploy to Staging}\n        Stage --> IntTest[Integration Tests]\n        IntTest --> E2ETest[E2E Tests]\n        E2ETest --> Approve{Manual Approval}\n        Approve -->|Yes| Prod[Deploy to Production]\n        Approve -->|No| Stop[Stop]\n    end\n    \n    Prod --> Monitor[Monitor]\n    Monitor --> Success{Healthy?}\n    Success -->|No| Rollback[Rollback]\n    Success -->|Yes| Complete([Complete])\n    \n    style Code fill:#3b82f6\n    style Build fill:#8b5cf6\n    style Prod fill:#10b981\n    style Rollback fill:#ef4444\n    style Complete fill:#10b981\n```"
+                }
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "grid",
+                "props": {
+                  "columns": 2,
+                  "gap": "1.5rem"
+                },
+                "children": [
+                  {
+                    "type": "div",
+                    "children": [
+                      {
+                        "type": "markdown",
+                        "props": {
+                          "content": "#### Deployment Frequency\n\nReleases per environment."
+                        }
+                      },
+                      {
+                        "type": "BarChart",
+                        "props": {
+                          "data": {
+                            "labels": ["Dev", "Staging", "Production"],
+                            "datasets": [
+                              {
+                                "label": "Week 1",
+                                "data": [45, 12, 3],
+                                "backgroundColor": "rgba(59, 130, 246, 0.8)"
+                              },
+                              {
+                                "label": "Week 2",
+                                "data": [52, 15, 4],
+                                "backgroundColor": "rgba(16, 185, 129, 0.8)"
+                              }
+                            ]
+                          },
+                          "config": {
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "position": "bottom"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "div",
+                    "children": [
+                      {
+                        "type": "markdown",
+                        "props": {
+                          "content": "#### Build Success Rate\n\nPipeline performance metrics."
+                        }
+                      },
+                      {
+                        "type": "PieChart",
+                        "props": {
+                          "data": {
+                            "labels": ["Success", "Failed - Tests", "Failed - Build", "Failed - Deploy"],
+                            "datasets": [
+                              {
+                                "data": [85, 8, 4, 3],
+                                "backgroundColor": [
+                                  "rgba(16, 185, 129, 0.9)",
+                                  "rgba(251, 191, 36, 0.9)",
+                                  "rgba(239, 68, 68, 0.9)",
+                                  "rgba(239, 68, 68, 0.7)"
+                                ]
+                              }
+                            ]
+                          },
+                          "config": {
+                            "responsive": true,
+                            "plugins": {
+                              "legend": {
+                                "position": "bottom",
+                                "labels": {
+                                  "boxWidth": 12
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "markdown",
+                "props": {
+                  "content": "## Complete Feature Summary\n\nThis showcase demonstrates:\n- **Nested Tabs**: Organize content into logical sections\n- **Mixed Content**: Charts and diagrams in same view\n- **Grid Layouts**: Responsive multi-column layouts\n- **Real-world Scenarios**: Practical business and technical examples\n- **Interactive Charts**: Full Chart.js functionality\n- **Technical Diagrams**: Complete Mermaid diagram support\n- **Card Components**: Organized, styled containers\n- **Markdown Integration**: Rich text with embedded diagrams\n\nAll features work seamlessly together for comprehensive data visualization and technical documentation."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

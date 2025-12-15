@@ -1,0 +1,205 @@
+name: WebSocket Stability Check
+
+on:
+  push:
+    branches: [ main, v1 ]
+    paths:
+      - 'simple-backend.js'
+      - 'frontend/src/**'
+      - 'package.json'
+  pull_request:
+    branches: [ main, v1 ]
+    paths:
+      - 'simple-backend.js'
+      - 'frontend/src/**'
+      - 'package.json'
+
+jobs:
+  websocket-compatibility-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        cd frontend && npm install
+        
+    - name: Check for dual WebSocket managers (Backend)
+      run: |
+        echo "🔍 Checking for conflicting WebSocket managers in backend..."
+        
+        # Check for problematic imports
+        if grep -q "WebSocketConnectionManager" simple-backend.js; then
+          echo "❌ CRITICAL: Found WebSocketConnectionManager import - causes dual manager conflict"
+          exit 1
+        fi
+        
+        if grep -q "ClaudeAPIManager" simple-backend.js; then
+          echo "❌ CRITICAL: Found ClaudeAPIManager import - causes connection issues"
+          exit 1
+        fi
+        
+        # Ensure basic WebSocket implementation exists
+        if ! grep -q "wss.on('connection'" simple-backend.js; then
+          echo "❌ CRITICAL: Missing basic WebSocket connection handler"
+          exit 1
+        fi
+        
+        echo "✅ Backend WebSocket implementation is clean"
+        
+    - name: Check for new WebSocket services (Frontend)
+      run: |
+        echo "🔍 Checking frontend for conflicting WebSocket services..."
+        
+        # These files should NOT exist in stable version
+        CONFLICT_FILES=(
+          "frontend/src/services/WebSocketService.ts"
+          "frontend/src/services/MessageQueue.ts"
+          "frontend/src/services/MessageProcessor.ts"
+        )
+        
+        for file in "${CONFLICT_FILES[@]}"; do
+          if [ -f "$file" ]; then
+            echo "❌ CRITICAL: Found conflicting file: $file"
+            echo "This file causes frontend-backend WebSocket incompatibility"
+            exit 1
+          fi
+        done
+        
+        echo "✅ Frontend WebSocket implementation is clean"
+        
+    - name: Validate timeout configurations
+      run: |
+        echo "🔍 Validating timeout configurations..."
+        
+        # Check for problematic 30-second timeouts
+        THIRTY_SEC_TIMEOUTS=$(grep -c "30000" simple-backend.js || true)
+        
+        if [ "$THIRTY_SEC_TIMEOUTS" -gt 3 ]; then
+          echo "⚠️ WARNING: Found $THIRTY_SEC_TIMEOUTS instances of 30-second timeouts"
+          echo "This may cause connection instability"
+          grep -n "30000" simple-backend.js
+        fi
+        
+        echo "✅ Timeout configuration check complete"
+        
+    - name: Start services for integration test
+      run: |
+        echo "🚀 Starting backend service..."
+        node simple-backend.js &
+        BACKEND_PID=$!
+        
+        echo "⏳ Waiting for backend to start..."
+        sleep 10
+        
+        echo "🚀 Starting frontend service..."
+        cd frontend && npm run build
+        
+        # Kill backend
+        kill $BACKEND_PID || true
+        
+    - name: Run WebSocket stability tests
+      run: |
+        echo "🧪 Running WebSocket stability regression tests..."
+        
+        # Start backend for testing
+        node simple-backend.js &
+        BACKEND_PID=$!
+        
+        # Wait for startup
+        sleep 5
+        
+        # Run specific WebSocket tests
+        npm test -- tests/regression/websocket-stability-regression.test.js
+        
+        # Run integration tests
+        npm test -- tests/integration/frontend-backend-sync.test.js
+        
+        # Kill backend
+        kill $BACKEND_PID || true
+        
+    - name: Check for connection error patterns
+      run: |
+        echo "🔍 Checking logs for connection error patterns..."
+        
+        if [ -f "logs/combined.log" ]; then
+          # Check for the specific error we fixed
+          if grep -q "Connection lost: Unknown error" logs/combined.log; then
+            echo "❌ CRITICAL: Found 'Connection lost: Unknown error' in logs"
+            echo "This indicates WebSocket stability regression"
+            exit 1
+          fi
+          
+          if grep -q "ping timeout" logs/combined.log; then
+            echo "❌ CRITICAL: Found ping timeout errors in logs"
+            echo "This indicates connection management issues"
+            exit 1
+          fi
+          
+          echo "✅ No critical connection errors found in logs"
+        else
+          echo "ℹ️ No log file found - this is normal for CI"
+        fi
+        
+    - name: Validate package.json consistency
+      run: |
+        echo "🔍 Checking package.json for conflicting dependencies..."
+        
+        # Check for WebSocket-related packages that might cause conflicts
+        if grep -q "ws.*multiple" package.json; then
+          echo "⚠️ WARNING: Multiple WebSocket packages detected"
+        fi
+        
+        # Ensure core dependencies are present
+        if ! grep -q '"ws"' package.json; then
+          echo "❌ CRITICAL: Missing 'ws' package dependency"
+          exit 1
+        fi
+        
+        echo "✅ Package dependencies look good"
+        
+    - name: Generate stability report
+      run: |
+        echo "📊 Generating WebSocket stability report..."
+        
+        cat > websocket-stability-report.md << EOF
+        # WebSocket Stability Check Report
+        
+        **Date**: $(date)
+        **Commit**: $GITHUB_SHA
+        **Branch**: $GITHUB_REF_NAME
+        
+        ## ✅ Checks Passed:
+        - No dual WebSocket manager conflicts
+        - No conflicting frontend WebSocket services
+        - Timeout configurations validated
+        - No critical connection errors detected
+        - Package dependencies consistent
+        
+        ## 🔧 System Architecture:
+        - **Backend**: Simple WebSocket implementation (stable)
+        - **Frontend**: Direct WebSocket connection (compatible)
+        - **Deployment**: Single-manager architecture
+        
+        ## 📝 Notes:
+        This report confirms the system maintains the stable WebSocket
+        implementation that resolves "Connection lost: Unknown error" issues.
+        
+        **Last Stable Commit**: 13ddedfa
+        EOF
+        
+        cat websocket-stability-report.md
+        
+    - name: Upload stability report
+      uses: actions/upload-artifact@v3
+      with:
+        name: websocket-stability-report
+        path: websocket-stability-report.md

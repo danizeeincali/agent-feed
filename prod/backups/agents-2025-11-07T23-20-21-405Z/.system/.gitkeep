@@ -1,0 +1,8 @@
+# Protected Agent Configuration Sidecars
+
+This directory contains protected configuration files for agents.
+These files are read-only and contain security-critical settings.
+
+**DO NOT MODIFY THESE FILES MANUALLY**
+
+Use the ProtectedConfigManager API to update protected configurations.

@@ -1,0 +1,75 @@
+{
+  "instance": {
+    "type": "production",
+    "name": "claude-prod",
+    "version": "1.0.0",
+    "created": "2025-08-20T20:00:00Z"
+  },
+  "workspace": {
+    "root": "/workspaces/agent-feed/agent_workspace/",
+    "restricted_paths": [
+      "/workspaces/agent-feed/src/",
+      "/workspaces/agent-feed/frontend/",
+      "/workspaces/agent-feed/.claude/dev/"
+    ],
+    "allowed_operations": [
+      "read", "write", "execute"
+    ]
+  },
+  "agents": {
+    "definitions_path": "/workspaces/agent-feed/@agents/",
+    "workspace_path": "/workspaces/agent-feed/agent_workspace/agents/",
+    "shared_path": "/workspaces/agent-feed/agent_workspace/shared/",
+    "data_path": "/workspaces/agent-feed/agent_workspace/data/",
+    "max_concurrent": 10,
+    "execution_timeout": 300000,
+    "resource_limits": {
+      "memory_per_agent": "512MB",
+      "cpu_per_agent": 0.5,
+      "storage_per_agent": "1GB"
+    }
+  },
+  "communication": {
+    "enabled": true,
+    "queue_path": "/tmp/claude-communication/",
+    "instance_id": "claude-prod-instance",
+    "partner_instance": "claude-dev-instance",
+    "auto_handoff": false,
+    "require_confirmation_for_outgoing": true
+  },
+  "permissions": {
+    "dangerous_skip": true,
+    "sandbox_mode": true,
+    "max_file_size": "500MB",
+    "allowed_commands": ["node", "python", "curl", "wget", "sqlite3"]
+  },
+  "logging": {
+    "level": "info",
+    "file": ".claude/prod/logs/claude-prod.log",
+    "audit_enabled": true,
+    "audit_file": ".claude/prod/logs/audit.log",
+    "agent_logs_path": "logs/agent-logs/"
+  },
+  "resources": {
+    "max_memory": "4GB",
+    "max_cpu_percent": 90,
+    "max_processes": 100
+  },
+  "features": {
+    "mcp_enabled": true,
+    "swarm_enabled": true,
+    "neural_learning": true,
+    "performance_monitoring": true,
+    "agent_orchestration": true
+  },
+  "monitoring": {
+    "health_check_interval": 30000,
+    "metrics_collection": true,
+    "dashboard_enabled": true,
+    "alert_thresholds": {
+      "cpu_percent": 85,
+      "memory_percent": 90,
+      "agent_failure_rate": 10
+    }
+  }
+}

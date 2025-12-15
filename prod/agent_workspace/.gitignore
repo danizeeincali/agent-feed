@@ -1,0 +1,18 @@
+# Agent Workspace - Production
+# Temporary files
+temp/*
+!temp/.gitkeep
+
+# Log files
+logs/*.log
+logs/debug/*
+
+# Agent-specific temporary outputs
+agents/*/temp/*
+agents/*/.cache/*
+
+# Keep directory structure
+!agents/.gitkeep
+!shared/.gitkeep
+!outputs/.gitkeep
+!logs/.gitkeep

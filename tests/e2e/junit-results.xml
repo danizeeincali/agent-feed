@@ -1,0 +1,58 @@
+<testsuites id="" name="" tests="13" failures="0" skipped="13" errors="0" time="1.000085">
+<testsuite name="telemetry-ui-validation.spec.ts" timestamp="2025-11-12T20:06:51.053Z" hostname="chromium" tests="9" failures="0" skipped="9" time="0" errors="0">
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 01 - Load home page without errors" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 02 - Navigate to Avi DM interface" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 03 - Compose Avi DM message" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 04 - Verify backend logs clean (no schema errors)" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 05 - Verify database schema correct" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 06 - Check network for 500 errors" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 07 - Verify frontend loads without JS errors" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry UI Validation - Schema Fix Verification › 08 - Comprehensive regression check" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Telemetry Validation Summary Report › Generate comprehensive validation report" classname="telemetry-ui-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="websocket-and-conversation-validation.spec.ts" timestamp="2025-11-12T20:06:51.053Z" hostname="chromium" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Fix #1: Real-Time Comment Display Without Refresh" classname="websocket-and-conversation-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Fix #2: Multi-Turn Conversation Context" classname="websocket-and-conversation-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Combined Test: Real-Time Multi-Turn Conversation" classname="websocket-and-conversation-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Regression: No Duplicate Avi Responses" classname="websocket-and-conversation-validation.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

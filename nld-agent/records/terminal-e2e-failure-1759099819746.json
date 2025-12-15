@@ -1,0 +1,9 @@
+{
+  "type": "terminal-e2e-failure",
+  "preventionPattern": true,
+  "test": "terminal-multiple-commands",
+  "timestamp": "2025-09-28T22:50:19.745Z",
+  "error": "Cannot read properties of undefined (reading 'goto')",
+  "failureType": "terminal-memory-leak",
+  "impact": "performance-degradation"
+}

@@ -1,0 +1,63 @@
+{
+  "timestamp": "2025-10-03T15:45:05.209Z",
+  "consoleMessages": [
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:443/?token=r_0Fuj4kbqFP' failed: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: The server did not accept the WebSocket handshake."
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: Event"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: The server did not accept the WebSocket handshake."
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: Event"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: Could not connect to localhost: Connection refused"
+    },
+    {
+      "type": "error",
+      "text": "WebSocket connection to 'ws://localhost:5173/ws' failed: The server did not accept the WebSocket handshake."
+    },
+    {
+      "type": "error",
+      "text": "❌ WebSocket error: Event"
+    }
+  ],
+  "foundPosts": true,
+  "testStatus": "completed"
+}

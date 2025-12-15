@@ -1,0 +1,476 @@
+name: 🧪 SPARC Regression Test Suite
+
+on:
+  push:
+    branches: [ main, develop, v1 ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run regression tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_categories:
+        description: 'Test categories to run (unit,integration,e2e,performance)'
+        required: false
+        default: 'unit,integration,e2e'
+      coverage_enabled:
+        description: 'Enable coverage reporting'
+        required: false
+        default: 'true'
+        type: boolean
+      performance_tests:
+        description: 'Run performance regression tests'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+  SPARC_TEST_ENVIRONMENT: 'ci'
+  SPARC_REPORT_PATH: 'tests/sparc-regression/reports'
+
+jobs:
+  # Pre-flight checks and setup
+  setup:
+    name: 🚀 Setup & Pre-flight Checks
+    runs-on: ubuntu-latest
+    outputs:
+      test-categories: ${{ steps.config.outputs.categories }}
+      coverage-enabled: ${{ steps.config.outputs.coverage }}
+      performance-enabled: ${{ steps.config.outputs.performance }}
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+          
+      - name: 📦 Install dependencies
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          
+      - name: 🔧 Configure test parameters
+        id: config
+        run: |
+          # Determine test categories
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            categories="${{ github.event.inputs.test_categories }}"
+            coverage="${{ github.event.inputs.coverage_enabled }}"
+            performance="${{ github.event.inputs.performance_tests }}"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            categories="unit,integration,e2e,performance"
+            coverage="true"
+            performance="true"
+          else
+            categories="unit,integration,e2e"
+            coverage="true"
+            performance="false"
+          fi
+          
+          echo "categories=${categories}" >> $GITHUB_OUTPUT
+          echo "coverage=${coverage}" >> $GITHUB_OUTPUT
+          echo "performance=${performance}" >> $GITHUB_OUTPUT
+          
+          echo "🎯 Test Categories: ${categories}"
+          echo "📊 Coverage: ${coverage}"
+          echo "⚡ Performance: ${performance}"
+          
+      - name: 🔍 Validate SPARC configuration
+        run: |
+          cd frontend
+          npx tsx tests/sparc-regression/utilities/validate-config.ts
+          
+  # Unit Tests - Fast feedback
+  unit-tests:
+    name: 🧪 Unit Tests (P1 Critical)
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(needs.setup.outputs.test-categories, 'unit')
+    
+    strategy:
+      matrix:
+        feature: ['mention-system', 'post-creation', 'comment-threading']
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js & Dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+          
+      - name: 📦 Install dependencies
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          
+      - name: 🧪 Run Unit Tests - ${{ matrix.feature }}
+        run: |
+          cd frontend
+          npm run test:unit -- tests/sparc-regression/unit/${{ matrix.feature }}
+        env:
+          CI: true
+          NODE_ENV: test
+          
+      - name: 📊 Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-results-${{ matrix.feature }}
+          path: |
+            frontend/tests/sparc-regression/reports/
+            frontend/coverage/
+          retention-days: 7
+          
+  # Integration Tests - Component interaction
+  integration-tests:
+    name: 🔗 Integration Tests (P1 Workflows)
+    runs-on: ubuntu-latest
+    needs: [setup, unit-tests]
+    if: contains(needs.setup.outputs.test-categories, 'integration')
+    
+    services:
+      # Test database for integration tests
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: agent_feed_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js & Dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+          
+      - name: 📦 Install dependencies
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          
+      - name: 🗄️ Setup test database
+        run: |
+          cd backend
+          npm run migrate:test
+          npm run seed:test
+        env:
+          DATABASE_URL: postgresql://postgres:test_password@localhost:5432/agent_feed_test
+          
+      - name: 🚀 Start test backend
+        run: |
+          cd backend
+          npm run start:test &
+          sleep 10
+        env:
+          DATABASE_URL: postgresql://postgres:test_password@localhost:5432/agent_feed_test
+          
+      - name: 🔗 Run Integration Tests
+        run: |
+          cd frontend
+          npm run test:integration -- tests/sparc-regression/integration/
+        env:
+          CI: true
+          API_BASE_URL: http://localhost:3000
+          
+      - name: 📊 Upload Integration Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-test-results
+          path: frontend/tests/sparc-regression/reports/
+          retention-days: 7
+          
+  # E2E Tests - Critical user paths
+  e2e-tests:
+    name: 🌐 E2E Tests (P1 Critical Paths)
+    runs-on: ubuntu-latest
+    needs: [setup, integration-tests]
+    if: contains(needs.setup.outputs.test-categories, 'e2e')
+    
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js & Dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+          
+      - name: 📦 Install dependencies
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          
+      - name: 🎭 Install Playwright Browsers
+        run: |
+          cd frontend
+          npx playwright install ${{ matrix.browser }} --with-deps
+          
+      - name: 🚀 Build and start application
+        run: |
+          cd frontend
+          npm run build
+          npm run preview &
+          sleep 10
+          
+      - name: 🌐 Run E2E Tests - ${{ matrix.browser }}
+        run: |
+          cd frontend
+          npx playwright test --config=tests/sparc-regression/config/playwright.config.ts --project=${{ matrix.browser }}
+        env:
+          CI: true
+          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
+          
+      - name: 📊 Upload E2E Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-test-results-${{ matrix.browser }}
+          path: |
+            frontend/tests/sparc-regression/reports/playwright-report/
+            frontend/tests/sparc-regression/reports/test-results/
+          retention-days: 7
+          
+  # Regression Scenario Tests - Known failure patterns
+  regression-scenarios:
+    name: 🔄 Regression Scenarios (Anti-patterns)
+    runs-on: ubuntu-latest
+    needs: [setup, e2e-tests]
+    if: always() && needs.setup.result == 'success'
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js & Dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+          
+      - name: 📦 Install dependencies
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          npx playwright install chromium --with-deps
+          
+      - name: 🚀 Build and start application
+        run: |
+          cd frontend
+          npm run build
+          npm run preview &
+          sleep 10
+          
+      - name: 🔄 Run Regression Scenarios
+        run: |
+          cd frontend
+          npx playwright test --config=tests/sparc-regression/config/playwright.config.ts --project=regression-scenarios
+        env:
+          CI: true
+          
+      - name: 📊 Upload Regression Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regression-scenario-results
+          path: frontend/tests/sparc-regression/reports/
+          retention-days: 30 # Keep regression results longer
+          
+  # Performance Tests - Optional but important
+  performance-tests:
+    name: ⚡ Performance Regression Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.performance-enabled == 'true'
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js & Dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+          
+      - name: 📦 Install dependencies
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          npx playwright install chromium --with-deps
+          
+      - name: 🚀 Build optimized application
+        run: |
+          cd frontend
+          npm run build
+          npm run preview &
+          sleep 10
+          
+      - name: ⚡ Run Performance Tests
+        run: |
+          cd frontend
+          npx playwright test --config=tests/sparc-regression/config/playwright.config.ts --project=performance
+        env:
+          CI: true
+          PERFORMANCE_TESTS: true
+          
+      - name: 📊 Upload Performance Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-test-results
+          path: frontend/tests/sparc-regression/reports/performance-metrics/
+          retention-days: 30
+          
+  # Generate comprehensive report
+  generate-report:
+    name: 📊 Generate SPARC Test Report
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, e2e-tests, regression-scenarios]
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📊 Download all test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: test-artifacts/
+          
+      - name: 📈 Generate comprehensive report
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          npx tsx tests/sparc-regression/utilities/TestRunner.ts --generate-report
+        env:
+          ARTIFACTS_PATH: ../test-artifacts
+          
+      - name: 📋 Upload final report
+        uses: actions/upload-artifact@v4
+        with:
+          name: sparc-regression-final-report
+          path: |
+            frontend/tests/sparc-regression/reports/sparc-regression-report-*.json
+            frontend/tests/sparc-regression/reports/latest-report.json
+          retention-days: 90
+          
+  # Quality Gates Check
+  quality-gates:
+    name: 🚪 Quality Gates Validation
+    runs-on: ubuntu-latest
+    needs: [generate-report]
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📊 Download final report
+        uses: actions/download-artifact@v4
+        with:
+          name: sparc-regression-final-report
+          path: reports/
+          
+      - name: 🚪 Validate Quality Gates
+        run: |
+          cd frontend
+          npm ci --prefer-offline --no-audit
+          npx tsx tests/sparc-regression/utilities/quality-gates-validator.ts reports/latest-report.json
+          
+      - name: 📝 Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'reports/latest-report.json';
+            
+            if (fs.existsSync(path)) {
+              const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+              
+              const summary = `## 🧪 SPARC Regression Test Results
+              
+              ### 📊 Test Summary
+              - ✅ **Passed**: ${report.summary.passed}
+              - ❌ **Failed**: ${report.summary.failed}  
+              - ⏭️ **Skipped**: ${report.summary.skipped}
+              - ⏱️ **Duration**: ${(report.duration / 1000).toFixed(2)}s
+              
+              ### 🚪 Quality Gates
+              - **Coverage Gate**: ${report.qualityGates.coverageGate.passed ? '✅' : '❌'} (${report.qualityGates.coverageGate.actual}% / ${report.qualityGates.coverageGate.required}%)
+              - **Performance Gate**: ${report.qualityGates.performanceGate.passed ? '✅' : '❌'}
+              - **Regression Gate**: ${report.qualityGates.regressionGate.passed ? '✅' : '❌'} (${report.qualityGates.regressionGate.newFailures} new failures)
+              - **Stability Gate**: ${report.qualityGates.stabilityGate.passed ? '✅' : '❌'}
+              
+              ### 🎯 Feature Coverage
+              ${Object.entries(report.features).map(([feature, results]) => 
+                `- **${feature}**: ${results.reduce((acc, r) => acc + r.passed, 0)} passed, ${results.reduce((acc, r) => acc + r.failed, 0)} failed`
+              ).join('\n')}
+              
+              ${report.qualityGates.regressionGate.passed ? '🎉 All regression tests passed!' : '⚠️ Some regression tests failed - please review.'}
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: summary
+              });
+            }
+            
+  # Notification and cleanup
+  notify-results:
+    name: 📢 Notify Results
+    runs-on: ubuntu-latest
+    needs: [quality-gates]
+    if: always() && (github.event_name == 'schedule' || github.ref == 'refs/heads/main')
+    
+    steps:
+      - name: 📊 Download final report
+        uses: actions/download-artifact@v4
+        with:
+          name: sparc-regression-final-report
+          path: reports/
+          
+      - name: 📢 Send notification on failure
+        if: needs.quality-gates.result == 'failure'
+        run: |
+          echo "🚨 SPARC Regression Tests Failed!"
+          echo "Check the workflow results and reports for details."
+          # In real implementation, this would send Slack/email notifications

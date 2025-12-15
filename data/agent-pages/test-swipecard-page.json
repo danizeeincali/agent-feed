@@ -1,0 +1,81 @@
+{
+  "pageId": "test-swipecard-page",
+  "agentId": "test-agent",
+  "title": "Test SwipeCard Component",
+  "content": {
+    "components": [
+      {
+        "type": "Header",
+        "props": {
+          "level": 1,
+          "text": "Advanced SwipeCard Test"
+        }
+      },
+      {
+        "type": "SwipeCard",
+        "props": {
+          "cards": [
+            {
+              "id": "card-1",
+              "title": "Task: Code Review",
+              "content": "Review PR #456 - Authentication improvements",
+              "imageUrl": "https://picsum.photos/400/300?random=10",
+              "metadata": {
+                "priority": "high",
+                "assignee": "John Doe"
+              }
+            },
+            {
+              "id": "card-2",
+              "title": "Task: Bug Fix",
+              "content": "Fix navigation menu issue on mobile devices",
+              "imageUrl": "https://picsum.photos/400/300?random=11",
+              "metadata": {
+                "priority": "medium",
+                "assignee": "Jane Smith"
+              }
+            },
+            {
+              "id": "card-3",
+              "title": "Task: Feature Request",
+              "content": "Implement dark mode toggle in user settings",
+              "imageUrl": "https://picsum.photos/400/300?random=12",
+              "metadata": {
+                "priority": "low",
+                "assignee": "Bob Johnson"
+              }
+            },
+            {
+              "id": "card-4",
+              "title": "Task: Documentation",
+              "content": "Update API documentation for v2.0 release",
+              "imageUrl": "https://picsum.photos/400/300?random=13",
+              "metadata": {
+                "priority": "medium",
+                "assignee": "Alice Brown"
+              }
+            },
+            {
+              "id": "card-5",
+              "title": "Task: Testing",
+              "content": "Write integration tests for payment module",
+              "imageUrl": "https://picsum.photos/400/300?random=14",
+              "metadata": {
+                "priority": "high",
+                "assignee": "Charlie Davis"
+              }
+            }
+          ],
+          "onSwipeLeft": {
+            "endpoint": "/api/swipe-reject",
+            "method": "POST"
+          },
+          "onSwipeRight": {
+            "endpoint": "/api/swipe-accept",
+            "method": "POST"
+          }
+        }
+      }
+    ]
+  }
+}

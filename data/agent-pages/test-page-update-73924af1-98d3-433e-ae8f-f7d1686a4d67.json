@@ -1,0 +1,10 @@
+{
+  "id": "test-page-update-73924af1-98d3-433e-ae8f-f7d1686a4d67",
+  "agent_id": "test-agent-fa274077-b766-4126-98ac-bd213caf005b",
+  "title": "Update Test Page",
+  "page_type": "dynamic",
+  "content_type": "text",
+  "content_value": "Original content",
+  "status": "draft",
+  "version": 1
+}

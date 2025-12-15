@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude AI Performance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segura UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00f5ff, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-subtitle {
+            color: #b3c6e7;
+            font-size: 1.2em;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .metric-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #e8f4f8;
+        }
+
+        .metric-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .status-good { background: #27ae60; }
+        .status-warning { background: #f39c12; }
+        .status-critical { background: #e74c3c; }
+
+        .metric-value {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #00f5ff;
+            margin-bottom: 10px;
+        }
+
+        .metric-description {
+            color: #b3c6e7;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chart-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #e8f4f8;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .alerts-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .alert-critical {
+            background: rgba(231, 76, 60, 0.2);
+            border-left-color: #e74c3c;
+        }
+
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.2);
+            border-left-color: #f39c12;
+        }
+
+        .alert-info {
+            background: rgba(52, 152, 219, 0.2);
+            border-left-color: #3498db;
+        }
+
+        .alert-icon {
+            margin-right: 12px;
+            font-size: 1.2em;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .alert-time {
+            font-size: 0.8em;
+            color: #b3c6e7;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .control-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .control-button.active {
+            background: #00f5ff;
+            color: #1e3c72;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.1em;
+            color: #b3c6e7;
+        }
+
+        .update-time {
+            text-align: center;
+            color: #b3c6e7;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+        .threshold-indicators {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .threshold {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .threshold.good { background: #27ae60; }
+        .threshold.warning { background: #f39c12; }
+        .threshold.critical { background: #e74c3c; }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-title {
+                font-size: 2em;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Claude AI Performance Dashboard</h1>
+            <p class="dashboard-subtitle">Real-time monitoring and performance analytics</p>
+        </div>
+
+        <div class="controls">
+            <button class="control-button active" onclick="setTimeRange('5m')">5 Minutes</button>
+            <button class="control-button" onclick="setTimeRange('15m')">15 Minutes</button>
+            <button class="control-button" onclick="setTimeRange('1h')">1 Hour</button>
+            <button class="control-button" onclick="setTimeRange('6h')">6 Hours</button>
+            <button class="control-button" onclick="setTimeRange('24h')">24 Hours</button>
+            <button class="control-button" onclick="runLoadTest()">Run Load Test</button>
+        </div>
+
+        <div class="metrics-grid" id="metricsGrid">
+            <!-- Metrics will be populated dynamically -->
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Claude Response Time Trends</h3>
+            <div class="chart-wrapper">
+                <canvas id="responseTimeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">SSE Message Delivery Performance</h3>
+            <div class="chart-wrapper">
+                <canvas id="sseDeliveryChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">Memory Usage by Instance</h3>
+            <div class="chart-wrapper">
+                <canvas id="memoryChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3 class="chart-title">System Resource Utilization</h3>
+            <div class="chart-wrapper">
+                <canvas id="systemResourceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="alerts-section">
+            <h3 class="chart-title">Performance Alerts</h3>
+            <div id="alertsList">
+                <!-- Alerts will be populated dynamically -->
+            </div>
+        </div>
+
+        <div class="update-time">
+            Last updated: <span id="lastUpdate">Never</span>
+        </div>
+    </div>
+
+    <script>
+        // Dashboard state
+        let currentTimeRange = '5m';
+        let refreshInterval;
+        let charts = {};
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            loadPerformanceData();
+            startAutoRefresh();
+        });
+
+        // Chart initialization
+        function initializeCharts() {
+            // Response Time Chart
+            const responseTimeCtx = document.getElementById('responseTimeChart').getContext('2d');
+            charts.responseTime = new Chart(responseTimeCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Average Response Time (ms)',
+                        data: [],
+                        borderColor: '#00f5ff',
+                        backgroundColor: 'rgba(0, 245, 255, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'P95 Response Time (ms)',
+                        data: [],
+                        borderColor: '#f39c12',
+                        backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: getChartOptions('Response Time (ms)')
+            });
+
+            // SSE Delivery Chart
+            const sseCtx = document.getElementById('sseDeliveryChart').getContext('2d');
+            charts.sseDelivery = new Chart(sseCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'SSE Delivery Time (ms)',
+                        data: [],
+                        borderColor: '#27ae60',
+                        backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Message Throughput (msg/s)',
+                        data: [],
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: getChartOptions('Delivery Time (ms)', true)
+            });
+
+            // Memory Chart
+            const memoryCtx = document.getElementById('memoryChart').getContext('2d');
+            charts.memory = new Chart(memoryCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'RSS Memory (MB)',
+                        data: [],
+                        borderColor: '#9b59b6',
+                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Heap Used (MB)',
+                        data: [],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: getChartOptions('Memory Usage (MB)')
+            });
+
+            // System Resource Chart
+            const systemCtx = document.getElementById('systemResourceChart').getContext('2d');
+            charts.systemResource = new Chart(systemCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'CPU Usage (%)',
+                        data: [],
+                        borderColor: '#e67e22',
+                        backgroundColor: 'rgba(230, 126, 34, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Active Connections',
+                        data: [],
+                        borderColor: '#1abc9c',
+                        backgroundColor: 'rgba(26, 188, 156, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: getChartOptions('CPU Usage (%)', true)
+            });
+        }
+
+        function getChartOptions(yAxisLabel, dualAxis = false) {
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: { color: '#b3c6e7' },
+                        grid: { color: 'rgba(179, 198, 231, 0.1)' }
+                    },
+                    y: {
+                        ticks: { color: '#b3c6e7' },
+                        grid: { color: 'rgba(179, 198, 231, 0.1)' },
+                        title: {
+                            display: true,
+                            text: yAxisLabel,
+                            color: '#e8f4f8'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#e8f4f8' }
+                    }
+                },
+                elements: {
+                    point: { radius: 3 }
+                }
+            };
+
+            if (dualAxis) {
+                options.scales.y1 = {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    ticks: { color: '#b3c6e7' },
+                    grid: { drawOnChartArea: false },
+                    title: {
+                        display: true,
+                        text: 'Secondary Metric',
+                        color: '#e8f4f8'
+                    }
+                };
+            }
+
+            return options;
+        }
+
+        // Data loading and updating
+        async function loadPerformanceData() {
+            try {
+                showLoading();
+                
+                // Simulate API call to get performance data
+                const data = await fetchPerformanceData();
+                
+                updateMetricsCards(data.metrics);
+                updateCharts(data.timeSeries);
+                updateAlerts(data.alerts);
+                
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                
+            } catch (error) {
+                console.error('Failed to load performance data:', error);
+                showError('Failed to load performance data');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function fetchPerformanceData() {
+            // In a real implementation, this would fetch from your API
+            // For demo purposes, we'll generate mock data
+            return {
+                metrics: {
+                    claudeResponseTime: { value: 1245, status: 'good', change: -12 },
+                    sseDeliveryTime: { value: 67, status: 'good', change: 3 },
+                    activeInstances: { value: 8, status: 'good', change: 2 },
+                    memoryUsage: { value: 234, status: 'warning', change: 45 },
+                    errorRate: { value: 0.3, status: 'good', change: -0.1 },
+                    throughput: { value: 156, status: 'good', change: 23 }
+                },
+                timeSeries: generateTimeSeriesData(),
+                alerts: [
+                    {
+                        type: 'warning',
+                        title: 'High Memory Usage',
+                        message: 'Instance memory usage above 200MB',
+                        time: '2 minutes ago'
+                    },
+                    {
+                        type: 'info',
+                        title: 'Load Test Started',
+                        message: 'Concurrent user load test initiated',
+                        time: '5 minutes ago'
+                    }
+                ]
+            };
+        }
+
+        function generateTimeSeriesData() {
+            const now = Date.now();
+            const interval = getIntervalForTimeRange(currentTimeRange);
+            const count = getPointCountForTimeRange(currentTimeRange);
+            
+            const data = {
+                labels: [],
+                responseTime: { avg: [], p95: [] },
+                sseDelivery: { time: [], throughput: [] },
+                memory: { rss: [], heap: [] },
+                system: { cpu: [], connections: [] }
+            };
+            
+            for (let i = count - 1; i >= 0; i--) {
+                const timestamp = new Date(now - (i * interval));
+                data.labels.push(timestamp.toLocaleTimeString());
+                
+                // Generate realistic mock data with some variance
+                data.responseTime.avg.push(1200 + Math.random() * 300);
+                data.responseTime.p95.push(2500 + Math.random() * 500);
+                
+                data.sseDelivery.time.push(50 + Math.random() * 30);
+                data.sseDelivery.throughput.push(100 + Math.random() * 50);
+                
+                data.memory.rss.push(200 + Math.random() * 50);
+                data.memory.heap.push(150 + Math.random() * 30);
+                
+                data.system.cpu.push(30 + Math.random() * 20);
+                data.system.connections.push(5 + Math.random() * 10);
+            }
+            
+            return data;
+        }
+
+        function updateMetricsCards(metrics) {
+            const grid = document.getElementById('metricsGrid');
+            grid.innerHTML = '';
+            
+            const metricConfigs = [
+                {
+                    key: 'claudeResponseTime',
+                    title: 'Claude Response Time',
+                    unit: 'ms',
+                    description: 'Average response time for Claude AI queries',
+                    threshold: { good: 2000, warning: 5000 }
+                },
+                {
+                    key: 'sseDeliveryTime',
+                    title: 'SSE Delivery Time',
+                    unit: 'ms',
+                    description: 'Server-sent event message delivery latency',
+                    threshold: { good: 100, warning: 500 }
+                },
+                {
+                    key: 'activeInstances',
+                    title: 'Active Instances',
+                    unit: '',
+                    description: 'Number of active Claude AI instances',
+                    threshold: { good: 20, warning: 50 }
+                },
+                {
+                    key: 'memoryUsage',
+                    title: 'Memory Usage',
+                    unit: 'MB',
+                    description: 'Total memory consumption across instances',
+                    threshold: { good: 200, warning: 500 }
+                },
+                {
+                    key: 'errorRate',
+                    title: 'Error Rate',
+                    unit: '%',
+                    description: 'Percentage of failed requests',
+                    threshold: { good: 1, warning: 5 }
+                },
+                {
+                    key: 'throughput',
+                    title: 'Throughput',
+                    unit: 'req/min',
+                    description: 'Successful requests per minute',
+                    threshold: { good: 100, warning: 50 }
+                }
+            ];
+            
+            metricConfigs.forEach(config => {
+                const metric = metrics[config.key];
+                const card = createMetricCard(config, metric);
+                grid.appendChild(card);
+            });
+        }
+
+        function createMetricCard(config, metric) {
+            const card = document.createElement('div');
+            card.className = 'metric-card';
+            
+            const status = getMetricStatus(metric.value, config.threshold);
+            const changeIndicator = metric.change >= 0 ? '+' : '';
+            
+            card.innerHTML = `
+                <div class="metric-header">
+                    <div class="metric-title">${config.title}</div>
+                    <div class="metric-status status-${status}">${status.toUpperCase()}</div>
+                </div>
+                <div class="metric-value">${metric.value}${config.unit}</div>
+                <div class="metric-description">
+                    ${config.description}
+                    <br>
+                    <strong>${changeIndicator}${metric.change}${config.unit}</strong> from last period
+                </div>
+                <div class="threshold-indicators">
+                    <div class="threshold ${status === 'good' ? 'good' : ''}" title="Good: < ${config.threshold.good}${config.unit}"></div>
+                    <div class="threshold ${status === 'warning' ? 'warning' : ''}" title="Warning: < ${config.threshold.warning}${config.unit}"></div>
+                    <div class="threshold ${status === 'critical' ? 'critical' : ''}" title="Critical: >= ${config.threshold.warning}${config.unit}"></div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function getMetricStatus(value, threshold) {
+            if (value <= threshold.good) return 'good';
+            if (value <= threshold.warning) return 'warning';
+            return 'critical';
+        }
+
+        function updateCharts(timeSeriesData) {
+            // Update Response Time Chart
+            charts.responseTime.data.labels = timeSeriesData.labels;
+            charts.responseTime.data.datasets[0].data = timeSeriesData.responseTime.avg;
+            charts.responseTime.data.datasets[1].data = timeSeriesData.responseTime.p95;
+            charts.responseTime.update();
+            
+            // Update SSE Delivery Chart
+            charts.sseDelivery.data.labels = timeSeriesData.labels;
+            charts.sseDelivery.data.datasets[0].data = timeSeriesData.sseDelivery.time;
+            charts.sseDelivery.data.datasets[1].data = timeSeriesData.sseDelivery.throughput;
+            charts.sseDelivery.update();
+            
+            // Update Memory Chart
+            charts.memory.data.labels = timeSeriesData.labels;
+            charts.memory.data.datasets[0].data = timeSeriesData.memory.rss;
+            charts.memory.data.datasets[1].data = timeSeriesData.memory.heap;
+            charts.memory.update();
+            
+            // Update System Resource Chart
+            charts.systemResource.data.labels = timeSeriesData.labels;
+            charts.systemResource.data.datasets[0].data = timeSeriesData.system.cpu;
+            charts.systemResource.data.datasets[1].data = timeSeriesData.system.connections;
+            charts.systemResource.update();
+        }
+
+        function updateAlerts(alerts) {
+            const alertsList = document.getElementById('alertsList');
+            
+            if (alerts.length === 0) {
+                alertsList.innerHTML = '<p style="text-align: center; color: #27ae60;">No active alerts</p>';
+                return;
+            }
+            
+            alertsList.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const alertItem = document.createElement('div');
+                alertItem.className = `alert-item alert-${alert.type}`;
+                
+                const icon = getAlertIcon(alert.type);
+                
+                alertItem.innerHTML = `
+                    <div class="alert-icon">${icon}</div>
+                    <div class="alert-content">
+                        <div class="alert-title">${alert.title}</div>
+                        <div>${alert.message}</div>
+                        <div class="alert-time">${alert.time}</div>
+                    </div>
+                `;
+                
+                alertsList.appendChild(alertItem);
+            });
+        }
+
+        function getAlertIcon(type) {
+            switch (type) {
+                case 'critical': return '🚨';
+                case 'warning': return '⚠️';
+                case 'info': return 'ℹ️';
+                default: return '📊';
+            }
+        }
+
+        // Utility functions
+        function getIntervalForTimeRange(range) {
+            switch (range) {
+                case '5m': return 5000; // 5 seconds
+                case '15m': return 15000; // 15 seconds
+                case '1h': return 60000; // 1 minute
+                case '6h': return 360000; // 6 minutes
+                case '24h': return 1440000; // 24 minutes
+                default: return 5000;
+            }
+        }
+
+        function getPointCountForTimeRange(range) {
+            switch (range) {
+                case '5m': return 60; // 60 points over 5 minutes
+                case '15m': return 60; // 60 points over 15 minutes
+                case '1h': return 60; // 60 points over 1 hour
+                case '6h': return 60; // 60 points over 6 hours
+                case '24h': return 60; // 60 points over 24 hours
+                default: return 60;
+            }
+        }
+
+        // Control functions
+        function setTimeRange(range) {
+            currentTimeRange = range;
+            
+            // Update button states
+            document.querySelectorAll('.control-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reload data for new time range
+            loadPerformanceData();
+        }
+
+        function runLoadTest() {
+            if (confirm('This will start a load test which may impact performance. Continue?')) {
+                // In a real implementation, this would trigger your load test
+                alert('Load test started! Monitor the dashboard for results.');
+                
+                // For demo, we'll just show a temporary alert
+                const alertsList = document.getElementById('alertsList');
+                const alertItem = document.createElement('div');
+                alertItem.className = 'alert-item alert-info';
+                alertItem.innerHTML = `
+                    <div class="alert-icon">🚀</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Load Test Started</div>
+                        <div>Concurrent user load test initiated with 10 users</div>
+                        <div class="alert-time">Just now</div>
+                    </div>
+                `;
+                alertsList.insertBefore(alertItem, alertsList.firstChild);
+            }
+        }
+
+        function startAutoRefresh() {
+            refreshInterval = setInterval(() => {
+                loadPerformanceData();
+            }, 30000); // Refresh every 30 seconds
+        }
+
+        function showLoading() {
+            // You could add a loading indicator here
+        }
+
+        function hideLoading() {
+            // Hide loading indicator
+        }
+
+        function showError(message) {
+            alert(`Error: ${message}`);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+name: Claude SDK Analytics Test Suite
+
+on:
+  push:
+    branches: [ main, develop, v1 ]
+    paths:
+      - 'frontend/src/**'
+      - 'frontend/package*.json'
+      - '.github/workflows/test-claude-sdk-analytics.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/src/**'
+      - 'frontend/package*.json'
+      - '.github/workflows/test-claude-sdk-analytics.yml'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18'
+  CACHE_VERSION: v1
+
+jobs:
+  # Unit Tests
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run unit tests
+        working-directory: frontend
+        run: |
+          npm run test:unit -- \
+            --coverage \
+            --coverageReporters=lcov,json,text-summary \
+            --coverageDirectory=coverage/unit \
+            --testPathPattern="src/tests/unit" \
+            --passWithNoTests=false
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: Upload unit test coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: frontend/coverage/unit/lcov.info
+          flags: unit-tests
+          name: unit-coverage
+          fail_ci_if_error: false
+
+      - name: Upload unit test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: unit-test-results
+          path: |
+            frontend/coverage/unit/
+            frontend/test-results/
+          retention-days: 7
+
+  # Integration Tests
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      # Mock API server for integration tests
+      mock-api:
+        image: wiremock/wiremock:latest
+        ports:
+          - 3001:8080
+        options: --health-cmd="curl -f http://localhost:8080/__admin/health" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Wait for mock API
+        run: |
+          timeout 30 bash -c 'until curl -f http://localhost:3001/__admin/health; do sleep 1; done'
+
+      - name: Run integration tests
+        working-directory: frontend
+        run: |
+          npm run test:integration -- \
+            --coverage \
+            --coverageReporters=lcov,json,text-summary \
+            --coverageDirectory=coverage/integration \
+            --testPathPattern="src/tests/integration" \
+            --passWithNoTests=false
+        env:
+          CI: true
+          NODE_ENV: test
+          MOCK_API_URL: http://localhost:3001
+
+      - name: Upload integration test coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: frontend/coverage/integration/lcov.info
+          flags: integration-tests
+          name: integration-coverage
+          fail_ci_if_error: false
+
+      - name: Upload integration test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration-test-results
+          path: |
+            frontend/coverage/integration/
+            frontend/test-results/
+          retention-days: 7
+
+  # Performance Tests
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run performance tests
+        working-directory: frontend
+        run: |
+          npm run test:performance -- \
+            --reporter=verbose \
+            --testPathPattern="src/tests/performance" \
+            --passWithNoTests=false
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: Upload performance test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-test-results
+          path: frontend/test-results/
+          retention-days: 7
+
+  # E2E Tests
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium firefox
+
+      - name: Build application
+        working-directory: frontend
+        run: npm run build
+
+      - name: Start application
+        working-directory: frontend
+        run: |
+          npm run preview &
+          sleep 10
+          curl -f http://localhost:4173 || exit 1
+
+      - name: Run E2E tests
+        working-directory: frontend
+        run: |
+          npx playwright test \
+            --config=src/tests/config/playwright.config.ts \
+            --project=chromium \
+            --reporter=html,junit \
+            src/tests/e2e/claude-sdk/
+        env:
+          CI: true
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-test-results
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+          retention-days: 7
+
+  # Regression Tests
+  regression-tests:
+    name: Regression Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run regression tests
+        working-directory: frontend
+        run: |
+          npm test -- \
+            --testPathPattern="src/tests/regression" \
+            --coverage \
+            --coverageReporters=lcov,json \
+            --coverageDirectory=coverage/regression \
+            --passWithNoTests=false
+        env:
+          CI: true
+          NODE_ENV: test
+
+      - name: Upload regression test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: regression-test-results
+          path: |
+            frontend/coverage/regression/
+            frontend/test-results/
+          retention-days: 7
+
+  # Coverage Analysis
+  coverage-analysis:
+    name: Coverage Analysis
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, regression-tests]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all coverage reports
+        uses: actions/download-artifact@v3
+        with:
+          path: coverage-artifacts/
+
+      - name: Merge coverage reports
+        run: |
+          npx nyc merge coverage-artifacts/*/coverage/ coverage/merged.json
+          npx nyc report --reporter=lcov --reporter=text-summary --temp-dir=coverage/ --report-dir=coverage/merged/
+
+      - name: Upload merged coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage/merged/lcov.info
+          flags: merged-coverage
+          name: merged-coverage
+          fail_ci_if_error: true
+
+      - name: Coverage threshold check
+        run: |
+          node -e "
+            const coverage = require('./coverage/merged/coverage-summary.json');
+            const thresholds = { lines: 90, functions: 85, branches: 80, statements: 90 };
+
+            let failed = false;
+            Object.entries(thresholds).forEach(([metric, threshold]) => {
+              const actual = coverage.total[metric].pct;
+              if (actual < threshold) {
+                console.error(\`❌ \${metric} coverage \${actual}% is below threshold \${threshold}%\`);
+                failed = true;
+              } else {
+                console.log(\`✅ \${metric} coverage \${actual}% meets threshold \${threshold}%\`);
+              }
+            });
+
+            if (failed) process.exit(1);
+          "
+
+  # Security Scan
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run security audit
+        working-directory: frontend
+        run: |
+          npm audit --audit-level=moderate
+
+      - name: Run dependency vulnerability scan
+        uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_TYPESCRIPT_ES: true
+
+  # Test Summary
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, performance-tests, e2e-tests, regression-tests, coverage-analysis]
+    if: always()
+
+    steps:
+      - name: Download all test results
+        uses: actions/download-artifact@v3
+        with:
+          path: test-artifacts/
+
+      - name: Generate test summary
+        run: |
+          echo "# 🧪 Claude SDK Analytics Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Test status summary
+          echo "## Test Status" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Suite | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Unit Tests | ${{ needs.unit-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Integration Tests | ${{ needs.integration-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance Tests | ${{ needs.performance-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| E2E Tests | ${{ needs.e2e-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Regression Tests | ${{ needs.regression-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Coverage Analysis | ${{ needs.coverage-analysis.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Coverage info if available
+          if [ -f "test-artifacts/unit-test-results/coverage/unit/coverage-summary.json" ]; then
+            echo "## Coverage Summary" >> $GITHUB_STEP_SUMMARY
+            echo "```json" >> $GITHUB_STEP_SUMMARY
+            cat test-artifacts/unit-test-results/coverage/unit/coverage-summary.json >> $GITHUB_STEP_SUMMARY
+            echo "```" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail if any tests failed
+        if: |
+          needs.unit-tests.result == 'failure' ||
+          needs.integration-tests.result == 'failure' ||
+          needs.performance-tests.result == 'failure' ||
+          needs.e2e-tests.result == 'failure' ||
+          needs.regression-tests.result == 'failure' ||
+          needs.coverage-analysis.result == 'failure'
+        run: |
+          echo "One or more test suites failed"
+          exit 1

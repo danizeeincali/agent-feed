@@ -1,0 +1,57 @@
+{
+  "timestamp": "2025-09-30T19:38:08.059Z",
+  "tests": [
+    {
+      "name": "Navigation",
+      "status": "PASS"
+    },
+    {
+      "name": "No Spawn Agent Button",
+      "status": "PASS"
+    },
+    {
+      "name": "Refresh Button Present",
+      "status": "PASS"
+    },
+    {
+      "name": "No Activate Buttons",
+      "status": "PASS"
+    },
+    {
+      "name": "No Play Icons",
+      "status": "PASS"
+    },
+    {
+      "name": "Required Buttons Present",
+      "status": "PASS",
+      "details": "Home: 11, Details: 11, Delete: 0"
+    },
+    {
+      "name": "No Console Errors",
+      "status": "PASS"
+    },
+    {
+      "name": "Refresh Button Functional",
+      "status": "PASS"
+    }
+  ],
+  "screenshots": [
+    "/workspaces/agent-feed/frontend/tests/screenshots/spawn-agent-removal-full-page.png",
+    "/workspaces/agent-feed/frontend/tests/screenshots/spawn-agent-removal-viewport.png"
+  ],
+  "consoleErrors": [
+    "WebSocket connection to 'ws://localhost:443/?token=wIMZ-p2W0hdO' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "WebSocket connection to 'ws://localhost:5173/ws' failed: Error during WebSocket handshake: Unexpected response code: 404",
+    "❌ WebSocket error: Event",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+  ],
+  "consoleWarnings": [
+    "⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+    "⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath."
+  ],
+  "overallStatus": "PASS"
+}

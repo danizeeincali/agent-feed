@@ -1,0 +1,309 @@
+{
+  "scenario": "deep-threading",
+  "steps": [],
+  "screenshots": [
+    "/workspaces/agent-feed/frontend/tests/e2e/validation/screenshots/error-scenario2-1761856024994.png"
+  ],
+  "consoleLogs": [
+    {
+      "type": "log",
+      "text": "🔄 DEBUG: Fetching suggestions {mentionQuery: null, debouncedQuery: , isDropdownOpen: false}",
+      "timestamp": 1761855994533
+    },
+    {
+      "type": "log",
+      "text": "⏹️ DEBUG: Skipping fetch - dropdown closed",
+      "timestamp": 1761855994533
+    },
+    {
+      "type": "log",
+      "text": "🎨 RealSocialMediaFeed RENDER: {loading: false, error: null, postsLength: 20, postsType: object, postsIsArray: true}",
+      "timestamp": 1761855994538
+    },
+    {
+      "type": "log",
+      "text": "🎨 About to render posts: {postsExists: true, postsLength: 20, postsType: object, isArray: true}",
+      "timestamp": 1761855994538
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 0 : {id: dff7dd20-36ab-4bd1-9579-286900e904c5, title: Test Math Problem Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994590
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 1 : {id: post-1761854826827, title: what is 5949+98?, comments: undefined, hasCommentsField: false, engagement: {\"comments\":3,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994624
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 2 : {id: 7a33c018-5631-4c9d-8142-709c849c5997, title: Test Math Problem Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994624
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 3 : {id: post-1761850763869, title: what is 4949+98?, comments: undefined, hasCommentsField: false, engagement: {\"comments\":3,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994624
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 4 : {id: post-1761850663926, title: Real-Time Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":3,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994624
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 5 : {id: post-1761701081639, title: E2E Test Post - PostgreSQL Integration, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994624
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 6 : {id: post-1761701079803, title: Performance Test Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994624
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 7 : {id: post-1761701079793, title: Persistence Test Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":1,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994624
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 8 : {id: post-1761701079781, title: Comment Test Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":3,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 9 : {id: post-1761701079775, title: Third Test Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 10 : {id: post-1761701079773, title: Second Test Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 11 : {id: post-1761701079771, title: First Post in Empty Database, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 12 : {id: post-1761701079586, title: Performance Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 13 : {id: post-1761701079583, title: Compatibility Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 14 : {id: post-1761701079579, title: Timestamp Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 15 : {id: post-1761701079574, title: Orchestrator Detection Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994625
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 16 : {id: post-1761701079566, title: Minimal Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994626
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 17 : {id: post-1761701079562, title: Mapping Test Post, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994650
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 18 : {id: post-1761701079558, title: Priority Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994650
+    },
+    {
+      "type": "log",
+      "text": "🎨 Rendering post 19 : {id: post-1761701079553, title: Duplicate Test, comments: undefined, hasCommentsField: false, engagement: {\"comments\":0,\"likes\":0,\"shares\":0,\"views\":0}}",
+      "timestamp": 1761855994650
+    },
+    {
+      "type": "log",
+      "text": "[useTicketUpdates] Cleaning up Socket.IO listeners",
+      "timestamp": 1761855995046
+    },
+    {
+      "type": "warning",
+      "text": "WebSocket connection to 'ws://localhost:3001/socket.io/?EIO=4&transport=websocket' failed: WebSocket is closed before the connection is established.",
+      "timestamp": 1761855995046
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761855995046
+    },
+    {
+      "type": "log",
+      "text": "[Socket.IO] Connected to server: 2wJslSKJhPTgzXP1AAAJ",
+      "timestamp": 1761855995047
+    },
+    {
+      "type": "log",
+      "text": "[useTicketUpdates] WebSocket connected: {message: WebSocket connection established, timestamp: 2025-10-30T20:26:34.924Z}",
+      "timestamp": 1761855995082
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761855995780
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761855996783
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761855997783
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761855998794
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761855999797
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856000825
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856001847
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856002890
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856003880
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856004891
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856005917
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856006912
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856007929
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856008929
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856009934
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856010961
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856011966
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856012971
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856013976
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856014981
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856015984
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856017002
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856018009
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856019012
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856020033
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856021024
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856022028
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856023037
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856024041
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "timestamp": 1761856025049
+    }
+  ],
+  "backendLogs": "👀 File watcher initialized for agent directory\n🔧 DEBUG: Creating Claude Code SDK router...\n🔧 DEBUG: Registering POST /streaming-chat route...\n🔧 DEBUG: Registering POST /background-task route...\n🔧 DEBUG: Registering POST /session route...\n🔧 DEBUG: Registering GET /session/:sessionId route...\n🔧 DEBUG: Registering DELETE /session/:sessionId route...\n🔧 DEBUG: Registering GET /health route...\n🔧 DEBUG: Registering GET /analytics/health route...\n🔧 DEBUG: Registering GET /status route...\n🔧 DEBUG: Registering GET /cost-tracking route...\n🔧 DEBUG: Registering GET /token-usage route...\n🔧 DEBUG: Registering GET /analytics route...\n🔧 DEBUG: Registering GET /optimization route...\n[dotenv@17.2.3] injecting env (51) from ../.env -- tip: ⚙️  override existing env vars with { override: true }\n📊 Database Mode: SQLite\n📂 Agent Source: Filesystem\n⚠️  Failed to load compiled TypeScript monitoring modules. Using fallback implementation.\nRun `npm run build` to compile TypeScript sources.\n❌ Failed to load monitoring modules: Cannot find module 'ts-node'\nRequire stack:\n- /workspaces/agent-feed/api-server/services/monitoring-service.js\n📋 Work Queue Mode: SQLite\n✅ Token analytics database connected: /workspaces/agent-feed/database.db\n✅ Agent pages database connected: /workspaces/agent-feed/data/agent-pages.db\n✅ Proactive agent work queue initialized (SQLite for proactive agents)\n✅ SQLite connections established\n✅ SQLite work queue repository initialized\n✅ Work queue selector initialized\n✅ TokenAnalyticsWriter initialized with database connection\n✅ Claude Code SDK Manager initialized with official SDK\n📁 Working Directory: /workspaces/agent-feed/prod\n🤖 Model: claude-sonnet-4-20250514\n🛠️ Tools Available: Bash, Read, Write, Edit, MultiEdit, Grep, Glob, WebFetch, WebSearch\n🔓 Permission Mode: bypassPermissions\n✅ [TelemetryService] Initialized: { hasDatabase: true, hasSSEStream: true, initialized: true }\n✅ TelemetryService initialized in ClaudeCodeSDKManager\n✅ TelemetryService initialized with database and SSE stream\n✅ Feedback loop system initialized\n✅ UserSettingsService prepared statements initialized\n✅ User settings routes initialized with database\n✅ User settings system initialized\n📡 Auto-registration middleware initialized\n   Watching: /workspaces/agent-feed/data/agent-pages\n✅ Agent Pages routes initialized with database\n✅ Security configuration loaded\n✅ Minimal security middleware initialized (single-user mode)\n✅ Security and authentication routes initialized\n📡 Initializing WebSocket service (Socket.IO)...\nWebSocket service initialized\n✅ WebSocket service initialized BEFORE server listen\n   🔌 WebSocket endpoint will be: ws://localhost:3001/socket.io/\n   📢 Events: ticket:status:update, worker:lifecycle\n🚀 API Server running on http://0.0.0.0:3001\n📡 Health check: http://localhost:3001/health\n🤖 Agents API: http://localhost:3001/api/agents\n📝 Templates API: http://localhost:3001/api/templates\n📊 Streaming Ticker SSE: http://localhost:3001/api/streaming-ticker/stream\n📄 Dynamic Pages API: http://localhost:3001/api/agent-pages/agents/:agentId/pages\n📈 All analytics APIs available\n🔌 Socket.IO ready at: ws://localhost:3001/socket.io/\n💾 Memory Usage:\n   RSS: 98 MB\n   Heap Total: 56 MB\n   Heap Used: 29 MB\n   External: 4 MB\n   Array Buffers: 0 MB\n\n📊 Initializing Phase 5 Monitoring System...\n🔍 Initializing Phase 5 monitoring services...\n⚠️  Using mock MetricsCollector\n✅ MetricsCollector started (5s intervals)\n⚠️  Using mock HealthMonitor\n✅ HealthMonitor started\n⚠️  Using mock AlertManager\n✅ AlertManager started\n✅ Phase 5 monitoring fully initialized\n✅ Phase 5 Monitoring System active\n   📈 Metrics API: http://localhost:3001/api/monitoring/metrics\n   🏥 Health API: http://localhost:3001/api/monitoring/health\n   🚨 Alerts API: http://localhost:3001/api/monitoring/alerts\n\n🤖 Starting AVI Orchestrator...\n🚀 Starting AVI Orchestrator...\n✅ AVI marked as running\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:24:05.584Z\n}\n✅ AVI Orchestrator started successfully\n   Max Workers: 5\n   Poll Interval: 5000ms\n   Max Context: 50000 tokens\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n✅ AVI Orchestrator started - using SQLite work queue\n   📡 WebSocket events enabled for real-time ticket updates\n   ✅ Watcher ready\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:24:35.584Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:25:05.586Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:25:35.587Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n⚠️ High memory usage: 23MB / 26MB (88%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:26:05.588Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n🎫 Found 16 tickets for 20 posts\nWebSocket client connected: O1Pku9Fv4wV1wz5_AAAB\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\n🎫 Found 16 tickets for 20 posts\nWebSocket client connected: oH--djglHnwThOY3AAAD\nWebSocket client disconnected: O1Pku9Fv4wV1wz5_AAAB, reason: client namespace disconnect\nWebSocket client disconnected: oH--djglHnwThOY3AAAD, reason: client namespace disconnect\nWebSocket client connected: 2wJslSKJhPTgzXP1AAAJ\nWebSocket client connected: 36uHj3G9IEBnsIN5AAAL\n⚠️ High memory usage: 25MB / 28MB (91%)\n   SSE Connections: 0\n   Ticker Messages: 3\n📊 AVI state updated: {\n  context_size: 0,\n  active_workers: 0,\n  workers_spawned: 0,\n  tickets_processed: 0,\n  last_health_check: 2025-10-30T20:26:35.595Z\n}\n💚 Health Check: 0 workers, 0 tokens, 0 processed\n",
+  "error": {
+    "message": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"title\"], input[placeholder*=\"Title\"]').first()\u001b[22m\n",
+    "stack": "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"title\"], input[placeholder*=\"Title\"]').first()\u001b[22m\n\n    at /workspaces/agent-feed/frontend/tests/e2e/validation/conversation-memory-validation.spec.ts:412:24"
+  }
+}
