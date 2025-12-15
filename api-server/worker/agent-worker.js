@@ -8,6 +8,10 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
+// SECURITY FIX: Rate limiting for name submissions
+// Prevents database write amplification from rapid-fire submissions
+const nameSubmissionTimestamps = new Map(); // userId -> timestamp
+
 class AgentWorker {
   constructor(config = {}) {
     this.workerId = config.workerId;
@@ -29,6 +33,7 @@ class AgentWorker {
    */
   emitStatusUpdate(status, options = {}) {
     if (!this.websocketService || !this.websocketService.isInitialized()) {
+      console.log(`⚠️ WebSocket not available for status update: ${status} (ticket: ${this.ticketId})`);
       return; // Silently skip if WebSocket not available
     }
 
@@ -44,6 +49,7 @@ class AgentWorker {
       payload.error = options.error;
     }
 
+    console.log(`🔔 Emitting WebSocket event: ${status} (ticket: ${this.ticketId}, agent: ${this.agentId})`);
     this.websocketService.emitTicketStatusUpdate(payload);
   }
 
@@ -52,26 +58,44 @@ class AgentWorker {
    * @returns {Promise<Object>} Result with success, response, tokensUsed, commentId
    */
   async execute() {
+    let ticket = null;
+
     try {
       this.status = 'running';
 
       // 1. Fetch ticket from work queue
-      const ticket = await this.fetchTicket();
+      ticket = await this.fetchTicket();
       this.postId = ticket.post_id; // Store post_id for WebSocket events
 
-      // Emit processing started event
+      // Emit 'waiting' state after picking up ticket
+      console.log(`🔄 Worker: Emitting state 'waiting' for ticket ${ticket.id}`);
+      this.emitCommentState(ticket, 'waiting');
+
+      // Emit processing started event (legacy)
       this.emitStatusUpdate('processing');
 
-      // 2. Process URL with Claude Code SDK
+      // 2. Emit 'analyzed' state before processing
+      console.log(`🔄 Worker: Emitting state 'analyzed' for ticket ${ticket.id}`);
+      this.emitCommentState(ticket, 'analyzed');
+
+      // 3. Emit 'responding' state before AI API call
+      console.log(`🔄 Worker: Emitting state 'responding' for ticket ${ticket.id}`);
+      this.emitCommentState(ticket, 'responding');
+
+      // 4. Process URL with Claude Code SDK
       const intelligence = await this.processURL(ticket);
 
-      // 3. Post intelligence as comment on original post
+      // 5. Post intelligence as comment on original post
       const commentResult = await this.postToAgentFeed(intelligence, ticket);
 
-      // 4. Return success
+      // 6. Return success
       this.status = 'completed';
 
-      // Emit completion event
+      // Emit 'complete' state after completion
+      console.log(`🔄 Worker: Emitting state 'complete' for ticket ${ticket.id}`);
+      this.emitCommentState(ticket, 'complete');
+
+      // Emit completion event (legacy)
       this.emitStatusUpdate('completed');
 
       return {
@@ -87,6 +111,41 @@ class AgentWorker {
       this.emitStatusUpdate('failed', { error: error.message });
 
       throw error;
+    } finally {
+      // ALWAYS emit 'completed' status even on error to ensure UI updates
+      if (ticket) {
+        console.log(`🔄 Worker: Emitting final state 'complete' for ticket ${ticket.id} (finally block)`);
+        this.emitCommentState(ticket, 'complete');
+      }
+    }
+  }
+
+  /**
+   * Emit comment state for processing pills
+   * @param {Object} ticket - Ticket object with id and post_id
+   * @param {string} state - State: waiting, analyzed, responding, complete
+   */
+  emitCommentState(ticket, state) {
+    if (!this.websocketService || !this.websocketService.isInitialized()) {
+      console.log(`⚠️ WebSocket not available for comment state: ${state} (ticket: ${ticket.id})`);
+      return;
+    }
+
+    // Check if websocketService has emitCommentState method
+    if (typeof this.websocketService.emitCommentState === 'function') {
+      this.websocketService.emitCommentState({
+        commentId: ticket.id,
+        postId: ticket.post_id,
+        state: state
+      });
+    } else {
+      // Fallback: broadcast directly
+      this.websocketService.broadcast('comment:state', {
+        commentId: ticket.id,
+        postId: ticket.post_id,
+        state: state,
+        timestamp: new Date().toISOString()
+      });
     }
   }
 
@@ -1028,13 +1087,250 @@ Provide your analysis and intelligence summary in a conversational tone.`;
       throw new Error('Worker not in comment mode');
     }
 
-    const { comment, parentPost } = this.commentContext;
+    const { comment, parentPost, ticket } = this.commentContext;
 
     console.log(`💬 Processing comment: ${comment.id}`);
     console.log(`   Content: ${comment.content}`);
     console.log(`   Agent: ${this.agentId}`);
 
     try {
+      // ============================================================================
+      // ONBOARDING FLOW DETECTION (FR-2: Get-to-Know-You Response Logic)
+      // ============================================================================
+
+      // Check if this is Get-to-Know-You agent during Phase 1 onboarding
+      if (this.agentId === 'get-to-know-you-agent') {
+        const { default: dbSelector } = await import('../config/database-selector.js');
+
+        if (!dbSelector.sqliteDb && !dbSelector.usePostgres) {
+          await dbSelector.initialize();
+        }
+
+        // Get user ID from comment author
+        const userId = comment.author;
+
+        // Get onboarding state
+        const onboardingState = await dbSelector.getOnboardingState(userId);
+
+        // Process onboarding flow if state exists and Phase 1 is active
+        if (onboardingState && onboardingState.phase === 1 && !onboardingState.phase1_completed) {
+          console.log(`📋 Get-to-Know-You onboarding flow: phase=${onboardingState.phase}, step=${onboardingState.step}`);
+
+          // Import onboarding service
+          const { createOnboardingFlowService } = await import('../services/onboarding/onboarding-flow-service.js');
+          const onboardingService = createOnboardingFlowService(dbSelector.sqliteDb || dbSelector.pgPool);
+
+          // ========================================================================
+          // STEP 1: Name Collection (step='name')
+          // ========================================================================
+          if (onboardingState.step === 'name') {
+            console.log(`📝 Processing name response: "${comment.content}"`);
+
+            // SECURITY FIX: Rate limiting for name submissions
+            // Max 1 submission per 10 seconds to prevent database write amplification
+            const lastSubmission = nameSubmissionTimestamps.get(userId);
+            const now = Date.now();
+
+            if (lastSubmission && (now - lastSubmission) < 10000) {
+              return {
+                success: true,
+                reply: "Please wait a moment before trying again. 😊",
+                agent: this.agentId,
+                commentId: comment.id,
+                skipStateUpdate: true
+              };
+            }
+
+            // Update timestamp for this user
+            nameSubmissionTimestamps.set(userId, now);
+
+            // Validate name
+            const trimmedName = comment.content.trim();
+
+            if (trimmedName.length === 0) {
+              // Empty name - respond with error
+              return {
+                success: true,
+                reply: "I didn't catch that. Please provide a name I can call you by.",
+                agent: this.agentId,
+                commentId: comment.id,
+                skipStateUpdate: true
+              };
+            }
+
+            if (trimmedName.length > 50) {
+              // Name too long - respond with error
+              return {
+                success: true,
+                reply: "That's a bit long! Please use a shorter version (maximum 50 characters).",
+                agent: this.agentId,
+                commentId: comment.id,
+                skipStateUpdate: true
+              };
+            }
+
+            // Process name via onboarding service (saves to user_settings and updates state)
+            const nameResult = await onboardingService.processNameResponse(userId, trimmedName);
+
+            if (!nameResult.success) {
+              throw new Error(`Name processing failed: ${nameResult.error || 'Unknown error'}`);
+            }
+
+            console.log(`✅ Name saved: "${trimmedName}" for user ${userId}`);
+
+            // SECURITY FIX: Remove race condition by using proper async/await sequencing
+            // instead of setTimeout which is brittle and can cause race conditions
+
+            // Step 2: Create acknowledgment COMMENT
+            const acknowledgment = `Nice to meet you, ${trimmedName}! 👋 I'm your Get-to-Know-You Agent, and I help Λvi personalize your experience here.`;
+
+            // Step 3: Create NEW POST with use case question (runs AFTER comment is posted)
+            try {
+              const postPayload = {
+                title: `What brings you to Agent Feed, ${trimmedName}?`,
+                content: `# What brings you to Agent Feed, ${trimmedName}?
+
+I'd love to understand what you're hoping to accomplish here. This helps me personalize your experience and introduce you to the right agents.
+
+**🎯 Personal Productivity**
+- Managing daily tasks and goals
+- Building better habits
+- Staying organized
+
+**💼 Business Management**
+- Running projects and teams
+- Strategic planning
+- Business operations
+
+**🎨 Creative Projects**
+- Writing, design, content creation
+- Managing creative workflows
+
+**📚 Learning & Development**
+- Acquiring new skills
+- Research and exploration
+- Knowledge management
+
+**🌟 Something else?**
+Tell me what's most important to you!`,
+                authorId: userId,
+                isAgentResponse: true,
+                agentId: 'get-to-know-you-agent',
+                agent: {
+                  name: 'get-to-know-you-agent',
+                  displayName: 'Get-to-Know-You Agent'
+                },
+                metadata: {
+                  isOnboardingPost: true,
+                  onboardingPhase: 1,
+                  onboardingStep: 'use_case',
+                  postType: 'conversational'
+                }
+              };
+
+              const postResponse = await fetch(`${this.apiBaseUrl}/api/posts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(postPayload)
+              });
+
+              if (!postResponse.ok) {
+                throw new Error(`Failed to create use case post: ${postResponse.statusText}`);
+              }
+
+              const postData = await postResponse.json();
+              console.log(`✅ Created use case question post for ${trimmedName}`);
+
+              // ✅ Emit WebSocket event for new post visibility
+              if (this.websocketService && this.websocketService.isInitialized()) {
+                this.websocketService.broadcast('post:created', {
+                  post: postData.data,
+                  timestamp: new Date().toISOString()
+                });
+                console.log(`📡 WebSocket: Emitted post:created event for ${postData.data.id}`);
+              }
+
+              // Return acknowledgment comment with post creation confirmation
+              return {
+                success: true,
+                reply: acknowledgment,
+                agent: this.agentId,
+                commentId: comment.id,
+                nextStep: 'use_case',
+                postCreated: true,
+                postId: postData.data.id
+              };
+            } catch (error) {
+              console.error(`❌ Error creating use case post:`, error);
+
+              // Still return acknowledgment even if post creation fails
+              // This ensures the user gets feedback, but log the error
+              return {
+                success: true,
+                reply: acknowledgment,
+                agent: this.agentId,
+                commentId: comment.id,
+                nextStep: 'use_case',
+                postCreated: false,
+                postError: error.message
+              };
+            }
+          }
+
+          // ========================================================================
+          // STEP 2: Use Case Collection (step='use_case')
+          // ========================================================================
+          if (onboardingState.step === 'use_case') {
+            console.log(`📝 Processing use case response: "${comment.content}"`);
+
+            const trimmedUseCase = comment.content.trim();
+
+            if (trimmedUseCase.length === 0) {
+              // Empty use case - respond with error
+              return {
+                success: true,
+                reply: "I didn't catch that. What brings you to Agent Feed?",
+                agent: this.agentId,
+                commentId: comment.id,
+                skipStateUpdate: true
+              };
+            }
+
+            // Process use case via onboarding service (marks Phase 1 complete)
+            const useCaseResult = await onboardingService.processUseCaseResponse(userId, trimmedUseCase);
+
+            if (!useCaseResult.success) {
+              throw new Error(`Use case processing failed: ${useCaseResult.error || 'Unknown error'}`);
+            }
+
+            console.log(`✅ Phase 1 completed for user ${userId}`);
+
+            // Get display name from onboarding state
+            const updatedState = await dbSelector.getOnboardingState(userId);
+            const responses = updatedState.responses ? JSON.parse(updatedState.responses) : {};
+            const userName = responses.name || 'there';
+
+            // Return Phase 1 completion message
+            const completionMessage = useCaseResult.message || `Perfect, ${userName}! Based on that, your agents will help you get started. You're all set!`;
+
+            // Note: Avi welcome post is NOT triggered here (removed per spec review)
+            // The onboarding flow focuses on Get-to-Know-You agent interaction only
+
+            return {
+              success: true,
+              reply: completionMessage,
+              agent: this.agentId,
+              commentId: comment.id,
+              phase1Complete: true
+            };
+          }
+        }
+      }
+
+      // ============================================================================
+      // STANDARD COMMENT PROCESSING (non-onboarding flow)
+      // ============================================================================
+
       // Check if this is a threaded reply and get conversation chain
       let conversationChain = [];
       if (comment.parentCommentId) {

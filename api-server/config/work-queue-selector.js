@@ -78,12 +78,16 @@ class WorkQueueSelector {
       // Pass through methods that have compatible interfaces
       getAllPendingTickets: (options) => sqliteRepo.getAllPendingTickets(options),
       getPendingTickets: (options) => sqliteRepo.getPendingTickets(options),
+      claimPendingTickets: (options) => sqliteRepo.claimPendingTickets(options),
       getTicket: (id) => sqliteRepo.getTicket(id),
       updateTicketStatus: (id, status) => sqliteRepo.updateTicketStatus(id, status),
       completeTicket: (id, result) => sqliteRepo.completeTicket(id, result),
       failTicket: (id, error) => sqliteRepo.failTicket(id, error),
       getTicketsByAgent: (agentId) => sqliteRepo.getTicketsByAgent(agentId),
-      getTicketsByPost: (postId) => sqliteRepo.getTicketsByPost(postId)
+      getTicketsByPost: (postId) => sqliteRepo.getTicketsByPost(postId),
+      getTicketsByError: (errorPattern) => sqliteRepo.getTicketsByError(errorPattern),
+      resetTicketForRetry: (id) => sqliteRepo.resetTicketForRetry(id),
+      batchResetTickets: (ticketIds) => sqliteRepo.batchResetTickets(ticketIds)
     };
   }
 

@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Plus, Edit3, Search, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { RefreshCw, MessageCircle, AlertCircle, ChevronDown, ChevronUp, User, Bookmark, Trash2, Plus, Edit3, Search, Sparkles, Loader2 } from 'lucide-react';
 import { apiService } from '../services/api';
 import { AgentPost, ApiResponse, FilterStats } from '../types/api';
+import { debugLog, DEBUG_PILLS } from '../utils/debugLogger';
 import FilterPanel, { FilterOptions } from './FilterPanel';
 import { renderParsedContent, parseContent, extractHashtags, extractMentions } from '../utils/contentParser';
 import ThreadedCommentSystem from './ThreadedCommentSystem';
-import { CommentThread } from './CommentThread';
+import { CommentThread, CommentProcessingState } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { MentionInput } from './MentionInput';
 import { PostCreator } from './PostCreator';
@@ -179,11 +180,26 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   // Helper function: Determine overall ticket status from ticket data
   const getOverallStatus = (ticketStatus: any): 'pending' | 'processing' | 'completed' | 'failed' | null => {
     if (!ticketStatus || ticketStatus.total === 0) return null;
-    if (ticketStatus.failed > 0) return 'failed';
-    if (ticketStatus.processing > 0) return 'processing';
-    if (ticketStatus.pending > 0) return 'pending';
-    if (ticketStatus.completed > 0) return 'completed';
-    return null;
+
+    // Log status determination for debugging
+    console.log('[RealSocialMediaFeed] getOverallStatus input:', {
+      total: ticketStatus.total,
+      pending: ticketStatus.pending,
+      processing: ticketStatus.processing,
+      completed: ticketStatus.completed,
+      failed: ticketStatus.failed,
+      agents: ticketStatus.agents
+    });
+
+    let result: 'pending' | 'processing' | 'completed' | 'failed' | null = null;
+
+    if (ticketStatus.failed > 0) result = 'failed';
+    else if (ticketStatus.processing > 0) result = 'processing';
+    else if (ticketStatus.pending > 0) result = 'pending';
+    else if (ticketStatus.completed > 0) result = 'completed';
+
+    console.log('[RealSocialMediaFeed] getOverallStatus result:', result);
+    return result;
   };
 
   // Core state - must be declared first, before any conditional returns
@@ -199,6 +215,8 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   const [loadingComments, setLoadingComments] = useState<{[key: string]: boolean}>({});
   const [showCommentForm, setShowCommentForm] = useState<CommentFormVisibility>({});
   const [commentFormContent, setCommentFormContent] = useState<CommentFormContent>({});
+  const [processingComments, setProcessingComments] = useState<Set<string>>(new Set());
+  const [commentStates, setCommentStates] = useState<Map<string, CommentProcessingState>>(new Map());
   const [currentFilter, setCurrentFilter] = useState<FilterOptions>({ type: 'all' });
   const [filterData, setFilterData] = useState<FilterData>({ agents: [], hashtags: [] });
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
@@ -383,8 +401,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
   // Real-time updates via WebSocket and filter data loading
   useEffect(() => {
     console.log('🔄 RealSocialMediaFeed: Initial useEffect triggered');
-    loadPosts(0);
-    loadFilterData();
+    console.log('🔌 [RealSocialMediaFeed] Setting up WebSocket event listeners');
+    // FIX: Parallelize initial data loading for faster startup
+    Promise.all([loadPosts(0), loadFilterData()]).catch(err => {
+      console.error('[RealSocialMediaFeed] Initial load error:', err);
+    });
 
     // Listen for real-time post updates
     const handlePostsUpdate = (updatedPost: AgentPost) => {
@@ -429,6 +450,11 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
             return post;
           })
         );
+
+        // ✅ Refresh comments if this post's comments are visible
+        if (showComments[postId]) {
+          loadComments(postId, true); // Force refresh
+        }
       }
     };
 
@@ -442,33 +468,33 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
       const data = event.detail;
       console.log('🎫 [RealSocialMediaFeed] Ticket status update event received:', {
         post_id: data.post_id,
+        ticket_id: data.ticket_id,
         status: data.status,
-        agent_id: data.agent_id
+        agent_id: data.agent_id,
+        timestamp: data.timestamp,
+        error: data.error
       });
 
       // Debounce: Don't refetch if we just did
       const now = Date.now();
       if (now - lastRefetch < DEBOUNCE_MS) {
-        console.log('🎫 [RealSocialMediaFeed] Debouncing refetch (too soon)');
+        console.log('🎫 [RealSocialMediaFeed] Debouncing refetch (too soon), last refetch was', now - lastRefetch, 'ms ago');
         return;
       }
 
       lastRefetch = now;
 
       // Refetch posts to get updated ticket_status from server
-      console.log('🎫 [RealSocialMediaFeed] Refetching posts for updated badge data');
-      loadPosts(page, false);
+      // Note: Always refetch page 0 to get latest data since we're in a stale closure
+      console.log('🎫 [RealSocialMediaFeed] Refetching posts for updated badge data (status:', data.status, ')');
+      loadPosts(0, false);
     };
 
     apiService.on('posts_updated', handlePostsUpdate);
-    apiService.on('comment_created', handleCommentUpdate);
-    apiService.on('comment_added', handleCommentUpdate);
     window.addEventListener('ticket:status:update', handleTicketStatusUpdate);
 
     return () => {
       apiService.off('posts_updated', handlePostsUpdate);
-      apiService.off('comment_created', handleCommentUpdate);
-      apiService.off('comment_added', handleCommentUpdate);
       window.removeEventListener('ticket:status:update', handleTicketStatusUpdate);
     };
   }, []);
@@ -674,23 +700,92 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
     }));
   };
 
-  const loadComments = async (postId: string, refresh = false) => {
-    if (loadingComments[postId] && !refresh) return;
+  const loadComments = useCallback(async (postId: string, refresh = false) => {
+    console.log('[RealSocialMediaFeed] loadComments called:', { postId, refresh });
+    if (loadingComments[postId] && !refresh) {
+      console.log('[RealSocialMediaFeed] Skipping - already loading');
+      return;
+    }
 
     setLoadingComments(prev => ({ ...prev, [postId]: true }));
     try {
       const comments = await apiService.getPostComments(postId, { userId });
+      console.log('[RealSocialMediaFeed] Comments loaded:', { postId, count: comments.length });
       setPostComments(prev => ({ ...prev, [postId]: comments }));
     } catch (error) {
-      console.error('Failed to load comments:', error);
+      console.error('[RealSocialMediaFeed] Failed to load comments:', error);
     } finally {
       setLoadingComments(prev => ({ ...prev, [postId]: false }));
     }
-  };
+  }, [userId, loadingComments]);
+
+  // STALE CLOSURE FIX: Use ref to avoid stale closure in event handlers
+  // When loadComments changes, the useEffect would re-register with old references
+  const loadCommentsRef = useRef(loadComments);
+  useEffect(() => { loadCommentsRef.current = loadComments; }, [loadComments]);
+
+  // Separate effect for comment:created with proper dependencies
+  // CRITICAL: DO NOT include loadComments in deps - use ref instead to avoid stale closure
+  useEffect(() => {
+    const handleCommentCreated = (data: any) => {
+      console.log('[RealSocialMediaFeed] 📬 comment:created received:', data);
+      const postId = data.postId || data.post_id;
+      if (!postId) return;
+
+      // SPARC FIX: ALWAYS update engagement count (even when collapsed)
+      setPosts(prev => prev.map(post => {
+        if (post.id === postId) {
+          const engagement = parseEngagement(post.engagement);
+          return {
+            ...post,
+            engagement: {
+              ...engagement,
+              comments: (engagement.comments || 0) + 1
+            }
+          };
+        }
+        return post;
+      }));
+
+      // PILL FIX: DON'T immediately reload comments - this kills the pill!
+      // The optimistic update in handleNewComment adds the comment with pill state
+      // If we reload here, the server response replaces it before pill renders
+      // Instead, delay reload to let pill be visible first
+      if (showComments[postId]) {
+        console.log('[RealSocialMediaFeed] 🔄 DELAYING comment reload to preserve pill:', postId);
+        // STALE CLOSURE FIX: Use ref.current instead of direct reference
+        // PILL FIX: Delay by 3000ms to let pill render and be visible
+        setTimeout(() => {
+          console.log('[RealSocialMediaFeed] 🔄 Now reloading comments after delay:', postId);
+          loadCommentsRef.current(postId, true);
+        }, 3000);
+      } else {
+        // FIX: Clear cached comments so they'll be reloaded when section opens
+        console.log('[RealSocialMediaFeed] 📝 Clearing cached comments for:', postId);
+        setPostComments(prev => {
+          const updated = { ...prev };
+          delete updated[postId];
+          return updated;
+        });
+      }
+    };
+
+    apiService.on('comment:created', handleCommentCreated);
+
+    return () => {
+      apiService.off('comment:created', handleCommentCreated);
+    };
+  }, [showComments]); // STALE CLOSURE FIX: Removed loadComments from deps
 
   const handleNewComment = async (postId: string, content: string, parentId?: string) => {
+    // Generate temporary comment ID for tracking processing state
+    const tempCommentId = `temp-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
     try {
       console.log('Creating comment:', { postId, content, parentId });
+
+      // PILL FIX: Add temp ID to processingComments for immediate pill display
+      setProcessingComments(prev => new Set(prev).add(tempCommentId));
 
       const result = await apiService.createComment(postId, content, {
         parentId,
@@ -701,8 +796,45 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
 
       console.log('Comment created successfully:', result);
 
-      // Refresh comments after adding new one
-      await loadComments(postId, true);
+      // PILL FIX: Add the ACTUAL comment ID to processingComments for pill rendering
+      // CommentThread checks processingComments.has(comment.id) at line 245
+      const actualCommentId = result?.data?.id || result?.id;
+      const newComment = result?.data || result;
+
+      if (actualCommentId) {
+        setProcessingComments(prev => {
+          const next = new Set(prev);
+          next.delete(tempCommentId); // Remove temp ID
+          next.add(actualCommentId);  // Add actual COMMENT ID (not POST ID!)
+          return next;
+        });
+
+        // PILL FIX: Set initial state to 'waiting' for immediate pill display
+        setCommentStates(prev => {
+          const next = new Map(prev);
+          next.set(actualCommentId, 'waiting');
+          return next;
+        });
+
+        console.log('[PILL FIX] Added comment ID to processingComments AND commentStates:', actualCommentId);
+      }
+
+      // PILL FIX: Add the new comment to local state immediately (optimistic update)
+      // This ensures the comment appears in the UI before the server confirms
+      if (newComment && newComment.id) {
+        setPostComments(prev => ({
+          ...prev,
+          [postId]: [...(prev[postId] || []), newComment]
+        }));
+        console.log('[PILL FIX] Added comment to postComments optimistically:', newComment.id);
+      }
+
+      // PILL FIX: Delay the comment refresh to prevent race condition
+      // The new comment is already in local state, this just syncs with server
+      setTimeout(async () => {
+        console.log('[PILL FIX] Delayed loadComments to let pills be visible');
+        await loadComments(postId, true);
+      }, 1000);
 
       // Update engagement count optimistically (parse engagement first)
       setPosts(current =>
@@ -721,11 +853,23 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
         })
       );
 
-      // Hide comment form after successful submission
+      // PILL FIX: Keep comment ID in processingComments until agent responds
+      // The comment:state:complete event will remove it later
+      // DO NOT remove here - let the WebSocket event lifecycle handle removal
+
+      // Hide comment form after successful submission (moved after processing state removal)
       setShowCommentForm(prev => ({ ...prev, [postId]: false }));
     } catch (error) {
       console.error('Failed to create comment:', error);
       alert('Failed to post analysis. Please try again.');
+
+      // Remove from processing state on error
+      setProcessingComments(prev => {
+        const next = new Set(prev);
+        next.delete(tempCommentId);
+        return next;
+      });
+
       throw error;
     }
   };
@@ -1072,11 +1216,20 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Ticket Status Badge - Show if tickets exist */}
                   {post.ticket_status && post.ticket_status.total > 0 && (
                     <div className="pl-14">
-                      <TicketStatusBadge
-                        status={getOverallStatus(post.ticket_status)}
-                        agents={post.ticket_status.agents || []}
-                        count={post.ticket_status.total}
-                      />
+                      {(() => {
+                        const status = getOverallStatus(post.ticket_status);
+                        console.log(`[RealSocialMediaFeed] Rendering badge for post ${post.id}:`, {
+                          status,
+                          ticket_status: post.ticket_status
+                        });
+                        return (
+                          <TicketStatusBadge
+                            status={status}
+                            agents={post.ticket_status.agents || []}
+                            count={post.ticket_status.total}
+                          />
+                        );
+                      })()}
                     </div>
                   )}
 
@@ -1168,11 +1321,20 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                   {/* Ticket Status Badge - Show if tickets exist */}
                   {post.ticket_status && post.ticket_status.total > 0 && (
                     <div className="mb-4">
-                      <TicketStatusBadge
-                        status={getOverallStatus(post.ticket_status)}
-                        agents={post.ticket_status.agents || []}
-                        count={post.ticket_status.total}
-                      />
+                      {(() => {
+                        const status = getOverallStatus(post.ticket_status);
+                        console.log(`[RealSocialMediaFeed] Rendering expanded badge for post ${post.id}:`, {
+                          status,
+                          ticket_status: post.ticket_status
+                        });
+                        return (
+                          <TicketStatusBadge
+                            status={status}
+                            agents={post.ticket_status.agents || []}
+                            count={post.ticket_status.total}
+                          />
+                        );
+                      })()}
                     </div>
                   )}
 
@@ -1397,14 +1559,15 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                               console.log('🎯 REAL SOCIAL FEED: Mention selected in comment:', mention);
                             }}
                             placeholder="Write a comment... Use @ to mention agents or users"
-                            className="w-full p-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                            className="w-full p-3 text-sm border border-gray-300 dark:border-gray-700 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-50 dark:disabled:bg-gray-800 transition-opacity duration-200"
                             rows={4}
                             maxLength={2000}
                             mentionContext="comment"
+                            disabled={processingComments.has(post.id)}
                             onKeyDown={(e) => {
                               if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                                 const content = commentFormContent[post.id];
-                                if (content?.trim()) {
+                                if (content?.trim() && !processingComments.has(post.id)) {
                                   handleNewComment(post.id, content.trim());
                                   setCommentFormContent(prev => ({ ...prev, [post.id]: '' }));
                                 }
@@ -1423,21 +1586,31 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                               <button
                                 onClick={(e) => {
                                   const content = commentFormContent[post.id]?.trim();
-                                  if (content) {
+                                  if (content && !processingComments.has(post.id)) {
                                     handleNewComment(post.id, content);
                                     setCommentFormContent(prev => ({ ...prev, [post.id]: '' }));
                                   }
                                 }}
-                                className="px-4 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                                disabled={processingComments.has(post.id)}
+                                className="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-blue-600 flex items-center gap-2 shadow-sm hover:shadow-md"
                               >
-                                Add Comment
+                                {processingComments.has(post.id) ? (
+                                  <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span>Adding Comment...</span>
+                                  </>
+                                ) : (
+                                  <span>Add Comment</span>
+                                )}
                               </button>
                             </div>
                           </div>
                         </div>
                       </div>
                     )}
-                    
+
+                    {/* Processing indicator removed - now per-post in button */}
+
                     {loadingComments[post.id] ? (
                       <div className="text-center py-4">
                         <div className="inline-flex items-center space-x-2">
@@ -1453,8 +1626,41 @@ const RealSocialMediaFeed: React.FC<RealSocialMediaFeedProps> = ({ className = '
                             comments={postComments[post.id]}
                             currentUser={userId}
                             maxDepth={6}
-                            onCommentsUpdate={() => loadComments(post.id, true)}
+                            onCommentsUpdate={() => {
+                              debugLog('feed', '🔄 onCommentsUpdate triggered for post:', post.id);
+                              loadComments(post.id, true);
+                            }}
                             enableRealTime={true}
+                            processingComments={processingComments}
+                            onProcessingChange={(commentId, isProcessing) => {
+                              debugLog('feed', '⚙️ Processing change:', commentId, isProcessing ? 'START' : 'END');
+                              setProcessingComments(prev => {
+                                const next = new Set(prev);
+                                if (isProcessing) {
+                                  next.add(commentId);
+                                  debugLog('feed', '📊 Added to processing set:', commentId, 'size:', next.size);
+                                } else {
+                                  next.delete(commentId);
+                                  debugLog('feed', '📊 Removed from processing set:', commentId, 'size:', next.size);
+                                }
+                                return next;
+                              });
+                            }}
+                            commentStates={commentStates}
+                            onStateChange={(commentId, state) => {
+                              debugLog('feed', '🔄 State change:', commentId, '→', state);
+                              setCommentStates(prev => {
+                                const next = new Map(prev);
+                                if (state) {
+                                  next.set(commentId, state);
+                                  debugLog('feed', '📊 State map updated:', commentId, '=', state, 'map size:', next.size);
+                                } else {
+                                  next.delete(commentId);
+                                  debugLog('feed', '📊 State cleared for:', commentId, 'map size:', next.size);
+                                }
+                                return next;
+                              });
+                            }}
                             className="bg-white dark:bg-gray-900 rounded-lg"
                           />
                         ) : (

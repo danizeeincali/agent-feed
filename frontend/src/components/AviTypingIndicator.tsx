@@ -116,7 +116,7 @@ const AviTypingIndicator: React.FC<AviTypingIndicatorProps> = memo(({ isVisible,
         className={`avi-wave-text-inline ${className}`}
         role="status"
         aria-live="polite"
-        aria-label="Avi is thinking"
+        aria-label="Agent is processing"
         style={{
           display: 'flex',
           width: '100%',
@@ -162,7 +162,7 @@ const AviTypingIndicator: React.FC<AviTypingIndicatorProps> = memo(({ isVisible,
       className={`avi-typing-indicator ${className}`}
       role="status"
       aria-live="polite"
-      aria-label="Avi is typing"
+      aria-label="Agent is responding"
       style={{
         position: 'absolute',
         bottom: '100%',
@@ -205,7 +205,7 @@ const AviTypingIndicator: React.FC<AviTypingIndicatorProps> = memo(({ isVisible,
           fontStyle: 'italic',
         }}
       >
-        is typing...
+        responding...
       </span>
     </div>
   );

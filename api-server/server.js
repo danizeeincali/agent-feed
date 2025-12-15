@@ -257,37 +257,67 @@ function containsURL(text) {
 
 /**
  * Detect if post is a question for AVI
- * Questions without URLs are directed to AVI
- * Questions with URLs go to link-logger-agent
+ *
+ * ROUTING PRIORITY:
+ * 1. Posts with URLs -> link-logger (skip AVI)
+ * 2. Explicit @mention of another agent -> that agent (skip AVI)
+ * 3. Explicit AVI mention (avi, @avi, λvi) -> AVI
+ * 4. General questions (? or question words) -> AVI as default responder
+ * 5. Otherwise -> not AVI
  */
 function isAviQuestion(content) {
-  const lowerContent = content.toLowerCase();
-
-  // Skip if contains URL (goes to link-logger)
-  if (containsURL(content)) {
+  if (!content || typeof content !== 'string') {
     return false;
   }
 
-  // Pattern 1: Direct address
-  if (lowerContent.includes('avi') || lowerContent.includes('λvi')) {
+  const lowerContent = content.toLowerCase();
+  const trimmedContent = content.trim();
+
+  // PRIORITY 1: Skip if contains URL (goes to link-logger)
+  if (containsURL(content)) {
+    console.log(`📍 [ROUTING] URL detected, skipping AVI`);
+    return false;
+  }
+
+  // PRIORITY 2: Skip if explicit @mention of another agent (not avi)
+  // Match @agent-name patterns but exclude @avi
+  const agentMentionPattern = /@(link-logger|personal-todos|follow-ups|meeting-prep|meeting-next-steps|page-builder|skills|get-to-know-you|feedback|ideas|agent-architect|learning-optimizer|system-architect)(-agent)?\b/i;
+  if (agentMentionPattern.test(content)) {
+    console.log(`📍 [ROUTING] Agent @mention detected, routing to specific agent`);
+    return false;
+  }
+
+  // PRIORITY 3: Explicit AVI mention - use word boundary to avoid false positives
+  // Matches: avi, @avi, λvi, but NOT aviation, navigate, etc.
+  const aviPattern = /\bavi\b|@avi\b|\bλvi\b/i;
+  if (aviPattern.test(content)) {
+    console.log(`📍 [ROUTING] Explicit AVI mention detected`);
     return true;
   }
 
-  // Pattern 2: Question marks
+  // PRIORITY 4: Question detection - route to AVI as default responder
+  // 4a: Contains question mark
   if (content.includes('?')) {
+    console.log(`📍 [ROUTING] Question mark detected, routing to AVI`);
     return true;
   }
 
-  // Pattern 3: Common command/question patterns
-  const questionPatterns = [
-    /^(what|where|when|why|how|who|status|help)/i,
-    /directory/i,
-    /working on/i,
-    /tell me/i,
-    /show me/i
-  ];
+  // 4b: Starts with question words
+  const questionWordPattern = /^(what|how|why|when|where|who|which|can|could|would|should|is|are|do|does|will|has|have|did)\b/i;
+  if (questionWordPattern.test(trimmedContent)) {
+    console.log(`📍 [ROUTING] Question word detected, routing to AVI`);
+    return true;
+  }
 
-  return questionPatterns.some(pattern => pattern.test(content));
+  // 4c: Contains question phrases (help requests)
+  const helpPattern = /\b(help me|tell me|explain|can you|could you|would you|please)\b/i;
+  if (helpPattern.test(content)) {
+    console.log(`📍 [ROUTING] Help request detected, routing to AVI`);
+    return true;
+  }
+
+  console.log(`📍 [ROUTING] Not a question, skipping AVI`);
+  return false;
 }
 
 /**
@@ -1203,6 +1233,20 @@ app.post('/api/v1/agent-posts', async (req, res) => {
         });
 
         console.log(`✅ Work ticket created for orchestrator: ticket-${ticket.id}`);
+
+        // Emit pending status immediately for real-time UI feedback
+        if (websocketService?.isInitialized()) {
+          websocketService.emitTicketStatusUpdate({
+            post_id: createdPost.id,
+            ticket_id: ticket.id,
+            status: 'pending',
+            agent_id: null, // Not assigned yet
+            timestamp: new Date().toISOString()
+          });
+          console.log(`📡 Emitted pending status for ticket ${ticket.id} (post: ${createdPost.id})`);
+        } else {
+          console.warn(`⚠️ WebSocket service not initialized - pending event not emitted for ticket ${ticket.id}`);
+        }
       } catch (ticketError) {
         console.error('❌ Failed to create work ticket:', ticketError);
         // Log error but don't fail the post creation
@@ -1683,6 +1727,17 @@ app.post('/api/agent-posts/:postId/comments', async (req, res) => {
           comment: createdComment  // Full comment object for frontend
         });
       }
+
+      // PILL FIX: Emit comment:state:waiting for processing pill display
+      // This allows the frontend to show the "Waiting for agents" pill
+      if (websocketService && websocketService.emitCommentState) {
+        websocketService.emitCommentState({
+          commentId: createdComment.id,
+          postId: postId,
+          state: 'waiting'
+        });
+        console.log(`📢 Emitted comment:state:waiting for comment ${createdComment.id}`);
+      }
     } catch (wsError) {
       console.error('❌ Failed to broadcast comment via WebSocket:', wsError);
       // Don't fail the request if WebSocket broadcast fails
@@ -1840,6 +1895,18 @@ app.post('/api/v1/agent-posts/:postId/comments', async (req, res) => {
           content: createdComment.content,
           comment: createdComment  // Full comment object for frontend
         });
+      }
+
+      // V1 PILL FIX: Emit comment:state:waiting for processing pill display
+      // This is CRITICAL - the original endpoint has this but V1 was missing it
+      // Without this, the "Waiting for agents..." pill never appears
+      if (websocketService && websocketService.emitCommentState) {
+        websocketService.emitCommentState({
+          commentId: createdComment.id,
+          postId: postId,
+          state: 'waiting'
+        });
+        console.log(`📢 [V1] Emitted comment:state:waiting for comment ${createdComment.id}`);
       }
     } catch (wsError) {
       console.error('❌ Failed to broadcast comment via WebSocket:', wsError);
@@ -4678,5 +4745,8 @@ process.on('unhandledRejection', (reason, promise) => {
 //   getOrchestratorStatus,
 //   isOrchestratorHealthy
 // };
+
+// Export for testing
+export { isAviQuestion, containsURL };
 
 export default app;

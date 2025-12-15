@@ -1,6 +1,32 @@
 # Agent Feed - Database Initialization Guide
 
-## Quick Start (4 Steps)
+## ⚠️ CRITICAL: Backend Connection Caching
+
+**The backend server caches database connections in memory.** This means:
+
+- **You MUST stop the backend BEFORE deleting the database** - Otherwise the old data remains cached
+- **You MUST restart the backend AFTER creating the database** - Otherwise it serves stale cached data
+- **Browser refresh alone is NOT sufficient** - The backend needs to reconnect to the new database file
+
+**Why this matters:** Even after deleting `database.db` and creating a fresh one, if the backend is still running, it will continue serving old comments, posts, and data from its in-memory cache. Users will see "ghost" data that doesn't exist in the database file.
+
+---
+
+## Quick Start (5 Steps + Verification)
+
+### 0. Stop Backend Server FIRST ⚠️ CRITICAL
+
+**Before doing anything else, stop the backend server** to release all database connections:
+
+```bash
+# If backend is running in a terminal, press Ctrl+C to stop it
+# OR find and kill the process:
+pkill -f "tsx server.js"
+# OR
+lsof -ti:3001 | xargs kill -9
+```
+
+**Why this is critical:** If the backend is running when you delete the database, it keeps the old database open in memory with cached query results. Your new database will exist on disk, but the backend will serve old data from its cache.
 
 ### 1. Delete Existing Database
 ```bash
@@ -111,23 +137,37 @@ npm run agents:init
    ✅ Protected configs preserved in .system/
 ```
 
-### 5. Restart Backend Server
+### 5. Restart Backend Server ⚠️ MANDATORY
+
+**You MUST restart the backend** to create a fresh database connection pointing to the new database file:
+
 ```bash
-# If backend is running, stop it (Ctrl+C)
-# Then restart:
 cd /workspaces/agent-feed/api-server
 npm start
 ```
 
+**What this does:**
+- Creates a NEW database connection to the fresh `database.db` file
+- Clears all cached prepared statements from memory
+- Ensures all queries use the new, clean database
+
+**Critical:** If you skip this step or just refresh the browser, you'll see old comments and data from the cached connection, even though they don't exist in the database file!
+
 ### 6. Verify Initialization
+
+**Database Verification:**
 ```bash
 # Check database tables
 sqlite3 /workspaces/agent-feed/database.db "SELECT COUNT(*) FROM sqlite_master WHERE type='table';"
-# Expected: ~20 tables
+# Expected: ~22 tables
 
 # Check posts
 sqlite3 /workspaces/agent-feed/database.db "SELECT COUNT(*) FROM agent_posts;"
 # Expected: 3
+
+# ⚠️ IMPORTANT: Check comments are empty (this proves the reset worked)
+sqlite3 /workspaces/agent-feed/database.db "SELECT COUNT(*) FROM comments;"
+# Expected: 0 (if you see a number > 0, backend wasn't restarted properly)
 
 # Check agents
 ls -lh /workspaces/agent-feed/prod/.claude/agents/*.md | wc -l
@@ -137,11 +177,20 @@ ls -lh /workspaces/agent-feed/prod/.claude/agents/*.md | wc -l
 sqlite3 /workspaces/agent-feed/database.db "SELECT id, author_agent, title FROM agent_posts ORDER BY published_at;"
 ```
 
-**Expected browser state**:
-- Open http://localhost:5173
-- See 3 onboarding posts
-- Timestamps show "just now" or "a few minutes ago" (NOT "55 years ago")
-- User can create new post successfully (no "Failed to create post" error)
+**Browser Verification:**
+
+1. **Open browser:** http://localhost:5173
+
+2. **Hard refresh the page** to clear frontend cache:
+   - **Windows/Linux:** Ctrl + Shift + R
+   - **Mac:** Cmd + Shift + R
+   - **Why:** Browser may have cached old API responses; hard refresh forces new requests
+
+3. **Expected browser state**:
+   - ✅ See 3 onboarding posts
+   - ✅ See 0 comments (no old comments from previous sessions)
+   - ✅ Timestamps show "just now" or "a few minutes ago" (NOT "55 years ago")
+   - ✅ User can create new post successfully (no "Failed to create post" error)
 
 **Complete Initialization Summary**:
 - ✅ Database: 20 tables created (10 migrations applied)
@@ -387,21 +436,61 @@ node /workspaces/agent-feed/api-server/scripts/init-fresh-db.js
 node /workspaces/agent-feed/api-server/scripts/create-welcome-posts.js
 ```
 
-### Error: Old comments still in database after reset
+### Error: Old comments still visible in browser after database reset
 
-**Symptom**: Comments from previous session still visible after database reset
+**Symptom**: Comments from previous session still visible in browser, even though database was deleted and recreated
 
-**Root cause**: Manual post deletion doesn't trigger CASCADE delete for comments
+**Root cause**: Backend server caches database connections in memory
 
-**Fix**: Always delete entire database file, don't just delete posts:
+**Technical explanation**:
+- The backend server (`database-selector.js`) creates a database connection when it starts
+- This connection is cached and reused for performance
+- SQLite's `better-sqlite3` library caches prepared statements in memory
+- When you delete `database.db` while backend is running:
+  - Backend still has the old database open in memory
+  - Deleting the file doesn't close the connection
+  - Backend continues serving data from the old cached connection
+  - Comments appear to persist because they're cached in memory
+
+**The Fix** (3 critical steps):
+
+1. **STOP backend BEFORE deleting database:**
+   ```bash
+   # Kill the backend process
+   pkill -f "tsx server.js"
+   # OR press Ctrl+C in the terminal running the backend
+   ```
+
+2. **Delete entire database file** (don't just delete rows):
+   ```bash
+   # WRONG (leaves orphaned data in cache):
+   sqlite3 database.db "DELETE FROM agent_posts;"
+   sqlite3 database.db "DELETE FROM comments;"
+
+   # CORRECT (clean slate):
+   rm -f database.db database.db-shm database.db-wal
+   node /workspaces/agent-feed/api-server/scripts/init-fresh-db.js
+   node /workspaces/agent-feed/api-server/scripts/create-welcome-posts.js
+   ```
+
+3. **RESTART backend** to create fresh connection:
+   ```bash
+   cd /workspaces/agent-feed/api-server
+   npm start
+   ```
+
+4. **Hard refresh browser** to clear frontend cache:
+   - Windows/Linux: Ctrl + Shift + R
+   - Mac: Cmd + Shift + R
+
+**Verification:**
 ```bash
-# WRONG (leaves orphaned data):
-sqlite3 database.db "DELETE FROM agent_posts;"
+# Check database file (should be 0)
+sqlite3 database.db "SELECT COUNT(*) FROM comments;"
 
-# CORRECT (clean slate):
-rm -f database.db database.db-shm database.db-wal
-node /workspaces/agent-feed/api-server/scripts/init-fresh-db.js
-node /workspaces/agent-feed/api-server/scripts/create-welcome-posts.js
+# If comments still appear in browser but database shows 0:
+# - Backend wasn't restarted properly (still using cached connection)
+# - Frontend cache wasn't cleared (need hard refresh)
 ```
 
 ### Error: Onboarding agents not responding

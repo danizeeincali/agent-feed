@@ -36,22 +36,23 @@ class UserSettingsService {
         WHERE user_id = ?
       `);
 
-      // Update user settings
-      this.updateSettingsStmt = this.db.prepare(`
-        UPDATE user_settings
-        SET
-          display_name = COALESCE(?, display_name),
-          display_name_style = COALESCE(?, display_name_style),
-          profile_json = COALESCE(?, profile_json),
-          onboarding_completed = COALESCE(?, onboarding_completed),
-          onboarding_completed_at = COALESCE(?, onboarding_completed_at)
-        WHERE user_id = ?
-      `);
-
-      // Insert user settings (for new users)
-      this.insertSettingsStmt = this.db.prepare(`
-        INSERT INTO user_settings (user_id, display_name, display_name_style, profile_json, onboarding_completed, onboarding_completed_at)
+      // Upsert user settings (handles both insert and update)
+      this.upsertSettingsStmt = this.db.prepare(`
+        INSERT INTO user_settings (
+          user_id,
+          display_name,
+          display_name_style,
+          profile_json,
+          onboarding_completed,
+          onboarding_completed_at
+        )
         VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(user_id) DO UPDATE SET
+          display_name = COALESCE(excluded.display_name, user_settings.display_name),
+          display_name_style = COALESCE(excluded.display_name_style, user_settings.display_name_style),
+          profile_json = COALESCE(excluded.profile_json, user_settings.profile_json),
+          onboarding_completed = COALESCE(excluded.onboarding_completed, user_settings.onboarding_completed),
+          onboarding_completed_at = COALESCE(excluded.onboarding_completed_at, user_settings.onboarding_completed_at)
       `);
 
       console.log('✅ UserSettingsService prepared statements initialized');
@@ -86,7 +87,7 @@ class UserSettingsService {
   }
 
   /**
-   * Update user settings
+   * Update user settings (uses upsert pattern)
    * @param {string} userId - User ID
    * @param {Object} updates - Settings to update
    * @param {string} updates.display_name - Display name
@@ -107,27 +108,15 @@ class UserSettingsService {
       // Stringify JSON fields if provided
       const profileJsonStr = profile_json ? JSON.stringify(profile_json) : null;
 
-      // Update settings
-      const result = this.updateSettingsStmt.run(
+      // Upsert settings (insert or update)
+      this.upsertSettingsStmt.run(
+        userId,
         display_name || null,
         display_name_style || null,
         profileJsonStr,
-        onboarding_completed !== undefined ? onboarding_completed : null,
-        onboarding_completed_at || null,
-        userId
+        onboarding_completed !== undefined ? onboarding_completed : 0,
+        onboarding_completed_at || null
       );
-
-      // If no rows were updated, user doesn't exist - create new record
-      if (result.changes === 0) {
-        this.insertSettingsStmt.run(
-          userId,
-          display_name || 'User',
-          display_name_style || null,
-          profileJsonStr || '{}',
-          onboarding_completed !== undefined ? onboarding_completed : 0,
-          onboarding_completed_at || null
-        );
-      }
 
       // Return updated settings
       return this.getUserSettings(userId);

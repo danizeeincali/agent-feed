@@ -99,6 +99,68 @@ export class WorkQueueRepository {
   }
 
   /**
+   * Atomically claim pending tickets by marking them as 'in_progress'
+   * This prevents race conditions where multiple polls claim the same ticket
+   *
+   * @param {Object} options
+   * @param {number} options.limit - Maximum tickets to claim
+   * @param {string} options.workerId - ID of worker claiming tickets
+   * @returns {Array} Claimed tickets with status='in_progress'
+   */
+  claimPendingTickets({ limit = 5, workerId = null } = {}) {
+    const now = Date.now();
+
+    // Use SQLite transaction for atomic SELECT + UPDATE
+    const transaction = this.db.transaction(() => {
+      // Step 1: Find pending tickets (SELECT)
+      const findStmt = this.db.prepare(`
+        SELECT id FROM work_queue_tickets
+        WHERE status = 'pending'
+        ORDER BY priority ASC, created_at ASC
+        LIMIT ?
+      `);
+      const ticketIds = findStmt.all(limit);
+
+      if (ticketIds.length === 0) {
+        return [];
+      }
+
+      // Step 2: Atomically mark as 'in_progress' (UPDATE)
+      const updateStmt = this.db.prepare(`
+        UPDATE work_queue_tickets
+        SET
+          status = 'in_progress',
+          assigned_at = ?
+        WHERE id = ?
+      `);
+
+      ticketIds.forEach(({ id }) => {
+        updateStmt.run(now, id);
+      });
+
+      // Step 3: Fetch full ticket data (SELECT)
+      const getStmt = this.db.prepare(`
+        SELECT * FROM work_queue_tickets
+        WHERE id = ?
+      `);
+
+      return ticketIds.map(({ id }) => {
+        const ticket = getStmt.get(id);
+        return this._deserializeTicket(ticket);
+      });
+    });
+
+    // Execute transaction (all-or-nothing)
+    const claimedTickets = transaction();
+
+    if (claimedTickets.length > 0) {
+      console.log(`🔒 Atomically claimed ${claimedTickets.length} tickets (worker: ${workerId || 'orchestrator'})`);
+    }
+
+    return claimedTickets;
+  }
+
+  /**
    * Update ticket status
    * @param {string} id - Ticket ID
    * @param {string} status - New status (pending, in_progress, completed, failed)

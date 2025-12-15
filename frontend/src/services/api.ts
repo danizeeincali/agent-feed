@@ -13,11 +13,12 @@ import {
 } from '../types/api';
 import { Task, Workflow, OrchestrationState } from '../types';
 import { hasMarkdown } from '../utils/contentParser.tsx';
+import { io, Socket } from 'socket.io-client';
 
 export class ApiService {
   private baseUrl: string;
   private cache: Map<string, { data: any; timestamp: number; ttl: number }> = new Map();
-  private wsConnection: WebSocket | null = null;
+  private wsConnection: Socket | null = null;
   private eventHandlers: Map<string, Set<Function>> = new Map();
 
   constructor(baseUrl?: string) {
@@ -259,54 +260,112 @@ export class ApiService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  // WebSocket initialization for real-time updates
+  // WebSocket initialization for real-time updates using Socket.IO
   private initializeWebSocket(): void {
     if (typeof window === 'undefined') return;
 
     try {
-      // Dynamic WebSocket URL construction based on current location
-      const { protocol, hostname, port } = window.location;
+      // Dynamic Socket.IO URL construction - connect to BACKEND, not Vite dev server
+      const { hostname } = window.location;
 
-      // Determine WebSocket protocol based on current page protocol
-      const wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+      // In development, connect directly to backend port 3001
+      // In production, use same origin (proxied through server)
+      const isDevelopment = hostname === 'localhost' || hostname === '127.0.0.1';
+      const socketUrl = isDevelopment ? 'http://localhost:3001' : window.location.origin;
 
-      // Use current host and port - Vite proxy will handle routing
-      const wsPort = port ? `:${port}` : '';
-      const wsUrl = `${wsProtocol}//${hostname}${wsPort}/socket.io`;
+      console.log('🔌 [apiService] Connecting Socket.IO to backend:', socketUrl);
 
-      console.log('🔌 Attempting WebSocket connection to:', wsUrl);
-      this.wsConnection = new WebSocket(wsUrl);
+      this.wsConnection = io(socketUrl, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5,
+        timeout: 10000
+      });
 
-      this.wsConnection.onopen = () => {
-        console.log('✅ Real-time WebSocket connected');
+      this.wsConnection.on('connect', () => {
+        console.log('✅ [apiService] Socket.IO connected to backend:', socketUrl);
         this.emit('connected', null);
-      };
+      });
 
-      this.wsConnection.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          this.handleRealTimeUpdate(data);
-        } catch (error) {
-          console.error('❌ WebSocket message parsing error:', error);
+      this.wsConnection.on('disconnect', (reason) => {
+        console.log('🔌 Socket.IO disconnected:', reason);
+        if (reason === 'io server disconnect') {
+          // Server initiated disconnect, reconnect manually
+          this.wsConnection?.connect();
         }
-      };
+      });
 
-      this.wsConnection.onclose = () => {
-        console.log('🔌 WebSocket connection closed');
-        this.attemptReconnect();
-      };
+      this.wsConnection.on('connect_error', (error) => {
+        console.error('❌ Socket.IO connection error:', error);
+      });
 
-      this.wsConnection.onerror = (error) => {
-        console.error('❌ WebSocket error:', error);
-      };
+      // Listen for comment:created events from backend
+      this.wsConnection.on('comment:created', (data) => {
+        console.log('💬 Comment created event received:', data);
+        this.handleRealTimeUpdate({ type: 'comment:created', payload: data });
+      });
+
+      // Listen for other real-time events
+      this.wsConnection.on('agents_updated', (data) => {
+        this.handleRealTimeUpdate({ type: 'agents_updated', payload: data });
+      });
+
+      this.wsConnection.on('posts_updated', (data) => {
+        this.handleRealTimeUpdate({ type: 'posts_updated', payload: data });
+      });
+
+      this.wsConnection.on('metrics_updated', (data) => {
+        this.handleRealTimeUpdate({ type: 'metrics_updated', payload: data });
+      });
+
+      // Listen for ticket status updates (for post/comment processing pills)
+      this.wsConnection.on('ticket:status:update', (data) => {
+        console.log('🎫 [apiService] Ticket status update:', data);
+        this.emit('ticket:status:update', data);
+
+        // Dispatch to window for components using window.addEventListener
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('ticket:status:update', { detail: data }));
+        }
+      });
+
+      // Listen for comment state events (for processing pills)
+      this.wsConnection.on('comment:state', (data) => {
+        console.log('📊 [apiService] Comment state:', data);
+        this.emit('comment:state', data);
+        // Dispatch to window for components using window.addEventListener
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('comment:state', { detail: data }));
+        }
+      });
+
+      // Listen for state-specific events
+      ['waiting', 'analyzed', 'responding', 'complete'].forEach(state => {
+        this.wsConnection!.on(`comment:state:${state}`, (data) => {
+          console.log(`📊 [apiService] Comment state:${state}:`, data);
+          this.emit(`comment:state:${state}`, data);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent(`comment:state:${state}`, { detail: data }));
+          }
+        });
+      });
+
     } catch (error) {
-      console.error('❌ Failed to initialize WebSocket:', error);
+      console.error('❌ Failed to initialize Socket.IO:', error);
     }
   }
 
   private handleRealTimeUpdate(data: any): void {
     // Clear relevant cache based on update type
     switch (data.type) {
+      case 'comment:created':
+        // Clear comments cache for the specific post
+        if (data.payload?.postId) {
+          this.clearCache(`/agent-posts/${data.payload.postId}/comments`);
+        }
+        this.emit('comment:created', data.payload);
+        break;
       case 'agents_updated':
         this.clearCache('/agents');
         this.emit('agents_updated', data.payload);
@@ -325,10 +384,9 @@ export class ApiService {
   }
 
   private attemptReconnect(): void {
-    setTimeout(() => {
-      console.log('🔄 Attempting WebSocket reconnection...');
-      this.initializeWebSocket();
-    }, 5000);
+    // Socket.IO handles reconnection automatically
+    // This method is kept for compatibility but is no longer needed
+    console.log('🔄 Socket.IO will handle reconnection automatically');
   }
 
   public on(event: string, handler: Function): void {
@@ -1606,7 +1664,7 @@ export class ApiService {
   // Cleanup method
   public destroy(): void {
     if (this.wsConnection) {
-      this.wsConnection.close();
+      this.wsConnection.disconnect();
       this.wsConnection = null;
     }
     this.eventHandlers.clear();

@@ -12,7 +12,7 @@
 🔧 DEBUG: Registering GET /token-usage route...
 🔧 DEBUG: Registering GET /analytics route...
 🔧 DEBUG: Registering GET /optimization route...
-[dotenv@17.2.3] injecting env (55) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (55) from ../.env -- tip: ⚙️  enable debug logging with { debug: true }
 📊 Database Mode: SQLite
 📂 Agent Source: Filesystem
 ⚠️  Failed to load compiled TypeScript monitoring modules. Using fallback implementation.
@@ -71,11 +71,11 @@ WebSocket service initialized
 📈 All analytics APIs available
 🔌 Socket.IO ready at: ws://localhost:3001/socket.io/
 💾 Memory Usage:
-   RSS: 167 MB
-   Heap Total: 90 MB
-   Heap Used: 64 MB
-   External: 4 MB
-   Array Buffers: 0 MB
+   RSS: 225 MB
+   Heap Total: 94 MB
+   Heap Used: 62 MB
+   External: 7 MB
+   Array Buffers: 1 MB
 
 📊 Initializing Phase 5 Monitoring System...
 🔍 Initializing Phase 5 monitoring services...
@@ -95,20 +95,14 @@ WebSocket service initialized
 ✅ SequentialIntroductionOrchestrator initialized
 🚀 Starting AVI Orchestrator...
 ✅ AVI marked as running
-❌ Error retrying failed comment tickets: TypeError: this.workQueueRepo.getTicketsByError is not a function
-    at AviOrchestrator.retryFailedCommentTickets (file:///workspaces/agent-feed/api-server/avi/orchestrator.js:442:54)
-    at AviOrchestrator.start (file:///workspaces/agent-feed/api-server/avi/orchestrator.js:105:39)
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at async startOrchestrator (file:///workspaces/agent-feed/api-server/avi/orchestrator.js:866:3)
-    at async Server.<anonymous> (file:///workspaces/agent-feed/api-server/server.js:4494:7)
 📊 AVI state updated: {
   context_size: 0,
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:44:36.105Z
+  last_health_check: 2025-11-14T02:29:42.297Z
 }
-ℹ️ No agents ready to introduce (user score: 35)
+ℹ️ No agents ready to introduce (user score: 0)
 🚨 Emergency monitor started (interval: 15000ms)
 ✅ AVI Orchestrator started successfully
    Max Workers: 5
@@ -119,8 +113,8 @@ WebSocket service initialized
 ✅ AVI Orchestrator started - using SQLite work queue
    📡 WebSocket events enabled for real-time ticket updates
    ✅ Watcher ready
-WebSocket client connected: 9KHGC2PwD7GaH6ZzAAAB
-⚠️ High memory usage: 45MB / 48MB (94%)
+WebSocket client connected: uQZP8YEDO4V9QwNsAAAB
+⚠️ High memory usage: 53MB / 57MB (93%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -128,11 +122,13 @@ WebSocket client connected: 9KHGC2PwD7GaH6ZzAAAB
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:45:06.110Z
+  last_health_check: 2025-11-14T02:30:12.302Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 45MB / 48MB (94%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: uQZP8YEDO4V9QwNsAAAB, reason: client namespace disconnect
+WebSocket client connected: CT_bvqPjcEwhJro1AAAD
+⚠️ High memory usage: 53MB / 57MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -140,14 +136,11 @@ WebSocket client connected: 9KHGC2PwD7GaH6ZzAAAB
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:45:36.110Z
+  last_health_check: 2025-11-14T02:30:42.303Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: 9KHGC2PwD7GaH6ZzAAAB, reason: client namespace disconnect
-WebSocket client connected: iIkEG21VD6fQjqlRAAAD
-🎫 Found 0 tickets for 5 posts
-⚠️ High memory usage: 46MB / 48MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 53MB / 57MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -155,11 +148,13 @@ WebSocket client connected: iIkEG21VD6fQjqlRAAAD
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:46:06.110Z
+  last_health_check: 2025-11-14T02:31:12.303Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 46MB / 48MB (95%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: CT_bvqPjcEwhJro1AAAD, reason: client namespace disconnect
+WebSocket client connected: I9RacG1IZe3Set-aAAAF
+⚠️ High memory usage: 54MB / 57MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -167,13 +162,11 @@ WebSocket client connected: iIkEG21VD6fQjqlRAAAD
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:46:36.110Z
+  last_health_check: 2025-11-14T02:31:42.304Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: iIkEG21VD6fQjqlRAAAD, reason: client namespace disconnect
-WebSocket client connected: El_BDAKp4Xm4b1JlAAAF
-⚠️ High memory usage: 46MB / 48MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 54MB / 57MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -181,11 +174,13 @@ WebSocket client connected: El_BDAKp4Xm4b1JlAAAF
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:47:06.112Z
+  last_health_check: 2025-11-14T02:32:12.304Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 46MB / 48MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: I9RacG1IZe3Set-aAAAF, reason: client namespace disconnect
+WebSocket client connected: 9Ww7z_lo8GQY1638AAAH
+⚠️ High memory usage: 54MB / 57MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -193,20 +188,11 @@ WebSocket client connected: El_BDAKp4Xm4b1JlAAAF
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:47:36.113Z
+  last_health_check: 2025-11-14T02:32:42.306Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: El_BDAKp4Xm4b1JlAAAF, reason: client namespace disconnect
-WebSocket client connected: ZVQxG0jcg4iw0fP1AAAH
-🎫 Found 1 tickets for 16 posts
-WebSocket client connected: NfNXr-qlPmNFhYPuAAAJ
-WebSocket client disconnected: NfNXr-qlPmNFhYPuAAAJ, reason: transport close
-🎫 Found 1 tickets for 16 posts
-WebSocket client connected: MrOnMoY7Xe4w6xCLAAAN
-WebSocket client disconnected: MrOnMoY7Xe4w6xCLAAAN, reason: client namespace disconnect
-WebSocket client connected: pRVS2LR5lsP1SnoOAAAP
-⚠️ High memory usage: 47MB / 49MB (95%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 53MB / 58MB (92%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -214,11 +200,13 @@ WebSocket client connected: pRVS2LR5lsP1SnoOAAAP
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:48:06.114Z
+  last_health_check: 2025-11-14T02:33:12.306Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 47MB / 49MB (95%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 9Ww7z_lo8GQY1638AAAH, reason: client namespace disconnect
+WebSocket client connected: dl9dI18XuTW5bhMkAAAJ
+⚠️ High memory usage: 54MB / 58MB (92%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -226,15 +214,11 @@ WebSocket client connected: pRVS2LR5lsP1SnoOAAAP
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:48:36.114Z
+  last_health_check: 2025-11-14T02:33:42.307Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: ZVQxG0jcg4iw0fP1AAAH, reason: client namespace disconnect
-WebSocket client connected: TIvwEH3MvmmiGJm6AAAR
-WebSocket client disconnected: pRVS2LR5lsP1SnoOAAAP, reason: client namespace disconnect
-WebSocket client connected: x-8SSYxTZJ0ZqI0wAAAT
-⚠️ High memory usage: 47MB / 49MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 54MB / 58MB (92%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -242,11 +226,13 @@ WebSocket client connected: x-8SSYxTZJ0ZqI0wAAAT
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:49:06.115Z
+  last_health_check: 2025-11-14T02:34:12.308Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 47MB / 49MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: dl9dI18XuTW5bhMkAAAJ, reason: client namespace disconnect
+WebSocket client connected: qOI6U5QZU5Qh_d5BAAAL
+⚠️ High memory usage: 54MB / 58MB (92%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -254,15 +240,11 @@ WebSocket client connected: x-8SSYxTZJ0ZqI0wAAAT
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:49:36.116Z
+  last_health_check: 2025-11-14T02:34:42.310Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: TIvwEH3MvmmiGJm6AAAR, reason: client namespace disconnect
-WebSocket client connected: 3PriMDrnvQJ-5LjIAAAV
-WebSocket client disconnected: x-8SSYxTZJ0ZqI0wAAAT, reason: client namespace disconnect
-WebSocket client connected: RQ5PMViPgKdF7wT2AAAX
-⚠️ High memory usage: 48MB / 49MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 54MB / 58MB (92%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -270,11 +252,13 @@ WebSocket client connected: RQ5PMViPgKdF7wT2AAAX
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:50:06.115Z
+  last_health_check: 2025-11-14T02:35:12.310Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 47MB / 50MB (95%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: qOI6U5QZU5Qh_d5BAAAL, reason: client namespace disconnect
+WebSocket client connected: DXynmFFrZTSXqwwpAAAN
+⚠️ High memory usage: 54MB / 58MB (93%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -282,15 +266,11 @@ WebSocket client connected: RQ5PMViPgKdF7wT2AAAX
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:50:36.115Z
+  last_health_check: 2025-11-14T02:35:42.310Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: 3PriMDrnvQJ-5LjIAAAV, reason: client namespace disconnect
-WebSocket client connected: Usxk7RQ3_NXk0S6eAAAZ
-WebSocket client disconnected: RQ5PMViPgKdF7wT2AAAX, reason: client namespace disconnect
-WebSocket client connected: gPRLqwJ0UghVH9-eAAAb
-⚠️ High memory usage: 47MB / 50MB (95%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 54MB / 58MB (93%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -298,11 +278,13 @@ WebSocket client connected: gPRLqwJ0UghVH9-eAAAb
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:51:06.116Z
+  last_health_check: 2025-11-14T02:36:12.313Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 47MB / 50MB (95%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: DXynmFFrZTSXqwwpAAAN, reason: client namespace disconnect
+WebSocket client connected: 57UwS9JbbAvC2FyHAAAP
+⚠️ High memory usage: 54MB / 59MB (93%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -310,15 +292,11 @@ WebSocket client connected: gPRLqwJ0UghVH9-eAAAb
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:51:36.117Z
+  last_health_check: 2025-11-14T02:36:42.316Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: Usxk7RQ3_NXk0S6eAAAZ, reason: client namespace disconnect
-WebSocket client connected: zxu99bgDZNdvn3mbAAAd
-WebSocket client disconnected: gPRLqwJ0UghVH9-eAAAb, reason: client namespace disconnect
-WebSocket client connected: qSm44wnSiPg9YOLIAAAf
-⚠️ High memory usage: 47MB / 50MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 54MB / 58MB (93%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -326,11 +304,13 @@ WebSocket client connected: qSm44wnSiPg9YOLIAAAf
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:52:06.118Z
+  last_health_check: 2025-11-14T02:37:12.321Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 48MB / 50MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 57UwS9JbbAvC2FyHAAAP, reason: client namespace disconnect
+WebSocket client connected: H1v5osdETgz3qvSBAAAR
+⚠️ High memory usage: 54MB / 58MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -338,15 +318,11 @@ WebSocket client connected: qSm44wnSiPg9YOLIAAAf
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:52:36.118Z
+  last_health_check: 2025-11-14T02:37:42.325Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: zxu99bgDZNdvn3mbAAAd, reason: client namespace disconnect
-WebSocket client connected: mmUYwxxRHIE2Akd6AAAh
-WebSocket client disconnected: qSm44wnSiPg9YOLIAAAf, reason: client namespace disconnect
-WebSocket client connected: SPWvoQOvV5N3CeQGAAAj
-⚠️ High memory usage: 48MB / 50MB (96%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 54MB / 58MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -354,11 +330,13 @@ WebSocket client connected: SPWvoQOvV5N3CeQGAAAj
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:53:06.118Z
+  last_health_check: 2025-11-14T02:38:12.326Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-⚠️ High memory usage: 47MB / 50MB (94%)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: H1v5osdETgz3qvSBAAAR, reason: client namespace disconnect
+WebSocket client connected: 8wpaAlGYcSL34bCTAAAT
+⚠️ High memory usage: 54MB / 58MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -366,19 +344,11 @@ WebSocket client connected: SPWvoQOvV5N3CeQGAAAj
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:53:36.119Z
+  last_health_check: 2025-11-14T02:38:42.327Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
-WebSocket client disconnected: mmUYwxxRHIE2Akd6AAAh, reason: client namespace disconnect
-WebSocket client connected: jxXEyvltK7zdL43ZAAAl
-WebSocket client disconnected: SPWvoQOvV5N3CeQGAAAj, reason: transport close
-🎫 Found 1 tickets for 16 posts
-🎫 Found 1 tickets for 16 posts
-WebSocket client connected: KdB78zoagqfySuqEAAAp
-WebSocket client disconnected: KdB78zoagqfySuqEAAAp, reason: client namespace disconnect
-WebSocket client connected: -CeiB-DR5aT-9SfbAAAr
-⚠️ High memory usage: 48MB / 51MB (94%)
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 54MB / 58MB (94%)
    SSE Connections: 0
    Ticker Messages: 3
 📊 AVI state updated: {
@@ -386,7 +356,1466 @@ WebSocket client connected: -CeiB-DR5aT-9SfbAAAr
   active_workers: 0,
   workers_spawned: 0,
   tickets_processed: 0,
-  last_health_check: 2025-11-13T00:54:06.125Z
+  last_health_check: 2025-11-14T02:39:12.332Z
 }
 💚 Health Check: 0 workers, 0 tokens, 0 processed
-ℹ️ No agents ready to introduce (user score: 35)
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 8wpaAlGYcSL34bCTAAAT, reason: transport close
+🎫 Found 0 tickets for 3 posts
+🎫 Found 0 tickets for 3 posts
+WebSocket client connected: iDai_eMrk9zz0mXKAAAY
+WebSocket client disconnected: iDai_eMrk9zz0mXKAAAY, reason: client namespace disconnect
+WebSocket client connected: wJ5Qnd4AmDff2cdaAAAa
+⚠️ High memory usage: 55MB / 58MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 0,
+  active_workers: 0,
+  workers_spawned: 0,
+  tickets_processed: 0,
+  last_health_check: 2025-11-14T02:39:42.334Z
+}
+💚 Health Check: 0 workers, 0 tokens, 0 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: wJ5Qnd4AmDff2cdaAAAa, reason: client namespace disconnect
+✅ Fetched 0 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: ucZ_jk9vx6zwipb3AAAd
+WebSocket client disconnected: ucZ_jk9vx6zwipb3AAAd, reason: client namespace disconnect
+WebSocket client connected: 5-kjGjY1ysnwt2nDAAAf
+WebSocket client disconnected: 5-kjGjY1ysnwt2nDAAAf, reason: client namespace disconnect
+WebSocket client connected: 8q0B-LOuRR8VKYAEAAAh
+WebSocket client disconnected: 8q0B-LOuRR8VKYAEAAAh, reason: client namespace disconnect
+WebSocket client connected: wlmtHZcnXW5_CGH-AAAj
+WebSocket client disconnected: wlmtHZcnXW5_CGH-AAAj, reason: client namespace disconnect
+WebSocket client connected: aCKTOY9uOQYtDPqzAAAl
+WebSocket client disconnected: aCKTOY9uOQYtDPqzAAAl, reason: client namespace disconnect
+WebSocket client connected: 82E-59tQXwsssONKAAAn
+WebSocket client disconnected: 82E-59tQXwsssONKAAAn, reason: client namespace disconnect
+WebSocket client connected: Ablcp8O30hR__evCAAAp
+WebSocket client disconnected: Ablcp8O30hR__evCAAAp, reason: transport close
+WebSocket client connected: xHshQ2NZIecP2Zo0AAAr
+WebSocket client disconnected: xHshQ2NZIecP2Zo0AAAr, reason: client namespace disconnect
+✅ Created comment 32837da8-aa29-4a07-9771-ee8fa16d256f for post post-1763087344617-4v5y0a4c6 in SQLite
+📡 Broadcasted comment:created for post post-1763087344617-4v5y0a4c6, comment ID: 32837da8-aa29-4a07-9771-ee8fa16d256f
+✅ Work ticket created for comment: ticket-f2664700-bc14-49dc-8917-514c4668167b
+WebSocket client connected: MV2NhF2wrGRN8E5aAAAt
+WebSocket client disconnected: MV2NhF2wrGRN8E5aAAAt, reason: transport error
+✅ Fetched 1 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: t6SMdm5i6UKVtmkgAAAw
+⚠️ High memory usage: 55MB / 58MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 0,
+  active_workers: 0,
+  workers_spawned: 0,
+  tickets_processed: 0,
+  last_health_check: 2025-11-14T02:40:12.337Z
+}
+💚 Health Check: 0 workers, 0 tokens, 0 processed
+ℹ️ No agents ready to introduce (user score: 0)
+🔒 Atomically claimed 1 tickets (worker: orchestrator-1763088012652)
+📋 Claimed 1 pending tickets atomically, spawning workers...
+🤖 Spawning worker worker-1763088012653-2k90wfo4f for ticket f2664700-bc14-49dc-8917-514c4668167b
+💬 Processing comment ticket: f2664700-bc14-49dc-8917-514c4668167b
+📍 Routing comment to parent post's agent: get-to-know-you-agent
+🎯 Routing comment to agent: get-to-know-you-agent
+📊 Comment ticket f2664700-bc14-49dc-8917-514c4668167b processing started (total in-flight: 1)
+💬 Processing comment: 32837da8-aa29-4a07-9771-ee8fa16d256f
+   Content: Groot
+   Agent: get-to-know-you-agent
+✅ Claude Code SDK Manager initialized
+📁 Working Directory: /workspaces/agent-feed/prod
+🤖 Model: claude-sonnet-4-20250514
+🔓 Permission Mode: bypassPermissions
+🛠️ Tools: Bash, Read, Write, Edit, MultiEdit, Glob, Grep, WebFetch, WebSearch
+🛡️ Protected query execution: {
+  workerId: 'worker-1763088012653-2k90wfo4f',
+  ticketId: 'f2664700-bc14-49dc-8917-514c4668167b',
+  userId: 'system',
+  complexity: 'complex',
+  limits: { maxChunks: 200, maxSize: 50000, timeoutMs: 300000 }
+}
+[WorkerHealthMonitor] Registered worker: worker-1763088012653-2k90wfo4f for ticket: f2664700-bc14-49dc-8917-514c4668167b
+🕐 Grace period monitoring started: {
+  stateId: 'gps-1763088012757-4202ccdb',
+  worker: 'worker-1763088012653-2k90wfo4f',
+  ticket: 'f2664700-bc14-49dc-8917-514c4668167b',
+  timeout: '300000ms',
+  gracePeriod: '240000ms (80%)'
+}
+🔧 Executing headless task...
+🚀 Executing Claude Code query...
+📝 Prompt: ---
+name: get-to-know-you-agent
+tier: 1
+visibility: public
+icon: Users
+icon_type: svg
+icon_emoji: 👥...
+⚙️ System message: init
+💬 Assistant response received
+WebSocket client disconnected: t6SMdm5i6UKVtmkgAAAw, reason: client namespace disconnect
+WebSocket client connected: jjaqvh_HB-pUP7khAAAy
+💬 Assistant response received
+WebSocket client disconnected: jjaqvh_HB-pUP7khAAAy, reason: client namespace disconnect
+WebSocket client connected: n4HywNJ-USRUiEizAAA0
+💬 Assistant response received
+WebSocket client disconnected: n4HywNJ-USRUiEizAAA0, reason: transport close
+🎫 Found 0 tickets for 3 posts
+🎫 Found 0 tickets for 3 posts
+WebSocket client connected: nmuvgwNvPCo3-3_NAAA5
+WebSocket client disconnected: nmuvgwNvPCo3-3_NAAA5, reason: client namespace disconnect
+WebSocket client connected: HEGxvcPWT2GUQYJAAAA7
+WebSocket client disconnected: HEGxvcPWT2GUQYJAAAA7, reason: client namespace disconnect
+✅ Fetched 1 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: ifrO8deQ6QUtxD0rAAA-
+💬 Assistant response received
+💬 Assistant response received
+⚠️ High memory usage: 56MB / 59MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 1,
+  workers_spawned: 1,
+  tickets_processed: 0,
+  last_health_check: 2025-11-14T02:40:42.337Z
+}
+💚 Health Check: 1 workers, 2000 tokens, 0 processed
+ℹ️ No agents ready to introduce (user score: 0)
+💬 Assistant response received
+WebSocket client disconnected: ifrO8deQ6QUtxD0rAAA-, reason: transport close
+✅ Query completed: success
+🎫 Found 0 tickets for 3 posts
+[WorkerHealthMonitor] Unregistered worker: worker-1763088012653-2k90wfo4f
+🔍 SDK Result Structure: {
+  success: true,
+  terminated: false,
+  reason: undefined,
+  messageCount: 13,
+  messageTypes: [
+    'system',    'assistant',
+    'user',      'assistant',
+    'user',      'assistant',
+    'user',      'assistant',
+    'user',      'assistant',
+    'assistant', 'user',
+    'result'
+  ],
+  chunkCount: 13,
+  responseSize: 0
+}
+✅ Extracted from nested message.content array: Perfect! Nice to meet you, Groot! 🌱 
+
+I'm your Get-to-Know-You Agent, and I help Λvi (your AI chief
+✅ Worker worker-1763088012653-2k90wfo4f completed comment processing
+📊 Tickets completed: 1 (active workers: 1)
+✅ Created comment c387674e-af8d-441c-bcad-be5d8d5097a3 for post post-1763087344617-4v5y0a4c6 in SQLite
+📡 Broadcasted comment:created for post post-1763087344617-4v5y0a4c6, comment ID: c387674e-af8d-441c-bcad-be5d8d5097a3
+⏭️  Skipping ticket creation for comment c387674e-af8d-441c-bcad-be5d8d5097a3 (skipTicket=true)
+✅ Posted reply as get-to-know-you-agent: c387674e-af8d-441c-bcad-be5d8d5097a3
+📡 Broadcasted comment:created for post post-1763087344617-4v5y0a4c6, comment ID: c387674e-af8d-441c-bcad-be5d8d5097a3
+🗑️ Worker worker-1763088012653-2k90wfo4f destroyed (0 active, 1 completed)
+🎫 Found 0 tickets for 3 posts
+WebSocket client connected: rEOAhP72PURtkGhMAABD
+WebSocket client disconnected: rEOAhP72PURtkGhMAABD, reason: client namespace disconnect
+WebSocket client connected: Okqb-x4Bl4Nbl_SFAABF
+WebSocket client disconnected: Okqb-x4Bl4Nbl_SFAABF, reason: client namespace disconnect
+✅ Fetched 2 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: k8rFPP4N3E7TXOs6AABI
+WebSocket client disconnected: k8rFPP4N3E7TXOs6AABI, reason: transport close
+🎫 Found 0 tickets for 3 posts
+🎫 Found 0 tickets for 3 posts
+WebSocket client connected: DMnCY2BYPvaXtbXDAABM
+WebSocket client disconnected: DMnCY2BYPvaXtbXDAABM, reason: client namespace disconnect
+WebSocket client connected: 7JUR0NwKP5Q5lOLEAABO
+WebSocket client disconnected: 7JUR0NwKP5Q5lOLEAABO, reason: client namespace disconnect
+✅ Fetched 2 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: AXAfHOcfRidxGDMLAABR
+⚠️ High memory usage: 57MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:41:12.342Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: AXAfHOcfRidxGDMLAABR, reason: transport close
+🎫 Found 0 tickets for 3 posts
+🎫 Found 0 tickets for 3 posts
+WebSocket client connected: paPuXrcfXjZAjzR0AABV
+WebSocket client disconnected: paPuXrcfXjZAjzR0AABV, reason: client namespace disconnect
+WebSocket client connected: -t4lTLdN_1uG5h7FAABX
+WebSocket client disconnected: -t4lTLdN_1uG5h7FAABX, reason: client namespace disconnect
+✅ Fetched 2 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: PJ1ROMcBRy37AF2hAABZ
+WebSocket client disconnected: PJ1ROMcBRy37AF2hAABZ, reason: transport close
+WebSocket client connected: wAgOuYyC-lhHWA5KAABb
+⚠️ High memory usage: 57MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:41:42.343Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:42:12.348Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: wAgOuYyC-lhHWA5KAABb, reason: client namespace disconnect
+WebSocket client connected: FBQ9wJs7JLdiYDTMAABd
+WebSocket client disconnected: FBQ9wJs7JLdiYDTMAABd, reason: transport close
+🎫 Found 0 tickets for 3 posts
+🎫 Found 0 tickets for 3 posts
+WebSocket client connected: WhUcg1WLbCbX95SvAABh
+WebSocket client disconnected: WhUcg1WLbCbX95SvAABh, reason: client namespace disconnect
+WebSocket client connected: oAecG8K3oiuBNGL7AABj
+WebSocket client disconnected: oAecG8K3oiuBNGL7AABj, reason: client namespace disconnect
+✅ Fetched 2 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: Bk9ORtkZZPNpROq7AABm
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:42:42.348Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:43:12.353Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: Bk9ORtkZZPNpROq7AABm, reason: client namespace disconnect
+WebSocket client connected: KhZiBZvgill221ojAABo
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:43:42.353Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: KhZiBZvgill221ojAABo, reason: transport close
+🎫 Found 0 tickets for 3 posts
+🎫 Found 0 tickets for 3 posts
+WebSocket client connected: kjyWuLrkr0qGqBYfAABt
+WebSocket client disconnected: kjyWuLrkr0qGqBYfAABt, reason: client namespace disconnect
+WebSocket client connected: CTaLeuIUPmfQP18RAABv
+WebSocket client disconnected: CTaLeuIUPmfQP18RAABv, reason: client namespace disconnect
+✅ Fetched 2 comments for post post-1763087344617-4v5y0a4c6 from SQLite
+WebSocket client connected: uLvrrhKb4i7wWgm6AABy
+⚠️ High memory usage: 58MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:44:12.354Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:44:42.354Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: uLvrrhKb4i7wWgm6AABy, reason: client namespace disconnect
+WebSocket client connected: fdb5TZoN7sO6Ilm-AAB0
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:45:12.360Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:45:42.360Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: fdb5TZoN7sO6Ilm-AAB0, reason: client namespace disconnect
+WebSocket client connected: CCmybXqZQw3qmKK4AAB2
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:46:12.365Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:46:42.365Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: CCmybXqZQw3qmKK4AAB2, reason: client namespace disconnect
+WebSocket client connected: ZtVKesMQ_60EaHtrAAB4
+⚠️ High memory usage: 57MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:47:12.367Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:47:42.367Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: ZtVKesMQ_60EaHtrAAB4, reason: client namespace disconnect
+WebSocket client connected: 0cVMTgqWqjM9Rp0sAAB6
+⚠️ High memory usage: 58MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:48:12.373Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 60MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:48:42.411Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 0cVMTgqWqjM9Rp0sAAB6, reason: client namespace disconnect
+WebSocket client connected: dhWes5P6grlOabdfAAB8
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:49:12.412Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:49:42.412Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: dhWes5P6grlOabdfAAB8, reason: client namespace disconnect
+WebSocket client connected: LeXbj18Vm3cioKDgAAB-
+⚠️ High memory usage: 57MB / 60MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:50:12.412Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:50:42.411Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: LeXbj18Vm3cioKDgAAB-, reason: client namespace disconnect
+WebSocket client connected: FwSpT8UbMv5ZkAnfAACA
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:51:12.411Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:51:42.412Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: FwSpT8UbMv5ZkAnfAACA, reason: client namespace disconnect
+WebSocket client connected: l-TZf6fbKTcv2x-OAACC
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:52:12.413Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:52:42.413Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: l-TZf6fbKTcv2x-OAACC, reason: client namespace disconnect
+WebSocket client connected: M9C8uHU0X_18kqpQAACE
+⚠️ High memory usage: 57MB / 61MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:53:12.420Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:53:42.421Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: M9C8uHU0X_18kqpQAACE, reason: client namespace disconnect
+WebSocket client connected: por3tZKCdgGAaEb5AACG
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:54:12.422Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:54:42.427Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: por3tZKCdgGAaEb5AACG, reason: client namespace disconnect
+WebSocket client connected: wsGIk9WTMOoXRLD5AACI
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:55:12.427Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:55:42.427Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: wsGIk9WTMOoXRLD5AACI, reason: client namespace disconnect
+WebSocket client connected: wDt2IzTv2U41Bh4nAACK
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:56:12.428Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:56:42.429Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: wDt2IzTv2U41Bh4nAACK, reason: client namespace disconnect
+WebSocket client connected: e15Yz6DF2BWCFUTkAACM
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:57:12.429Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:57:42.429Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: e15Yz6DF2BWCFUTkAACM, reason: client namespace disconnect
+WebSocket client connected: sFInb5TKkfzM0ILbAACO
+⚠️ High memory usage: 57MB / 61MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:58:12.433Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:58:42.434Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: sFInb5TKkfzM0ILbAACO, reason: client namespace disconnect
+WebSocket client connected: rWSo3WcVBxzHJwGkAACQ
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:59:12.438Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T02:59:42.439Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: rWSo3WcVBxzHJwGkAACQ, reason: client namespace disconnect
+WebSocket client connected: ad5-lz8C12lf-RbrAACS
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:00:12.442Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:00:42.443Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: ad5-lz8C12lf-RbrAACS, reason: client namespace disconnect
+WebSocket client connected: GRztELYcmukhclBLAACU
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:01:12.448Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:01:42.448Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: GRztELYcmukhclBLAACU, reason: client namespace disconnect
+WebSocket client connected: 2NZbWN9JRmOQkdxgAACW
+⚠️ High memory usage: 57MB / 61MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:02:12.453Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:02:42.453Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 2NZbWN9JRmOQkdxgAACW, reason: client namespace disconnect
+WebSocket client connected: OkTJUR88icpM1JiiAACY
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:03:12.457Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:03:42.458Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: OkTJUR88icpM1JiiAACY, reason: client namespace disconnect
+WebSocket client connected: OIQnagPDp-7s_z7uAACa
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:04:12.463Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:04:42.464Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: OIQnagPDp-7s_z7uAACa, reason: client namespace disconnect
+WebSocket client connected: exJwdIR2DeqOfnc6AACc
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:05:12.466Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:05:42.466Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: exJwdIR2DeqOfnc6AACc, reason: client namespace disconnect
+WebSocket client connected: fsCjJer9MQtVLoONAACe
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:06:12.471Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:06:42.472Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: fsCjJer9MQtVLoONAACe, reason: client namespace disconnect
+WebSocket client connected: F8rHclb-0vel5lQ7AACg
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:07:12.474Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:07:42.475Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: F8rHclb-0vel5lQ7AACg, reason: client namespace disconnect
+WebSocket client connected: yKiG14jffFnCOSBKAACi
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:08:12.480Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:08:42.481Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: yKiG14jffFnCOSBKAACi, reason: client namespace disconnect
+WebSocket client connected: CG14Od2ADVUBoodpAACk
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:09:12.485Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:09:42.486Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: CG14Od2ADVUBoodpAACk, reason: client namespace disconnect
+WebSocket client connected: 7nu_ykawtokQEupAAACm
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:10:12.490Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:10:42.490Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 7nu_ykawtokQEupAAACm, reason: client namespace disconnect
+WebSocket client connected: yOlzZ5PXcNMwKTPMAACo
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:11:12.494Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 62MB (93%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:11:42.494Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: yOlzZ5PXcNMwKTPMAACo, reason: client namespace disconnect
+WebSocket client connected: Yd1OjqLal_eoWQPsAACq
+⚠️ High memory usage: 57MB / 62MB (93%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:12:12.499Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 62MB (93%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:12:42.500Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 62MB (93%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:13:12.503Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: Yd1OjqLal_eoWQPsAACq, reason: client namespace disconnect
+WebSocket client connected: Hud7-F0WrOt76LlVAACs
+⚠️ High memory usage: 58MB / 62MB (93%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:13:42.504Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 62MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:14:12.508Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: Hud7-F0WrOt76LlVAACs, reason: client namespace disconnect
+WebSocket client connected: QHrajV3PkSm0IUEjAACu
+⚠️ High memory usage: 58MB / 62MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:14:42.509Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 62MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:15:12.513Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: QHrajV3PkSm0IUEjAACu, reason: client namespace disconnect
+WebSocket client connected: 7UyMYjvJM6xaxGnMAACw
+⚠️ High memory usage: 58MB / 62MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:15:42.514Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 62MB (94%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:16:12.518Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 7UyMYjvJM6xaxGnMAACw, reason: client namespace disconnect
+WebSocket client connected: yL8hCB9-erMSFqfnAACy
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:16:42.518Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:17:12.521Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: yL8hCB9-erMSFqfnAACy, reason: client namespace disconnect
+WebSocket client connected: DO27RyYcd4Kps2k0AAC0
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:17:42.522Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:18:12.527Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: DO27RyYcd4Kps2k0AAC0, reason: client namespace disconnect
+WebSocket client connected: pjsw9Et2O9WqaRWSAAC2
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:18:42.528Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:19:12.531Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: pjsw9Et2O9WqaRWSAAC2, reason: client namespace disconnect
+WebSocket client connected: IjBcNFHeFuEiBouSAAC4
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:19:42.532Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:20:12.537Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: IjBcNFHeFuEiBouSAAC4, reason: client namespace disconnect
+WebSocket client connected: ODZ3XEAwrcNgYDeCAAC6
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:20:42.537Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:21:12.540Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: ODZ3XEAwrcNgYDeCAAC6, reason: client namespace disconnect
+WebSocket client connected: Ymk23v8V0gzq5zumAAC8
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:21:42.541Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:22:12.546Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: Ymk23v8V0gzq5zumAAC8, reason: client namespace disconnect
+WebSocket client connected: blWMFTvhjJgADsfcAAC-
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:22:42.547Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:23:12.550Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: blWMFTvhjJgADsfcAAC-, reason: client namespace disconnect
+WebSocket client connected: 9QLeCuw4q9FdthFwAADA
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:23:42.551Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:24:12.555Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: 9QLeCuw4q9FdthFwAADA, reason: client namespace disconnect
+WebSocket client connected: a0gPU_psiwxbo7CUAADC
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:24:42.556Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:25:12.558Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: a0gPU_psiwxbo7CUAADC, reason: client namespace disconnect
+WebSocket client connected: wbLcQaR06Bn4p_w2AADE
+⚠️ High memory usage: 58MB / 61MB (96%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:25:42.559Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:26:12.563Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: wbLcQaR06Bn4p_w2AADE, reason: client namespace disconnect
+WebSocket client connected: s_BuYbwpQ0KiCbzVAADG
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:26:42.565Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 57MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:27:12.568Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: s_BuYbwpQ0KiCbzVAADG, reason: client namespace disconnect
+WebSocket client connected: MF1dBY6BYP3F_yJ8AADI
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:27:42.569Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:28:12.572Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+WebSocket client disconnected: MF1dBY6BYP3F_yJ8AADI, reason: client namespace disconnect
+WebSocket client connected: 9DIpaBU5igQHigPiAADK
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:28:42.573Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)
+⚠️ High memory usage: 58MB / 61MB (95%)
+   SSE Connections: 0
+   Ticker Messages: 3
+📊 AVI state updated: {
+  context_size: 2000,
+  active_workers: 0,
+  workers_spawned: 1,
+  tickets_processed: 1,
+  last_health_check: 2025-11-14T03:29:12.576Z
+}
+💚 Health Check: 0 workers, 2000 tokens, 1 processed
+ℹ️ No agents ready to introduce (user score: 0)

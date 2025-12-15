@@ -1,58 +1,48 @@
-<testsuites id="" name="" tests="13" failures="0" skipped="13" errors="0" time="1.000085">
-<testsuite name="telemetry-ui-validation.spec.ts" timestamp="2025-11-12T20:06:51.053Z" hostname="chromium" tests="9" failures="0" skipped="9" time="0" errors="0">
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 01 - Load home page without errors" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 02 - Navigate to Avi DM interface" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 03 - Compose Avi DM message" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 04 - Verify backend logs clean (no schema errors)" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 05 - Verify database schema correct" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 06 - Check network for 500 errors" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 07 - Verify frontend loads without JS errors" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry UI Validation - Schema Fix Verification › 08 - Comprehensive regression check" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Telemetry Validation Summary Report › Generate comprehensive validation report" classname="telemetry-ui-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-</testsuite>
-<testsuite name="websocket-and-conversation-validation.spec.ts" timestamp="2025-11-12T20:06:51.053Z" hostname="chromium" tests="4" failures="0" skipped="4" time="0" errors="0">
-<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Fix #1: Real-Time Comment Display Without Refresh" classname="websocket-and-conversation-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Fix #2: Multi-Turn Conversation Context" classname="websocket-and-conversation-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Combined Test: Real-Time Multi-Turn Conversation" classname="websocket-and-conversation-validation.spec.ts" time="0">
-<skipped>
-</skipped>
-</testcase>
-<testcase name="Critical Fixes: WebSocket &amp; Conversation Context › Regression: No Duplicate Avi Responses" classname="websocket-and-conversation-validation.spec.ts" time="0">
-<skipped>
-</skipped>
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="18.096229">
+<testsuite name="pill-visibility-fix-e2e.spec.ts" timestamp="2025-11-25T07:19:01.789Z" hostname="chromium" tests="1" failures="1" skipped="0" time="14.971" errors="0">
+<testcase name="Processing Pill Visibility Fix - Comment Reply › should show processing pill IMMEDIATELY when replying to a comment" classname="pill-visibility-fix-e2e.spec.ts" time="14.971">
+<failure message="pill-visibility-fix-e2e.spec.ts:22:3 should show processing pill IMMEDIATELY when replying to a comment" type="FAILURE">
+<![CDATA[  [chromium] › pill-visibility-fix-e2e.spec.ts:22:3 › Processing Pill Visibility Fix - Comment Reply › should show processing pill IMMEDIATELY when replying to a comment 
+
+    Error: ❌ Comment button not found
+
+      52 |
+      53 |     if (!commentButton) {
+    > 54 |       throw new Error('❌ Comment button not found');
+         |             ^
+      55 |     }
+      56 |
+      57 |     await commentButton.click();
+        at /workspaces/agent-feed/tests/e2e/pill-visibility-fix-e2e.spec.ts:54:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[🧪 Starting pill visibility fix test...
+📍 Step 1: Navigating to http://localhost:5173
+⏳ Step 2: Waiting for feed to load...
+📸 Screenshot saved: 1-initial-feed-loaded-2025-11-25T07-19-09-623Z.png
+✅ Feed loaded successfully
+🔍 Step 3: Finding first post...
+✅ Found target post
+💬 Step 4: Creating a top-level comment to reply to...
+
+[[ATTACHMENT|../../test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/video.webm]]
+
+[[ATTACHMENT|../../test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/error-context.md]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

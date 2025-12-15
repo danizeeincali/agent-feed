@@ -16,6 +16,7 @@ import { getHealthMonitor } from '../services/worker-health-monitor.js';
 import { TicketValidator } from './ticket-validator.js';
 import { SequentialIntroductionOrchestrator } from '../services/agents/sequential-introduction-orchestrator.js';
 import { createAgentVisibilityService } from '../services/agent-visibility-service.js';
+import { debugLog, debugWarn, debugError, DEBUG_PILLS } from '../utils/debug-logger.js';
 
 // Stub repositories for Phase 2 - Complete implementation
 const aviStateRepo = {
@@ -44,6 +45,9 @@ class AviOrchestrator {
     this.contextSize = 0;
     this.ticketsProcessed = 0;
     this.workersSpawned = 0;
+
+    // ✅ FIX: Belt-and-suspenders duplicate ticket tracking
+    this.processingTickets = new Set(); // Track tickets being processed in-memory
 
     this.mainLoopTimer = null;
     this.healthCheckTimer = null;
@@ -170,20 +174,28 @@ class AviOrchestrator {
       return; // At capacity
     }
 
-    // Get pending tickets using real repository
+    // ✅ FIX: Use atomic claiming to prevent race condition
     const availableSlots = this.maxWorkers - activeCount;
-    const tickets = await this.workQueueRepo.getPendingTickets({
-      limit: availableSlots
+    const tickets = await this.workQueueRepo.claimPendingTickets({
+      limit: availableSlots,
+      workerId: `orchestrator-${Date.now()}`
     });
 
     if (tickets.length === 0) {
       return; // No work to do
     }
 
-    console.log(`📋 Found ${tickets.length} pending tickets, spawning workers...`);
+    console.log(`📋 Claimed ${tickets.length} pending tickets atomically, spawning workers...`);
 
     // Spawn workers for each ticket
     for (const ticket of tickets) {
+      // ✅ FIX: Belt-and-suspenders - also track in memory
+      if (this.processingTickets.has(ticket.id)) {
+        console.warn(`⚠️ Ticket ${ticket.id} already being processed, skipping...`);
+        continue;
+      }
+      this.processingTickets.add(ticket.id);
+
       await this.spawnWorker(ticket);
     }
   }
@@ -204,8 +216,8 @@ class AviOrchestrator {
         return await this.processCommentTicket(ticket, workerId);
       }
 
-      // Mark ticket as in_progress
-      await this.workQueueRepo.updateTicketStatus(ticket.id.toString(), 'in_progress');
+      // ✅ FIX: Status already updated by claimPendingTickets()
+      // No need for duplicate update here
 
       // Create worker instance
       const worker = new AgentWorker({
@@ -220,28 +232,69 @@ class AviOrchestrator {
       this.activeWorkers.set(workerId, worker);
       this.workersSpawned++;
 
+      // FIX: Increment counter when processing STARTS (not just when completed)
+      console.log(`📊 Ticket ${ticket.id} processing started (total in-flight: ${this.activeWorkers.size})`);
+
+      // Emit processing state for posts
+      console.log(`📊 [Orchestrator] Emitting 'processing' for POST ticket ${ticket.id}`);
+      if (this.websocketService && this.websocketService.isInitialized()) {
+        this.websocketService.emitTicketStatusUpdate({
+          post_id: ticket.post_id,
+          ticket_id: ticket.id,
+          status: 'processing',
+          agent_id: ticket.agent_id
+        });
+      }
+
       // Execute ticket (async)
       worker.execute()
         .then(async (result) => {
           console.log(`✅ Worker ${workerId} completed successfully`);
           this.ticketsProcessed++;
+          console.log(`📊 Tickets completed: ${this.ticketsProcessed} (active workers: ${this.activeWorkers.size})`);
 
           // Mark ticket as completed
           await this.workQueueRepo.completeTicket(ticket.id.toString(), {
             result: result.response,
             tokens_used: result.tokensUsed || 0
           });
+
+          // Emit completed state for posts
+          console.log(`📊 [Orchestrator] Emitting 'completed' for POST ticket ${ticket.id}`);
+          if (this.websocketService && this.websocketService.isInitialized()) {
+            this.websocketService.emitTicketStatusUpdate({
+              post_id: ticket.post_id,
+              ticket_id: ticket.id,
+              status: 'completed',
+              agent_id: ticket.agent_id
+            });
+          }
         })
         .catch(async (error) => {
           console.error(`❌ Worker ${workerId} failed:`, error);
 
           // Mark ticket as failed (with retry logic)
           await this.workQueueRepo.failTicket(ticket.id.toString(), error.message);
+
+          // Emit failed state for posts
+          console.log(`📊 [Orchestrator] Emitting 'failed' for POST ticket ${ticket.id}`);
+          if (this.websocketService && this.websocketService.isInitialized()) {
+            this.websocketService.emitTicketStatusUpdate({
+              post_id: ticket.post_id,
+              ticket_id: ticket.id,
+              status: 'failed',
+              agent_id: ticket.agent_id,
+              error: error.message
+            });
+          }
         })
         .finally(() => {
+          // ✅ FIX: Cleanup in-memory tracking
+          this.processingTickets.delete(ticket.id);
+
           // Clean up worker
           this.activeWorkers.delete(workerId);
-          console.log(`🗑️ Worker ${workerId} destroyed (${this.activeWorkers.size} active)`);
+          console.log(`🗑️ Worker ${workerId} destroyed (${this.activeWorkers.size} active, ${this.ticketsProcessed} completed)`);
         });
 
       // Update context size estimate
@@ -254,10 +307,38 @@ class AviOrchestrator {
   }
 
   /**
+   * Emit comment processing state via WebSocket
+   * @param {string} commentId - Comment ID
+   * @param {string} postId - Parent post ID
+   * @param {string} state - State: 'waiting' | 'analyzed' | 'responding' | 'complete'
+   */
+  emitCommentState(commentId, postId, state) {
+    debugLog('orchestrator', `📡 Emitting state '${state}' for comment ${commentId} (post: ${postId})`);
+
+    if (this.websocketService && this.websocketService.isInitialized()) {
+      this.websocketService.emitCommentState({
+        commentId,
+        postId,
+        state,
+        timestamp: Date.now()
+      });
+      debugLog('orchestrator', `✅ State '${state}' emitted successfully for comment ${commentId}`);
+    } else {
+      debugWarn('orchestrator', `⚠️ WebSocket not initialized, cannot emit state '${state}' for comment ${commentId}`);
+    }
+  }
+
+  /**
    * Process comment ticket with specialized routing
    */
   async processCommentTicket(ticket, workerId) {
-    console.log(`💬 Processing comment ticket: ${ticket.id}`);
+    debugLog('orchestrator', `🎯 Processing comment ticket: ${ticket.id}`);
+    debugLog('orchestrator', `📋 Ticket details:`, {
+      ticketId: ticket.id,
+      postId: ticket.post_id,
+      agent: ticket.agent_id,
+      metadata: ticket.metadata
+    });
 
     try {
       // Validate ticket fields before processing
@@ -270,6 +351,9 @@ class AviOrchestrator {
       const parentPostId = metadata.parent_post_id;
       const parentCommentId = metadata.parent_comment_id;
 
+      // Emit 'waiting' state - comment has entered the queue
+      this.emitCommentState(commentId, parentPostId, 'waiting');
+
       // FIX: Use ticket.content instead of ticket.post_content
       const content = ticket.content;
 
@@ -278,21 +362,30 @@ class AviOrchestrator {
         throw new Error('Missing ticket.content field');
       }
 
-      // Mark ticket as in_progress
-      await this.workQueueRepo.updateTicketStatus(ticket.id.toString(), 'in_progress');
+      // ✅ FIX: Status already updated by claimPendingTickets()
+      // No need for duplicate update here
 
       // Load parent post context
       let parentPost = null;
       try {
         const { default: dbSelector } = await import('../config/database-selector.js');
         parentPost = await dbSelector.getPostById(parentPostId);
+
+        if (parentPost) {
+          console.log(`📄 [ROUTING] Parent post loaded: ${parentPostId} by ${parentPost.author_agent || 'unknown'}`);
+        } else {
+          console.warn(`⚠️ [ROUTING] Parent post ${parentPostId} not found in database`);
+        }
       } catch (error) {
-        console.warn('⚠️ Failed to load parent post:', error);
+        console.error('❌ [ROUTING ERROR] Failed to load parent post:', error);
       }
 
-      // Route to appropriate agent
-      const agent = this.routeCommentToAgent(content, metadata);
-      console.log(`🎯 Routing comment to agent: ${agent}`);
+      // Route to appropriate agent (NOW ASYNC! - pass parentPost for author_agent routing)
+      const agent = await this.routeCommentToAgent(content, metadata, parentPost);
+      console.log(`🎯 [ROUTING] Final decision: ${agent}`);
+
+      // Emit 'analyzed' state - AI has received and analyzed the comment
+      this.emitCommentState(commentId, parentPostId, 'analyzed');
 
       // Spawn worker in comment mode
       const worker = new AgentWorker({
@@ -319,28 +412,50 @@ class AviOrchestrator {
       this.activeWorkers.set(workerId, worker);
       this.workersSpawned++;
 
+      // FIX: Log processing start
+      console.log(`📊 Comment ticket ${ticket.id} processing started (total in-flight: ${this.activeWorkers.size})`);
+
+      // Emit 'responding' state - AI is starting to generate response
+      this.emitCommentState(commentId, parentPostId, 'responding');
+
       // Process comment and generate reply
       worker.processComment()
         .then(async (result) => {
           console.log(`✅ Worker ${workerId} completed comment processing`);
           this.ticketsProcessed++;
+          console.log(`📊 Tickets completed: ${this.ticketsProcessed} (active workers: ${this.activeWorkers.size})`);
 
           // Post reply to API
           if (result.success && result.reply) {
+            debugLog('orchestrator', `✅ Agent response generated for comment ${commentId}, posting reply...`);
             await this.postCommentReply(parentPostId, commentId, agent, result.reply);
+            debugLog('orchestrator', `✅ Reply posted successfully for comment ${commentId}`);
           }
+
+          // Emit 'complete' state - response has been posted
+          this.emitCommentState(commentId, parentPostId, 'complete');
+          debugLog('orchestrator', `🏁 Processing complete for comment ${commentId}`);
 
           // Complete ticket
           await this.workQueueRepo.completeTicket(ticket.id.toString(), result);
+
+          // NOTE: Worker already emitted 'completed' status via emitStatusUpdate()
+          // No need for duplicate orchestrator-level event
         })
         .catch(async (error) => {
           console.error(`❌ Worker ${workerId} failed:`, error);
           await this.workQueueRepo.failTicket(ticket.id.toString(), error.message);
+
+          // NOTE: Worker already emitted 'failed' status via emitStatusUpdate()
+          // No need for duplicate orchestrator-level event
         })
         .finally(() => {
+          // ✅ FIX: Cleanup in-memory tracking
+          this.processingTickets.delete(ticket.id);
+
           // Clean up worker
           this.activeWorkers.delete(workerId);
-          console.log(`🗑️ Worker ${workerId} destroyed (${this.activeWorkers.size} active)`);
+          console.log(`🗑️ Worker ${workerId} destroyed (${this.activeWorkers.size} active, ${this.ticketsProcessed} completed)`);
         });
 
       // Update context size estimate
@@ -353,36 +468,76 @@ class AviOrchestrator {
   }
 
   /**
-   * Route comment to appropriate agent based on content
+   * Route comment to appropriate agent based on parent comment OR parent post
+   * PRIORITY 1: Parent comment's author_agent (for threaded replies)
+   * PRIORITY 2: Parent post's author_agent (for top-level comments)
+   * PRIORITY 3: Agent mentions
+   * PRIORITY 4: Keyword-based routing
+   * PRIORITY 5: Default to Avi
    */
-  routeCommentToAgent(content, metadata) {
+  async routeCommentToAgent(content, metadata, parentPost = null) {
     const lowerContent = content.toLowerCase();
 
-    // Check for agent mentions
+    // PRIORITY 1: If replying to a comment, route to that comment's agent
+    if (metadata.parent_comment_id) {
+      try {
+        const { default: dbSelector } = await import('../config/database-selector.js');
+        const parentComment = await dbSelector.getCommentById(metadata.parent_comment_id);
+
+        if (parentComment && parentComment.author_agent) {
+          console.log(`📍 [ROUTING PRIORITY 1] Reply to comment ${metadata.parent_comment_id} → agent: ${parentComment.author_agent}`);
+          return parentComment.author_agent;
+        } else if (parentComment) {
+          console.log(`⚠️ [ROUTING] Parent comment ${metadata.parent_comment_id} exists but has no author_agent, falling back to parent post routing`);
+        } else {
+          console.log(`⚠️ [ROUTING] Parent comment ${metadata.parent_comment_id} not found, falling back to parent post routing`);
+        }
+      } catch (error) {
+        console.error('❌ [ROUTING ERROR] Failed to load parent comment for routing:', error);
+        console.log('⚠️ [ROUTING FALLBACK] Continuing with parent post routing');
+      }
+    }
+
+    // PRIORITY 2: Route based on parent post's author_agent (FR-1)
+    if (parentPost && parentPost.author_agent) {
+      console.log(`📍 [ROUTING PRIORITY 2] Top-level comment on post by ${parentPost.author_agent}`);
+      return parentPost.author_agent;
+    } else if (parentPost) {
+      console.log(`⚠️ [ROUTING] Parent post exists but has no author_agent, falling back to mentions/keywords`);
+    }
+
+    // PRIORITY 3: Check for agent mentions
     if (lowerContent.includes('@page-builder') || lowerContent.includes('page-builder-agent')) {
+      console.log(`📍 [ROUTING PRIORITY 3] Agent mention detected: page-builder-agent`);
       return 'page-builder-agent';
     }
     if (lowerContent.includes('@skills') || lowerContent.includes('skills-architect')) {
+      console.log(`📍 [ROUTING PRIORITY 3] Agent mention detected: skills-architect-agent`);
       return 'skills-architect-agent';
     }
     if (lowerContent.includes('@agent-architect') || lowerContent.includes('create agent')) {
+      console.log(`📍 [ROUTING PRIORITY 3] Agent mention detected: agent-architect-agent`);
       return 'agent-architect-agent';
     }
 
-    // Keyword-based routing
+    // PRIORITY 4: Keyword-based routing
     const keywords = this.extractKeywords(lowerContent);
 
     if (keywords.some(k => ['page', 'component', 'ui', 'layout', 'tool'].includes(k))) {
+      console.log(`📍 [ROUTING PRIORITY 4] Keyword match: page-builder-agent (keywords: ${keywords.join(', ')})`);
       return 'page-builder-agent';
     }
     if (keywords.some(k => ['skill', 'template', 'pattern'].includes(k))) {
+      console.log(`📍 [ROUTING PRIORITY 4] Keyword match: skills-architect-agent (keywords: ${keywords.join(', ')})`);
       return 'skills-architect-agent';
     }
     if (keywords.some(k => ['agent', 'create', 'build'].includes(k))) {
+      console.log(`📍 [ROUTING PRIORITY 4] Keyword match: agent-architect-agent (keywords: ${keywords.join(', ')})`);
       return 'agent-architect-agent';
     }
 
-    // Default to Avi
+    // PRIORITY 5: Default to Avi
+    console.log(`📍 [ROUTING PRIORITY 5] No matches, defaulting to avi`);
     return 'avi';
   }
 
@@ -489,19 +644,8 @@ class AviOrchestrator {
         await this.workQueueRepo.failTicket(worker.ticketId, `Auto-killed: ${worker.reason}`);
       }
 
-      // Notify via WebSocket if available
-      if (this.websocketService && this.websocketService.isInitialized()) {
-        this.websocketService.broadcastToAll({
-          type: 'worker_killed',
-          data: {
-            workerId: worker.workerId,
-            ticketId: worker.ticketId,
-            reason: worker.reason,
-            runtime: worker.runtime,
-            timestamp: Date.now()
-          }
-        });
-      }
+      // NOTE: Worker kill events are handled internally
+      // No WebSocket broadcast needed for worker lifecycle events
 
       console.log(`✅ Worker ${worker.workerId} kill handled successfully`);
     } catch (error) {

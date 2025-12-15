@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Edit3, Zap, Bot } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { PostCreator } from './PostCreator';
@@ -11,6 +11,7 @@ import ToastContainer from './ToastContainer';
 import SystemCommandWarningDialog from './SystemCommandWarningDialog';
 import { detectRiskyContent } from '../utils/detectRiskyContent';
 import { useUser } from '../contexts/UserContext';
+// Socket.IO import removed - using window events instead
 // Removed AviDirectChatSDK import - using built-in Avi chat component
 
 type PostingTab = 'post' | 'quick' | 'avi';
@@ -112,6 +113,46 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void; toast: R
     await submitPost();
   };
 
+  const subscribeToTicketUpdates = (postId: string, ticketId: string) => {
+    // Status to toast message mapping
+    const statusMessages: Record<string, { type: 'success' | 'error' | 'info', message: string }> = {
+      'pending': { type: 'info', message: '⏳ Queued for agent processing...' },
+      'processing': { type: 'info', message: '🤖 Agent is analyzing your post...' },
+      'completed': { type: 'success', message: '✅ Agent response posted!' },
+      'failed': { type: 'error', message: '❌ Processing failed. Will retry automatically.' }
+    };
+
+    // Use window event listener instead of creating socket
+    const handleTicketUpdate = (event: any) => {
+      const data = event.detail;
+      if (data.post_id === postId) {
+        const config = statusMessages[data.status];
+        if (config) {
+          if (config.type === 'success') {
+            toast.showSuccess(config.message);
+          } else if (config.type === 'error') {
+            toast.showError(config.message);
+          } else {
+            toast.showInfo(config.message);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('ticket:status:update', handleTicketUpdate);
+
+    // Store cleanup function
+    const cleanup = () => {
+      window.removeEventListener('ticket:status:update', handleTicketUpdate);
+    };
+
+    // Auto-cleanup after 2 minutes
+    setTimeout(cleanup, 120000);
+
+    // Return cleanup for manual cleanup if needed
+    return cleanup;
+  };
+
   const submitPost = async () => {
     setIsSubmitting(true);
     try {
@@ -143,6 +184,15 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void; toast: R
 
       const result = await response.json();
       toast.showSuccess(`✓ Post created successfully!`);
+
+      // NEW: Subscribe to ticket status updates
+      const postId = result.data.id;
+      const ticketId = result.ticket?.id;
+
+      if (ticketId) {
+        subscribeToTicketUpdates(postId, ticketId);
+      }
+
       onPostCreated?.(result.data);
       setContent('');
     } catch (error) {
@@ -174,6 +224,8 @@ const QuickPostSection: React.FC<{ onPostCreated?: (post: any) => void; toast: R
       return prev;
     });
   };
+
+  // No cleanup needed - window event listeners are cleaned up by subscribeToTicketUpdates
 
   return (
     <div className="space-y-4">

@@ -18,6 +18,13 @@
 
 import { Server } from 'socket.io';
 
+// Debug flag for verbose logging
+const DEBUG_PILLS = true;
+
+const debugLog = (...args) => {
+  if (DEBUG_PILLS) console.log('📢 [WebSocket]', ...args);
+};
+
 class WebSocketService {
   constructor() {
     this.io = null;
@@ -74,8 +81,10 @@ class WebSocketService {
 
       // Handle subscription to specific post updates
       socket.on('subscribe:post', (postId) => {
+        console.log(`📡 Client ${socket.id} subscribing to post:${postId}`);
         socket.join(`post:${postId}`);
-        console.log(`Client ${socket.id} subscribed to post:${postId}`);
+        const room = this.io.sockets.adapter.rooms.get(`post:${postId}`);
+        console.log(`✅ Client ${socket.id} joined room post:${postId}, room size: ${room?.size || 0}`);
       });
 
       // Handle unsubscription from post updates
@@ -137,19 +146,24 @@ class WebSocketService {
     };
 
     // Broadcast to all connected clients
+    debugLog(`Emitting 'ticket:status:update' to all clients`, event);
     this.io.emit('ticket:status:update', event);
 
     // Broadcast to post-specific subscribers
     if (event.post_id) {
+      const room = this.io.sockets.adapter.rooms.get(`post:${event.post_id}`);
+      debugLog(`Emitting 'ticket:status:update' to room post:${event.post_id}, subscribers: ${room?.size || 0}`);
       this.io.to(`post:${event.post_id}`).emit('ticket:status:update', event);
     }
 
     // Broadcast to agent-specific subscribers
     if (event.agent_id) {
+      const room = this.io.sockets.adapter.rooms.get(`agent:${event.agent_id}`);
+      debugLog(`Emitting 'ticket:status:update' to room agent:${event.agent_id}, subscribers: ${room?.size || 0}`);
       this.io.to(`agent:${event.agent_id}`).emit('ticket:status:update', event);
     }
 
-    console.log(`Emitted ticket:status:update - Ticket: ${event.ticket_id}, Status: ${event.status}`);
+    debugLog(`✅ Emitted ticket:status:update - Ticket: ${event.ticket_id}, Status: ${event.status}`);
   }
 
   /**
@@ -204,14 +218,16 @@ class WebSocketService {
 
     const { postId, comment } = payload;
 
-    // Broadcast full comment object to all clients subscribed to this post
-    // This includes all fields needed by frontend (id, content_type, author_type, etc.)
-    this.io.to(`post:${postId}`).emit('comment:created', {
+    // GLOBAL BROADCAST - Single server architecture, no need for rooms
+    console.log(`📢 Broadcasting comment:created GLOBALLY for post ${postId}`);
+
+    // Broadcast to ALL clients - they filter by postId
+    this.io.emit('comment:created', {
       postId,
       comment: comment  // Send full comment object with all database fields
     });
 
-    console.log(`📡 Broadcasted comment:created for post ${postId}, comment ID: ${comment?.id}`);
+    console.log(`✅ Broadcasted comment:created GLOBALLY for post ${postId}, comment ID: ${comment?.id}`);
   }
 
   /**
@@ -226,12 +242,63 @@ class WebSocketService {
 
     const { postId, commentId } = payload;
 
-    this.io.to(`post:${postId}`).emit('comment:updated', {
+    // GLOBAL BROADCAST - Single server architecture
+    console.log(`📢 Broadcasting comment:updated GLOBALLY for post ${postId}`);
+
+    this.io.emit('comment:updated', {
       ...payload,
       timestamp: payload.timestamp || new Date().toISOString()
     });
 
-    console.log(`📡 Broadcasted comment:updated for post ${postId}`);
+    console.log(`✅ Broadcasted comment:updated GLOBALLY for post ${postId}, comment ID: ${commentId}`);
+  }
+
+  /**
+   * Emit comment processing state event
+   * @param {Object} payload - Comment state payload
+   * @param {string} payload.commentId - Comment ID
+   * @param {string} payload.postId - Parent post ID
+   * @param {string} payload.state - State: 'waiting' | 'analyzed' | 'responding' | 'complete'
+   * @param {number} [payload.timestamp] - Event timestamp (defaults to now)
+   */
+  emitCommentState(payload) {
+    if (!this.io || !this.initialized) {
+      console.warn('Cannot emit event: WebSocket service not initialized');
+      return;
+    }
+
+    // Validate state
+    const validStates = ['waiting', 'analyzed', 'responding', 'complete'];
+    if (!validStates.includes(payload.state)) {
+      console.error(`Invalid comment state: ${payload.state}. Must be one of: ${validStates.join(', ')}`);
+      return;
+    }
+
+    const event = {
+      commentId: payload.commentId,
+      postId: payload.postId,
+      state: payload.state,
+      timestamp: payload.timestamp || Date.now()
+    };
+
+    // Emit generic event (for backward compatibility)
+    debugLog(`Emitting 'comment:state' to all clients`, event);
+    this.io.emit('comment:state', event);
+
+    // Emit state-specific event (for frontend listeners)
+    debugLog(`Emitting 'comment:state:${event.state}' to all clients`);
+    this.io.emit(`comment:state:${event.state}`, event);
+
+    // Broadcast to post-specific subscribers
+    if (event.postId) {
+      const room = this.io.sockets.adapter.rooms.get(`post:${event.postId}`);
+      const roomSize = room?.size || 0;
+      debugLog(`Emitting 'comment:state:${event.state}' to room post:${event.postId}, subscribers: ${roomSize}`);
+      this.io.to(`post:${event.postId}`).emit('comment:state', event);
+      this.io.to(`post:${event.postId}`).emit(`comment:state:${event.state}`, event);
+    }
+
+    debugLog(`✅ Emitted comment:state:${event.state} - Comment: ${event.commentId}, Post: ${event.postId}`);
   }
 
   /**

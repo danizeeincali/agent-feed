@@ -1,6 +1,10 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { MessageCircle, Reply, ChevronDown, ChevronRight, User, Bot, Link, ArrowUp, CheckCircle } from 'lucide-react';
+import { MessageCircle, Reply, ChevronDown, ChevronRight, User, Bot, Link, ArrowUp, CheckCircle, Loader2, Clock, Search } from 'lucide-react';
+
+// Multi-state processing pill types
+export type CommentProcessingState = 'waiting' | 'analyzed' | 'responding' | 'complete' | null;
 import { cn } from '../utils/cn';
+import { debugLog, DEBUG_PILLS } from '../utils/debugLogger';
 import { CommentModerationPanel } from './CommentModerationPanel';
 import { buildCommentTree, CommentTreeNode } from '../utils/commentUtils';
 import { MentionInput } from './MentionInput';
@@ -61,7 +65,17 @@ interface CommentItemProps {
   onHighlight: (commentId: string) => void;
   showModeration?: boolean;
   isHighlighted?: boolean;
+  processingComments?: Set<string>;
+  commentStates?: Map<string, CommentProcessingState>;
 }
+
+// State configuration for multi-state processing pill (generic agent terminology)
+const stateConfig = {
+  waiting: { color: 'yellow', icon: Clock, text: 'Waiting for agents...', bgClass: 'bg-yellow-100 dark:bg-yellow-900', textClass: 'text-yellow-700 dark:text-yellow-300', borderClass: 'border-yellow-200 dark:border-yellow-800' },
+  analyzed: { color: 'blue', icon: Search, text: 'Agents analyzing...', bgClass: 'bg-blue-100 dark:bg-blue-900', textClass: 'text-blue-700 dark:text-blue-300', borderClass: 'border-blue-200 dark:border-blue-800' },
+  responding: { color: 'purple', icon: MessageCircle, text: 'Agents responding...', bgClass: 'bg-purple-100 dark:bg-purple-900', textClass: 'text-purple-700 dark:text-purple-300', borderClass: 'border-purple-200 dark:border-purple-800' },
+  complete: { color: 'green', icon: CheckCircle, text: 'Complete', bgClass: 'bg-green-100 dark:bg-green-900', textClass: 'text-green-700 dark:text-green-300', borderClass: 'border-green-200 dark:border-green-800' }
+};
 
 const CommentItem: React.FC<CommentItemProps> = ({
   comment,
@@ -74,7 +88,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
   onToggleExpand,
   onHighlight,
   showModeration = false,
-  isHighlighted = false
+  isHighlighted = false,
+  processingComments = new Set(),
+  commentStates = new Map()
 }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState('');
@@ -83,8 +99,10 @@ const CommentItem: React.FC<CommentItemProps> = ({
   const [showEditHistory, setShowEditHistory] = useState(false);
   
   const commentRef = useRef<HTMLDivElement>(null);
+  // FIX: Single source of truth - use only collapsed Set
+  // A comment is expanded if it's NOT in the collapsed Set
   const isCollapsed = threadState.collapsed.has(comment.id);
-  const isExpanded = threadState.expanded.has(comment.id) || !isCollapsed;
+  const isExpanded = !isCollapsed;
 
   const canModify = currentUser === comment.author;
   const hasReplies = comment.replies && comment.replies.length > 0;
@@ -221,6 +239,40 @@ const CommentItem: React.FC<CommentItemProps> = ({
         // Highlighted styling
         isHighlighted && 'bg-blue-50 dark:bg-blue-900/30'
       )}>
+        {/* Multi-state processing indicator - shows current processing state for this comment */}
+        {(() => {
+          const currentState = commentStates.get(comment.id);
+          const isProcessing = processingComments.has(comment.id);
+
+          // Show pill if there's an explicit state or if processing (fallback to 'waiting')
+          if (currentState || isProcessing) {
+            const state = currentState || 'waiting';
+            const config = stateConfig[state];
+            const IconComponent = config.icon;
+            const shouldAnimate = state !== 'complete';
+
+            return (
+              <div className="absolute top-2 right-2 z-10 pointer-events-none" data-testid={`processing-pill-${comment.id}`}>
+                <div className={cn(
+                  'flex items-center gap-1.5 px-2.5 py-1 rounded-full shadow-md border',
+                  config.bgClass,
+                  config.borderClass
+                )}>
+                  <IconComponent className={cn(
+                    'w-3 h-3',
+                    config.textClass,
+                    shouldAnimate && 'animate-spin'
+                  )} />
+                  <span className={cn('text-xs font-medium', config.textClass)}>
+                    {config.text}
+                  </span>
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
+
         {/* Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
@@ -231,7 +283,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
               <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
             )}
             <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
-              <AuthorDisplayName authorId={comment.author_user_id || comment.author} fallback="User" />
+              <AuthorDisplayName authorId={comment.author_agent || comment.author_user_id || comment.author} fallback="User" />
             </span>
             {/* Agent Badge */}
             {isAgentComment && (
@@ -401,12 +453,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
               onMentionSelect={(mention) => {
                 console.log('🎯 COMMENT THREAD: Mention selected in reply:', mention);
               }}
-              className="w-full p-2 text-sm border border-gray-300 dark:border-gray-700 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-2 text-sm border border-gray-300 dark:border-gray-700 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-50 dark:disabled:bg-gray-800 transition-opacity duration-200"
               rows={3}
               maxLength={2000}
               placeholder="Write a reply... Use @ to mention agents or users"
               mentionContext="post"
               autoFocus={true}
+              disabled={processingComments.has(comment.id) || isSubmitting}
             />
             {replyError && (
               <p className="text-xs text-red-600">{replyError}</p>
@@ -428,10 +481,17 @@ const CommentItem: React.FC<CommentItemProps> = ({
                 </button>
                 <button
                   onClick={handleReplySubmit}
-                  disabled={isSubmitting || !replyContent.trim()}
-                  className="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  disabled={isSubmitting || !replyContent.trim() || processingComments.has(comment.id)}
+                  className="px-3 py-1.5 text-xs font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-1.5 shadow-sm hover:shadow"
                 >
-                  {isSubmitting ? 'Posting...' : 'Post Reply'}
+                  {(isSubmitting || processingComments.has(comment.id)) ? (
+                    <>
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <span>Posting...</span>
+                    </>
+                  ) : (
+                    <span>Post Reply</span>
+                  )}
                 </button>
               </div>
             </div>
@@ -453,6 +513,10 @@ interface CommentThreadProps {
   onCommentsUpdate?: () => void;
   showModeration?: boolean;
   enableRealTime?: boolean;
+  processingComments?: Set<string>;
+  onProcessingChange?: (commentId: string, isProcessing: boolean) => void;
+  commentStates?: Map<string, CommentProcessingState>;
+  onStateChange?: (commentId: string, state: CommentProcessingState) => void;
   className?: string;
 }
 
@@ -464,6 +528,10 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   onCommentsUpdate,
   showModeration = false,
   enableRealTime = false,
+  processingComments = new Set(),
+  onProcessingChange,
+  commentStates,
+  onStateChange,
   className
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -588,32 +656,165 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     };
   }, [comments]); // Dependency on comments ensures navigation works after data loads
 
-  // WebSocket connection for real-time updates
+  // Socket.IO connection for real-time updates
   useEffect(() => {
     if (!enableRealTime) return;
-    
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const ws = new WebSocket(`${protocol}//${window.location.host}/api/socket.io/comments/${postId}`);
-    
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'comment_update') {
-        onCommentsUpdate?.();
-      }
-    };
-    
-    ws.onerror = (error) => {
-      console.warn('WebSocket connection failed:', error);
-    };
-    
-    wsRef.current = ws;
-    
+
+    let socket: any = null;
+
+    // Import Socket.IO client dynamically
+    import('socket.io-client').then(({ io }) => {
+      console.log('[CommentThread] Initializing Socket.IO connection for post:', postId);
+
+      // SPARC FIX: Connect to backend port 3001, not Vite port 5173
+      const { hostname } = window.location;
+      const isDevelopment = hostname === 'localhost' || hostname === '127.0.0.1';
+      const socketUrl = isDevelopment ? 'http://localhost:3001' : window.location.origin;
+
+      console.log('[CommentThread] 🔌 Connecting Socket.IO to:', socketUrl);
+
+      socket = io(socketUrl, {
+        path: '/socket.io/',
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000
+      });
+
+      // Connection event handlers
+      socket.on('connect', () => {
+        console.log('[CommentThread] ✅ Socket.IO connected:', socket.id);
+        // Subscribe to post-specific updates
+        socket.emit('subscribe:post', postId);
+        console.log('[CommentThread] 📡 Subscribed to post updates:', postId);
+      });
+
+      socket.on('disconnect', (reason: string) => {
+        console.log('[CommentThread] ❌ Socket.IO disconnected:', reason);
+      });
+
+      socket.on('error', (error: any) => {
+        console.error('[CommentThread] ❌ Socket.IO error:', error);
+      });
+
+      socket.on('connected', (data: any) => {
+        console.log('[CommentThread] 🔌 Connection confirmed:', data);
+      });
+
+      // Listen for comment created events
+      socket.on('comment:created', (data: any) => {
+        debugLog('commentThread', '📬 Event received: comment:created', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '✨ Triggering UI update for new comment on post:', postId);
+          onCommentsUpdate?.();
+        }
+      });
+
+      // Listen for comment updated events
+      socket.on('comment:updated', (data: any) => {
+        debugLog('commentThread', '📝 Event received: comment:updated', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '✨ Triggering UI update for updated comment on post:', postId);
+          onCommentsUpdate?.();
+        }
+      });
+
+      // Listen for agent response events (Avi's replies)
+      socket.on('agent:response', (data: any) => {
+        debugLog('commentThread', '🤖 Event received: agent:response', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '✨ Triggering UI update for agent response on post:', postId);
+          onCommentsUpdate?.();
+        }
+      });
+
+      // Listen for comment state transition events (for processing pill updates)
+      socket.on('comment:state:waiting', (data: any) => {
+        debugLog('commentThread', '📥 Event received: comment:state:waiting', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '🔄 State update: waiting for comment', data.commentId);
+          onStateChange?.(data.commentId, 'waiting');
+        }
+      });
+
+      socket.on('comment:state:analyzed', (data: any) => {
+        debugLog('commentThread', '📥 Event received: comment:state:analyzed', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '🔄 State update: analyzed for comment', data.commentId);
+          onStateChange?.(data.commentId, 'analyzed');
+        }
+      });
+
+      socket.on('comment:state:responding', (data: any) => {
+        debugLog('commentThread', '📥 Event received: comment:state:responding', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '🔄 State update: responding for comment', data.commentId);
+          onStateChange?.(data.commentId, 'responding');
+        }
+      });
+
+      socket.on('comment:state:complete', (data: any) => {
+        debugLog('commentThread', '📥 Event received: comment:state:complete', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '🔄 State update: complete for comment', data.commentId);
+          onStateChange?.(data.commentId, 'complete');
+          // FIX: DELAY the comment reload to let pill stay visible for 2.5 seconds
+          // Previously onCommentsUpdate was called immediately, causing pill to flash and disappear
+          debugLog('commentThread', '✨ Delaying UI update to show completion pill for 2.5s');
+          setTimeout(() => {
+            debugLog('commentThread', '✨ Now triggering UI update on completion for post:', postId);
+            onCommentsUpdate?.();
+            // Clear state after reload
+            setTimeout(() => {
+              debugLog('commentThread', '🔄 Clearing state for comment', data.commentId);
+              onStateChange?.(data.commentId, null);
+            }, 500);
+          }, 2500);
+        }
+      });
+
+      // Add unified listener for generic comment:state event (fallback)
+      // NOTE: This listener handles non-complete states only to avoid duplicate reloads
+      socket.on('comment:state', (data: any) => {
+        debugLog('commentThread', '📥 Event received: comment:state (generic)', data);
+        if (data.postId === postId) {
+          debugLog('commentThread', '🔄 State update:', data.state, 'for comment', data.commentId);
+          onStateChange?.(data.commentId, data.state);
+
+          // FIX: Don't reload on 'complete' here - let comment:state:complete handler do it
+          // This prevents duplicate reloads that cause race conditions
+          if (data.state === 'complete') {
+            debugLog('commentThread', '⏭️ Skipping reload in generic handler - letting specific handler manage it');
+            // Don't call onCommentsUpdate here - the comment:state:complete listener handles it with delay
+          }
+        }
+      });
+
+      wsRef.current = socket;
+    }).catch((error) => {
+      console.error('[CommentThread] ❌ Failed to load Socket.IO client:', error);
+    });
+
+    // Cleanup function
     return () => {
-      ws.close();
+      if (socket) {
+        console.log('[CommentThread] 🔌 Cleaning up Socket.IO connection');
+        socket.emit('unsubscribe:post', postId);
+        socket.disconnect();
+      }
+      wsRef.current = null;
     };
-  }, [postId, enableRealTime, onCommentsUpdate]);
+  }, [postId, enableRealTime, onCommentsUpdate, onStateChange]);
 
   const handleReply = useCallback(async (parentId: string, content: string) => {
+    // PILL FIX: Generate temp ID for immediate tracking, will replace with actual ID
+    const tempReplyId = `temp-reply-${Date.now()}`;
+    console.log('[CommentThread] Starting reply processing, temp ID:', tempReplyId);
+
+    // PILL FIX: Track the temp ID immediately for instant pill display
+    onProcessingChange?.(tempReplyId, true);
+    onStateChange?.(tempReplyId, 'waiting');
+
     setIsLoading(true);
     try {
       // SPARC FIX: Use correct endpoint POST /api/agent-posts/:postId/comments with parent_id in body
@@ -642,14 +843,37 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
         throw new Error(errorData.message || `Failed to create reply: ${response.status}`);
       }
 
-      onCommentsUpdate?.();
+      // PILL FIX: Get the actual comment ID from response and track it
+      const responseData = await response.json();
+      const actualCommentId = responseData?.data?.id || responseData?.id;
+
+      if (actualCommentId) {
+        console.log('[CommentThread] Reply created with ID:', actualCommentId);
+        // Remove temp ID, add actual ID
+        onProcessingChange?.(tempReplyId, false);
+        onStateChange?.(tempReplyId, null);
+        // Track the actual comment ID
+        onProcessingChange?.(actualCommentId, true);
+        onStateChange?.(actualCommentId, 'waiting');
+        console.log('[CommentThread] PILL FIX: Now tracking actual comment ID:', actualCommentId);
+      }
+
+      // PILL FIX: Delay the comment refresh to let pills be visible
+      // The WebSocket comment:state events will handle the pill lifecycle
+      setTimeout(() => {
+        console.log('[CommentThread] Refreshing comments after delay');
+        onCommentsUpdate?.();
+      }, 500);
     } catch (error) {
       console.error('Failed to post reply:', error);
+      // Clean up on error
+      onProcessingChange?.(tempReplyId, false);
+      onStateChange?.(tempReplyId, null);
       throw error;
     } finally {
       setIsLoading(false);
     }
-  }, [postId, currentUser, onCommentsUpdate]);
+  }, [postId, currentUser, onCommentsUpdate, onProcessingChange, onStateChange]);
 
   const handleNavigate = useCallback((commentId: string, direction: 'parent' | 'next' | 'prev') => {
     const comment = comments.find(c => c.id === commentId);
@@ -796,6 +1020,8 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
                     onHighlight={handleHighlight}
                     showModeration={showModeration}
                     isHighlighted={threadState.highlighted === comment.id}
+                    processingComments={processingComments}
+                    commentStates={commentStates}
                   />
                   {/* Render children with proper threading indentation */}
                   {isExpanded && hasChildren && (

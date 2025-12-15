@@ -592,6 +592,49 @@ class DatabaseSelector {
   }
 
   /**
+   * Get onboarding state for user
+   * @param {string} userId - User ID
+   * @returns {Promise<Object|null>} Onboarding state or null
+   */
+  async getOnboardingState(userId = 'demo-user-123') {
+    if (this.usePostgres) {
+      // PostgreSQL implementation (not implemented yet)
+      console.warn('⚠️ getOnboardingState not implemented for PostgreSQL');
+      return null;
+    } else {
+      try {
+        const state = this.sqliteDb.prepare(`
+          SELECT
+            user_id,
+            phase,
+            step,
+            phase1_completed,
+            phase1_completed_at,
+            phase2_completed,
+            phase2_completed_at,
+            responses,
+            created_at,
+            updated_at
+          FROM onboarding_state
+          WHERE user_id = ?
+        `).get(userId);
+
+        if (!state) {
+          return null;
+        }
+
+        return {
+          ...state,
+          responses: state.responses ? JSON.parse(state.responses) : {}
+        };
+      } catch (error) {
+        console.error('❌ Error getting onboarding state:', error);
+        return null;
+      }
+    }
+  }
+
+  /**
    * Close database connections
    */
   async close() {

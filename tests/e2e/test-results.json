@@ -10,7 +10,9 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 1
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -46,7 +48,9 @@
         "outputDir": "/workspaces/agent-feed/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
         "testDir": "/workspaces/agent-feed/tests/e2e",
@@ -66,301 +70,115 @@
   },
   "suites": [
     {
-      "title": "telemetry-ui-validation.spec.ts",
-      "file": "telemetry-ui-validation.spec.ts",
+      "title": "pill-visibility-fix-e2e.spec.ts",
+      "file": "pill-visibility-fix-e2e.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Telemetry UI Validation - Schema Fix Verification",
-          "file": "telemetry-ui-validation.spec.ts",
-          "line": 86,
+          "title": "Processing Pill Visibility Fix - Comment Reply",
+          "file": "pill-visibility-fix-e2e.spec.ts",
+          "line": 8,
           "column": 6,
           "specs": [
             {
-              "title": "01 - Load home page without errors",
-              "ok": true,
+              "title": "should show processing pill IMMEDIATELY when replying to a comment",
+              "ok": false,
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
+                  "timeout": 90000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14971,
+                      "error": {
+                        "message": "Error: ❌ Comment button not found",
+                        "stack": "Error: ❌ Comment button not found\n    at /workspaces/agent-feed/tests/e2e/pill-visibility-fix-e2e.spec.ts:54:13",
+                        "location": {
+                          "file": "/workspaces/agent-feed/tests/e2e/pill-visibility-fix-e2e.spec.ts",
+                          "column": 13,
+                          "line": 54
+                        },
+                        "snippet": "  52 |\n  53 |     if (!commentButton) {\n> 54 |       throw new Error('❌ Comment button not found');\n     |             ^\n  55 |     }\n  56 |\n  57 |     await commentButton.click();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/agent-feed/tests/e2e/pill-visibility-fix-e2e.spec.ts",
+                            "column": 13,
+                            "line": 54
+                          },
+                          "message": "Error: ❌ Comment button not found\n\n  52 |\n  53 |     if (!commentButton) {\n> 54 |       throw new Error('❌ Comment button not found');\n     |             ^\n  55 |     }\n  56 |\n  57 |     await commentButton.click();\n    at /workspaces/agent-feed/tests/e2e/pill-visibility-fix-e2e.spec.ts:54:13"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🧪 Starting pill visibility fix test...\n"
+                        },
+                        {
+                          "text": "📍 Step 1: Navigating to http://localhost:5173\n"
+                        },
+                        {
+                          "text": "⏳ Step 2: Waiting for feed to load...\n"
+                        },
+                        {
+                          "text": "📸 Screenshot saved: 1-initial-feed-loaded-2025-11-25T07-19-09-623Z.png\n"
+                        },
+                        {
+                          "text": "✅ Feed loaded successfully\n"
+                        },
+                        {
+                          "text": "🔍 Step 3: Finding first post...\n"
+                        },
+                        {
+                          "text": "✅ Found target post\n"
+                        },
+                        {
+                          "text": "💬 Step 4: Creating a top-level comment to reply to...\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-11-25T07:19:03.576Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/agent-feed/test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/agent-feed/test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/agent-feed/test-results/pill-visibility-fix-e2e-Pr-b174d--when-replying-to-a-comment-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/agent-feed/tests/e2e/pill-visibility-fix-e2e.spec.ts",
+                        "column": 13,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
                 }
               ],
-              "id": "a0f8fbf879de67c43e21-3ef609ddbee0a37a3dd5",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 134,
-              "column": 3
-            },
-            {
-              "title": "02 - Navigate to Avi DM interface",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-18f17bfbb67553c3acf4",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 159,
-              "column": 3
-            },
-            {
-              "title": "03 - Compose Avi DM message",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-065f6897321406b43ef3",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 194,
-              "column": 3
-            },
-            {
-              "title": "04 - Verify backend logs clean (no schema errors)",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-95ba9d06b0c15719bfd1",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 279,
-              "column": 3
-            },
-            {
-              "title": "05 - Verify database schema correct",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-cf97e3dffbebbf641f69",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 312,
-              "column": 3
-            },
-            {
-              "title": "06 - Check network for 500 errors",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-7f901327b7204b45138a",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 340,
-              "column": 3
-            },
-            {
-              "title": "07 - Verify frontend loads without JS errors",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-b7561894a2dd1cedf3f4",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 395,
-              "column": 3
-            },
-            {
-              "title": "08 - Comprehensive regression check",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-8bf1da8e4a3d02c14645",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 429,
-              "column": 3
-            }
-          ]
-        },
-        {
-          "title": "Telemetry Validation Summary Report",
-          "file": "telemetry-ui-validation.spec.ts",
-          "line": 500,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Generate comprehensive validation report",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "a0f8fbf879de67c43e21-110edf707fc58c787595",
-              "file": "telemetry-ui-validation.spec.ts",
-              "line": 501,
-              "column": 3
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "websocket-and-conversation-validation.spec.ts",
-      "file": "websocket-and-conversation-validation.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Critical Fixes: WebSocket & Conversation Context",
-          "file": "websocket-and-conversation-validation.spec.ts",
-          "line": 16,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Fix #1: Real-Time Comment Display Without Refresh",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "1d577e83531231c1f68d-95b234de0c8ebbf176ee",
-              "file": "websocket-and-conversation-validation.spec.ts",
-              "line": 37,
-              "column": 3
-            },
-            {
-              "title": "Fix #2: Multi-Turn Conversation Context",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "1d577e83531231c1f68d-78f1421a44c745f28b8f",
-              "file": "websocket-and-conversation-validation.spec.ts",
-              "line": 96,
-              "column": 3
-            },
-            {
-              "title": "Combined Test: Real-Time Multi-Turn Conversation",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "1d577e83531231c1f68d-93341ee234a524b384ec",
-              "file": "websocket-and-conversation-validation.spec.ts",
-              "line": 185,
-              "column": 3
-            },
-            {
-              "title": "Regression: No Duplicate Avi Responses",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "1d577e83531231c1f68d-6b9f861ccb0d8b23d47b",
-              "file": "websocket-and-conversation-validation.spec.ts",
-              "line": 218,
+              "id": "b8b1bfd38c85a482a535-56a85259e18089de272f",
+              "file": "pill-visibility-fix-e2e.spec.ts",
+              "line": 22,
               "column": 3
             }
           ]
@@ -370,11 +188,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-11-12T20:06:50.060Z",
-    "duration": 1000.0849999999998,
+    "startTime": "2025-11-25T07:19:00.964Z",
+    "duration": 18096.229,
     "expected": 0,
-    "skipped": 13,
-    "unexpected": 0,
+    "skipped": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }
