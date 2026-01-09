@@ -3201,3 +3201,6 @@
 2025-12-15T20:41:20.361Z [DEBUG] Applied original permissions to temp file
 2025-12-15T20:41:20.361Z [DEBUG] Renaming /workspaces/agent-feed/.claude/config/.claude.json.tmp.1665.1765831280357 to /workspaces/agent-feed/.claude/config/.claude.json
 2025-12-15T20:41:20.361Z [DEBUG] File /workspaces/agent-feed/.claude/config/.claude.json written atomically
+2025-12-15T20:42:20.348Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-12-15T20:42:20.348Z [DEBUG] Found 0 hook matchers in settings
+2025-12-15T20:42:20.348Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
