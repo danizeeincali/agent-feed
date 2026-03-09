@@ -145,12 +145,21 @@
       "note": "Legacy — being replaced by guide-agent + preference-learner split."
     },
     {
+      "name": "system-admin-agent",
+      "description": "Agent lifecycle manager — gates creation, updates, and retirement of agents and skills",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "avi-prometheus",
+      "note": "Gatekeeper for agent system evolution. Uses approval gates before allowing agent creation/modification. Coordinates meta-agent, meta-update-agent, agent-feedback-agent, agent-ideas-agent, and skill-builder."
+    },
+    {
       "name": "meta-agent",
       "description": "Generates new agent configurations",
       "tier": 3,
       "user_facing": false,
       "proactive": true,
-      "reportsTo": "avi-prometheus"
+      "reportsTo": "system-admin-agent"
     },
     {
       "name": "meta-update-agent",
@@ -158,7 +167,7 @@
       "tier": 3,
       "user_facing": false,
       "proactive": false,
-      "reportsTo": "avi-prometheus"
+      "reportsTo": "system-admin-agent"
     },
     {
       "name": "agent-feedback-agent",
@@ -166,7 +175,7 @@
       "tier": 3,
       "user_facing": false,
       "proactive": false,
-      "reportsTo": "avi-prometheus"
+      "reportsTo": "system-admin-agent"
     },
     {
       "name": "agent-ideas-agent",
@@ -174,7 +183,7 @@
       "tier": 3,
       "user_facing": false,
       "proactive": true,
-      "reportsTo": "avi-prometheus"
+      "reportsTo": "system-admin-agent"
     },
     {
       "name": "page-builder-agent",
@@ -191,7 +200,7 @@
       "tier": 3,
       "user_facing": false,
       "proactive": false,
-      "reportsTo": "avi-prometheus",
+      "reportsTo": "system-admin-agent",
       "note": "Creates SKILL.md files in container/skills/. Triggered by meta-agent."
     }
   ]
