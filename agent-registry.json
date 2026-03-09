@@ -22,56 +22,26 @@
       "tier": 1,
       "user_facing": true,
       "proactive": true,
+      "reportsTo": "orchestrator",
       "note": "The one face users see. Handles direct conversation, delegates silently."
     },
     {
-      "name": "link-logger-agent",
-      "description": "Strategic link capture and progressive summarization",
+      "name": "librarian-agent",
+      "description": "Knowledge manager — organizes, curates, and retrieves saved links, content, and resources",
       "tier": 2,
       "user_facing": true,
-      "proactive": true
+      "proactive": true,
+      "reportsTo": "avi-prometheus",
+      "note": "Coordinates link-logger (capture) and curator (discovery) behind the scenes."
     },
     {
-      "name": "curator-agent",
-      "description": "Content curation and recommendations",
+      "name": "life-coach-agent",
+      "description": "Goal achievement and productivity partner — tracks goals, prepares meetings, follows up on action items",
       "tier": 2,
       "user_facing": true,
-      "proactive": true
-    },
-    {
-      "name": "personal-todos-agent",
-      "description": "Task and todo management",
-      "tier": 2,
-      "user_facing": true,
-      "proactive": true
-    },
-    {
-      "name": "follow-ups-agent",
-      "description": "Track and manage follow-up items",
-      "tier": 2,
-      "user_facing": true,
-      "proactive": true
-    },
-    {
-      "name": "goal-analyst-agent",
-      "description": "Goal tracking and progress analysis",
-      "tier": 2,
-      "user_facing": true,
-      "proactive": true
-    },
-    {
-      "name": "meeting-prep-agent",
-      "description": "Meeting preparation and briefings",
-      "tier": 2,
-      "user_facing": true,
-      "proactive": true
-    },
-    {
-      "name": "meeting-next-steps-agent",
-      "description": "Extract and track meeting action items",
-      "tier": 2,
-      "user_facing": true,
-      "proactive": true
+      "proactive": true,
+      "reportsTo": "avi-prometheus",
+      "note": "Coordinates goal-analyst, meeting-prep, and meeting-next-steps behind the scenes."
     },
     {
       "name": "guide-agent",
@@ -79,7 +49,71 @@
       "tier": 2,
       "user_facing": true,
       "proactive": true,
+      "reportsTo": "avi-prometheus",
       "note": "Temporary during onboarding. Resurfaces during interaction breaks."
+    },
+    {
+      "name": "link-logger-agent",
+      "description": "Strategic link capture and progressive summarization",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "librarian-agent",
+      "note": "Works under librarian-agent. Captures and summarizes links."
+    },
+    {
+      "name": "curator-agent",
+      "description": "Content curation and recommendations",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "librarian-agent",
+      "note": "Works under librarian-agent. Discovers and recommends content."
+    },
+    {
+      "name": "personal-todos-agent",
+      "description": "Task and todo management with Fibonacci priority",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "avi-prometheus",
+      "note": "Works closely with AVI. Manages task lists behind the scenes."
+    },
+    {
+      "name": "follow-ups-agent",
+      "description": "Track and manage follow-up items",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "avi-prometheus",
+      "note": "Works closely with AVI. Tracks delegation and commitments."
+    },
+    {
+      "name": "goal-analyst-agent",
+      "description": "Goal tracking and progress analysis",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "life-coach-agent",
+      "note": "Works under life-coach-agent. Tracks goal hierarchies and metrics."
+    },
+    {
+      "name": "meeting-prep-agent",
+      "description": "Meeting preparation and briefings",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "life-coach-agent",
+      "note": "Works under life-coach-agent. Creates meeting agendas."
+    },
+    {
+      "name": "meeting-next-steps-agent",
+      "description": "Extract and track meeting action items",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "reportsTo": "life-coach-agent",
+      "note": "Works under life-coach-agent. Extracts action items from transcripts."
     },
     {
       "name": "preference-learner",
@@ -87,6 +121,8 @@
       "tier": 3,
       "user_facing": false,
       "proactive": false,
+      "reportsTo": "avi-prometheus",
+      "heartbeatInterval": "6h",
       "note": "Permanent background observer. Writes to user_profile.json. Never talks to user."
     },
     {
@@ -95,6 +131,8 @@
       "tier": 3,
       "user_facing": false,
       "proactive": true,
+      "reportsTo": "avi-prometheus",
+      "heartbeatInterval": "1h",
       "note": "Synthesizes insights from all domain agents. Delegates creation to appropriate agents."
     },
     {
@@ -103,6 +141,7 @@
       "tier": 3,
       "user_facing": false,
       "proactive": true,
+      "reportsTo": "avi-prometheus",
       "note": "Legacy — being replaced by guide-agent + preference-learner split."
     },
     {
@@ -110,98 +149,50 @@
       "description": "Generates new agent configurations",
       "tier": 3,
       "user_facing": false,
-      "proactive": true
+      "proactive": true,
+      "reportsTo": "avi-prometheus"
     },
     {
       "name": "meta-update-agent",
       "description": "Updates existing agent configurations",
       "tier": 3,
       "user_facing": false,
-      "proactive": false
+      "proactive": false,
+      "reportsTo": "avi-prometheus"
     },
     {
       "name": "agent-feedback-agent",
       "description": "Collects and analyzes feedback on agent performance",
       "tier": 3,
       "user_facing": false,
-      "proactive": false
+      "proactive": false,
+      "reportsTo": "avi-prometheus"
     },
     {
       "name": "agent-ideas-agent",
       "description": "Brainstorms and evaluates new agent ideas",
       "tier": 3,
       "user_facing": false,
-      "proactive": true
+      "proactive": true,
+      "reportsTo": "avi-prometheus"
     },
     {
-      "name": "chief-of-staff-agent",
-      "description": "Strategic orchestration and delegation",
+      "name": "page-builder-agent",
+      "description": "Creates dynamic pages with 30+ component types for rich data presentation",
       "tier": 3,
       "user_facing": false,
-      "proactive": true
+      "proactive": true,
+      "reportsTo": "avi-prometheus",
+      "note": "Builds pages on behalf of other agents. Uses page-builder skill."
     },
     {
-      "name": "chief-of-staff-automation-agent",
-      "description": "Automates recurring workflows",
+      "name": "skill-builder",
+      "description": "Autonomously creates new agent skills following Anthropic skill format",
       "tier": 3,
       "user_facing": false,
-      "proactive": true
-    },
-    {
-      "name": "impact-filter-agent",
-      "description": "Assesses impact and priority of incoming requests",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": false
-    },
-    {
-      "name": "bull-beaver-bear-agent",
-      "description": "Decision framework analysis (optimistic/builder/cautious)",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": false
-    },
-    {
-      "name": "financial-viability-analyzer-agent",
-      "description": "Financial analysis and viability assessment",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": false
-    },
-    {
-      "name": "market-research-analyst-agent",
-      "description": "Market analysis and competitive intelligence",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": false
-    },
-    {
-      "name": "opportunity-scout-agent",
-      "description": "Discovers and evaluates opportunities",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": true
-    },
-    {
-      "name": "opportunity-log-maintainer-agent",
-      "description": "Maintains opportunity tracking log",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": false
-    },
-    {
-      "name": "prd-observer-agent",
-      "description": "Monitors product requirements and changes",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": true
-    },
-    {
-      "name": "agent-feed-post-composer-agent",
-      "description": "Composes feed posts for agent updates",
-      "tier": 3,
-      "user_facing": false,
-      "proactive": false
+      "proactive": false,
+      "reportsTo": "avi-prometheus",
+      "note": "Creates SKILL.md files in container/skills/. Triggered by meta-agent."
     }
   ]
 }
