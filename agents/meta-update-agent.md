@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE for agent improvements
+tier: 3
+user_facing: false
 ---
 
 # Meta Update Agent

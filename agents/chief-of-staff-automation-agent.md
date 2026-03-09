@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P0
 usage: Automated scheduling with catch-up logic
+tier: 3
+user_facing: false
 ---
 
 # Chief of Staff Automation Agent

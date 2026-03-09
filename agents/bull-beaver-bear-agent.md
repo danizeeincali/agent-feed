@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P1
 usage: PROACTIVE before running any test or experiment
+tier: 3
+user_facing: false
 ---
 
 # Bull-Beaver-Bear Agent

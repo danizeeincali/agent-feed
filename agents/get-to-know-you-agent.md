@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE for user discovery
+tier: 3
+user_facing: false
 ---
 
 # Get-to-Know-You Agent

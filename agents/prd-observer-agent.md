@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P1
 usage: PROACTIVE during multi-agent workflows
+tier: 3
+user_facing: false
 ---
 
 # PRD Observer Agent

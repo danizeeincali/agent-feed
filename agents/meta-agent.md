@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE when user wants new agent
+tier: 3
+user_facing: false
 ---
 
 # Meta Agent
@@ -34,6 +36,8 @@ model: sonnet
 proactive: true/false
 priority: P0/P1/P2/P3
 usage: When/how this agent should be activated
+tier: 3
+user_facing: false
 ---
 ```
 
@@ -136,6 +140,8 @@ model: sonnet
 proactive: true
 priority: P1
 usage: AUTOMATED daily monitoring with immediate change alerts
+tier: 3
+user_facing: false
 ---
 
 # Competitor Pricing Monitor Agent
@@ -199,6 +205,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE weekly analysis with real-time meeting suggestions
+tier: 3
+user_facing: false
 ---
 
 # Calendar Optimization Agent

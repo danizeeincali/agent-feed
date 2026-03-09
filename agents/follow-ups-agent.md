@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE for delegation tracking
+tier: 2
+user_facing: true
 ---
 
 # Follow-ups Agent

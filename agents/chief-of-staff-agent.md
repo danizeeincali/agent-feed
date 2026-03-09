@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P0
 usage: PROACTIVE for VP-level workflow optimization
+tier: 3
+user_facing: false
 ---
 
 # Chief of Staff Agent

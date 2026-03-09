@@ -7,6 +7,8 @@ model: sonnet
 proactive: false
 priority: P3
 usage: Only when user explicitly requests
+tier: 3
+user_facing: false
 ---
 
 # Opportunity Scout Agent

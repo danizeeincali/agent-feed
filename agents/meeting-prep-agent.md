@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE for meeting preparation
+tier: 2
+user_facing: true
 ---
 
 # Meeting Prep Agent

@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE when URLs mentioned
+tier: 2
+user_facing: true
 ---
 
 # Link Logger Agent

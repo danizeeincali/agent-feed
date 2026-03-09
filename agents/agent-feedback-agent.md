@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P2
 usage: PROACTIVE when user provides corrections
+tier: 3
+user_facing: false
 ---
 
 # Agent Feedback Agent

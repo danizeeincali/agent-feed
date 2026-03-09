@@ -7,6 +7,8 @@ model: sonnet
 proactive: false
 priority: P2
 usage: After opportunity identification
+tier: 3
+user_facing: false
 ---
 
 # Financial Viability Analyzer Agent

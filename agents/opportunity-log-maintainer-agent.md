@@ -7,6 +7,8 @@ model: sonnet
 proactive: false
 priority: P3
 usage: Document opportunity insights
+tier: 3
+user_facing: false
 ---
 
 # Opportunity Log Maintainer Agent

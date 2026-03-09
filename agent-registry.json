@@ -1,0 +1,207 @@
+{
+  "version": "1.0.0-alpha",
+  "description": "AVI Agent Framework — Canonical agent registry with 4-tier classification",
+  "tiers": {
+    "0": "Orchestrator — Invisible routing logic, no persona, no UI presence",
+    "1": "AVI — The single user-facing concierge/chief-of-staff",
+    "2": "Human-interactable sub-agents — Users CAN talk to directly via @mention",
+    "3": "Background sub-agents — Never user-facing, do monitoring/maintenance/learning"
+  },
+  "agents": [
+    {
+      "name": "orchestrator",
+      "description": "Invisible routing and coordination layer",
+      "tier": 0,
+      "user_facing": false,
+      "proactive": false,
+      "note": "Pure code, no agent MD file. Routes requests to appropriate tier 2/3 agents."
+    },
+    {
+      "name": "avi-prometheus",
+      "description": "User-facing concierge and chief of staff",
+      "tier": 1,
+      "user_facing": true,
+      "proactive": true,
+      "note": "The one face users see. Handles direct conversation, delegates silently."
+    },
+    {
+      "name": "link-logger-agent",
+      "description": "Strategic link capture and progressive summarization",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true
+    },
+    {
+      "name": "curator-agent",
+      "description": "Content curation and recommendations",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true
+    },
+    {
+      "name": "personal-todos-agent",
+      "description": "Task and todo management",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true
+    },
+    {
+      "name": "follow-ups-agent",
+      "description": "Track and manage follow-up items",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true
+    },
+    {
+      "name": "goal-analyst-agent",
+      "description": "Goal tracking and progress analysis",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true
+    },
+    {
+      "name": "meeting-prep-agent",
+      "description": "Meeting preparation and briefings",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true
+    },
+    {
+      "name": "meeting-next-steps-agent",
+      "description": "Extract and track meeting action items",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true
+    },
+    {
+      "name": "guide-agent",
+      "description": "Onboarding teacher — shows users what AVI can do, drip-feeds capabilities",
+      "tier": 2,
+      "user_facing": true,
+      "proactive": true,
+      "note": "Temporary during onboarding. Resurfaces during interaction breaks."
+    },
+    {
+      "name": "preference-learner",
+      "description": "Observes all interactions, builds user profile, updates preferences continuously",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false,
+      "note": "Permanent background observer. Writes to user_profile.json. Never talks to user."
+    },
+    {
+      "name": "observer-agent",
+      "description": "Cross-domain pattern detection — notices repeated requests, schedules, unmet needs",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "note": "Synthesizes insights from all domain agents. Delegates creation to appropriate agents."
+    },
+    {
+      "name": "get-to-know-you-agent",
+      "description": "User onboarding and profile building",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true,
+      "note": "Legacy — being replaced by guide-agent + preference-learner split."
+    },
+    {
+      "name": "meta-agent",
+      "description": "Generates new agent configurations",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true
+    },
+    {
+      "name": "meta-update-agent",
+      "description": "Updates existing agent configurations",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    },
+    {
+      "name": "agent-feedback-agent",
+      "description": "Collects and analyzes feedback on agent performance",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    },
+    {
+      "name": "agent-ideas-agent",
+      "description": "Brainstorms and evaluates new agent ideas",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true
+    },
+    {
+      "name": "chief-of-staff-agent",
+      "description": "Strategic orchestration and delegation",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true
+    },
+    {
+      "name": "chief-of-staff-automation-agent",
+      "description": "Automates recurring workflows",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true
+    },
+    {
+      "name": "impact-filter-agent",
+      "description": "Assesses impact and priority of incoming requests",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    },
+    {
+      "name": "bull-beaver-bear-agent",
+      "description": "Decision framework analysis (optimistic/builder/cautious)",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    },
+    {
+      "name": "financial-viability-analyzer-agent",
+      "description": "Financial analysis and viability assessment",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    },
+    {
+      "name": "market-research-analyst-agent",
+      "description": "Market analysis and competitive intelligence",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    },
+    {
+      "name": "opportunity-scout-agent",
+      "description": "Discovers and evaluates opportunities",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true
+    },
+    {
+      "name": "opportunity-log-maintainer-agent",
+      "description": "Maintains opportunity tracking log",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    },
+    {
+      "name": "prd-observer-agent",
+      "description": "Monitors product requirements and changes",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": true
+    },
+    {
+      "name": "agent-feed-post-composer-agent",
+      "description": "Composes feed posts for agent updates",
+      "tier": 3,
+      "user_facing": false,
+      "proactive": false
+    }
+  ]
+}

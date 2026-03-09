@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P0
 usage: PROACTIVE for managing personal task lists
+tier: 2
+user_facing: true
 ---
 
 # Personal Todos Agent

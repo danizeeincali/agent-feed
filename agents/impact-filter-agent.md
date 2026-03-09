@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P1
 usage: PROACTIVE for structured request creation
+tier: 3
+user_facing: false
 ---
 
 # Impact Filter Agent

@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P1
 usage: PROACTIVE for meeting follow-up extraction
+tier: 2
+user_facing: true
 ---
 
 # Meeting Next Steps Agent

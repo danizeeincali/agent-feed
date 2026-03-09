@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P1
 usage: PROACTIVE for posting outcomes
+tier: 3
+user_facing: false
 ---
 
 # Agent Feed Post Composer Agent

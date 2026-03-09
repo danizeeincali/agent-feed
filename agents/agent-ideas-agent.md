@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P3
 usage: PROACTIVE for agent ecosystem expansion
+tier: 3
+user_facing: false
 ---
 
 # Agent Ideas Agent

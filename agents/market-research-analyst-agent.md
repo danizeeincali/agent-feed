@@ -7,6 +7,8 @@ model: sonnet
 proactive: false
 priority: P2
 usage: Supporting opportunity validation
+tier: 3
+user_facing: false
 ---
 
 # Market Research Analyst Agent

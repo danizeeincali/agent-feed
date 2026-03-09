@@ -7,6 +7,8 @@ model: sonnet
 proactive: true
 priority: P1
 usage: PROACTIVE when goals or metrics discussed
+tier: 2
+user_facing: true
 ---
 
 # Goal Analyst Agent
